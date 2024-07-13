@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "edid-decode";
-  version = "unstable-2024-01-29";
+  version = "0-unstable-2024-04-02";
 
   outputs = [
     "out"
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";
-    rev = "7a27b339cf5ee1ab431431a844418a7f7c16d167";
-    hash = "sha256-y+g+E4kaQh6j+3GvHdcVEGQu/zOkGyW/HazUHG0DCxM=";
+    rev = "3d635499e4aca3319f0796ba787213c981c5a770";
+    hash = "sha256-bqzO39YM/3h9p37xaGJAw9xERgWOD+4yqO/XQiq/QqM=";
   };
 
   preBuild = ''

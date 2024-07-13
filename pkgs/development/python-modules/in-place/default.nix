@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     substituteInPlace tox.ini --replace "--cov=in_place --no-cov-on-fail" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

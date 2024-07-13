@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atari800";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
     rev = "ATARI800_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
-    hash = "sha256-OZj0x9+M3jkiXUWgB93JTQzi4OUSBCZ3KtniwcZeVB0=";
+    hash = "sha256-D66YRRTqdoV9TqDFonJ9XNpfP52AicuYgdiW27RCIuQ=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://atari800.github.io/";
-    description = "An Atari 8-bit emulator";
+    description = "Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and 5200 game
       console for Unix, Linux, Amiga, MS-DOS, Atari TT/Falcon, MS-Windows, MS

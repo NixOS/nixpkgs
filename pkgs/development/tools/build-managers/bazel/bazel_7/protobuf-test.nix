@@ -5,7 +5,6 @@
 , darwin
 , distDir
 , extraBazelArgs ? ""
-, fetchFromGitHub
 , fetchurl
 , jdk11_headless
 , lib
@@ -157,11 +156,6 @@ let
         --javabase='@local_jdk//:jdk' \
     '' + lib.optionalString (stdenv.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-    '' + lib.optionalString (stdenv.cc.isClang && stdenv ? cc.libcxx.cxxabi.libName) ''
-        --linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
-        --linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
-        --host_linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
-        --host_linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
     '' + ''
 
     '';

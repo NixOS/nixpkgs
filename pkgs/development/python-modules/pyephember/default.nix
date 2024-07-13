@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paho-mqtt
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paho-mqtt,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyephember"
-  ];
+  pythonImportsCheck = [ "pyephember" ];
 
   meta = with lib; {
     description = "Python client to the EPH Control Systems Ember API";

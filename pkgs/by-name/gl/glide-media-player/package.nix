@@ -13,24 +13,23 @@
 , graphene
 , gst_all_1
 , glib-networking
-, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "glide-media-player";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
     rev = version;
-    hash = "sha256-SN/1Yf4fHlDbJ2X6DGktsn1GFW8bbkeznlO1S8sBZyg=";
+    hash = "sha256-rWWMMuA41uFWazIJBVLxzaCrR5X5tI4x+GXXYkfeqz8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2Ma7ZAKFiAQXFWFze4RLwGu33d/vC6FVW6fJdqwED20=";
+    hash = "sha256-Kvdbo5tkhwsah9W7Y5zqpoA3bVHfmjGj7Cjsqxkljls=";
   };
 
   postPatch = ''
@@ -41,8 +40,6 @@ stdenv.mkDerivation rec {
     patchShebangs --build \
       scripts/meson_post_install.py \
       build-aux/cargo-build.py
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i "/wayland,x11egl,x11glx/d" meson.build
   '';
 
   nativeBuildInputs = [
@@ -64,8 +61,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
     glib-networking
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
   ];
 
   meta = with lib; {
@@ -74,8 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];
     mainProgram = "glide";
-    platforms = platforms.unix;
-    # error: could not find system library 'gstreamer-gl-1.0' required by the 'gstreamer-gl-sys' crate
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    # Required gdk4-{wayland,x11} and gstreamer-gl not available on darwin
+    platforms = subtractLists platforms.darwin platforms.unix;
   };
 }

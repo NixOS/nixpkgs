@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free open source software implementation of the DMARC specification";
+    description = "Free open source software implementation of the DMARC specification";
     homepage = "http://www.trusteddomain.org/opendmarc/";
     license = with licenses; [ bsd3 sendmail ];
     maintainers = teams.helsinki-systems.members;

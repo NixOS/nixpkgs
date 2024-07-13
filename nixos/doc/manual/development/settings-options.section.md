@@ -146,6 +146,27 @@ have a predefined type and string generator already declared under
     :   Outputs the given attribute set as an Elixir map, instead of the
         default Elixir keyword list
 
+`pkgs.formats.php { finalVariable }` []{#pkgs-formats-php}
+
+:   A function taking an attribute set with values
+
+    `finalVariable`
+
+    :   The variable that will store generated expression (usually `config`). If set to `null`, generated expression will contain `return`.
+
+    It returns a set with PHP-Config-specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special PHP values:
+
+    `mkRaw phpCode`
+
+    :   Outputs the given string as raw PHP code
+
+    `mkMixedArray list set`
+
+    :   Creates PHP array that contains both indexed and associative values. For example, `lib.mkMixedArray [ "hello" "world" ] { "nix" = "is-great"; }` returns `['hello', 'world', 'nix' => 'is-great']`
 
 []{#pkgs-formats-result}
 These functions all return an attribute set with these values:
@@ -248,28 +269,30 @@ up in the manual.
 ::: {#ex-settings-typed-attrs .example}
 ### Declaring a type-checked `settings` attribute
 ```nix
-settings = lib.mkOption {
-  type = lib.types.submodule {
+{
+  settings = lib.mkOption {
+    type = lib.types.submodule {
 
-    freeformType = settingsFormat.type;
+      freeformType = settingsFormat.type;
 
-    # Declare an option for the port such that the type is checked and this option
-    # is shown in the manual.
-    options.port = lib.mkOption {
-      type = lib.types.port;
-      default = 8080;
-      description = ''
-        Which port this service should listen on.
-      '';
+      # Declare an option for the port such that the type is checked and this option
+      # is shown in the manual.
+      options.port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          Which port this service should listen on.
+        '';
+      };
+
     };
-
+    default = {};
+    description = ''
+      Configuration for Foo, see
+      <link xlink:href="https://example.com/docs/foo"/>
+      for supported values.
+    '';
   };
-  default = {};
-  description = ''
-    Configuration for Foo, see
-    <link xlink:href="https://example.com/docs/foo"/>
-    for supported values.
-  '';
-};
+}
 ```
 :::

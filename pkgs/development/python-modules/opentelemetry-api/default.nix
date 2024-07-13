@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, deprecated
-, hatchling
-, importlib-metadata
-, opentelemetry-test-utils
-, setuptools
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  deprecated,
+  hatchling,
+  importlib-metadata,
+  opentelemetry-test-utils,
+  setuptools,
+  pytestCheckHook,
+  writeScript,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.23.0";
+    version = "1.25.0";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -24,27 +25,20 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       rev = "refs/tags/v${version}";
-      hash = "sha256-Ge/DjVG7ajoS0nJLZxtfn4Mmx0SffAE/91dViA5qWAA=";
+      hash = "sha256-9mxgPYliGkNsZGOhF9YCmxZjP3hc2UUmxSpWY4IMLCo=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
 
-    nativeBuildInputs = [
-      pythonRelaxDepsHook
-    ];
 
-    build-system = [
-      hatchling
-    ];
+    build-system = [ hatchling ];
 
     dependencies = [
       deprecated
       importlib-metadata
     ];
 
-    pythonRelaxDeps = [
-      "importlib-metadata"
-    ];
+    pythonRelaxDeps = [ "importlib-metadata" ];
 
     nativeCheckInputs = [
       opentelemetry-test-utils
@@ -55,8 +49,18 @@ let
 
     doCheck = false;
 
-    # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
-    passthru.tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    passthru = {
+      updateScript = writeScript "update.sh" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p nix-update
+
+        set -eu -o pipefail
+        nix-update --version-regex 'v(.*)' python3Packages.opentelemetry-api
+        nix-update python3Packages.opentelemetry-instrumentation
+      '';
+      # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
+      tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    };
 
     meta = with lib; {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
@@ -66,4 +70,5 @@ let
       maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
     };
   };
-in self
+in
+self

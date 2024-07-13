@@ -18,11 +18,16 @@
 .Op Fl -no-build-nix
 .Op Fl -fast
 .Op Fl -rollback
-.Op Fl -builders Ar builder-spec
 .br
 .Op Fl -flake Ar flake-uri
 .Op Fl -no-flake
-.Op Fl -override-input Ar input-name flake-uri
+.Op Fl -recreate-lock-file
+.Op Fl -no-update-lock-file
+.Op Fl -no-write-lock-file
+.Op Fl -no-registries
+.Op Fl -commit-lock-file
+.Op Fl -update-input Ar input-path
+.Op Fl -override-input Ar input-path flake-url
 .br
 .Op Fl -profile-name | p Ar name
 .Op Fl -specialisation | c Ar name
@@ -31,14 +36,26 @@
 .Op Fl -target-host Va host
 .Op Fl -use-remote-sudo
 .br
-.Op Fl -show-trace
-.Op Fl I Va NIX_PATH
 .Op Fl -verbose | v
-.Op Fl -accept-flake-config
-.Op Fl -impure
+.Op Fl -quiet
+.Op Fl -log-format Ar format
+.Op Fl -no-build-output | Q
 .Op Fl -max-jobs | j Va number
-.Op Fl -keep-failed | K
+.Op Fl -cores Va number
 .Op Fl -keep-going | k
+.Op Fl -keep-failed | K
+.Op Fl -fallback
+.Op Fl I Va NIX_PATH
+.Op Fl -option Ar name value
+.Op Fl -repair
+.Op Fl -builders Va builder-spec
+.Op Fl -accept-flake-config
+.Op Fl -print-build-logs | L
+.Op Fl -show-trace
+.Op Fl -refresh
+.Op Fl -impure
+.Op Fl -offline
+.Op Fl -no-net
 .
 .
 .
@@ -390,18 +407,57 @@ even if the current NixOS systems uses flakes.
 .Pp
 In addition,
 .Nm
-accepts various Nix-related flags, including
+accepts following options from nix commands that the tool calls:
+.
+.Pp
+flake-related options:
+.Bd -offset indent
+.Fl -recreate-lock-file Ns ,
+.Fl -no-update-lock-file Ns ,
+.Fl -no-write-lock-file Ns ,
+.Fl -no-registries Ns ,
+.Fl -commit-lock-file Ns ,
+.Fl -update-input Ar input-path Ns ,
+.Fl -override-input Ar input-path flake-url Ns
+.Ed
+.
+.Pp
+Builder options:
+.Bd -offset indent
+.Fl -verbose Ns ,
+.Fl v Ns ,
+.Fl -quiet Ns ,
+.Fl -log-format Ns ,
+.Fl -no-build-output Ns ,
+.Fl Q Ns ,
 .Fl -max-jobs Ns ,
 .Fl j Ns ,
-.Fl I Ns ,
-.Fl -accept-flake-config Ns ,
-.Fl -show-trace Ns ,
-.Fl -keep-failed Ns ,
+.Fl -cores Ns ,
 .Fl -keep-going Ns ,
+.Fl k Ns ,
+.Fl -keep-failed Ns ,
+.Fl K Ns ,
+.Fl -fallback Ns ,
+.Fl I Ns ,
+.Fl -option Ns
+.Fl -repair Ns ,
+.Fl -builders Ns ,
+.Fl -accept-flake-config Ns ,
+.Fl -print-build-logs Ns ,
+.Fl L Ns ,
+.Fl -show-trace Ns ,
+.Fl -refresh Ns ,
 .Fl -impure Ns ,
-.Fl -verbose Ns , and
-.Fl v Ns
-\&. See the Nix manual for details.
+.Fl -offline Ns ,
+.Fl -no-net Ns
+.Ed
+.
+.Pp
+See the Nix manual,
+.Ic nix flake lock --help
+or
+.Ic nix-build --help
+for details.
 .
 .
 .

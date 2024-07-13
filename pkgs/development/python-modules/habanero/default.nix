@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, requests
-, tqdm
-, nose
-, vcrpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  requests,
+  tqdm,
+  nose,
+  vcrpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-Pw0TgXxDRmR565hdNGipfDZ7P32pxWkmPWfaYK0RaI4=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     requests
@@ -38,14 +37,10 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  pythonImportsCheck = [
-    "habanero"
-  ];
+  pythonImportsCheck = [ "habanero" ];
 
   # almost the entirety of the test suite makes network calls
-  pytestFlagsArray = [
-    "test/test-filters.py"
-  ];
+  pytestFlagsArray = [ "test/test-filters.py" ];
 
   meta = with lib; {
     description = "Python interface to Library Genesis";

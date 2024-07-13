@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/dconf";
+    homepage = "https://gitlab.gnome.org/GNOME/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

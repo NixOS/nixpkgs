@@ -67,7 +67,8 @@ stdenv.mkDerivation (rec {
       (if compat185 then "--enable-compat185" else "--disable-compat185")
     ]
     ++ lib.optional dbmSupport "--enable-dbm"
-    ++ lib.optional stdenv.isFreeBSD "--with-pic";
+    ++ lib.optional stdenv.isFreeBSD "--with-pic"
+    ++ (drvArgs.configureFlags or []);
 
   preConfigure = ''
     cd build_unix
@@ -92,4 +93,4 @@ stdenv.mkDerivation (rec {
     license = license;
     platforms = platforms.unix;
   };
-} // drvArgs)
+} // builtins.removeAttrs drvArgs [ "configureFlags" ])

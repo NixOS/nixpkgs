@@ -1,19 +1,20 @@
-{ lib
-, asyncclick
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, tzlocal
+{
+  lib,
+  asyncclick,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "gardena-bluetooth";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,12 +23,10 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "gardena-bluetooth";
     rev = "refs/tags/${version}";
-    hash = "sha256-WnurxoSzzNTNxz6S1HSKb/lTuOyox6fG2I0Hlj95Ub0=";
+    hash = "sha256-eze99JvNSwhot8t43oy30iaFrrkpeMNFyHvfQcA56IM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
@@ -36,9 +35,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cli = [
-      asyncclick
-     ];
+    cli = [ asyncclick ];
   };
 
   nativeCheckInputs = [
@@ -46,9 +43,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "gardena_bluetooth"
-  ];
+  pythonImportsCheck = [ "gardena_bluetooth" ];
 
   meta = with lib; {
     description = "Module for interacting with Gardena Bluetooth";

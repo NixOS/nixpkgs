@@ -109,7 +109,7 @@ in
   options = {
     services.btrbk = {
       extraPackages = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Extra packages for btrbk, like compression utilities for `stream_compress`.
 
           **Note**: This option will get deprecated in future releases.
@@ -122,17 +122,17 @@ in
         example = literalExpression "[ pkgs.xz ]";
       };
       niceness = mkOption {
-        description = lib.mdDoc "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
+        description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
         type = types.ints.between (-20) 19;
         default = 10;
       };
       ioSchedulingClass = mkOption {
-        description = lib.mdDoc "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
+        description = "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
         type = types.enum [ "idle" "best-effort" "realtime" ];
         default = "best-effort";
       };
       instances = mkOption {
-        description = lib.mdDoc "Set of btrbk instances. The instance named `btrbk` is the default one.";
+        description = "Set of btrbk instances. The instance named `btrbk` is the default one.";
         type = with types;
           attrsOf (
             submodule {
@@ -140,7 +140,7 @@ in
                 onCalendar = mkOption {
                   type = types.nullOr types.str;
                   default = "daily";
-                  description = lib.mdDoc ''
+                  description = ''
                     How often this btrbk instance is started. See systemd.time(7) for more information about the format.
                     Setting it to null disables the timer, thus this instance can only be started manually.
                   '';
@@ -150,7 +150,7 @@ in
                     freeformType = let t = types.attrsOf (types.either types.str (t // { description = "instances of this type recursively"; })); in t;
                     options = {
                       stream_compress = mkOption {
-                        description = lib.mdDoc ''
+                        description = ''
                           Compress the btrfs send stream before transferring it from/to remote locations using a
                           compression command.
                         '';
@@ -173,7 +173,7 @@ in
                       };
                     };
                   };
-                  description = lib.mdDoc "configuration options for btrbk. Nested attrsets translate to subsections.";
+                  description = "configuration options for btrbk. Nested attrsets translate to subsections.";
                 };
               };
             }
@@ -181,18 +181,18 @@ in
         default = { };
       };
       sshAccess = mkOption {
-        description = lib.mdDoc "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
+        description = "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
         type = with types; listOf (
           submodule {
             options = {
               key = mkOption {
                 type = str;
-                description = lib.mdDoc "SSH public key allowed to login as user `btrbk` to run remote backups.";
+                description = "SSH public key allowed to login as user `btrbk` to run remote backups.";
               };
               roles = mkOption {
                 type = listOf (enum [ "info" "source" "target" "delete" "snapshot" "send" "receive" ]);
                 example = [ "source" "info" "send" ];
-                description = lib.mdDoc "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
+                description = "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
               };
             };
           }

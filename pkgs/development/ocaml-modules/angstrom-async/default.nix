@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, angstrom, async }:
+{ lib, buildDunePackage, angstrom, async }:
 
 buildDunePackage rec {
   pname = "angstrom-async";

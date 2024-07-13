@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, fetchurl
-, matplotlib
-, pillow
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pywavelets
-, scikit-learn
-, setuptools
-, torch
-, torchvision
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  fetchurl,
+  matplotlib,
+  pillow,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pywavelets,
+  scikit-learn,
+  setuptools,
+  torch,
+  torchvision,
+  tqdm,
+  fetchpatch,
 }:
 let
   MobileNetV3 = fetchurl {
@@ -73,8 +75,15 @@ buildPythonPackage rec {
     ln -s ${EfficientNet} $HOME/.cache/torch/hub/checkpoints/${EfficientNet.name}
   '';
 
-  pythonImportsCheck = [
-    "imagededup"
+  pythonImportsCheck = [ "imagededup" ];
+
+  patches = [
+    # https://github.com/idealo/imagededup/pull/217
+    (fetchpatch {
+      name = "pytest-warnings-none.patch";
+      url = "https://github.com/idealo/imagededup/commit/e2d7a21568e3115acd0632af569549c511ad5c0d.patch";
+      hash = "sha256-AQwJpU3Ag6ONRAw0z8so5icW4fRpMHuBOMT5X+HsQ2w=";
+    })
   ];
 
   meta = with lib; {

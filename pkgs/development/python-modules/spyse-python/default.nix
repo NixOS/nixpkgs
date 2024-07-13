@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, dataclasses-json
-, fetchFromGitHub
-, fetchpatch
-, limiter
-, pythonOlder
-, requests
-, responses
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  dataclasses-json,
+  fetchFromGitHub,
+  fetchpatch,
+  limiter,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
       --replace "requests~=2.26.0" "requests>=2.26.0"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -56,9 +55,7 @@ buildPythonPackage rec {
   # Tests requires an API token
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spyse"
-  ];
+  pythonImportsCheck = [ "spyse" ];
 
   meta = with lib; {
     description = "Python module for spyse.com API";

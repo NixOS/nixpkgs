@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,13 @@ buildPythonPackage rec {
       "--cov-report term-missing" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   meta = with lib; {
     description = "Chinese Characters to Pinyin - 汉字转拼音";
+    mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

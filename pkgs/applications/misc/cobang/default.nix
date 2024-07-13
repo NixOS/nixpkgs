@@ -19,19 +19,19 @@
 , setuptools
 , python
 , pytestCheckHook
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.10.5";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CfT/farNOJiWIioFBPx2q7bAFAE4khcojdZ7AsYaU6o=";
+    hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     # Needed to recognize gobject namespaces
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     setuptools
   ];
 
@@ -94,10 +94,10 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A QR code scanner desktop app for Linux";
+    description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "cobang";
     platforms = [ "x86_64-linux" ];
   };

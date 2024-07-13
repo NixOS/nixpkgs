@@ -60,12 +60,10 @@ stdenv.mkDerivation rec {
 
   env = lib.optionalAttrs stdenv.isDarwin {
     GETTEXT_DIR = gettext;
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   meta = with lib; {
-    description = "The ultimate task management solution for seamless organization and efficiency";
+    description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = licenses.mpl20;

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-gnym2sedyzQzubOtj64Yoh+sKT+sa60w/Z72hby7Pms=";
 
   meta = with lib; {
-    description = "A calculator REPL, similar to bc";
+    description = "Calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;
     maintainers = with maintainers; [ nrdxp ma27 figsoda ];

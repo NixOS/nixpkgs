@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook3
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
       excludes = [ "NEWS" ];
     })
+
+    # switch to pep517 build tools
+    ./pep517.patch
   ];
 
   buildInputs = [
@@ -44,8 +47,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config gettext libtool autoconf-archive
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
-    python3Packages.wrapPython
-    wrapGAppsHook autoreconfHook gobject-introspection
+    python3Packages.wrapPython python3Packages.build python3Packages.installer
+    python3Packages.setuptools python3Packages.wheel
+    wrapGAppsHook3 autoreconfHook gobject-introspection
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 pycairo pysmbc ];
@@ -80,6 +84,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/openprinting/system-config-printer";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

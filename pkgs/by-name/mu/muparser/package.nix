@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "An extensible high performance math expression parser library written in C++";
+    description = "Extensible high performance math expression parser library written in C++";
     homepage = "https://beltoforion.de/en/muparser/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];

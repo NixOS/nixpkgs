@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, case
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     psutil
     pytestCheckHook
   ];
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     "test_set_pdeathsig"
   ];
 
-  pythonImportsCheck = [
-    "billiard"
-  ];
+  pythonImportsCheck = [ "billiard" ];
 
   meta = with lib; {
     description = "Python multiprocessing fork with improvements and bugfixes";

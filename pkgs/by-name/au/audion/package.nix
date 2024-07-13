@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "audion";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audion";
     rev = "refs/tags/${version}";
-    hash = "sha256-j8sQCeHpxrpzyY75DypWI9z+JBWq7aaaXPnZh7ksRjc=";
+    hash = "sha256-NtAzh7n5bJXMt73L+FJU3vuNoNgga3wYXdZ2TY8AjIA=";
   };
 
-  cargoHash = "sha256-/x2gjLz73uPY+ouQOxLN2ViET+V/s9jgkgw97yzVj24=";
+  cargoHash = "sha256-0jPAidJu3f3exXkVCLowR1zHsZ3bctWu+O2mQmSwSpE=";
 
   meta = with lib; {
     description = "Ping the host continuously and write results to a file";

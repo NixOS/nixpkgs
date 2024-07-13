@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, setuptools
+  setuptools,
 
-, six
-, requests
-, beautifulsoup4
+  six,
+  requests,
+  beautifulsoup4,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-NwHuAabIX4uGWgScMLoLRgiFjIA/6OMNHSif2+idDv4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     six
@@ -35,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "feedfinder2" ];
 
   meta = with lib; {
-    description = "A Python library for finding feed links on websites";
+    description = "Python library for finding feed links on websites";
     homepage = "https://github.com/dfm/feedfinder2";
     license = licenses.mit;
     maintainers = with maintainers; [ vizid ];

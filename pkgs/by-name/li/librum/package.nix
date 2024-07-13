@@ -13,14 +13,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librum";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "Librum-Reader";
     repo = "Librum";
     rev = "v.${version}";
     fetchSubmodules = true;
-    hash = "sha256-/QxTWlTMoXykPe3z+mmn6eaGRJDu2IX8BJPcXi1gUqQ=";
+    hash = "sha256-Iwcbcz8LrznFP8rfW6mg9p7klAtTx4daFxylTeFKrH0=";
   };
 
   patches = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An application designed to make reading enjoyable and straightforward";
+    description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''
       Librum is an application designed to make reading enjoyable
       and straightforward for everyone. It's not just an e-book
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with maintainers; [ aleksana oluceps ];

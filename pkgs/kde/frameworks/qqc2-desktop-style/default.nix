@@ -1,11 +1,11 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  sonnet,
+  qttools,
 }:
 mkKdeDerivation {
   pname = "qqc2-desktop-style";
 
+  extraNativeBuildInputs = [qttools];
   extraBuildInputs = [qtdeclarative];
-  extraPropagatedBuildInputs = [sonnet];
 }

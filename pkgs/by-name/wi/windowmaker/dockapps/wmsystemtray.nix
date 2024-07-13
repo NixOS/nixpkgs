@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A system tray for Windowmaker";
+    description = "System tray for Windowmaker";
     homepage = "http://wmsystemtray.sourceforge.net";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];

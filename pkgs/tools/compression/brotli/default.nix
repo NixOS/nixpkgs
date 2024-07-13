@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
-    description = "A generic-purpose lossless compression algorithm and tool";
+    description = "Generic-purpose lossless compression algorithm and tool";
     longDescription =
       ''  Brotli is a generic-purpose lossless compression algorithm that
           compresses data using a combination of a modern variant of the LZ77

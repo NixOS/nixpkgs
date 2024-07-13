@@ -88,6 +88,7 @@ in
 
     meta = {
       description = "Conda is a package manager for Python";
+      mainProgram = "conda-shell";
       homepage = "https://conda.io/";
       platforms = lib.platforms.linux;
       license = lib.licenses.bsd3;

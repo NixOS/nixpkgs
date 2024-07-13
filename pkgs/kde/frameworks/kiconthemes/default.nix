@@ -12,4 +12,5 @@ mkKdeDerivation {
     qtsvg
     qttools
   ];
+  meta.mainProgram = "kiconfinder6";
 }

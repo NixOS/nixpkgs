@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://kx.studio/Applications:Carla";
-    description = "An audio plugin host";
+    description = "Audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3
       and AU plugin formats, plus GIG, SF2 and SFZ file support.

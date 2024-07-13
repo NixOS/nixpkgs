@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,24 +18,16 @@ buildPythonPackage rec {
     owner = "alecthomas";
     repo = "voluptuous";
     rev = "refs/tags/${version}";
-    hash = "sha256-7KXuypcKoqZboHTzoNKK5sYUR57wWGJu6y9zkLecep0=";
+    hash = "sha256-BM83pwgxQRCCzaGJKHGfQzDbQj/27nWes4I8Bym1nUc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "voluptuous"
-  ];
+  pythonImportsCheck = [ "voluptuous" ];
 
-  pytestFlagsArray = [
-    "voluptuous/tests/"
-  ];
+  pytestFlagsArray = [ "voluptuous/tests/" ];
 
   meta = with lib; {
     description = "Python data validation library";

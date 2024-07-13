@@ -5,21 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.16";
+  version = "0.45.24";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
-    rev = version;
-    hash = "sha256-ln522U3XqZfhvLvMEzrqXV3SjhpgnrRk2MxQQRBL5VU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VltrcTbX95agV9JGV2KYGeZ6iUlgzrOsjShsUpiGfes=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.7.1" "apprise" \
+      --replace "apprise~=1.8.0" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
-      --replace "dnspython~=2.4" "dnspython" \
+      --replace "dnspython==2.6.1" "dnspython" \
       --replace "pytest ~=7.2" "" \
       --replace "pytest-flask ~=1.2" "" \
       --replace "selenium~=4.14.0" "selenium" \
@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-paginate
     flask-restful
     flask-wtf
+    greenlet
     inscriptis
     jinja2
     jinja2-time
@@ -51,7 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     loguru
     lxml
     paho-mqtt
-    pillow
     playwright
     pyee
     pyppeteer

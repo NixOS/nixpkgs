@@ -22,4 +22,5 @@ mkKdeDerivation {
     mpfr
     libqalculate
   ];
+  meta.mainProgram = "kalk";
 }

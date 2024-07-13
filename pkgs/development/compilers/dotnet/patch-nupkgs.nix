@@ -24,7 +24,7 @@ let
     openssl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
 
-in writeShellScriptBin "patch-nupkgs" ''
+in writeShellScriptBin "patch-nupkgs" (''
   set -euo pipefail
   shopt -s nullglob
   isELF() {
@@ -38,11 +38,15 @@ in writeShellScriptBin "patch-nupkgs" ''
   }
   cd "$1"
   for x in *.${buildRid}/* *.${buildRid}.*/*; do
-    [[ -d "$x" ]] && [[ ! -f "$x"/.nix-patched ]] || continue
+    # .nupkg.metadata is written last, so we know the packages is complete
+    [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
+      && [[ ! -f "$x"/.nix-patched ]] || continue
     echo "Patching package $x"
     pushd "$x"
     for p in $(find -type f); do
-      if [[ "$p" != *.nix-patched ]] && isELF "$p"; then
+      if [[ "$p" != *.nix-patched ]] \
+        && isELF "$p" \
+        && patchelf --print-interpreter "$p" &>/dev/null; then
         tmp="$p".$$.nix-patched
         # if this fails to copy then another process must have patched it
         cp --reflink=auto "$p" "$tmp" || continue
@@ -50,8 +54,16 @@ in writeShellScriptBin "patch-nupkgs" ''
         patchelf \
           --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
           "$tmp" ||:
+        # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
+        # This fixes dotnet-built binaries like crossgen2
         patchelf \
-          --set-rpath "${binaryRPath}" \
+          --add-needed libicui18n.so \
+          --add-needed libicuuc.so \
+          --add-needed libz.so \
+          --add-needed libssl.so \
+          "$tmp"
+        patchelf \
+          --add-rpath "${binaryRPath}" \
           "$tmp" ||:
         mv "$tmp" "$p"
       fi
@@ -59,4 +71,16 @@ in writeShellScriptBin "patch-nupkgs" ''
     touch .nix-patched
     popd
   done
-''
+'' + lib.optionalString stdenv.isDarwin ''
+  for x in microsoft.dotnet.ilcompiler/*; do
+    # .nupkg.metadata is written last, so we know the packages is complete
+    [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
+      && [[ ! -f "$x"/.nix-patched ]] || continue
+    echo "Patching package $x"
+    pushd "$x"
+    sed -i 's: -no_code_signature_warning::g' build/Microsoft.NETCore.Native.targets
+    sed -i 's:Include="-ld_classic"::g' build/Microsoft.NETCore.Native.Unix.targets
+    touch .nix-patched
+    popd
+  done
+'')

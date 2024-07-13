@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };

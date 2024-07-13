@@ -97,6 +97,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tt_e.html";
     description = "Fast-paced abstract scrolling shooter game";
+    mainProgram = "torus-trooper";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

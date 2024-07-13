@@ -1,17 +1,17 @@
 { lib
-, flutter
+, flutter319
 , python3
 , fetchFromGitHub
 , pcre2
 , libnotify
 , libappindicator
 , pkg-config
-, gnome
+, gnome-screenshot
 , makeWrapper
 , removeReferencesTo
 }:
 
-flutter.buildFlutterApplication rec {
+flutter319.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.4.0";
 
@@ -67,7 +67,7 @@ flutter.buildFlutterApplication rec {
 
   # Needed for QR scanning to work
   extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
+    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [
@@ -84,6 +84,7 @@ flutter.buildFlutterApplication rec {
 
   meta = with lib; {
     description = "Yubico Authenticator for Desktop";
+    mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

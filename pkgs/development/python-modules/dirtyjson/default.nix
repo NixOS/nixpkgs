@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +19,19 @@ buildPythonPackage rec {
     hash = "sha256-kMpKGPP/MM6EnRANz0oAOVPHnTojSO8Fbx2cIiMaJf0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dirtyjson"
-  ];
+  pythonImportsCheck = [ "dirtyjson" ];
 
   meta = with lib; {
     description = "JSON decoder for Python that can extract data from the muck";
     homepage = "https://github.com/codecobblers/dirtyjson";
-    license = with licenses; [ afl21 /* and */ mit];
+    license = with licenses; [
+      afl21 # and
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

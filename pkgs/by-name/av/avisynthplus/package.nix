@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An improved version of the AviSynth frameserver";
+    description = "Improved version of the AviSynth frameserver";
     homepage = "https://avs-plus.net/";
     changelog = "https://github.com/AviSynth/AviSynthPlus/releases/tag/${finalAttrs.src.rev}";
     license = licenses.gpl2Only;

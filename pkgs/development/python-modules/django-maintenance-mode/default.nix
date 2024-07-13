@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, python
-, python-fsutil
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  python,
+  python-fsutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-rZo0yru+y5TkdULBQDMGAVb494PSLtbnNX/7cuphKNk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "maintenance_mode"
-  ];
+  pythonImportsCheck = [ "maintenance_mode" ];
 
   meta = with lib; {
     description = "Shows a 503 error page when maintenance-mode is on";

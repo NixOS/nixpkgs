@@ -2,8 +2,8 @@
 
 let
   ocamlDependencies = version:
-    if lib.versionAtLeast version "4.2"
-    then with ocaml-ng.ocamlPackages_4_12; [
+    if lib.versionAtLeast version "4.3"
+    then with ocaml-ng.ocamlPackages_4_14; [
       ocaml
       findlib
       sedlex
@@ -126,7 +126,7 @@ in {
     sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
   };
   haxe_4_3 = generic {
-    version = "4.3.3";
-    sha256 = "sha256-sMklqQkVbWCYCKpOU23AjkuxzcVV7Aa8ljlFpruam9Y=";
+    version = "4.3.4";
+    sha256 = "sha256-XGV4VG8nUofHGjHbtrLA+2kIpnnPqw5IlcNrP3EsL+Q=";
   };
 }

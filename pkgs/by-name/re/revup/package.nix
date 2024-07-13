@@ -6,10 +6,10 @@
 
 let
   pname = "revup";
-  version = "0.2.1";
+  version = "0.3.0";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EaBI414m5kihuaOkaHYAzvVxeJCgMIh9lD0JnCeVdZM=";
+    hash = "sha256-LrSRcnWc4AvWbpSrOLprs+rVM0sR1joLat3g9og6BwE=";
   };
 in
 python3.pkgs.buildPythonPackage {
@@ -39,6 +39,7 @@ python3.pkgs.buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/Skydio/revup";
+    changelog = "https://github.com/Skydio/revup/releases/tag/v${version}";
     description = " Revolutionary github tools";
     longDescription = ''
       Revup provides command-line tools that allow developers to iterate faster

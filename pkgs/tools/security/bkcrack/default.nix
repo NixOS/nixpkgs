@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bkcrack";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "kimci86";
     repo = "bkcrack";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x7JK7+DcD2uSWZRTJQPGCcF2mHBlu6FwYUbuYzbvD+s=";
+    hash = "sha256-smDmnqmYuFT3ip3ULQfiiF5YxkwzPwPYBujqq9GUyMs=";
   };
 
   passthru.updateScript = nix-update-script { };

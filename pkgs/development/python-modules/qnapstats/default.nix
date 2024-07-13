@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, xmltodict
-, responses
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  xmltodict,
+  responses,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    responses
-  ];
+  nativeCheckInputs = [ responses ];
 
   checkPhase = ''
     runHook preCheck

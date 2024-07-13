@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , pkg-config, intltool
 , glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
-, librsvg, wrapGAppsHook
+, librsvg, wrapGAppsHook3
 , pulseaudioSupport ? true, libpulseaudio }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # https://bugs.launchpad.net/audio-recorder/+bug/1784622
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];
 
   buildInputs = [
     glib dbus gtk3 librsvg libappindicator-gtk3
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Audio recorder for GNOME and Unity Desktops";
+    mainProgram = "audio-recorder";
     longDescription = ''
       This program allows you to record your favourite music or audio to a file.
       It can record audio from your system soundcard, microphones, browsers and

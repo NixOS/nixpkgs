@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, onnxruntime-native
-, piper-phonemize-native
-, pybind11
-, setuptools
+{
+  buildPythonPackage,
+  onnxruntime-native,
+  piper-phonemize-native,
+  pybind11,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -20,9 +21,7 @@ buildPythonPackage {
     piper-phonemize-native.espeak-ng
   ];
 
-  pythonImportsCheck = [
-    "piper_phonemize"
-  ];
+  pythonImportsCheck = [ "piper_phonemize" ];
 
   # no tests
   doCheck = false;

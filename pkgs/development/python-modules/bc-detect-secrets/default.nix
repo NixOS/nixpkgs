@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, mock
-, pkgs
-, pyahocorasick
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, setuptools
-, unidiff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gibberish-detector,
+  mock,
+  pkgs,
+  pyahocorasick,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  setuptools,
+  unidiff,
 }:
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
-  version = "1.5.4";
+  version = "1.5.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,26 +26,20 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     rev = "refs/tags/${version}";
-    hash = "sha256-Gm8PYN9vqYkGaGKpLZkx0Ehd1P3G2d5LkSjWXxpPerI=";
+    hash = "sha256-njTVA1H0QM0PHIHe/Vc4IJtbgTyWdytqPv0RRnTY6cw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     requests
     unidiff
   ];
 
   passthru.optional-dependencies = {
-    word_list = [
-      pyahocorasick
-    ];
-    gibberish = [
-      gibberish-detector
-    ];
+    word_list = [ pyahocorasick ];
+    gibberish = [ gibberish-detector ];
   };
 
   nativeCheckInputs = [
@@ -71,9 +66,7 @@ buildPythonPackage rec {
     "TestModifiesBaselineFromVersionChange"
   ];
 
-  pythonImportsCheck = [
-    "detect_secrets"
-  ];
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
     description = "Tool to detect secrets in the code";
@@ -82,4 +75,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

@@ -17,7 +17,7 @@ buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/yaronzz/Tidal-Media-Downloader";
-    description = "An application that lets you download videos and tracks from Tidal";
+    description = "Application that lets you download videos and tracks from Tidal";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.all;

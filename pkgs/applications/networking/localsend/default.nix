@@ -7,6 +7,7 @@
 , pkg-config
 , libayatana-appindicator
 , undmg
+, makeBinaryWrapper
 }:
 
 let
@@ -72,13 +73,14 @@ let
       hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
     };
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg makeBinaryWrapper ];
 
     sourceRoot = ".";
 
     installPhase = ''
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+      makeBinaryWrapper $out/Applications/LocalSend.app/Contents/MacOS/LocalSend $out/bin/localsend
     '';
 
     meta = metaCommon // {
@@ -88,7 +90,7 @@ let
   };
 
   metaCommon = with lib; {
-    description = "An open source cross-platform alternative to AirDrop";
+    description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";

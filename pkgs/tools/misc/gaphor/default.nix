@@ -4,7 +4,7 @@
 , copyDesktopItems
 , gobject-introspection
 , poetry-core
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtksourceview4
 , pango
 , gaphas
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     copyDesktopItems
     gobject-introspection
     poetry-core
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -59,7 +59,7 @@ buildPythonApplication rec {
     desktopName = "Gaphor";
   };
 
-  # Disable automatic wrapGAppsHook to prevent double wrapping
+  # Disable automatic wrapGAppsHook3 to prevent double wrapping
   dontWrapGApps = true;
 
   postInstall = ''
@@ -76,7 +76,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple modeling tool written in Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     homepage = "https://github.com/gaphor/gaphor";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];

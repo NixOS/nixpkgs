@@ -38,7 +38,7 @@ buildFHSEnv {
 
   meta = with lib; {
     homepage = "https://www.cockroachlabs.com";
-    description = "A scalable, survivable, strongly-consistent SQL database";
+    description = "Scalable, survivable, strongly-consistent SQL database";
     license = licenses.bsl11;
     platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice neosimsim ];

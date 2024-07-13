@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, lxml
-, matplotlib
-, pytestCheckHook
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  lxml,
+  pytestCheckHook,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-ITvZx+3HMbTyaRmCb7tR0LKqCxGjqDdV9/2taziUD0c=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    lxml
-    matplotlib
+  dependencies = [ lxml ];
+
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    nose
   ];
-
-  nativeCheckInputs = [ pytestCheckHook nose ];
 
   pythonImportsCheck = [ "svgutils" ];
 

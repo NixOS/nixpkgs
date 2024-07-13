@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The in-house serif typeface for the publishing house Brill, designed by John Hudson; free for non-commercial use";
+    description = "In-house serif typeface for the publishing house Brill, designed by John Hudson; free for non-commercial use";
     longDescription = ''
       Brill has “a neo-classical design geared towards optimum legibility”.
 

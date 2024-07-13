@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";
-    description = "The Classified Advertisements library provides a generic means for matching resources";
+    description = "Classified Advertisements library provides a generic means for matching resources";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

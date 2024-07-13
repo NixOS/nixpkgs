@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, clarifai-grpc
-, fetchFromGitHub
-, inquirerpy
-, llama-index-core
-, numpy
-, opencv4
-, pandas
-, pillow
-, pycocotools
-, pypdf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, rich
-, schema
-, setuptools
-, tqdm
-, tritonclient
+{
+  lib,
+  buildPythonPackage,
+  clarifai-grpc,
+  fetchFromGitHub,
+  inquirerpy,
+  llama-index-core,
+  numpy,
+  opencv4,
+  pandas,
+  pillow,
+  pycocotools,
+  pypdf,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rich,
+  schema,
+  setuptools,
+  tabulate,
+  tqdm,
+  tritonclient,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.1.0";
+  version = "10.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,47 +33,34 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-/2PIsSsYr/R7DuTX/ndBAOX7C3IaFqPw16ZAX8E1Vk8=";
+    hash = "sha256-zAjGVICrYgai6GFpcJyigKxn7kNEZKclggR5ktzrCQ0=";
   };
 
   pythonRelaxDeps = [
     "clarifai-grpc"
+    "schema"
   ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     clarifai-grpc
     inquirerpy
-    llama-index-core
     numpy
-    opencv4
-    pandas
     pillow
-    pypdf
     pyyaml
     rich
     schema
+    tabulate
     tqdm
     tritonclient
   ];
 
   passthru.optional-dependencies = {
-    all = [
-      pycocotools
-    ];
+    all = [ pycocotools ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -81,12 +69,15 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access and API key
     "test_export_workflow_general"
+    "test_validate_invalid_id"
+    "test_validate_invalid_hex_id"
   ];
 
   disabledTestPaths = [
     # Tests require network access and API key
     "tests/test_app.py"
     "tests/test_data_upload.py"
+    "tests/test_eval.py"
     "tests/test_model_predict.py"
     "tests/test_model_train.py"
     "tests/test_search.py"
@@ -96,9 +87,7 @@ buildPythonPackage rec {
     "clarifai/models/model_serving/repo_build/static_files/base_test.py"
   ];
 
-  pythonImportsCheck = [
-    "clarifai"
-  ];
+  pythonImportsCheck = [ "clarifai" ];
 
   meta = with lib; {
     description = "Clarifai Python Utilities";
@@ -106,5 +95,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "clarifai";
   };
 }

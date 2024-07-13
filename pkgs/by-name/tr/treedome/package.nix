@@ -8,51 +8,43 @@
 , gsettings-desktop-schemas
 , gtk3
 , libsoup
-, mkYarnPackage
+, stdenv
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
 , openssl
 , pkg-config
 , rustPlatform
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 }:
 
 let
   pname = "treedome";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-FBzRsBoV3wnt2nu5WMnaTnBNC51jG120E0Orm55KhBg=";
+    hash = "sha256-YkyjG/ee5WeO5OD4FZnWaqcOJO3YC0uQkbwGkCNBxC8=";
     fetchLFS = true;
   };
 
-  frontend-build = mkYarnPackage {
-    inherit version src;
+  frontend-build = stdenv.mkDerivation (finalAttrs: {
     pname = "treedome-ui";
+    inherit version src;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
       hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
     };
 
-    packageJSON = ./package.json;
-
-    configurePhase = ''
-      runHook preConfigure
-      ln -s $node_modules node_modules
-      runHook postConfigure
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn --offline run build
-
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -62,9 +54,7 @@ let
 
       runHook postInstall
     '';
-
-    doDist = false;
-  };
+  });
 in
 rustPlatform.buildRustPackage {
   inherit version pname src;
@@ -98,7 +88,7 @@ rustPlatform.buildRustPackage {
     cmake
     pkg-config
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -139,9 +129,9 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application organized in tree-like structures";
+    description = "Local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";
     maintainers = with maintainers; [ tengkuizdihar ];

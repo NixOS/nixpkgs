@@ -92,6 +92,7 @@
       '';
 
       passthru = {
+        python = python3;
         # PYTHONPATH of all dependencies used by the package
         pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
         gunicorn = python3.pkgs.gunicorn;
@@ -101,6 +102,7 @@
       meta = {
         homepage = "https://github.com/netbox-community/netbox";
         description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
+        mainProgram = "netbox";
         license = lib.licenses.asl20;
         knownVulnerabilities = (lib.optional eol "Netbox version ${version} is EOL; please upgrade by following the current release notes instructions.");
         # Warning:

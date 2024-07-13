@@ -119,6 +119,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
     "zerocallusedregs"
@@ -262,7 +263,9 @@ let
   defaultHardeningFlags =
     (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
       # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
+      (if with stdenv.hostPlatform; isOpenBSD && isStatic
+       then knownHardeningFlags # Need pie, in fact
+       else remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
@@ -413,25 +416,28 @@ else let
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
     } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
       let
+        allDependencies = concatLists (concatLists dependencies);
+        allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
+
         computedSandboxProfile =
           concatMap (input: input.__propagatedSandboxProfile or [])
             (stdenv.extraNativeBuildInputs
             ++ stdenv.extraBuildInputs
-            ++ concatLists dependencies);
+            ++ allDependencies);
 
         computedPropagatedSandboxProfile =
           concatMap (input: input.__propagatedSandboxProfile or [])
-            (concatLists propagatedDependencies);
+            allPropagatedDependencies;
 
         computedImpureHostDeps =
           unique (concatMap (input: input.__propagatedImpureHostDeps or [])
             (stdenv.extraNativeBuildInputs
             ++ stdenv.extraBuildInputs
-            ++ concatLists dependencies));
+            ++ allDependencies));
 
         computedPropagatedImpureHostDeps =
           unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-            (concatLists propagatedDependencies));
+            allPropagatedDependencies);
     in {
       inherit __darwinAllowLocalNetworking;
       # TODO: remove `unique` once nix has a list canonicalization primitive
@@ -556,8 +562,8 @@ let
 
   meta = checkMeta.commonMeta {
     inherit validity attrs pos;
-    references = attrs.nativeBuildInputs ++ attrs.buildInputs
-              ++ attrs.propagatedNativeBuildInputs ++ attrs.propagatedBuildInputs;
+    references = attrs.nativeBuildInputs or [] ++ attrs.buildInputs or []
+              ++ attrs.propagatedNativeBuildInputs or [] ++ attrs.propagatedBuildInputs or [];
   };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 
@@ -574,6 +580,12 @@ let
         "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
       env;
 
+  # Fixed-output derivations may not reference other paths, which means that
+  # for a fixed-output derivation, the corresponding inputDerivation should
+  # *not* be fixed-output. To achieve this we simply delete the attributes that
+  # would make it fixed-output.
+  deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [ "outputHashAlgo" "outputHash" "outputHashMode" ];
+
 in
 
 extendDerivation
@@ -584,7 +596,7 @@ extendDerivation
      # This allows easy building and distributing of all derivations
      # needed to enter a nix-shell with
      #   nix-build shell.nix -A inputDerivation
-     inputDerivation = derivation (derivationArg // {
+     inputDerivation = derivation (deleteFixedOutputRelatedAttrs derivationArg // {
        # Add a name in case the original drv didn't have one
        name = derivationArg.name or "inputDerivation";
        # This always only has one output

@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytz
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "sha256-GVbokNZz0XE1zCCRMlPBVPa8HAAmbCK31QPMGlpC2Eg=";
   };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [
+    pytz
+    six
+  ];
 
   # tests are not included in sdist and building from source is none trivial
   doCheck = false;

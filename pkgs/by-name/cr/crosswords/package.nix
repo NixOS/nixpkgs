@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Crossword player and editor for GNOME";
+    description = "Crossword player and editor for GNOME";
     homepage = "https://gitlab.gnome.org/jrb/crosswords";
     license = licenses.gpl3Plus;
     mainProgram = "crosswords";

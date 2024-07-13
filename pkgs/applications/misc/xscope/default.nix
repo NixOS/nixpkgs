@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "program to monitor X11/Client conversations";
     homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ crertel ];
     platforms = with platforms; unix;
     mainProgram = "xscope";
   };

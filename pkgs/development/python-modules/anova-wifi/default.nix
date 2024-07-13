@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, aiohttp
-, sensor-state-data
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  aiohttp,
+  sensor-state-data,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.11.7";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,19 +21,17 @@ buildPythonPackage rec {
     owner = "Lash-L";
     repo = "anova_wifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G87lNPyFnMO0YWKtLv/RgSZ0j0exFro24erwYv87V90=";
+    hash = "sha256-F/bd5BtHpF3778eoK0QBaSmdTOpLlz+fixCYR74BRZw=";
   };
 
   postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
-    '';
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
+  '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     sensor-state-data
   ];
@@ -50,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anova_wifi" ];
 
   meta = with lib; {
-    description = "A Python package for reading anova sous vide api data";
+    description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
     changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
     maintainers = with maintainers; [ jamiemagee ];

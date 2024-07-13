@@ -33,9 +33,13 @@ for index in "${sources[@]}"; do
 
     remote_sources+=($index)
 
-    base_addresses[$index]=$(
+    base_address=$(
     curl --compressed --netrc -fsL "$index" | \
       jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
+    if [[ ! "$base_address" == */ ]]; then
+      base_address="$base_address/"
+    fi
+    base_addresses[$index]="$base_address"
 done
 
 echo "{ fetchNuGet }: ["
@@ -61,11 +65,12 @@ for package in *; do
     for source in "${remote_sources[@]}"; do
       url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
       if [[ "$source" == "$used_source" ]]; then
-        sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
+        hash="$(nix-hash --type sha256 --flat --sri "$version/$package.$version".nupkg)"
         found=true
         break
       else
-        if sha256=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+        if hash=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+          hash="$(nix-hash --to-sri --type sha256 "$hash")"
           # If multiple remote sources are enabled, nuget will try them all
           # concurrently and use the one that responds first. We always use the
           # first source that has the package.
@@ -87,9 +92,9 @@ for package in *; do
     fi
 
     if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; url = \"$url\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
     else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
     fi
   done
   cd ..

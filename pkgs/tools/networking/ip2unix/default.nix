@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, yaml-cpp, systemd
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, yaml-cpp, systemd
 , python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
 , libxml2, docbook5
 }:
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
+
+  patches = [
+    # https://github.com/nixcloud/ip2unix/pull/35
+    # fix out of range string_view access
+    (fetchpatch {
+      url = "https://github.com/nixcloud/ip2unix/commit/050ddf76b4b925f27e255fbb820b0700407ceb2b.patch";
+      hash = "sha256-5vaLmZmwuiMGV4KnVhuDSnXG1a390aBU51TShwpaMLs=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl

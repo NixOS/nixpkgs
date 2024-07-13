@@ -12,4 +12,5 @@ mkKdeDerivation {
     qtmultimedia
     qqc2-desktop-style
   ];
+  meta.mainProgram = "kwordquiz";
 }

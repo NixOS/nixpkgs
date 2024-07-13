@@ -7,7 +7,7 @@
 , isInsiders ? false
 # sourceExecutableName is the name of the binary in the source archive over
 # which we have no control and it is needed to run the insider version as
-# documented in https://nixos.wiki/wiki/Visual_Studio_Code#Insiders_Build
+# documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
 # On MacOS the insider binary is still called code instead of code-insiders as
 # of 2023-08-06.
 , sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.isLinux) "-insiders"
@@ -30,21 +30,21 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "11brsgksn3bl3px0hwa83vr22gb2k19pn8hcn7xwn6zzcgf7rsf2";
-    x86_64-darwin = "1ai7jmiq37zpicc5p387nvbx5122fp7c3qh2k596jq7l7k0iyfzd";
-    aarch64-linux = "0psjz56h8asgdh0m6insfysw1f6d00hifvb0rfsi8qv0wca72wb4";
-    aarch64-darwin = "0jskk6dvjg290mvw8hcs4hrhy7m3ridsj5w9lxs6kn74fdvg1byb";
-    armv7l-linux = "0rz26xw312s0larjvkrf8np9c0yccppadiqmj69j47vavg78274c";
+    x86_64-linux = "0bzf0mx1rgndpdd4a97kr01xsgsgp86gyscg8js2cvaad4265bmv";
+    x86_64-darwin = "1m7f91cqbbv00difvfqld8fqkj9kvyddihmzi3zyzn4gfkv8gvf0";
+    aarch64-linux = "09mxsk4qkq34yg1sd67cdasfxwdhdzcfij50fv1nl3kdjzp2i0iz";
+    aarch64-darwin = "1jxjzfz6gr0pcp2anwjqwm38ma2i8fnzf5zpscfdklrlbhf438k2";
+    armv7l-linux = "1yp4npgw4dkx8halsr1vm5ll1w4phx67dwd4krz1914mddx7x2kr";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.87.2";
+    version = "1.91.0";
     pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
-    rev = "863d2581ecda6849923a2118d93a088b0745d9d6";
+    rev = "ea1445cc7016315d0f5728f8e8b12a45dc0a7286";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
@@ -68,7 +68,7 @@ in
       src = fetchurl {
         name = "vscode-server-${rev}.tar.gz";
         url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-        sha256 = "1hdny44f93qzpm9vgx14wk1myrnsv5qcj25rqcy2jb5kspnq6813";
+        sha256 = "08mgfrwiji16q8x8kwmw3pdmb0325hfr9pd2fa5g5kmy9gnfw38v";
       };
     };
 
@@ -97,7 +97,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica bobby285271 Enzime ];
+      maintainers = with maintainers; [ eadwu synthetica bobby285271 johnrtitor ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

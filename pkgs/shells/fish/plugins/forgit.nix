@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "24.03.2";
+  version = "24.06.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    hash = "sha256-DnGQHWx3uFHFEI1kMTB6hfmaE4tY4O/hesPKj5s4uwQ=";
+    hash = "sha256-odxdySx3Bzxs5RMXJ4nivwltQYIaM/UrPb+A0/pnDSk=";
   };
 
   postInstall = ''
@@ -16,7 +16,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "A utility tool powered by fzf for using git interactively.";
+    description = "Utility tool powered by fzf for using git interactively";
     homepage = "https://github.com/wfxr/forgit";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

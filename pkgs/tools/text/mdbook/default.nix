@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Create books from MarkDown";
+    mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ licenses.mpl20 ];

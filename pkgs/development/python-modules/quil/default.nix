@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, rustPlatform
-, numpy
-, pytestCheckHook
-, syrupy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  rustPlatform,
+  numpy,
+  pytestCheckHook,
+  syrupy,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.6.5";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,29 +22,25 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "quil-rs";
     rev = "quil-py/v${version}";
-    hash = "sha256-SYq0NOzYGJuXFPGjvYzGgKvioCk0hBxLR5S6VFU5d88=";
+    hash = "sha256-GJ39pvIqYs2bMGAHJL8OgB0OfmIpo/k3FxorYvdOvhI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-qZY9eQxxlH59DE/RrZFC3G6Pp3IdJupPN5AhUnrKSKs=";
+    hash = "sha256-VvnjdCFrpo/rDLNJrHpZoV+E+fQGgNW/nBOvMG91sHQ=";
   };
 
   buildAndTestSubdir = "quil-py";
 
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  dependencies = [ numpy ];
 
   pythonImportsCheck = [ "numpy" ];
 

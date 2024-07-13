@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cargo
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python311
-, rustPlatform
-, symlinkJoin
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, blueprint-compiler
-, cairo
-, cmake
-, dbus
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, graphene
-, gtk4
-, libGL
-, libadwaita
-, libdrm
-, mesa
-, pango
-, sqlite
-, udev
-, wayland
-, dmidecode
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cargo,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python311,
+  rustPlatform,
+  symlinkJoin,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  blueprint-compiler,
+  cairo,
+  cmake,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  graphene,
+  gtk4,
+  libGL,
+  libadwaita,
+  libdrm,
+  mesa,
+  pango,
+  sqlite,
+  udev,
+  wayland,
+  dmidecode,
+  vulkan-loader,
 }:
 
 let
@@ -45,30 +46,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.4.4";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-J0wSu/jWpUJ7Ga6RecY4yLT7i5Ry1HiI+t30SAHOkMw=";
+    hash = "sha256-84D+CttolY5hleCJbDiN3mlk0+nlwwJUJhGoKGVT/lw=";
   };
 
   cargoDeps = symlinkJoin {
     name = "cargo-vendor-dir";
     paths = [
-      (rustPlatform.importCargoLock {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "pathfinder_canvas-0.5.0" = "sha256-qEp16TVggPtvFvDuUyWsS6rH6MeO6FW0K6BnACghaCg=";
-        };
-      })
-      (rustPlatform.importCargoLock {
-        lockFile = ./gatherer-Cargo.lock;
-      })
+      (rustPlatform.importCargoLock { lockFile = ./Cargo.lock; })
+      (rustPlatform.importCargoLock { lockFile = ./gatherer-Cargo.lock; })
     ];
   };
-
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -139,12 +132,13 @@ stdenv.mkDerivation rec {
     patchShebangs data/hwdb/generate_hwdb.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
 }

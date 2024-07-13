@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyqt5
-, pytestCheckHook
-, nix-update-script
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyqt5,
+  pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-dL2EUAMzWKq/oN3rXiEC6emDJddmg4KclT5ONKA0jfk=";
   };
 
-  nativeCheckInputs = [ pyqt5 pytestCheckHook ];
+  nativeCheckInputs = [
+    pyqt5
+    pytestCheckHook
+  ];
 
   # All of these fail because Qt modules cannot be imported
   disabledTestPaths = [

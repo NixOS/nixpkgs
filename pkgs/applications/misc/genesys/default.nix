@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A simple family tree generator that scales";
+    description = "Simple family tree generator that scales";
     homepage = "https://github.com/mrlem/genesys";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ rogarb ];

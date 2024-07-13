@@ -1,22 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, libcap, acl, file, readline, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libcap,
+  acl,
+  file,
+  readline,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clifm";
-  version = "1.17";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "leo-arch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-plJ2iKloRGtBSa1upSo675bMj6qczR6TQ043UQboxQE=";
+    hash = "sha256-QNxEvFZ5e4jQV2Tv2/D9KPRDoCoQlrqStFnbKVgcXxg=";
   };
 
-  buildInputs = [ libcap acl file readline python3];
+  buildInputs = [
+    libcap
+    acl
+    file
+    readline
+    python3
+  ];
 
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "DATADIR=/share"
-    "PREFIX=/"
+    "PREFIX=${placeholder "out"}"
+    "DATADIR=${placeholder "out"}/share"
   ];
 
   enableParallelBuilding = true;

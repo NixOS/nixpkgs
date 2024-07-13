@@ -5,7 +5,6 @@
 , gettext
 , itstool
 , glib
-, gnome
 , gtk-layer-shell
 , gtk3
 , libmateweather
@@ -13,23 +12,24 @@
 , librsvg
 , libxml2
 , dconf
+, dconf-editor
 , mate-desktop
 , mate-menus
 , hicolor-icon-theme
 , wayland
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , marco
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.0";
+  version = "1.28.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "s70EoJTQ61vX3DOA728MSdmp1SCXM9fM17RtBmogjLo=";
+    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     # See https://github.com/mate-desktop/mate-panel/issues/1402
-    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook
-    gnome.dconf-editor
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
+    dconf-editor
   ];
 
   # Needed for Wayland support.
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE panel";
+    description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;

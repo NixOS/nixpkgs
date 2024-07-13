@@ -3,6 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -38,6 +39,8 @@ buildGoModule rec {
     $out/bin/amtool --completion-script-zsh > amtool.zsh
     installShellCompletion amtool.zsh
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
 
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";

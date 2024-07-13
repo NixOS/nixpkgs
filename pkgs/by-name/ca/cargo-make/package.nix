@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.37.10";
+  version = "0.37.13";
 
   src = fetchFromGitHub {
     owner = "sagiegurari";
     repo = "cargo-make";
     rev = version;
-    hash = "sha256-qahmRwRjwefkp21f4nsIR4THGibkQ8+20qVmQmJ7+Vk=";
+    hash = "sha256-5A0J3NtxXlhIhr0+GZoctCA5EwTnBt+9aL4I8HUiJqY=";
   };
 
-  cargoHash = "sha256-NTi+1ULK+k1JIP7z3/3v7gPUxXgliq3i8gtJQVLDGEY=";
+  cargoHash = "sha256-7UA9EOUF/A1FhWBErZdPrzL+rDukjbtC2KIK10cLDXI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Rust task runner and build tool";
+    description = "Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -26,7 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A Redis HTTP interface with JSON output";
+    description = "Redis HTTP interface with JSON output";
+    mainProgram = "webdis";
     homepage = "https://webd.is/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ wucke13 ];

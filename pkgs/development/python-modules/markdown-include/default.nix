@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, markdown
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  markdown,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    markdown
-  ];
+  propagatedBuildInputs = [ markdown ];
 
-  pythonImportsCheck = [
-    "markdown_include"
-  ];
+  pythonImportsCheck = [ "markdown_include" ];
 
   doCheck = false; # no tests
 

@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "2.30.2";
+  version = "2.32.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    sha256 = "sha256-ThZb6/Mprz9qgEGsJ+EbENvjmgehDsjVgFGBq4PZMRM=";
+    sha256 = "sha256-N92qv1CjOSeoknIbf+LA0oAzy75uRGjOpcpHCg7g5lY=";
   };
   doCheck = false;
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  cargoHash = "sha256-yoBoPk5PvMLGvhU/kg+WwO5WgwEnfKQlnkCC6IctfAI=";
+  cargoHash = "sha256-9L02ox2T+dBRx+mmFpy5Bktsyp3C/havfZoDaNevIMw=";
 
   postInstall = ''
     installShellCompletion --cmd sentry-cli \
@@ -39,8 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";
     license = licenses.bsd3;
-    description = "A command line utility to work with Sentry";
+    description = "Command line utility to work with Sentry";
+    mainProgram = "sentry-cli";
     changelog = "https://github.com/getsentry/sentry-cli/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ rizary loewenheim ];
+    maintainers = with maintainers; [ rizary ];
   };
 }

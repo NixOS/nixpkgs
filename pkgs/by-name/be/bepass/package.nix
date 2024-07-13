@@ -23,7 +23,7 @@ buildGoModule rec{
     hash = "sha256-ruOhPWNs1WWM3r6X+6ch0HoDCu/a+IkBQiCr0Wh6yS8=";
   };
 
-  vendorHash = "sha256-SiggDy6vc19yIw15g45yjl8gscE91zUoR6woECbAtR0=";
+  vendorHash = "sha256-Juie/Hq3i6rvAK19x6ah3SCQJL0uCrmV9gvzHih3crY=";
 
   subPackages = [
     "cmd/cli"
@@ -52,7 +52,7 @@ buildGoModule rec{
 
   meta = with lib; {
     homepage = "https://github.com/bepass-org/bepass";
-    description = "A simple DPI bypass tool written in go";
+    description = "Simple DPI bypass tool written in go";
     license = licenses.mit;
     mainProgram = "bepass";
     maintainers = with maintainers; [ oluceps ];

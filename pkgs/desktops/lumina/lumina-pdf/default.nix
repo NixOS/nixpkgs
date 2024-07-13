@@ -30,6 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "PDF viewer for the Lumina Desktop";
+    mainProgram = "lumina-pdf";
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;
     platforms = platforms.unix;

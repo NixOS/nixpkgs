@@ -1,57 +1,55 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, rustPlatform
-, rustc
-, libiconv
-, typing-extensions
-, pytestCheckHook
-, hypothesis
-, pytest-timeout
-, pytest-mock
-, dirty-equals
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  libiconv,
+  typing-extensions,
+  pytestCheckHook,
+  hypothesis,
+  pytest-timeout,
+  pytest-mock,
+  dirty-equals,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.14.6";
-    format = "pyproject";
+    version = "2.18.4";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
       rev = "refs/tags/v${version}";
-      hash = "sha256-Y3RdDqFrH5C8Jt45FV6jLRV8G9odkqM1fBz6axeXF+4=";
+      hash = "sha256-wt6HG2jQU09Zxhxhzb49HvNnxahfSk2xvNApVZkqqbw=";
     };
 
-    patches = [
-      ./01-remove-benchmark-flags.patch
-    ];
+    patches = [ ./01-remove-benchmark-flags.patch ];
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${pname}-${version}";
-      hash = "sha256-tx8eS+MciP1C6U8FrKdTgelHb/yxU2eSdSydIMKh4rs=";
+      hash = "sha256-m0xP4fIFgInkUeAy4HqfTKHEiqmWpYO8CgKzxg+WXiU=";
     };
 
     nativeBuildInputs = [
       cargo
       rustPlatform.cargoSetupHook
-      rustPlatform.maturinBuildHook
       rustc
+    ];
+
+    build-system = [
+      rustPlatform.maturinBuildHook
       typing-extensions
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [
-      libiconv
-    ];
+    buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-    propagatedBuildInputs = [
-      typing-extensions
-    ];
+    dependencies = [ typing-extensions ];
 
     pythonImportsCheck = [ "pydantic_core" ];
 
@@ -85,4 +83,5 @@ let
       maintainers = with maintainers; [ blaggacao ];
     };
   };
-in pydantic-core
+in
+pydantic-core

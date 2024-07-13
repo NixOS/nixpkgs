@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, nbconvert
-, nbformat
-, notebook
-, pandoc-attributes
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  nbconvert,
+  nbformat,
+  notebook,
+  pandoc-attributes,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/aaren/notedown";
     description = "Convert IPython Notebooks to markdown (and back)";
+    mainProgram = "notedown";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vcanadi ];
   };

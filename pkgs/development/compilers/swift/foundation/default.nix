@@ -63,6 +63,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Core utilities, internationalization, and OS independence for Swift";
+    mainProgram = "plutil";
     homepage = "https://github.com/apple/swift-corelibs-foundation";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;

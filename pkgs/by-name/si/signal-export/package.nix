@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     mainProgram = "sigexport";
     homepage = "https://github.com/carderne/signal-export";
-    description = "Export your Signal chats to markdown files with attachments.";
+    description = "Export your Signal chats to markdown files with attachments";
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ phaer picnoir ];

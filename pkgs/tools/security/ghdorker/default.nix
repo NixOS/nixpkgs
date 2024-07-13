@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Extensible GitHub dorking tool";
+    mainProgram = "ghdorker";
     homepage = "https://github.com/dtaivpp/ghdorker";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

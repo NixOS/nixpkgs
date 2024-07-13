@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, cmake
-, doxygen
-, fetchFromGitHub
-, glib
-, glib-networking
-, gnutls
-, gpgme
-, hiredis
-, libgcrypt
-, libnet
-, libpcap
-, libssh
-, libuuid
-, libxcrypt
-, libxml2
-, paho-mqtt-c
-, pkg-config
-, zlib
-, freeradius
+{
+  lib,
+  stdenv,
+  cmake,
+  doxygen,
+  fetchFromGitHub,
+  glib,
+  glib-networking,
+  gnutls,
+  gpgme,
+  hiredis,
+  libgcrypt,
+  libnet,
+  libpcap,
+  libssh,
+  libuuid,
+  libxcrypt,
+  libxml2,
+  openldap,
+  paho-mqtt-c,
+  pkg-config,
+  radcli,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "gvm-libs";
     rev = "refs/tags/v${version}";
     hash = "sha256-nFqYpt9OWEPgSbaNsHLhs9mg7ChQcmfcgHh7nFfQh18=";
   };
@@ -45,20 +47,19 @@ stdenv.mkDerivation rec {
     gpgme
     hiredis
     libgcrypt
-    freeradius
     libnet
     libpcap
     libssh
     libuuid
     libxcrypt
     libxml2
+    openldap
     paho-mqtt-c
+    radcli
     zlib
   ];
 
-  cmakeFlags = [
-    "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
-  ];
+  cmakeFlags = [ "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm" ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];

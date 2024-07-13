@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , dpdk
@@ -19,11 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "odp-dpdk";
-  version = "1.42.0.0_DPDK_22.11";
+  version = "1.44.0.0_DPDK_22.11";
 
-  src = fetchurl {
-    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${pname}-${version}.tar.gz";
-    hash = "sha256-qtdqYE4+ab6/9Z0YXXCItcfj+3+gyprcNMAnAZkl4GA=";
+  src = fetchFromGitHub {
+    owner = "OpenDataPlane";
+    repo = "odp-dpdk";
+    rev = "v${version}";
+    hash = "sha256-hYtQ7kKB08BImkTYXqtnv1Ny1SUPCs6GX7WOYks8iKA=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +46,6 @@ stdenv.mkDerivation rec {
     jansson
     libbpf
     libnl
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-    "-Wno-error=uninitialized"
   ];
 
   # binaries will segfault otherwise

@@ -151,7 +151,7 @@ kaem.runCommand "${pname}-${version}" {
   nativeBuildInputs = [ tinycc.compiler gnupatch ];
 
   meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
+    description = "Tool to control the generation of non-source files from sources";
     homepage = "https://www.gnu.org/software/make";
     license = licenses.gpl3Plus;
     maintainers = teams.minimal-bootstrap.members;

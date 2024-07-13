@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pass-update";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-update";
     rev = "v${version}";
-    sha256 = "0yx8w97jcp6lv7ad5jxqnj04csbrn2hhc4pskssxknw2sbvg4g6c";
+    sha256 = "sha256-NFdPnGMs8myiHufeHAQUNDUuvDzYeoWYZllI9+4HL+s=";
   };
 
   postPatch = ''

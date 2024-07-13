@@ -7,16 +7,14 @@
 
   isoImage.edition = "plasma6";
 
-  services.xserver = {
-    desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
-    # Automatically login as nixos.
-    displayManager = {
-      sddm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "nixos";
-      };
+  # Automatically login as nixos.
+  services.displayManager = {
+    sddm.enable = true;
+    autoLogin = {
+      enable = true;
+      user = "nixos";
     };
   };
 

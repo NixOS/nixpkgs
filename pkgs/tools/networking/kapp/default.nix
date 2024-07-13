@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.60.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kapp";
     rev = "v${version}";
-    sha256 = "sha256-o1MFbyjgOvhgcrlkbYGn0+nHENL2STFiD9CUkCdB56E=";
+    hash = "sha256-6i09V4Y2rFoChXo5roxVUFf84qCu2X9i5NtlYtw4RhE=";
   };
 
   vendorHash = null;
@@ -18,7 +18,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   ldflags = [
-    "-X github.com/vmware-tanzu/carvel-kapp/pkg/kapp/version.Version=${version}"
+    "-X carvel.dev/kapp/pkg/kapp/version.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

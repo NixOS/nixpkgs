@@ -1,11 +1,23 @@
-{ lib, stdenv, fetchurl, ncurses, zlib
-, openssl ? null
-, sslSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  zlib,
+  openssl,
+  sslSupport ? true,
 }:
 
-with lib;
-
 assert sslSupport -> openssl != null;
+
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optional
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "tinyfugue";
@@ -17,11 +29,16 @@ stdenv.mkDerivation rec {
     sha256 = "12fra2fdwqj6ilv9wdkc33rkj343rdcf5jyff4yiwywlrwaa2l1p";
   };
 
+  patches = [
+    ./001-darwin-fixes.patch
+  ];
+
   configureFlags = optional (!sslSupport) "--disable-ssl";
 
-  buildInputs =
-    [ ncurses zlib ]
-    ++ optional sslSupport openssl;
+  buildInputs = [
+    ncurses
+    zlib
+  ] ++ optional sslSupport openssl;
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -31,13 +48,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://tinyfugue.sourceforge.net/";
-    description = "A terminal UI, screen-oriented MUD client";
+    description = "Terminal UI, screen-oriented MUD client";
+    mainProgram = "tf";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use
       with any type of text MUD.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.KibaFox ];
   };
 }

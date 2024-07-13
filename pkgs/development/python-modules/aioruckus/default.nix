@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "aioruckus"
-  ];
+  pythonImportsCheck = [ "aioruckus" ];
 
   nativeCheckInputs = [
     pytest-asyncio

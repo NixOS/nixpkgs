@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spotipy
-, click
-, pycryptodomex
-, mutagen
-, requests
-, deezer-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spotipy,
+  click,
+  pycryptodomex,
+  mutagen,
+  requests,
+  deezer-py,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +35,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "deezer"
-  ];
+  pythonImportsCheck = [ "deezer" ];
 
   meta = with lib; {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
+    mainProgram = "deemix";
     homepage = "https://git.freezerapp.xyz/RemixDev/deemix-py";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ natto1784 ];

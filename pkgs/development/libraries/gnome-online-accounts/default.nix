@@ -1,61 +1,51 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , vala
 , glib
 , meson
 , ninja
 , libxslt
-, gtk3
+, gtk4
 , enableBackend ? stdenv.isLinux
-, webkitgtk_4_1
 , json-glib
+, libadwaita
 , librest_1_0
 , libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
-, icu
 , glib-networking
 , libsoup_3
 , docbook-xsl-nons
 , docbook_xml_dtd_412
 , gnome
-, gcr
+, gcr_4
 , libkrb5
 , gvfs
 , dbus
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.48.0";
+  version = "3.50.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QYu5/P/b1yqYIFrTZRN2F/weNVGlTedPapjUXSZhdb8=";
+    hash = "sha256-5xSmfRccVxRDYet07oKhexXQqCIo/xiM+ScE9WJsopQ=";
   };
-
-  patches = [
-    # Fix crash with EWS and libxml2.12.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/b9638e2418408be4906752297e700506766dcf20.patch";
-      hash = "sha256-l9+qS9WF3RuG9NtQQzSjpFSLNJV4FkXxOsLKYbINqrQ=";
-    })
-  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
     "-Dgoabackend=${lib.boolToString enableBackend}"
     "-Dgtk_doc=${lib.boolToString enableBackend}"
     "-Dman=${lib.boolToString enableBackend}"
-    "-Dmedia_server=true"
+    "-Dwebdav=true"
   ];
 
   nativeBuildInputs = [
@@ -70,27 +60,23 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gcr
+    gcr_4
     glib
     glib-networking
-    gtk3
+    gtk4
+    libadwaita
     gvfs # OwnCloud, Google Drive
-    icu
     json-glib
     libkrb5
     librest_1_0
     libxml2
     libsecret
     libsoup_3
-  ] ++ lib.optionals enableBackend [
-    webkitgtk_4_1
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   separateDebugInfo = true;
 
@@ -102,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-online-accounts";
     description = "Single sign-on framework for GNOME";
     platforms = platforms.unix;
     license = licenses.lgpl2Plus;

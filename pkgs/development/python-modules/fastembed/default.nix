@@ -1,21 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, huggingface-hub
-, pythonOlder
-, pythonRelaxDepsHook
-, poetry-core
-, onnx
-, onnxruntime
-, requests
-, tokenizers
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  huggingface-hub,
+  loguru,
+  mmh3,
+  numpy,
+  onnx,
+  onnxruntime,
+  pillow,
+  pystemmer,
+  requests,
+  snowballstemmer,
+  tokenizers,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.1.2";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,42 +33,41 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "fastembed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FW85xeRcrPL3euXcQ3dS40SapimFgpWtRu6XiIzdzSM=";
+    hash = "sha256-bFIikLogTxrwLNR+NOnnRjKGneZ63N7CBuu81z85xZo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     huggingface-hub
+    loguru
+    mmh3
+    numpy
     onnx
     onnxruntime
+    pillow
+    pystemmer
     requests
+    snowballstemmer
     tokenizers
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "fastembed"
-  ];
+  pythonImportsCheck = [ "fastembed" ];
 
-  pythonRelaxDeps = [
-    "huggingface-hub"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonRelaxDeps = [ "onnxruntime" ];
 
   # there is one test and it requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast, Accurate, Lightweight Python library to make State of the Art Embedding";
     homepage = "https://github.com/qdrant/fastembed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/qdrant/fastembed/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

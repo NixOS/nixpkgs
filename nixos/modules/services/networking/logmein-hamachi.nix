@@ -17,8 +17,7 @@ in
     services.logmein-hamachi.enable = mkOption {
       type = types.bool;
       default = false;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable LogMeIn Hamachi, a proprietary
           (closed source) commercial VPN software.
         '';

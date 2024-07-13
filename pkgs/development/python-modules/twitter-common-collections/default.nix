@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, twitter-common-lang
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  twitter-common-lang,
 }:
 
 buildPythonPackage rec {
-  pname   = "twitter.common.collections";
+  pname = "twitter.common.collections";
   version = "0.3.11";
 
   src = fetchPypi {
@@ -17,9 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Twitter's common collections";
-    homepage    = "https://twitter.github.io/commons/";
-    license     = licenses.asl20;
+    homepage = "https://twitter.github.io/commons/";
+    license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
   };
-
 }

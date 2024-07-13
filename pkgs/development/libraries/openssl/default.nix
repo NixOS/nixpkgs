@@ -143,6 +143,15 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+      # /dev/crypto support has been dropped in OpenBSD 5.7.
+      #
+      # OpenBSD's ports does this too,
+      # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+      #
+      # https://github.com/openssl/openssl/pull/10565 indicated the
+      # intent was that this would be configured properly automatically,
+      # but that doesn't appear to be the case.
+      ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
@@ -221,10 +230,10 @@ let
     meta = with lib; {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
-      description = "A cryptographic library that implements the SSL and TLS protocols";
+      description = "Cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ];
+      maintainers = with maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
@@ -237,6 +246,8 @@ let
 in {
   # intended version "policy":
   # - 1.1 as long as some package exists, which does not build without it
+  #   (tracking issue: https://github.com/NixOS/nixpkgs/issues/269713)
+  #   try to remove in 24.05 for the first time, if possible then
   # - latest 3.x LTS
   # - latest 3.x non-LTS as preview/for development
   #
@@ -245,7 +256,7 @@ in {
 
   # If you do upgrade here, please update in pkgs/top-level/release.nix
   # the permitted insecure version to ensure it gets cached for our users
-  # and backport this to stable release (23.05).
+  # and backport this to stable release (at time of writing this 23.11).
   openssl_1_1 = common {
     version = "1.1.1w";
     hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
@@ -259,14 +270,14 @@ in {
     withDocs = true;
     extraMeta = {
       knownVulnerabilities = [
-        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.05 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
+        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.11 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
       ];
     };
   };
 
   openssl_3 = common {
-    version = "3.0.13";
-    hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
+    version = "3.0.14";
+    hash = "sha256-7soDXU3U6E/CWEbZUtpil0hK+gZQpvhMaC453zpBI8o=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -288,8 +299,31 @@ in {
   };
 
   openssl_3_2 = common {
-    version = "3.2.1";
-    hash = "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=";
+    version = "3.2.2";
+    hash = "sha256-GXFJwY2enyksQ/BACsq6EuX1LKz+BQ89GZJ36nOOwuc=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
+
+  openssl_3_3 = common {
+    version = "3.3.1";
+    hash = "sha256-d3zVlihMiDN1oqehG/XSeG/FQTJV76sgxQ1v/m0CC34=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch

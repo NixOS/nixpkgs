@@ -6,7 +6,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , imagemagick
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 }:
 
@@ -46,7 +46,7 @@ maven'.buildMavenPackage rec {
   nativeBuildInputs = [
     imagemagick # for icon conversion
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ gtk3 ];

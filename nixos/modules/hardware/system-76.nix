@@ -57,13 +57,13 @@ let
 in {
   options = {
     hardware.system76 = {
-      enableAll = mkEnableOption (lib.mdDoc "all recommended configuration for system76 systems");
+      enableAll = mkEnableOption "all recommended configuration for system76 systems";
 
       firmware-daemon.enable = mkOption {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = lib.mdDoc "Whether to enable the system76 firmware daemon";
+        description = "Whether to enable the system76 firmware daemon";
         type = types.bool;
       };
 
@@ -71,7 +71,7 @@ in {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = lib.mdDoc "Whether to make the system76 out-of-tree kernel modules available";
+        description = "Whether to make the system76 out-of-tree kernel modules available";
         type = types.bool;
       };
 
@@ -79,7 +79,7 @@ in {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = lib.mdDoc "Whether to enable the system76 power daemon";
+        description = "Whether to enable the system76 power daemon";
         type = types.bool;
       };
     };

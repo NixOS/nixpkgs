@@ -9,7 +9,7 @@
 , pkg-config
 , polkit
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , editorconfig-core-c
 , granite
 , gtk3
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     polkit # needed for ITS rules
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

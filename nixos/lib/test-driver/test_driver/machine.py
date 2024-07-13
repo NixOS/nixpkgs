@@ -17,7 +17,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
-from test_driver.logger import rootlog
+from test_driver.logger import AbstractLogger
 
 from .qmp import QMPSession
 
@@ -165,8 +165,6 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
         return (
             f"{self._cmd}"
@@ -272,6 +270,7 @@ class Machine:
         out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
+        logger: AbstractLogger,
         name: str = "machine",
         keep_vm_state: bool = False,
         callbacks: Optional[List[Callable]] = None,
@@ -282,6 +281,7 @@ class Machine:
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
+        self.logger = logger
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -309,15 +309,15 @@ class Machine:
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
-        rootlog.log(msg, {"machine": self.name})
+        self.logger.log(msg, {"machine": self.name})
 
     def log_serial(self, msg: str) -> None:
-        rootlog.log_serial(msg, self.name)
+        self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
-        return rootlog.nested(msg, my_attrs)
+        return self.logger.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
@@ -1115,8 +1115,8 @@ class Machine:
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
-        rootlog.log(f"deleting VM state directory {self.state_dir}")
-        rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
+        self.logger.log(f"deleting VM state directory {self.state_dir}")
+        self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         """
@@ -1223,7 +1223,7 @@ class Machine:
     def release(self) -> None:
         if self.pid is None:
             return
-        rootlog.info(f"kill machine (pid {self.pid})")
+        self.logger.info(f"kill machine (pid {self.pid})")
         assert self.process
         assert self.shell
         assert self.monitor
@@ -1250,6 +1250,5 @@ class Machine:
             check_return=False,
             check_output=False,
         )
-        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
         self.connected = False
         self.connect()

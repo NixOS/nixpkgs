@@ -19,7 +19,7 @@ let lspLibPkg = idris2Packages.buildIdris {
   };
   idrisLibraries = [ ];
 };
-in lspLibPkg.library
+in lspLibPkg.library { withSource = true; }
 ```
 
 The above results in a derivation with the installed library results (with sourcecode).
@@ -30,6 +30,7 @@ A slightly more involved example of a fully packaged executable would be the [`i
 
 # Assuming the previous example lives in `lsp-lib.nix`:
 let lspLib = callPackage ./lsp-lib.nix { };
+    inherit (idris2Packages) idris2Api;
     lspPkg = idris2Packages.buildIdris {
       ipkgName = "idris2-lsp";
       src = fetchFromGitHub {
@@ -38,10 +39,9 @@ let lspLib = callPackage ./lsp-lib.nix { };
          rev = "main";
          hash = "sha256-vQTzEltkx7uelDtXOHc6QRWZ4cSlhhm5ziOqWA+aujk=";
       };
-      idrisLibraries = [(idris2Packages.idris2Api { }) (lspLib { })];
+      idrisLibraries = [idris2Api lspLib];
     };
 in lspPkg.executable
 ```
 
-The above uses the default value of `withSource = false` for both of the two required Idris libraries that the `idris2-lsp` executable depends on. `idris2Api` in the above derivation comes built in with `idris2Packages`. This library exposes many of the otherwise internal APIs of the Idris2 compiler.
-
+The above uses the default value of `withSource = false` for the `idris2Api` but could be modified to include that library's source by passing `(idris2Api { withSource = true; })` to `idrisLibraries` instead. `idris2Api` in the above derivation comes built in with `idris2Packages`. This library exposes many of the otherwise internal APIs of the Idris2 compiler.

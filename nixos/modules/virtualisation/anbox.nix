@@ -10,7 +10,7 @@ let
     address = mkOption {
       default = addr;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         IPv${toString v} ${name} address.
       '';
     };
@@ -18,7 +18,7 @@ let
     prefixLength = mkOption {
       default = pref;
       type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-      description = lib.mdDoc ''
+      description = ''
         Subnet mask of the ${name} address, specified as the number of
         bits in the prefix (`${if v == 4 then "24" else "64"}`).
       '';
@@ -53,13 +53,13 @@ in
 
   options.virtualisation.anbox = {
 
-    enable = mkEnableOption (lib.mdDoc "Anbox");
+    enable = mkEnableOption "Anbox";
 
     image = mkOption {
       default = pkgs.anbox.image;
       defaultText = literalExpression "pkgs.anbox.image";
       type = types.package;
-      description = lib.mdDoc ''
+      description = ''
         Base android image for Anbox.
       '';
     };
@@ -67,7 +67,7 @@ in
     imageModifications = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Commands to edit the image filesystem.
 
         This can be used to e.g. bundle a privileged F-Droid.
@@ -79,7 +79,7 @@ in
     extraInit = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra shell commands to be run inside the container image during init.
       '';
     };
@@ -91,7 +91,7 @@ in
       dns = mkOption {
         default = "1.1.1.1";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Container DNS server.
         '';
       };

@@ -1,14 +1,29 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, portmidi
-, python-rtmidi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+
+  # native dependencies
+  portmidi,
+
+  # optional-dependencies
+  pygame,
+  python-rtmidi,
+  rtmidi-python,
+
+  # tests
+  pytestCheckHook,
+  pythonOlder,
+
 }:
 
 buildPythonPackage rec {
@@ -20,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ouootu1zD3N9WxLaNXjevp3FAFj6Nw/pzt7ZGJtnw0g=";
+    hash = "sha256-Ouootu1zD3N9WxLaNXjevp3FAFj6Nw/pzt7ZGJtnw0g=";
   };
 
   patches = [
@@ -30,22 +45,24 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    python-rtmidi
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ packaging ];
 
-  pythonImportsCheck = [
-    "mido"
-  ];
+  optional-dependencies = {
+    ports-pygame = [ pygame ];
+    ports-rtmidi = [ python-rtmidi ];
+    ports-rtmidi-python = [ rtmidi-python ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "mido" ];
 
   meta = with lib; {
     description = "MIDI Objects for Python";

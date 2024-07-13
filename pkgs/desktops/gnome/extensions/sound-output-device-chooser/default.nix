@@ -1,7 +1,6 @@
 { lib, stdenv
 , substituteAll
 , fetchFromGitHub
-, fetchpatch
 , libpulseaudio
 , python3
 }:

@@ -25,7 +25,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Qt based archiving solution with libarchive backend";
+    description = "Qt based archiving solution with libarchive backend";
+    mainProgram = "archiver";
     homepage = "https://gitlab.com/marcusbritanicus/libarchive-qt";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

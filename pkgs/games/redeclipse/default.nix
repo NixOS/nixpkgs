@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , curl, ed, pkg-config, freetype, zlib, libX11
 , SDL2, SDL2_image, SDL2_mixer
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A first person arena shooter, featuring parkour, impulse boosts, and more";
+    description = "First person arena shooter, featuring parkour, impulse boosts, and more";
     longDescription = ''
       Red Eclipse is a fun-filled new take on the first person arena shooter,
       featuring parkour, impulse boosts, and more. The development is geared

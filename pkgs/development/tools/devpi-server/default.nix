@@ -23,6 +23,7 @@
 , webtest
 , testers
 , devpi-server
+, nixosTests
 }:
 
 
@@ -108,8 +109,11 @@ buildPythonApplication rec {
     "devpi_server"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = devpi-server;
+  passthru.tests = {
+    devpi-server = nixosTests.devpi-server;
+    version = testers.testVersion {
+      package = devpi-server;
+    };
   };
 
   meta = with lib;{

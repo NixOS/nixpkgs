@@ -22,7 +22,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A high-level and functional interface to the Format module of the OCaml standard library";
+    description = "High-level and functional interface to the Format module of the OCaml standard library";
     homepage = "https://github.com/ocaml-community/easy-format";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

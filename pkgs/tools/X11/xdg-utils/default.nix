@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, fetchpatch, writeText
+{ lib, stdenv, fetchurl, fetchFromGitLab, fetchFromGitHub, runCommand, writeText
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
-, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, xdg-user-dirs
+, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
+, shared-mime-info
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -29,7 +30,7 @@ let
 
   # This is still required to work around the eval trickery some scripts do
   commonPrologue = "${writeText "xdg-utils-prologue" ''
-    export PATH=$PATH:${coreutils}/bin
+    export PATH=$PATH:${lib.makeBinPath [ coreutils ]}
   ''}";
 
   solutions = [
@@ -120,7 +121,11 @@ let
         "$KDE_SESSION_VERSION" = true;
         "$KTRADER" = true;
       };
-      prologue = commonPrologue;
+      prologue = "${writeText "xdg-mime-prologue" ''
+        export XDG_DATA_DIRS="$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${shared-mime-info}/share"
+        export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
+        export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
+      ''}";
     }
 
     {
@@ -162,7 +167,10 @@ let
     {
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ nettools perl procmail procps ];
+      inputs = commonDeps ++ [ nettools perl procps ]
+        # procmail's funky build system is currently broken in cross-build.
+        # xdg-screensaver will gracefully degrade if it's not available.
+        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) procmail;
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
       fake.external = commonFakes ++ [
@@ -171,12 +179,15 @@ let
         "xautolock"                 # Xautolock
         "xscreensaver-command"      # Xscreensaver
         "xset"                      # generic-ish X
-      ];
-      fix."$lockfile_command" = [ "lockfile" ];
+      ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "lockfile"; # procmail
       keep = {
         "$MV" = true;
         "$XPROP" = true;
+        "$lockfile_command" = true;
       };
+      execer = [
+        "cannot:${perl}/bin/perl"
+      ];
       prologue = "${writeText "xdg-screensaver-prologue" ''
         export PERL5LIB=${with perlPackages; makePerlPath [ NetDBus XMLTwig XMLParser X11Protocol ]}
         export PATH=$PATH:${coreutils}/bin
@@ -209,10 +220,29 @@ let
         "$handler" = true;
       };
     }
+
+    {
+      scripts = [ "bin/xdg-terminal" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = commonDeps ++ [ bash glib.bin which ];
+      fake.external = commonFakes ++ [
+        "gconftool-2"    # GNOME
+        "exo-open"       # XFCE
+        "lxterminal"     # LXQT
+        "qterminal"      # LXQT
+        "terminology"    # Englightenment
+      ];
+      keep = {
+        "$command" = true;
+        "$kreadconfig" = true;
+        "$terminal_exec" = true;
+      };
+      prologue = commonPrologue;
+    }
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -220,7 +250,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${version}";
+    rev = "v${self.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -228,6 +258,8 @@ stdenv.mkDerivation rec {
     # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
+    #  Enable build of xdg-terminal
+    ./enable-xdg-terminal.patch
   ];
 
   # just needed when built from git
@@ -242,11 +274,39 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions);
 
+  passthru.tests.xdg-mime = runCommand "xdg-mime-test" {
+    nativeBuildInputs = [ self.finalPackage ];
+    preferLocalBuild = true;
+    xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
+      "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
+        "https://staging.cohostcdn.org/attachment/0f5d9832-0cda-4d07-b35f-832b287feb6c/kernelkisser.png"
+        "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"
+      ];
+      "sha256-Si9AtB7J9o6rK/oftv+saST77CNaeWomWU5ECfbRioM=" = [
+        "https://static1.e621.net/data/25/3d/253dc77fbc60d7214bc60e4a647d1c32.jpg"
+      ];
+      "sha256-Z+onQRY5zlDWPp5/y4E6crLz3TaMCNipcxEEMSHuLkM=" = [
+        "https://d.furaffinity.net/art/neotheta/1691409857/1691409857.neotheta_quickmakeanentry_by_neotheta-sig.png"
+        "https://static1.e621.net/data/bf/e4/bfe43ba264ad68e5d8a101ecef69c03e.png"
+      ];
+    };
+  } ''
+    for x in $xenias; do
+      ext=''${x##*.}
+      type="$(xdg-mime query filetype $x)"
+      [ $? -eq 0 ] && [ "$type" = "image/''${ext/jpg/jpeg}" ] || {
+        echo "Incorrect MIME type '$type' for '$x'" >&2
+        exit 1
+      }
+    done
+    touch $out
+  '';
+
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
-    description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2 else licenses.mit;
+    description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
+    license = if mimiSupport then licenses.gpl2Only else licenses.mit;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };
-}
+})

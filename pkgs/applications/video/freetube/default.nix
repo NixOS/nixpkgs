@@ -2,18 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.19.2";
+  version = "0.21.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-GhlU02CmglHUzVTqoajXFS1E6WXxXjxRTdiDEDqsH8s=";
+    sha256 = "sha256-HAtOWa/2j8xIICz8BQcG9X4t5Wu+VjlpWUGcTVteeME=";
   };
 
   passthru.tests = nixosTests.freetube;
 
   appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
   };
 
   dontUnpack = true;
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An Open Source YouTube app for privacy";
+    description = "Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];

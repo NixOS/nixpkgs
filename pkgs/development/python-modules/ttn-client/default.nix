@@ -1,15 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "0.0.3";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,23 +20,23 @@ buildPythonPackage rec {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oHGv9huk400nPl4ytV8uxzK7eENpoBHt8uFjD2Ck67w=";
+    hash = "sha256-MnQEYPrkJVs+yxRRYF5FpDDc6k6qAbAnSzNl+p1bmgY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   checkInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ttn_client"
+  pythonImportsCheck = [ "ttn_client" ];
+
+  disabledTests = [
+    # Test require network access
+    "test_connection_auth_error"
   ];
 
   meta = with lib; {

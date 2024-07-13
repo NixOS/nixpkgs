@@ -1,17 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, psutil }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "command-runner";
   version = "1.6.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "command_runner";
-    inherit version;
-    sha256 = "sha256-lzt1UhhrPqQrBKsRmPhqhtOIfFlCteQqo6sZ6rOut0A=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "netinvent";
+    repo = "command_runner";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QzqkcF2/YExK/dz+b0Uk0Af/rAXRMuRIeEynyFgDql8=";
   };
 
-  propagatedBuildInputs = [ psutil ];
+  build-system = [ setuptools ];
+
+  dependencies = [ psutil ];
+
+  # Tests are execute ping
+  # ping: socket: Operation not permitted
+  doCheck = false;
+
+  pythonImportsCheck = [ "command_runner" ];
 
   meta = with lib; {
     homepage = "https://github.com/netinvent/command_runner";
@@ -19,6 +38,7 @@ buildPythonPackage rec {
       Platform agnostic command execution, timed background jobs with live
       stdout/stderr output capture, and UAC/sudo elevation
     '';
+    changelog = "https://github.com/netinvent/command_runner/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = teams.wdz.members;
   };

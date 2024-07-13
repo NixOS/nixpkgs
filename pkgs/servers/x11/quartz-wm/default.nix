@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     AppKit Xplugin Foundation
   ];
   meta = with lib; {
-    license = licenses.apsl20;
+    license = licenses.apple-psl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

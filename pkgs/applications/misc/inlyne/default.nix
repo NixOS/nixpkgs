@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dDGTy5WOCyeWYfemVtv+YswNyHSqDL4C7MbHsKgRwLk=";
+    hash = "sha256-Kae8WnahA/6k6QT5htYU2+diAFkmxVsbVaxRUlhf39o=";
   };
 
-  cargoHash = "sha256-GDy7/FooHD77X5dZmlLX+isRKr2WjadKPKyVD55M9ZE=";
+  cargoHash = "sha256-M6daK2y9HBRDV2wQjw87g1QYOqiJBfRf9uW1Eg6z6C8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU powered browserless markdown viewer";
+    description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/trimental/inlyne";
     changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;

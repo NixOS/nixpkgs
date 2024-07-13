@@ -57,9 +57,7 @@ in
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
-           && stdenv.buildPlatform.system != "i686-freebsd"
-           && stdenv.buildPlatform.system != "x86_64-solaris"
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-solaris"
            && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
 
 , # The configuration attribute set
@@ -110,8 +108,9 @@ let
   trivialBuilders = self: super:
     import ../build-support/trivial-builders {
       inherit lib;
+      inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) shellcheck-minimal;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
@@ -282,8 +281,8 @@ let
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
+        gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
+          stdenv.hostPlatform.gcc or {};
       };
     });
 
@@ -293,7 +292,7 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
-              "zerocallusedregs"
+              "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

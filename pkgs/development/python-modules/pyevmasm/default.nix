@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ethereum Virtual Machine (EVM) assembler and disassembler";
+    mainProgram = "evmasm";
     homepage = "https://github.com/crytic/pyevmasm";
     changelog = "https://github.com/crytic/pyevmasm/releases/tag/${version}";
     license = licenses.asl20;

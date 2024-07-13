@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.darlinghq.org/";
     description = "Darling lets you open macOS dmgs on Linux";
+    mainProgram = "darling-dmg";
     platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Luflosi ];

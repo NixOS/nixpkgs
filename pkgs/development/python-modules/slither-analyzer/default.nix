@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, crytic-compile
-, fetchFromGitHub
-, makeWrapper
-, packaging
-, prettytable
-, pythonOlder
-, setuptools
-, solc
-, web3
-, withSolc ? false
-, testers
-, slither-analyzer
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  crytic-compile,
+  fetchFromGitHub,
+  makeWrapper,
+  packaging,
+  prettytable,
+  pythonOlder,
+  setuptools-scm,
+  solc,
+  web3,
+  withSolc ? false,
+  testers,
+  slither-analyzer,
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,12 +27,12 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-MjO2ZYFat+byH0DEt2v/wPXaYL2lmlESgQCZXD4Jpt0=";
+    hash = "sha256-KmbmljtmMtrJxgSMJjQ8fdk6RpEXcAVBuo24EsyMV8k=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -68,14 +69,19 @@ buildPythonPackage rec {
     "slither.vyper_parsing"
   ];
 
-  # No Python tests
-  doCheck = false;
+  # Test if the binary works during the build phase.
+  checkPhase = ''
+    runHook preCheck
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = slither-analyzer;
-      command = "HOME=$TMPDIR slither --version";
-    };
+    HOME="$TEMP" $out/bin/slither --version
+
+    runHook postCheck
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = slither-analyzer;
+    command = "HOME=$TMPDIR slither --version";
+    version = "${version}";
   };
 
   meta = with lib; {
@@ -89,6 +95,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
     mainProgram = "slither";
-    maintainers = with maintainers; [ arturcygan fab hellwolf ];
+    maintainers = with maintainers; [
+      arturcygan
+      fab
+      hellwolf
+    ];
   };
 }

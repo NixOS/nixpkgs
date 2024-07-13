@@ -93,6 +93,13 @@ in
         # be garbage collected. Ensure the file gets "refreshed" on every start.
         rm -f ${stateDir}/.local/share/dresden-elektronik/deCONZ/zcldb.txt
       '';
+      postStart = ''
+        # Delay signalling service readiness until it's actually up.
+        while ! "${lib.getExe pkgs.curl}" -sSfL -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
+            echo "Waiting for TCP port ${toString cfg.httpPort} to be open..."
+            sleep 1
+        done
+      '';
       environment = {
         HOME = stateDir;
         XDG_RUNTIME_DIR = "/run/${name}";
@@ -115,6 +122,7 @@ in
         RuntimeDirectory = name;
         RuntimeDirectoryMode = "0700";
         StateDirectory = name;
+        SuccessExitStatus = [ 143 ];
         WorkingDirectory = stateDir;
         # For access to /dev/ttyACM0 (ConBee).
         SupplementaryGroups = [ "dialout" ];

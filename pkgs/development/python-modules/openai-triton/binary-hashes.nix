@@ -5,7 +5,8 @@
 
 # To add a new version, run "prefetch.sh 'new-version'" to paste the generated file as follows.
 
-version : builtins.getAttr version {
+version:
+builtins.getAttr version {
   "2.1.0" = {
     x86_64-linux-38 = {
       name = "triton-2.1.0-cp38-cp38-linux_x86_64.whl";

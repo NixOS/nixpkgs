@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "krelay";
-  version = "0.0.7";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "knight42";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FB+N4gSjAG/HyL5a/D44G4VVzlAQZ8Vjt+YUclCcy3w=";
+    hash = "sha256-tZnHkjsAT8AOIpVDIiHnD6k/2S/S/+jM9uw18TaYJaA=";
   };
 
-  vendorHash = "sha256-Nktv3yRrK2AypCzvQDH9gax65GJEXq6Fb3eBWvltQVk=";
+  vendorHash = "sha256-5lA7I/vrc6+XsiSCL61a/p7jbseLcJyXnOC5R/z85vQ=";
 
   subPackages = [ "cmd/client" ];
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A drop-in replacement for `kubectl port-forward` with some enhanced features";
+    description = "Drop-in replacement for `kubectl port-forward` with some enhanced features";
     homepage = "https://github.com/knight42/krelay";
     changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
     license = licenses.mit;

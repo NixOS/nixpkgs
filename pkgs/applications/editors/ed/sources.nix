@@ -4,7 +4,7 @@
 
 let
   meta = {
-    description = "The GNU implementation of the standard Unix editor";
+    description = "GNU implementation of the standard Unix editor";
     longDescription = ''
       GNU ed is a line-oriented text editor. It is used to create, display,
       modify and otherwise manipulate text files, both interactively and via
@@ -23,10 +23,10 @@ in
 {
   ed = let
     pname = "ed";
-    version = "1.20.1";
+    version = "1.20.2";
     src = fetchurl {
       url = "mirror://gnu/ed/ed-${version}.tar.lz";
-      hash = "sha256-saRjspehQfmHbEsfzQFHf2Rc3tkhaAkOmjXbKvS6u8o=";
+      hash = "sha256-Zf7HMY9IwsoX8zSsD0cD3v5iA3uxPMI5IN4He1+iRSM=";
     };
   in import ./generic.nix {
     inherit pname version src meta;

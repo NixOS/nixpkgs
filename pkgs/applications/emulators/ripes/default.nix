@@ -14,14 +14,14 @@
 stdenv.mkDerivation rec {
   pname = "ripes";
   # Pulling unstable version as latest stable does not build against gcc-13.
-  version = "2.2.6-unstable-2024-03-03";
+  version = "2.2.6-unstable-2024-04-04";
 
   src = fetchFromGitHub {
     owner = "mortbopet";
     repo = "Ripes";
-    rev = "b71f0ddd5d2d346cb97b28fd3f70fef55bb9b6b7";
+    rev = "878087332afa3558dc8ca657f80a16ecdcf82818";
     fetchSubmodules = true;
-    hash = "sha256-zQrrWBHNIacRoAEIjR0dlgUTncBCiodcBeT/wbDClWg=";
+    hash = "sha256-aNJTM/s4GNhWVXQxK1R/rIN/NmeKglibQZMh8ENjIzo=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A graphical processor simulator and assembly editor for the RISC-V ISA";
+    description = "Graphical processor simulator and assembly editor for the RISC-V ISA";
     homepage = "https://github.com/mortbopet/Ripes";
     license = licenses.mit;
     platforms = platforms.unix;

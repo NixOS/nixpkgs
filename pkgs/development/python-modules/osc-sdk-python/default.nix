@@ -1,38 +1,34 @@
 {
-  lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , pytestCheckHook
-  , requests
-  , ruamel-yaml
-  , setuptools
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.27.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     rev = "v${version}";
-    hash = "sha256-dp4yE8cTeXAPoixJ6ZtsvcTSKdYpDIebHkddUiqJe5Q=";
+    hash = "sha256-WtKG2ujEGUW0nhYWxfYDkxicN/uEqBxKCh9FcCfjmHM=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
     ruamel-yaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -40,13 +36,9 @@ buildPythonPackage rec {
   '';
 
   # Only keep test not requiring access and secret keys
-  pytestFlagsArray = [
-    "tests/test_net.py"
-  ];
+  pytestFlagsArray = [ "tests/test_net.py" ];
 
-  pythonImportsCheck = [
-    "osc_sdk_python"
-  ];
+  pythonImportsCheck = [ "osc_sdk_python" ];
 
   meta = with lib; {
     description = "SDK to perform actions on Outscale API";

@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, protobuf
+, protobuf_26
 , git
 , testers
 , buf
@@ -10,20 +10,19 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.30.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
-    repo = pname;
+    repo = "buf";
     rev = "v${version}";
-    hash = "sha256-SHwmX9/9qqhpTDVKf+0HAJqPvSKKoUyxHqCe8WXhMUc=";
+    hash = "sha256-a2OuxstfZcN49CLn4Tk6DeCXUKZOrMQ7pNDicmNxVRA=";
   };
 
-  vendorHash = "sha256-4ccctJ5C4/Ff+wLrZPR1oS0tjqkULAsTjKm3X8WDr6o=";
+  vendorHash = "sha256-rAuFXXoC0zp/n+2Ogxrj7Ji3wpQ45XloOs7nI8K41eo=";
 
   patches = [
-    # Skip a test that requires networking to be available to work,
-    # and a test which requires the source checkout to be part of a git repository
+    # Skip a test that requires networking to be available to work.
     ./skip_broken_tests.patch
   ];
 
@@ -33,7 +32,11 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf # Required for buftesting.GetProtocFilePaths
+    protobuf_26 # Required for buftesting.GetProtocFilePaths
+  ];
+
+  checkFlags = [
+    "-skip=TestWorkspaceGit"
   ];
 
   preCheck = ''
@@ -74,5 +77,6 @@ buildGoModule rec {
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk lrewega ];
+    mainProgram = "buf";
   };
 }

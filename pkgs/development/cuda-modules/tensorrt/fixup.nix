@@ -1,12 +1,12 @@
 {
   cudaVersion,
   final,
-  hostPlatform,
   lib,
   mkVersionedPackageName,
   package,
   patchelf,
   requireFile,
+  stdenv,
   ...
 }:
 let
@@ -17,6 +17,7 @@ let
     strings
     versions
     ;
+  inherit (stdenv) hostPlatform;
   # targetArch :: String
   targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
     x86_64-linux = "x86_64-linux-gnu";
@@ -108,6 +109,6 @@ finalAttrs: prevAttrs: {
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
+    maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
   };
 }

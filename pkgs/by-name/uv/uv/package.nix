@@ -2,60 +2,81 @@
 , cmake
 , darwin
 , fetchFromGitHub
-, openssl
+, installShellFiles
+, libiconv
 , pkg-config
+, python3Packages
 , rustPlatform
 , stdenv
+, testers
+, uv
 , nix-update-script
 }:
 
-rustPlatform.buildRustPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.1.21";
+  version = "0.2.22";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = version;
-    hash = "sha256-xc1+33BCycl7BJqqcQKLR9Sgg8xTRcF8P7gRIyeRIZ4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+eQdR6+0O1CTZoNIodM52R25lLZT+qB2kFy7oWaE+7M=";
   };
 
-  cargoLock = {
+  cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "pubgrub-0.2.1" = "sha256-Pn60v5tfpGrssCeuaUcxw5eJ1g8Dk/+un0s8+k4abpo=";
+      "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
+      "pubgrub-0.2.1" = "sha256-6tr+HATYSn1A1uVJwmz40S4yLDOJlX8vEokOOtdFG0M=";
+      "reqwest-middleware-0.3.2" = "sha256-OiC8Kg+F2eKy7YNuLtgYPi95DrbxLvsIKrKEeyuzQTo=";
     };
   };
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
 
   buildInputs = [
-    openssl
+    libiconv
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
+  dontUseCmakeConfigure = true;
+
   cargoBuildFlags = [ "--package" "uv" ];
 
-  # Tests require network access
-  doCheck = false;
+  postInstall = ''
+    export HOME=$TMPDIR
+    installShellCompletion --cmd uv \
+      --bash <($out/bin/uv --generate-shell-completion bash) \
+      --fish <($out/bin/uv --generate-shell-completion fish) \
+      --zsh <($out/bin/uv --generate-shell-completion zsh)
+  '';
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
+  pythonImportsCheck = [
+    "uv"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = uv;
+    };
+    updateScript = nix-update-script { };
   };
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
-    description = "An extremely fast Python package installer and resolver, written in Rust";
+  meta = {
+    description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ marsam ];
+    license = with lib.licenses; [ asl20 mit ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, asn1crypto
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, freezegun
-, oscrypto
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, uritools
+{
+  lib,
+  aiohttp,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  oscrypto,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  uritools,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace ', "pytest-runner",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -72,15 +71,13 @@ buildPythonPackage rec {
     "test_ed"
   ];
 
-  pythonImportsCheck = [
-    "pyhanko_certvalidator"
-  ];
+  pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
   meta = with lib; {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
     changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

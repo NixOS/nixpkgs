@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simply tool to convert json to yaml written in Go";
+    mainProgram = "gojsontoyaml";
     homepage = "https://github.com/brancz/gojsontoyaml";
     license = licenses.mit;
     maintainers = [ maintainers.bryanasdev000 ];

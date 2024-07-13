@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ascii_magic"
-  ];
+  pythonImportsCheck = [ "ascii_magic" ];
 
   preCheck = ''
     cd tests

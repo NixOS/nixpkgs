@@ -9,7 +9,7 @@ let
 in
 
 {
-  options.hardware.flipperzero.enable = mkEnableOption (mdDoc "udev rules and software for Flipper Zero devices");
+  options.hardware.flipperzero.enable = mkEnableOption "udev rules and software for Flipper Zero devices";
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.qFlipper ];

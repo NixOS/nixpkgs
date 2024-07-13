@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Tests are interacting with the Dexcom API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydexcom"
-  ];
+  pythonImportsCheck = [ "pydexcom" ];
 
   meta = with lib; {
     description = "Python API to interact with Dexcom Share service";

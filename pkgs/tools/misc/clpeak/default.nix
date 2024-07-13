@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocl-icd opencl-clhpp ];
 
   meta = with lib; {
-    description = "A tool which profiles OpenCL devices to find their peak capacities";
+    description = "Tool which profiles OpenCL devices to find their peak capacities";
     homepage = "https://github.com/krrishnarraj/clpeak/";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ];

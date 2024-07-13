@@ -5,7 +5,7 @@
 , jdk
 , jre
 , makeWrapper
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/usadellab/Trimmomatic/blob/main/versionHistory.txt";
-    description = "A flexible read trimming tool for Illumina NGS data";
+    description = "Flexible read trimming tool for Illumina NGS data";
     longDescription = ''
       Trimmomatic performs a variety of useful trimming tasks for illumina
       paired-end and single ended data: adapter trimming, quality trimming,

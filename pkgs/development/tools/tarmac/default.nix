@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Resource compiler and asset manager for Roblox";
+    mainProgram = "tarmac";
     longDescription = ''
       Tarmac is a resource compiler and asset manager for Roblox projects.
       It helps enable hermetic place builds when used with tools like Rojo.

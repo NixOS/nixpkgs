@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libxkbcommon
 , pango
@@ -13,35 +14,25 @@
 , mesa
 , fontconfig
 , libglvnd
-, libclang
 , autoPatchelfHook
 , clang
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.3";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
+    hash = "sha256-EdlOGL9RdO77HnZxv2UpPwrJdFH8qPrPSRtkBBV167s=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "revert-viewporter.patch";
-      url = "https://github.com/YaLTeR/niri/commit/40cec34aa4a7f99ab12b30cba1a0ee83a706a413.patch";
-      hash = "sha256-3fg8v0eotfjUQY6EVFEPK5BBIBrr6vQpXbjDcsw2E8Q=";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-sXdixfPLAUIIVK+PhqRuMZ7XKNJIGkWNlH8nBzXlxCU=";
+      "smithay-0.3.0" = "sha256-K1lguY6f1mbrfxkDNeLlNAXSM9JC8Jm61MyBIsIYiNs=";
     };
   };
 
@@ -71,8 +62,6 @@ rustPlatform.buildRustPackage rec {
     libglvnd # For libEGL
   ];
 
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-
   passthru.providedSessions = ["niri"];
 
   postPatch = ''
@@ -88,8 +77,10 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A scrollable-tiling Wayland compositor";
+    description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-fLBWHhvfqEiaZkFyNs8CKr5vFMQ5mrbo/X3oGwJmFoo=";
+    sha256 = "sha256-fFwO06edv2f/remnKc5snAjgmqveVNqxHiUcTlfe+4Y=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config m4 perl makeWrapper ];

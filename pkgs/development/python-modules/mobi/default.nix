@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,26 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-g1L72MkJdrKQRsEdew+Qsn8LfCn8+cmj2pmY6s4nv2U=";
   };
 
-  pythonRelaxDeps = [
-    "loguru"
-  ];
+  pythonRelaxDeps = [ "loguru" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    loguru
-  ];
+  propagatedBuildInputs = [ loguru ];
 
-  pythonImportsCheck = [
-    "mobi"
-  ];
+  pythonImportsCheck = [ "mobi" ];
 
   meta = with lib; {
     description = "Library for unpacking unencrypted mobi files";
+    mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

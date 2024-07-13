@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
-    description = "A WebDriver server for running Selenium tests on Chrome";
+    description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
       WebDriver is an open source tool for automated testing of webapps across
       many browsers. It provides capabilities for navigating to web pages, user
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu marsam primeos ];
+    maintainers = with maintainers; [ goibhniu primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = attrNames allSpecs;

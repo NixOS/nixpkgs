@@ -62,6 +62,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/davidar/tensor";
     description = "Cross-platform Qt5/QML-based Matrix client";
+    mainProgram = "tensor";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;

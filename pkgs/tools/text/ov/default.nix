@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -10,16 +11,16 @@
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.33.3";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dKAZ8rcm1J3jRfOyLz74YuVv0hZ3iWXR1slBTu5CtYU=";
+    hash = "sha256-P/GkroAyE2mDEqLIyOqUGvauhPHVvaVRxpDkGv+BCqw=";
   };
 
-  vendorHash = "sha256-6Ik//r6JJ2n9lXr6JZ6BGIIL7yXXray+flEwQ0IKyA4=";
+  vendorHash = "sha256-PDyqscKzL2tGVrUckbedt0offgsCpDjxtnSeqggTM+A=";
 
   ldflags = [
     "-s"
@@ -38,12 +39,12 @@ buildGoModule rec {
 
   outputs = [ "out" "doc" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ov \
-      --bash <($out/bin/ov completion bash) \
-      --fish <($out/bin/ov completion fish) \
-      --zsh <($out/bin/ov completion zsh)
-
+      --bash <($out/bin/ov --completion bash) \
+      --fish <($out/bin/ov --completion fish) \
+      --zsh <($out/bin/ov --completion zsh)
+    '' + ''
     mkdir -p $out/share/$name
     cp $src/ov-less.yaml $out/share/$name/less-config.yaml
     makeWrapper $out/bin/ov $out/bin/ov-less --add-flags "--config $out/share/$name/less-config.yaml"

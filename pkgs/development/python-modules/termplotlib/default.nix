@@ -1,12 +1,13 @@
-{ lib
-, substituteAll
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, exdown
-, numpy
-, gnuplot
-, setuptools
+{
+  lib,
+  substituteAll,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  exdown,
+  numpy,
+  gnuplot,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   format = "pyproject";
   nativeCheckInputs = [

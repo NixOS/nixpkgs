@@ -1,14 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi
-, fonttools, fs, pyclipper, defcon, fontpens
-, setuptools-scm, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  fs,
+  pyclipper,
+  defcon,
+  fontpens,
+  setuptools-scm,
+  pytest,
 }:
 
 buildPythonPackage rec {
-  pname = "booleanOperations";
+  pname = "booleanoperations";
   version = "0.9.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "booleanOperations";
+    inherit version;
     sha256 = "1f41lb19m8azchl1aqz6j5ycbspb8jsf1cnn42hlydxd68f85ylc";
     extension = "zip";
   };

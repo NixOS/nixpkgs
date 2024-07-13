@@ -15,8 +15,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://kde.org/applications/utilities/kronometer/";
-    description = "A stopwatch application";
-    license = licenses.gpl2;
+    description = "Stopwatch application";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     mainProgram = "kronometer";
   };

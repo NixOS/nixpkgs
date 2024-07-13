@@ -190,6 +190,10 @@ in {
     primary.wait_for_unit("knot.service")
     secondary.wait_for_unit("knot.service")
 
+    for zone in ("example.com.", "sub.example.com."):
+        secondary.wait_until_succeeds(
+          f"knotc zone-status {zone} | grep -q 'serial: 2019031302'"
+        )
 
     def test(host, query_type, query, pattern):
         out = client.succeed(f"khost -t {query_type} {query} {host}").strip()

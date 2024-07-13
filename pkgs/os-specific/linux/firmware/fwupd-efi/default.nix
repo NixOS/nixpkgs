@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, fetchFromGitHub
-, substituteAll
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -13,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.4";
+  version = "1.6";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-J928Ck4yCVQ+q0nmnxoBTrntlfk/9R+WbzEILTt7/7w=";
+    url = "https://github.com/fwupd/fwupd-efi/releases/download/${version}/fwupd-efi-${version}.tar.xz";
+    hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ amaxine ];
+    maintainers = with maintainers; [ ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

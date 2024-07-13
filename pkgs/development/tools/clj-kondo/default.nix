@@ -3,12 +3,12 @@
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2024.02.12";
+  version = "2024.05.24";
 
   src = fetchurl {
     url =
       "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-up98q1/GWP9wZP95lHNE1z2xhzGzb8ZyTeuhP7a+qHw=";
+    sha256 = "sha256-vqdTfsIRPi2VlJLcbesRSqa/KFgqbk13vJBbEYd3heM=";
   };
 
   graalvmDrv = graalvmCEPackages.graalvm-ce;
@@ -23,7 +23,7 @@ buildGraalvmNativeImage rec {
   '';
 
   meta = with lib; {
-    description = "A linter for Clojure code that sparks joy";
+    description = "Linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ talyz ivar ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.unix;
   };
 }

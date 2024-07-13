@@ -124,11 +124,13 @@ mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
 Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
 
 ```nix
+{
   gems = bundlerEnv {
     name = "gems-for-some-project";
     gemdir = ./.;
     extraConfigPaths = [ "${./.}/.ruby-version" ];
   };
+}
 ```
 
 ### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}

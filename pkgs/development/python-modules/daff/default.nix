@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "daff"
-  ];
+  pythonImportsCheck = [ "daff" ];
 
   meta = with lib; {
     description = "Library for comparing tables, producing a summary of their differences, and using such a summary as a patch file";

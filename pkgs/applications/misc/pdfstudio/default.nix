@@ -75,6 +75,9 @@ in
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
       sha256 = "sha256-Po7BMmEWoC46rP7tUwZT9Ji/Wi8lKc6WN8x47fx2DXg=";
     };
+    extraBuildInputs = [
+      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
+    ];
     jdk = jdk17;
   };
 }.${pname}

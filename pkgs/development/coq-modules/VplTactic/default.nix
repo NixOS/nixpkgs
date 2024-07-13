@@ -13,6 +13,6 @@ mkCoqDerivation {
   mlPlugin = true;
 
   meta = Vpl.meta // {
-    description = "A Coq Tactic for Arithmetic (based on VPL)";
+    description = "Coq Tactic for Arithmetic (based on VPL)";
   };
 }

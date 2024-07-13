@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/LoliGothick/mitama-cpp-result";
-    description = "A Library that provides `result<T, E>` and `maybe<T>` and monadic functions for them";
+    description = "Library that provides `result<T, E>` and `maybe<T>` and monadic functions for them";
     longDescription = ''
       mitama-cpp-result is the C++17 libraries for error handling without exceptions.
 

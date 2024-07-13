@@ -15,7 +15,7 @@ in {
 
   options = {
     services.bee = {
-      enable = mkEnableOption (lib.mdDoc "Ethereum Swarm Bee");
+      enable = mkEnableOption "Ethereum Swarm Bee";
 
       package = mkPackageOption pkgs "bee" {
         example = "bee-unstable";
@@ -23,7 +23,7 @@ in {
 
       settings = mkOption {
         type = format.type;
-        description = lib.mdDoc ''
+        description = ''
           Ethereum Swarm Bee configuration. Refer to
           <https://gateway.ethswarm.org/bzz/docs.swarm.eth/docs/installation/configuration/>
           for details on supported values.
@@ -33,7 +33,7 @@ in {
       daemonNiceLevel = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Daemon process priority for bee.
           0 is the default Unix process priority, 19 is the lowest.
         '';
@@ -42,7 +42,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "bee";
-        description = lib.mdDoc ''
+        description = ''
           User the bee binary should execute under.
         '';
       };
@@ -50,7 +50,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "bee";
-        description = lib.mdDoc ''
+        description = ''
           Group the bee binary should execute under.
         '';
       };
@@ -101,8 +101,7 @@ in {
 
       preStart = with cfg.settings; ''
         if ! test -f ${password-file}; then
-          < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 > ${password-file}
-          chmod 0600 ${password-file}
+          < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 | install -m 600 /dev/stdin ${password-file}
           echo "Initialized ${password-file} from /dev/urandom"
         fi
         if [ ! -f ${data-dir}/keys/libp2p.key ]; then

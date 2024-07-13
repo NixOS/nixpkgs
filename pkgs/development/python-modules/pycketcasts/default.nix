@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-magic
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-magic,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pycketcasts"
-  ];
+  pythonImportsCheck = [ "pycketcasts" ];
 
   meta = with lib; {
     description = "Module to interact with PocketCast's unofficial API";

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, demes
-, fetchPypi
-, gsl
-, newick
-, numpy
-, oldest-supported-numpy
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools-scm
-, tskit
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  demes,
+  fetchPypi,
+  gsl,
+  newick,
+  numpy,
+  oldest-supported-numpy,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  tskit,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    gsl
-  ];
+  buildInputs = [ gsl ];
 
   propagatedBuildInputs = [
     numpy
@@ -71,9 +70,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r msprime
   '';
-  pythonImportsCheck = [
-    "msprime"
-  ];
+  pythonImportsCheck = [ "msprime" ];
 
   meta = with lib; {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";

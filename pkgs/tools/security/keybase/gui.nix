@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
 , dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
-, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
+, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook3
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -108,7 +108,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
-    description = "The Keybase official GUI";
+    description = "Keybase official GUI";
+    mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

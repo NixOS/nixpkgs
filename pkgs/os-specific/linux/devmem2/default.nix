@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Simple program to read/write from/to any location in memory";
+    mainProgram = "devmem2";
     homepage = "http://lartmaker.nl/lartware/port/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

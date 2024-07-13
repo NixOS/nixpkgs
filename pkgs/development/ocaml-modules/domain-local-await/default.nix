@@ -37,7 +37,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
     changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
-    description = "A scheduler independent blocking mechanism";
+    description = "Scheduler independent blocking mechanism";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ toastal ];
   };

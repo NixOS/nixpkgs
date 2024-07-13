@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/jaedb/Iris";
-    description = "A fully-functional Mopidy web client encompassing Spotify and many other backends";
+    description = "Fully-functional Mopidy web client encompassing Spotify and many other backends";
     license = licenses.asl20;
     maintainers = [ maintainers.rvolosatovs ];
   };

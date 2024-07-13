@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://libisl.sourceforge.io/";
     license = lib.licenses.lgpl21;
-    description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
+    description = "Library for manipulating sets and relations of integer points bounded by linear constraints";
     platforms = lib.platforms.all;
   };
 }

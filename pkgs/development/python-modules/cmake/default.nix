@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, flit-core
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  flit-core,
+  cmake,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
 
   inherit (cmake) setupHooks;
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  pythonImportsCheck = [
-    "cmake"
-  ];
+  pythonImportsCheck = [ "cmake" ];
 
   meta = with lib; {
     description = "CMake is an open-source, cross-platform family of tools designed to build, test and package software";

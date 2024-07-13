@@ -18,7 +18,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -82,7 +81,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A file explorer in your terminal";
+    description = "File explorer in your terminal";
+    mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;

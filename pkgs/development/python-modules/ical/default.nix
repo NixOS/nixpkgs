@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, freezegun
-, tzdata
-, pyparsing
-, pydantic
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, python-dateutil
-, setuptools
-, syrupy
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  freezegun,
+  tzdata,
+  pyparsing,
+  pydantic,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "7.0.1";
+  version = "8.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,14 +26,12 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "ical";
     rev = "refs/tags/${version}";
-    hash = "sha256-kvZZfmrE42uoB9v0PuXopH3g9Cf0hwLkCvaNi6CGX8M=";
+    hash = "sha256-b0laQRDATmx4401bJKkdHsfT9gpMff8vGaZJ9l8O7w4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
     pydantic
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "ical"
-  ];
+  pythonImportsCheck = [ "ical" ];
 
   meta = with lib; {
     description = "Library for handling iCalendar";

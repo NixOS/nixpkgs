@@ -19,7 +19,7 @@ buildBazelPackage rec {
 
   LIBTOOL = lib.optionalString stdenv.isDarwin "${darwin.cctools}/bin/libtool";
 
-  fetchAttrs.sha256 = "sha256-H0zTMCMFct09WdR/mzcs9FcC2OU/ZhGye7GAkx4tGa8=";
+  fetchAttrs.sha256 = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
 
   buildAttrs.installPhase = ''
     mkdir -p $out/bin
@@ -28,10 +28,11 @@ buildBazelPackage rec {
 
   meta = with lib; {
     description = "Protobuf plugin for generating JavaScript code";
+    mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";
     platforms = platforms.linux ++ platforms.darwin;
     license = with licenses; [ asl20 bsd3 ];
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = with maintainers; [ Sorixelle ];
+    maintainers = [ ];
   };
 }

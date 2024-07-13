@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.snapraid.it/";
-    description = "A backup program for disk arrays";
+    description = "Backup program for disk arrays";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;

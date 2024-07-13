@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.02.29";
+  version = "24.06.26";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PHpVquqC0MT7WNoWcdB9WTz4ZiSK4/f4oD5PH1gWBnw=";
+    hash = "sha256-9eQF3s4BAUK81/94z7cMkd2NWdNLVMraP08qsDmuAI8=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free, open source, cross-platform video editor";
+    description = "Free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the
       dependencies pinned to specific versions, is provided on

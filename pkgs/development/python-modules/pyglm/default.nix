@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,21 +19,15 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "glm"
-  ];
+  pythonImportsCheck = [ "glm" ];
 
   meta = with lib; {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";
-    description = "An OpenGL Mathematics (GLM) library for Python written in C++";
+    description = "OpenGL Mathematics (GLM) library for Python written in C++";
     changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${src.rev}";
     license = licenses.zlib;
     maintainers = with maintainers; [ sund3RRR ];

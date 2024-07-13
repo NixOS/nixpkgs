@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lobby_connect";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

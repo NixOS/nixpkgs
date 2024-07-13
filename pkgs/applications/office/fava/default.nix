@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Web interface for beancount";
+    mainProgram = "fava";
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;

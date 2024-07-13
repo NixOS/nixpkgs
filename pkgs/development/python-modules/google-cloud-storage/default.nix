@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-core
-, google-cloud-iam
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-core,
+  google-cloud-iam,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.15.0";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dWCjxIoD1mxVPcVSFdNYg8aA/gq0TCOqSDKADMyFXHQ=";
+    hash = "sha256-STeKv/VO9la1Lcpe8PLrqaqD3CsscseHFLA6GpX+k4g=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "google-auth"
-  ];
+  pythonRelaxDeps = [ "google-auth" ];
 
   propagatedBuildInputs = [
     google-auth
@@ -45,9 +42,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    protobuf = [
-      protobuf
-    ];
+    protobuf = [ protobuf ];
   };
 
   nativeCheckInputs = [
@@ -92,9 +87,7 @@ buildPythonPackage rec {
     rm tests/conformance/test_conformance.py
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.storage"
-  ];
+  pythonImportsCheck = [ "google.cloud.storage" ];
 
   meta = with lib; {
     description = "Google Cloud Storage API client library";

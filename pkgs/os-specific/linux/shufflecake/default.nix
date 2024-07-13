@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A plausible deniability (hidden storage) layer for Linux";
+    description = "Plausible deniability (hidden storage) layer for Linux";
     homepage = "https://shufflecake.net";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ oluceps ];

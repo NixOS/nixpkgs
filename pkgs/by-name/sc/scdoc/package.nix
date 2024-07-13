@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "A simple man page generator written in C99 for POSIX systems";
+    description = "Simple man page generator written in C99 for POSIX systems";
     homepage = "https://git.sr.ht/~sircmpwn/scdoc";
     changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.rev}";
     license = lib.licenses.mit;

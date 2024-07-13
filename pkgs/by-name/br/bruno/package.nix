@@ -8,6 +8,7 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
@@ -27,20 +28,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.11.0";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-Urskhzs00OEucoR17NDXNtnrcXk9h75E806Re0HvYyw=";
+    hash = "sha256-0YWkZdfthHpX4Duc0kP9/QBBTQk1Jx0Hrjd/aoRUIKU=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-48xzx7dTalceXzjFBHIkkUS83pqP/OQ0L2tnMESpHII=";
+  npmDepsHash = "sha256-aw4jOvlfZHCRrgoXT69XrMYe40YXULrfbVG1pQAFGr4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ buildNpmPackage' rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
@@ -73,7 +75,7 @@ buildNpmPackage' rec {
 
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
@@ -94,8 +96,8 @@ buildNpmPackage' rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
@@ -147,11 +149,11 @@ buildNpmPackage' rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks ];
     mainProgram = "bruno";
   };
 }

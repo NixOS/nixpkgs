@@ -21,6 +21,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Inline (Unit) Tests for OCaml";
+    mainProgram = "qtest";
     inherit (src.meta) homepage;
     maintainers = with lib.maintainers; [ vbgl ];
     license = lib.licenses.gpl3;

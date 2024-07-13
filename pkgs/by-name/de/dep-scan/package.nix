@@ -1,30 +1,29 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.2.12";
+  version = "5.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UoppQAokiWBcgTcSmwfoqrDKt/QHYd2NBR3CpNOqI4k=";
+    hash = "sha256-5iMhl3Wcxwgq4Wr0TUcAuRnb2+y8DHBugnnkpcZfSAM=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov-append --cov-report term --cov depscan" ""
+      --replace-fail " --cov-append --cov-report term --cov depscan" ""
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appthreat-vulnerability-db
     cvss
     defusedxml
@@ -44,9 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "depscan"
-  ];
+  pythonImportsCheck = [ "depscan" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

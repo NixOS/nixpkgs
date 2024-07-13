@@ -1,7 +1,7 @@
 { lib, pkgs, config, utils, ... }:
 
 let
-  inherit (lib) concatMapStrings literalExpression mdDoc mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) concatMapStrings literalExpression mkDefault mkEnableOption mkIf mkOption types;
 
   cfg = config.services.xserver.desktopManager.budgie;
 
@@ -43,13 +43,17 @@ let
   budgie-control-center = pkgs.budgie.budgie-control-center.override {
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
+
+  notExcluded = pkg: (!(lib.elem pkg config.environment.budgie.excludePackages));
 in {
+  meta.maintainers = lib.teams.budgie.members;
+
   options = {
     services.xserver.desktopManager.budgie = {
-      enable = mkEnableOption (mdDoc "the Budgie desktop");
+      enable = mkEnableOption "the Budgie desktop";
 
       sessionPath = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -57,23 +61,23 @@ in {
         '';
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
       };
 
       extraGSettingsOverrides = mkOption {
-        description = mdDoc "Additional GSettings overrides.";
+        description = "Additional GSettings overrides.";
         type = types.lines;
         default = "";
       };
 
       extraGSettingsOverridePackages = mkOption {
-        description = mdDoc "List of packages for which GSettings are overridden.";
+        description = "List of packages for which GSettings are overridden.";
         type = types.listOf types.path;
         default = [];
       };
 
       extraPlugins = mkOption {
-        description = mdDoc "Extra plugins for the Budgie desktop";
+        description = "Extra plugins for the Budgie desktop";
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.budgiePlugins.budgie-analogue-clock-applet ]";
@@ -81,7 +85,7 @@ in {
     };
 
     environment.budgie.excludePackages = mkOption {
-      description = mdDoc "Which packages Budgie should exclude from the default environment.";
+      description = "Which packages Budgie should exclude from the default environment.";
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.mate-terminal ]";
@@ -89,7 +93,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = with pkgs; [
+    services.displayManager.sessionPackages = with pkgs; [
       budgie.budgie-desktop
     ];
 
@@ -128,7 +132,7 @@ in {
         gnome-menus
 
         # Required by Budgie Control Center.
-        gnome.zenity
+        zenity
 
         # Provides `gsettings`.
         glib
@@ -144,7 +148,6 @@ in {
           mate.atril
           mate.engrampa
           mate.mate-calc
-          mate.mate-terminal
           mate.mate-system-monitor
           vlc
 
@@ -157,6 +160,9 @@ in {
           nixos-gsettings-overrides
         ] config.environment.budgie.excludePackages)
       ++ cfg.sessionPath;
+
+    # Both budgie-desktop-view and nemo defaults to this emulator.
+    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
 
     # Fonts.
     fonts.packages = [
@@ -208,11 +214,10 @@ in {
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
-    services.xserver.libinput.enable = mkDefault true; # for BCC's Mouse panel.
+    services.libinput.enable = mkDefault true; # for BCC's Mouse panel.
     services.colord.enable = mkDefault true; # for BCC's Color panel.
     services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
     services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.
-    services.fprintd.enable = mkDefault true; # for BCC's Users panel.
     services.udisks2.enable = mkDefault true; # for BCC's Details panel.
 
     # For BCC's Online Accounts panel.

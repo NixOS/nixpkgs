@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.41.3";
+  version = "1.44.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Urcy3kvwBz5Ey0LnoT6/N7V/QJg2SIBHVmWa12WOTKw=";
+    hash = "sha256-DQrN5x+UiY6lLY1h96sTWBhD0jrvNyCdTwHsyFo95VE=";
   };
 
-  cargoHash = "sha256-NhJ3Uldncjx/KHAMVCd6U4Q0fbmc+u4E7JNZHcy/zQY=";
+  cargoHash = "sha256-QGBFDFZpOqPj/U1PhMaTZ3mI+d2jG6vYAkW6aNG4wyQ=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
-    description = "A secure runtime for JavaScript and TypeScript";
+    description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
       Deno will always be distributed as a single executable.

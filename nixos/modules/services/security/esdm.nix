@@ -24,12 +24,12 @@ in
   ];
 
   options.services.esdm = {
-    enable = lib.mkEnableOption (lib.mdDoc "ESDM service configuration");
+    enable = lib.mkEnableOption "ESDM service configuration";
     package = lib.mkPackageOption pkgs "esdm" { };
     enableLinuxCompatServices = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Enable /dev/random, /dev/urandom and /proc/sys/kernel/random/* userspace wrapper.
       '';
     };

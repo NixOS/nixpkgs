@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       "hidapi-hidraw"
       "hidapi-libusb"
     ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 })

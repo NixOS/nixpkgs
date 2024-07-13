@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IRC instant messaging gateway";
+    mainProgram = "bitlbee";
 
     longDescription = ''
       BitlBee brings IM (instant messaging) to IRC clients.  It's a

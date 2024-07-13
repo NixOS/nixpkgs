@@ -28,14 +28,15 @@
 , SDL2
 , waylandSupport ? true
 , wayland
+, wrapGAppsHook3
 }:
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "15726-ebf48800e";
-  rpcs3Version = "0.0.29-15726-ebf48800e";
-  rpcs3Revision = "ebf48800e6bf2569fa0a59974ab2daaeb3a92f23";
-  rpcs3Hash = "sha256-HJQ+DCZy8lwMCfq0N9StKD8bP1hCBxGMAucbQ9esy/I=";
+  rpcs3GitVersion = "16659-33851d51a";
+  rpcs3Version = "0.0.32-16659-33851d51a";
+  rpcs3Revision = "33851d51ab93c3c73be18a6cb5ed7723219ee1e3";
+  rpcs3Hash = "sha256-Gv3zkvZdvnRUKvS0JhrvHOOz5OVSqxHBkbbOdYWzRvU=";
 
   inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook qtwayland;
 in
@@ -81,7 +82,9 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_FAUDIO" faudioSupport)
   ];
 
-  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
+  dontWrapGApps = true;
+
+  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook wrapGAppsHook3 ];
 
   buildInputs = [
     qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
@@ -89,6 +92,10 @@ stdenv.mkDerivation {
   ] ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio
     ++ lib.optionals waylandSupport [ wayland qtwayland ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration

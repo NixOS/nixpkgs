@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , makeShellWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -87,7 +87,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website.";
+    description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website";
+    mainProgram = "Publii";
     longDescription = ''
       Creating a website doesn't have to be complicated or expensive. With Publii, the most
       intuitive static site CMS, you can create a beautiful, safe, and privacy-friendly website

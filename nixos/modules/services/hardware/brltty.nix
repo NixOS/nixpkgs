@@ -25,7 +25,7 @@ in {
     services.brltty.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Whether to enable the BRLTTY daemon.";
+      description = "Whether to enable the BRLTTY daemon.";
     };
 
   };

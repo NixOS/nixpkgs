@@ -21,7 +21,7 @@
 # can be turned off if used as a library
 , useGtk ? true
 , gtk3 ? null
-, wrapGAppsHook ? null
+, wrapGAppsHook3 ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
   ]
-    ++ lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ lib.optionals (useGtk) [ wrapGAppsHook3 ]
     ++ lib.optionals (useQt) [ wrapQtAppsHook ]
   ;
 
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
   ;
 
   meta = with lib; {
-    description = "A simple interface for devices supported by the linux UVC driver";
+    description = "Simple interface for devices supported by the linux UVC driver";
+    mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];
     license = licenses.gpl3;

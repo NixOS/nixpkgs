@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonRelaxDeps = [
+    "anyconfig"
     "flake8"
     "jsonschema"
     "pathspec"
@@ -44,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -79,6 +79,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Best practice scanner for Ansible roles and playbooks";
+    mainProgram = "ansible-later";
     homepage = "https://github.com/thegeeklab/ansible-later";
     changelog = "https://github.com/thegeeklab/ansible-later/releases/tag/v${version}";
     license = licenses.mit;

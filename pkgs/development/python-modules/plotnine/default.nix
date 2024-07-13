@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, matplotlib
-, mizani
-, pandas
-, patsy
-, scipy
-, statsmodels
-, geopandas
-, pytestCheckHook
-, scikit-misc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopandas,
+  matplotlib,
+  mizani,
+  pandas,
+  patsy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-misc,
+  scipy,
+  setuptools-scm,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.2";
+  version = "0.13.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,19 +26,17 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GgkaFiRRVpr0TreAetpaiOjpsyLV2wfGQWvUdHJN2mg=";
+    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=plotnine --cov-report=xml" ""
+      --replace-fail " --cov=plotnine --cov-report=xml" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     matplotlib
     mizani
     pandas
@@ -56,8 +55,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "plotnine"
+  pythonImportsCheck = [ "plotnine" ];
+
+  disabledTests = [
+    # Tries to change locale. The issued warning causes this test to fail.
+    # UserWarning: Could not set locale to English/United States. Some date-related tests may fail
+    "test_no_after_scale_warning"
   ];
 
   disabledTestPaths = [
@@ -103,7 +106,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Grammar of graphics for python";
+    description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
     changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
     license = licenses.mit;

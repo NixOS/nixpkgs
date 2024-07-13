@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "3.10";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-IDOtwrIKzP/pbwqIespvZtNS1VdR3246uXxgxR3V6VI=";
+    sha256 = "sha256-UAKEyJFdgwJ4Jz3lTG6vmxEkIVLSikWOEBjYV6o72nQ=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   cmakeFlags = ["-DWITH_LTO=OFF"];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    "-faligned-allocation"
+  ]);
 
   installPhase = ''
     runHook preInstall
@@ -53,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ratsclub ];
     mainProgram = "p2pool";
+    platforms = platforms.all;
   };
 }

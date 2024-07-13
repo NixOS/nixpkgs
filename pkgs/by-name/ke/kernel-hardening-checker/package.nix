@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A tool for checking the security hardening options of the Linux kernel";
+    description = "Tool for checking the security hardening options of the Linux kernel";
     homepage = "https://github.com/a13xp0p0v/kernel-hardening-checker";
     license = licenses.gpl3Only;
     platforms = platforms.all;

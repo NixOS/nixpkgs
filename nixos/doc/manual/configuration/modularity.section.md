@@ -16,7 +16,7 @@ including them from `configuration.nix`, e.g.:
 { imports = [ ./vpn.nix ./kde.nix ];
   services.httpd.enable = true;
   environment.systemPackages = [ pkgs.emacs ];
-  ...
+  # ...
 }
 ```
 
@@ -27,7 +27,7 @@ Here, we include two modules from the same directory, `vpn.nix` and
 { config, pkgs, ... }:
 
 { services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   environment.systemPackages = [ pkgs.vim ];
 }
@@ -42,7 +42,9 @@ merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
 
 ```nix
-boot.kernelModules = mkBefore [ "kvm-intel" ];
+{
+  boot.kernelModules = mkBefore [ "kvm-intel" ];
+}
 ```
 
 This causes the `kvm-intel` kernel module to be loaded before any other
@@ -60,7 +62,9 @@ When that happens, it's possible to force one definition take precedence
 over the others:
 
 ```nix
-services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
+{
+  services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
+}
 ```
 
 When using multiple modules, you may need to access configuration values

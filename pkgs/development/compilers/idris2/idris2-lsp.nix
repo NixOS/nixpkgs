@@ -11,8 +11,8 @@ let
   ];
   globalLibrariesPath = builtins.concatStringsSep ":" globalLibraries;
 
-  idris2Api = idris2Packages.idris2Api { };
-  lspLib = (idris2Packages.buildIdris {
+  inherit (idris2Packages) idris2Api;
+  lspLib = idris2Packages.buildIdris {
     ipkgName = "lsp-lib";
     version = "2024-01-21";
     src = fetchFromGitHub {
@@ -22,7 +22,7 @@ let
      hash = "sha256-ICW9oOOP70hXneJFYInuPY68SZTDw10dSxSPTW4WwWM=";
     };
     idrisLibraries = [ ];
-  }).library { };
+  };
 
   lspPkg = idris2Packages.buildIdris {
     ipkgName = "idris2-lsp";
@@ -43,6 +43,7 @@ let
 
     meta = with lib; {
       description = "Language Server for Idris2";
+      mainProgram = "idris2-lsp";
       homepage = "https://github.com/idris-community/idris2-lsp";
       license = licenses.bsd3;
       maintainers = with maintainers; [ mattpolzin ];

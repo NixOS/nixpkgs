@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, perl
-, stdenv
-, gcc10
-, CoreFoundation
-, Security
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  perl,
+  stdenv,
+  gcc10,
+  CoreFoundation,
+  Security,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.20.5";
+  version = "0.20.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v5zpSzU4M3G6tcvPnR4tLxjEhByDKz73qAor9yEjKdI=";
+    hash = "sha256-Z271rdHsBh8/+nIrMm3wGhxEJJNIl2hYuBQdkHSlRok=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -28,18 +29,16 @@ buildPythonPackage rec {
   ];
 
   # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-    gcc10
-    perl
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
+      gcc10
+      perl
+    ];
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "awscrt"
-  ];
+  pythonImportsCheck = [ "awscrt" ];
 
   # Unable to import test module
   # https://github.com/awslabs/aws-crt-python/issues/281

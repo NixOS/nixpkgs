@@ -6,7 +6,7 @@
 , openssl
 , zeromq
 , cppzmq
-, tbb_2021_8
+, tbb_2021_11
 , spdlog
 , libsodium
 , fmt
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.9.4";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-D+7a+3Vxrt+XUq7c2F2eqi8ZGQ2eZd37aTqighWEKPs=";
+    hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
   };
 
   strictDeps = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     openssl
     zeromq
     cppzmq
-    tbb_2021_8
+    tbb_2021_11
     spdlog
     libsodium
     fmt

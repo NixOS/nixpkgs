@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, packaging
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, setuptools
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.30";
+  version = "0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIE6V84xLEbgmTwvP6jQC0H//gBnMTO1sowL1HIMbpQ=";
+    hash = "sha256-e00/+yVKg7dGGq3Os+oWu/F93j5e9dnwWZxKwm+soqM=";
   };
 
   postPatch = ''
@@ -29,13 +29,10 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     versioneer
   ];
 
@@ -53,9 +50,7 @@ buildPythonPackage rec {
   # Tests attempt to create some file artifacts and fails
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tableauserverclient"
-  ];
+  pythonImportsCheck = [ "tableauserverclient" ];
 
   meta = with lib; {
     description = "Module for working with the Tableau Server REST API";

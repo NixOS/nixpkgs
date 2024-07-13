@@ -3,9 +3,8 @@
 let
   inherit (lib) findFirst isString optional optionals;
 
-  makeCMakeFlags = { cmakeFlags ? [], ... }:
-    cmakeFlags
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+  cmakeFlags' =
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
       "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
     ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
       "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
@@ -24,6 +23,9 @@ let
     ] ++ optionals stdenv.hostPlatform.isStatic [
       "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
     ]);
+
+  makeCMakeFlags = { cmakeFlags ? [], ... }: cmakeFlags ++ cmakeFlags';
+
 in
 {
   inherit makeCMakeFlags;

@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, makeBinaryWrapper }:
 
 
 let

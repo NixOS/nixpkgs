@@ -1,4 +1,10 @@
-{lib, buildPythonPackage, numpy, pkgs, pybind11 }:
+{
+  lib,
+  buildPythonPackage,
+  numpy,
+  pkgs,
+  pybind11,
+}:
 
 buildPythonPackage rec {
   inherit (pkgs.fasttext) pname version src;

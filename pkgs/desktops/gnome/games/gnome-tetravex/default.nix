@@ -4,8 +4,9 @@
 , fetchpatch
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gettext
 , itstool
@@ -37,10 +38,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     libxml2
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     pkg-config
     gettext
     meson
@@ -67,8 +68,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tetravex";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tetravex";
     description = "Complete the puzzle by matching numbered tiles";
+    mainProgram = "gnome-tetravex";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

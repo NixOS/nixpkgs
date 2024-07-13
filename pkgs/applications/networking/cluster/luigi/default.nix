@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0+3gSWZlXBO8T0c/Y5AmjGLoPExFQNeJNsTxJJbk8Sg=";
+    sha256 = "sha256-/HkLJ0dRXdGcZz77uOTJrOX0xc3DH45/k9xmfesuxsg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ python-dateutil tornado python-daemon boto3 tenacity ];

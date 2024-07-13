@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom Packet control Unit (PCU): Network-side GPRS (RLC/MAC); BTS- or BSC-colocated";
+    mainProgram = "osmo-pcu";
     homepage = "https://osmocom.org/projects/osmopcu";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,72 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, cython
-, oldest-supported-numpy
-, setuptools
-, setuptools-scm
-, numpy
-, pandas
-, cramjam
-, fsspec
-, thrift
-, python-lzo
-, pytestCheckHook
-, pythonOlder
-, packaging
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cramjam,
+  cython,
+  fetchFromGitHub,
+  fsspec,
+  git,
+  numpy,
+  oldest-supported-numpy,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  python-lzo,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.2.0";
+  version = "2024.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
     rev = "refs/tags/${version}";
-    hash = "sha256-e0gnC/HMYdrYdEwy6qNOD1J52xgN2x81oCG03YNsYjg=";
+    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-runner"' ""
-
-    sed -i \
-      -e "/pytest-runner/d" \
-      -e '/"git", "status"/d' setup.py
+      --replace-fail "numpy>=2.0.0rc1" "oldest-supported-numpy"
   '';
 
-  nativeBuildInputs = [
-    cython
-    oldest-supported-numpy
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cython
+    git
+    oldest-supported-numpy
+  ];
+
+  dependencies = [
     cramjam
     fsspec
     numpy
-    pandas
-    thrift
     packaging
+    pandas
   ];
 
   passthru.optional-dependencies = {
-    lzo = [
-      python-lzo
-    ];
+    lzo = [ python-lzo ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -80,14 +76,13 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [
-    "fastparquet"
-  ];
+  pythonImportsCheck = [ "fastparquet" ];
 
   meta = with lib; {
     description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
+    license = licenses.asl20;
     maintainers = with maintainers; [ veprbl ];
   };
 }

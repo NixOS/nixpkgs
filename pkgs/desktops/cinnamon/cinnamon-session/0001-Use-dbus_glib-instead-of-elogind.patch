@@ -16,10 +16,10 @@ index d8428dc..1f15115 100644
  ]
  
 +dbus_glib = dependency('dbus-glib-1')
- executable('cinnamon-session',
+ executable('cinnamon-session-binary',
    cinnamon_session_sources,
    dependencies: [
-@@ -74,7 +75,7 @@ executable('cinnamon-session',
+@@ -74,7 +75,7 @@ executable('cinnamon-session-binary',
      xext,
      xrender,
      xtest,

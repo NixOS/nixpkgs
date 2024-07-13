@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Concise Binary Object Representation (CBOR) Library";
+    mainProgram = "cbordump";
     homepage = "https://github.com/intel/tinycbor";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];

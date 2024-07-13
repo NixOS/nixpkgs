@@ -21,7 +21,7 @@
 , libgdata
 , dbus
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 , gtk-doc
 , docbook-xsl-nons
@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "45.0";
+  version = "46.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NIQFKVpZSxY2QOb73WfYsCzMQwB9XySoADCL7IlmGe8=";
+    hash = "sha256-J1wuhAXPCvLWzPqMU4alVFFpHoCAzX3wVOP3Bw0wW/o=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     appstream-glib
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -106,11 +106,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A phone dialer and call handler";
+    description = "Phone dialer and call handler";
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://gitlab.gnome.org/GNOME/calls";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
+    maintainers = with maintainers; [ craigem ];
     platforms = platforms.linux;
     mainProgram = "gnome-calls";
   };

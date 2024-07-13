@@ -6,6 +6,7 @@
 , jre
 , ant
 , makeWrapper
+, stripJavaArchivesHook
 , doCheck ? true
 , withExamples ? false
 }:
@@ -15,12 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4918";
+  version = "4921";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "sha256-oQ/2KY6xA/kwAroHiPqcIJlcPsTTeStUu8WN/95ZUTw=";
+    sha256 = "sha256-s7EKHXh3UNMDzBmWUTZaLR1P21e27cWJNYRlFcpJu50=";
   };
 
   patches = [
@@ -30,10 +31,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = with deps; ''
-    # Fix the output jar timestamps for reproducibility
-    substituteInPlace build.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-
     # Manually create version properties file for reproducibility
     mkdir -p build/classes
     cat > build/classes/mkgmap-version.properties << EOF
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
     '') testInputs}
   '';
 
-  nativeBuildInputs = [ jdk ant makeWrapper ];
+  nativeBuildInputs = [ jdk ant makeWrapper stripJavaArchivesHook ];
 
   buildPhase = ''
     runHook preBuild

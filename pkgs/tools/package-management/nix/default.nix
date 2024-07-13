@@ -1,5 +1,6 @@
 { lib
 , config
+, stdenv
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -7,6 +8,7 @@
 , fetchpatch
 , fetchpatch2
 , runCommand
+, overrideSDK
 , Security
 
 , storeDir ? "/nix/store"
@@ -20,15 +22,6 @@ let
     patches = (drv.patches or [ ]) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       ./patches/boehmgc-coroutine-sp-fallback.patch
-
-      # Required since 2.20, and has always been a valid change
-      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
-      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
-      (fetchpatch {
-        name = "boehmgc-traceable_allocator-public.diff";
-        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
-        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
-      })
     ];
   });
 
@@ -109,27 +102,6 @@ let
     hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
   };
 
-  # https://github.com/NixOS/nix/pull/7473
-  patch-sqlite-exception = fetchpatch2 {
-    name = "nix-7473-sqlite-exception-add-message.patch";
-    url = "https://github.com/hercules-ci/nix/commit/c965f35de71cc9d88f912f6b90fd7213601e6eb8.patch";
-    hash = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
-  };
-
-  patch-non-existing-output = fetchpatch {
-    # https://github.com/NixOS/nix/pull/7283
-    name = "fix-requires-non-existing-output.patch";
-    url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-    hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-  };
-
-  patch-rapidcheck-shared = fetchpatch2 {
-    # https://github.com/NixOS/nix/pull/9431
-    name = "fix-missing-librapidcheck.patch";
-    url = "https://github.com/NixOS/nix/commit/46131567da96ffac298b9ec54016b37114b0dfd5.patch";
-    hash = "sha256-lShYxYKRDWwBqCysAFmFBudhhAL1eendWcL8sEFLCGg=";
-  };
-
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
   addTestsShallowly = tests: pkg: pkg // {
@@ -162,107 +134,86 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common {
-    version = "2.3.17";
-    hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
+  nix_2_3 = ((common {
+    version = "2.3.18";
+    hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
     patches = [
       patch-monitorfdhup
-      ./patches/2_3/CVE-2024-27297.patch
     ];
-    maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
-
-  nix_2_10 = common {
-    version = "2.10.3";
-    hash = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
-    patches = [
-      ./patches/flaky-tests.patch
-      patch-non-existing-output
-      patch-monitorfdhup
-      patch-sqlite-exception
-    ];
-  };
-
-  nix_2_11 = common {
-    version = "2.11.1";
-    hash = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
-    patches = [
-      ./patches/flaky-tests.patch
-      patch-non-existing-output
-      patch-monitorfdhup
-      patch-sqlite-exception
-    ];
-  };
-
-  nix_2_12 = common {
-    version = "2.12.1";
-    hash = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
-    patches = [
-      ./patches/flaky-tests.patch
-      patch-monitorfdhup
-      patch-sqlite-exception
-    ];
-  };
-
-  nix_2_13 = common {
-    version = "2.13.6";
-    hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
-  };
-
-  nix_2_14 = common {
-    version = "2.14.1";
-    hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
-  };
-
-  nix_2_15 = common {
-    version = "2.15.3";
-    hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
-  };
-
-  nix_2_16 = common {
-    version = "2.16.2";
-    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
-  };
-
-  nix_2_17 = common {
-    version = "2.17.1";
-    hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
+    self_attribute_name = "nix_2_3";
+    maintainers = with lib.maintainers; [ flokli ];
+  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+    # https://github.com/NixOS/nix/issues/10222
+    # spurious test/add.sh failures
+    enableParallelChecking = false;
   };
 
   nix_2_18 = common {
-    version = "2.18.2";
-    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    version = "2.18.5";
+    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
+    self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
-    version = "2.19.3";
-    hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
-    patches = [
-      ./patches/2_19/CVE-2024-27297.patch
-    ];
+    version = "2.19.6";
+    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
+    self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
-    version = "2.20.5";
-    hash = "sha256-bfFe38BkoQws7om4gBtBWoNTLkt9piMXdLLoHYl+vBQ=";
+    version = "2.20.8";
+    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
+    self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
-    version = "2.21.0";
-    hash = "sha256-9b9qJ+7rGjLKbIswMf0/2pgUWH/xOlYLk7P4WYNcGDs=";
+    version = "2.21.4";
+    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
+    self_attribute_name = "nix_2_21";
   };
+
+  nix_2_22 = common {
+    version = "2.22.3";
+    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
+    self_attribute_name = "nix_2_22";
+  };
+
+  nix_2_23 = common {
+    version = "2.23.2";
+    hash = "sha256-NH1G4GGHXU4pnQWI9X/gs7r97GO0i4tJFjoaIxl0FaQ=";
+    self_attribute_name = "nix_2_23";
+    patches = [
+     # fixes regression in nix-prefetch-url
+     # https://github.com/NixOS/nix/pull/11052
+     (fetchpatch {
+       url = "https://github.com/NixOS/nix/commit/73f3179954ef8db5c8774c79272dd1215fe6f5c2.patch";
+       sha256 = "sha256-d/rBOONZGxOFRUPltH7z0OSYRqKbS/ZwZl/DaIXygC0=";
+     })
+    ];
+  };
+
+  git = (common rec {
+    version = "2.24.0";
+    suffix = "pre20240709_${lib.substring 0 8 src.rev}";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "142e566adbce587a5ed97d1648a26352f0608ec5";
+      hash = "sha256-fYZGuB/4LOBoMSUNj/yRU1mWm9lhdTzXF0P+zmac0hw=";
+    };
+    self_attribute_name = "git";
+  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  });
+
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -282,18 +233,15 @@ in lib.makeExtensible (self: ({
       nix;
 
   stable = addFallbackPathsCheck self.nix_2_18;
-
-  unstable = self.nix_2_21;
-} // lib.optionalAttrs config.allowAliases {
-  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
-
-  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
-
-  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
-
-  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
-
-  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
-
-  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
-}))
+} // lib.optionalAttrs config.allowAliases (
+  lib.listToAttrs (map (
+    minor:
+    let
+      attr = "nix_2_${toString minor}";
+    in
+    lib.nameValuePair attr (throw "${attr} has been removed")
+  ) (lib.range 4 17))
+  // {
+    unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
+  }
+)))

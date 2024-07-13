@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A memory safe implementation of sudo and su";
+    description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/memorysafety/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

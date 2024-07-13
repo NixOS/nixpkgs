@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, boto3
-, moto
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  boto3,
+  moto,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
       --replace "version=__version__," 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    boto3
-  ];
+  propagatedBuildInputs = [ boto3 ];
 
   nativeCheckInputs = [
     moto
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bucketstore"
-  ];
+  pythonImportsCheck = [ "bucketstore" ];
 
   meta = with lib; {
     description = "Library for interacting with Amazon S3";

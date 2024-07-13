@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -14,13 +13,12 @@
 , dconf
 , gettext
 , glib
-, gnome
+, gnome-keyring
 , history-service
 , libnotify
 , libphonenumber
 , libpulseaudio
 , libusermetrics
-, lomiri-ui-toolkit
 , lomiri-url-dispatcher
 , makeWrapper
 , pkg-config
@@ -54,9 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Remove when https://gitlab.com/ubports/development/core/telephony-service/-/merge_requests/90 merged & in release
     (fetchpatch {
-      name = "0001-telephony-service-CMakeLists-Make-tests-optional.patch";
-      url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/9a8297bcf9b34d77ffdae3dfe4ad2636022976fb.patch";
+      name = "0001-lomiri-telephony-service-CMakeLists-Make-tests-optional.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/9a8297bcf9b34d77ffdae3dfe4ad2636022976fb.patch";
       hash = "sha256-Za4ZGKnw9iz2RP1LzLhKrEJ1vLUufWk8J07LmWDW40E=";
+    })
+
+    # Remove when version > 0.5.3
+    (fetchpatch {
+      name = "0002-lomiri-telephony-service-Fix-gettext-funcs-in-wrong-namespace.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/18e0ba8e025b097eef1217d97d98ef4a4940fe84.patch";
+      hash = "sha256-vOIy+B/OQeccsVn4pXsnr8LYyEapqbebW1I6dBg5u2c=";
     })
   ];
 
@@ -116,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus-test-runner
     dconf
-    gnome.gnome-keyring
+    gnome-keyring
     telepathy-mission-control
     xvfb-run
   ];
@@ -176,6 +181,10 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i $out/lib/systemd/user/"$service".service \
         -e '/ofono-setup.service/d'
     done
+
+    # Parses the call & SMS indicator desktop files & tries to find its own executable in PATH
+    wrapProgram $out/bin/telephony-service-indicator \
+      --prefix PATH : "$out/bin"
   '';
 
   passthru = {

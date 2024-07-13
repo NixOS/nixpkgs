@@ -109,7 +109,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/intel/opencl-clang/";
-    description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
+    description = "Clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
     license = licenses.ncsa;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

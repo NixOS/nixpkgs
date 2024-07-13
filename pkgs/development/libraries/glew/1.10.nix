@@ -40,12 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
+    "CC:=$(CC)"
+    "LD:=$(CC)"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C(++)";
+    description = "OpenGL extension loading library for C(++)";
     homepage = "https://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]

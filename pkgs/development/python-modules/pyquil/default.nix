@@ -1,70 +1,63 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, ipython
-, lark
-, matplotlib-inline
-, nest-asyncio
-, networkx
-, numpy
-, packaging
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, qcs-sdk-python
-, respx
-, rpcq
-, scipy
-, syrupy
-, tenacity
-, types-deprecated
-, types-python-dateutil
-, types-retry
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  ipython,
+  lark,
+  matplotlib-inline,
+  nest-asyncio,
+  networkx,
+  numpy,
+  packaging,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  qcs-sdk-python,
+  respx,
+  rpcq,
+  scipy,
+  syrupy,
+  tenacity,
+  types-deprecated,
+  types-python-dateutil,
+  types-retry,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.6.1";
+  version = "4.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-93dHujgGEh9/r9epAiUcUCiFCG7SFTAFoQbjQwwKhN0=";
+    hash = "sha256-mXcuvZauldoKmTZzFJ6TGgETxpqhXsXYBTCZpwc1I7Q=";
   };
-
-  patches = [
-    ./pydantic.patch
-  ];
 
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "packaging"
+    "qcs-sdk-python"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     deprecated
     lark
     matplotlib-inline
     networkx
     numpy
     packaging
-    pydantic
     qcs-sdk-python
     rpcq
     scipy
@@ -72,8 +65,7 @@ buildPythonPackage rec {
     types-deprecated
     types-python-dateutil
     types-retry
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -89,9 +81,7 @@ buildPythonPackage rec {
   # tests hang
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyquil"
-  ];
+  pythonImportsCheck = [ "pyquil" ];
 
   meta = with lib; {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";

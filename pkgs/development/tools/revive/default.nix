@@ -46,6 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
+    mainProgram = "revive";
     homepage = "https://revive.run";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani ];

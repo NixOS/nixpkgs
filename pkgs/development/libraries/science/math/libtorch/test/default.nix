@@ -27,7 +27,13 @@ in stdenv.mkDerivation {
   pname = "libtorch-test";
   version = libtorch-bin.version;
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./CMakeLists.txt
+      ./test.cpp
+    ];
+  };
 
   nativeBuildInputs = [ cmake ];
 

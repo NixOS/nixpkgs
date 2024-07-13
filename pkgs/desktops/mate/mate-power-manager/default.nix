@@ -16,7 +16,7 @@
 , gtk3
 , libtool
 , polkit
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libtool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE Power Manager";
+    description = "MATE Power Manager";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;

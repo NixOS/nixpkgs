@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Query or alter a process' scheduling policy under Linux";
+    mainProgram = "schedtool";
     homepage = "https://freequaos.host.sk/schedtool/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

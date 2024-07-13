@@ -5,20 +5,20 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "n98-magerun2";
-  version = "7.3.1";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun2";
     rev = finalAttrs.version;
-    hash = "sha256-a1T4SmeOEKRW/xS2VBPLZt6r9JdtaJn8YVvfRnzGdb4=";
+    hash = "sha256-OPvyZ0r7Zt4PC+rmRtBm9EkbaE4PeovnUHrhzXUqT8E=";
   };
 
-  vendorHash = "sha256-1j0/spum4C9j/HNVlHwUehAFYJOz7YvMVlC6dtbNYK0=";
+  vendorHash = "sha256-HSkcYbDQPK1ByG8Euq9YqzK0jqjKrWO+0R4ungFDOIY=";
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";
-    description = "The swiss army knife for Magento2 developers";
+    description = "Swiss army knife for Magento2 developers";
     homepage = "https://magerun.net/";
     license = lib.licenses.mit;
     mainProgram = "n98-magerun2";

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, packaging
-, poetry-core
-, pydantic
-, pythonRelaxDepsHook
-, redis
-, structlog
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  packaging,
+  poetry-core,
+  pydantic,
+  redis,
+  structlog,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
+    "structlog"
   ];
 
   propagatedBuildInputs = [
@@ -35,13 +39,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  pythonRelaxDeps = [
-    "structlog"
-  ];
-
-  pythonImportsCheck = [
-    "diffsync"
-  ];
+  pythonImportsCheck = [ "diffsync" ];
 
   meta = with lib; {
     description = "Utility library for comparing and synchronizing different datasets";

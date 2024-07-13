@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "x42-avldrums";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "avldrums.lv2";
     rev = "v${version}";
-    hash = "sha256-NNqBZTWjIM97qsXTW/+6T7eOAELi/OwXh4mCYPD/C6I=";
+    hash = "sha256-AZKHjzgw0TtLHh4TF+yOUSa+GlNVwyHCpJWAZikXTy4=";
     fetchSubmodules = true;
   };
 

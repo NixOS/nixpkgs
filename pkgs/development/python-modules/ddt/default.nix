@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# tests
-, aiounittest
-, mock
-, pytestCheckHook
-, pyyaml
-, six
+  # tests
+  aiounittest,
+  mock,
+  pytestCheckHook,
+  pyyaml,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.7.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0XjRFavyWhuDJ+lPhaA+8JsdewyiVvYgMoSwJPL8cN8=";
+    hash = "sha256-0hXWsIOWMBPEoZseTc1qlugOQ6t3UZWXpqz88umj4Es=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # aiounittest is not compatible with Python 3.12.
   doCheck = pythonOlder "3.12";

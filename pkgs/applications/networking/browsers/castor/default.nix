@@ -2,7 +2,7 @@
 , fetchFromSourcehut
 , rustPlatform
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , openssl
 , gtk3
 , gdk-pixbuf
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
   useNextest = true;
 
   meta = with lib; {
-    description = "A graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
+    description = "Graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
+    mainProgram = "castor";
     homepage = "https://sr.ht/~julienxx/Castor";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

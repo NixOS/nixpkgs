@@ -56,7 +56,8 @@ for (uuid, versions) in uuid_to_versions.items():
       # Write nothing in Compat.toml, because we've already resolved everything
     with open(out_path / path / Path("Deps.toml"), "w") as f:
       f.write('["%s"]\n' % info["version"])
-      toml.dump(project["deps"], f)
+      if "deps" in project:
+        toml.dump(project["deps"], f)
     with open(out_path / path / Path("Versions.toml"), "w") as f:
       f.write('["%s"]\n' % info["version"])
       f.write('git-tree-sha1 = "%s"\n' % info["treehash"])
@@ -75,7 +76,7 @@ for (uuid, versions) in uuid_to_versions.items():
     os.makedirs(out_path / path)
 
     # Copy some files to the minimal repo unchanged
-    for f in ["Compat.toml", "Deps.toml"]:
+    for f in ["Compat.toml", "Deps.toml", "WeakCompat.toml", "WeakDeps.toml"]:
       if (registry_path / path / f).exists():
         shutil.copy2(registry_path / path / f, out_path / path)
 

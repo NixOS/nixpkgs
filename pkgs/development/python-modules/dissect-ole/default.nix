@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ole";
-  version = "3.7";
-  format = "pyproject";
+  version = "3.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ole";
     rev = "refs/tags/${version}";
-    hash = "sha256-Df6OU1vVsQl7d119W8+8YmUiy2+m6Dw3LpKnMVSRRR4=";
+    hash = "sha256-VWbgQhKV1vJBRQROrJXbJ7qDIVOfZwvjsRwUbm7q7OQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect.ole"
-  ];
+  pythonImportsCheck = [ "dissect.ole" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Object Linking & Embedding (OLE) format";

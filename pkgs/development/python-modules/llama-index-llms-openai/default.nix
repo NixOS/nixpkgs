@@ -1,28 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, llama-index-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai";
-
-  inherit (llama-index-core) version src meta;
-
+  version = "0.1.22";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/llms/${pname}";
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  src = fetchPypi {
+    pname = "llama_index_llms_openai";
+    inherit version;
+    hash = "sha256-cpvy6nBDUXRl4dWFCJUSt32LPOkiM6Z8E41dYhBh7VY=";
+  };
 
-  propagatedBuildInputs = [
-    llama-index-core
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "llama_index.llms.openai"
-  ];
+  dependencies = [ llama-index-core ];
+
+  # Tests are only available in the mono repo
+  doCheck = false;
+
+  pythonImportsCheck = [ "llama_index.llms.openai" ];
+
+  meta = with lib; {
+    description = "LlamaIndex LLMS Integration for OpenAI";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/llms/llama-index-llms-openai";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

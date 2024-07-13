@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-rnxznJM3ihuEJrD3ba6uMdGMozIrLw/QyGzA3JPygH4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "svg"
-  ];
+  pythonImportsCheck = [ "svg" ];
 
   disabledTestPaths = [
     # Tests need additional files

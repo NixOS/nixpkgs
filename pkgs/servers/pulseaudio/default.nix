@@ -5,7 +5,8 @@
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing_1
 , gst_all_1
-, check, libintl, meson, ninja, m4, wrapGAppsHook
+, check, libintl, meson, ninja, m4, wrapGAppsHook3
+, fetchpatch2
 
 , x11Support ? false
 
@@ -48,6 +49,19 @@ stdenv.mkDerivation rec {
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
+
+    # Fix crashes with some UCM devices
+    # See https://gitlab.archlinux.org/archlinux/packaging/packages/pulseaudio/-/issues/4
+    (fetchpatch2 {
+      name = "alsa-ucm-Check-UCM-verb-before-working-with-device-status.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/commit/f5cacd94abcc47003bd88ad7ca1450de649ffb15.patch";
+      hash = "sha256-WyEqCitrqic2n5nNHeVS10vvGy5IzwObPPXftZKy/A8=";
+    })
+    (fetchpatch2 {
+      name = "alsa-ucm-Replace-port-device-UCM-context-assertion-with-an-error.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/commit/ed3d4f0837f670e5e5afb1afa5bcfc8ff05d3407.patch";
+      hash = "sha256-fMJ3EYq56sHx+zTrG6osvI/QgnhqLvWiifZxrRLMvns=";
+    })
   ];
 
   outputs = [ "out" "dev" ];
@@ -55,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
     ++ lib.optionals stdenv.isLinux [ glib ]
     # gstreamer plugin discovery requires wrapping
-    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook;
+    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];

@@ -36,7 +36,7 @@
 
 let
   pname = "vector";
-  version = "0.36.1";
+  version = "0.39.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -45,14 +45,14 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iY0Bi1FG3kEiZtPTXonoVGYiquZkTPF51PWEZEoxQSw=";
+    hash = "sha256-S6yzh8ISIh6xzw5DwQaoZdpfmDHE9gfjlEtxIZerSak=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
-      "greptimedb-client-0.1.0" = "sha256-l4r/2DGllXiFgOwpa83ZRiK9o0L4bokVltCGD1cp3NM=";
+      "greptimedb-client-0.1.0" = "sha256-evL8Q2Ikct9s0r4DWTgSP/8g4XTishuJHmwRoCfQFbU=";
       "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage {
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
+
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
   buildInputs =
     [ oniguruma openssl protobuf rdkafka zstd ]
@@ -75,6 +76,9 @@ rustPlatform.buildRustPackage {
 
   # needed to dynamically link rdkafka
   CARGO_FEATURE_DYNAMIC_LINKING=1;
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   buildNoDefaultFeatures = true;
   buildFeatures = features;
@@ -121,7 +125,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A high-performance observability data pipeline";
+    description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];

@@ -1,21 +1,13 @@
 Patch dlopen() to allow direct paths to all required libs
 
-This is an update of the patch submitted in
-https://github.com/NixOS/nixpkgs/commit/b13e44e094989d3a902f8c73b22e8d3c0cc7acf4
-by Alexander V. Nikolaev <avn@avnik.info>
-
----
- cairocffi/__init__.py | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
-
 diff --git a/cairocffi/__init__.py b/cairocffi/__init__.py
-index 307d58c..43c29e3 100644
+index f917d90..31dab12 100644
 --- a/cairocffi/__init__.py
 +++ b/cairocffi/__init__.py
-@@ -21,28 +21,26 @@ VERSION = __version__ = (Path(__file__).parent / 'VERSION').read_text().strip()
+@@ -22,6 +22,14 @@ VERSION = __version__ = '1.7.1'
  version = '1.17.2'
  version_info = (1, 17, 2)
-
+ 
 +# Use hardcoded soname, because ctypes.util use gcc/objdump which shouldn't be
 +# required for runtime
 +_LIBS = {
@@ -24,8 +16,11 @@ index 307d58c..43c29e3 100644
 +    'gobject-2.0': '@glib@/lib/libgobject-2.0@ext@',
 +    'gdk_pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0@ext@',
 +}
-+
-
+ 
+ # Python 3.8 no longer searches for DLLs in PATH, so we can add everything in
+ # CAIROCFFI_DLL_DIRECTORIES manually. Note that unlike PATH, add_dll_directory
+@@ -36,26 +44,14 @@ if dll_directories and hasattr(os, 'add_dll_directory'):
+ 
  def dlopen(ffi, library_names, filenames):
      """Try various names for the same library, for different platforms."""
 -    exceptions = []
@@ -33,7 +28,7 @@ index 307d58c..43c29e3 100644
      for library_name in library_names:
 -        library_filename = find_library(library_name)
 -        if library_filename:
--            filenames = (library_filename,) + filenames
+-            filenames = (library_filename, *filenames)
 -        else:
 -            exceptions.append(
 -                'no library called "{}" was found'.format(library_name))
@@ -52,10 +47,8 @@ index 307d58c..43c29e3 100644
 +            lib = ffi.dlopen(path)
 +            if lib:
 +                return lib
-+
+ 
 +    raise OSError("dlopen() failed to load a library: %s as %s" % (library_name, path))
-
-
+ 
  cairo = dlopen(
---
-2.19.2
+     ffi, ('cairo-2', 'cairo', 'libcairo-2'),

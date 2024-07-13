@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , substituteAll
 , accountsservice
+, adwaita-icon-theme
 , budgie-desktop
+, cheese
 , clutter
 , clutter-gtk
 , colord
@@ -19,6 +21,7 @@
 , glibc
 , gnome
 , gnome-desktop
+, gnome-user-share
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -52,18 +55,18 @@
 , udisks2
 , upower
 , webp-pixbuf-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableSshSocket ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "budgie-control-center";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
@@ -86,7 +89,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -101,12 +104,12 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gnome-desktop
-    gnome.adwaita-icon-theme
-    gnome.cheese
+    adwaita-icon-theme
+    cheese
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
-    gnome.gnome-user-share
+    gnome-user-share
     gnome.mutter
     gsettings-desktop-schemas
     gsound
@@ -167,12 +170,12 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
-    description = "A fork of GNOME Control Center for the Budgie 10 Series";
+  meta = {
+    description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     mainProgram = "budgie-control-center";
-    platforms = platforms.linux;
-    maintainers = teams.budgie.members;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.budgie.members;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})
