@@ -20080,8 +20080,6 @@ with pkgs;
 
   clipper = callPackage ../development/libraries/clipper { };
 
-  clipper2 = callPackage ../development/libraries/clipper2 { };
-
   cln = callPackage ../development/libraries/cln { };
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
