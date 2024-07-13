@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   doctest,
-  fmt,
+  fmt_11,
   perl,
   glib,
   luajit,
@@ -22,6 +22,7 @@
   libsodium,
   xxHash,
   zstd,
+  libarchive,
   withBlas ? true,
   withHyperscan ? stdenv.isx86_64,
   withLuaJIT ? stdenv.isx86_64,
@@ -32,13 +33,13 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.8.4";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-3skF+aQv8Y3ATujV+WH4DxwyQ2hXR6CDZz77CkaRso0=";
+    hash = "sha256-PCogHnes3/8qqdcqsiUzuVVEUf8+ze3xiYUmfe6L3IU=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       doctest
-      fmt
+      fmt_11
       glib
       openssl
       pcre
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
       libsodium
       xxHash
       zstd
+      libarchive
     ]
     ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [
