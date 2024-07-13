@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ios-webkit-debug-proxy";
-  version = "1.9.0";
+  version = "1.9.1";
 
   outputs = [
     "out"
@@ -32,20 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "ios-webkit-debug-proxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cZ/p/aWET/BXKDrD+qgR+rfTISd+4jPNQFuV8klSLUo=";
+    hash = "sha256-94gYTv5v4YNwbiUJ/9PIHU+Bnvf5uN12+oMFWKj+J1Y=";
   };
 
   patches = [
-    # OpenSSL 3.0 compatibility
-    (fetchpatch {
-      url = "https://github.com/google/ios-webkit-debug-proxy/commit/5ba30a2a67f39d25025cadf37c0eafb2e2d2d0a8.patch";
-      hash = "sha256-2b9BjG9wkqO+ZfoBYYJvD2Db5Kr0F/MxKMTRsI0ea3s=";
-    })
-    (fetchpatch {
-      name = "libplist-2.3.0-compatibility.patch";
-      url = "https://github.com/google/ios-webkit-debug-proxy/commit/94e4625ea648ece730d33d13224881ab06ad0fce.patch";
-      hash = "sha256-2deFAKIcNPDd1loOSe8pWZWs9idIE5Q2+pLkoVQrTLg=";
-    })
     # Examples compilation breaks with --disable-static, see https://github.com/google/ios-webkit-debug-proxy/issues/399
     ./0001-Don-t-compile-examples.patch
   ];
