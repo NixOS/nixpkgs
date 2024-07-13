@@ -1962,6 +1962,8 @@ self: super: with self; {
 
   casa-formats-io = callPackage ../development/python-modules/casa-formats-io { };
 
+  casadi = callPackage ../development/python-modules/casadi { };
+
   casbin = callPackage ../development/python-modules/casbin { };
 
   cashaddress = callPackage ../development/python-modules/cashaddress { };
