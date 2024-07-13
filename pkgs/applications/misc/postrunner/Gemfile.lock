@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bindata (2.4.10)
+    fit4ruby (3.9.0)
+      bindata (~> 2.4.8)
+    mini_portile2 (2.7.1)
+    nokogiri (1.13.1)
+      mini_portile2 (~> 2.7.0)
+      racc (~> 1.4)
+    perobs (4.3.0)
+    postrunner (1.0.5)
+      fit4ruby (~> 3.9.0)
+      nokogiri
+      perobs (~> 4.3.0)
+    racc (1.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  postrunner
+
+BUNDLED WITH
+   2.1.4
