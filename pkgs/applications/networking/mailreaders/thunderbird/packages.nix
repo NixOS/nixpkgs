@@ -1,17 +1,15 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu73, fetchpatch2, config }:
 
-rec {
-  thunderbird = thunderbird-115;
-
-  thunderbird-115 = (buildMozillaMach rec {
+let
+  common = { version, sha512, updateScript }: (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "115.12.2";
+    inherit version updateScript;
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "182f35e8e5ece98d18dfefe106c73bc97fbc619f59772d9b3455b7c8af412021ecc5eae97a12515224e91deb814abb7a6ef7f538c450e9e77fdfd84078678038";
+      inherit sha512;
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -30,10 +28,6 @@ rec {
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
     };
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbird-unwrapped";
-      versionPrefix = "115";
-    };
   }).override {
     geolocationSupport = false;
     webrtcSupport = false;
@@ -50,6 +44,19 @@ rec {
         hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
       })];
     });
+  };
+
+in rec {
+  thunderbird = thunderbird-115;
+
+  thunderbird-115 = common {
+    version = "115.12.2";
+    sha512 = "182f35e8e5ece98d18dfefe106c73bc97fbc619f59772d9b3455b7c8af412021ecc5eae97a12515224e91deb814abb7a6ef7f538c450e9e77fdfd84078678038";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-115";
+      versionPrefix = "115";
+    };
   };
 }
  // lib.optionalAttrs config.allowAliases {
