@@ -1,12 +1,11 @@
 { lib
 , fetchzip
-, buildPythonApplication
 , python3Packages
 , desktop-file-utils
 , freecell-solver
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pysolfc";
   version = "2.21.0";
 

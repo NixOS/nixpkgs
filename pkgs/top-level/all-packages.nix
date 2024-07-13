@@ -36612,8 +36612,6 @@ with pkgs;
 
   powermanga = callPackage ../games/powermanga { };
 
-  pysolfc = python3Packages.callPackage ../games/pysolfc { };
-
   qq = callPackage ../applications/networking/instant-messengers/qq { };
 
   qqwing = callPackage ../games/qqwing { };
