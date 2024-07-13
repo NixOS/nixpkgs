@@ -5,7 +5,11 @@ with lib;
 let
 
   cfg = config.services.fprintd;
-  fprintdPkg = if cfg.tod.enable then pkgs.fprintd-tod else pkgs.fprintd;
+  fprintdPkg = if cfg.tod.enable
+    then if lib.hasAttr "needsLibfprint_1_90" cfg.tod.driver
+      then pkgs.fprintd-tod.override { libfprint-tod = libfprint-tod_1_90; }
+      else pkgs.fprintd-tod
+    else pkgs.fprintd;
 
 in
 
@@ -23,7 +27,13 @@ in
       package = mkOption {
         type = types.package;
         default = fprintdPkg;
-        defaultText = literalExpression "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
+        defaultText = literalExpression ''
+          if config.services.fprintd.tod.enable
+            then if lib.hasAttr "needsLibfprint_1_90" config.services.fprintd.tod.driver
+              then pkgs.fprintd-tod.override { libfprint-tod = libfprint-tod_1_90; }
+              else pkgs.fprintd-tod
+            else pkgs.fprintd;
+        '';
         description = ''
           fprintd package to use.
         '';
