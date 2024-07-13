@@ -607,6 +607,7 @@ mapAliases ({
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
+  weboob = throw "weboob has been removed, please use woob instead"; # added 2024-07-27
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19

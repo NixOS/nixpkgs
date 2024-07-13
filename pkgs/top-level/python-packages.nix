@@ -17267,8 +17267,6 @@ self: super: with self; {
 
   webob = callPackage ../development/python-modules/webob { };
 
-  weboob = callPackage ../development/python-modules/weboob { };
-
   webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
