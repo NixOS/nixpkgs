@@ -60,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.5";
+  version = "3.8.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-ZiaaLP4OHC2r7Ie9u9irZW85bt2aQN0AaXjgA8+lK/w=";
+    hash = "sha256-LhWIquU8sy1Dk38fTsoo/r2cDHqhc0/F3WGn6B4OvN0=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -84,16 +84,6 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/gnutls/gnutls/-/commit/8584908d6b679cd4e7676de437117a793e18347c.diff";
       revert = true;
       hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
-    })
-    # Makes the system-wide configuration for RSAES-PKCS1-v1_5 actually apply
-    # and makes it enabled by default when the config file is missing
-    # Without this an error 113 is thrown when using some RSA certificates
-    # see https://gitlab.com/gnutls/gnutls/-/issues/1540
-    # "This is pretty sever[e], since it breaks on letsencrypt-issued RSA keys." (comment from above issue)
-    (fetchpatch2 {
-      name = "fix-rsaes-pkcs1-v1_5-system-wide-configuration.patch";
-      url = "https://gitlab.com/gnutls/gnutls/-/commit/2d73d945c4b1dfcf8d2328c4d23187d62ffaab2d.diff";
-      hash = "sha256-2aWcLff9jzJnY+XSqCIaK/zdwSLwkNlfDeMlWyRShN8=";
     })
   ];
 
