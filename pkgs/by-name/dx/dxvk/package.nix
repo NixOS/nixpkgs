@@ -71,7 +71,9 @@ stdenvNoCC.mkDerivation (
       done
     '';
 
-    passthru = { inherit dxvk32 dxvk64; };
+    passthru = {
+      inherit dxvk32 dxvk64;
+    };
 
     __structuredAttrs = true;
 
