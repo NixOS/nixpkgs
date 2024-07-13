@@ -1,5 +1,6 @@
 {
   lib,
+  fetchFromGitHub,
   fetchzip,
 }:
 
@@ -8,9 +9,11 @@
     self = {
       pname = "pysolfc";
       version = "2.21.0";
-      src = fetchzip {
-        url = "mirror://sourceforge/pysolfc/PySolFC-${self.version}.tar.xz";
-        hash = "sha256-Deye7KML5G6RZkth2veVgPOWZI8gnusEvszlrPTAhag=";
+      src = fetchFromGitHub {
+        owner = "shlomif";
+        repo = "PysolFC";
+        rev = "pysolfc-${self.version}";
+        hash = "sha256-2/a78Hbjn/okDyVs8f4rr7cS/nqwfcqDqdzvmggDv3g=";
       };
     };
   in
