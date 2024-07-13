@@ -61,6 +61,8 @@ let
     boolToString
     ;
 
+  inherit (lib.network) ipv6;
+
   inherit (lib.modules)
     mergeDefinitions
     fixupOptionType
@@ -769,6 +771,37 @@ rec {
       functor = (defaultFunctor "functionTo") // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
+
+    # Network types
+    ipv6Addr =
+      elemType:
+      mkOptionType {
+        name = "ipv6Addr";
+        description = "Valid IPv6 address string";
+        descriptionClass = "noun";
+        check = ipv6.isValidIpStr;
+        merge = mergeEqualOption;
+      };
+
+    ipv6AddrAttrs =
+      elemType:
+      mkOptionType {
+        name = "ipv6AddrAttrs";
+        description = "Attribute set of parsed IPv6 address";
+        descriptionClass = "noun";
+        check =
+          v:
+          isAttrs v
+          && all (el: hasAttr el v) [
+            "address"
+            "addressCidr"
+            "url"
+            "urlWithPort"
+            "prefixLength"
+            "_address"
+          ];
+        merge = mergeEqualOption;
+      };
 
     # A submodule (like typed attribute set). See NixOS manual.
     submodule = modules: submoduleWith {

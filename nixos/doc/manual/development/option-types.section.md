@@ -211,6 +211,24 @@ merging is handled.
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
+## Network types {#sec-option-types-network}
+
+Types used in the network library.
+
+`types.ipv6AddrStr`
+
+:   A string that is a valid IPv6 address. Used as input to the
+    `lib.network.ipv6.fromString` ipv6 parser.
+
+`types.ipv6AddrAttrs`
+
+:   An attribute set contains the internal representation of an IPv6 address,
+    subnet prefix length and different string representations of the address:
+    default one, cidr notation, url and url with port. Can be created from a
+    string using a parsing function like `lib.network.ipv6.fromString`. Most
+    network library functions accept this type because it already contains a
+    parsed address.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
