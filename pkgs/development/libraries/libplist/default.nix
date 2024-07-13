@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     mainProgram = "plistutil";
   };
 }
