@@ -15,18 +15,19 @@
 }:
 
 let
-  version = "46.4";
+  version = "46.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
     rev = version;
-    hash = "sha256-FIq05EDOEi0qx6s5i5a2T9bacVUMQWe0nl6xUp6CY1s=";
+    hash = "sha256-PHjQJEM0W26ZpzW//+gsYCCq0lcikWh0707kDXxryAo=";
   };
 
   vte-gtk4-patched = vte-gtk4.overrideAttrs (prev: {
     patches = (prev.patches or [ ]) ++ [
+      "${src}/build-aux/0001-a11y-implement-GtkAccessibleText.patch"
       "${src}/build-aux/0001-add-notification-and-shell-precmd-preexec.patch"
     ];
   });
