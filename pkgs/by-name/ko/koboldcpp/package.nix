@@ -19,6 +19,9 @@
   openblas,
 
   cublasSupport ? config.cudaSupport,
+  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  arches ? cudaPackages.cudaFlags.arches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -28,19 +31,6 @@
   vulkan-loader,
 
   metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
-
-  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
-  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
-  arches ? cudaPackages.cudaFlags.arches or [ ],
-
-  # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-  # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
-  # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
-  march ? "",
-  # Apple Silicon Chips (M1, M2, M3 and so on DO NOT use mtune)
-  # For example, if you have an AMD Ryzen CPU, you will set "mtune" to "znver2"
-  mtune ? "",
-  mcpu ? "",
 }:
 
 let
@@ -115,12 +105,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
-
-  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    (lib.optionalString (march != "") "-march=${march}")
-    (lib.optionalString (mtune != "") "-mtune=${mtune}")
-    (lib.optionalString (mcpu != "") "-mcpu=${mcpu}")
-  ];
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
