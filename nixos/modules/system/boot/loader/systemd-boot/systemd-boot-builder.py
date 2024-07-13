@@ -314,7 +314,6 @@ def install_bootloader(args: argparse.Namespace) -> None:
         ).stdout
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        # Support multiple efi files
         installed_match = re.search(r"^\W+.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
                       installed_out, re.IGNORECASE | re.MULTILINE)
 
