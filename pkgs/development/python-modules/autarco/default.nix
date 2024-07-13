@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "0.3.0";
+  version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IBf6Dw2Yf7m+5bQ72K0kPxGdtpl8JowQ9IO3gWS3Vso=";
+    hash = "sha256-e/wi4suDMSQTaSdyYsTiBxVUNvisYBVPqy9Rpk0lwJw=";
   };
 
   pythonRelaxDeps = [ "orjson" ];
@@ -37,11 +37,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
@@ -63,7 +61,7 @@ buildPythonPackage rec {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
     changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
