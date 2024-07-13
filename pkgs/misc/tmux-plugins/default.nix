@@ -587,7 +587,7 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.3.1";
+    version = "1.4.0";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
@@ -603,6 +603,7 @@ in rec {
         * Naming a session after a folder/project
         * Switching sessions
         * Viewing current or creating new sessions in one popup
+        * Switching windows
       '';
       license = licenses.mit;
       platforms = platforms.unix;
