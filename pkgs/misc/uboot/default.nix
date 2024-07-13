@@ -416,6 +416,16 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePiZero3 = buildUBoot {
+    defconfig = "orangepi_zero3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    # According to https://linux-sunxi.org/H616 the H618 "is a minor update with a larger (1MB) L2 cache" (compared to the H616)
+    # but "does require extra support in U-Boot, TF-A and sunxi-fel. Support for that has been merged in mainline releases."
+    # But no extra support seems to be in TF-A.
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootOrangePi3 = buildUBoot {
     defconfig = "orangepi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
