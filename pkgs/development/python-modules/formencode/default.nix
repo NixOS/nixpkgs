@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "FormEncode";
     inherit version;
-    sha256 = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
+    hash = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
   };
 
   postPatch = ''

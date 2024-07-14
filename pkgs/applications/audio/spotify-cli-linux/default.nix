@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XJMkiQR1FoeIPfAuJT22kfYJdc/ABuxExELh0EEev8k=";
+    hash = "sha256-XJMkiQR1FoeIPfAuJT22kfYJdc/ABuxExELh0EEev8k=";
   };
 
   preBuild = ''
