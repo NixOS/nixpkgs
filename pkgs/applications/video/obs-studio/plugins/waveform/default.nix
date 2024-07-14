@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "phandasm";
     repo = "waveform";
     rev = "v${version}";
-    sha256 = "sha256-NcBtj+5X9tPH853a6oXzQCBH26hx8Yt17WjP9ryvgmc=";
+    hash = "sha256-NcBtj+5X9tPH853a6oXzQCBH26hx8Yt17WjP9ryvgmc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

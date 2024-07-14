@@ -1,7 +1,6 @@
 {
   lib,
   mkDerivation,
-  stdenv,
   make-rules,
 }:
 

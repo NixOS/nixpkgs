@@ -1,5 +1,4 @@
-{ stdenv
-, fetchpatch
+{ fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales

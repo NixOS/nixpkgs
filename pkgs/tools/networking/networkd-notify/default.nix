@@ -17,7 +17,7 @@ buildPythonApplication rec {
     owner = "wavexx";
     repo = pname;
     rev = "c2f3e71076a0f51c097064b1eb2505a361c7cc0e";
-    sha256 = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
+    hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };
 
   propagatedBuildInputs = [

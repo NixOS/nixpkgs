@@ -209,13 +209,15 @@
       apprise
     ];
     "aprilaire" = ps: with ps; [
-    ]; # missing inputs: pyaprilaire
+      pyaprilaire
+    ];
     "aprs" = ps: with ps; [
       aprslib
       geopy
     ];
     "apsystems" = ps: with ps; [
-    ]; # missing inputs: apsystems-ez1
+      apsystems-ez1
+    ];
     "aquacell" = ps: with ps; [
       fnv-hash-fast
       ifaddr
@@ -5266,7 +5268,9 @@
     "apple_tv"
     "application_credentials"
     "apprise"
+    "aprilaire"
     "aprs"
+    "apsystems"
     "aranet"
     "arcam_fmj"
     "aseko_pool_live"

@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${version}";
-    sha256 = "sha256-856lRCW4+FIiXjOzMkfoYws6SMIKXWVtvr+867QEjCk=";
+    hash = "sha256-856lRCW4+FIiXjOzMkfoYws6SMIKXWVtvr+867QEjCk=";
   };
 
   vendorHash = "sha256-2XdbTqNGt97jQUJmE06D6M/VxF9+vJAwMM/fF8MP2oo=";

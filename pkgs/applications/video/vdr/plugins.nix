@@ -176,7 +176,7 @@ in {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      sha256 = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
       fetchSubmodules = true;
     };
 

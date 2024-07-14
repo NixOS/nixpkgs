@@ -502,6 +502,7 @@ with lib.maintainers;
       euank
       marcusramberg
       mic92
+      rorosen
       superherointj
       wrmilling
       yajo

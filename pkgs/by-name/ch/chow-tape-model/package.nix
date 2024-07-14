@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
+    hash = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
 

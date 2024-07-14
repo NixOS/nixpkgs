@@ -15,7 +15,6 @@
   minikanren,
   numpy,
   scipy,
-  typing-extensions,
 
   # checks
   jax,
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.23.0";
+  version = "2.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -38,13 +37,17 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-r7ooPwZSEsypYAf+oWu7leuoIK39gFfHZACrxsbcIV0=";
+    hash = "sha256-Z0PQtuADqXiVnDcLoy+R5Mrg6KMGWILbLdMM5fNBqaM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "versioneer[toml]==0.28" "versioneer[toml]"
   '';
+
+  pythonRelaxDeps = [
+    "scipy"
+  ];
 
   build-system = [
     cython
@@ -59,7 +62,6 @@ buildPythonPackage rec {
     minikanren
     numpy
     scipy
-    typing-extensions
   ];
 
   nativeCheckInputs = [

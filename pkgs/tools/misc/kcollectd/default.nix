@@ -23,7 +23,7 @@ mkDerivation rec {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
+    hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
   };
 
   nativeBuildInputs = [

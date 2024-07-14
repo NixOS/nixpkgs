@@ -20,7 +20,7 @@ mkDerivation rec {
     owner = "agateau";
     repo = "sfxr-qt";
     rev = version;
-    sha256 = "sha256-JAWDk7mGkPtQ5yaA6UT9hlAy770MHrTBhBP9G8UqFKg=";
+    hash = "sha256-JAWDk7mGkPtQ5yaA6UT9hlAy770MHrTBhBP9G8UqFKg=";
     fetchSubmodules = true;
   };
 

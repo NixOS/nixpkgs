@@ -23,20 +23,12 @@ let
         gradle
       ];
 
-      buildPhase = args.buildPhase or ''
-        runHook preBuild
-
+      preBuild = ''
         # Set project name, otherwise defaults to directory name
         echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
-
-        export GRADLE_USER_HOME=$(mktemp -d)
-        gradle \
-          --offline \
-          --no-daemon \
-          -PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra
-
-        runHook postBuild
       '';
+
+      gradleFlags = [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
 
       installPhase = args.installPhase or ''
         runHook preInstall
