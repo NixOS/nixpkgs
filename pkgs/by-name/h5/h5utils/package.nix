@@ -38,14 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (hdf4 != null) hdf4
     ++ lib.optional (libmatheval != null) libmatheval;
 
-  meta = with lib; {
+  meta = {
     description = "Set of utilities for visualization and conversion of scientific data in the free, portable HDF5 format";
     homepage = "https://github.com/stevengj/h5utils";
     changelog = "https://github.com/NanoComp/h5utils/releases/tag/${finalAttrs.version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       gpl2Plus
     ];
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = [ lib.maintainers.sfrijters ];
   };
 })
