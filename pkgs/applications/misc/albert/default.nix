@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Z88amcPb2jCJduRu8CGQ20y2o5cXmL4rpRL0hGCEYgM=";
+    hash = "sha256-Z88amcPb2jCJduRu8CGQ20y2o5cXmL4rpRL0hGCEYgM=";
     fetchSubmodules = true;
   };
 

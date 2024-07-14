@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://pagure.io/numad.git";
     rev = "3399d89305b6560e27e70aff4ad9fb403dedf947";
-    sha256 = "sha256-USEffVcakaAbilqijJmpro92ujvxbglcXxyBlntMxaI=";
+    hash = "sha256-USEffVcakaAbilqijJmpro92ujvxbglcXxyBlntMxaI=";
   };
 
   postPatch = ''

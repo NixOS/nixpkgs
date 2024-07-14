@@ -1,22 +1,23 @@
-{ copyDesktopItems
-, fetchurl
-, jre
-, lib
-, makeDesktopItem
-, makeWrapper
-, stdenvNoCC
+{
+  copyDesktopItems,
+  fetchurl,
+  jre,
+  lib,
+  makeDesktopItem,
+  makeWrapper,
+  stdenvNoCC,
 
-, gamemodeSupport ? stdenvNoCC.isLinux
-, textToSpeechSupport ? stdenvNoCC.isLinux
-, additionalLibs ? [ ]
+  gamemodeSupport ? stdenvNoCC.isLinux,
+  textToSpeechSupport ? stdenvNoCC.isLinux,
+  additionalLibs ? [ ],
 
-, # dependencies
-  flite
-, gamemode
-, libglvnd
-, libpulseaudio
-, udev
-, xorg
+  # dependencies
+  flite,
+  gamemode,
+  libglvnd,
+  libpulseaudio,
+  udev,
+  xorg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -35,19 +36,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase =
     let
-      runtimeLibraries = [
-        libglvnd
-        libpulseaudio
-        udev
-        xorg.libXxf86vm
-      ]
-      ++ lib.optional gamemodeSupport gamemode.lib
-      ++ lib.optional textToSpeechSupport flite
-      ++ additionalLibs;
+      runtimeLibraries =
+        [
+          libglvnd
+          libpulseaudio
+          udev
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXxf86vm
+        ]
+        ++ lib.optional gamemodeSupport gamemode.lib
+        ++ lib.optional textToSpeechSupport flite
+        ++ additionalLibs;
     in
     ''
       runHook preInstall

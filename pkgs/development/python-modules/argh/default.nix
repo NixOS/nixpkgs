@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.31.2";
+  version = "0.31.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2xw0iFgE99RkbDhdwvsZtFKYVhMi9MFerhsTOZP54yM=";
+    hash = "sha256-8wAj2L4Uyl7msbPuq4KRUde72kZK4H3E3VNHkZxYkvk=";
   };
 
   nativeBuildInputs = [ flit-core ];

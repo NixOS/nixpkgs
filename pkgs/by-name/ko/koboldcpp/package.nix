@@ -4,8 +4,9 @@
   stdenv,
   makeWrapper,
   gitUpdater,
-  python311Packages,
+  python3Packages,
   tk,
+  addDriverRunpath,
 
   darwin,
 
@@ -18,6 +19,9 @@
   openblas,
 
   cublasSupport ? config.cudaSupport,
+  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  arches ? cudaPackages.cudaFlags.arches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -27,39 +31,36 @@
   vulkan-loader,
 
   metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
-
-  # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-  # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
-  # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
-  # For example, if you have an AMD Ryzen CPU, you will set "march" to "x86-64" and "mtune" to "znver2"
-  march ? "",
-  mtune ? "",
 }:
 
 let
   makeBool = option: bool: (if bool then "${option}=1" else "");
 
+  makeWrapperArgs = lib.optionalString config.cudaSupport ''
+    --prefix LD_LIBRARY_PATH: "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+  '';
+
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.68";
+  version = "1.69.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-zqRlQ8HgT4fmGHD6uxxa2duZrx9Vhxd+gm1XQ7w9ay0=";
+    sha256 = "sha256-808HyqrB9/cFJU7nq7Cm5Fm4OFPML4oQtnv0hystwAg=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ];
 
-  pythonInputs = builtins.attrValues { inherit (python311Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs =
     [ tk ]
@@ -105,15 +106,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
-
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
     (makeBool "LLAMA_CUBLAS" cublasSupport)
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
+    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head arches}")
   ];
 
   installPhase = ''
@@ -133,10 +132,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Remove an unused argument, mainly intended for Darwin to reduce warnings
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-warn " -s " " "
+  '';
+
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-    --prefix PATH ${lib.makeBinPath [ tk ]}
+      --prefix PATH ${lib.makeBinPath [ tk ]} ${makeWrapperArgs}
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

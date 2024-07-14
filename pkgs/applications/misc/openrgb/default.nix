@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+    hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];

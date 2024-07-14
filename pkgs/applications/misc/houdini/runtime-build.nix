@@ -1,9 +1,5 @@
-{ lib, stdenv, requireFile, bc, version, src, eulaDate }:
-
-let
-  license_dir = "~/.config/houdini";
-in
-stdenv.mkDerivation rec {
+{ stdenv, bc, version, src, eulaDate }:
+stdenv.mkDerivation {
   inherit version src;
   pname = "houdini-runtime";
 
