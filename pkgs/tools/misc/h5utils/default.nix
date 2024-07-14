@@ -1,7 +1,12 @@
-{ stdenv, fetchurl, lib
-, hdf5, libpng, libjpeg
-, hdf4 ? null
-, libmatheval ? null
+{
+  stdenv,
+  fetchurl,
+  lib,
+  hdf5,
+  libpng,
+  libjpeg,
+  hdf4 ? null,
+  libmatheval ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,15 +21,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # libdf is an alternative name for libhdf (hdf4)
-  preConfigure = lib.optionalString (hdf4 != null)
-  ''
+  preConfigure = lib.optionalString (hdf4 != null) ''
     substituteInPlace configure \
     --replace "-ldf" "-lhdf" \
   '';
 
   preBuild = lib.optionalString hdf5.mpiSupport "export CC=${lib.getBin hdf5.mpi}/mpicc";
 
-  buildInputs = [ hdf5 libjpeg libpng ] ++ lib.optional hdf5.mpiSupport hdf5.mpi
+  buildInputs =
+    [
+      hdf5
+      libjpeg
+      libpng
+    ]
+    ++ lib.optional hdf5.mpiSupport hdf5.mpi
     ++ lib.optional (hdf4 != null) hdf4
     ++ lib.optional (libmatheval != null) libmatheval;
 
@@ -32,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of utilities for visualization and conversion of scientific data in the free, portable HDF5 format";
     homepage = "https://github.com/stevengj/h5utils";
     changelog = "https://github.com/NanoComp/h5utils/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ mit gpl2Plus ];
+    license = with licenses; [
+      mit
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ sfrijters ];
   };
 })
