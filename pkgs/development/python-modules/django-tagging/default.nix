@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28d68fa4831705e51ad7d1e845ed6dd9e354f9b6f8a5f63b655a430646ef4e8d";
+    hash = "sha256-KNaPpIMXBeUa19HoRe1t2eNU+bb4pfY7ZVpDBkbvTo0=";
   };
 
   # error: invalid command 'test'

@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7n/ddjF6eJklo+T79+/zBxSHryebc2W9gxwxsb2BbF4=";
+    hash = "sha256-7n/ddjF6eJklo+T79+/zBxSHryebc2W9gxwxsb2BbF4=";
   };
 
   propagatedBuildInputs = with python3Packages; [

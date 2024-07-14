@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyyaml_env_tag";
     inherit version;
-    sha256 = "1nsva88jsmwn0cb9jnrfiz4dvs9xakkpgfii7g1xwkx1pmsjc2bh";
+    hash = "sha256-cAkmdb2hT97DOzG6d+dUPendyI8uW5kWA5ZXLRFSW9s=";
   };
 
   propagatedBuildInputs = [ pyyaml ];

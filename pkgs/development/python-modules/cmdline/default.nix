@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7cf6af53549892b2218c2f56a199dff54a733be5c5515c0fd626812070b0a86a";
+    hash = "sha256-fPavU1SYkrIhjC9WoZnf9UpzO+XFUVwP1iaBIHCwqGo=";
   };
 
   # No tests, https://github.com/rca/cmdline/issues/1

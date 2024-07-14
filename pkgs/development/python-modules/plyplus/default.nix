@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PlyPlus";
     inherit version;
-    sha256 = "0g3flgfm3jpb2d8v9z0qmbwca5gxdqr10cs3zvlfhv5cs06ahpnp";
+    hash = "sha256-116oDNCsbOjo/kMzEDJu/RXF+KoY/LRRE+vKUd2jbjw=";
   };
 
   propagatedBuildInputs = [ ply ];

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ledger_agent";
     inherit version;
-    sha256 = "03zj602m2rln9yvr08dswy56vzkbldp8b074ixwzz525dafblr92";
+    hash = "sha256-ImW6nGpFlP95j+SAhW6ja/5tiue6IZC3T5ZmUQUw8g8=";
   };
 
   propagatedBuildInputs = [

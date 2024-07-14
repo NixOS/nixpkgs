@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vmxgn9wd3j80hp4gr5iq06jrl4gryz5zgfdd2ah30d12sfcfig0";
+    hash = "sha256-4EXHnBahgQGVaM29X77Pj9AsDcCx5EcuBEiOxpN9vW4=";
   };
 
   nativeCheckInputs = with python3Packages; [

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "spark_parser";
     inherit version;
-    sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
+    hash = "sha256-p7uXuXlT+4vwzYFY2CC2Rn7x5/dHc46CJIrkyCTx4lo=";
   };
 
   buildInputs = [ nose ];

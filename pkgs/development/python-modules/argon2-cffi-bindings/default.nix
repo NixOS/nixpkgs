@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3";
+    hash = "sha256-u4nO/6bHkYB9EwXOt32/rMWqSZiR0sVWYcZFllH8OeM=";
   };
 
   buildInputs = [ libargon2 ];

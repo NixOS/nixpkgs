@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aspy.yaml";
     inherit version;
-    sha256 = "0i9z2jm2hjwdxdv4vw4kbs70h2ciz49rv8w73zbawb7z5qw45iz7";
+    hash = "sha256-58dCOC7/LK7WH4ejnRP5kQkIjl6T8E12641LKKoUP0U=";
   };
 
   propagatedBuildInputs = [ pyyaml ];

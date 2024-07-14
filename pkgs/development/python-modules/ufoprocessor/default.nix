@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ufoProcessor";
     inherit version;
-    sha256 = "0ns11aamgavgsfj8qf5kq7dvzmgl0mhr1cbych2f075ipfdvva5s";
+    hash = "sha256-uqi9m7uxHOAEZH6xkGEF9NW/28GzOIyk02+rV5UKQVs=";
     extension = "zip";
   };
 

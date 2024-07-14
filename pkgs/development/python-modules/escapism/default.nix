@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73256bdfb4f22230f0428fc6efecee61cdc4fad531b6f98b849cb9c80711e4ec";
+    hash = "sha256-cyVr37TyIjDwQo/G7+zuYc3E+tUxtvmLhJy5yAcR5Ow=";
   };
 
   # No tests distributed

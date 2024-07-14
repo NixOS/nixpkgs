@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "nose_warnings_filters";
     inherit version;
-    sha256 = "17dvfqfy2fm7a5cmiffw2dc3064kpx72fn5mlw01skm2rhn5nv25";
+    hash = "sha256-RWxbLMyiTh0Ap7VYJ06/kxgwWBPcuVhZUac64R12u50=";
   };
 
   disabled = !isPy3k;

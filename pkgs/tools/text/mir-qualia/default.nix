@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://pypi/m/mir.qualia/mir.qualia-${version}.tar.gz";
-    sha256 = "1ybq6jb5clh9hw0sp3idp4hjv2gkm9yiaph48gcc208affflc8m9";
+    hash = "sha256-qSJGnXMKAcHYQwReFX2q84ktIbktjqsBhwlSVpY0ePk=";
   };
 
   meta = {

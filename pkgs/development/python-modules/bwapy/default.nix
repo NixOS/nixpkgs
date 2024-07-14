@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "090qwx3vl729zn3a7sksbviyg04kc71gpbm3nd8dalqp673x1npw";
+    hash = "sha256-/NrQxzEXU9VQs6Ou+8Jhk4Dn41566qOG/UkcukfnGCQ=";
   };
   postPatch = ''
     # replace bundled bwa

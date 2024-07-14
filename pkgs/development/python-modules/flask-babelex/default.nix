@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Flask-BabelEx";
-    sha256 = "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r";
+    hash = "sha256-OaWczuk4ap1S2AuRASJEAgNq7cLHhzsR3u9uTiHKzic=";
   };
 
   propagatedBuildInputs = [

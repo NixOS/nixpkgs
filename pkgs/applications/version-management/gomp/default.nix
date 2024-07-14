@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11nq40igqbyfiygdzb1zyxx1n6d9xkv8vlmprbbi75mq54gfihhb";
+    hash = "sha256-C8LoHim4lhPXyrfSjfbsqRkbevc/rN+ej84v/CIg2IY=";
   };
 
   doCheck = false; # tests require interactive terminal

@@ -6,7 +6,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
+    hash = "sha256-7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
   };
 
   checkPhase = "$out/bin/fortls --help 1>/dev/null";

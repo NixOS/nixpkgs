@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hnivz4p4llky6djxgcsr9r3j4vr46mkjvp0ksybhpx0fsnhdi81";
+    hash = "sha256-AcUGrXagX7i8nuBuOasheRM5csqavS6b8ZNScsnf0UI=";
   };
 
   pythonImportsCheck = [ "treelog" ];

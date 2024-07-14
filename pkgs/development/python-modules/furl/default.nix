@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e";
+    hash = "sha256-WmGI/iZmxIShIVnBi+l6GXenHWMu9buGfvFfVK85zE4=";
   };
 
   # With python 3.11.4, invalid IPv6 address does throw ValueError

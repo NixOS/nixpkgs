@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-SSLify";
     inherit version;
-    sha256 = "0gjl1m828z5dm3c5dpc2qjgi4llf84cp72mafr0ib5fd14y1sgnk";
+    hash = "sha256-0z4dPAnNlRVBdqqKcxlBjlISn8SC3VbYqK18JFANVD4=";
   };
 
   propagatedBuildInputs = [ flask ];

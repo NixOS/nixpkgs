@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "booleanOperations";
     inherit version;
-    sha256 = "1f41lb19m8azchl1aqz6j5ycbspb8jsf1cnn42hlydxd68f85ylc";
+    hash = "sha256-jPqCHDKtN0+hINay4LRE6+rFfJHmYxUoZF+hmsKigbg=";
     extension = "zip";
   };
 

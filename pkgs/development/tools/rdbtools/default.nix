@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "689e57e42f43bdc73ea4e893d9676819980d17968696826b69fbd951f59772de";
+    hash = "sha256-aJ5X5C9Dvcc+pOiT2WdoGZgNF5aGloJrafvZUfWXct4=";
   };
 
   propagatedBuildInputs = [ redis python-lzf ];

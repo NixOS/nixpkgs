@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SocksiPy-branch";
     inherit version;
-    sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
+    hash = "sha256-F6lQYOKMO5A4qbjBhlxU+MHFvvFdVhv3d8m788gOhAY=";
   };
 
   meta = with lib; {

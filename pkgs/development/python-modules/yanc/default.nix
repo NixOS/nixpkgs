@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z35bkk9phs40lf5061k1plhjdl5fskm0dmdikrsqi1bjihnxp8w";
+    hash = "sha256-HN1uYZQrRKzzjK02UKd2hTYJ6Q0zGFAcBUTDm+ZcZXw=";
   };
 
   # Tests fail on Python>=3.5. See: https://github.com/0compute/yanc/issues/10

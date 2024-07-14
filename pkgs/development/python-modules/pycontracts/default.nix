@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyContracts";
     inherit version;
-    sha256 = "03q5m595ysjrc9h57m7prrca6b9l4yrzvdijnzxnhd61p7jzbh49";
+    hash = "sha256-icD15bnBNGj7tzK2/bMnNC2jWM731FNgYllqX1KpBQ8=";
   };
 
   buildInputs = [ nose ];

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7";
+    hash = "sha256-OlUge8/tU93VxbrhdFJAYpNe/tF3kuneKtAgXOmtY/c=";
   };
 
   __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";

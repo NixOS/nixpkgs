@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "uptime_kuma_monitor";
     inherit version;
-    sha256 = "0zi4856hj5ar4yidh7366kx3xnh8qzydw9z8vlalcn98jf3jlnk9";
+    hash = "sha256-aVoqh5MoWUYV3egn3vzHCNo++jRmHNiiJ1kVCU1BJH4=";
   };
 
   propagatedBuildInputs = [

@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://pypi/k/kargo/${pname}-${version}.tar.gz";
-    sha256 = "1iq3vrmglag9gpsir03yz7556m0bz99nwb2mf594378cqzbr6db3";
+    hash = "sha256-YzWT18cMnUFScVUsblP6C1RTyvl+gBz1fekp+mreA8c=";
   };
 
   propagatedBuildInputs = [

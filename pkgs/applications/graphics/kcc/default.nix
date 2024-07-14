@@ -13,7 +13,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "KindleComicConverter";
-    sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
+    hash = "sha256-Xb7l3F7gagcxauXrryH/oZcAlNuuWYWtc14oB+8RJkQ=";
   };
 
   propagatedBuildInputs = with python3Packages ; [

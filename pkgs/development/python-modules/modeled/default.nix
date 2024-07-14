@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     extension = "zip";
     inherit pname version;
-    sha256 = "1wcl3r02q10gxy4xw7g8x2wg2sx4sbawzbfcl7a5xdydrxl4r4v4";
+    hash = "sha256-ZJNMaM/Nt17Uocytz9XSpGvxuOjoHd6J7w8ELEAelPE=";
   };
 
   buildInputs = [ zetup ];

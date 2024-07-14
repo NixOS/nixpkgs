@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6a0ddb78db7e00ae7ffe895bf8ef97f91e6310dfc1c4721896bdfd044b1cb03";
+    hash = "sha256-tqDdt4234Arn/+iVv475f5HmMQ38HEchiWvf0ESxywM=";
   };
 
   prePatch = ''

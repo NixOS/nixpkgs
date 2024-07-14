@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Nevow";
     inherit version;
-    sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
+    hash = "sha256-r7a6haU1GVNXjAGPzbnfvWLymo1GxYvJZSvAAKJyI/M=";
   };
 
   propagatedBuildInputs = [ twisted ];

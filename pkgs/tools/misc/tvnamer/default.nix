@@ -35,7 +35,7 @@ pypkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc2ea8188df6ac56439343630466b874c57756dd0b2538dd8e7905048f425f04";
+    hash = "sha256-3C6oGI32rFZDk0NjBGa4dMV3Vt0LJTjdjnkFBI9CXwQ=";
   };
 
   propagatedBuildInputs = with pypkgs; [ tvdb-api ];

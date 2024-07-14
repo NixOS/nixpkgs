@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Python-fontconfig";
     inherit version;
-    sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
+    hash = "sha256-t8/jZiQvg7jNcXW31N2V0Z9C1hnFilGRT3Kx50FzmZQ=";
   };
 
   buildInputs = [ fontconfig ];

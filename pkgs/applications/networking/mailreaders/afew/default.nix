@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
+    hash = "sha256-zoV/4aO8CYLB2sga72bKzBSOT52wbacg+Gk5KvHC7nI=";
   };
 
   nativeBuildInputs = with python3Packages; [

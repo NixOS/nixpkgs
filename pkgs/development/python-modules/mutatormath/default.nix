@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MutatorMath";
     inherit version;
-    sha256 = "0r1qq45np49x14zz1zwkaayqrn7m8dn2jlipjldg2ihnmpzw29w1";
+    hash = "sha256-gSfB/60WRvEalTdSKWxD9diMvVKT//A/CT2RawvBOGQ=";
     extension = "zip";
   };
 

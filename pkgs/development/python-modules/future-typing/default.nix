@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "future_typing";
     inherit version;
-    sha256 = "65fdc5034a95db212790fee5e977fb0a2df8deb60dccf3bac17d6d2b1a9bbacd";
+    hash = "sha256-Zf3FA0qV2yEnkP7l6Xf7Ci343rYNzPO6wX1tKxqbus0=";
   };
 
   doCheck = false; # No tests in pypi source. Did not get tests from GitHub source to work.

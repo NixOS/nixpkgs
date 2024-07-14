@@ -15,7 +15,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7af6360ca8d556f1cfe82b97f03b8d1ea5a9d6de1fa3018290c844b6566d9d6e";
+    hash = "sha256-evY2DKjVVvHP6CuX8DuNHqWp1t4fowGCkMhEtlZtnW4=";
   };
 
   meta = with lib; {

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_c_kernel";
     inherit version;
-    sha256 = "e4b34235b42761cfc3ff08386675b2362e5a97fb926c135eee782661db08a140";
+    hash = "sha256-5LNCNbQnYc/D/wg4ZnWyNi5al/uSbBNe7ngmYdsIoUA=";
   };
 
   postPatch = ''

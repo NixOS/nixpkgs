@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_Oracle";
     inherit version;
-    sha256 = "3b2d215af4441463c97ea469b9cc307460739f89fdfa8ea222ea3518f1a424d9";
+    hash = "sha256-Oy0hWvREFGPJfqRpucwwdGBzn4n9+o6iIuo1GPGkJNk=";
   };
 
   preConfigure = ''

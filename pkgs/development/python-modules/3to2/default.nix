@@ -13,7 +13,7 @@ buildPythonPackage rec {
     inherit version;
     pname = "3to2";
     extension = "zip";
-    sha256 = "fef50b2b881ef743f269946e1090b77567b71bb9a9ce64b7f8e699b562ff685c";
+    hash = "sha256-/vULK4ge90PyaZRuEJC3dWe3G7mpzmS3+OaZtWL/aFw=";
   };
 
   nativeCheckInputs = [ pytest ];

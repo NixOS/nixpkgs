@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3818b39e77c26fc1a37767a74fdd5e7d02877d75ed901ead2f40bd03baaa109f";
+    hash = "sha256-OBiznnfCb8Gjd2enT91efQKHfXXtkB6tL0C9A7qqEJ8=";
   };
 
   # disabled for now due to Tensorflow trying to create files in $HOME:

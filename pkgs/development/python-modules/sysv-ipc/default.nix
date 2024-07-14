@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sysv_ipc";
     inherit version;
-    sha256 = "0f063cbd36ec232032e425769ebc871f195a7d183b9af32f9901589ea7129ac3";
+    hash = "sha256-DwY8vTbsIyAy5CV2nryHHxlafRg7mvMvmQFYnqcSmsM=";
   };
 
   meta = with lib; {

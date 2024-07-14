@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b4fd5c4949af435a7ab558f87b406acd5ddf9dc7f01fc3b3e99ebcec9a4674c";
+    hash = "sha256-e0/VxJSa9DWnq1WPh7QGrNXd+dx/Afw7PpnrzsmkZ0w=";
   };
   propagatedBuildInputs = [ poetry-core ];
   pythonImportsCheck = [ "dbglib" ];

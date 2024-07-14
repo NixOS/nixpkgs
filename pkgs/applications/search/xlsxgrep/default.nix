@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014i1nifx67mxi0k9sch00j6bjykb6krzl2q3ara9s1g75inl4rm";
+    hash = "sha256-NRNqYzkv6KSyGljQn6dZ08tlJACQ6TRB7PWY7qINkQQ=";
   };
 
   pythonPath = with python3Packages; [ xlrd ];

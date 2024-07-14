@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "WebHelpers";
     inherit version;
-    sha256 = "ea86f284e929366b77424ba9a89341f43ae8dee3cbeb8702f73bcf86058aa583";
+    hash = "sha256-6obyhOkpNmt3QkupqJNB9Dro3uPL64cC9zvPhgWKpYM=";
   };
 
   buildInputs = [

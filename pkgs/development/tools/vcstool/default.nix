@@ -9,7 +9,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04b3a963e15386660f139e5b95d293e43e3cb414e3b13e14ee36f5223032ee2c";
+    hash = "sha256-BLOpY+FThmYPE55bldKT5D48tBTjsT4U7jb1IjAy7iw=";
   };
 
   propagatedBuildInputs = [ pyyaml setuptools ];

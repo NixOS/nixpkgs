@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0hdnd6124hx7s16z1pssmq5m5mqqqz8s38ixl9aayv4wmf5bhs5c";
+    hash = "sha256-rGi4iqucbK9Uoj2iodHHGNdSC65a3/BN0KdDIoJptkE=";
   };
 
   propagatedBuildInputs = [ azure-nspkg ];

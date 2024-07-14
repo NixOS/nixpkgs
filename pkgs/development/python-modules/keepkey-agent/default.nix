@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "keepkey_agent";
     inherit version;
-    sha256 = "03779gvlx70i0nnry98i4pl1d92604ix5x6jgdfkrdgzqbh5vj27";
+    hash = "sha256-R8hd4ML/tTxde9L00iMBRqQW6CURJZ+tBRGcTvdL5ww=";
   };
 
   propagatedBuildInputs = [

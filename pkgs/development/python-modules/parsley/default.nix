@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Parsley";
     inherit version;
-    sha256 = "0hcd41bl07a8sx7nmx12p16xprnblc4phxkawwmmy78n8y6jfi4l";
+    hash = "sha256-lEQnjUcWHV8r52p2eAmjy+bbTbgi9GpP10gdQFcgjUE=";
   };
   # Tests fail although the package works just fine.  Unfortunately
   # the tests as run by the upstream CI server travis.org are broken.

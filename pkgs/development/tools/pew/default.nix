@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04anak82p4v9w0lgfs55s7diywxil6amq8c8bhli143ca8l2fcdq";
+    hash = "sha256-uDEnKFJskBApXIghXJWhsXMf29GlaPco4GmTK9BUVhE=";
   };
 
   propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];
