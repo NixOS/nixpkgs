@@ -12,7 +12,6 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "@uppy/companion"
-, "@vue/cli"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
