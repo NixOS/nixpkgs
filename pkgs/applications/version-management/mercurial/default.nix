@@ -17,7 +17,7 @@
 }:
 
 let
-  inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
+  inherit (python3Packages) docutils python fb-re2 pygit2 pygments setuptools;
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
@@ -43,7 +43,7 @@ let
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs = [ makeWrapper gettext installShellFiles python3Packages.setuptools ]
+    nativeBuildInputs = [ makeWrapper gettext installShellFiles setuptools ]
       ++ lib.optionals rustSupport [
            rustPlatform.cargoSetupHook
            cargo
@@ -112,6 +112,9 @@ let
       gnupg
     ];
 
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6887
+    propagatedBuildInputs = [ setuptools ];
+
     postPatch = ''
       patchShebangs .
 
@@ -125,6 +128,12 @@ let
           --replace '*/hg:' '*/*hg*:' \${/* paths emitted by our wrapped hg look like ..hg-wrapped-wrapped */""}
           --replace '"$PYTHON" "$BINDIR"/hg' '"$BINDIR"/hg' ${/* 'hg' is a wrapper; don't run using python directly */""}
       done
+
+      # https://bz.mercurial-scm.org/show_bug.cgi?id=6887
+      # Adding setuptools to the python path is not enough for the distutils
+      # module to be found, so we patch usage directly:
+      substituteInPlace tests/hghave.py \
+        --replace-fail "distutils" "setuptools._distutils"
     '';
 
     # This runs Mercurial _a lot_ of times.
