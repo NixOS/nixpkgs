@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, django
-, netaddr
-, six
-, fetchFromGitHub
-, pythonOlder
-, djangorestframework
-# required for tests
-, postgresql
-, postgresqlTestHook
-, psycopg2
-, pytestCheckHook
-, pytest-django
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  django,
+  netaddr,
+  six,
+  fetchFromGitHub,
+  pythonOlder,
+  djangorestframework,
+  # required for tests
+  postgresql,
+  postgresqlTestHook,
+  psycopg2,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,31 +18,21 @@ buildPythonPackage rec {
     hash = "sha256-6HzQ2NZmVzza8TOBare5vuyAGmSoZZXBnLX+mS7z1kk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   doCheck = !isPyPy;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "src/zope/testing/tests.py"
-  ];
+  pytestFlagsArray = [ "src/zope/testing/tests.py" ];
 
-  pythonImportsCheck = [
-    "zope.testing"
-  ];
+  pythonImportsCheck = [ "zope.testing" ];
 
-  pythonNamespaces = [
-    "zope"
-  ];
+  pythonNamespaces = [ "zope" ];
 
   meta = with lib; {
     description = "Zope testing helpers";
-    homepage =  "https://github.com/zopefoundation/zope.testing";
+    homepage = "https://github.com/zopefoundation/zope.testing";
     changelog = "https://github.com/zopefoundation/zope.testing/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
-gradle, git, perl, makeWrapper, fetchpatch, substituteAll, jre_minimal
+{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
+gradle, git, perl, makeWrapper, substituteAll, jre_minimal
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
@@ -80,7 +80,7 @@ let
     outputHash = {
       x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
       aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
 in stdenv.mkDerivation {

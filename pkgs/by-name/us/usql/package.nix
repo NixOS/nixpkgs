@@ -11,28 +11,24 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.17.5";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-Lh5CProffPB/GEYvU1h7St8zgmnS1QOjBgvdUXlsGzc=";
+    hash = "sha256-VenqDYkBJ4XJ2zV7kaVvwlgDyCaTY77zQ5hPq5cOZKg=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-IdqSTwQeMRjB5sE53VvTVAXPyIyN+pMj4XziIT31rV0=";
+  vendorHash = "sha256-KdLUxgNGMkkWBhUpXSecu0m3fsKl7Qj8Aw3z8WcdnSs=";
   proxyVendor = true;
 
-  # Exclude broken genji, hive & impala drivers (bad group)
+  # Exclude drivers from the bad group
   # These drivers break too often and are not used.
   #
-  # See https://github.com/xo/usql/pull/347
-  #
   excludedPackages = [
-    "genji"
-    "hive"
     "impala"
   ];
 
@@ -49,11 +45,6 @@ buildGoModule rec {
     "sqlite_vtable"
     "no_adodb"
   ];
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   ldflags = [
     "-s"

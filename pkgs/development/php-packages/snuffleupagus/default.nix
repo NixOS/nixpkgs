@@ -1,11 +1,12 @@
-{ stdenv
-, buildPecl
-, lib
-, libiconv
-, php
-, fetchFromGitHub
-, pcre2
-, darwin
+{
+  stdenv,
+  buildPecl,
+  lib,
+  libiconv,
+  php,
+  fetchFromGitHub,
+  pcre2,
+  darwin,
 }:
 
 buildPecl rec {
@@ -19,23 +20,19 @@ buildPecl rec {
     hash = "sha256-NwG8gBaToBaJGrZoCD7bDym7hQidWU0ArckoQCHN81o=";
   };
 
-  buildInputs = [
-    pcre2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.Libsystem
-    libiconv
-  ];
+  buildInputs =
+    [ pcre2 ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.Libsystem
+      libiconv
+    ];
 
-  internalDeps = with php.extensions; [
-    session
-  ];
+  internalDeps = with php.extensions; [ session ];
 
   sourceRoot = "${src.name}/src";
 
-  configureFlags = [
-    "--enable-snuffleupagus"
-  ];
+  configureFlags = [ "--enable-snuffleupagus" ];
 
   postPhpize = ''
     ./configure --enable-snuffleupagus

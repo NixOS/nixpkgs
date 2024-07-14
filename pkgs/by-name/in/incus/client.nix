@@ -1,27 +1,27 @@
 {
   lts ? false,
+  meta,
+  patches,
+  src,
+  vendorHash,
+  version,
 
   lib,
   buildGoModule,
-  fetchFromGitHub,
   installShellFiles,
 }:
 let
-  releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile) version hash vendorHash;
+  pname = "incus${lib.optionalString lts "-lts"}-client";
 in
 
-buildGoModule rec {
-  pname = "incus-client";
-
-  inherit vendorHash version;
-
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    rev = "refs/tags/v${version}";
-    inherit hash;
-  };
+buildGoModule {
+  inherit
+    patches
+    pname
+    src
+    vendorHash
+    version
+    ;
 
   CGO_ENABLED = 0;
 
@@ -30,10 +30,8 @@ buildGoModule rec {
   subPackages = [ "cmd/incus" ];
 
   postInstall = ''
-    # use custom bash completion as it has extra logic for e.g. instance names
-    installShellCompletion --bash --name incus ./scripts/bash/incus
-
     installShellCompletion --cmd incus \
+      --bash <($out/bin/incus completion bash) \
       --fish <($out/bin/incus completion fish) \
       --zsh <($out/bin/incus completion zsh)
   '';
@@ -41,13 +39,7 @@ buildGoModule rec {
   # don't run the full incus test suite
   doCheck = false;
 
-  meta = {
-    description = "Powerful system container and virtual machine manager";
-    homepage = "https://linuxcontainers.org/incus";
-    changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
-    platforms = lib.platforms.unix;
-    mainProgram = "incus";
+  meta = meta // {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, mecab
-, setuptools-scm
-, requests
-, tqdm
-, wasabi
-, plac
-, cython
-, platformdirs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  mecab,
+  setuptools-scm,
+  requests,
+  tqdm,
+  wasabi,
+  plac,
+  cython,
+  platformdirs,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,19 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  propagatedBuildInputs = [ requests tqdm wasabi plac platformdirs ];
+  propagatedBuildInputs = [
+    requests
+    tqdm
+    wasabi
+    plac
+    platformdirs
+  ];
 
-  nativeBuildInputs = [ cython mecab setuptools-scm ];
+  nativeBuildInputs = [
+    cython
+    mecab
+    setuptools-scm
+  ];
 
   pythonImportsCheck = [ "unidic" ];
 

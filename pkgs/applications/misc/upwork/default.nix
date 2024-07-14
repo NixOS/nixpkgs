@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, dpkg, wrapGAppsHook, autoPatchelfHook
+{ lib, stdenv, requireFile, dpkg, wrapGAppsHook3, autoPatchelfHook
 , alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11, libxcb
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zakkor wolfangaukang ];
+    maintainers = with maintainers; [ zakkor ];
   };
 }

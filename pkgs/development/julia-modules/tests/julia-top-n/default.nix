@@ -4,7 +4,16 @@
 mkDerivation {
   pname = "julia-top-n";
   version = "0.1.0.0";
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./app
+      ./julia-top-n.cabal
+      ./package.yaml
+      ./stack.yaml
+      ./stack.yaml.lock
+    ];
+  };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [

@@ -54,8 +54,9 @@ let
       description = builtins.head (lib.splitString "\n" description);
       longDescription = description;
       homepage = link;
-      license = lib.licenses.gpl2Plus; # https://wiki.gnome.org/Projects/GnomeShell/Extensions/Review#Licensing
-      maintainers = with lib.maintainers; [ piegames ];
+      license = lib.licenses.gpl2Plus; # https://gjs.guide/extensions/review-guidelines/review-guidelines.html#licensing
+      platforms = lib.platforms.linux;
+      maintainers = [ lib.maintainers.honnip ];
     };
     passthru = {
       extensionPortalSlug = pname;

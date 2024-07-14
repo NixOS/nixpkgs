@@ -1,0 +1,11 @@
+diff --git a/crypto/kzg/Cargo.toml b/crypto/kzg/Cargo.toml
+index 7b70166f9..857fa4ee1 100644
+--- a/crypto/kzg/Cargo.toml
++++ b/crypto/kzg/Cargo.toml
+@@ -16,4 +16,4 @@ serde = { workspace = true }
+ ethereum_serde_utils = { workspace = true }
+ hex = { workspace = true }
+ ethereum_hashing = { workspace = true }
+-c-kzg = { git = "https://github.com/ethereum/c-kzg-4844", rev = "748283cced543c486145d5f3f38684becdfe3e1b"}
+\ No newline at end of file
++c-kzg = "0.4.0"

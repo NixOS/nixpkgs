@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.9.8";
+  version = "1.9.9.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-JbLP65fC6uHrHXpSUwtgYHB+VLfheo5RU3C44lx8QlQ=";
+    hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs wegank ];
     platforms = platforms.unix;
+    mainProgram = "freedv";
   };
 }

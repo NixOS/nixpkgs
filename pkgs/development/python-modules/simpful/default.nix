@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, requests
-, scipy
-, seaborn
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  seaborn,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "simpful";
-  version = "2.11.1";
+  version = "2.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,12 +24,10 @@ buildPythonPackage rec {
     owner = "aresio";
     repo = "simpful";
     rev = "refs/tags/${version}";
-    hash = "sha256-54WkKnPB3xA2CaOpmasqxgDoga3uAqoC1nOivytXmGY=";
+    hash = "sha256-NtTw7sF1WfVebUk1wHrM8FHAe3/FXDcMApPkDbw0WXo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "simpful"
-  ];
+  pythonImportsCheck = [ "simpful" ];
 
   meta = with lib; {
     description = "Library for fuzzy logic";

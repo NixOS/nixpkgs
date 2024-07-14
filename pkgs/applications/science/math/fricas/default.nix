@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
+{ lib, stdenv, fetchFromGitHub, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
 
 stdenv.mkDerivation rec {
   pname = "fricas";
-  version = "1.3.9";
+  version = "1.3.11";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/fricas/fricas/${version}/fricas-${version}-full.tar.bz2";
-    sha256 = "sha256-5RPcffM0GN0l6r8IgHJlwdxwwp2y4kIdJ5M3JnGZCzc=";
+  src = fetchFromGitHub {
+    owner = "fricas";
+    repo = "fricas";
+    rev = version;
+    sha256 = "sha256-EX/boSs6rK4RrJ5W6Rd0TSHsbQsNiFI1evFuNPBMeu8=";
   };
 
   buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];
 
+  # Remove when updating to next version
+  configurePhase = ''
+    ./configure --prefix=$out --with-lisp='sbcl --dynamic-space-size 3072'
+  '';
+
   dontStrip = true;
 
   meta = {
-    homepage = "https://fricas.sourceforge.net/";
-    description = "An advanced computer algebra system";
+    homepage = "https://fricas.github.io";
+    description = "Advanced computer algebra system";
     license = lib.licenses.bsd3;
 
     platforms = lib.platforms.linux;

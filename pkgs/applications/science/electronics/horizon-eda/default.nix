@@ -4,7 +4,7 @@
 , coreutils
 , libspnav
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
     boost.dev
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 

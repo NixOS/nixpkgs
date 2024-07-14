@@ -18,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.7.0";
+  version = "5.7.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "383ef6db1cccabd2dd788ea9385f05e98a2bafdfeb7f0eda57ff9d572f4fad71";
+    hash = "sha256-78bkX/xe/ZiSHqXNP+zhZqGlzp6qEtQbRiaJZDU9vts=";
   };
 
   outputs = [ "out" "dev" ];
@@ -112,7 +112,8 @@ wrapped-full = runCommand unwrapped.name
       # For http module, prefill module, trust anchor bootstrap.
       # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
       http
-      # psl isn't in nixpkgs yet, but policy.slice_randomize_psl() seems not important.
+      # used by policy.slice_randomize_psl()
+      psl
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;

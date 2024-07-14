@@ -21,8 +21,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Dynamic DNS daemon for no-ip accounts";
     homepage = "http://noip.com/download?page=linux";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.iand675 ];
     platforms = platforms.linux;
+    mainProgram = "noip2";
   };
 }

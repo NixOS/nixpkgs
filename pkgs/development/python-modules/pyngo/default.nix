@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# dependencies
-, django
-, pydantic
-, typing-extensions
+  # dependencies
+  django,
+  pydantic,
+  typing-extensions,
 
-# tests
-, django-stubs
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  django-stubs,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
     "pydantic"
+    "typing-extensions"
   ];
 
   propagatedBuildInputs = [

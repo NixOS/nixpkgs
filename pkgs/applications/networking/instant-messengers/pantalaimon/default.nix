@@ -1,31 +1,40 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, logbook, peewee, janus,
-  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, installShellFiles, nixosTests,
-
-  pytest, faker, pytest-aiohttp, aioresponses,
-
-  enableDbusUi ? true
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, nixosTests
+, enableDbusUi ? true
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pantalaimon";
   version = "0.10.5";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   # pypi tarball miss tests
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = pname;
+    repo = "pantalaimon";
     rev = version;
-    sha256 = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
+    hash = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    installShellFiles
+  ] ++ (with python3Packages; [
+    setuptools
+  ]);
+
+  pythonRelaxDeps = [
+    "matrix-nio"
+  ];
+
+  dependencies = with python3Packages; [
     aiohttp
     appdirs
     attrs
+    cachetools
     click
     janus
     keyring
@@ -33,33 +42,27 @@ buildPythonApplication rec {
     matrix-nio
     peewee
     prompt-toolkit
-    setuptools
   ]
   ++ matrix-nio.optional-dependencies.e2e
-  ++ lib.optionals enableDbusUi [
-      dbus-python
-      notify2
-      pygobject3
-      pydbus
+  ++ lib.optionals enableDbusUi optional-dependencies.ui;
+
+  optional-dependencies.ui = with python3Packages; [
+    dbus-python
+    notify2
+    pygobject3
+    pydbus
   ];
 
-  nativeCheckInputs = [
-    pytest
+  nativeCheckInputs = with python3Packages; [
+    aioresponses
     faker
     pytest-aiohttp
-    aioresponses
-  ];
-
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+    pytestCheckHook
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # darwin has difficulty communicating with server, fails some integration tests
   doCheck = !stdenv.isDarwin;
-
-  checkPhase = ''
-    pytest
-  '';
 
   postInstall = ''
     installManPage docs/man/*.[1-9]
@@ -70,7 +73,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
+    description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];

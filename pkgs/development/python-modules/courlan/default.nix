@@ -1,46 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, langcodes
-, pytestCheckHook
-, tld
-, urllib3
-, pythonOlder
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchPypi,
+  langcodes,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tld,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "0.9.5";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ONw1suO/H11RbQDVGsEuveVD40F8a+b2oic8D8W1s1M=";
+    hash = "sha256-DLycrIOXDGUbk3p4I6XZLL67a2AUVOoPtstNDuXRhF0=";
   };
 
-  propagatedBuildInputs = [
+  # Tests try to write to /tmp directly. use $TMPDIR instead.
+  postPatch = ''
+    substituteInPlace tests/unit_tests.py \
+      --replace-fail "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
+      --replace-fail "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\"" \
+      --replace-fail "/tmp" "$TMPDIR"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    babel
     langcodes
     tld
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # disable tests that require an internet connection
-  disabledTests = [
-    "test_urlcheck"
-  ];
-
-  # nixify path to the courlan binary in the test suite
-  postPatch = ''
-    substituteInPlace tests/unit_tests.py \
-      --replace "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
-      --replace "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\""
-  '';
+  disabledTests = [ "test_urlcheck" ];
 
   pythonImportsCheck = [ "courlan" ];
 
@@ -48,7 +51,8 @@ buildPythonPackage rec {
     description = "Clean, filter and sample URLs to optimize data collection";
     homepage = "https://github.com/adbar/courlan";
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
-    license = licenses.gpl3Plus;
+    license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
+    mainProgram = "courlan";
   };
 }

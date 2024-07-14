@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.3.1.3";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
-    hash = "sha256-G4XLRYFndXW6toRyL7n1xV1ueGKVnkY1NgtpzaZ8h+I=";
+    hash = "sha256-UaZjT7B9T3a3W9PD9abA/WPmt9Id8/zUUSZU05+8x9c=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
+    mainProgram = "yoshimi";
   };
 }

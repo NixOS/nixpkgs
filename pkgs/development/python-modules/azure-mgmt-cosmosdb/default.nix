@@ -1,22 +1,23 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.4.0";
+  version = "9.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yruCHNRGsJ5z0kwxwoemD8w2I0iPH/qTNcaSJn55w0E=";
+    hash = "sha256-XSGhl94Is2OOCa2I4y2iEfe7WYt9fP7kjWHVfWmz7dk=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.cosmosdb"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.cosmosdb" ];
 
   meta = with lib; {
     description = "Module to work with the Microsoft Azure Cosmos DB Management";

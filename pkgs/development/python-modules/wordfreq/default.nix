@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, poetry-core
-, regex
-, langcodes
-, ftfy
-, msgpack
-, mecab-python3
-, jieba
-, pytestCheckHook
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  poetry-core,
+  regex,
+  langcodes,
+  ftfy,
+  msgpack,
+  mecab-python3,
+  jieba,
+  pytestCheckHook,
+  pythonOlder,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     regex
@@ -48,8 +47,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library for looking up the frequencies of words in many languages, based on many sources of data";
-    homepage =  "https://github.com/rspeer/wordfreq/";
+    description = "Library for looking up the frequencies of words in many languages, based on many sources of data";
+    homepage = "https://github.com/rspeer/wordfreq/";
     license = licenses.mit;
   };
 }

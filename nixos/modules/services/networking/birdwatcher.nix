@@ -9,12 +9,12 @@ in
   options = {
     services.birdwatcher = {
       package = mkPackageOption pkgs "birdwatcher" { };
-      enable = mkEnableOption (lib.mdDoc "Birdwatcher");
+      enable = mkEnableOption "Birdwatcher";
       flags = mkOption {
         default = [ ];
         type = types.listOf types.str;
         example = [ "-worker-pool-size 16" "-6" ];
-        description = lib.mdDoc ''
+        description = ''
           Flags to append to the program call
         '';
       };
@@ -22,7 +22,7 @@ in
       settings = mkOption {
         type = types.lines;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           birdwatcher configuration, for configuration options see the example on [github](https://github.com/alice-lg/birdwatcher/blob/master/etc/birdwatcher/birdwatcher.conf)
         '';
         example = literalExpression ''

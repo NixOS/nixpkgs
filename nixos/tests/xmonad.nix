@@ -61,7 +61,7 @@ in {
   nodes.machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = "none+xmonad";
+    services.displayManager.defaultSession = "none+xmonad";
     services.xserver.windowManager.xmonad = {
       enable = true;
       enableConfiguredRecompile = true;

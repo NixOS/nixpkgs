@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
-    ++ lib.optional stdenv.isLinux elfutils;
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rpm.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    description = "The RPM Package Manager";
+    description = "RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
     # Support for darwin was removed in https://github.com/NixOS/nixpkgs/pull/196350.

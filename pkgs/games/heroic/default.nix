@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , python3
 , makeWrapper
@@ -17,23 +17,23 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.12.1";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-dfyyxE2U5rSSoTY2L5bKsnjQ8u53GgAXa+V+idDr51Q=";
+    hash = "sha256-AnyltqNP+XyVzgCobM3g6DIXntD3spKecYtCRx+8oic=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-27r6lZiD1Ptk0WIYdwNLSZy6iMnmaZjKXBUjr+5+1lQ=";
+    hash = "sha256-3CYSw1Qy363eyhy3UyFgihSau+miNHwvKjhlq/kWxWQ=";
   };
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     python3
     makeWrapper
@@ -114,7 +114,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
+    description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;

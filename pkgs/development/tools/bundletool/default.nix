@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bundletool";
-  version = "1.15.6";
+  version = "1.17.0";
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${version}/bundletool-all-${version}.jar";
-    sha256 = "sha256-OK6KELzazvB+zOghEYjFySs3a+lto4/z7h8s9IlbLLg=";
+    sha256 = "sha256-VOvuHx3oNn2a0mtGcr+yl2sLEhQuFdaD/HuOJU/GzBs=";
   };
 
   dontUnpack = true;
@@ -21,10 +21,11 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line tool to manipulate Android App Bundles";
+    mainProgram = "bundletool";
     homepage = "https://developer.android.com/studio/command-line/bundletool";
     changelog = "https://github.com/google/bundletool/releases/tag/${version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     platforms = jre_headless.meta.platforms;
     license = licenses.asl20;
   };

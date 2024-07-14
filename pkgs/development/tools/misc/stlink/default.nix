@@ -5,7 +5,7 @@
 , libusb1
 , gtk3
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGUI ? false
 }:
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     cmake
   ] ++ lib.optionals withGUI [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   cmakeFlags = [

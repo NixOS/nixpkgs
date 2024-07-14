@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       These tools work independently of the Gimp engine and do not
       require the Gimp to even be installed.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

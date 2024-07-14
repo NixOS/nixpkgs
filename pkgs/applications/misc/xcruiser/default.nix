@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;
+    mainProgram = "xcruiser";
   };
 }

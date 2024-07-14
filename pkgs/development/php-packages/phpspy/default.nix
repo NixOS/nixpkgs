@@ -1,9 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, php
-, testers
-, phpPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnugrep,
+  binutils,
+  makeBinaryWrapper,
+  php,
+  testers,
+  phpPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,17 +22,30 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ php.unwrapped ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    php.unwrapped
+  ];
 
   env.USE_ZEND = 1;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp phpspy $out/bin
+    install -Dt "$out/bin" phpspy stackcollapse-phpspy.pl
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/phpspy" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnugrep
+          # for objdump
+          binutils
+        ]
+      }"
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, numpy
-, pydicom
-, pylibjpeg-libjpeg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  flit-core,
+  setuptools,
+  numpy,
+  pydicom,
+  pylibjpeg-libjpeg,
 }:
 
 let
-  pylibjpeg-data = buildPythonPackage rec {
+  pylibjpeg-data = buildPythonPackage {
     pname = "pylibjpeg-data";
     version = "1.0.0dev0";
     pyproject = true;
@@ -31,7 +32,7 @@ in
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,10 +41,10 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Px1DyYDkKAUdYo+ZxZ1w7TkPzWN++styiFl02iQOvyQ=";
+    hash = "sha256-qGtrphsBBVieGS/8rdymbsjLMU/QEd7zFNAANN8bD+k=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ numpy ];
 
@@ -62,8 +63,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydicom/pylibjpeg/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
-    # several test failures of form
-    # "pydicom.errors.InvalidDicomError: File is missing DICOM File Meta Information header or the 'DICM' prefix is missing from the header. ..."
-    broken = stdenv.isDarwin;
   };
 }

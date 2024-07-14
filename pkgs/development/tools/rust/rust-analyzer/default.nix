@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2024-01-29";
-  cargoSha256 = "sha256-3f+Nc2HXCQsaZ+FFSH7ML0o1yikZWhsRZmA8JtBc2TY=";
+  version = "2024-07-01";
+  cargoSha256 = "sha256-hi3EzQbOWUEv5xxImjV1ooz5K5Xzz2V3AHSXpifhFjg=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-6K5rK1b2APQfXOrC+Hm+0QcyfPVt+TV81Q6Fd/QjMlQ=";
+    sha256 = "sha256-fsxAuW6RxKZYjAP3biUC6C4vaYFhDfWv8lp1Tmx3ZCY=";
   };
 
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A modular compiler frontend for the Rust language";
+    description = "Modular compiler frontend for the Rust language";
     homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];

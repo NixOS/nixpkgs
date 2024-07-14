@@ -20,7 +20,7 @@ in
 {
   # interface
   options.services.vmalert = {
-    enable = mkEnableOption (mdDoc "vmalert");
+    enable = mkEnableOption "vmalert";
 
     package = mkPackageOption pkgs "victoriametrics" { };
 
@@ -32,7 +32,7 @@ in
           "datasource.url" = mkOption {
             type = types.nonEmptyStr;
             example = "http://localhost:8428";
-            description = mdDoc ''
+            description = ''
               Datasource compatible with Prometheus HTTP API.
             '';
           };
@@ -41,14 +41,14 @@ in
             type = with types; listOf nonEmptyStr;
             default = [];
             example = [ "http://127.0.0.1:9093" ];
-            description = mdDoc ''
+            description = ''
               Prometheus Alertmanager URL. List all Alertmanager URLs if it runs in the cluster mode to ensure high availability.
             '';
           };
 
           "rule" = mkOption {
             type = with types; listOf path;
-            description = mdDoc ''
+            description = ''
               Path to the files with alerting and/or recording rules.
 
               ::: {.note}
@@ -70,7 +70,7 @@ in
           "dir/*.yaml"
         ];
       };
-      description = mdDoc ''
+      description = ''
         `vmalert` configuration, passed via command line flags. Refer to
         <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/app/vmalert/README.md#configuration>
         for details on supported values.
@@ -94,7 +94,7 @@ in
           }
         ];
       };
-      description = mdDoc ''
+      description = ''
         A list of the given alerting or recording rules against configured `"datasource.url"` compatible with
         Prometheus HTTP API for `vmalert` to execute. Refer to
         <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/app/vmalert/README.md#rules>

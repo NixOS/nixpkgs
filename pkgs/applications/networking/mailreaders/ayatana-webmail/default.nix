@@ -2,12 +2,12 @@
 , fetchFromGitHub
 , gettext
 , gtk3
-, python3Packages
+, python311Packages
 , gdk-pixbuf
 , libnotify
 , glib
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 # BTW libappindicator is also supported, but upstream recommends their
 # implementation, see:
 # https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
@@ -16,6 +16,10 @@
 , libcanberra-gtk3
 }:
 
+let
+  # https://github.com/AyatanaIndicators/ayatana-webmail/issues/38
+  python3Packages = python311Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
   version = "22.12.15";
@@ -47,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # For compiling gsettings-schemas
   ];
 

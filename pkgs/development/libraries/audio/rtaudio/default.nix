@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   pname = "rtaudio";
   version = "5.2.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
+    description = "Set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtaudio/";
     license = licenses.mit;
     maintainers = with maintainers; [ magnetophon ];

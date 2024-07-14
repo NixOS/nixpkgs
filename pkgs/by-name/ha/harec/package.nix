@@ -1,47 +1,44 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, qbe
-, fetchgit
+{
+  fetchFromSourcehut,
+  gitUpdater,
+  lib,
+  qbe,
+  stdenv,
 }:
 let
-  # harec needs the dbgfile and dbgloc features implemented up to this commit.
-  # This can be dropped once 1.2 is released. For a possible release date, see:
-  # https://lists.sr.ht/~mpu/qbe/%3CZPkmHE9KLohoEohE%40cloudsdale.the-delta.net.eu.org%3E
-  qbe' = qbe.overrideAttrs (_old: {
-    version = "1.1-unstable-2024-01-12";
-    src = fetchgit {
-      url = "git://c9x.me/qbe.git";
-      rev = "85287081c4a25785dec1ec48c488a5879b3c37ac";
-      hash = "sha256-7bVbxUU/HXJXLtAxhoK0URmPtjGwMSZrPkx8WKl52Mg=";
-    };
-  });
-
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   arch = stdenv.hostPlatform.uname.processor;
+  qbePlatform =
+    {
+      x86_64 = "amd64_sysv";
+      aarch64 = "arm64";
+      riscv64 = "rv64";
+    }
+    .${arch};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "unstable-2024-02-03";
+  version = "0.24.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "09cb18990266eef814917d8211d38b82e0896532";
-    hash = "sha256-cxWRqGipoDATN1+V9s9S2WJ3sLMcTqIJmhP5XTld3AU=";
+    rev = finalAttrs.version;
+    hash = "sha256-NOfoCT/wKZ3CXYzXZq7plXcun+MXQicfzBOmetXN7Qs=";
   };
 
-  nativeBuildInputs = [
-    qbe'
-  ];
+  nativeBuildInputs = [ qbe ];
 
-  buildInputs = [
-    qbe'
-  ];
+  buildInputs = [ qbe ];
 
   makeFlags = [
     "PREFIX=${builtins.placeholder "out"}"
     "ARCH=${arch}"
+    "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
   ];
 
   strictDeps = true;
@@ -55,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # We create this attribute so that the `hare` package can access the
-    # overwritten `qbe`.
-    qbeUnstable = qbe';
+    updateScript = gitUpdater { };
+    # To be kept in sync with the hare package.
+    inherit qbe;
   };
 
   meta = {
@@ -69,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/
     # UPDATE: https://github.com/hshq/harelang provides a MacOS port
-    platforms = with lib.platforms;
+    platforms =
+      with lib.platforms;
       lib.intersectLists (freebsd ++ openbsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
     badPlatforms = lib.platforms.darwin;
   };

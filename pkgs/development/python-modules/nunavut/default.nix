@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-resources
-, pydsdl
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  importlib-resources,
+  pydsdl,
+  pyyaml,
 }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nunavut";
   version = "2.3.1";
   format = "setuptools";
@@ -39,12 +40,11 @@
   # https://github.com/UAVCAN/nunavut/issues/182
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nunavut"
-  ];
+  pythonImportsCheck = [ "nunavut" ];
 
   meta = with lib; {
-    description = "A UAVCAN DSDL template engine";
+    description = "UAVCAN DSDL template engine";
+    mainProgram = "nnvg";
     longDescription = ''
       It exposes a pydsdl abstract syntax tree to Jinja2 templates allowing
       authors to generate code, schemas, metadata, documentation, etc.
@@ -52,6 +52,9 @@
     homepage = "https://nunavut.readthedocs.io/";
     changelog = "https://github.com/OpenCyphal/nunavut/releases/tag/${version}";
     maintainers = with maintainers; [ wucke13 ];
-    license = with licenses; [ bsd3 mit ];
+    license = with licenses; [
+      bsd3
+      mit
+    ];
   };
 }

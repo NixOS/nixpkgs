@@ -1,49 +1,45 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sensor-state-data
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pycryptodomex,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.25.2";
-  format = "pyproject";
+  version = "0.30.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-awztZiUgEMGR8m/aXhDBLdm4IXIKIAHgX922m+PTTfg=";
+    hash = "sha256-x+i5zC0WTWO+F1uIliAzyc+48X3njwTNz5ss5KK6xuQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "pycryptodomex"
-  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "pycryptodomex" ];
+
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools
@@ -54,13 +50,9 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xiaomi_ble"
-  ];
+  pythonImportsCheck = [ "xiaomi_ble" ];
 
   meta = with lib; {
     description = "Library for Xiaomi BLE devices";

@@ -1,63 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, boto3
-, botocore
-, cryptography
-, jinja2
-, python-dateutil
-, requests
-, responses
-, werkzeug
-, xmltodict
+  # dependencies
+  boto3,
+  botocore,
+  cryptography,
+  jinja2,
+  python-dateutil,
+  requests,
+  responses,
+  werkzeug,
+  xmltodict,
 
-# optional-dependencies
-, aws-xray-sdk
-, cfn-lint
-, docker
-, ecdsa
-, flask
-, flask-cors
-, graphql-core
-, jsondiff
-, multipart
-, openapi-spec-validator
-, py-partiql-parser
-, pyparsing
-, python-jose
-, pyyaml
-, sshpubkeys
+  # optional-dependencies
+  antlr4-python3-runtime,
+  aws-xray-sdk,
+  cfn-lint,
+  flask,
+  flask-cors,
+  docker,
+  graphql-core,
+  joserfc,
+  jsonpath-ng,
+  jsondiff,
+  multipart,
+  openapi-spec-validator,
+  py-partiql-parser,
+  pyparsing,
+  pyyaml,
 
-# tests
-, freezegun
-, pytestCheckHook
-, pytest-order
-, pytest-xdist
+  # tests
+  freezegun,
+  pytestCheckHook,
+  pytest-order,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.2.11";
+  version = "5.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LaYtUuqnZd/idiySDwqIpY86CeBFgckduWfZL67ISPE=";
+    hash = "sha256-63Hxy6AccP/x8WCGrLJNbZrrMoMNZG2JifmKKa6uJLo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     cryptography
@@ -69,26 +68,27 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
+      antlr4-python3-runtime
       aws-xray-sdk
       cfn-lint
       docker
-      ecdsa
       flask
       flask-cors
       graphql-core
+      joserfc
       jsondiff
+      jsonpath-ng
       multipart
       openapi-spec-validator
-      py-partiql-parser
       pyparsing
-      python-jose
+      py-partiql-parser
       pyyaml
       setuptools
-      sshpubkeys
-    ] ++ python-jose.optional-dependencies.cryptography;
+    ];
+    cognitoidp = [ joserfc ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -98,17 +98,19 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-order
     pytest-xdist
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
   pytestFlagsArray = [
-    "-m" "'not network and not requires_docker'"
+    "-m"
+    "'not network and not requires_docker'"
 
     # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist" "loadscope"
+    "--dist"
+    "loadscope"
 
     # Fails at local name resolution
     "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
@@ -120,6 +122,11 @@ buildPythonPackage rec {
     # Fails at resolving google.com
     "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_http_destination"
     "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_batch_http_destination"
+
+    # Fails at resolving s3.amazonaws.com
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_wildcard_urls"
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_specific_url"
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_entire_service"
 
     # Download recordings returns faulty JSON
     "--deselect=tests/test_moto_api/recorder/test_recorder.py::TestRecorder::test_ec2_instance_creation_recording_on"
@@ -149,6 +156,9 @@ buildPythonPackage rec {
     # Threading tests regularly blocks test execution
     "tests/test_utilities/test_threaded_server.py"
     "tests/test_s3/test_s3_bucket_policy.py"
+
+    # https://github.com/getmoto/moto/issues/7786
+    "tests/test_dynamodb/test_dynamodb_import_table.py"
   ];
 
   meta = with lib; {

@@ -6,12 +6,14 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , libinput
+, gobject-introspection
 , gnome
 , gnome-desktop
 , glib
 , gtk3
+, json-glib
 , wayland
 , libdrm
 , libxkbcommon
@@ -24,20 +26,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.35.0";
+  version = "0.38.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-q2wyM0R7Mi/XuckNb6ZDkStaV9yJH1BgJ4cjqQc6EI4=";
+    hash = "sha256-OcRUnw1Fck9bMSgfMMcWqqR6a6yzyKjY8P3nqcwVULc=";
   };
 
   nativeBuildInputs = [
+    gobject-introspection
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -49,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
+    json-glib
     wayland
     finalAttrs.wlroots
     xorg.xcbutilwm
@@ -65,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src;
         preferLocalBuild = true;
         allowSubstitutes = false;
-        phases = "unpackPhase installPhase";
         installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
       })
     ];
@@ -81,9 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";
+    mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 })

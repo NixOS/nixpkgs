@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # PyPi version does not include test directory
   doCheck = false;
 
-  pythonImportsCheck = [
-    "httpagentparser"
-  ];
+  pythonImportsCheck = [ "httpagentparser" ];
 
   meta = with lib; {
     description = "Module to extract OS, Browser, etc. information from http user agent string";

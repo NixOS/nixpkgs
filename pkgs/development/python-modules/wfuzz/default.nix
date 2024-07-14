@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, chardet
-, colorama
-, fetchFromGitHub
-, netaddr
-, pycurl
-, pyparsing
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  chardet,
+  colorama,
+  fetchFromGitHub,
+  netaddr,
+  pycurl,
+  pyparsing,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     six
     setuptools
     pyparsing
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    colorama
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
   nativeCheckInputs = [
     netaddr
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     "tests/acceptance/test_saved_filter.py"
   ];
 
-  pythonImportsCheck = [
-    "wfuzz"
-  ];
+  pythonImportsCheck = [ "wfuzz" ];
 
   postInstall = ''
     mkdir -p $out/share/wordlists/wfuzz

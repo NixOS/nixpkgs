@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
-, click
-, jinja2
-, jsonschema
-, linkify-it-py
-, myst-nb
-, myst-parser
-, pyyaml
-, sphinx
-, sphinx-comments
-, sphinx-copybutton
-, sphinx-external-toc
-, sphinx-jupyterbook-latex
-, sphinx-design
-, sphinx-thebe
-, sphinx-book-theme
-, sphinx-togglebutton
-, sphinxcontrib-bibtex
-, sphinx-multitoc-numbering
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
+  click,
+  jinja2,
+  jsonschema,
+  linkify-it-py,
+  myst-nb,
+  myst-parser,
+  pyyaml,
+  sphinx,
+  sphinx-comments,
+  sphinx-copybutton,
+  sphinx-external-toc,
+  sphinx-jupyterbook-latex,
+  sphinx-design,
+  sphinx-thebe,
+  sphinx-book-theme,
+  sphinx-togglebutton,
+  sphinxcontrib-bibtex,
+  sphinx-multitoc-numbering,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,12 +34,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jupyter_book";
-    hash = "sha256-U5xdBJNUYgDZ3ie9S1936uoDEV+JN/gl1P+Cs4AamH4=";
+    hash = "sha256-rRXuSanf7Hc6HTBJ2sOFY4KqL5txRKGAEUduZcEbX0Y=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click
@@ -71,7 +70,7 @@ buildPythonPackage rec {
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "jupyter-book";
   };
 }

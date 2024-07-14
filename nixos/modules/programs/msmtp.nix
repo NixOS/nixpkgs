@@ -1,41 +1,39 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.msmtp;
 
 in {
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ pacien ];
 
   options = {
     programs.msmtp = {
-      enable = mkEnableOption (lib.mdDoc "msmtp - an SMTP client");
+      enable = lib.mkEnableOption "msmtp - an SMTP client";
 
-      setSendmail = mkOption {
-        type = types.bool;
+      setSendmail = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set the system sendmail to msmtp's.
         '';
       };
 
-      defaults = mkOption {
-        type = types.attrs;
+      defaults = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
         example = {
           aliases = "/etc/aliases";
           port = 587;
           tls = true;
         };
-        description = lib.mdDoc ''
+        description = ''
           Default values applied to all accounts.
           See msmtp(1) for the available options.
         '';
       };
 
-      accounts = mkOption {
-        type = with types; attrsOf attrs;
+      accounts = lib.mkOption {
+        type = with lib.types; attrsOf attrs;
         default = {};
         example = {
           "default" = {
@@ -45,7 +43,7 @@ in {
             passwordeval = "cat /secrets/password.txt";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
           See msmtp(1) for the available options.
@@ -59,10 +57,10 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to add to the msmtp configuration verbatim.
           See msmtp(1) for the syntax and available options.
         '';
@@ -70,10 +68,10 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.msmtp ];
 
-    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
+    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
       program = "sendmail";
       source = "${pkgs.msmtp}/bin/sendmail";
       setuid = false;
@@ -86,10 +84,10 @@ in {
       mkValueString = v:
         if v == true then "on"
         else if v == false then "off"
-        else generators.mkValueStringDefault {} v;
+        else lib.generators.mkValueStringDefault {} v;
       mkKeyValueString = k: v: "${k} ${mkValueString v}";
       mkInnerSectionString =
-        attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
+        attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
       mkAccountString = name: attrs: ''
         account ${name}
         ${mkInnerSectionString attrs}
@@ -98,7 +96,7 @@ in {
       defaults
       ${mkInnerSectionString cfg.defaults}
 
-      ${concatStringsSep "\n" (mapAttrsToList mkAccountString cfg.accounts)}
+      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
 
       ${cfg.extraConfig}
     '';

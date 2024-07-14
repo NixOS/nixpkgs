@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, urllib3
-, selenium
-, cssselect
-, django
-, flask
-, lxml
-, pytestCheckHook
-, zope-testbrowser
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  urllib3,
+  selenium,
+  cssselect,
+  django,
+  flask,
+  lxml,
+  pytestCheckHook,
+  zope-testbrowser,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,26 @@ buildPythonPackage rec {
     hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    urllib3
-  ];
+  propagatedBuildInputs = [ urllib3 ];
 
   passthru.optional-dependencies = {
-    "zope.testbrowser" = [ zope-testbrowser lxml cssselect ];
-    django = [ django lxml cssselect ];
-    flask = [ flask lxml cssselect ];
+    "zope.testbrowser" = [
+      zope-testbrowser
+      lxml
+      cssselect
+    ];
+    django = [
+      django
+      lxml
+      cssselect
+    ];
+    flask = [
+      flask
+      lxml
+      cssselect
+    ];
     selenium = [ selenium ];
   };
 

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C library to provide global keyboard and mouse hooks from userland";
+    description = "C library to provide global keyboard and mouse hooks from userland";
     homepage = "https://github.com/kwhat/libuiohook";
     license = licenses.gpl3Only;
     platforms = platforms.all;

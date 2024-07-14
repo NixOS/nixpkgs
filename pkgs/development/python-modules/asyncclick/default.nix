@@ -1,16 +1,17 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.1.7.1";
+  version = "8.1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "asyncclick";
     rev = "refs/tags/${version}";
-    hash = "sha256-gx7s/HikvjsXalc0Z73JWMKc1SlhR+kohwk2sW4o19I=";
+    hash = "sha256-ahzI7yILq1OpZ6IT0qt8vjzi6I6zAoTrULOl8CqRw4A=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,7 +33,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -44,9 +42,7 @@ buildPythonPackage rec {
     "test_context_pushing"
   ];
 
-  pythonImportsCheck = [
-    "asyncclick"
-  ];
+  pythonImportsCheck = [ "asyncclick" ];
 
   meta = with lib; {
     description = "Python composable command line utility";

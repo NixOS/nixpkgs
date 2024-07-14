@@ -8,14 +8,13 @@
 , udev
 , libevdev
 , libgudev
-, libxml2
 , python3
 , valgrind
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "2.9.0";
+  version = "2.12.2";
 
   outputs = [ "out" "dev" ];
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    hash = "sha256-oM3dd22hQaAXdNoO2Q2JvO2lJCkmfw8f0NWxYcVT3lA=";
+    hash = "sha256-dxnXh+O/8q8ShsPbpqvaBPNQR6lJBphBolYTmcJEF/0=";
   };
 
   postPatch = ''
@@ -51,10 +50,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"
-  ];
-
-  checkInputs = [
-    libxml2
   ];
 
   nativeCheckInputs = [

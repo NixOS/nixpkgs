@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
-    description = "An OCaml module for the declarative definition of command line interfaces";
+    description = "OCaml module for the declarative definition of command line interfaces";
     license = licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];

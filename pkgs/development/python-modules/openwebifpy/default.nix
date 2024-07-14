@@ -1,47 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
-, yarl
+  # dependencies
+  aiohttp,
+  yarl,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.2.1";
+  version = "4.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dCgbMyyVmYGPV8GyZUrMR+IO8nGoQ//dnmHmhFH2iJo=";
+    hash = "sha256-Ui3731ChEUterRXb+QVMR1CNXhPYhBkZoUwbSJ47g+4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
     yarl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "openwebif"
-  ];
+  pythonImportsCheck = [ "openwebif" ];
 
   disabledTests = [
     # https://github.com/autinerd/openwebifpy/issues/1
@@ -57,4 +52,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
-

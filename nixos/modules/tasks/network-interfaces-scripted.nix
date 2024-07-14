@@ -203,10 +203,10 @@ let
                   ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
-                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                    if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
-                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
+                    else
+                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''

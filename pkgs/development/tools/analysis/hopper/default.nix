@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.hopperapp.com/index.html";
-    description = "A macOS and Linux Disassembler";
+    description = "MacOS and Linux Disassembler";
     license = licenses.unfree;
     maintainers = with maintainers; [
-      luis
       Enteee
     ];
     platforms = platforms.linux;

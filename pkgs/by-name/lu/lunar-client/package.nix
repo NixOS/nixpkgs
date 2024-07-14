@@ -6,17 +6,16 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunar-client";
-  version = "3.2.1";
+  version = "3.2.11";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-ZW+SFIZ5+xxgesaZ7ZQbUnv7H5U92SZdfAU7GhJR1H0mhkrIb5Go6GWrIXaWYZLrmOlD98LSLihYi7SemJp+Yg==";
+    hash = "sha512-qRucW9x4LMmTb8pw0zY1EKXkPfjdahCi2PN/bfdB8CYA4wZp0bfZNaGtPpI/BKPlnR/nfpypEdnHsoqlL9KiCg==";
   };
 
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      mv $out/bin/{lunar-client-*,lunar-client}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/lunar-client \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -30,11 +29,11 @@ appimageTools.wrapType2 rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Free Minecraft client with mods, cosmetics, and performance boost.";
+    description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     mainProgram = "lunar-client";
-    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
+    maintainers = with maintainers; [ Technical27 surfaceflinger ];
     platforms = [ "x86_64-linux" ];
   };
 }

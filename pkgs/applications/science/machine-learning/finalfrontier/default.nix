@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Utility for training word and subword embeddings";
+    mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

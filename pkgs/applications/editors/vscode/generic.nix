@@ -150,7 +150,7 @@ in
     icon = "vs${executableName}";
     startupNotify = true;
     categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "x-scheme-handler/vscode" ];
+    mimeTypes = [ "x-scheme-handler/vs${executableName}" ];
     keywords = [ "vscode" ];
     noDisplay = true;
   };
@@ -165,7 +165,7 @@ in
     autoPatchelfHook
     asar
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-    (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
+    (buildPackages.wrapGAppsHook3.override { inherit (buildPackages) makeWrapper; })
   ];
 
   dontBuild = true;

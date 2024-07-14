@@ -6,7 +6,7 @@
 
 let
   pname = "elvish";
-  version = "0.20.0";
+  version = "0.20.1";
 in
 buildGoModule {
   inherit pname version;
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "elves";
     repo = "elvish";
     rev = "v${version}";
-    hash = "sha256-aaj2P1V31FnRehrUh+aqpPa8QwRrUezKwAa8WBa4X0w=";
+    hash = "sha256-lKrX38gVUhYwwuNF25LcZ+TytP4vx/GO7ay6Au4BBZA=";
   };
 
   vendorHash = "sha256-sgVGqpncV7Ylok5FRcV01a3MCX6UdZvTt3nfVh5L2so=";
@@ -41,7 +41,8 @@ buildGoModule {
 
   meta = {
     homepage = "https://elv.sh/";
-    description = "A friendly and expressive command shell";
+    description = "Friendly and expressive command shell";
+    mainProgram = "elvish";
     longDescription = ''
       Elvish is a friendly interactive shell and an expressive programming
       language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0

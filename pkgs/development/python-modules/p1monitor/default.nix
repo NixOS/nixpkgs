@@ -1,18 +1,19 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZtIY4HvRllqlLlf3j1+RMJuuQuq+BZbMuMn9n/v8H5M=";
+    hash = "sha256-WEvNPtaKGJsbHLjGjSl0/9BewmLLMFLoN9SHMdEBoAM=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace 'addopts = "--cov"' ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "p1monitor"
-  ];
+  pythonImportsCheck = [ "p1monitor" ];
 
   meta = with lib; {
     description = "Module for interacting with the P1 Monitor";

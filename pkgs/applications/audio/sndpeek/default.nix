@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libsndfile, freeglut, alsa-lib, mesa, libGLU, libX11, libXmu
+{ lib, stdenv, fetchurl, libsndfile, libglut, alsa-lib, mesa, libGLU, libX11, libXmu
 , libXext, libXi }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./pthread.patch ];
 
   buildInputs = [
-    freeglut
+    libglut
     alsa-lib
     mesa
     libGLU
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
     license = licenses.gpl2;
     maintainers = [ maintainers.laikq ];
+    mainProgram = "sndpeek";
   };
 }

@@ -1,42 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "losant-rest";
-  version = "1.19.4";
-  format = "setuptools";
+  version = "1.19.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Losant";
     repo = "losant-rest-python";
-    rev = "v${version}";
-    hash = "sha256-aVOviCeYi/oj1Xv7I0d4U+JBU0w3wbjORXOim/g5S7U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CErC2Pwdw8CzV423uToysGaz92cBNyO3tLLuLozc0MU=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];
 
-  pytestFlagsArray = [
-    "tests/losantrest_tests.py"
-  ];
+  pytestFlagsArray = [ "tests/platformrest_tests.py" ];
 
-  pythonImportsCheck = [
-    "losantrest"
-  ];
+  pythonImportsCheck = [ "platformrest" ];
 
   meta = with lib; {
     description = "Python module for consuming the Losant IoT Platform API";

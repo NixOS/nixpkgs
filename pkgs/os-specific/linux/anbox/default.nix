@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , callPackage
 , fetchpatch
 , cmake, pkg-config, dbus, makeWrapper
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
+    protobufc
   ];
 
   buildInputs = [
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     lxc
     mesa
     properties-cpp
-    protobuf protobufc
+    protobuf
     python3
     SDL2 SDL2_image
     systemd
@@ -130,6 +131,8 @@ stdenv.mkDerivation rec {
     })
     # Ensures generated desktop files work on store path change
     ./0001-NixOS-Use-anbox-from-PATH-in-desktop-files.patch
+    # Allows android-emugl to build with gtest 1.13+
+    ./0002-NixOS-Build-android-emugl-with-cpp-14.patch
     # Provide window icons
     (fetchpatch {
       url = "https://github.com/samueldr/anbox/commit/2387f4fcffc0e19e52e58fb6f8264fbe87aafe4d.patch";
@@ -162,7 +165,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://anbox.io";
     description = "Android in a box";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo ];
     platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };

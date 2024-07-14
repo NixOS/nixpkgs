@@ -40,5 +40,6 @@ buildRustPackage {
     description = "Figma Agent for Linux (a.k.a. Font Helper)";
     license = licenses.mit;
     maintainers = with maintainers; [ ercao ];
+    mainProgram = "figma-agent";
   };
 }

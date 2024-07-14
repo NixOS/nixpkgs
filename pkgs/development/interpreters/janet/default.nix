@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.33.0";
+  version = "1.35.2";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kXbJtWxvysC4hLkgVyPpkunFhN+2iVu+S+LCo5ikj5s=";
+    hash = "sha256-iqexxlBFM4ffxDsOdKMRJs/ufhKV0jvzqgZ3tH9S/k0=";
   };
 
   postPatch = ''
@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Janet programming language";
+    mainProgram = "janet";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ andrewchambers peterhoeg ];

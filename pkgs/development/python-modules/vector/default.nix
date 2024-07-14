@@ -1,28 +1,29 @@
-{ lib
-, awkward
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, numba
-, numpy
-, notebook
-, packaging
-, papermill
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  awkward,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  numba,
+  numpy,
+  notebook,
+  packaging,
+  papermill,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "1.2.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I7esW9qyc7T5MGFn/YZmajd3pSgE0CgqVW2YkTDLV6Q=";
+    hash = "sha256-Fa74kRVg2x6j/6nb1UFNDsV1pQSiw/I+pFFwoYmURm4=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "vector"
-  ];
+  pythonImportsCheck = [ "vector" ];
 
   __darwinAllowLocalNetworking = true;
 

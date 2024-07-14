@@ -3,16 +3,13 @@
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  # raspberrypi/firmware no longers tag the releases. However, since each commit
-  # on the stable branch corresponds to a tag in raspberrypi/linux repo, we
-  # assume they are cut together.
-  version = "stable_20231123";
+  version = "1.20240529";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
-    rev = "524247ac6d8b1f4ddd53730e978a70c76a320bd6";
-    hash = "sha256-rESwkR7pc5MTwIZ8PaMUPXuzxfv+jVpdRp8ijvxHGcg=";
+    rev = version;
+    hash = "sha256-KsCo7ZG6vKstxRyFljZtbQvnDSqiAPdUza32xTY/tlA=";
   };
 
   installPhase = ''

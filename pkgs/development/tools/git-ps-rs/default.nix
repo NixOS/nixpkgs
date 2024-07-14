@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-HPHFjYfug642NXeNmv50UzsdOAlDR9F/MtgYnzwiZP8=";
+    hash = "sha256-OkQLuTZ4CFxA8Ezpo7ChVDR3BzLzlF/EOkZjTIbjJl4=";
   };
 
-  cargoHash = "sha256-mvRcOwCe5NQ+cJ9brnbZ6HLtLn+fnjYzSBQwA3Qn9PU=";
+  cargoHash = "sha256-9SmUGSHPhByBkSyuyNSBCsYsWxF7e13i00Jbf4COOj4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Tool for working with a stack of patches";
+    mainProgram = "gps";
     homepage = "https://git-ps.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ alizter ];

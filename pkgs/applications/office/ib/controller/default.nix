@@ -155,6 +155,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Automation Controller for the Trader Work Station of Interactive Brokers";
+    broken = true;  # Ref: https://github.com/NixOS/nixpkgs/issues/40784
     homepage = "https://github.com/ib-controller/ib-controller";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;

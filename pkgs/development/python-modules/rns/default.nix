@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, netifaces
-, pyserial
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  netifaces,
+  pyserial,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.7.0";
+  version = "0.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,14 +20,12 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-iwW52jPSCwelfByerKHxKgH4NbWwCJLPyHXyBeJPwaM=";
+    hash = "sha256-TWaDRJQ695kjoKjWQeAO+uxSZGgQiHoWYIsS+XnYVOQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     netifaces
     pyserial
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "RNS"
-  ];
+  pythonImportsCheck = [ "RNS" ];
 
   meta = with lib; {
     description = "Cryptography-based networking stack for wide-area networks";

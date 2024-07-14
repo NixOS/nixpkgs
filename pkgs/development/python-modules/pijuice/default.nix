@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, smbus-cffi
-, urwid
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  smbus-cffi,
+  urwid,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     cd Software/Source
   '';
 
-  propagatedBuildInputs = [ smbus-cffi urwid ];
+  propagatedBuildInputs = [
+    smbus-cffi
+    urwid
+  ];
 
   # Remove the following files from the package:
   #
@@ -59,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
+    mainProgram = "pijuice_cli";
     homepage = "https://github.com/PiSupply/PiJuice";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexagonal-sun ];

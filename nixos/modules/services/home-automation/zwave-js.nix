@@ -8,21 +8,21 @@ let
   settingsFormat = pkgs.formats.json {};
 in {
   options.services.zwave-js = {
-    enable = mkEnableOption (mdDoc "the zwave-js server on boot");
+    enable = mkEnableOption "the zwave-js server on boot";
 
     package = mkPackageOption pkgs "zwave-js-server" { };
 
     port = mkOption {
       type = types.port;
       default = 3000;
-      description = mdDoc ''
+      description = ''
         Port for the server to listen on.
       '';
     };
 
     serialPort = mkOption {
       type = types.path;
-      description = mdDoc ''
+      description = ''
         Serial port device path for Z-Wave controller.
       '';
       example = "/dev/ttyUSB0";
@@ -30,7 +30,7 @@ in {
 
     secretsConfigFile = mkOption {
       type = types.path;
-      description = mdDoc ''
+      description = ''
         JSON file containing secret keys. A dummy example:
 
         ```
@@ -72,13 +72,13 @@ in {
               type = types.path;
               default = "/var/cache/zwave-js";
               readOnly = true;
-              description = lib.mdDoc "Cache directory";
+              description = "Cache directory";
             };
           };
         };
       };
       default = {};
-      description = mdDoc ''
+      description = ''
         Configuration settings for the generated config
         file.
       '';
@@ -88,7 +88,7 @@ in {
       type = with lib.types; listOf str;
       default = [ ];
       example = [ "--mock-driver" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra flags to pass to command
       '';
     };

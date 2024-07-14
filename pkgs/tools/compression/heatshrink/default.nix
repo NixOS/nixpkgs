@@ -5,14 +5,14 @@
 , fetchpatch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "heatshrink";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "atomicobject";
     repo = "heatshrink";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Nm9/+JFMDXY1N90hmNFGh755V2sXSRQ4VBN9f8TcsGk=";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A data compression/decompression library for embedded/real-time systems";
+    description = "Data compression/decompression library for embedded/real-time systems";
     homepage = "https://github.com/atomicobject/heatshrink";
     license = licenses.isc;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     mainProgram = "heatshrink";
   };
-}
+})

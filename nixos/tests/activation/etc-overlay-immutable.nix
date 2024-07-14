@@ -13,6 +13,7 @@
     users.mutableUsers = false;
     boot.initrd.systemd.enable = true;
     boot.kernelPackages = pkgs.linuxPackages_latest;
+    time.timeZone = "Utc";
 
     specialisation.new-generation.configuration = {
       environment.etc."newgen".text = "newgen";
@@ -20,11 +21,20 @@
   };
 
   testScript = ''
-    machine.succeed("findmnt --kernel --type overlay /etc")
-    machine.fail("stat /etc/newgen")
+    with subtest("/etc is mounted as an overlay"):
+      machine.succeed("findmnt --kernel --type overlay /etc")
 
-    machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+    with subtest("direct symlinks point to the target without indirection"):
+      assert machine.succeed("readlink -n /etc/localtime") == "/etc/zoneinfo/Utc"
 
-    assert machine.succeed("cat /etc/newgen") == "newgen"
+    with subtest("switching to the same generation"):
+      machine.succeed("/run/current-system/bin/switch-to-configuration test")
+
+    with subtest("switching to a new generation"):
+      machine.fail("stat /etc/newgen")
+
+      machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+
+      assert machine.succeed("cat /etc/newgen") == "newgen"
   '';
 }

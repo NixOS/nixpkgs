@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Load homebrew apps over network/usbgecko to your Wii";
+    mainProgram = "wiiload";
     homepage = "https://wiibrew.org/wiki/Wiiload";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tomsmeets ];

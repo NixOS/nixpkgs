@@ -2,10 +2,10 @@
 
 let
   pname = "framesh";
-  version = "0.6.8";
+  version = "0.6.9";
   src = fetchurl {
     url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
-    hash = "sha256-qTbT1g+9hypBUxRMZ/Eat5OGb1y6yJlxQ6iJzfQH8G4=";
+    hash = "sha256-SsQIAg5DttvNJk1z+GJq4+e0Qa/j+VEKPV2bPA6+V8A=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -16,7 +16,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/frame.desktop $out/share/applications/frame.desktop
     install -m 444 -D ${appimageContents}/frame.png \
       $out/share/icons/hicolor/512x512/apps/frame.png

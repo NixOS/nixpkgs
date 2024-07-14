@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://bitbucket.org/linuxwolf6/lzwolf";
     description = "Enhanced fork of ECWolf, a Wolfenstein 3D source port";
+    mainProgram = "lzwolf";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tgunnoe ];

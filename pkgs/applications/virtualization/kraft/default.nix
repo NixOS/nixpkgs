@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.7.3";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-61eH2aFue/qJ7Xmu8ueQvsQ5moVpDkHe9p9bywqRwQY=";
+    hash = "sha256-lBvDKO2+MTSrmQM7szg5yulUi5OZKv7qKNQ75PIZgDo=";
   };
 
-  vendorHash = "sha256-4e7g79C6BofnPXPCuquIPfGL7C9TMSdmlIq2HSrz3eY=";
+  vendorHash = "sha256-JSE4k/JgWvYCfTUuf2pj4XCcdJ9+j7fY9aAiCipapIk=";
 
   ldflags = [
     "-s"
@@ -38,6 +38,5 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "kraft";
-    broken = stdenv.isDarwin; # > machine/platform/iterator_v1alpha1.go:32:34: undefined: hostSupportedStrategies
   };
 }

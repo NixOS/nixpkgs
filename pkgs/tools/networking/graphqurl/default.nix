@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "graphqurl";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphqurl";
     rev = "v${version}";
-    hash = "sha256-0dR8lLD0yatAvE3kA90cNOzVRTFpQmzN1l13hdFr3TM=";
+    hash = "sha256-w7t3p7TOBA0nxUlfRfQkiZ26SCDCwv03A1r+pTgUCqc=";
   };
 
-  npmDepsHash = "sha256-2kLmhNFO/ySa6S9rBNYCePmsYXWz006IxiOJ7ZUkgPw=";
+  npmDepsHash = "sha256-17eRYr0vgnq7eFtlYY2CwvluwhbXWClL3onTNBkDF0c=";
 
   dontNpmBuild = true;
 

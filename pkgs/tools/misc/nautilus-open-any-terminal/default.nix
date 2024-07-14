@@ -4,24 +4,25 @@
 , dconf
 , fetchFromGitHub
 , glib
-, gnome
+, nautilus
+, nautilus-python
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
-    rev = version;
-    hash = "sha256-fcTbt8O/7KEme5+GlDD7hMMcE2RaYqFdfojzJ1KhnA0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jKPqgd0sSt/qKPqbYbvdeGuo78R5gp1R5tSTPAzz+IU=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];
@@ -30,15 +31,15 @@ python3.pkgs.buildPythonPackage rec {
     glib
     gobject-introspection
     pkg-config
-    wrapGAppsHook
-    python3.pkgs.setuptools
+    wrapGAppsHook3
+    python3.pkgs.setuptools-scm
   ];
 
   buildInputs = [
     dbus
     dconf
-    gnome.nautilus
-    gnome.nautilus-python
+    nautilus
+    nautilus-python
     gsettings-desktop-schemas
     gtk3
     python3.pkgs.pygobject3

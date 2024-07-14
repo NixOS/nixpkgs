@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, stripJavaArchivesHook, wrapGAppsHook3, libGL }:
 let
   buildNumber = "1293";
   vaqua = fetchurl {
@@ -52,12 +52,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
   };
 
-  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ ant unzip makeWrapper stripJavaArchivesHook wrapGAppsHook3 ];
   buildInputs = [ jdk jogl ant rsync ffmpeg batik ];
 
   dontWrapGApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
@@ -78,9 +80,13 @@ stdenv.mkDerivation rec {
     cd build
     ant build
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
@@ -89,14 +95,18 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/share/${pname}/java
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A language and IDE for electronic arts";
+    description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
     license = with licenses; [ gpl2Only lgpl21Only ];
     platforms = platforms.linux;

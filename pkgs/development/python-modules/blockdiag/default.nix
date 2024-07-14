@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, fetchpatch
-, funcparserlib
-, nose
-, pillow
-, ephem
-, pythonOlder
-, pytestCheckHook
-, reportlab
-, setuptools
-, webcolors
-, python
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  ephem,
+  fetchFromGitHub,
+  fetchpatch,
+  funcparserlib,
+  pillow,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
+  reportlab,
+  setuptools,
+  webcolors,
 }:
 
 buildPythonPackage rec {
   pname = "blockdiag";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
@@ -38,14 +38,18 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
+    docutils
     funcparserlib
     pillow
-    webcolors
     reportlab
-    docutils
+    webcolors
   ];
+
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     ephem
@@ -53,24 +57,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "src/blockdiag/tests/"
-  ];
+  pytestFlagsArray = [ "src/blockdiag/tests/" ];
 
   disabledTests = [
     # Test require network access
     "test_app_cleans_up_images"
   ];
 
-  pythonImportsCheck = [
-    "blockdiag"
-  ];
+  pythonImportsCheck = [ "blockdiag" ];
 
   meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "blockdiag";
+    platforms = platforms.unix;
   };
 }

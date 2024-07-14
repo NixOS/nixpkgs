@@ -22,9 +22,9 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "louvre";
-  version = "1.1.0-1";
+  version = "2.2.0-1";
   rev = "v${self.version}";
-  hash = "sha256-HwvX0ykl2+4MBcIixmEknFtsB0QC4w1QDzQz1589bl0=";
+  hash = "sha256-Ds1TTxHFq0Z88djdpAunhtKAipOCTodKIKOh5oxF568=";
 
   src = fetchFromGitHub {
     inherit (self) rev hash;

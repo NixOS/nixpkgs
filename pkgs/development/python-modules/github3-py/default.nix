@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, uritemplate
-, python-dateutil
-, pyjwt
-, pytestCheckHook
-, betamax
-, betamax-matchers
-, hatchling
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  uritemplate,
+  python-dateutil,
+  pyjwt,
+  pytestCheckHook,
+  betamax,
+  betamax-matchers,
+  hatchling,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -25,17 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-MNVxB2dT78OJ7cf5qu8zik/LJLVNiWjV85sTQvRd3TY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     pyjwt
     python-dateutil
     requests
     uritemplate
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -63,7 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github3py.readthedocs.org/en/master/";
-    description = "A wrapper for the GitHub API written in python";
+    description = "Wrapper for the GitHub API written in python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
   };

@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace logging daemon for netfilter/iptables";
+    mainProgram = "ulogd";
 
     longDescription = ''
       Logging daemon that reads event messages coming from the Netfilter
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.netfilter.org/projects/ulogd/index.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-h ];
   };

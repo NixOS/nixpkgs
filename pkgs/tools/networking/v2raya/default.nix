@@ -11,13 +11,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.4.3";
+  version = "2.2.5.6";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    hash = "sha256-6643sdKVHOHrGRocTm881GCHoON4tlrKcNfOFMHwnQY=";
+    hash = "sha256-tXVyroQ2yXwLe+OulvVQYgfd9EcC87S0L8d7w5gLnMI=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
   guiSrc = "${src}/gui";
@@ -30,7 +30,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-rZIcVLolTMdtN27W6gCw9uk9m4N5v9SZn2563+aN/gs=";
+      sha256 = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
     };
 
     buildPhase = ''
@@ -62,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorHash = "sha256-wwDv2ThHwtnUpAnQoc0Ms0mGC44jRvABcE4K5MrF8S4=";
+  vendorHash = "sha256-8MSNTKeN0N2/yaHnXsKmxzw9vRy+E5q60IpwLycqC2I=";
 
   ldflags = [
     "-s"
@@ -89,11 +89,11 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
+    description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
     homepage = "https://github.com/v2rayA/v2rayA";
     mainProgram = "v2rayA";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with maintainers; [ ChaosAttractor ];
   };
 }

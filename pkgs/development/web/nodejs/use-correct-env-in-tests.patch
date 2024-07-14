@@ -1,0 +1,24 @@
+`/usr/bin/env` is not available.
+
+--- old/test/common/assertSnapshot.js
++++ new/test/common/assertSnapshot.js
+@@ -81,2 +81,2 @@ async function spawnAndAssert(filename, transform = (x) => x, { tty = false, ...
+-  const executable = tty ? 'tools/pseudo-tty.py' : process.execPath;
+-  const args = tty ? [process.execPath, ...flags, filename] : [...flags, filename];
++  const executable = tty ? 'python3' : process.execPath;
++  const args = tty ? ['tools/pseudo-tty.py', process.execPath, ...flags, filename] : [...flags, filename];
+--- old/test/parallel/test-child-process-default-options.js
++++ new/test/parallel/test-child-process-default-options.js
+@@ -35 +35 @@ if (isWindows) {
+-  child = spawn('/usr/bin/env', [], {});
++  child = spawn('env', [], {});
+--- old/test/parallel/test-child-process-env.js
++++ new/test/parallel/test-child-process-env.js
+@@ -51 +51 @@ if (isWindows) {
+-  child = spawn('/usr/bin/env', [], { env });
++  child = spawn('env', [], { env });
+--- old/test/parallel/test-child-process-exec-env.js
++++ new/test/parallel/test-child-process-exec-env.js
+@@ -47 +47 @@ if (!isWindows) {
+-  child = exec('/usr/bin/env', { env: { 'HELLO': 'WORLD' } }, after);
++  child = exec('env', { env: { 'HELLO': 'WORLD' } }, after);

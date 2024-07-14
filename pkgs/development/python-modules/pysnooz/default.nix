@@ -1,18 +1,19 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, events
-, fetchFromGitHub
-, freezegun
-, home-assistant-bluetooth
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, transitions
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  events,
+  fetchFromGitHub,
+  freezegun,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  transitions,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysnooz"
-  ];
+  pythonImportsCheck = [ "pysnooz" ];
 
   meta = with lib; {
     description = "Library to control SNOOZ white noise machines";

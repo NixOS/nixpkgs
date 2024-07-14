@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  six,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1g4FCSMyS8T6F/T8BOqak4h1nJis8g9jaOluA4FTNpA=";
+    hash = "sha256-1g4FCSMyS8T6F/T8BOqak4h1nJis8g9jaOluA4FTNpA=";
   };
 
   propagatedBuildInputs = [

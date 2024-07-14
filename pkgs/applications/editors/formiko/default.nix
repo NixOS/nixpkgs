@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , docutils
@@ -24,7 +24,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gtk3
   ];

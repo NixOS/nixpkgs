@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rune";
-  version = "0.13.1";
+  version = "0.13.3";
 
   src = fetchCrate {
     pname = "rune-cli";
     inherit version;
-    hash = "sha256-7GScETlQ/rl9vOB9zSfsCM1ay1F5YV6OAxKe82lMU1I=";
+    hash = "sha256-nrHduxHSX31nwqcBbgPT4WH64LXTruScocpqex4zxf4=";
   };
 
-  cargoHash = "sha256-T6uYe+ZgXgsGN1714Ka+fxeVDoXgjVdfrrw5Rj/95cE=";
+  cargoHash = "sha256-EjUzXb2r6lKV1fBL7KdseC9vmW2L0AjpowYo4j8Xpv8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "An interpreter for the Rune Language, an embeddable dynamic programming language for Rust";
+    description = "Interpreter for the Rune Language, an embeddable dynamic programming language for Rust";
     homepage = "https://rune-rs.github.io/";
     changelog = "https://github.com/rune-rs/rune/releases/tag/${version}";
     license = with licenses; [ asl20 mit ];

@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nn/G7SkRuHXRSRgNjlmdX1G07sp7FPx8UyAn63Nivfg=";
+    hash = "sha256-MrlzAZWLgfwIoTdxY+fjWbrv7tygAjnxXebiEgwOM9A=";
   };
 
-  cargoHash = "sha256-vCoKaDd0mQRF6NNfK679FhEXuAdn/1o3F1gTfT8NK+0=";
+  cargoHash = "sha256-7HPTELRlmyjj7CXNbgqrzxW548BgbxybWi+tT3rOCX0=";
 
   nativeBuildInputs = [
     cmake
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = lib.optionalString (!xdg-utils.meta.broken) ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
   meta = with lib; {
-    description = "A cross-platform, GPU-accelerated terminal emulator";
+    description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
     mainProgram = "alacritty";

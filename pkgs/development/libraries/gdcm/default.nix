@@ -6,6 +6,7 @@
 , vtk
 , ApplicationServices
 , Cocoa
+, DarwinTools # sw_vers
 , libiconv
 , enablePython ? false
 , python ? null
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdcm";
-  version = "3.0.23";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zwIPWcjTrfbdNBzAqwV6lU2l6sx+e4Yi7dprdem6AeE=";
+    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 
   cmakeFlags = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
   # a number of additional but much slower tests are enabled
 
   meta = with lib; {
-    description = "The grassroots cross-platform DICOM implementation";
+    description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.

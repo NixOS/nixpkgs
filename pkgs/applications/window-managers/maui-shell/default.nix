@@ -79,7 +79,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A convergent shell for desktops, tablets, and phones";
+    description = "Convergent shell for desktops, tablets, and phones";
     homepage = "https://github.com/Nitrux/maui-shell";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ onny ];

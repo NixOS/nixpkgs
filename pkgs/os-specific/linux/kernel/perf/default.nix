@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , kernel
 , elfutils
@@ -159,6 +158,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
+    mainProgram = "perf";
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5";

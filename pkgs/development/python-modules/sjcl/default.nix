@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pycryptodome
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pycryptodome,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,12 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "sjcl"
-  ];
+  pythonImportsCheck = [ "sjcl" ];
 
   meta = with lib; {
-    description = "Decrypt and encrypt messages compatible to the \"Stanford Javascript Crypto Library (SJCL)\" message format. This is a wrapper around pycrypto.";
+    description = "Decrypt and encrypt messages compatible to the \"Stanford Javascript Crypto Library (SJCL)\" message format. This is a wrapper around pycrypto";
     homepage = "https://github.com/berlincode/sjcl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ binsky ];

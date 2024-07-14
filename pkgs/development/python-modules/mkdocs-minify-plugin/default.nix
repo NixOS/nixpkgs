@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mkdocs
-, csscompressor
-, htmlmin
-, jsmin
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mkdocs,
+  csscompressor,
+  htmlmin,
+  jsmin,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
-    description = "A mkdocs plugin to minify the HTML of a page before it is written to disk.";
+    description = "Mkdocs plugin to minify the HTML of a page before it is written to disk";
     homepage = "https://github.com/byrnereese/mkdocs-minify-plugin";
     license = licenses.mit;
     maintainers = with maintainers; [ tfc ];

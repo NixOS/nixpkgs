@@ -10,12 +10,12 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "numberstation";
-  version = "1.3.0";
+  version = "1.4.0";
 
   format = "other";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "~martijnbraam";
     repo = "numberstation";
     rev = version;
-    hash = "sha256-l4ev47ofBZeUqjJjdhQOHX+mNL9nIHH0mfYdqZW1LMs=";
+    hash = "sha256-0T/Dc2i6auuZiWjcPR72JT8yOrzmdEmbW2PS5YhmEwI=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,7 +60,9 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    changelog = "https://git.sr.ht/~martijnbraam/numberstation/refs/${version}";
     description = "TOTP Authentication application for mobile";
+    mainProgram = "numberstation";
     homepage = "https://sr.ht/~martijnbraam/numberstation/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda ];

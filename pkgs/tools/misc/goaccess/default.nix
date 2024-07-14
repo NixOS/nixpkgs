@@ -1,44 +1,37 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gettext
-, libmaxminddb
-, ncurses
-, openssl
-, withGeolocation ? true
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gettext,
+  libmaxminddb,
+  ncurses,
+  openssl,
+  withGeolocation ? true,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.1";
   pname = "goaccess";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "allinurl";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-GTW7ECSHjFBw8O2NewvMgC+3aheusupDlSBTxZriHHc=";
+    repo = "goaccess";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZOngDAHA88YQvkx2pk5ZSpBzxqelvCIR4z5hiFmfGyc=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals withGeolocation [
-    libmaxminddb
-  ] ++ lib.optionals stdenv.isDarwin [
-    gettext
-  ];
+  ] ++ lib.optionals withGeolocation [ libmaxminddb ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   configureFlags = [
     "--enable-utf8"
     "--with-openssl"
-  ] ++ lib.optionals withGeolocation [
-    "--enable-geoip=mmdb"
-  ];
+  ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
 
   meta = with lib; {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";

@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication {
   meta = with lib; {
     homepage = "https://github.com/andry08/ArubaOTP-seed-extractor";
     description = "Extract TOTP seed instead of using ArubaOTP app";
+    mainProgram = "arubaotp-seed-extractor";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };

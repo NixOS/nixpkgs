@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2024.01.12";
+  version = "2024.06.15";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-oIx/eMceFN2q7EfPCR6nFZAw5HK3U6qbyu7z9H1aJbU=";
+    hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
   };
 
   installPhase = let
@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++ Library Manager";
+    mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "yor";
-  version = "0.1.188";
+  version = "0.1.196";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-8bQUZFV5euXki7jz3tZmhJ/vSFnJusYyejfw0s+N6rk=";
+    hash = "sha256-3jM5UaI8kmcW4z9YU7GJKHCNoX10BpO10C47/b/1I74=";
   };
 
-  vendorHash = "sha256-VYzMdYwWe2TTIV28kORX6pImSE04aFISDCjlQvqiIp8=";
+  vendorHash = "sha256-uT/jGD4hDVes4h+mlSIT2p+C9TjxnUWsmKv9haPjjLc=";
 
   doCheck = false;
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Extensible auto-tagger for your IaC files. The ultimate way to link entities in the cloud back to the codified resource which created it.";
+    description = "Extensible auto-tagger for your IaC files. The ultimate way to link entities in the cloud back to the codified resource which created it";
     homepage = "https://github.com/bridgecrewio/yor";
     changelog = "https://github.com/bridgecrewio/yor/releases/tag/${version}";
     license = licenses.asl20;

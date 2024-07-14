@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Automate starting binary exploit challenges";
+    mainProgram = "pwninit";
     homepage = "https://github.com/io12/pwninit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.scoder12 ];

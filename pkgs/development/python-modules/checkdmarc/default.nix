@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, dnspython
-, expiringdict
-, fetchFromGitHub
-, hatchling
-, publicsuffixlist
-, pyleri
-, iana-etc
-, pytestCheckHook
-, pythonOlder
-, requests
-, timeout-decorator
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  dnspython,
+  expiringdict,
+  fetchFromGitHub,
+  hatchling,
+  publicsuffixlist,
+  pyleri,
+  iana-etc,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  timeout-decorator,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-NNB5dYQzzdNapjP4mtpCW08BzfZ+FFRESUtpxCOzrdk=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     cryptography
@@ -42,17 +41,11 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "checkdmarc"
-  ];
+  pythonImportsCheck = [ "checkdmarc" ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
   disabledTests = [
     # Tests require network access
@@ -65,11 +58,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A parser for SPF and DMARC DNS records";
+    description = "Parser for SPF and DMARC DNS records";
+    mainProgram = "checkdmarc";
     homepage = "https://github.com/domainaware/checkdmarc";
     changelog = "https://github.com/domainaware/checkdmarc/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
-

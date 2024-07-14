@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 stackprotector stackclashprotection pie pic strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -79,6 +79,10 @@ for flag in "${!hardeningEnableMap[@]}"; do
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
       hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
+    stackclashprotection)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stack-clash-protection >&2; fi
+      hardeningCFlagsBefore+=('-fstack-clash-protection')
+      ;;
     pie)
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
@@ -105,6 +109,10 @@ for flag in "${!hardeningEnableMap[@]}"; do
       else
         hardeningCFlagsBefore+=('-fno-strict-overflow')
       fi
+      ;;
+    trivialautovarinit)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling trivialautovarinit >&2; fi
+      hardeningCFlagsBefore+=('-ftrivial-auto-var-init=pattern')
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi

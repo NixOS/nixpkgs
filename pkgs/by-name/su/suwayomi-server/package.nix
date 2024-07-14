@@ -12,12 +12,12 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suwayomi-server";
-  version = "0.7.0";
-  revision = 1197;
+  version = "1.0.0";
+  revision = 1498;
 
   src = fetchurl {
-    url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Tachidesk-Server-v${finalAttrs.version}-r${toString finalAttrs.revision}.jar";
-    hash = "sha256-4DO1WiBCu/8ypFgJdBmEwQXQ1xaWAlbt8N5TELomVVA=";
+    url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}-r${toString finalAttrs.revision}.jar";
+    hash = "sha256-CskVYc+byfn3mNzbOX1fCXPpjihtWpoRGBpXDY378c0=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
+    description = "Free and open source manga reader server that runs extensions built for Tachiyomi";
     longDescription = ''
       Suwayomi is an independent Tachiyomi compatible software and is not a Fork of Tachiyomi.
 

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.22.0";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-7raWk4Y/ZrSaGKPLrrnD49aDALkZ+Nxycd+px8Eks10=";
+    hash = "sha256-7+r2fuFNVvOC0Zl1kqAiAh9C3qqhg7KGrbnOp4Jk+Is=";
   };
 
-  vendorHash = "sha256-lRXZ9iSWQEKWmeQV1ei/G4+HvqhW9U8yUv1Qb/d2jvY=";
+  vendorHash = "sha256-eTiNBs8xcfrth/E44URhD8uSgdoXZT1+MD3H24dzI1A=";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional stdenv.isLinux libX11;
@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated WireGuard® Management Client";
+    mainProgram = "netclient";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
     license = licenses.asl20;

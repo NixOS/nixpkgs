@@ -31,13 +31,21 @@ buildPythonApplication rec {
     poetry-core
   ];
 
+  nativeBuildInputs = [
+  ];
+
   nativeCheckInputs = [
     responses
     pytest-mock
     pytestCheckHook
   ];
+
+  pythonRelaxDeps = [
+    # https://gitlab.com/chrisberkhout/pricehist/-/issues/6
+    "lxml"
+  ];
   meta = with lib; {
-    description = "A command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
+    description = "Command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = licenses.mit;
     mainProgram = "pricehist";

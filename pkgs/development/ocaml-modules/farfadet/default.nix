@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    description = "A printf-like for Faraday library";
+    description = "Printf-like for Faraday library";
     homepage = "https://github.com/oklm-wsh/Farfadet";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

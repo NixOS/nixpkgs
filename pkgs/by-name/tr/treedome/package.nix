@@ -2,56 +2,49 @@
 , cargo-tauri
 , cmake
 , dbus
-, fetchFromGitea
+, fetchgit
 , fetchYarnDeps
 , freetype
 , gsettings-desktop-schemas
 , gtk3
 , libsoup
-, mkYarnPackage
+, stdenv
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
 , openssl
 , pkg-config
 , rustPlatform
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 }:
 
 let
   pname = "treedome";
-  version = "0.3.3";
+  version = "0.4.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "solver-orgz";
-    repo = "treedome";
+  src = fetchgit {
+    url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    sha256 = "sha256-492EAKCXyc4s9FvkpqppZ/GllYuYe0YsXgbRl/oQBgE=";
+    hash = "sha256-YkyjG/ee5WeO5OD4FZnWaqcOJO3YC0uQkbwGkCNBxC8=";
+    fetchLFS = true;
   };
 
-  frontend-build = mkYarnPackage {
-    inherit version src;
+  frontend-build = stdenv.mkDerivation (finalAttrs: {
     pname = "treedome-ui";
+    inherit version src;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-rV5jKKnbMutaG5o8gRKgs/uoKwbIkxAPIcx6VWG7mm4=";
+      hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
     };
 
-    packageJSON = ./package.json;
-
-    configurePhase = ''
-      ln -s $node_modules node_modules
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn --offline run build
-
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -61,9 +54,7 @@ let
 
       runHook postInstall
     '';
-
-    doDist = false;
-  };
+  });
 in
 rustPlatform.buildRustPackage {
   inherit version pname src;
@@ -74,6 +65,10 @@ rustPlatform.buildRustPackage {
     outputHashes = {
       "fix-path-env-0.0.0" = "sha256-ewE3CwqLC8dvi94UrQsWbp0mjmrzEJIGPDYtdmQ/sGs=";
     };
+  };
+
+  env = {
+    VERGEN_GIT_DESCRIBE = version;
   };
 
   preConfigure = ''
@@ -93,7 +88,7 @@ rustPlatform.buildRustPackage {
     cmake
     pkg-config
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -134,11 +129,12 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown";
+    description = "Local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
-    license = licenses.gpl3Plus;
+    license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";
     maintainers = with maintainers; [ tengkuizdihar ];
+    changelog = "https://codeberg.org/solver-orgz/treedome/releases/tag/${version}";
   };
 }

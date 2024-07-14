@@ -35,10 +35,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "An extensible music player daemon written in Rust";
+    description = "Extensible music player daemon written in Rust";
     homepage = "https://github.com/tsirysndr/music-player";
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    mainProgram = "music-player";
   };
 }

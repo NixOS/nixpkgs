@@ -22,6 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Toy binary to illustrate adding a mount beneath an existing mount";
+    mainProgram = "move-mount";
     homepage = "https://github.com/brauner/move-mount-beneath";
     license = lib.licenses.mit0;
     maintainers = with lib.maintainers; [ nikstur ];

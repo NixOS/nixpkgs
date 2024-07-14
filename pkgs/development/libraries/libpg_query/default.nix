@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pganalyze/libpg_query/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

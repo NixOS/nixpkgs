@@ -51,7 +51,7 @@ in stdenv'.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Qt port of the Scintilla text editing library";
+    description = "Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
       control.

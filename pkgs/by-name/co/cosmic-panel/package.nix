@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-panel";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ qyliss nyanbinary ];
     platforms = platforms.linux;

@@ -16,12 +16,12 @@ debianPatch = patchname: hash: fetchpatch {
   sha256 = hash;
 };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "tumiki-fighters";
   version = "0.21";
 
   src = fetchurl {
-    url = "http://abagames.sakura.ne.jp/windows/tf${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "http://abagames.sakura.ne.jp/windows/tf${lib.replaceStrings ["."] ["_"] finalAttrs.version}.zip";
     sha256 = "0djykfc1r8ysapklm621h89ana1c4qzc1m5nr9bqw4iccnmvwk3p";
   };
 
@@ -90,8 +90,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tf_e.html";
     description = "Sticky 2D shooter";
+    mainProgram = "tumiki-fighters";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

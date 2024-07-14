@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.42.0";
+  version = "1.46.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PZ875cjJUUE92aBoKfgQ3tY8tVN3ksB7nITc8MK0g+w=";
+    hash = "sha256-f3K+59+9NO33GO1SBZhKfqHPO9p5kivDeLNd780cZu8=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # All tests require an API key
   doCheck = false;
 
-  pythonImportsCheck = [
-    "meraki"
-  ];
+  pythonImportsCheck = [ "meraki" ];
 
   meta = with lib; {
     description = "Provides all current Meraki dashboard API calls to interface with the Cisco Meraki cloud-managed platform";

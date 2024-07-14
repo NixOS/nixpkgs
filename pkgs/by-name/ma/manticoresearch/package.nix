@@ -28,7 +28,7 @@ let
     nativeBuildInputs = [ cmake ];
     cmakeFlags = [ "-DAPI_ONLY=ON" ];
     meta = {
-      description = "A column-oriented storage and secondary indexing library";
+      description = "Column-oriented storage and secondary indexing library";
       homepage = "https://github.com/manticoresoftware/columnar/";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;

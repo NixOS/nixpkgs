@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 
   meta = {
-    description = "A program to find rational points on hyperelliptic curves";
+    description = "Program to find rational points on hyperelliptic curves";
+    mainProgram = "ratpoints";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

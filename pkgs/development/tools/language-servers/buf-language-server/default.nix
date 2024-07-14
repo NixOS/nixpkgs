@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Language server for protocol buffers";
+    mainProgram = "bufls";
     homepage = "https://github.com/bufbuild/buf-language-server";
     license = licenses.asl20;
     maintainers = with maintainers; [ svrana ];

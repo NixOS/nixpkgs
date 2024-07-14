@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "hydrogen-web";
     rev = "v${finalAttrs.version}";
     hash = "sha256-u8Yex3r7EZH+JztQHJbfncYeyyl6hgb1ZNFIg//wcb0=";
   };
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N9lUAhfYLlEAIaWSNS3Ecq+aBTz+f7Z22Sclwj9rp6w=";
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs ];
 
   configurePhase = ''
     runHook preConfigure

@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
+    hash = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
   };
 
   nativeCheckInputs = with python3Packages; [
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/jonathanj/eliottree";
     description = "Render Eliot logs as an ASCII tree";
+    mainProgram = "eliot-tree";
     license = licenses.mit;
     maintainers = [ maintainers.dpausp ];
   };

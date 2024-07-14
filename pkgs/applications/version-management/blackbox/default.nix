@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     expect
     which
     coreutils
-    pinentry.tty
+    pinentry
     git
     gnutar
     procps

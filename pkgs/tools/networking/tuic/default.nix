@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec{
@@ -13,6 +15,10 @@ rustPlatform.buildRustPackage rec{
     rev = "tuic-server-${version}";
     hash = "sha256-VoNr91vDqBlt9asT/dwCeYk13UNiDexNNiKwD5DSn8k=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Security
+  ]);
 
   postPatch = ''
     ln -sf ${./Cargo.lock} Cargo.lock

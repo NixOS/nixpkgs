@@ -16,12 +16,14 @@
   opensslSupport ? true,
   openssl,
   soxSupport ? true,
-  sox
+  sox,
+  libsndfileSupport ? true,
+  libsndfile
 }:
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
-  version = "0.3.0";
+  version = "0.4.0";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "roc-streaming";
     repo = "roc-toolkit";
     rev = "v${version}";
-    hash = "sha256-tC0rjb3eDtEciUk0NmVye+N//Y/RFsi5d3kFS031y8I=";
+    hash = "sha256-53irDq803dTg0YqtC1SOXmYNGypSMAEK+9HJ65pR5PA=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +48,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional libunwindSupport libunwind
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional opensslSupport openssl
-    ++ lib.optional soxSupport sox;
+    ++ lib.optional soxSupport sox
+    ++ lib.optional libsndfileSupport libsndfile;
 
   sconsFlags =
     [ "--build=${stdenv.buildPlatform.config}"
@@ -56,6 +59,7 @@ stdenv.mkDerivation rec {
     lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
+    lib.optional (!libsndfileSupport) "--disable-sndfile" ++
     (if (!openfecSupport)
        then ["--disable-openfec"]
        else [ "--with-libraries=${openfec}/lib"

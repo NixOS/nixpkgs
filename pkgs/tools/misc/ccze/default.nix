@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       for the Perl colorize tool.  Includes plugins for a variety of log
       formats (Apache, Postfix, Procmail, etc.).
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ malyn ];
     platforms = platforms.linux;
   };

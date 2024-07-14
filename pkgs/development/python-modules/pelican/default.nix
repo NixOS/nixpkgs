@@ -1,37 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, pdm-backend
+  # build-system
+  pdm-backend,
 
-# native dependencies
-, glibcLocales
-, git
-, pandoc
-, typogrify
+  # native dependencies
+  glibcLocales,
+  git,
+  pandoc,
+  typogrify,
 
-# dependencies
-, backports-zoneinfo
-, blinker
-, docutils
-, feedgenerator
-, jinja2
-, markdown
-, ordered-set
-, pygments
-, python-dateutil
-, rich
-, tzdata
-, unidecode
-, watchfiles
+  # dependencies
+  backports-zoneinfo,
+  blinker,
+  docutils,
+  feedgenerator,
+  jinja2,
+  markdown,
+  ordered-set,
+  pygments,
+  python-dateutil,
+  rich,
+  tzdata,
+  unidecode,
+  watchfiles,
 
-# tests
-, mock
-, pytestCheckHook
-, pytest-xdist
+  # tests
+  mock,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -60,12 +60,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "unidecode"
-  ];
+  pythonRelaxDeps = [ "unidecode" ];
 
   buildInputs = [
     glibcLocales
@@ -87,9 +84,7 @@ buildPythonPackage rec {
     tzdata
     unidecode
     watchfiles
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   nativeCheckInputs = [
     mock
@@ -108,6 +103,7 @@ buildPythonPackage rec {
     "test_basic_generation_works"
     "test_custom_generation_works"
     "test_custom_locale_generation_works"
+    "test_deprecated_attribute"
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -126,7 +122,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ offline prikhi ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      offline
+      prikhi
+    ];
   };
 }

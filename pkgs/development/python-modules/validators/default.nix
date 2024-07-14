@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.22.0";
-  format = "pyproject";
+  version = "0.28.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,26 +18,20 @@ buildPythonPackage rec {
     owner = "python-validators";
     repo = "validators";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qu6Tu9uIluT1KBJYkFjDFt9AWN2Kez3uCYDQknXqYrU=";
+    hash = "sha256-r3SQvt96y8e9odWxz0GjVKH3+Pa0Lqs+tbhryeGaZUU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "validators"
-  ];
+  pythonImportsCheck = [ "validators" ];
 
   meta = with lib; {
     description = "Python Data Validation for Humans";
     homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

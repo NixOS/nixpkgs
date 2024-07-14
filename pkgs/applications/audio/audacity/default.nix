@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , python3
 , gettext
@@ -62,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-YlRWCu6kQYdzast7Mf29p4FvpXJHQLG7vqqo/5SNQCQ=";
+    hash = "sha256-wQ+K31TvDTVwDyVQ5nWgcneZ1cFxztmsbSXrDs33Uoc=";
   };
 
   postPatch = ''
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
@@ -190,6 +190,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
     changelog = "https://github.com/audacity/audacity/releases";
     license = with licenses; [
@@ -201,7 +202,7 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    maintainers = with maintainers; [ veprbl wegank ];
     platforms = platforms.unix;
   };
 }

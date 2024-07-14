@@ -1,9 +1,9 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 , qtbase
+, qtsvg
+, qtwayland
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
@@ -31,26 +31,29 @@ during runtime. Alternatively, one can edit the desktop file themselves after
 it is generated See:
 https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 , autostartExecPath ? "syncthingtray"
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.13";
+  version = "1.5.5";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-RysX2IAzhGz/L65nDEL2UQLXIjdkQRmMs7bqNQIR+eA=";
+    hash = "sha256-NfFB+4cqe1rHqc+w0Enl9h33gPjJ3CfrFpyOhysmz0Q=";
   };
 
   buildInputs = [
     qtbase
+    qtsvg
     cpp-utilities
     qtutilities
     boost
     qtforkawesome
   ] ++ lib.optionals stdenv.isDarwin [ iconv ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
@@ -74,15 +77,23 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.isDarwin;
   preCheck = ''
     export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
-  # don't test --help  on Darwin because output is .app
-  doInstallCheck = !stdenv.isDarwin;
-  installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # put the app bundle into the proper place /Applications instead of /bin
+    mkdir -p $out/Applications
+    mv $out/bin/syncthingtray.app $out/Applications
+    # Make binary available in PATH like on other platforms
+    ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
   '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DKF_PACKAGE_PREFIX=KF${lib.versions.major qtbase.version}"
     "-DBUILD_TESTING=ON"
     # See https://github.com/Martchus/syncthingtray/issues/208
     "-DEXCLUDE_TESTS_FROM_ALL=OFF"

@@ -1,47 +1,43 @@
 { stdenv
 , lib
-, fetchFromGitLab
+, fetchurl
 , pkg-config
 , vala
 , glib
 , meson
 , ninja
 , libxslt
-, gtk3
+, gtk4
 , enableBackend ? stdenv.isLinux
-, webkitgtk_4_1
 , json-glib
+, libadwaita
 , librest_1_0
 , libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
-, icu
 , glib-networking
 , libsoup_3
 , docbook-xsl-nons
 , docbook_xml_dtd_412
 , gnome
-, gcr
+, gcr_4
 , libkrb5
 , gvfs
 , dbus
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.48.0";
+  version = "3.50.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-online-accounts";
-    rev = version;
-    sha256 = "sha256-USl0Qay9pSgbbp3n/L8eBaRQwaBYledht5j+afmo++o=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5xSmfRccVxRDYet07oKhexXQqCIo/xiM+ScE9WJsopQ=";
   };
 
   mesonFlags = [
@@ -49,7 +45,7 @@ stdenv.mkDerivation rec {
     "-Dgoabackend=${lib.boolToString enableBackend}"
     "-Dgtk_doc=${lib.boolToString enableBackend}"
     "-Dman=${lib.boolToString enableBackend}"
-    "-Dmedia_server=true"
+    "-Dwebdav=true"
   ];
 
   nativeBuildInputs = [
@@ -64,42 +60,38 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gcr
+    gcr_4
     glib
     glib-networking
-    gtk3
+    gtk4
+    libadwaita
     gvfs # OwnCloud, Google Drive
-    icu
     json-glib
     libkrb5
     librest_1_0
     libxml2
     libsecret
     libsoup_3
-  ] ++ lib.optionals enableBackend [
-    webkitgtk_4_1
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
       versionPolicy = "odd-unstable";
-      packageName = pname;
+      packageName = "gnome-online-accounts";
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-online-accounts";
     description = "Single sign-on framework for GNOME";
     platforms = platforms.unix;
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

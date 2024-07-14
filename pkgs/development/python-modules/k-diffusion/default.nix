@@ -1,25 +1,26 @@
-{ lib
-, accelerate
-, buildPythonPackage
-, clean-fid
-, clip-anytorch
-, dctorch
-, einops
-, fetchFromGitHub
-, jsonmerge
-, kornia
-, pillow
-, pythonOlder
-, rotary-embedding-torch
-, safetensors
-, scikit-image
-, scipy
-, torch
-, torchdiffeq
-, torchsde
-, torchvision
-, tqdm
-, wandb
+{
+  lib,
+  accelerate,
+  buildPythonPackage,
+  clean-fid,
+  clip-anytorch,
+  dctorch,
+  einops,
+  fetchFromGitHub,
+  jsonmerge,
+  kornia,
+  pillow,
+  pythonOlder,
+  rotary-embedding-torch,
+  safetensors,
+  scikit-image,
+  scipy,
+  torch,
+  torchdiffeq,
+  torchsde,
+  torchvision,
+  tqdm,
+  wandb,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     wandb
   ];
 
-  pythonImportsCheck = [
-    "k_diffusion"
-  ];
+  pythonImportsCheck = [ "k_diffusion" ];
 
   # no tests
   doCheck = false;

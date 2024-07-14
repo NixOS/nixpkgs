@@ -9,7 +9,6 @@
 , pycryptodome
 , pytest-runner
 , pythonOlder
-, pythonRelaxDepsHook
 , recommonmark
 , setuptools-scm
 , sphinx
@@ -50,13 +49,13 @@ buildPythonPackage rec {
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pythonRelaxDepsHook
     pytest-runner
     setuptools-scm
   ];
 
   pythonRelaxDeps = [
     "asttokens"
+    "packaging"
   ];
 
   propagatedBuildInputs = [

@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python311 }:
 
 let
-  python = python3.override {
+  python = python311.override {
     packageOverrides = self: super: {
       pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";
@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Nginx configuration static analyzer";
+    mainProgram = "gixy";
     longDescription = ''
       Gixy is a tool to analyze Nginx configuration.
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.

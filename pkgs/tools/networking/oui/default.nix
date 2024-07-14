@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/thatmattlove/oui";
     license = with licenses; [ bsd3 ];
     maintainers = teams.wdz.members;
+    mainProgram = "oui";
   };
 }

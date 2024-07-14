@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ contrun ];
     license = with licenses; [ bsd2 mit unlicense free ];
+    mainProgram = "sslsplit";
   };
 }

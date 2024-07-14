@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, google-api-core
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  google-api-core,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.15.0";
+  version = "1.19.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+mda6vBMYnpELNMDIZbW82rWhEO6MnyXZ6a/vECkKyE=";
+    hash = "sha256-a0pbhsLLvNpd2Q9OM4xRA/PoRgTs+wAtTss6DF1BUxs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

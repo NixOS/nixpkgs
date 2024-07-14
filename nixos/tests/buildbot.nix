@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "steps.ShellCommand(command=['bash', 'fakerepo.sh'])"
         ];
         changeSource = [
-          "changes.GitPoller('git://gitrepo/fakerepo.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('git://gitrepo/fakerepo.git', workdir='gitpoller-workdir', branch='master', pollInterval=300)"
         ];
       };
       networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];

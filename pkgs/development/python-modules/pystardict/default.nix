@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,15 +22,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  nativeBuildInputs = [ setuptools setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pystardict" ];
 
   meta = with lib; {
-    description =
-      "Library for manipulating StarDict dictionaries from within Python";
+    description = "Library for manipulating StarDict dictionaries from within Python";
     homepage = "https://github.com/lig/pystardict";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ thornycrackers ];

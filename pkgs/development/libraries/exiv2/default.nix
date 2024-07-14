@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , doxygen
 , gettext
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.28.1";
+  version = "0.28.3";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,15 +27,8 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo = "exiv2";
     rev = "v${version}";
-    hash = "sha256-Jim8vYWyCa16LAJ1GuP8cCzhXIc2ouo6hVsHg3UQbdg=";
+    hash = "sha256-KD3kkIQXPcjCVZZrmbn93xYbJ8ryG0mLFbkO5AVqnTw=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Exiv2/exiv2/commit/c351c7cce317571934abf693055779a59df30d6e.patch";
-      hash = "sha256-fWJT4IUBrAELl6ku0M1iTzGFX74le8Z0UzTJLU/gYls=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -94,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
+    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
@@ -104,7 +96,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://exiv2.org";
-    description = "A library and command-line utility to manage image metadata";
+    description = "Library and command-line utility to manage image metadata";
+    mainProgram = "exiv2";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];

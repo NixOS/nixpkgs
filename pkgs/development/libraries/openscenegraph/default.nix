@@ -10,7 +10,7 @@
   tiffSupport ? true, libtiff,
   gdalSupport ? false, gdal,
   curlSupport ? true, curl,
-  colladaSupport ? false, collada-dom,
+  colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade-occt,
   ffmpegSupport ? false, ffmpeg,
   nvttSupport ? false, nvidia-texture-tools,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional tiffSupport libtiff
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
-    ++ lib.optional colladaSupport collada-dom
+    ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
   meta = with lib; {
-    description = "A 3D graphics toolkit";
+    description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];
     platforms = with platforms; linux ++ darwin;

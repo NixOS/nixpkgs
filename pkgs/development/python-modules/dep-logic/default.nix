@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pdm-backend
-, packaging
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pdm-backend,
+  packaging,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dep-logic";
-  version = "0.0.4";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,25 +18,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "dep-logic";
-    rev = version;
-    hash = "sha256-AFiCNzHlo3BADqbjRBruA80cfM6Ytdb+gReEg5hUmro=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1pGAY4d4dD85aqxBL/i/JHPyr7dOoZVpniDS5xSjnHU=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dep_logic"
-  ];
+  pythonImportsCheck = [ "dep_logic" ];
 
   meta = {
     changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${src.rev}";

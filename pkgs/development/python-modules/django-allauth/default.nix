@@ -1,34 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
-, python3-openid
-, requests
-, requests-oauthlib
-, pyjwt
+  # build-time dependencies
+  gettext,
 
-# optional-dependencies
-, python3-saml
-, qrcode
+  # dependencies
+  django,
+  python3-openid,
+  requests,
+  requests-oauthlib,
+  pyjwt,
 
-# tests
-, pillow
-, pytestCheckHook
-, pytest-django
+  # optional-dependencies
+  python3-saml,
+  qrcode,
 
-# passthru tests
-, dj-rest-auth
+  # tests
+  pillow,
+  pytestCheckHook,
+  pytest-django,
+
+  # passthru tests
+  dj-rest-auth,
 }:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.60.0";
+  version = "0.61.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,10 +42,11 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     rev = "refs/tags/${version}";
-    hash = "sha256-hkzZl2eZKti6m06LTtBqVXmsj6IFztsV2Of6tPiej+I=";
+    hash = "sha256-C9SYlL1yMnSb+Zpi2opvDw1stxAHuI9/XKHyvkM36Cg=";
   };
 
   nativeBuildInputs = [
+    gettext
     setuptools
   ];
 
@@ -52,18 +58,14 @@ buildPythonPackage rec {
     requests-oauthlib
   ] ++ pyjwt.optional-dependencies.crypto;
 
+  preBuild = "${python.interpreter} -m django compilemessages";
+
   passthru.optional-dependencies = {
-    saml = [
-      python3-saml
-    ];
-    mfa = [
-      qrcode
-    ];
+    saml = [ python3-saml ];
+    mfa = [ qrcode ];
   };
 
-  pythonImportsCheck = [
-    "allauth"
-  ];
+  pythonImportsCheck = [ "allauth" ];
 
   nativeCheckInputs = [
     pillow

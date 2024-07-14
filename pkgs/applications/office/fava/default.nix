@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.27.2";
+  version = "1.27.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kLQAWFHDmzsBjVMm/ZUn+TFkM52W0h0jg0wSp1tmPZQ=";
+    hash = "sha256-GsnXZaazEiOhyjbIinHRD1fdoqlAp3d5csrmtydxmGM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Web interface for beancount";
+    mainProgram = "fava";
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;

@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported.";
+    description = "Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported";
     homepage = "https://github.com/sgreben/jp";
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];

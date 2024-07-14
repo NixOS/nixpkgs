@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fantastic new revival of ATF's classic Spartan, a geometric sans-serif that has no problem kicking its enemies in the chest.";
+    description = "Fantastic new revival of ATF's classic Spartan, a geometric sans-serif that has no problem kicking its enemies in the chest";
     longDescription = ''
       A new classic, this is a bold, modern, geometric sans-serif that has no
       problem kicking its enemies in the chest.

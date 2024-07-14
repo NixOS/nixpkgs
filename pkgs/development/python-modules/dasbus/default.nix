@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pygobject3, dbus, hatchling, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygobject3,
+  dbus,
+  hatchling,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "dasbus";
@@ -14,7 +22,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
   propagatedBuildInputs = [ pygobject3 ];
-  nativeCheckInputs = [ dbus pytestCheckHook ];
+  nativeCheckInputs = [
+    dbus
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rhinstaller/dasbus";

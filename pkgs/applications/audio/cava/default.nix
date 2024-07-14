@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cava";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    hash = "sha256-AQR1qc6HgkUkXBRf7kGy4QdtfCj+YVDlYSEIWOutkTk=";
+    hash = "sha256-y6RslsU/zmr0Ai/rnr73N3OtjuBcWa3JCwh9P5GkNss=";
   };
 
   buildInputs = [

@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "dmrconfig";
   };
 }

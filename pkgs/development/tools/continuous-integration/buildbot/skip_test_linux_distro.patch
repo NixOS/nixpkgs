@@ -1,6 +1,6 @@
-diff -Nur buildbot-0.9.6/buildbot/test/unit/test_buildbot_net_usage_data.py buildbot-0.9.6.patched/buildbot/test/unit/test_buildbot_net_usage_data.py
---- buildbot-0.9.6/buildbot/test/unit/test_buildbot_net_usage_data.py	2017-04-19 16:57:02.000000000 +0200
-+++ buildbot-0.9.6.patched/buildbot/test/unit/test_buildbot_net_usage_data.py	2017-05-04 12:22:54.575762551 +0200
+diff -Nur buildbot-0.9.6/master/buildbot/test/unit/test_buildbot_net_usage_data.py buildbot-0.9.6.patched/buildbot/test/unit/test_buildbot_net_usage_data.py
+--- buildbot-0.9.6/master/buildbot/test/unit/test_buildbot_net_usage_data.py	2017-04-19 16:57:02.000000000 +0200
++++ buildbot-0.9.6.patched/master/buildbot/test/unit/test_buildbot_net_usage_data.py	2017-05-04 12:22:54.575762551 +0200
 @@ -147,6 +147,7 @@
          _sendBuildbotNetUsageData({'foo': 'bar'})
  

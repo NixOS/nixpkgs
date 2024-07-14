@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.48.4";
+  version = "0.50.8";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    hash = "sha256-megPu4HGVdfMzWkJJyse87EBLSi50yXXHfg7WIk3U10=";
+    hash = "sha256-Z0xvU8ZT9aXe0NKUhh302XrWwROlkIRHWgcjwzLMr8Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The easy, open source way for everyone in your company to ask questions and learn from data";
+    description = "Easy, open source way for everyone in your company to ask questions and learn from data";
     homepage    = "https://metabase.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license     = licenses.agpl3Only;

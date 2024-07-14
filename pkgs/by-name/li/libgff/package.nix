@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    description = "A lightweight GTF/GFF parsers exposing a C++ interface";
+    description = "Lightweight GTF/GFF parsers exposing a C++ interface";
     homepage = "https://github.com/COMBINE-lab/libgff";
     downloadPage = "https://github.com/COMBINE-lab/libgff/releases";
     changelog = "https://github.com/COMBINE-lab/libgff/releases/tag/" +

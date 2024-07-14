@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , qttools
@@ -12,30 +11,22 @@
 , qtimageformats
 , lxqt
 , librsvg
-, freeimage
-, libraw
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.17";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ssCVMFCE1vhucYMxXkEZV5YlFxT1JdYGqrzILhWX1XI=";
+    hash = "sha256-TSU6sqdwBa86k7HcyNSJeJ6gj+n6EfIMjE8skSG5o0c=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-
-    (fetchpatch {
-      name = "fix_svg_with_filter_attribute_rendering_exception.patch";
-      url = "https://github.com/linuxdeepin/dtkgui/commit/f2c9327eb4989ab8ea96af7560c67d1cada794de.patch";
-      hash = "sha256-lfg09tgS4vPuYachRbHdaMYKWdZZ0lP0Hxakkr9JKGs=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -50,8 +41,6 @@ stdenv.mkDerivation rec {
     qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
@@ -64,7 +53,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCS=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
     "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
   ];
 
   preConfigure = ''
@@ -74,6 +62,12 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DGui/bin/*; do
+      wrapQtApp $binary
+    done
+  '';
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hist
-, matplotlib
-, mplhep-data
-, pytestCheckHook
-, pytest-mock
-, pytest-mpl
-, scipy
-, setuptools
-, setuptools-scm
-, uhi
-, uproot
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hist,
+  matplotlib,
+  mplhep-data,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-mpl,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  uhi,
+  uproot,
 }:
 
 buildPythonPackage rec {
   pname = "mplhep";
-  version = "0.3.32";
+  version = "0.3.50";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xwlrMZLJKRW6iqMsDKS5BDqejADSk/qGOAnQDZ2fTPc=";
+    hash = "sha256-xHdZdfTiKbDGu6oYIiTd8P/npH2kUjz7s8A9+CBJN0A=";
   };
 
   nativeBuildInputs = [
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     "test_uproot_versions"
   ];
 
-  pythonImportsCheck = [
-    "mplhep"
-  ];
+  pythonImportsCheck = [ "mplhep" ];
 
   meta = with lib; {
     description = "Extended histogram plots on top of matplotlib and HEP compatible styling similar to current collaboration requirements (ROOT)";

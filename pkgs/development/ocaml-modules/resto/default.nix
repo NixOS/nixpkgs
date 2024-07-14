@@ -19,7 +19,7 @@ buildDunePackage rec {
   doCheck = false;
 
   meta = {
-    description = "A minimal OCaml library for type-safe HTTP/JSON RPCs";
+    description = "Minimal OCaml library for type-safe HTTP/JSON RPCs";
     homepage = "https://gitlab.com/nomadic-labs/resto";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];

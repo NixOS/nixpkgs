@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  openssl, wrapGAppsHook,
+  openssl, wrapGAppsHook3,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
   fetchpatch
 }:
@@ -32,7 +32,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 ];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"

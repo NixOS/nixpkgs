@@ -1,19 +1,31 @@
-{ lib, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  shared-mime-info,
+  libiconv,
+  installShellFiles,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ndFe5GlSWVUPdGRRWuImcLtcuOMoMXMyGGIa+CXfCug=";
+    hash = "sha256-6ASljvJF/qbl8nvAZKQ2rQ8CQPovTF7FLKp8enIjIP4=";
   };
 
-  cargoHash = "sha256-lCClE8U4188q5rWEEkUt0peLEmYvLoE7vJ6Q9uB5HWg=";
+  cargoHash = "sha256-4tm7N8l7ScKhhOFxt/1ssArdF9fgvCyrDrBASaiOusI=";
 
-  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  nativeBuildInputs = [
+    installShellFiles
+    shared-mime-info
+  ];
+
   buildInputs = [ libiconv ];
 
   preCheck = ''
@@ -28,6 +40,8 @@ rustPlatform.buildRustPackage rec {
 
     installManPage assets/manual/man1/*
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Fork of handlr with support for regex";

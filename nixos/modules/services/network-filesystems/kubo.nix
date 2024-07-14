@@ -99,25 +99,25 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         the Interplanetary File System (WARNING: may cause severe network degradation).
         NOTE: after enabling this option and rebuilding your system, you need to log out
         and back in for the `IPFS_PATH` environment variable to be present in your shell.
         Until you do that, the CLI tools won't be able to talk to the daemon by default
-      '');
+      '';
 
       package = mkPackageOption pkgs "kubo" { };
 
       user = mkOption {
         type = types.str;
         default = "ipfs";
-        description = lib.mdDoc "User under which the Kubo daemon runs";
+        description = "User under which the Kubo daemon runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "ipfs";
-        description = lib.mdDoc "Group under which the Kubo daemon runs";
+        description = "Group under which the Kubo daemon runs";
       };
 
       dataDir = mkOption {
@@ -131,37 +131,37 @@ in
           then "/var/lib/ipfs"
           else "/var/lib/ipfs/.ipfs"
         '';
-        description = lib.mdDoc "The data dir for Kubo";
+        description = "The data dir for Kubo";
       };
 
       defaultMode = mkOption {
         type = types.enum [ "online" "offline" "norouting" ];
         default = "online";
-        description = lib.mdDoc "systemd service that is enabled by default";
+        description = "systemd service that is enabled by default";
       };
 
       autoMount = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether Kubo should try to mount /ipfs and /ipns at startup.";
+        description = "Whether Kubo should try to mount /ipfs and /ipns at startup.";
       };
 
       autoMigrate = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether Kubo should try to run the fs-repo-migration at startup.";
+        description = "Whether Kubo should try to run the fs-repo-migration at startup.";
       };
 
       enableGC = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable automatic garbage collection";
+        description = "Whether to enable automatic garbage collection";
       };
 
       emptyRepo = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "If set to false, the repo will be initialized with help files";
+        description = "If set to false, the repo will be initialized with help files";
       };
 
       settings = mkOption {
@@ -172,7 +172,7 @@ in
             Addresses.API = mkOption {
               type = types.oneOf [ types.str (types.listOf types.str) ];
               default = [ ];
-              description = lib.mdDoc ''
+              description = ''
                 Multiaddr or array of multiaddrs describing the address to serve the local HTTP API on.
                 In addition to the multiaddrs listed here, the daemon will also listen on a Unix domain socket.
                 To allow the ipfs CLI tools to communicate with the daemon over that socket,
@@ -183,7 +183,7 @@ in
             Addresses.Gateway = mkOption {
               type = types.oneOf [ types.str (types.listOf types.str) ];
               default = "/ip4/127.0.0.1/tcp/8080";
-              description = lib.mdDoc "Where the IPFS Gateway can be reached";
+              description = "Where the IPFS Gateway can be reached";
             };
 
             Addresses.Swarm = mkOption {
@@ -196,23 +196,23 @@ in
                 "/ip6/::/udp/4001/quic-v1"
                 "/ip6/::/udp/4001/quic-v1/webtransport"
               ];
-              description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
+              description = "Where Kubo listens for incoming p2p connections";
             };
 
             Mounts.IPFS = mkOption {
               type = types.str;
               default = "/ipfs";
-              description = lib.mdDoc "Where to mount the IPFS namespace to";
+              description = "Where to mount the IPFS namespace to";
             };
 
             Mounts.IPNS = mkOption {
               type = types.str;
               default = "/ipns";
-              description = lib.mdDoc "Where to mount the IPNS namespace to";
+              description = "Where to mount the IPNS namespace to";
             };
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Attrset of daemon configuration.
           See [https://github.com/ipfs/kubo/blob/master/docs/config.md](https://github.com/ipfs/kubo/blob/master/docs/config.md) for reference.
           You can't set `Identity` or `Pinning`.
@@ -232,13 +232,13 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "Extra flags passed to the Kubo daemon";
+        description = "Extra flags passed to the Kubo daemon";
         default = [ ];
       };
 
       localDiscovery = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''Whether to enable local discovery for the Kubo daemon.
+        description = ''Whether to enable local discovery for the Kubo daemon.
           This will allow Kubo to scan ports on your local network. Some hosting services will ban you if you do this.
         '';
         default = false;
@@ -247,14 +247,14 @@ in
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc "The fdlimit for the Kubo systemd unit or `null` to have the daemon attempt to manage it";
+        description = "The fdlimit for the Kubo systemd unit or `null` to have the daemon attempt to manage it";
         example = 64 * 1024;
       };
 
       startWhenNeeded = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to use socket activation to start Kubo when needed.";
+        description = "Whether to use socket activation to start Kubo when needed.";
       };
 
     };

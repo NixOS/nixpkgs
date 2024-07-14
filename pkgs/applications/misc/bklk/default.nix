@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
     platforms = platforms.all;
+    mainProgram = "bklk";
   };
 }

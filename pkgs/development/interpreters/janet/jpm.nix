@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = janet.meta // {
     description = "Janet Project Manager for the Janet programming language";
+    mainProgram = "jpm";
     platforms = lib.attrNames platformFiles;
   };
 }

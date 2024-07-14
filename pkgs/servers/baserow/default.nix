@@ -16,7 +16,7 @@ let
       baserow_premium = self.buildPythonPackage rec {
         pname = "baserow_premium";
         version = "1.12.1";
-        foramt = "setuptools";
+        format = "setuptools";
 
         src = fetchFromGitLab {
           owner = "bramw";

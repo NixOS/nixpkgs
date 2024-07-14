@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pysigma
-, pysigma-pipeline-sysmon
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pysigma,
+  pysigma-pipeline-sysmon,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-PRJmFXVjcvXVHITwp6ESSoizmJOSiLTl1mj67rNhSNw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pysigma
-  ];
+  propagatedBuildInputs = [ pysigma ];
 
   nativeCheckInputs = [
     pysigma-pipeline-sysmon
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sigma.backends.splunk"
-  ];
+  pythonImportsCheck = [ "sigma.backends.splunk" ];
 
   meta = with lib; {
     description = "Library to support Splunk for pySigma";

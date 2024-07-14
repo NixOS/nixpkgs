@@ -434,7 +434,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     # HACK: since we can't encode the libc / abi in platforms, we need
     # to make the platform list dependent on the evaluation platform

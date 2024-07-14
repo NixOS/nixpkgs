@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "ovmfvartool";
@@ -21,8 +26,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse and generate OVMF_VARS.fd from Yaml";
+    mainProgram = "ovmfvartool";
     homepage = "https://github.com/hlandau/ovmfvartool";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ baloo raitobezarius ];
+    maintainers = with maintainers; [
+      baloo
+      raitobezarius
+    ];
   };
 }

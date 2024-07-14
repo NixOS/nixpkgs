@@ -7,22 +7,23 @@
 , libsecret
 , networkmanager
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.2.0";
+  version = "4.3.1";
+  format = "pyproject";
 
   src = fetchurl {
     url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";
-    hash = "sha256-W5z0ykrwWANZmW+lQt6m+BmYPI0cutsamx8V2JrpeHA=";
+    hash = "sha256-8k5ZbbN2OvoFFq0nn+fftQfQJbGhb2MEvZNokMXegr0=";
   };
 
   nativeBuildInputs = [
     gdk-pixbuf
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -37,12 +38,6 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     setuptools
   ];
-
-  patches = [ ./nix-python-prefix.patch ];
-
-  postPatch = ''
-    substituteInPlace eduvpn/utils.py --subst-var-by out $out
-  '';
 
   checkInputs = with python3Packages; [
     pytestCheckHook

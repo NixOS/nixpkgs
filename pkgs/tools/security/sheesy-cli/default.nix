@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "The 'share-secrets-safely' CLI to interact with GPG/pass-like vaults";
+    description = "'share-secrets-safely' CLI to interact with GPG/pass-like vaults";
     homepage = "https://share-secrets-safely.github.io/cli/";
     changelog = "https://github.com/share-secrets-safely/cli/releases/tag/${version}";
     license = with licenses; [ lgpl21Only ];

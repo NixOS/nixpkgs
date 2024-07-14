@@ -1,10 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, glibcLocales
-, pythonOlder
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-93AauYWbrG/2smAhbNKGE0twGJZ2u9gBetlXGCpciH8=";
   };
 
-  pythonImportsCheck = [
-    "urwid"
-  ];
+  pythonImportsCheck = [ "urwid" ];
 
   # Tests which assert on strings don't decode results correctly, see urwid
   doCheck = false;

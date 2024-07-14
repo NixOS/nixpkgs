@@ -11,12 +11,12 @@ let
 in
 {
   options.services.jicofo = with types; {
-    enable = mkEnableOption (lib.mdDoc "Jitsi Conference Focus - component of Jitsi Meet");
+    enable = mkEnableOption "Jitsi Conference Focus - component of Jitsi Meet";
 
     xmppHost = mkOption {
       type = str;
       example = "localhost";
-      description = lib.mdDoc ''
+      description = ''
         Hostname of the XMPP server to connect to.
       '';
     };
@@ -24,7 +24,7 @@ in
     xmppDomain = mkOption {
       type = nullOr str;
       example = "meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         Domain name of the XMMP server to which to connect as a component.
 
         If null, {option}`xmppHost` is used.
@@ -34,7 +34,7 @@ in
     componentPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-component";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing component secret.
       '';
     };
@@ -42,7 +42,7 @@ in
     userName = mkOption {
       type = str;
       default = "focus";
-      description = lib.mdDoc ''
+      description = ''
         User part of the JID for XMPP user connection.
       '';
     };
@@ -50,7 +50,7 @@ in
     userDomain = mkOption {
       type = str;
       example = "auth.meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         Domain part of the JID for XMPP user connection.
       '';
     };
@@ -58,7 +58,7 @@ in
     userPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-user";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing password for XMPP user connection.
       '';
     };
@@ -66,7 +66,7 @@ in
     bridgeMuc = mkOption {
       type = str;
       example = "jvbbrewery@internal.meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         JID of the internal MUC used to communicate with Videobridges.
       '';
     };
@@ -79,7 +79,7 @@ in
           jicofo.bridge.max-bridge-participants = 42;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Contents of the {file}`jicofo.conf` configuration file.
       '';
     };

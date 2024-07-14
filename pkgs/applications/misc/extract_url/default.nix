@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.memoryhole.net/~kyle/extract_url/";
     description = "Extracts URLs from MIME messages or plain text";
+    mainProgram = "extract_url";
     license = licenses.bsd2;
     maintainers = [ maintainers.qyliss ];
     platforms = platforms.unix;

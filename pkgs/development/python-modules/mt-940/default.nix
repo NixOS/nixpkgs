@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     sed -i "/--no-cov/d" pytest.ini
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pyyaml
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mt940"
-  ];
+  pythonImportsCheck = [ "mt940" ];
 
   meta = with lib; {
     description = "Module to parse MT940 files and returns smart Python collections for statistics and manipulation";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +27,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "binary2strings"
-  ];
+  pythonImportsCheck = [ "binary2strings" ];
 
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Module to extract Ascii, Utf8, and Unicode strings from binary data";

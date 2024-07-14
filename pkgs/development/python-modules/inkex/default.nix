@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, inkscape
-, fetchFromGitLab
-, poetry-core
-, cssselect
-, lxml
-, numpy
-, packaging
-, pillow
-, pygobject3
-, pyparsing
-, pyserial
-, scour
-, gobject-introspection
-, pytestCheckHook
-, gtk3
+{
+  lib,
+  buildPythonPackage,
+  inkscape,
+  fetchpatch,
+  poetry-core,
+  cssselect,
+  lxml,
+  numpy,
+  packaging,
+  pillow,
+  pygobject3,
+  pyparsing,
+  pyserial,
+  scour,
+  gobject-introspection,
+  pytestCheckHook,
+  gtk3,
 }:
 
 buildPythonPackage {
@@ -25,9 +26,18 @@ buildPythonPackage {
 
   inherit (inkscape) src;
 
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # Fix “distribute along path” test with Python 3.12.
+    # https://gitlab.com/inkscape/extensions/-/issues/580
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
+      extraPrefix = "share/extensions/";
+      stripLen = 1;
+      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
+    })
   ];
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     cssselect
@@ -70,7 +80,8 @@ buildPythonPackage {
     cd share/extensions
 
     substituteInPlace pyproject.toml \
-      --replace 'scour = "^0.37"' 'scour = ">=0.37"'
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
+      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
   '';
 
   meta = {

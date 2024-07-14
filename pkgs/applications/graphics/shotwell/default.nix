@@ -3,6 +3,7 @@
 , fetchurl
 , meson
 , ninja
+, adwaita-icon-theme
 , gtk3
 , libexif
 , libgphoto2
@@ -11,7 +12,6 @@
 , libxml2
 , vala
 , sqlite
-, webkitgtk_4_1
 , pkg-config
 , gnome
 , gst_all_1
@@ -28,7 +28,7 @@
 , desktop-file-utils
 , gdk-pixbuf
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , itstool
 , libsecret
@@ -36,15 +36,13 @@
 , gsettings-desktop-schemas
 }:
 
-# for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.4";
+  version = "0.32.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-3iqUUIRtHOwUxqEDA3X9SeGvJNySCtZIA0QST5zLhW8=";
+    sha256 = "sha256-EvMl4BnD5jjCuWFXG8IEd2dh6CYUZ+8btodViJM11fc=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     gettext
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -67,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libxml2
     sqlite
-    webkitgtk_4_1
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -84,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     librest
     gcr
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libsecret
     libportal-gtk3
   ];
@@ -98,9 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
-    homepage = "https://wiki.gnome.org/Apps/Shotwell";
+    mainProgram = "shotwell";
+    homepage = "https://gitlab.gnome.org/GNOME/shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;
   };
 })

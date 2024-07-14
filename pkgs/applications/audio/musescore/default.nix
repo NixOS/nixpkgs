@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -21,6 +20,9 @@
 , qtdeclarative
 , qtgraphicaleffects
 , flac
+, libopusenc
+, libopus
+, tinyxml-2
 , qtquickcontrols
 , qtquickcontrols2
 , qtscript
@@ -48,13 +50,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.2.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YCeO/ijxA+tZxNviqmlIBkAdjPTrKoOoo1QyMIOqhWU=";
+    sha256 = "sha256-QjvY8R2nq/DeFDikHn9qr4aCEwzAcogQXM5vdZqhoMM=";
   };
 
   cmakeFlags = [
@@ -63,8 +65,12 @@ in stdenv'.mkDerivation (finalAttrs: {
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
     "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
-    # Use our freetype
+    # Use our versions of system libraries
     "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
+    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
+    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
     # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
     # upstream defaults to compiling to x86_64 only, unless this cmake flag is
     # set
@@ -85,11 +91,6 @@ in stdenv'.mkDerivation (finalAttrs: {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the
-  # sandbox profile from `qtbase`, see:
-  # https://github.com/NixOS/nixpkgs/issues/237458
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
-
   nativeBuildInputs = [
     wrapQtAppsHook
     cmake
@@ -108,6 +109,9 @@ in stdenv'.mkDerivation (finalAttrs: {
     portaudio'
     portmidi
     flac
+    libopusenc
+    libopus
+    tinyxml-2
     qtbase
     qtdeclarative
     qtgraphicaleffects
@@ -129,7 +133,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -142,9 +146,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ vandenoever doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
 })

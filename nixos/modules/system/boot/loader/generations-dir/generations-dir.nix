@@ -22,7 +22,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create symlinks to the system generations under
           `/boot`.  When enabled,
           `/boot/default/kernel`,
@@ -41,7 +41,7 @@ in
       copyKernels = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
         '';

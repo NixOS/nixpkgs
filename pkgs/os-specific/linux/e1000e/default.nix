@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Linux kernel drivers for Intel Ethernet adapters and LOMs (LAN On Motherboard)";
     homepage = "http://e1000.sf.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -1,4 +1,4 @@
-{ callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }:
+{ useNixpkgsEngine ? false, callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }@args:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
@@ -8,34 +8,39 @@ let
   mkFlutter =
     { version
     , engineVersion
+    , engineSwiftShaderHash
+    , engineSwiftShaderRev
+    , engineHashes
+    , enginePatches
     , dartVersion
     , flutterHash
     , dartHash
     , patches
     , pubspecLock
     , artifactHashes
-    }:
+    , channel
+    }@fargs:
     let
       args = {
-        inherit version engineVersion patches pubspecLock artifactHashes;
+        inherit version engineVersion engineSwiftShaderRev engineSwiftShaderHash engineHashes enginePatches patches pubspecLock artifactHashes useNixpkgsEngine channel;
 
         dart = dart.override {
           version = dartVersion;
           sources = {
             "${dartVersion}-x86_64-linux" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
               sha256 = dartHash.x86_64-linux;
             };
             "${dartVersion}-aarch64-linux" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
+              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
               sha256 = dartHash.aarch64-linux;
             };
             "${dartVersion}-x86_64-darwin" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
+              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
               sha256 = dartHash.x86_64-darwin;
             };
             "${dartVersion}-aarch64-darwin" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
+              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
               sha256 = dartHash.aarch64-darwin;
             };
           };
@@ -63,10 +68,15 @@ let
       in
       lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
         patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+        enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
       } // data))))
     (builtins.readDir ./versions);
+
+  stableFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "stable") flutterVersions;
+  betaFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "beta") flutterVersions;
 in
 flutterVersions // {
-  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames flutterVersions))};
+  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
   inherit wrapFlutter mkFlutter;
 }

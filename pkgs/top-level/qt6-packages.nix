@@ -10,6 +10,7 @@
 , generateSplicesForMkScope
 , stdenv
 , pkgsHostTarget
+, kdePackages
 }:
 
 let
@@ -29,9 +30,27 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  drumstick = callPackage ../development/libraries/drumstick { };
+
+  fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
+
+  fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+
+  fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+
+  fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
+
+  fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
+
+  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
+
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
@@ -46,6 +65,7 @@ makeScopeWithSplicing' {
   };
   qcoro = callPackage ../development/libraries/qcoro { };
   qgpgme = callPackage ../development/libraries/gpgme { };
+  qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
@@ -60,9 +80,7 @@ makeScopeWithSplicing' {
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
-    qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
-  };
+  qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
@@ -88,14 +106,16 @@ makeScopeWithSplicing' {
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm {};
 
+  sierra-breeze-enhanced = kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+
+  signond = callPackage ../development/libraries/signond {};
+
   waylib = callPackage ../development/libraries/waylib { };
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
-    # Convert to a throw on 01-01-2023.
-    # Warnings show up in various cli tool outputs, throws do not.
-    # Remove completely before 24.05
-    overrideScope' = lib.warn "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+    # Remove completely before 24.11
+    overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
   });
 }

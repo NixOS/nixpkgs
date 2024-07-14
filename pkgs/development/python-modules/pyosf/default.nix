@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
 
   preBuild = "export HOME=$TMP";
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyosf"
-  ];
+  pythonImportsCheck = [ "pyosf" ];
 
   meta = with lib; {
     description = "Pure Python library for simple sync with Open Science Framework";

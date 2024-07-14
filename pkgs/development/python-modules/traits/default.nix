@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
   # Circular dependency
   doCheck = false;
 
-  pythonImportsCheck = [
-    "traits"
-  ];
+  pythonImportsCheck = [ "traits" ];
 
   meta = with lib; {
     description = "Explicitly typed attributes for Python";

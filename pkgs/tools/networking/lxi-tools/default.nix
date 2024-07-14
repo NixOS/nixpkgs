@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, cmake, pkg-config
 , liblxi, readline, lua, bash-completion
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib, gtk4, gtksourceview5, libadwaita, json-glib
 , desktop-file-utils, appstream-glib
 , gsettings-desktop-schemas
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja cmake pkg-config
-  ] ++ lib.optional withGui wrapGAppsHook;
+  ] ++ lib.optional withGui wrapGAppsHook4;
 
   buildInputs = [
     liblxi readline lua bash-completion
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.vq ];
+    mainProgram = "lxi";
   };
 }

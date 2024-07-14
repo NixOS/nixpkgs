@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, click
-, click-log
-, fetchFromGitHub
-, pure-pcapy3
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
-, zigpy
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  click-log,
+  fetchFromGitHub,
+  pure-pcapy3,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.38.0";
+  version = "0.39.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,27 +27,25 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    hash = "sha256-7aqzhujTn1TMYBA6+79Ok76yv8hXszuuZ7TjhJ6zbQw=";
+    hash = "sha256-e7DGAA2/6tc2+iH/14y/QT7k9a7pgrE5bplTPL3xm2Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-log
     pure-pcapy3
     pyserial-asyncio
     voluptuous
     zigpy
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -53,9 +53,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pythonImportsCheck = [
-    "bellows"
-  ];
+  pythonImportsCheck = [ "bellows" ];
 
   meta = with lib; {
     description = "Python module to implement EZSP for EmberZNet devices";
@@ -63,5 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/zigpy/bellows/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
+    mainProgram = "bellows";
   };
 }

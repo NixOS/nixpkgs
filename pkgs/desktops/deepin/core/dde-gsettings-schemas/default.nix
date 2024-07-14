@@ -3,13 +3,12 @@
 , runCommand
 , glib
 , gtk3
-, dde-dock
+, dde-grand-search
 , startdde
 , dde-session-shell
 , dde-file-manager
 , deepin-desktop-schemas
 , deepin-movie-reborn
-, deepin-screen-recorder
 , deepin-system-monitor
 , gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
@@ -18,13 +17,12 @@
 
 let
   gsettingsOverridePackages = [
-    dde-dock
+    dde-grand-search
     startdde
     dde-session-shell
     dde-file-manager
     deepin-desktop-schemas
     deepin-movie-reborn
-    deepin-screen-recorder
     deepin-system-monitor
     gsettings-desktop-schemas # dde-appearance need org.gnome.desktop.background
   ] ++ extraGSettingsOverridePackages;

@@ -5,13 +5,13 @@ in
 buildKodiAddon rec {
   pname = "jellyfin";
   namespace = "plugin.video.jellyfin";
-  version = "0.7.10";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
     rev = "v${version}";
-    sha256 = "sha256-hR4cJEpP/RZH24M4Ma33ZUe9oydRg7CyP1hHncvDW8Y=";
+    sha256 = "sha256-Uyo8GClJU2/gdk4PeFNnoyvxOhooaxeXN3Wc5YGuCiM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://jellyfin.org/";
-    description = "A whole new way to manage and view your media library";
+    description = "Whole new way to manage and view your media library";
     license = licenses.gpl3Only;
     maintainers = teams.kodi.members;
   };

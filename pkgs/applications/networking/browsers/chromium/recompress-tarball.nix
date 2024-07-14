@@ -34,6 +34,7 @@ fetchurl ({
       --one-top-level=source \
       --exclude=third_party/llvm \
       --exclude=third_party/rust-src \
+      --exclude='build/linux/debian_*-sysroot' \
       --strip-components=1
 
     tar \

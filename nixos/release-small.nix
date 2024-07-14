@@ -43,7 +43,7 @@ in rec {
         login
         misc
         nat
-        nfs3
+        nfs4
         openssh
         php
         predictable-interface-names
@@ -78,9 +78,11 @@ in rec {
       nginx
       nodejs
       openssh
+      opensshTest
       php
       postgresql
       python
+      release-checks
       rsyslog
       stdenv
       subversion
@@ -97,12 +99,13 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ lib.maintainers.eelco ];
+      maintainers = [ ];
     };
     constituents = lib.flatten [
       [
         "nixos.channel"
         "nixpkgs.tarball"
+        "nixpkgs.release-checks"
       ]
       (map (onSystems [ "x86_64-linux" ]) [
         "nixos.tests.boot.biosCdrom"
@@ -125,7 +128,7 @@ in rec {
         "nixos.tests.misc"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
-        "nixos.tests.nfs3.simple"
+        "nixos.tests.nfs4.simple"
         "nixos.tests.openssh"
         "nixos.tests.php.fpm"
         "nixos.tests.php.pcre"
@@ -137,6 +140,7 @@ in rec {
         "nixos.tests.simple"
         "nixpkgs.jdk"
         "nixpkgs.tests-stdenv-gcc-stageCompare"
+        "nixpkgs.opensshTest"
       ])
     ];
   };

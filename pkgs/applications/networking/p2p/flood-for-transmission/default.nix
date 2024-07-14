@@ -6,18 +6,16 @@
 
 buildNpmPackage rec {
   pname = "flood-for-transmission";
-  version = "2024-01-24T16-52-06";
+  version = "2024-05-18T08-04-58";
 
   src = fetchFromGitHub {
     owner = "johman10";
-    repo = pname;
+    repo = "flood-for-transmission";
     rev = version;
-    hash = "sha256-ZV/Gk9DlYkMh8j034YGvMVN7MeOJgFARyOr9Atrs3j4=";
+    hash = "sha256-/vD53tFvCBOU9i/EfogjNjCEp6BBkR6eEKWnPhCUdJk=";
   };
 
-  npmDepsHash = "sha256-VHWM0vxFKucrmoJiwYpjw7QqhBQw9rPPQVIIevp6Wn0=";
-
-  npmInstallFlags = [ "--legacy-peer-deps" ];
+  npmDepsHash = "sha256-BKr4Gm3bTFnxgv4HlPclr8+c6jDVPFFbGXvpk5t8/X4=";
 
   installPhase = ''
     runHook preInstall
@@ -28,7 +26,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Flood clone for Transmission";
+    description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
     maintainers = with maintainers; [ al3xtjames ];
     license = licenses.gpl3Only;

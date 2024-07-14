@@ -1,18 +1,18 @@
 { lib
 , fetchFromGitHub
-, nix-update-script
+, unstableGitUpdater
 , stdenvNoCC
 , ... }:
 
 stdenvNoCC.mkDerivation (self: {
-  name = "alacritty-theme";
-  version = "unstable-2024-01-21";
+  pname = "alacritty-theme";
+  version = "0-unstable-2024-07-03";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "f03686afad05274f5fbd2507f85f95b1a6542df4";
-    hash = "sha256-457kKE3I4zGf1EKkEoyZu0Fa/1O3yiryzHVEw2rNZt8=";
+    rev = "b5a35e2f6e186f70560a3123c4fbc14b2c99af2f";
+    hash = "sha256-60/XiJHeCP06DFjEosTgWJlzV4lfS/Bs24nfRCSQU70=";
   };
 
   dontConfigure = true;
@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation (self: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   meta = with lib; {

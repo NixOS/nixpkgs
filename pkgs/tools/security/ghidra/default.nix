@@ -20,6 +20,8 @@ let
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
     categories = [ "Development" ];
+    terminal = false;
+    startupWMClass = "ghidra-Ghidra";
   };
 
 in stdenv.mkDerivation rec {
@@ -69,7 +71,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    mainProgram = "ghidra";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

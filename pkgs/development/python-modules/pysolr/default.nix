@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, requests, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  requests,
+  mock,
+}:
 
 buildPythonPackage rec {
   pname = "pysolr";
@@ -24,4 +31,3 @@ buildPythonPackage rec {
     license = licenses.bsd3;
   };
 }
-

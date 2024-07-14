@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1a2jiwwnr5g3xfba1a89c257bdbnq4zglri8hz021vk7f6s4rlrf";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildInputs = [ jdk ];
 
   buildPhase = ''
@@ -88,6 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Trader Work Station of Interactive Brokers";
+    broken = true;  # Ref: https://github.com/NixOS/nixpkgs/issues/40784
     homepage = "https://www.interactivebrokers.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;

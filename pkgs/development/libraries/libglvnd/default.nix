@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit (addOpenGLRunpath) driverLink; };
 
   meta = with lib; {
-    description = "The GL Vendor-Neutral Dispatch library";
+    description = "GL Vendor-Neutral Dispatch library";
     longDescription = ''
       libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
       calls between multiple vendors. It allows multiple drivers from different

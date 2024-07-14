@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pythonOlder
-, reportlab
-, svglib
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  reportlab,
+  svglib,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
   # Tests require a Django instance which is setup
   doCheck = false;
 
-  pythonImportsCheck = [
-    "easy_thumbnails"
-  ];
+  pythonImportsCheck = [ "easy_thumbnails" ];
 
   meta = with lib; {
     description = "Easy thumbnails for Django";

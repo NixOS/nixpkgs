@@ -21,7 +21,7 @@
 , libxplayer-plparser
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , yelp-tools }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     autoconf-archive
     gettext
     gtk-doc
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A generic media player from Linux Mint";
+    description = "Generic media player from Linux Mint";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://github.com/linuxmint/xplayer";
     maintainers = with maintainers; [ tu-maurice bobby285271 ];

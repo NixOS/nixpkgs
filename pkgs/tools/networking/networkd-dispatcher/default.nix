@@ -4,7 +4,7 @@
 , fetchpatch
 , python3Packages
 , asciidoc
-, makeWrapper
+, wrapGAppsNoGuiHook
 , iw
 }:
 
@@ -43,9 +43,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     asciidoc
-    makeWrapper
+    wrapGAppsNoGuiHook
     python3Packages.wrapPython
   ];
+
+  dontWrapGApps = true;
 
   checkInputs = with python3Packages; [
     dbus-python
@@ -72,13 +74,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preFixup = ''
+    makeWrapperArgs+=( \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : "${lib.makeBinPath [ iw ]}" \
+    )
+  '';
   postFixup = ''
     wrapPythonPrograms
-    wrapProgram $out/bin/networkd-dispatcher --prefix PATH : ${lib.makeBinPath [ iw ]}
   '';
 
   meta = with lib; {
     description = "Dispatcher service for systemd-networkd connection status changes";
+    mainProgram = "networkd-dispatcher";
     homepage = "https://gitlab.com/craftyguy/networkd-dispatcher";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

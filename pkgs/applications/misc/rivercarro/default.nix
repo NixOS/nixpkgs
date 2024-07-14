@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~novakane/rivercarro";
-    description = "A layout generator for river Wayland compositor, fork of rivertile";
+    description = "Layout generator for river Wayland compositor, fork of rivertile";
     longDescription = ''
       A slightly modified version of rivertile layout generator for river.
 
@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
     inherit (zig_0_11.meta) platforms;
+    mainProgram = "rivercarro";
   };
 })

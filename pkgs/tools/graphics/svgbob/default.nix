@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ivanceras/svgbob";
     changelog = "https://github.com/ivanceras/svgbob/raw/${version}/Changelog.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "svgbob";
   };
 }

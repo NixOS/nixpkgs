@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A multitrack guitar tablature editor";
+    description = "Multitrack guitar tablature editor";
     longDescription = ''
       TuxGuitar is a multitrack guitar tablature editor and player written
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.

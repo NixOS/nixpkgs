@@ -25,10 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libxml2 eigen python3 cairo pcre ];
 
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=14" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
-    description = "A toolbox designed to speak the many languages of chemical data";
+    description = "Toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ danielbarter ];

@@ -18,7 +18,7 @@ callPackage ./generic.nix rec {
 
   patches = [(substitute {
     src = ./disable-git-version.patch;
-    replacements = [ "--subst-var-by" "version" version ];
+    substitutions = [ "--subst-var-by" "version" version ];
   })];
 
   depsHash = "sha256-0P/BcjNnbDN25DguRcCyzPuUG7bouxEx1ySodIbSwvg=";

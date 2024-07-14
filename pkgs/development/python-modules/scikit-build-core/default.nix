@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, distlib
-, pythonOlder
-, exceptiongroup
-, hatch-vcs
-, hatchling
-, cattrs
-, cmake
-, ninja
-, packaging
-, pathspec
-, pyproject-metadata
-, pytest-subprocess
-, pytestCheckHook
-, setuptools
-, tomli
-, virtualenv
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  distlib,
+  pythonOlder,
+  exceptiongroup,
+  hatch-vcs,
+  hatchling,
+  cattrs,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  pyproject-metadata,
+  pytest-subprocess,
+  pytestCheckHook,
+  setuptools,
+  tomli,
+  virtualenv,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.7.0";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-hffyRpxWjGzjWrL6Uv4tJqBODeUH06JMGrtyg3Vlf9M=";
+    hash = "sha256-e+r5M89zSsvrttlsApNlQQIkcJvN5o87C08MsD4FSTk=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
@@ -41,12 +42,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
-  ];
+  propagatedBuildInputs =
+    [ packaging ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
   passthru.optional-dependencies = {
     pyproject = [
@@ -72,6 +73,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # runs pip, requires network access
     "tests/test_custom_modules.py"
+    "tests/test_hatchling.py"
     "tests/test_pyproject_pep517.py"
     "tests/test_pyproject_pep518.py"
     "tests/test_pyproject_pep660.py"
@@ -81,12 +83,10 @@ buildPythonPackage rec {
     "tests/test_editable.py"
   ];
 
-  pythonImportsCheck = [
-    "scikit_build_core"
-  ];
+  pythonImportsCheck = [ "scikit_build_core" ];
 
   meta = with lib; {
-    description = "A next generation Python CMake adaptor and Python API for plugins";
+    description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
     changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Track your time without being tracked";
+    mainProgram = "furtherance";
     homepage = "https://github.com/lakoliu/Furtherance";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wonderdraft";
-  version = "1.1.7.3";
+  version = "1.1.8.2b";
 
   src = requireFile {
     name = "Wonderdraft-${version}-Linux64.deb";
     url = "https://wonderdraft.net/";
-    hash = "sha256-i8YZF5w1dIWUyk99SUhHU7eJRjPXJDPbYUzGC1uN8JQ=";
+    hash = "sha256-3eYnEH6P94z9axFsrkJA4QMcHyg/gNRczqL3h5Sc2Tg=";
   };
   sourceRoot = ".";
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wonderdraft.net/";
-    description = "A mapmaking tool for Tabletop Roleplaying Games, designed for city, region, or world scale";
+    description = "Mapmaking tool for Tabletop Roleplaying Games, designed for city, region, or world scale";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jsusk ];

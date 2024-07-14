@@ -1,9 +1,8 @@
 { mkDerivation
-, fetchurl
 , lib
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapGAppsHook3
 , kconfig
 , kcrash
 , kinit
@@ -68,7 +67,7 @@ in
 mkDerivation {
   pname = "partitionmanager";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
 
@@ -79,6 +78,10 @@ mkDerivation {
       --prefix PATH : "${runtimeDeps}"
     )
   '';
+
+  passthru = {
+    inherit kpmcore;
+  };
 
   meta = with lib; {
     description = "KDE Partition Manager";

@@ -1,4 +1,4 @@
-{ callPackage, lib, overrideCC, pkgs, buildPackages, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python311, fetchpatch2, enableNpm ? true }:
 
 let
   # Clang 16+ cannot build Node v18 due to -Wenum-constexpr-conversion errors.
@@ -7,7 +7,6 @@ let
     if packages.stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion packages.stdenv.cc.cc) "16"
       then overrideCC packages.llvmPackages_15.stdenv (packages.llvmPackages_15.stdenv.cc.override {
         inherit (packages.llvmPackages) libcxx;
-        extraPackages = [ packages.llvmPackages.libcxxabi ];
       })
       else packages.stdenv;
 
@@ -15,18 +14,24 @@ let
     inherit openssl;
     stdenv = ensureCompatibleCC pkgs;
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
-    python = python3;
+    python = python311;
   };
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.19.0";
-  sha256 = "sha256-9StBryBZapq9jtdSQYN+xDlFRoIhRIu/hBNh4gkYGbY=";
+  version = "18.20.2";
+  sha256 = "sha256-iq6nycfpJ/sJ2RSY2jEbbk0YIzOQ4jxyOlO4kfrUxz8=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
+    ./use-correct-env-in-tests.patch
+    ./v18-openssl-3.0.14.patch
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
+      hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
+    })
   ];
 }

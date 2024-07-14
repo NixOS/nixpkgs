@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, platformdirs
-, cryptography
-, dogpile-cache
-, jmespath
-, jsonpatch
-, keystoneauth1
-, munch
-, netifaces
-, os-service-types
-, pbr
-, pythonOlder
-, pyyaml
-, requestsexceptions
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  platformdirs,
+  cryptography,
+  dogpile-cache,
+  jmespath,
+  jsonpatch,
+  keystoneauth1,
+  munch,
+  netifaces,
+  os-service-types,
+  pbr,
+  pythonOlder,
+  pyyaml,
+  requestsexceptions,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "2.1.0";
+  version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dsm3QKLNYl/MbpJBYU7vKgk0y3I1SlxYcWj4+t7y5nQ=";
+    hash = "sha256-cH8V1+wHSrJDS5peGYT6yrAPgi0nL0wqXeDSKgnrec0=";
   };
 
   propagatedBuildInputs = [
@@ -51,12 +52,11 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "openstack"
-  ];
+  pythonImportsCheck = [ "openstack" ];
 
   meta = with lib; {
-    description = "An SDK for building applications to work with OpenStack";
+    description = "SDK for building applications to work with OpenStack";
+    mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

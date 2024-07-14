@@ -1,9 +1,10 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     sed -i "/'pep8\|flake8\|pep8-naming',/d" setup.py
   '';
 
-  checkInputs = [
-    mock
-  ];
+  checkInputs = [ mock ];
 
   checkPhase = ''
     ${python.interpreter} setup.py test

@@ -7,19 +7,19 @@ in
 {
   options = {
     services.openarena = {
-      enable = mkEnableOption (lib.mdDoc "OpenArena");
+      enable = mkEnableOption "OpenArena game server";
       package = lib.mkPackageOption pkgs "openarena" { };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to open firewall ports for OpenArena";
+        description = "Whether to open firewall ports for OpenArena";
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Extra flags to pass to {command}`oa_ded`";
+        description = "Extra flags to pass to {command}`oa_ded`";
         example = [
           "+set dedicated 2"
           "+set sv_hostname 'My NixOS OpenArena Server'"

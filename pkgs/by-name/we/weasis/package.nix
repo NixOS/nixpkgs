@@ -14,12 +14,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "weasis";
-  version = "4.2.1";
+  version = "4.4.0";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${version}/weasis-native.zip";
-    hash = "sha256-HDlylpe8cHZRaIXndfGh6XmUn8o2PQB1Av7hLCp679U=";
+    hash = "sha256-+Bi9rTuM9osKzbKVA4exqsFm8p9+1OHgJqRSNnCC6QQ=";
     stripRoot = false;
   };
 
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     # Using changelog from releases as it is more accurate
     changelog = "https://github.com/nroduit/Weasis/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 epl20 ];
-    maintainers = [ lib.maintainers.wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";
   };

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [ gpl2 lgpl21 bsd2 ];
+    license = with licenses; [ gpl2Only lgpl21 bsd2 ];
     maintainers = with maintainers; [ tirex vcunat vifino ];
     platforms = platforms.linux;
   };

@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libkrun";
-  version = "1.7.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cP+Pxl/9QIsoGysXTBZJ86q57cIMA7TJenMWtcOI+Y4=";
+    hash = "sha256-LIp2/794gbHPweBJcHCjbF0m+bJAs0SPF7WivW7fxLI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit pname version src;
-    hash = "sha256-qVyHC015QJEt6LZ8br3H0nucYKhYGBMtyB2IBaixTqk=";
+    hash = "sha256-g4ceYi16mjEgvWTAQEW8ShT/e5IKnlgLgk49Mg0N2fQ=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A dynamic library providing Virtualization-based process isolation capabilities";
+    description = "Dynamic library providing Virtualization-based process isolation capabilities";
     homepage = "https://github.com/containers/libkrun";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];

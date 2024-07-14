@@ -18,6 +18,7 @@
 , libpng
 , python3
 , zlib
+, simde
 , bashInteractive
 , zsh
 , fish
@@ -30,25 +31,26 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.32.1";
+  version = "0.35.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d+Xwn+po/pclAy4UZ4pR4KWmriHCLPeMhXxoHp6wHT8=";
+    hash = "sha256-5ZkQfGlW7MWYCJZSwK/u8x9jKrZEqupsNvW30DLipDM=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-WRDP3Uyttz/kWm07tjv7wNguF/a1YgZqutbvFEOHuE0=";
+    vendorHash = "sha256-NzDA9b3RAfMx+Jj7cSF8pEsKUkoBECBUXl2QFSmkmwM=";
   }).goModules;
 
   buildInputs = [
     harfbuzz
     ncurses
+    simde
     lcms2
     librsync
     openssl.dev
@@ -208,7 +210,10 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} "$out"
     cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
+
+    # dereference the `kitty` symlink to make sure the actual executable
+    # is wrapped on macOS as well (and not just the symlink)
+    wrapProgram $(realpath "$out/bin/kitty") --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \
@@ -232,13 +237,15 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests.test = nixosTests.terminal-emulators.kitty;
+    tests = lib.optionalAttrs stdenv.isLinux {
+      default = nixosTests.terminal-emulators.kitty;
+    };
     updateScript = nix-update-script {};
   };
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
-    description = "A modern, hackable, featureful, OpenGL based terminal emulator";
+    description = "Modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
@@ -246,6 +253,6 @@ buildPythonApplication rec {
     ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }

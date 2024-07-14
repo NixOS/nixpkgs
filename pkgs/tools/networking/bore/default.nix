@@ -44,6 +44,8 @@ rustPlatform.buildRustPackage rec {
     description = "DNS query tool";
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
-    maintainers = [ maintainers.delan ];
+    maintainers = [ ];
+    mainProgram = "bore";
+    broken = stdenv.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
   };
 }

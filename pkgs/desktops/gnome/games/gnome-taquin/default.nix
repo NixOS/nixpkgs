@@ -4,8 +4,9 @@
 , fetchpatch
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gsound
 , gettext
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     python3
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     librsvg
     gsound
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   passthru = {
@@ -66,8 +67,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Taquin";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-taquin";
     description = "Move tiles so that they reach their places";
+    mainProgram = "gnome-taquin";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

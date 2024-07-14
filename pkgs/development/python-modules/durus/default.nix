@@ -1,12 +1,18 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
-  pname = "Durus";
+  pname = "durus";
   version = "4.2";
 
   src = fetchPypi {
-    inherit version pname;
-    sha256 = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
+    pname = "Durus";
+    inherit version;
+    hash = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
   };
 
   # Checks disabled due to missing python unittest framework 'sancho' in nixpkgs
@@ -21,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object persistence layer";
+    mainProgram = "durus";
     homepage = "https://github.com/nascheme/durus";
     license = licenses.mit;
     maintainers = with maintainers; [ grindhold ];

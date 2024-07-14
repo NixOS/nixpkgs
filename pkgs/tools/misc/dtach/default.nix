@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://dtach.sourceforge.net/";
-    description = "A program that emulates the detach feature of screen";
+    description = "Program that emulates the detach feature of screen";
 
     longDescription = ''
       dtach is a tiny program that emulates the detach feature of

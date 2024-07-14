@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A shebang for running inside nix-shell";
+    description = "Shebang for running inside nix-shell";
     homepage    = "https://github.com/bennofs/nix-script";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ bennofs rnhmjoj ];

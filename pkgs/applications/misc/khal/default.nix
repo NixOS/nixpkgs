@@ -6,46 +6,28 @@
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't work with latest urwid
-      urwid = super.urwid.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.2";
-        src = fetchFromGitHub {
-          owner = "urwid";
-          repo = "urwid";
-          rev = "refs/tags/${version}";
-          hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
+    hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with py.pkgs; [
+  ] ++ (with python3.pkgs; [
     setuptools-scm
     sphinx
     sphinxcontrib-newsfeed
   ]);
 
-  propagatedBuildInputs = with py.pkgs;[
+  propagatedBuildInputs = with python3.pkgs;[
     atomicwrites
     click
     click-log
@@ -63,7 +45,7 @@ py.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with py.pkgs;[
+  nativeCheckInputs = with python3.pkgs;[
     freezegun
     hypothesis
     packaging

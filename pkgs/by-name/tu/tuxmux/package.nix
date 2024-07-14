@@ -9,23 +9,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuxmux";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BZ1Vo1NIpzUBGyvd/UbxLaFbrLzoaP8kn/8GoAYBmlo=";
+    hash = "sha256-HujdIT55NmXpHDa0a4EmB30va8bNdZ/MHu7+SwF9Nvc=";
   };
 
-  cargoHash = "sha256-HIYQPHLMhQtpCIkl5EzjJGHXzBtw7mY85l5bqapw3rg=";
+  cargoHash = "sha256-ceXeYa8MGGc0I8Q/r4GVsR71St/hlNc75a20BN0Haas=";
 
   buildInputs = [ libiconv ];
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
   postInstall = ''
-    installShellCompletion $releaseDir/../completions/tm.{bash,fish}
-    installShellCompletion --zsh $releaseDir/../completions/_tm
+    installShellCompletion $releaseDir/../completions/tux.{bash,fish}
+    installShellCompletion --zsh $releaseDir/../completions/_tux
 
     installManPage $releaseDir/../man/*
   '';
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/edeneast/tuxmux";
     license = licenses.asl20;
     maintainers = with maintainers; [ edeneast ];
-    mainProgram = "tm";
+    mainProgram = "tux";
   };
 }

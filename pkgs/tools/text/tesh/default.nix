@@ -1,4 +1,4 @@
-{ python3Packages, fetchFromGitHub, fetchpatch }:
+{ python3Packages, fetchFromGitHub }:
 
 let
   version = "0.3.2";

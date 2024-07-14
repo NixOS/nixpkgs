@@ -21,5 +21,6 @@ buildGoModule rec {
     description = "Parallel S3 and local filesystem execution tool";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
+    mainProgram = "s5cmd";
   };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevdev udev yaml-cpp boost ];
 
   meta = {
-    description = "A minimal composable infrastructure on top of libudev and libevdev";
+    description = "Minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vyp ];

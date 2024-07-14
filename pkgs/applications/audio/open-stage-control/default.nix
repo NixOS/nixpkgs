@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.25.7";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-BvWr+AhNGh2t4DleKFqgCqijma4CcXOSMoDtSeEUiEc=";
+    hash = "sha256-hBQyz6VAtiC1XOADZml1MwGKtmdyiJNlRAmHRjt6QsA=";
   };
 
   # Remove some Electron stuff from package.json
@@ -88,7 +88,8 @@ buildNpmPackage rec {
     description = "Libre and modular OSC / MIDI controller";
     homepage = "https://openstagecontrol.ammd.net/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "open-stage-control";
   };
 }

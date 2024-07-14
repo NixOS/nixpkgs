@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit version;
     inherit (src.meta) homepage;
-    description = "A storage load analysis tool for OpenZFS";
+    description = "Storage load analysis tool for OpenZFS";
     longDescription = ''
       ioztat is a storage load analysis tool for OpenZFS. It provides
       iostat-like statistics at an individual dataset/zvol level.

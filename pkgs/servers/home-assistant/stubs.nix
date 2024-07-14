@@ -8,8 +8,8 @@
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2024.2.1";
-  format = "pyproject";
+  version = "2024.7.2";
+  pyproject = true;
 
   disabled = python.version != home-assistant.python.version;
 
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-1a2iwyRyXOD8iaTzdnEGfwCgw6dU2bV1iWpoD7s35QI=";
+    hash = "sha256-MMFt8TGWB+7wUKYWL4IJyhI3YOumll8Jq5GWZpaZZ8I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     home-assistant
   ];

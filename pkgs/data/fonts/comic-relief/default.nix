@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fontlibrary.org/en/font/comic-relief";
-    description = "A font metric-compatible with Microsoft Comic Sans";
+    description = "Font metric-compatible with Microsoft Comic Sans";
     longDescription = ''
       Comic Relief is a typeface designed to be metrically equivalent
       to the popular Comic Sans MS. Comic Relief can be used in place

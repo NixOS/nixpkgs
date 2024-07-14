@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://empty.sourceforge.net";
-    description = "A simple tool to automate interactive terminal applications";
+    description = "Simple tool to automate interactive terminal applications";
     license = licenses.bsd3;
     platforms = platforms.all;
     longDescription = ''

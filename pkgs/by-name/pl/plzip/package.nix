@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.nongnu.org/lzip/plzip.html";
-    description = "A massively parallel lossless data compressor based on the lzlib compression library";
+    description = "Massively parallel lossless data compressor based on the lzlib compression library";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _360ied ehmry ];

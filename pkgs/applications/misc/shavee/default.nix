@@ -39,9 +39,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/ashuio/shavee";
-    description = "A program to automatically decrypt and mount ZFS datasets using Yubikey HMAC as 2FA or any File on USB/SFTP/HTTPS";
+    description = "Program to automatically decrypt and mount ZFS datasets using Yubikey HMAC as 2FA or any File on USB/SFTP/HTTPS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jasonodoom ];
     platforms = lib.platforms.linux;
+    mainProgram = "shavee";
   };
 }

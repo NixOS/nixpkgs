@@ -12,8 +12,14 @@
 , rustc
 , rustPlatform
 , rust-bindgen
+# testing
+, emptyFile
+, nixos
+, nixosTests
+}@args':
 
-, # The kernel source tarball.
+let overridableKernel =
+lib.makeOverridable ({ # The kernel source tarball.
   src
 
 , # The kernel version.
@@ -66,7 +72,10 @@
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
-, nixosTests
+
+, stdenv ? args'.stdenv
+, buildPackages ? args'.buildPackages
+
 , ...
 }@args:
 
@@ -88,7 +97,7 @@ let
   # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
   basicArgs = builtins.removeAttrs
     args
-    (lib.filter (x: ! (builtins.elem x [ "version" "src" ])) (lib.attrNames args));
+    (lib.filter (x: ! (builtins.elem x [ "version" "pname" "src" ])) (lib.attrNames args));
 
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
@@ -131,8 +140,7 @@ let
     passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    nativeBuildInputs = [ perl gmp libmpc mpfr bison flex ]
       ++ lib.optional (lib.versionAtLeast version "5.2") pahole
       ++ lib.optionals withRust [ rust-bindgen rustc ]
     ;
@@ -206,13 +214,20 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
-    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
+    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile modDirVersion;
     pos = builtins.unsafeGetAttrPos "version" args;
 
-    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; } // lib.optionalAttrs withRust { CONFIG_RUST = "y"; };
-  } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
+    config = {
+      CONFIG_MODULES = "y";
+      CONFIG_FW_LOADER = "m";
+      CONFIG_RUST = if withRust then "y" else "n";
+    };
+  });
 
-  passthru = basicArgs // {
+in
+kernel.overrideAttrs (finalAttrs: previousAttrs: {
+
+  passthru = previousAttrs.passthru or { } // basicArgs // {
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
@@ -225,17 +240,49 @@ let
       ]);
     });
 
-    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
-      overridableKernel = finalKernel // {
+      overridableKernel = finalAttrs.finalPackage // {
         override = args:
           lib.warn (
             "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
             + toString (lib.attrNames (lib.toFunction args { }))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
+      /* Certain arguments must be evaluated lazily; so that only the output(s) depend on them.
+         Original reproducer / simplified use case:
+       */
+      versionDoesNotDependOnPatchesEtcNixOS =
+        builtins.seq
+          (nixos ({ config, pkgs, ... }: {
+              boot.kernelPatches = [
+                (builtins.seq config.boot.kernelPackages.kernel.version { patch = pkgs.emptyFile; })
+              ];
+          })).config.boot.kernelPackages.kernel.outPath
+          emptyFile;
+      versionDoesNotDependOnPatchesEtc =
+        builtins.seq
+          (import ./generic.nix args' (args // (
+          let explain = attrName:
+            ''
+              The ${attrName} attribute must be able to access the kernel.version attribute without an infinite recursion.
+              That means that the kernel attrset (attrNames) and the kernel.version attribute must not depend on the ${attrName} argument.
+              The fact that this exception is raised shows that such a dependency does exist.
+              This is a problem for the configurability of ${attrName} in version-aware logic such as that in NixOS.
+              Strictness can creep in through optional attributes, or assertions and warnings that run as part of code that shouldn't access what is checked.
+            '';
+          in {
+            kernelPatches = throw (explain "kernelPatches");
+            structuredExtraConfig = throw (explain "structuredExtraConfig");
+            modDirVersion = throw (explain "modDirVersion");
+          }))).version
+          emptyFile;
+    in [
+      (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel)
+      versionDoesNotDependOnPatchesEtc
+      # Disabled by default, because the infinite recursion is hard to understand. The other test's error is better and produces a shorter trace.
+      # versionDoesNotDependOnPatchesEtcNixOS
+    ] ++ kernelTests;
   };
 
-  finalKernel = lib.extendDerivation true passthru kernel;
-in finalKernel
+}));
+in overridableKernel

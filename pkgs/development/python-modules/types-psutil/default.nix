@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "types-psutil";
-  version = "5.9.5.17";
+  version = "5.9.5.20240516";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-99h2mBLXKktRPX7J61WA/i9gE/wnA5SmA8tlNIEfPk0=";
+    hash = "sha256-uylvWfxWRYiR0P6xmUcX5UihvPiZNqKHffh5K4IrRpY=";
   };
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "psutil-stubs"
-  ];
+  pythonImportsCheck = [ "psutil-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for psutil";

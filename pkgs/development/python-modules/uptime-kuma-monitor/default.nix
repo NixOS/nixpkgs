@@ -1,9 +1,10 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchPypi
-, prometheus-client
-, pythonOlder
+{
+  lib,
+  requests,
+  buildPythonPackage,
+  fetchPypi,
+  prometheus-client,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "uptime_kuma_monitor"
-  ];
+  pythonImportsCheck = [ "uptime_kuma_monitor" ];
 
   meta = with lib; {
     description = "Python wrapper around UptimeKuma /metrics endpoint";

@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.edwtjo ];
     platforms = with lib.platforms; unix;
+    mainProgram = "abook";
   };
 }

@@ -1,4 +1,4 @@
-From a3b7510e4c9e7201a4301f2a45d8569b06354607 Mon Sep 17 00:00:00 2001
+From 884ef7c843be906d62e4240c2a0e885dcd5a5726 Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Sat, 24 Dec 2022 20:30:22 +0100
 Subject: [PATCH 4/4] libbacktrace: Support NIX_DEBUG_INFO_DIRS environment
@@ -13,10 +13,10 @@ Let’s make debug data lookup work on NixOS just like in gdb.
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/elf.c b/elf.c
-index 65c647a..5c8abc0 100644
+index ccffa95..e86950d 100644
 --- a/elf.c
 +++ b/elf.c
-@@ -6935,11 +6935,18 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
+@@ -6946,11 +6946,18 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
  
    if (buildid_data != NULL)
      {
@@ -38,5 +38,5 @@ index 65c647a..5c8abc0 100644
        debug_dir = strtok (debug_directories, ":");
        while (debug_dir != NULL)
 -- 
-2.38.1
+2.43.1
 

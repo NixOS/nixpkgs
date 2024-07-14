@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, click
-, colorama
-, enum34
-, fetchPypi
-, git
-, gnugrep
-, gnupg
-, nose
-, pbr
-, pexpect
-, pythonAtLeast
-, pythonOlder
-, substituteAll
-, tree
-, xclip
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchPypi,
+  git,
+  gnugrep,
+  gnupg,
+  nose,
+  pbr,
+  pexpect,
+  pythonAtLeast,
+  pythonOlder,
+  substituteAll,
+  tree,
+  xclip,
 }:
 
 # Use the `pypass` top-level attribute, if you're interested in the
@@ -53,7 +53,9 @@ buildPythonPackage rec {
     click
     colorama
     pexpect
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  ];
+
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [ nose ];
 
@@ -77,6 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Password manager pass in Python";
+    mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

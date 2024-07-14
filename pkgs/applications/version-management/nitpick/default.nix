@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A distributed issue tracker";
+    description = "Distributed issue tracker";
     longDescription = ''
       Nitpick is a distributed issue tracker. It helps keep track of which nits you
       should pick. It's intended to be used with source code such that the issues can

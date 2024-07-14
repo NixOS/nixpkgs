@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
+{ lib, stdenv, fetchgit, fetchurl, fetchpatch, git, cmake, pkg-config
 , openssl, boost, grpc, protobuf, libnsl, rocksdb_6_23, snappy }:
 
 let
@@ -99,6 +99,17 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
     hash = "sha256-VW/VmnhtF2xyHfEud3D6b3n8uTE0a/nDW1GISs5QfwM=";
   };
+
+  patches = [
+    # Fix gcc-13 build due to missing <cstdint> includes:
+    #   https://github.com/XRPLF/rippled/pull/4555
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url  = "https://github.com/XRPLF/rippled/commit/c9a586c2437bc8ffd22e946c82e1cbe906e1fc40.patch";
+      hash = "sha256-+4BDTMFoQWUHljgwGB1gtczVPQH/U5MA0ojbnBykceg=";
+      excludes = [ "src/ripple/basics/StringUtilities.h" ];
+    })
+  ];
 
   hardeningDisable = ["format"];
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON" "-DSNAPPY_INCLUDE_DIR=${snappy}/include" ];

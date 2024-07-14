@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
+    mainProgram = "syncterm";
     maintainers = with maintainers; [ embr ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;

@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, bokeh
-, toolz
-, datashape
-, numba
-, numpy
-, pandas
-, pillow
-, xarray
-, colorcet
-, param
-, pyct
-, scipy
-, pytestCheckHook
-, pythonOlder
-, nbsmoke
-, fastparquet
-, nbconvert
-, pytest-xdist
-, netcdf4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dask,
+  bokeh,
+  toolz,
+  datashape,
+  numba,
+  numpy,
+  pandas,
+  pillow,
+  xarray,
+  colorcet,
+  param,
+  pyct,
+  scipy,
+  pytestCheckHook,
+  pythonOlder,
+  nbsmoke,
+  fastparquet,
+  nbconvert,
+  pytest-xdist,
+  netcdf4,
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.16.0";
+  version = "0.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7UwRGVdXjcs/z/ly2VT3dYba/XGnNF/VzQadn7BQ0NE=";
+    hash = "sha256-eJmXm0wa26a0/S6GyqP175TE5qsjTLtzBspr/iQ/xN8=";
   };
 
   propagatedBuildInputs = [
@@ -72,9 +73,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
-    "datashader"
-  ];
+  pytestFlagsArray = [ "datashader" ];
 
   disabledTests = [
     # Not compatible with current version of bokeh
@@ -90,12 +89,11 @@ buildPythonPackage rec {
     "datashader/tests/test_datatypes.py"
   ];
 
-  pythonImportsCheck = [
-    "datashader"
-  ];
+  pythonImportsCheck = [ "datashader" ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Data visualization toolchain based on aggregating into a grid";
+    mainProgram = "datashader";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

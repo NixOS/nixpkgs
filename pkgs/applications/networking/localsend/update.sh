@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq yq nix-prefetch-url
+#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq yq nix
 
 set -eou pipefail
 

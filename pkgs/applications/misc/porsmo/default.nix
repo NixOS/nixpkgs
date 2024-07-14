@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ColorCookie-dev/porsmo";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
+    mainProgram = "porsmo";
   };
 }

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, treelog
-, stringly
-, flit-core
-, bottombar
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  treelog,
+  stringly,
+  flit-core,
+  bottombar,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "8.4";
+  version = "8.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,12 +23,10 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cwMo3ixTK7UO9sxhcQBN4/gNZNAoBH/xL2tZ1Orh8LE=";
+    hash = "sha256-wxouS0FXrdIhm6nTVBuzkwHceJnZ7f7k8nMFxFsZchE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     numpy
@@ -36,13 +35,9 @@ buildPythonPackage rec {
     bottombar
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nutils"
-  ];
+  pythonImportsCheck = [ "nutils" ];
 
   disabledTestPaths = [
     # AttributeError: type object 'setup' has no attribute '__code__'

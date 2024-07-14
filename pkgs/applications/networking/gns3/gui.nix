@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit hash;
     owner = "GNS3";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
   };
 
   nativeBuildInputs = with python3.pkgs; [

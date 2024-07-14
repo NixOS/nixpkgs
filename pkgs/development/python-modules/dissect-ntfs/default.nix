@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.8";
+  version = "3.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-BmXYnN8B7r/gz+zEWWS7ClOv29QOiHrm7g2ZNZXlnGU=";
+    hash = "sha256-rwn7nKfEmv92JdSMhKztMWptvggzlWhGA0gg5C0EbFM=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.ntfs"
-  ];
+  pythonImportsCheck = [ "dissect.ntfs" ];
 
   disabledTestPaths = [
     # Test is very time consuming

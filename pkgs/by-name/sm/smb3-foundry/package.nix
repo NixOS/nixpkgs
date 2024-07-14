@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/mchlnix/SMB3-Foundry/releases/tag/${finalAttrs.version}";
-    description = "A modern Super Mario Bros. 3 Level Editor";
+    description = "Modern Super Mario Bros. 3 Level Editor";
     homepage = "https://github.com/mchlnix/SMB3-Foundry";
     license = lib.licenses.gpl3Only;
     mainProgram = "smb3-foundry";

@@ -10,7 +10,7 @@
 , gtk3
 , copyDesktopItems
 , icoutils
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 }:
 
@@ -46,7 +46,7 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postFixup = ''

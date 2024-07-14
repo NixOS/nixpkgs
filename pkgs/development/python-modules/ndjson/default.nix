@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, six
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  watchdog,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     watchdog
   ];
 
-  pythonImportsCheck = [
-    "ndjson"
-  ];
+  pythonImportsCheck = [ "ndjson" ];
 
   meta = with lib; {
     description = "Module supports ndjson";

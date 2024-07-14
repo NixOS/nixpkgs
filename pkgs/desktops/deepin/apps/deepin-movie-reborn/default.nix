@@ -1,11 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
-, qtbase
 , qttools
 , qtx11extras
 , qtmultimedia
@@ -30,7 +28,6 @@
 , gst_all_1
 , gtest
 , libpulseaudio
-, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -123,6 +120,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Full-featured video player supporting playing local and streaming media in multiple video formats";
+    mainProgram = "deepin-movie";
     homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

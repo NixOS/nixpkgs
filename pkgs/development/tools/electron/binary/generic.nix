@@ -3,7 +3,7 @@
 , libXScrnSaver
 , makeWrapper
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , unzip
@@ -12,7 +12,8 @@
 , mesa
 , libxkbcommon
 , libxshmfence
-, libglvnd
+, libGL
+, vulkan-loader
 , alsa-lib
 , cairo
 , cups
@@ -41,7 +42,7 @@ let
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "26.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "29.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -102,7 +103,7 @@ let
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
     ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libglvnd ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL vulkan-loader ]
   );
 
   linux = {
@@ -111,7 +112,7 @@ let
     nativeBuildInputs = [
       unzip
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     dontUnpack = true;
@@ -130,6 +131,15 @@ let
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
+
+      # patch libANGLE
+      patchelf \
+        --set-rpath "${lib.makeLibraryPath [ libGL pciutils vulkan-loader ]}" \
+        $out/libexec/electron/lib*GL*
+
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
   };
 

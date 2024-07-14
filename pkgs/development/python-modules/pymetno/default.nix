@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, async-timeout
-, xmltodict
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  async-timeout,
+  xmltodict,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,15 +28,13 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "metno"
-  ];
+  pythonImportsCheck = [ "metno" ];
 
   # Project has no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "A library to communicate with the met.no API";
+    description = "Library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     changelog = "https://github.com/Danielhiversen/pyMetno/releases/tag/${version}";
     license = licenses.mit;

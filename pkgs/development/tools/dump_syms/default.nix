@@ -7,6 +7,7 @@
 
 # darwin
 , Security
+, SystemConfiguration
 
 # tests
 , firefox-esr-unwrapped
@@ -16,7 +17,7 @@
 
 let
   pname = "dump_syms";
-  version = "2.2.2";
+  version = "2.3.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -25,15 +26,10 @@ rustPlatform.buildRustPackage {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8kyicTtY7h1CDM4UGOHsppRRTraU6JLe24MKtoduiz0=";
+    hash = "sha256-pZlWA7LZeMb+ZhnfQh9MzvDDlre1kkPc6aSVNZcVi/w=";
   };
 
-  cargoSha256 = "sha256-5WiGckh/jq7AHH3JWZL8tIsj1Gqr8iLX7IyppKsW96k=";
-
-  # Workaround for https://github.com/nixos/nixpkgs/issues/166205
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  cargoSha256 = "sha256-srphb7jFSJB08hSShk3f5QYPoYu8UwbUzkzn0zpMqyg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,6 +39,7 @@ rustPlatform.buildRustPackage {
     openssl
   ] ++ lib.optionals (stdenv.isDarwin) [
     Security
+    SystemConfiguration
   ];
 
   checkFlags = [
@@ -57,8 +54,9 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/mozilla/dump_syms/releases/tag/v${version}";
+    changelog = "https://github.com/mozilla/dump_syms/blob/v${version}/CHANGELOG.md";
     description = "Command-line utility for parsing the debugging information the compiler provides in ELF or stand-alone PDB files";
+    mainProgram = "dump_syms";
     license = licenses.asl20;
     homepage = "https://github.com/mozilla/dump_syms/";
     maintainers = with maintainers; [ hexa ];

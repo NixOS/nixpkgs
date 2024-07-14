@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
     rev = "v${version}";
-    hash = "sha256-Qk5iGALlSVSzgBJzYzyLdLHhj/Zq1R4nFseACBmIBuA=";
+    hash = "sha256-IJcPSBJErf8Dy9YhYAc9eg/llgaaLZCQSB0Brof+kpg=";
   };
 
   strictDeps = true;

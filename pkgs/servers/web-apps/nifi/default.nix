@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nifi";
-  version = "1.24.0";
+  version = "1.27.0";
 
   src = fetchzip {
     url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
-    hash = "sha256-8S06E8RiH/EnfAa60eRzjmHmzMn+3UZbykJpvFFXEho=";
+    hash = "sha256-D3o7MLn8vdDqzk6/AJ7Lmq6Yx2swy8CwOyDTlxFSVME=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -43,15 +43,15 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
+, version ? "7.1.2"
 }:
 
 let
-  version = "7.0.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-R35U9jdAAfQ5qUcbod6deCTa8SnblVEISezF4ZzogXA=";
+    hash = "sha256-nPbtIxnIFpGdlwFe720MWULNGu1I4DxzuggV2VPtYas=";
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
     # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
-    # sandbox. Oddly, bazel_6 does not need that patch :-/.
+    # sandbox.
     #
     # If you want to investigate the sandbox profile path,
     # IORegisterForSystemPower can be allowed with
@@ -258,8 +258,6 @@ stdenv.mkDerivation rec {
 
   postPatch =
     let
-      # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-      nixpkgs166205ldflag = lib.optionalString stdenv.cc.isClang "-l${stdenv.cc.libcxx.cxxabi.libName}";
       darwinPatches = ''
         bazelLinkFlags () {
           eval set -- "$NIX_LDFLAGS"
@@ -274,7 +272,7 @@ stdenv.mkDerivation rec {
 
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
-        export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks -F${IOKit}/Library/Frameworks ${nixpkgs166205ldflag}"
+        export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks -F${IOKit}/Library/Frameworks"
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
