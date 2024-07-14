@@ -15740,8 +15740,6 @@ self: super: with self; {
 
   twitter = callPackage ../development/python-modules/twitter { };
 
-  twitter-common-dirutil = callPackage ../development/python-modules/twitter-common-dirutil { };
-
   twitter-common-lang = callPackage ../development/python-modules/twitter-common-lang { };
 
   twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
