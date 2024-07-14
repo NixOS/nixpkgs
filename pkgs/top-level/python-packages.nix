@@ -9928,6 +9928,8 @@ self: super: with self; {
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
+  pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
+
   pybars3 = callPackage ../development/python-modules/pybars3 { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
