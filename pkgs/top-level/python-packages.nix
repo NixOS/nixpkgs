@@ -945,6 +945,8 @@ self: super: with self; {
 
   attacut = callPackage ../development/python-modules/attacut { };
 
+  attr = callPackage ../development/python-modules/attr { };
+
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
