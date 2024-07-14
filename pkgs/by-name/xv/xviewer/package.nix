@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cinnamon-desktop
 , docbook_xsl
 , exempi
 , gdk-pixbuf
@@ -21,7 +20,7 @@
 , pkg-config
 , python3
 , wrapGAppsHook3
-, xapp
+, cinnamon
 , yelp-tools
 }:
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cinnamon-desktop
+    cinnamon.cinnamon-desktop
     docbook_xsl
     gdk-pixbuf
     gobject-introspection
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
     libpeas
     librsvg
     libxml2
-    xapp
+    cinnamon.xapp
   ];
 
   meta = with lib; {
