@@ -1,5 +1,4 @@
-{ stdenv
-, mkDerivation
+{ mkDerivation
 , lib
 , fetchFromGitHub
 , fetchpatch

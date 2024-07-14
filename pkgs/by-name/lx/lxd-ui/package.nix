@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxd-ui";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
     rev = "refs/tags/${version}";
-    hash = "sha256-lXuPU1WWhrjst5ZbdLWPMovncHkUMYSUDNpsaWvdPgM=";
+    hash = "sha256-PBCWZG8Yxjiw3cGLEfMBJZnHsc4hMZHdq7OqaJ8HYJY=";
   };
 
   offlineCache = fetchYarnDeps {

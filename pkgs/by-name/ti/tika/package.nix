@@ -6,6 +6,7 @@
   fetchFromGitHub,
   makeWrapper,
   mvnDepsHash ? null,
+  nixosTests,
 }:
 
 let
@@ -45,7 +46,7 @@ maven'.buildMavenPackage rec {
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
   mvnParameters = toString [
-    "-DskipTests=true" # skip tests (out of memory execptions)
+    "-DskipTests=true" # skip tests (out of memory exceptions)
     "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
   ];
 
@@ -66,6 +67,10 @@ maven'.buildMavenPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) tika;
+  };
 
   meta = {
     changelog = "https://github.com/apache/tika/blob/${src.rev}/CHANGES.txt";

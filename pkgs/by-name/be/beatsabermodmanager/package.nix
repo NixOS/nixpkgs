@@ -1,9 +1,5 @@
 {
   lib,
-  dotnet-sdk,
-  stdenv,
-  substituteAll,
-
   buildDotnetModule,
   fetchFromGitHub,
 

@@ -1,7 +1,6 @@
 {
   lib,
   crossLibcStdenv,
-  stdenvNoCC,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
   buildPackages,

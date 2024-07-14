@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvLibcMinimal,
   mkDerivation,
   libcMinimal,
   bsdSetupHook,
