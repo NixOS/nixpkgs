@@ -4178,8 +4178,9 @@
       zeroconf
     ];
     "solaredge" = ps: with ps; [
+      aiosolaredge
       stringcase
-    ]; # missing inputs: aiosolaredge
+    ];
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
@@ -5870,6 +5871,7 @@
     "snips"
     "snmp"
     "snooz"
+    "solaredge"
     "solax"
     "soma"
     "somfy_mylink"
