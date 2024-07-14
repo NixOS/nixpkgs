@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  elevenlabs_tts = callPackage ./elevenlabs_tts {};
+
   emporia_vue = callPackage ./emporia_vue {};
 
   epex_spot = callPackage ./epex_spot {};
