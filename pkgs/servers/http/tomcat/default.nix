@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre }:
+{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre, gitUpdater }:
 
 let
   common = { version, hash }: stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,11 +19,18 @@ let
         mv $out/webapps $webapps/
       '';
 
-    passthru.tests = {
-      inherit (nixosTests) tomcat;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "JAVA_HOME=${jre} ${finalAttrs.finalPackage}/bin/version.sh";
+    passthru = {
+      updateScript = gitUpdater {
+        url = "https://github.com/apache/tomcat.git";
+        allowedVersions = "^${lib.versions.major version}\\.";
+        ignoredVersions = "-M.*";
+      };
+      tests = {
+        inherit (nixosTests) tomcat;
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "JAVA_HOME=${jre} ${finalAttrs.finalPackage}/bin/version.sh";
+        };
       };
     };
 
