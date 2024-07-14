@@ -1,37 +1,68 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
+  meson,
+  ninja,
+  pkg-config,
+  libsndfile,
+  libsamplerate,
 }:
 
-let
-  patch = fetchurl {
-    url = "mirror://debian/pool/main/libr/libresample/libresample_0.1.3-3.diff.gz";
-    sha256 = "063w8rqxw87fc89gas47vk0ll7xl8cy7d8g70gm1l62bqkkajklx";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libresample";
-  version = "0.1.3";
-  src = fetchurl {
-    url = "mirror://debian/pool/main/libr/libresample/libresample_${version}.orig.tar.gz";
-    sha256 = "05a8mmh1bw5afqx0kfdqzmph4x2npcs4idx0p0v6q95lwf22l8i0";
+  version = "0.1.4-unstable-2024-08-23";
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "minorninth";
+    repo = "libresample";
+    rev = "7cb7f9c3f72d4e6774d964dc324af827192df7c3";
+    hash = "sha256-8gyGZVblqeHYXKFM79AcfX455+l3Tsoq3xQse5nrKAo=";
   };
-  patches = [ patch ];
-  preConfigure = ''
-    cat debian/patches/1001_shlib-cmake.patch | patch -p1
-  '';
-  nativeBuildInputs = [ cmake ];
+
+  patches = [
+    # Fix testresample.c output span; add exit code
+    # https://github.com/minorninth/libresample/pull/7
+    ./fix-test.patch
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      # For `resample-sndfile`
+      libsndfile
+    ]
+    ++ lib.optionals (!libsamplerate.meta.broken) [
+      # For `compareresample`
+      libsamplerate
+    ];
+
+  mesonFlags = [ (lib.mesonEnable "compareresample" (!libsamplerate.meta.broken)) ];
+
+  doCheck = true;
 
   meta = {
     description = "Real-time library for sampling rate conversion library";
-    license = lib.licenses.lgpl2Plus;
-    homepage = "https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html";
+    homepage = "https://github.com/minorninth/libresample";
+    license = lib.licenses.bsd2; # OR LGPL-2.1-or-later
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    platforms = lib.platforms.all;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.emily
     ];
-    platforms = lib.platforms.unix;
+    mainProgram = "resample-sndfile";
   };
-}
+})
