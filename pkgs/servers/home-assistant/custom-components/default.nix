@@ -4,6 +4,8 @@
 {
   adaptive_lighting = callPackage ./adaptive_lighting {};
 
+  alarmo = callPackage ./alarmo {};
+
   auth-header = callPackage ./auth-header {};
 
   awtrix = callPackage ./awtrix {};
