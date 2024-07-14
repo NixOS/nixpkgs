@@ -18,7 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-hchlxuB5QP+VxCx+QZ2739/mR5SQmYyE+9kXLKJ2ij4=";
   };
 
-  patches = [ ./relative_import.patch ];
+  patches = [
+    ./relative_import.patch
+    ./assert.patch
+  ];
 
   propagatedBuildInputs = [ pillow ];
 

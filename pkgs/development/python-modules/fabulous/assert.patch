@@ -1,0 +1,54 @@
+diff --git a/tests/casts_test.py b/tests/casts_test.py
+index 8146e94..b8c6674 100755
+--- a/tests/casts_test.py
++++ b/tests/casts_test.py
+@@ -21,15 +21,15 @@ from fabulous import casts
+ class TestControl(unittest.TestCase):
+ 
+     def test_casts_yes_no(self):
+-        self.failUnlessEqual(casts.yes_no('y'), True)
+-        self.failUnlessEqual(casts.yes_no('n'), False)
+-        self.failUnlessEqual(casts.yes_no('Yes'), True)
+-        self.failUnlessEqual(casts.yes_no('nO'), False)
+-        self.failUnlessRaises(ValueError, casts.yes_no, 'spam')
++        self.assertEqual(casts.yes_no('y'), True)
++        self.assertEqual(casts.yes_no('n'), False)
++        self.assertEqual(casts.yes_no('Yes'), True)
++        self.assertEqual(casts.yes_no('nO'), False)
++        self.assertRaises(ValueError, casts.yes_no, 'spam')
+         
+     def test_casts_file(self):
+-        self.failUnlessEqual( type(casts.file(__file__)), type(open(__file__)) )
+-        self.failUnlessRaises(ValueError, casts.file, '')
++        self.assertEqual( type(casts.file(__file__)), type(open(__file__)) )
++        self.assertRaises(ValueError, casts.file, '')
+         
+ 
+ if __name__ == '__main__':
+diff --git a/tests/rlcomplete_test.py b/tests/rlcomplete_test.py
+index 4f19b1d..c665a9f 100755
+--- a/tests/rlcomplete_test.py
++++ b/tests/rlcomplete_test.py
+@@ -21,16 +21,16 @@ class TestControl(unittest.TestCase):
+ 
+     def test_ListCompleter(self):
+         c = rlcomplete.ListCompleter(['foo','bar','baz'], True)
+-        self.failUnlessEqual(c.completelist('a'), [])
+-        self.failUnlessEqual(c.completelist('B'), ['bar','baz'])
+-        self.failUnlessEqual(c.completelist('f'), ['foo'])
++        self.assertEqual(c.completelist('a'), [])
++        self.assertEqual(c.completelist('B'), ['bar','baz'])
++        self.assertEqual(c.completelist('f'), ['foo'])
+         c = rlcomplete.ListCompleter(['foo','bar','baz'], False)
+-        self.failUnlessEqual(c.completelist('B'), [])
+-        self.failUnlessEqual(c.completelist('b'), ['bar','baz'])
++        self.assertEqual(c.completelist('B'), [])
++        self.assertEqual(c.completelist('b'), ['bar','baz'])
+ 
+     def test_PathCompleter(self):
+         #c = rlcomplete.PathCompleter()
+-        #self.failUnlessEqual(c.completelist('m'), ['manual/'])
++        #self.assertEqual(c.completelist('m'), ['manual/'])
+         pass
+         
+ if __name__ == '__main__':
