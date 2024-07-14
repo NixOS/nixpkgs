@@ -7,7 +7,7 @@
   setuptools,
   pytestCheckHook,
   pytest-mock,
-  ffmpeg_4,
+  ffmpeg_7,
 }:
 
 buildPythonPackage {
@@ -25,7 +25,7 @@ buildPythonPackage {
   patches = [
     (substituteAll {
       src = ./ffmpeg-location.patch;
-      ffmpeg = ffmpeg_4;
+      ffmpeg = ffmpeg_7;
     })
 
     # Remove dependency on `future`
@@ -33,6 +33,20 @@ buildPythonPackage {
     (fetchpatch2 {
       url = "https://github.com/kkroening/ffmpeg-python/commit/dce459d39ace25f03edbabdad1735064787568f7.patch?full_index=1";
       hash = "sha256-ZptCFplL88d0p2s741ymHiwyDsDGVFylBJ8FTrZDGMc=";
+    })
+
+    # Fix ffmpeg/tests/test_ffmpeg.py: test_pipe() (v1: ignore duplicate frames)
+    # https://github.com/kkroening/ffmpeg-python/pull/726
+    (fetchpatch2 {
+      url = "https://github.com/kkroening/ffmpeg-python/commit/557ed8e81ff48c5931c9249ec4aae525347ecf85.patch?full_index=1";
+      hash = "sha256-XrL9yLaBg1tu63OYZauEb/4Ghp2zHtiF6vB+1YYbv1Y=";
+    })
+
+    # Fix `test__probe` on FFmpeg 7
+    # https://github.com/kkroening/ffmpeg-python/pull/848
+    (fetchpatch2 {
+      url = "https://github.com/kkroening/ffmpeg-python/commit/eeaa83398ba1d4e5b470196f7d4c7ca4ba9e8ddf.patch?full_index=1";
+      hash = "sha256-/qxez4RF/RPRr9nA+wp+XB49L3VNgnMwMQhFD2NwijU=";
     })
   ];
 
