@@ -397,6 +397,7 @@ self: super:
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
     buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes ];
   });
 
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
