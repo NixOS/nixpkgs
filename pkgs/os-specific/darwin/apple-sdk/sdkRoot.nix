@@ -41,18 +41,14 @@ runCommand "sdkroot-${sdkVersion}" { } ''
 
   install -D '${../../../build-support/setup-hooks/role.bash}' "$out/nix-support/setup-hook"
   cat >> "$out/nix-support/setup-hook" <<-hook
-  #
-  # See comments in cc-wrapper's setup hook. This works exactly the same way.
-  #
-  [[ -z \''${strictDeps-} ]] || (( "\$hostOffset" < 0 )) || return 0
-
   sdkRootHook() {
     # See ../../../build-support/setup-hooks/role.bash
     local role_post
     getHostRoleEnvHook
 
     # Only set the SDK root if one has not been set via this hook or some other means.
-    if [[ ! \$NIX_CFLAGS_COMPILE =~ isysroot ]]; then
+    local cflagsVar=NIX_CFLAGS_COMPILE\''${role_post}
+    if [[ ! \''${!cflagsVar} =~ isysroot ]]; then
       export NIX_CFLAGS_COMPILE\''${role_post}+=' -isysroot $out/${sdkName}.sdk'
     fi
   }
@@ -60,9 +56,9 @@ runCommand "sdkroot-${sdkVersion}" { } ''
   # See ../../../build-support/setup-hooks/role.bash
   getTargetRole
 
-  addEnvHooks "\$targetOffset" sdkRootHook
+  addEnvHooks "\$hostOffset" sdkRootHook
 
   # No local scope in sourced file
-  unset -v role_post
+  unset -v cflagsVar role_post
   hook
 ''

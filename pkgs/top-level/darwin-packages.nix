@@ -86,7 +86,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ apple_sdk.sdkRoot ];
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
