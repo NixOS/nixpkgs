@@ -1,6 +1,6 @@
 { version, hash }:
 
-{ lib, stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl, gitUpdater }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "jetty";
@@ -18,6 +18,13 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out
     mv etc lib modules start.jar $out
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/jetty/jetty.project.git";
+    allowedVersions = "^${lib.versions.major version}\\.";
+    ignoredVersions = "(alpha|beta).*";
+    rev-prefix = "jetty-";
+  };
 
   meta = with lib; {
     description = "Web server and javax.servlet container";
