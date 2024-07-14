@@ -567,6 +567,7 @@ mapAliases ({
   twitter-common-confluence = throw "twitter-common-confluence has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-dirutil = throw "twitter-common-dirutil has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-lang = throw "twitter-common-lang has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
