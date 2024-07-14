@@ -22,8 +22,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     nemo-python
   ];
 
-  # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
-  bulky = callPackage ./bulky { };
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
@@ -55,5 +53,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xviewer = callPackage ./xviewer { };
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
+  bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
   xapps = pkgs.cinnamon.xapp; # added 2022-07-27
 }
