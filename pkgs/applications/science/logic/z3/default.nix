@@ -89,7 +89,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
       changelog = "https://github.com/Z3Prover/z3/releases/tag/z3-${version}";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ thoughtpolice ttuegel ];
+      maintainers = with maintainers; [ thoughtpolice ttuegel numinit ];
     };
   };
 in
