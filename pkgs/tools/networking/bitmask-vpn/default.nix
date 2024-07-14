@@ -1,7 +1,7 @@
 { lib
 , stdenv
+, substituteAll
 , fetchFromGitLab
-, mkDerivation
 , buildGoModule
 , wrapQtAppsHook
 , python3Packages
@@ -13,32 +13,28 @@
 , iproute2
 , iptables
 , procps
-, qmltermwidget
 , qtbase
 , qtdeclarative
-, qtgraphicaleffects
-, qtinstaller
-, qtquickcontrols
-, qtquickcontrols2
+, qtsvg
 , qttools
 , CoreFoundation
 , Security
 , provider ? "riseup"
 }:
 let
-  version = "0.21.11";
+  version = "0.24.5";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
     rev = version;
-    sha256 = "sha256-mhmKG6Exxh64oeeeLezJYWEw61iIHLasHjLomd2L8P4=";
+    sha256 = "sha256-crMGezOCHv4yUEvkTHcvUqGIpFSYhLUCjf19mgqYmiI=";
   };
 
   # bitmask-root is only used on GNU/Linux
   # and may one day be replaced by pkg/helper
-  bitmask-root = mkDerivation {
+  bitmask-root = stdenv.mkDerivation {
     inherit src version;
     sourceRoot = "${src.name}/helpers";
     pname = "bitmask-root";
@@ -70,6 +66,13 @@ buildGoModule rec {
   pname = "${provider}-vpn";
   vendorHash = null;
 
+  patches = [
+    (substituteAll {
+      src = ./fix_paths.patch;
+      inherit qtbase qtdeclarative qttools;
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pkg/pickle/helpers.go \
       --replace /usr/share $out/share
@@ -87,7 +90,7 @@ buildGoModule rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace pkg/helper/linux.go \
       --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
-    substituteInPlace pkg/vpn/launcher_linux.go \
+    substituteInPlace pkg/launcher/launcher_linux.go \
       --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
       --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
       --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
@@ -98,20 +101,16 @@ buildGoModule rec {
     cmake
     pkg-config
     python3Packages.wrapPython
-    qmake
-    qtquickcontrols2
-    qttools
     which
     wrapQtAppsHook
-  ] ++ lib.optional (!stdenv.isLinux) qtinstaller;
+    qmake
+    qttools
+    qtsvg
+  ];
 
   buildInputs = [
     qtbase
-    qmltermwidget
     qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols
-    qtquickcontrols2
   ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,

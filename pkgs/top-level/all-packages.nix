@@ -12009,7 +12009,7 @@ with pkgs;
 
   ripdrag = callPackage ../tools/misc/ripdrag { };
 
-  riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+  riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
     provider = "riseup";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
