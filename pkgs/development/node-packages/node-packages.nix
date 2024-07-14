@@ -43875,15 +43875,6 @@ let
         sha512 = "pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==";
       };
     };
-    "pyright-1.1.373" = {
-      name = "pyright";
-      packageName = "pyright";
-      version = "1.1.373";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/pyright/-/pyright-1.1.373.tgz";
-        sha512 = "ZJSjqnHbeZowUnuAiojZqCLeY1XVzRIc2GvMFFNy/z6YSyJXwChPDQL5Jl2bavTvXNO0ITRmMBVvoKCRN7cc3g==";
-      };
-    };
     "q-1.5.1" = {
       name = "q";
       packageName = "q";
@@ -63410,27 +63401,6 @@ in
     meta = {
       description = "prettier extension for coc.nvim";
       homepage = "https://github.com/neoclide/coc-prettier#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-pyright = nodeEnv.buildNodePackage {
-    name = "coc-pyright";
-    packageName = "coc-pyright";
-    version = "1.1.371";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-pyright/-/coc-pyright-1.1.371.tgz";
-      sha512 = "8vgKSjuMVpylSoHIwdzP9edeHwmjUFY+ZyBkcLQMdyjdZtEc3+6OblXS0Dm5nXosjLY/ATc+w+38ITIssqm76g==";
-    };
-    dependencies = [
-      sources."pyright-1.1.373"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Pyright extension for coc.nvim, static type checker for Python";
-      homepage = "https://github.com/fannheyward/coc-pyright#readme";
       license = "MIT";
     };
     production = true;

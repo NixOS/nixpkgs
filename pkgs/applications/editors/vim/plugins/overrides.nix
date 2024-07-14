@@ -18,6 +18,7 @@
   arrow-cpp
 , Cocoa
 , coc-diagnostic
+, coc-pyright
 , code-minimap
 , dasht
 , deno
@@ -347,6 +348,12 @@
   coc-diagnostic = buildVimPlugin {
     inherit (coc-diagnostic) pname version meta;
     src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
+  };
+
+  coc-pyright = buildVimPlugin {
+    pname = "coc-pyright";
+    inherit (coc-pyright) version meta;
+    src = "${coc-pyright}/lib/node_modules/coc-pyright";
   };
 
   coc-nginx = buildVimPlugin {
@@ -2234,7 +2241,6 @@
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
-      "coc-pyright"
       "coc-python"
       "coc-r-lsp"
       "coc-rls"
