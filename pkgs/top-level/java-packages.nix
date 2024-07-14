@@ -3,13 +3,13 @@
 with pkgs;
 
 let
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
-  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
-  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
-  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
-  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
-  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
-  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22.nix { };
+  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11 { };
+  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15 { };
+  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
+  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19 { };
+  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20 { };
+  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
+  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
 
 in {
   inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;

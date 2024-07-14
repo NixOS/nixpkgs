@@ -7,14 +7,14 @@
 , gradle_6
 , makeDesktopItem
 , copyDesktopItems
-, perl
-, writeText
 , runtimeShell
 }:
 
 let
   pname = "jd-gui";
   version = "1.6.6";
+
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "java-decompiler";
@@ -23,58 +23,7 @@ let
     hash = "sha256-QHiZPYFwDQzbXVSuhwzQqBRXlkG9QVU+Jl6SKvBoCwQ=";
   };
 
-  patches = [
-    # https://github.com/java-decompiler/jd-gui/pull/362
-    (fetchpatch {
-      name = "nebula-plugin-gradle-6-compatibility.patch";
-      url = "https://github.com/java-decompiler/jd-gui/commit/91f805f9dc8ce0097460e63c8095ccea870687e6.patch";
-      hash = "sha256-9eaM9Mx2FaKIhGSOHjATKN/CrtvJeXyrH8Mdx8LNtpE=";
-    })
-  ];
-
-  deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src patches;
-
-    nativeBuildInputs = [ jdk perl gradle_6 ];
-
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d);
-      gradle --no-daemon jar
-    '';
-
-    # Mavenize dependency paths
-    # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-gqUyZE+MoZRYCcJx95Qc4dZIC3DZvxee6UQhpfveDI4=";
-  };
-
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${deps}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-  '';
+  gradle = gradle_6;
 
   desktopItem = makeDesktopItem {
     name = "jd-gui";
@@ -89,15 +38,27 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  inherit pname version src patches;
-  name = "${pname}-${version}";
+  inherit pname version src;
 
-  nativeBuildInputs = [ jdk gradle_6 copyDesktopItems ];
+  patches = [
+    # https://github.com/java-decompiler/jd-gui/pull/362
+    (fetchpatch {
+      name = "nebula-plugin-gradle-6-compatibility.patch";
+      url = "https://github.com/java-decompiler/jd-gui/commit/91f805f9dc8ce0097460e63c8095ccea870687e6.patch";
+      hash = "sha256-9eaM9Mx2FaKIhGSOHjATKN/CrtvJeXyrH8Mdx8LNtpE=";
+    })
+  ];
 
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon --info --init-script ${gradleInit} jar
-  '';
+  nativeBuildInputs = [ jdk gradle copyDesktopItems ];
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  gradleBuildTask = "jar";
 
   installPhase = let
     jar = "$out/share/jd-gui/${name}.jar";
