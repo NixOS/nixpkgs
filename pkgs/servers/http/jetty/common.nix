@@ -27,8 +27,9 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/jetty/jetty.project/releases/tag/jetty-${version}";
     description = "Web server and javax.servlet container";
-    homepage = "https://eclipse.dev/jetty/";
+    homepage = "https://jetty.org/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ asl20 epl10 ];
