@@ -47,7 +47,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
   xapp = callPackage ./xapp { };
-  xreader = callPackage ./xreader { };
   xviewer = callPackage ./xviewer { };
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
@@ -55,4 +54,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
   xapps = pkgs.cinnamon.xapp; # added 2022-07-27
+  xreader = lib.warn "cinnamon.xreader was moved to top-level. Please use pkgs.xreader directly." pkgs.xreader; # Added on 2024-07-14
 }

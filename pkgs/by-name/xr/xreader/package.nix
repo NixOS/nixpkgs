@@ -9,7 +9,7 @@
 , wrapGAppsHook3
 , libarchive
 , libxml2
-, xapp
+, cinnamon
 , meson
 , pkg-config
 , cairo
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    xapp
+    cinnamon.xapp
     cairo
     libarchive
     libxml2
