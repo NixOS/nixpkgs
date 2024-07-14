@@ -8330,6 +8330,12 @@
     githubId = 6109326;
     name = "David Hummel";
   };
+  hurricanepootis = {
+    email = "hurricanepootis@protonmail.com";
+    github = "HurricanePootis";
+    githubId = 53066639;
+    name = "HurricanePootis";
+  };
   huyngo = {
     email = "huyngo@disroot.org";
     github = "Huy-Ngo";
