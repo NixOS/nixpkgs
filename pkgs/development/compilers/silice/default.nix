@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sylefeb";
     repo = "silice";
     rev = "5ba9ef0d03b3c8d4a43efe10acfb51c97d3679ef";
-    sha256 = "sha256-LrLUaCpwzaxH02TGyEfARIumPi0s2REc1g79fSxJjFc=";
+    hash = "sha256-LrLUaCpwzaxH02TGyEfARIumPi0s2REc1g79fSxJjFc=";
     fetchSubmodules = true;
   };
 

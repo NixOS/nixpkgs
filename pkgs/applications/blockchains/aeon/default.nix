@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     repo = "aeon";
     rev = "v${version}-aeon";
     fetchSubmodules = true;
-    sha256 = "sha256-2MptLS12CUm9eUKm+V+yYpbLVwNyZeZ5HvAFyjEc4R4=";
+    hash = "sha256-2MptLS12CUm9eUKm+V+yYpbLVwNyZeZ5HvAFyjEc4R4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config git doxygen graphviz ];

@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-VPHQwy2+XR9R7toIN5sNFB91ddROlL7Scr8AKLgUzuo=";
+    hash = "sha256-VPHQwy2+XR9R7toIN5sNFB91ddROlL7Scr8AKLgUzuo=";
   };
 
   nativeBuildInputs = [

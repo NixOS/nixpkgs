@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     repo = "ReplaySorcery";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-HPkSOwfwcg4jLUzKfqdXgLu7mgD5H4wb9d2BrqWQeHc=";
+    hash = "sha256-HPkSOwfwcg4jLUzKfqdXgLu7mgD5H4wb9d2BrqWQeHc=";
   };
 
   patches = [

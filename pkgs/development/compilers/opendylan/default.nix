@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     owner = "dylan-lang";
     repo = "opendylan";
     rev = "cd9a8395586d33cc43a8611c1dc0513e69ee82dd";
-    sha256 = "sha256-i1wr4mBUbZhL8ENFGz8gV/mMzSJsj1AdJLd4WU9tIQM=";
+    hash = "sha256-i1wr4mBUbZhL8ENFGz8gV/mMzSJsj1AdJLd4WU9tIQM=";
     fetchSubmodules = true;
   };
 

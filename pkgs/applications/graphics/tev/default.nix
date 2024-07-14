@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
+    hash = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook3 ];
