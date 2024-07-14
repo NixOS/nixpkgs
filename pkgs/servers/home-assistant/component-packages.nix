@@ -216,7 +216,8 @@
       geopy
     ];
     "apsystems" = ps: with ps; [
-    ]; # missing inputs: apsystems-ez1
+      apsystems-ez1
+    ];
     "aquacell" = ps: with ps; [
       fnv-hash-fast
       ifaddr
@@ -5269,6 +5270,7 @@
     "apprise"
     "aprilaire"
     "aprs"
+    "apsystems"
     "aranet"
     "arcam_fmj"
     "aseko_pool_live"
