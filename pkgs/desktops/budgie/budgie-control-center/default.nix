@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "budgie-control-center";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
+    hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
 
   patches = [
