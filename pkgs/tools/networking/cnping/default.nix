@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "cntools";
     repo = "cnping";
     rev = "6b89363e6b79ecbf612306d42a8ef94a5a2f756a";
-    sha256 = "sha256-E3Wm5or6C4bHq7YoyaEbtDwyd+tDVYUOMeQrprlmL4A=";
+    hash = "sha256-E3Wm5or6C4bHq7YoyaEbtDwyd+tDVYUOMeQrprlmL4A=";
     fetchSubmodules = true;
   };
 

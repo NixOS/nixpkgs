@@ -38,7 +38,7 @@ gcc10Stdenv.mkDerivation rec {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
+    hash = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
 

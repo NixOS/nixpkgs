@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "oxfordcontrol";
     repo = "osqp";
     rev = "v${version}";
-    sha256 = "sha256-enkK5EFyAeLaUnHNYS3oq43HsHY5IuSLgsYP0k/GW8c=";
+    hash = "sha256-enkK5EFyAeLaUnHNYS3oq43HsHY5IuSLgsYP0k/GW8c=";
     fetchSubmodules = true;
   };
 

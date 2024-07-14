@@ -39,7 +39,7 @@ mkDerivation rec {
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
+    hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 
   nativeBuildInputs = [

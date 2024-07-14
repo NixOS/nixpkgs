@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "wangyu-";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
+    hash = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };
 

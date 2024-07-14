@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-JrAYtoS8wNmmhbgnprD7vNz1N64ekIryjK77rAKTyaQ=";
+    hash = "sha256-JrAYtoS8wNmmhbgnprD7vNz1N64ekIryjK77rAKTyaQ=";
     fetchSubmodules = true;
   };
 

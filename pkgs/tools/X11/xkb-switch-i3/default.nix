@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Zebradil";
     repo = "xkb-switch-i3";
     rev = version;
-    sha256 = "sha256-5d1DdRtz0QCWISSsWQt9xgTOekYUCkhfMsjG+/kyQK4=";
+    hash = "sha256-5d1DdRtz0QCWISSsWQt9xgTOekYUCkhfMsjG+/kyQK4=";
     fetchSubmodules = true;
   };
 

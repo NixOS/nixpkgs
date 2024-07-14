@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = version;
-    sha256 = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
+    hash = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
     fetchSubmodules = true;
   };
 

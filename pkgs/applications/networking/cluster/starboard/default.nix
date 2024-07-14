@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oOz7Dt+j2EmBL/aJUjqRST90wYpXkyREnKCcmNBQX18=";
+    hash = "sha256-oOz7Dt+j2EmBL/aJUjqRST90wYpXkyREnKCcmNBQX18=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
