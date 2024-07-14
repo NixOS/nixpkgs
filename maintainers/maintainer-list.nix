@@ -2398,6 +2398,11 @@
     github = "beezow";
     githubId = 42082156;
   };
+  BeiyanYunyi = {
+    name = "Beiyan Yunyi";
+    github = "BeiyanYunyi";
+    githubId = 14120445;
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     matrix = "@bendlas:matrix.org";
