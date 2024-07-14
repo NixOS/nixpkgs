@@ -36,6 +36,7 @@ my $rootDir = ""; # = /
 my $force = 0;
 my $noFilesystems = 0;
 my $showHardwareConfig = 0;
+my $configTemplate = "none";
 
 for (my $n = 0; $n < scalar @ARGV; $n++) {
     my $arg = $ARGV[$n];
@@ -64,9 +65,35 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
     elsif ($arg eq "--show-hardware-config") {
         $showHardwareConfig = 1;
     }
+    elsif ($arg eq "--template") {
+        $n++;
+        die "$0: '$arg' requires an argument\n" unless defined $ARGV[$n];
+        $configTemplate = $ARGV[$n];
+    }
     else {
         die "$0: unrecognized argument ‘$arg’\n";
     }
+}
+
+
+# Resolve template aliases
+# alias is <templateName>.alias containing only the template name
+my $i = 0;
+while (-f "@templateDir@/$configTemplate.alias") {
+    if ($i > 10) {
+        die "Too many template aliases, possible loop detected";
+    }
+    $configTemplate = read_file("@templateDir@/$configTemplate.alias");
+    chomp $configTemplate;
+    $i++;
+}
+
+my $templateDir = "";
+
+if (-d "@templateDir@/$configTemplate") {
+    $templateDir = "@templateDir@/$configTemplate";
+} elsif ($configTemplate ne "none") {
+    die "Template $configTemplate not found";
 }
 
 
@@ -703,9 +730,32 @@ EOF
         write_file($fn, <<EOF);
 @configuration@
 EOF
+        # Apply template
+
+        if ($templateDir ne "") {
+            my $templateFiles = `find $templateDir -type f`;
+            my @templateFiles = split /\n/, $templateFiles;
+            foreach my $templateFile (@templateFiles) {
+                # Ignore configuration.nix and hardware-configuration.nix
+                next if $templateFile =~ /configuration.nix$/;
+                next if $templateFile =~ /hardware-configuration.nix$/;
+
+                (my $relativePath = $templateFile) =~ s/^$templateDir//;
+                my $targetPath = "$outDir$relativePath";
+                my $targetDir = dirname($targetPath);
+
+                my $templateContent = read_file($templateFile);
+                print STDERR "writing $targetPath...\n";
+                mkpath($targetDir, 0, 0755);
+                write_file($targetPath, $templateContent);
+            }
+        }
         print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
+        if ($templateDir ne "") {
+            print STDERR "warning: template files were not applied\n  if you want to apply template, consider using --dir and copy template files over manually.\n";
+        }
     }
 }
 

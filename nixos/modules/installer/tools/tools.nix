@@ -49,6 +49,28 @@ let
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
     manPage = ./manpages/nixos-generate-config.8;
+    templateDir = pkgs.substituteAllFiles {
+      name = "nixos-generate-config-templates";
+      src = ./config-templates;
+      files = let
+        # all files in the templates directory, and subdirectories
+        getFiles = base: lib.pipe (getFiles' base ".") [
+          lib.attrNames
+          (lib.map (path: lib.removePrefix (builtins.toString base) path))
+        ];
+        getFiles' = base: dir: lib.pipe "${base}/${dir}" [
+          builtins.readDir
+          (lib.concatMapAttrs (name: type:
+            if type == "directory" then
+              lib.concatMapAttrs (name: type: { "${dir}/${name}" = type; } ) (getFiles' base "${dir}/${name}")
+            else { "${dir}/${name}" = type; }
+          ))
+        ];
+      in getFiles ./config-templates;
+
+      inherit (nixos-generate-config) hostPlatformSystem;
+      hostname = config.networking.hostName;
+    };
   };
 
   inherit (pkgs) nixos-option;
