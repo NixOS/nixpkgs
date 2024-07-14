@@ -2152,7 +2152,8 @@
     "iss" = ps: with ps; [
     ]; # missing inputs: pyiss
     "ista_ecotrend" = ps: with ps; [
-    ]; # missing inputs: pyecotrend-ista
+      pyecotrend-ista
+    ];
     "isy994" = ps: with ps; [
       pyisy
     ];
@@ -5565,6 +5566,7 @@
     "ipp"
     "iqvia"
     "isal"
+    "ista_ecotrend"
     "isy994"
     "izone"
     "jellyfin"
