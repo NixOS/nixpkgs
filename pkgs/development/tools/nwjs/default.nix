@@ -38,9 +38,9 @@
 }:
 
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"  else if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64"  else "ia32";
-  os = if stdenv.hostPlatform.system == "aarch64-darwin"  then "osx" else "linux"; 
-  dlextension = if stdenv.hostPlatform.system == "aarch64-darwin"  then "zip" else "tar.gz"; 
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64" else if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "ia32";
+  os = if stdenv.hostPlatform.system == "aarch64-darwin" then "osx" else "linux";
+  dlextension = if stdenv.hostPlatform.system == "aarch64-darwin" then "zip" else "tar.gz";
   flavor = if sdk then "sdk-" else "";
 
   nwEnvPaths = if os != "osx" then [
@@ -125,7 +125,7 @@ in
       gappsWrapperArgs+=(
           --add-flags "--ozone-platform-hint=auto"
         )
-    else 
+    else
       gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     )
