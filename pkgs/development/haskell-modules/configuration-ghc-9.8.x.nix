@@ -72,6 +72,7 @@ self: super: {
   th-desugar = doJailbreak self.th-desugar_1_16; # th-abstraction >=0.6 && <0.7
   singletons-th = self.singletons-th_3_3;
   singletons-base = self.singletons-base_3_3;
+  ghc-tags = self.ghc-tags_1_8;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
