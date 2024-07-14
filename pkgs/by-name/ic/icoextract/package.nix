@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace exe-thumbnailer.thumbnailer \
       --replace Exec=exe-thumbnailer Exec=$out/bin/exe-thumbnailer
 
-    install -Dm644 exe-thumbnailer.thumbnailer $out/share/thumbnailers
+    install -Dm644 exe-thumbnailer.thumbnailer -t $out/share/thumbnailers
   '';
 
   meta = with lib; {
