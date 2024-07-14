@@ -375,6 +375,7 @@ in {
   gnome-xorg = handleTest ./gnome-xorg.nix {};
   gns3-server = handleTest ./gns3-server.nix {};
   gnupg = handleTest ./gnupg.nix {};
+  goatcounter = handleTest ./goatcounter.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
