@@ -844,6 +844,7 @@ dont-distribute-packages:
  - clash-verilog
  - clash-vhdl
  - clashilator
+ - classify-frog
  - classy-effects
  - classy-effects-th
  - classy-miso
@@ -1406,6 +1407,7 @@ dont-distribute-packages:
  - forms-data-format
  - forsyde-deep
  - forth-hll
+ - fortran-src-extras
  - foscam-directory
  - foscam-sort
  - fpco-api
