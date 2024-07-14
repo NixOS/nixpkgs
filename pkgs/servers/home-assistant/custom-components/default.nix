@@ -42,6 +42,8 @@
 
   prometheus_sensor = callPackage ./prometheus_sensor {};
 
+  samsungtv-smart = callPackage ./samsungtv-smart {};
+
   sensi = callPackage ./sensi {};
 
   smartir = callPackage ./smartir {};
