@@ -209,7 +209,8 @@
       apprise
     ];
     "aprilaire" = ps: with ps; [
-    ]; # missing inputs: pyaprilaire
+      pyaprilaire
+    ];
     "aprs" = ps: with ps; [
       aprslib
       geopy
@@ -5266,6 +5267,7 @@
     "apple_tv"
     "application_credentials"
     "apprise"
+    "aprilaire"
     "aprs"
     "aranet"
     "arcam_fmj"
