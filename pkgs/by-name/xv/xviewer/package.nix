@@ -36,9 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cinnamon.cinnamon-desktop
     docbook_xsl
-    gdk-pixbuf
     gobject-introspection
     gtk-doc
     itstool
@@ -52,6 +50,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     exempi
+    gdk-pixbuf
     glib
     gtk3
     lcms2
@@ -60,6 +59,7 @@ stdenv.mkDerivation rec {
     libpeas
     librsvg
     libxml2
+    cinnamon.cinnamon-desktop
     cinnamon.xapp
   ];
 
