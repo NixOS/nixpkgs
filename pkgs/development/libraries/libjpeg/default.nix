@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.ijg.org/";
     description = "Library that implements the JPEG image file format";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
     license = licenses.free;
     pkgConfigModules = [ "libjpeg" ];
     platforms = platforms.unix;
