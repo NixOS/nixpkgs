@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,10 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "C++ library for Limited Error Raster Compression";
     homepage = "https://github.com/esri/lerc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+    pkgConfigModules = [ "Lerc" ];
   };
 })
