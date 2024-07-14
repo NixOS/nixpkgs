@@ -2098,9 +2098,11 @@ self: super: {
   # https://github.com/faylang/fay/pull/474
   fay = doJailbreak super.fay;
 
-  # Too strict version bounds on cryptonite.
-  # Issue reported upstream, no bug tracker url yet.
-  darcs = doJailbreak super.darcs;
+  # Requests latest versions of crypton-connection and tls
+  darcs = super.darcs.overrideScope (self: super: {
+    crypton-connection = self.crypton-connection_0_4_0;
+    tls = self.tls_2_0_6;
+  });
 
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
