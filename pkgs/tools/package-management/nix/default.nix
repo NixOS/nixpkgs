@@ -179,17 +179,9 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_23 = common {
-    version = "2.23.2";
-    hash = "sha256-NH1G4GGHXU4pnQWI9X/gs7r97GO0i4tJFjoaIxl0FaQ=";
+    version = "2.23.3";
+    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
     self_attribute_name = "nix_2_23";
-    patches = [
-     # fixes regression in nix-prefetch-url
-     # https://github.com/NixOS/nix/pull/11052
-     (fetchpatch {
-       url = "https://github.com/NixOS/nix/commit/73f3179954ef8db5c8774c79272dd1215fe6f5c2.patch";
-       sha256 = "sha256-d/rBOONZGxOFRUPltH7z0OSYRqKbS/ZwZl/DaIXygC0=";
-     })
-    ];
   };
 
   git = (common rec {

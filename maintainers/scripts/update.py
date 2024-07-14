@@ -91,9 +91,11 @@ def make_worktree() -> Generator[Tuple[str, str], None, None]:
         target_directory = f'{wt}/nixpkgs'
 
         subprocess.run(['git', 'worktree', 'add', '-b', branch_name, target_directory])
-        yield (target_directory, branch_name)
-        subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
-        subprocess.run(['git', 'branch', '-D', branch_name])
+        try:
+            yield (target_directory, branch_name)
+        finally:
+            subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
+            subprocess.run(['git', 'branch', '-D', branch_name])
 
 async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, branch: str, changes: List[Dict]) -> None:
     for change in changes:

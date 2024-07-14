@@ -87,6 +87,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # don't use absolute paths to binary or icon - see https://github.com/NixOS/nixpkgs/issues/308324
+    ./fix-desktop-file.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

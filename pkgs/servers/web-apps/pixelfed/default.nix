@@ -14,7 +14,7 @@ php.buildComposerProject (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "pixelfed";
-    repo = finalAttrs.pname;
+    repo = "pixelfed";
     rev = "v${finalAttrs.version}";
     hash = "sha256-pNo10vvUD7q0HLM7+GgT+6PyocF4kDZ3Zee4ZCPDJNQ=";
   };

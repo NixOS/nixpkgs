@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/HkLJ0dRXdGcZz77uOTJrOX0xc3DH45/k9xmfesuxsg=";
+    hash = "sha256-/HkLJ0dRXdGcZz77uOTJrOX0xc3DH45/k9xmfesuxsg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ python-dateutil tornado python-daemon boto3 tenacity ];

@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "zfs_autobackup";
-    sha256 = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
+    hash = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
   };
 
 

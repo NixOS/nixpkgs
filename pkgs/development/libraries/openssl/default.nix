@@ -24,7 +24,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
       inherit hash;
     };
 

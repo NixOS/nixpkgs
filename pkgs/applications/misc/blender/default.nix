@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.1.1";
 
   src = fetchurl {
-    url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
     hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
   };
 

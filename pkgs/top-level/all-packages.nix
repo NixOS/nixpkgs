@@ -12562,8 +12562,6 @@ with pkgs;
 
   sanctity = callPackage ../tools/misc/sanctity { };
 
-  sanjuuni = callPackage ../tools/graphics/sanjuuni { };
-
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
@@ -13937,7 +13935,7 @@ with pkgs;
 
   viking = callPackage ../applications/misc/viking { };
 
-  vikunja = callPackage ../by-name/vi/vikunja/package.nix { pnpm = pnpm_8; };
+  vikunja = callPackage ../by-name/vi/vikunja/package.nix { pnpm = pnpm_9; };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
 
@@ -18751,8 +18749,6 @@ with pkgs;
   ktlint = callPackage ../development/tools/ktlint { };
 
   kythe = callPackage ../development/tools/kythe { };
-
-  lazygit = callPackage ../development/tools/lazygit { };
 
   laminar = callPackage ../development/tools/continuous-integration/laminar { };
 
@@ -32735,7 +32731,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation Security;
   };
   p4d = callPackage ../applications/version-management/p4d { };
-  p4v = callPackage ../applications/version-management/p4v { };
+  p4v = qt6Packages.callPackage ../applications/version-management/p4v { };
 
   parson = callPackage ../development/libraries/parson { };
 
@@ -38953,7 +38949,7 @@ with pkgs;
 
   jacktrip = callPackage ../applications/audio/jacktrip { };
 
-  j2cli = with python3Packages; toPythonApplication j2cli;
+  j2cli = with python311Packages; toPythonApplication j2cli;
 
   jq-lsp = callPackage ../development/tools/language-servers/jq-lsp { };
 

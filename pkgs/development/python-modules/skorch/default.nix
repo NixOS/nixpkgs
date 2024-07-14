@@ -28,15 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-JcplwaeYlGRAJXRNac1Ya/hgWoHE+NWjZhCU9eaSyRQ=";
   };
 
-  # Remove at next skorch release:
-  patches = [
-    (fetchpatch {
-      name = "unbreak-tests-with-sklearn-1.4";
-      url = "https://github.com/skorch-dev/skorch/commit/1f7a779d0aa78589e17262c206f5775f2fcd75f8.diff";
-      hash = "sha256-X3SgjgDeq3PlBI13cC56LIL1dV1e+Z3tsBj9sz5pizo=";
-    })
-  ];
-
   disabled = pythonOlder "3.8";
 
   propagatedBuildInputs = [
