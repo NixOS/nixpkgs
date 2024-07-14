@@ -701,6 +701,8 @@ self: super: with self; {
 
   apscheduler = callPackage ../development/python-modules/apscheduler { };
 
+  apsystems-ez1 = callPackage ../development/python-modules/apsystems-ez1 { };
+
   apsw = callPackage ../development/python-modules/apsw { };
 
   apycula = callPackage ../development/python-modules/apycula { };
