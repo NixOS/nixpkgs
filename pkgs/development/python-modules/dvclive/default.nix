@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.46.1";
+  version = "3.47.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvclive";
     rev = "refs/tags/${version}";
-    hash = "sha256-ifr8gsGSOIBPC07JcFcV97yV4Io5J2uiMf2ucmySiWc=";
+    hash = "sha256-oC45cSqiKeorbyPe3GIsJ824U3OS1cKvWxUM901/QwQ=";
   };
 
   build-system = [ setuptools-scm ];
