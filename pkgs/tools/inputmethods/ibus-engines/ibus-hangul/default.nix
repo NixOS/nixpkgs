@@ -1,10 +1,11 @@
 { lib, stdenv
-, fetchurl
+, fetchFromGitHub
 , substituteAll
 , appstream-glib
 , gettext
 , pkg-config
 , wrapGAppsHook3
+, autoreconfHook
 , gtk3
 , ibus
 , libhangul
@@ -15,9 +16,11 @@ stdenv.mkDerivation rec {
   pname = "ibus-hangul";
   version = "1.5.5";
 
-  src = fetchurl {
-    url = "https://github.com/libhangul/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-parIgobNGJYCKYYOPhp3iXinrqpIStms+kgoS4f9w7s=";
+  src = fetchFromGitHub {
+    owner = "libhangul";
+    repo = "ibus-hangul";
+    rev = version;
+    hash = "sha256-x2oOW8eiEuwmdCGUo+r/KcsitfGccSyianwIEaOBS3M=";
   };
 
   patches = [
@@ -32,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    autoreconfHook
   ];
 
   buildInputs = [
