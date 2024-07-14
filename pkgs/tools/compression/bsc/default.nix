@@ -1,34 +1,31 @@
 { lib, stdenv, fetchFromGitHub, openmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bsc";
-  version = "3.1.0";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "IlyaGrebnov";
     repo = "libbsc";
-    rev = version;
-    sha256 = "0c0jmirh9y23kyi1jnrm13sa3xsjn54jazfr84ag45pai279fciz";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-reGg5xvoZBbNFFYPPyT2P1LA7oSCUIm9NIDjXyvkP9Q=";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = lib.optional stdenv.isDarwin openmp;
 
-  postPatch = ''
-    substituteInPlace makefile \
-        --replace 'g++' '$(CXX)'
-  '';
-
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=$(CXX)"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = "High performance block-sorting data compression library";
     homepage = "http://libbsc.com/";
     maintainers = with maintainers; [ sigmanificient ];
-    # Later commits changed the licence to Apache2 (no release yet, though)
-    license = with licenses; [ lgpl3Plus ];
+    license = lib.licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "bsc";
   };
-}
+})
