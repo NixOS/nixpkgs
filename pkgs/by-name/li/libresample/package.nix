@@ -1,34 +1,62 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  cmake,
+  fetchFromGitHub,
+  fetchpatch2,
+  meson,
+  ninja,
+  pkg-config,
+  libsndfile,
+  libsamplerate,
 }:
 
-let
-  patch = fetchurl {
-    url = "mirror://debian/pool/main/libr/libresample/libresample_0.1.3-3.diff.gz";
-    sha256 = "063w8rqxw87fc89gas47vk0ll7xl8cy7d8g70gm1l62bqkkajklx";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libresample";
-  version = "0.1.3";
-  src = fetchurl {
-    url = "mirror://debian/pool/main/libr/libresample/libresample_${version}.orig.tar.gz";
-    sha256 = "05a8mmh1bw5afqx0kfdqzmph4x2npcs4idx0p0v6q95lwf22l8i0";
+  version = "0.1.4";
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "minorninth";
+    repo = "libresample";
+    rev = "b556e9ab8c303190dd6411ee16292262453bc28e";
+    hash = "sha256-mpa1vJfOUhMdcgEfEi+DfKO3535RDrFI7w/ZEDGYFAE=";
   };
-  patches = [ patch ];
-  preConfigure = ''
-    cat debian/patches/1001_shlib-cmake.patch | patch -p1
-  '';
-  nativeBuildInputs = [ cmake ];
+
+  patches = [
+    # Port build system to Meson
+    # https://github.com/minorninth/libresample/pull/8
+    (fetchpatch2 {
+      url = "https://github.com/minorninth/libresample/commit/217b1e0c429003ce53b3eae53102fdca282b2e12.patch?full_index=1";
+      hash = "sha256-OPJLbC+XiPgSWNocsY1b9XRbdPDAcBcUhrFKnsr4QcA=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [ libsndfile ];
+
+  checkInputs = [ libsamplerate ];
+
+  doCheck = true;
 
   meta = {
     description = "Real-time library for sampling rate conversion library";
-    license = lib.licenses.lgpl2Plus;
-    homepage = "https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html";
-    maintainers = [ lib.maintainers.sander ];
+    homepage = "https://github.com/minorninth/libresample";
+    # There is a little ambiguity around the relicensing from
+    # LGPL-2.1-or-later; see
+    # <https://github.com/minorninth/libresample/issues/6>.
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sander ];
+    mainProgram = "resample-sndfile";
   };
 }
