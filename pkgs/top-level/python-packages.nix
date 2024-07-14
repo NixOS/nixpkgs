@@ -1064,6 +1064,8 @@ self: super: with self; {
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
+  aws-request-signer = callPackage ../development/python-modules/aws-request-signer { };
+
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-secretsmanager-caching = callPackage ../development/python-modules/aws-secretsmanager-caching { };
