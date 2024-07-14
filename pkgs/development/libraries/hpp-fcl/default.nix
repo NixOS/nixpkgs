@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "humanoid-path-planner";
-    repo = finalAttrs.pname;
+    repo = "hpp-fcl";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-BwS9RSirdlD6Cqwp7KD59dkh2WsJVwdlH9LzM2AFjI4=";

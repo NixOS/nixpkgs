@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = finalAttrs.pname;
+    repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
     hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
   };

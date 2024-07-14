@@ -1,3 +1,4 @@
+# A test that runs a multi-node k3s cluster and verify pod networking works across nodes
 import ../make-test-python.nix (
   {
     pkgs,

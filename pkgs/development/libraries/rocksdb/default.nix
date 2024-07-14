@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = finalAttrs.pname;
+    repo = "rocksdb";
     rev = "v${finalAttrs.version}";
     hash = "sha256-bTUzh7ch14TDcm6GkfhA5I/qUVmUm+RE5d2HMZ3zaNc=";
   };

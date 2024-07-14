@@ -69,8 +69,8 @@ let
       $epubPath
 
     echo "application/epub+zip" > mimetype
-    zip -0Xq "$out" mimetype
-    cd scratch && zip -Xr9D "$out" *
+    zip -0Xq -b "$TMPDIR" "$out" mimetype
+    cd scratch && zip -Xr9D -b "$TMPDIR" "$out" *
   '';
 
   # NB: This file describes the Nixpkgs manual, which happens to use module
