@@ -2,31 +2,59 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
+  ninja,
+  pkg-config,
   eigen,
-  ffmpeg_4,
+  ffmpeg_7,
+  libresample,
+  kissfft,
 }:
+
 stdenv.mkDerivation {
   pname = "musly";
-  version = "unstable-2017-04-26";
+  version = "0.1-unstable-2019-09-05";
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
+
   src = fetchFromGitHub {
     owner = "dominikschnitzer";
     repo = "musly";
-    rev = "f911eacbbe0b39ebe87cb37d0caef09632fa40d6";
-    sha256 = "1q42wvdwy2pac7bhfraqqj2czw7w2m33ms3ifjl8phm7d87i8825";
+    rev = "7a0c6a9a2782e6fca84fb86fce5232a8c8a104ed";
+    hash = "sha256-DOvGGx3pCcvPPsT97sQlINjT1sJy8ZWvxLsFGGZbgzE=";
   };
-  nativeBuildInputs = [ cmake ];
+
+  patches = [
+    # Fix build with FFmpeg 7, C++17, and external libresample and kissfft
+    # https://github.com/dominikschnitzer/musly/pull/53
+    (fetchpatch2 {
+      url = "https://github.com/dominikschnitzer/musly/compare/7a0c6a9a2782e6fca84fb86fce5232a8c8a104ed...86ed2b851538fd006848cf9b5bc143acf81a8839.patch";
+      hash = "sha256-MJxC66+9DrAjgyECGH7IeaNFExFhCwJmsEnbFvjC3ag=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
+
   buildInputs = [
     eigen
-    ffmpeg_4
+    ffmpeg_7
+    libresample
+    kissfft
   ];
-  fixupPhase = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
-  '';
 
-  meta = with lib; {
+  doCheck = true;
+
+  meta = {
     homepage = "https://www.musly.org";
     description = "Fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
@@ -36,9 +64,9 @@ stdenv.mkDerivation {
       or try the command line application included in the package and start generating
       some automatic music playlists right away.
     '';
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ ggpeti ];
-    platforms = with platforms; darwin ++ linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ ggpeti ];
+    platforms = lib.platforms.unix;
     mainProgram = "musly";
   };
 }
