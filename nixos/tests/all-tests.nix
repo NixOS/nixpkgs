@@ -980,6 +980,7 @@ in {
   thanos = handleTest ./thanos.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
+  tika = runTest ./tika.nix;
   timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
