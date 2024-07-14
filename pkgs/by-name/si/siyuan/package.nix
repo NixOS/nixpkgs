@@ -17,9 +17,13 @@ let
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "darwin";
+    "aarch64-darwin" = "darwin-arm64";
   };
 
   platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+
+  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
@@ -84,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  # disable code signing on Darwin
+  env.CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.isDarwin "false";
+
   postConfigure = ''
     # remove prebuilt pandoc archives
     rm -r pandoc
@@ -98,10 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
 
+    cp -r ${electronDist} electron-dist
+    chmod -R u+w electron-dist
+
     npm exec electron-builder -- \
         --dir \
         --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -110,15 +120,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/siyuan
-    cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
+    ${lib.optionalString (!stdenv.isDarwin) ''
+      mkdir -p $out/share/siyuan
+      cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
-    makeWrapper ${lib.getExe electron} $out/bin/siyuan \
-        --chdir $out/share/siyuan/resources \
-        --add-flags $out/share/siyuan/resources/app \
-        --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        --inherit-argv0
+      makeWrapper ${lib.getExe electron} $out/bin/siyuan \
+          --chdir $out/share/siyuan/resources \
+          --add-flags $out/share/siyuan/resources/app \
+          --set ELECTRON_FORCE_IS_PACKAGED 1 \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --inherit-argv0
+    ''}
+
+    ${lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r build/mac*/SiYuan.app $out/Applications
+      makeWrapper $out/Applications/SiYuan.app/Contents/MacOS/SiYuan $out/bin/siyuan
+    ''}
 
     runHook postInstall
   '';
