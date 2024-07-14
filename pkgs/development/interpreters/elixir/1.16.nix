@@ -1,7 +1,7 @@
 { mkDerivation }:
 mkDerivation {
-  version = "1.16.3";
-  sha256 = "sha256-WUBqoz3aQvBlSG3pTxGBpWySY7I0NUcDajQBgq5xYTU=";
+  version = "1.17.2";
+  sha256 = "sha256-8rb2f4CvJzio3QgoxvCv1iz8HooXze0tWUJ4Sc13dxg=";
   # https://hexdocs.pm/elixir/1.16.0/compatibility-and-deprecations.html#compatibility-between-elixir-and-erlang-otp
   minimumOTPVersion = "24";
   escriptPath = "lib/elixir/scripts/generate_app.escript";
