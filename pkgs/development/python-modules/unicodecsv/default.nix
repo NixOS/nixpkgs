@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
+    hash = "sha256-AYwIA31IZJoEEgY/9O2ibqqB7/FUbb/6UfpSkydv9/w=";
   };
 
   # ImportError: No module named runtests

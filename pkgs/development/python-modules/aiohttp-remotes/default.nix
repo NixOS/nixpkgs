@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiohttp_remotes";
     inherit version;
-    sha256 = "f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c";
+    hash = "sha256-+Vw6a+Xi3nRqhc6a9J7FSNptuDeNfoG7Fx7HexNWKmw=";
   };
 
   nativeBuildInputs = [ flit ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nm4mj7pd7gz4ghic6b3wrnd1b59hd1f0axavdabfl79wy511l7r";
+    hash = "sha256-+dAQiufpULdU26or4EKDqazQbOZjGRbhI/+ddo+spNo=";
   };
 
   # Set absolute nix store paths to the executables that pypass uses

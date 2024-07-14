@@ -6,7 +6,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0va7nkbdjgzrf7fnbxkh1140pbc62wyj86rdrrh5wmg3phiziqkb";
+    hash = "sha256-a+L4I7zjVV5gzi0bJD0Xhq0LSAhw9mXdcfk/2da0R20=";
   };
 
   propagatedBuildInputs = [ dnspython ];

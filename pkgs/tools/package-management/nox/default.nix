@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://pypi/n/nix-nox/nix-nox-${version}.tar.gz";
-    sha256 = "1qcbhdnhdhhv7q6cqdgv0q55ic8fk18526zn2yb12x9r1s0lfp9z";
+    hash = "sha256-P11HgQ45dRGWF/YbUVCYDrFYCgb7NcwMPhvCBm2Di+E=";
   };
 
   patches = [ ./nox-review-wip.patch ];

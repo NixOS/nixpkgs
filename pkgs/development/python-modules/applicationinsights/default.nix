@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b761f3ef0680acf4731906dfc1807faa6f2a57168ae74592db0084a6099f7b3";
+    hash = "sha256-C3YfPvBoCs9HMZBt/BgH+qbypXFornRZLbAISmCZ97M=";
   };
 
   propagatedBuildInputs = [ portalocker ];

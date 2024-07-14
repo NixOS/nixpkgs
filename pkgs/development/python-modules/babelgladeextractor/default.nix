@@ -16,7 +16,7 @@ buildPythonPackage rec {
     pname = "BabelGladeExtractor";
     inherit version;
     extension = "tar.bz2";
-    sha256 = "160p4wi2ss69g141c2z59azvrhn7ymy5m9h9d65qrcabigi0by5w";
+    hash = "sha256-vPgF4otLsYyLaQmmWnz1x8K8v0rlCxZIeMloLSInF5g=";
   };
 
   propagatedBuildInputs = [ babel ];

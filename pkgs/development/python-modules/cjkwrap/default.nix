@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CJKwrap";
     inherit version;
-    sha256 = "1b603sg6c2gv9vmlxwr6r1qvhadqk3qp6vifmijris504zjx5ix2";
+    hash = "sha256-osfS5Seg6JhlrC5uc/GYuCm4ccgm807rTvsJZp4ewKw=";
   };
 
   pythonImportsCheck = [ "cjkwrap" ];

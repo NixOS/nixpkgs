@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
+    hash = "sha256-ABkg7cVDNngJHLdMVuOcV//NsoA5ZEewfW++Trp6fYc=";
   };
 
   propagatedBuildInputs = with python3Packages; [ mopidy pylast ];

@@ -9,7 +9,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1230fdn5mx3wwr3a3nn6z2vwh973n248m11hnx9y3fjq7bgpky67";
+    hash = "sha256-x/h53zpYuuFTtzCEioiw4yTIt/jG2qFG5nz0WmxzYIg=";
   };
 
   # Tests requires to start containers

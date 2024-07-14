@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Gravatar";
     inherit version;
-    sha256 = "YGZfMcLGEokdto/4Aek+06CIHGyOw0arxk0qmSP1YuE=";
+    hash = "sha256-YGZfMcLGEokdto/4Aek+06CIHGyOw0arxk0qmSP1YuE=";
   };
 
   patches = [

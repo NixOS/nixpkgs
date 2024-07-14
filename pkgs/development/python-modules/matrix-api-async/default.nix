@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xdx8fci0lar3x09dwqgka6ssz9d3g7gsfx4yyr13sdwza7zsqc3";
+    hash = "sha256-g2H9j/q86RGy96Q7/c4bLX2tjZoP85ZAH1lREJlDvXU=";
   };
 
   propagatedBuildInputs = [ matrix-client ];

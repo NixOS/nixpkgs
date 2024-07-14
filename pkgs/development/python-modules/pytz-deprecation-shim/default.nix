@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytz_deprecation_shim";
     inherit version;
-    sha256 = "af097bae1b616dde5c5744441e2ddc69e74dfdcb0c263129610d85b87445a59d";
+    hash = "sha256-rwl7rhthbd5cV0REHi3caedN/csMJjEpYQ2FuHRFpZ0=";
   };
 
   nativeBuildInputs = [ setuptools ];

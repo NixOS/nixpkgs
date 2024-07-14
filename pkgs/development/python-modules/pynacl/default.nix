@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "PyNaCl";
-    sha256 = "8ac7448f09ab85811607bdd21ec2464495ac8b7c66d146bf545b0f08fb9220ba";
+    hash = "sha256-isdEjwmrhYEWB73SHsJGRJWsi3xm0Ua/VFsPCPuSILo=";
   };
 
   nativeBuildInputs = [ sphinxHook ];

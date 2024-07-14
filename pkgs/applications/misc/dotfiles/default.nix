@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "03qis6m9r2qh00sqbgwsm883s4bj1ibwpgk86yh4l235mdw8jywv";
+    hash = "sha256-m3uJeKtlCEqgN2i+y1cMchE9EKqav4U1ABCLnKrREQ8=";
   };
 
   # No tests in archive

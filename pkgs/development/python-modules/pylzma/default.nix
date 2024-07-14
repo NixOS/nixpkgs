@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # xz, and uefi-firmware-parser also does this
   src = fetchPypi {
     inherit pname version;
-    sha256 = "074anvhyjgsv2iby2ql1ixfvjgmhnvcwjbdz8gk70xzkzcm1fx5q";
+    hash = "sha256-uHQXKvvzd3DmQ78tydm2sD65XY+BYuFXFFs/6eG2ihw=";
   };
 
   pythonImportsCheck = [ "pylzma" ];

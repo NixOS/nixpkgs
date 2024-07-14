@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ede4caff74928156f7ff38dac9b0811893de41966c39cd5b2fdea53418349ca8";
+    hash = "sha256-7eTK/3SSgVb3/zjaybCBGJPeQZZsOc1bL96lNBg0nKg=";
   };
 
   propagatedBuildInputs = [ twitter-common-lang ];

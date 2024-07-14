@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f";
+    hash = "sha256-s72h0QjV3Zn0og0k2cNI6RxNt6sbdJIAve0vg5zL5o8=";
   };
 
   # This package has a test script (built for Travis) that involves a)

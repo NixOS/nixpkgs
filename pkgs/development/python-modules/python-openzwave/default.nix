@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_openzwave";
     inherit version;
-    sha256 = "6b40c7711383eeb3535cf5504f1cf47cc1ac7018eb820f299642a5a2795aef84";
+    hash = "sha256-a0DHcROD7rNTXPVQTxz0fMGscBjrgg8plkKlonla74Q=";
     extension = "zip";
   };
 

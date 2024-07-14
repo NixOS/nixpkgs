@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "64726a4a56783acdc79c6b9b3a15f16e6071077c897a0b999f3b43f744bc621c";
+    hash = "sha256-ZHJqSlZ4Os3HnGubOhXxbmBxB3yJeguZnztD90S8Yhw=";
   };
 
   patches = lib.optional stdenv.cc.isClang ./pyfribidi-clang.patch;

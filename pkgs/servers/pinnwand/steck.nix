@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
+    hash = "sha256-QcPX6fEfp1KITJlEBJS3sT5ZIQhXB///T5PxFY8gdKg=";
   };
 
   postPatch = ''

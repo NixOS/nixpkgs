@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02zjwa7zbcbqj76l0qmg7bbf3fqli60pl2apby3j4zwzcrrryczs";
+    hash = "sha256-+jOfc2affyKHX1cJeoGJFLvh1jqvYkDNkXix9Y/i8gs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];

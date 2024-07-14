@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "fontPens";
     inherit version;
-    sha256 = "1za15dzsnymq6d9x7xdfqwgw4a3003wj75fn2crhyidkfd2s3nd6";
+    hash = "sha256-ptmhRXOzRQ8zE9aVI/kAYCjCH8eu9dNTM7h6q38rQf0=";
     extension = "zip";
   };
 

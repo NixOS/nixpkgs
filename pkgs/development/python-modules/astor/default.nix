@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ppscdzzvxpznclkmhhj53iz314x3pfv4yc7c6gwxqgljgdgyvka";
+    hash = "sha256-am7/2pP04c6fYYd5st0dnYTx4ygSwjops//2/X9j+l4=";
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89

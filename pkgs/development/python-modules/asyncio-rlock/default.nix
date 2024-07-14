@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "asyncio_rlock";
     inherit version;
-    sha256 = "7e29824331619873e10d5d99dcc46d7b8f196c4a11b203f4eeccc0c091039d43";
+    hash = "sha256-fimCQzFhmHPhDV2Z3MRte48ZbEoRsgP07szAwJEDnUM=";
   };
 
   # no tests on PyPI, no tags on GitLab

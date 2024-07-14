@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19m3p6i7fj7nmkbsjhiha3f2l7d05j9gf9ha2pd0pqfrx9lp1r61";
+    hash = "sha256-weRwaerZ4QvaFQom95IsoB0q3FAwQqnXrPZId6K5o6Y=";
   };
 
   # tests are not published: https://github.com/asweigart/stdiomask/issues/5

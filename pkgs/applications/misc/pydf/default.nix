@@ -6,7 +6,7 @@ python3Packages.buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f47a7c3abfceb1ac04fc009ded538df1ae449c31203962a1471a4eb3bf21439";
+    hash = "sha256-f0enw6v86xrAT8AJ3tU43xrkScMSA5YqFHGk6zvyFDk=";
   };
 
   postInstall = ''

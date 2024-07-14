@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pympler";
     inherit version;
-    sha256 = "993f1a3599ca3f4fcd7160c7545ad06310c9e12f70174ae7ae8d4e25f6c5d3fa";
+    hash = "sha256-mT8aNZnKP0/NcWDHVFrQYxDJ4S9wF0rnro1OJfbF0/o=";
   };
 
   patches = [

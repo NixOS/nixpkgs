@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MeshLabXML";
     inherit version;
-    sha256 = "1villmg46hqby5jjkkpxr5bxydr72y5b3cbfngwpyxxdljn091w8";
+    hash = "sha256-iIcErKStd3/5s26xsYoXJzffV8n9zill8QtDQ16lNO4=";
   };
 
   propagatedBuildInputs = [ ];

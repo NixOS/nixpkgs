@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1bed2fb25b63fb7b1a55d64090c993c9c9167b28485ae0bcdd81cf6ede96aea";
+    hash = "sha256-8b7S+yW2P7expV1kCQyZPJyRZ7KEha4Lzdgc9u3pauo=";
   };
 
   # required WAV files for testing are not included in the tarball

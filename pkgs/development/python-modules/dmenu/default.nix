@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "dmenu";
-    sha256 = "06v2fq0ciallbib7sbk4kncj0n3gdqp1kz8n5k2669x49wyh34wm";
+    hash = "sha256-lZMBPU+kJ2PELBb9GS5ub1ggmZ1kLn1WXJSqyAB2Yhs=";
   };
 
   propagatedBuildInputs = [ dmenu ];

@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MIDIUtil";
     inherit version;
-    sha256 = "02m9sqv36zrzgz5zg2w9qmz8snzlm27yg3ways2hgipgs4xriykr";
+    hash = "sha256-efqYO9HvxgeF9oqP54+o9FuNfsWJi/fLfz9/MzbWqQo=";
   };
 
   meta = with lib; {

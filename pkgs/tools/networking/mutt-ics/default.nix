@@ -7,7 +7,7 @@ with python3.pkgs; buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "mutt_ics";
-    sha256 = "d44d4bec4e71c7f14df01b90fdb9563cdc784ece4250abfea5b0b675cfe85a50";
+    hash = "sha256-1E1L7E5xx/FN8BuQ/blWPNx4Ts5CUKv+pbC2dc/oWlA=";
   };
 
   propagatedBuildInputs = [ icalendar ];

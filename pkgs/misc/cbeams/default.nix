@@ -7,7 +7,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1agcjg6kmcyvk834xd2j60mi349qi9iw3dc2vwpd7pqwq1daq3gi";
+    hash = "sha256-8Q2sWsAc39Mu34K1wWOKOJERKzBStE4GmtuzOs2T7Kk=";
   };
 
   propagatedBuildInputs = [ blessings docopt ];

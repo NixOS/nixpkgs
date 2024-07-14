@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cf830c6614362a78aab78d50eaf7c6c93831369c52e1bb64ffae1df0341e637";
+    hash = "sha256-HPgwxmFDYqeKq3jVDq98bJODE2nFLhu2T/rh3wNB5jc=";
   };
 
   propagatedBuildInputs = [ enchant2 ];

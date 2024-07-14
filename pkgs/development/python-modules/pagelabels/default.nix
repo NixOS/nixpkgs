@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07as5kzyvj66bfgvx8bph8gkyj6cgm4lhgxwb78bpdl4m8y8kpma";
+    hash = "sha256-qt6JPKqEtrvQWbw/SEl9zEg/H4J3ob6fW8bI7f8sWh0=";
   };
 
   buildInputs = [ pdfrw ];

@@ -12,7 +12,7 @@ with python3Packages; buildPythonApplication rec {
   # Must be built from python sdist because of versioning quirks
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2510e3aae4874674187f88f22f854e6b0ea1881b77039808a68ac1a5e8ee69b6";
+    hash = "sha256-JRDjquSHRnQYf4jyL4VOaw6hiBt3A5gIporBpejuabY=";
   };
 
   propagatedBuildInputs = [

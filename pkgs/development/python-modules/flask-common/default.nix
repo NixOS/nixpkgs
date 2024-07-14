@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Common";
     inherit version;
-    sha256 = "13d99f2dbc0a332b8bc4b2cc394d3e48f89672c266868e372cd9d7b433d921a9";
+    hash = "sha256-E9mfLbwKMyuLxLLMOU0+SPiWcsJmho43LNnXtDPZIak=";
   };
 
   propagatedBuildInputs = [

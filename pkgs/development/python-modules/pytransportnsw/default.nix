@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyTransportNSW";
     inherit version;
-    sha256 = "00jklgjirmc58hiaqqc2n2rgixvx91bgrd6lv6hv28k51kid10f3";
+    hash = "sha256-w4HQ4gxlIrGh2dS0/FZIfff4srCCYawiRIXVHOWjUwI=";
   };
 
   propagatedBuildInputs = [ requests ];

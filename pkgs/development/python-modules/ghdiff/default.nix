@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17mdhi2sq9017nq8rkjhhc87djpi5z99xiil0xz17dyplr7nmkqk";
+    hash = "sha256-E89qT6bXtxN+BzTGntIv8cp2EINQzoywPQEkrEWErZ4=";
   };
 
   nativeCheckInputs = [ zope-testrunner ];

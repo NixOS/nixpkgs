@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h9q9pjvw1ap5k70ygp750d096jkzymxlhx87yh0pr9mb6zg6gd0";
+    hash = "sha256-oD3zvlk15QugP6hD2qv/U5oEGijnPg/OLFcFvuVNOEE=";
   };
 
   pythonImportsCheck = [ "ipaddress-python2-stubs" ];

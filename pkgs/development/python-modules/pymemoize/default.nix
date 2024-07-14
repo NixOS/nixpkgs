@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "PyMemoize";
-    sha256 = "0yqr60hm700zph6nv8wb6yp2s0i08mahxvw98bvkmw5ijbsviiq7";
+    hash = "sha256-B8e49ZKx8Dr3QonvDlVFIAItrjeLo20NvB+AUyEwGXs=";
   };
 
   nativeCheckInputs = [ django ];

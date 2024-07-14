@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1khw1rxra5hn7hwp16i6kgj89znq8vjsyly3r2dxx2z2bddil000";
+    hash = "sha256-AAAaW1vii96byMNTr+VG2P6E5JsmmnA5PBYWlXsOHM4=";
   };
 
   propagatedBuildInputs = lib.singleton python3Packages.pyusb;

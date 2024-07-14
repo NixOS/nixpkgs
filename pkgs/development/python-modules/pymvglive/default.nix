@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyMVGLive";
     inherit version;
-    sha256 = "0sh4xm74im9qxzpbrlc5h1vnpgvpybnpvdcav1iws0b561zdr08c";
+    hash = "sha256-DIHcfjBlAc1j2Iq1fe3yd79rd4CF0bzu7zjVSE7tBGo=";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kdr7w2fhgjpcf1k3l6an9im583iqkr6v8hb4q1zw30nh3bqkk0f";
+    hash = "sha256-DsyJ14AWDP4DJguibfLEcaBSY7LK0DGDY1c+6AQ/uU0=";
   };
 
   passthru.optional-dependencies = {

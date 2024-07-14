@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyPlatec";
     inherit version;
-    sha256 = "0kqx33flcrrlipccmqs78d14pj5749bp85b6k5fgaq2c7yzz02jg";
+    hash = "sha256-Twrwvz9MYPVcmWYVdFcip8hLQkNH48rYjTRnRt0YHU8=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-std=c++11";

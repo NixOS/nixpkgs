@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "148yp0l7h8cflxag62pc1iwj5b5liyljnaxwfjaiqwl96vwjn0fx";
+    hash = "sha256-3QEr+TaJchyVdLwrK6mPtKwieQzsCvNUp44heCi4HpE=";
   };
 
   # Does not seem to have actual tests, but unittest discover

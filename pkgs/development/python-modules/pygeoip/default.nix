@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f22c4e00ddf1213e0fae36dc60b46ee7c25a6339941ec1a975539014c1f9a96d";
+    hash = "sha256-8ixOAN3xIT4PrjbcYLRu58JaYzmUHsGpdVOQFMH5qW0=";
   };
 
   # requires geoip samples

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0avqpswfmw5b08xx3ib6zchc5bis390fn1v74vg7nnrkf1pb3qbd";
+    hash = "sha256-beGxbnAzW3veJmcH60AaOq7CIPtmxdE7Aqvw6ri+eCs=";
   };
 
   nativeCheckInputs = [ pytest ];

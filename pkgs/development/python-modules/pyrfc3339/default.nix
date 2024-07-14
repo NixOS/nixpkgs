@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyRFC3339";
     inherit version;
-    sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
+    hash = "sha256-gbjL4VGc23m+0EkQ3W+k4YH6+MiN/x4bmHtferI6Wxo=";
   };
 
   nativeBuildInputs = [ setuptools ];

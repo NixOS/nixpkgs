@@ -12,7 +12,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b6f8025ed1e9877f06882ddbd81f701a8e094647ab97595e2afc09016835a7c";
+    hash = "sha256-W2+AJe0emHfwaILdvYH3AajglGR6uXWV4q/AkBaDWnw=";
   };
 
   propagatedBuildInputs = [ dropbox annexremote humanfriendly ];

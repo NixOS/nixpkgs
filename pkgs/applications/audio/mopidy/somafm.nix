@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-SomaFM";
-    sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
+    hash = "sha256-DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
 
   propagatedBuildInputs = [ mopidy ];

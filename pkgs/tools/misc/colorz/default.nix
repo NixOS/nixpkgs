@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ghd90lgplf051fs5n5bb42zffd3fqpgzkbv6bhjw7r8jqwgcky0";
+    hash = "sha256-wE/2OJYoHy7hMnvN/y52ozn3BVmr2KJdKMDR+yhIDT4=";
   };
 
   propagatedBuildInputs = with python3Packages; [ pillow scipy ];

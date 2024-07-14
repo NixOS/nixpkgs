@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pySDCP";
     inherit version;
-    sha256 = "07396lsn610izaravqc6j5f6m0wjrzgc0d1r9dwqzj15g5zfc7wm";
+    hash = "sha256-lR/mfnklyI95Szk0wN7PkoNqXJGG4a2y+hEEYzU1aRw=";
   };
 
   # Project has no tests

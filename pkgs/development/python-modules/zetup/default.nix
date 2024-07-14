@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8a9bdcfa4b705d72b55b218658bc9403c157db7b57a14158253c98d03ab713d";
+    hash = "sha256-uKm9z6S3BdcrVbIYZYvJQDwVfbe1ehQVglPJjQOrcT0=";
   };
 
   # Python > 3.7 compatibility

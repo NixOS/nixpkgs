@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bada20a25b547b395d472e2e08928f0437df26bbdbda4797c55863198e29a21f";
+    hash = "sha256-utogoltUezldRy4uCJKPBDffJrvb2keXxVhjGY4poh8=";
   };
 
   # test_help expects architecture-dependent Linux signal numbers.

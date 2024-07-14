@@ -11,7 +11,7 @@ buildPythonPackage rec {
   format = "setuptools";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s84kd9vblbjz61q7zchx64a6hmdqb4lillna5ryh0g9ij76g6r5";
+    hash = "sha256-JZtnjozpAehzUZbSSMnCrUKjiOmQ/YOD+XLRtVObBGk=";
   };
   preBuild = "echo > README.rst";
   # setup.py uses a python3 os.path.join

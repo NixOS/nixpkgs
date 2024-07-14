@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
+    hash = "sha256-8b/++cvIJij259e0DX4lWu+qGttqGx0mxpqLeeYgipg=";
   };
 
   # 2to3 was removed in setuptools 58

@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "XStatic-jQuery";
     inherit version;
-    sha256 = "e0ae8f8ec5bbd28045ba4bca06767a38bd5fc27cf9b71f434589f59370dcd323";
+    hash = "sha256-4K6PjsW70oBFukvKBnZ6OL1fwnz5tx9DRYn1k3Dc0yM=";
   };
 
   # no tests implemented

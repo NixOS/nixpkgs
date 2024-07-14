@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01kpx35572mp4xl2fjyvfk39jfgfjcyzymbifk76891kaqkjb7r9";
+    hash = "sha256-KZ8lJ1YzJGTOdHFV/z2T7jmZxnTbSydoJ7eKU8rodwY=";
   };
 
   # The pyscaffold is not a runtime dependency but just a python project bootstrapping tool. Thus,

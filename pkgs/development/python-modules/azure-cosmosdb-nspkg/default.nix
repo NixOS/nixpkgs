@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acf691e692818d9a65c653c7a3485eb8e35c0bdc496bba652e5ea3905ba09cd8";
+    hash = "sha256-rPaR5pKBjZplxlPHo0heuONcC9xJa7plLl6jkFugnNg=";
   };
 
   propagatedBuildInputs = [ azure-nspkg ];

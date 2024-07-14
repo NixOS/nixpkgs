@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Keras_Preprocessing";
     inherit version;
-    sha256 = "add82567c50c8bc648c14195bf544a5ce7c1f76761536956c3d2978970179ef3";
+    hash = "sha256-rdglZ8UMi8ZIwUGVv1RKXOfB92dhU2lWw9KXiXAXnvM=";
   };
 
   propagatedBuildInputs = [
