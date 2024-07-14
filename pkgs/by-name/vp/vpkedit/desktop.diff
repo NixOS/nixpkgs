@@ -1,0 +1,13 @@
+diff --git a/src/installer/deb/desktop.in b/src/installer/deb/desktop.in
+index 6caf29b..6593d9e 100644
+--- a/src/installer/deb/desktop.in
++++ b/src/installer/deb/desktop.in
+@@ -2,7 +2,7 @@
+ Version=${PROJECT_VERSION}
+ Name=${PROJECT_NAME_PRETTY}
+ Comment=${PROJECT_DESCRIPTION}
+-Exec=/opt/${PROJECT_NAME}/${PROJECT_NAME} %f
++Exec=${PROJECT_NAME} %f
+ Icon=${PROJECT_NAME}
+ Terminal=false
+ Type=Application
