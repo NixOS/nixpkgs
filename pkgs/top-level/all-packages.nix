@@ -16994,6 +16994,8 @@ with pkgs;
 
   genemichaels = callPackage ../development/tools/rust/genemichaels { };
 
+  funlisp = callPackage ../development/interpreters/funlisp { };
+
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
