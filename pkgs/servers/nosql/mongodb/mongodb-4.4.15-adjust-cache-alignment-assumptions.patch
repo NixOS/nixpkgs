@@ -1,0 +1,37 @@
+From 5c9e0d0fc9188bab0ae09c9c33df01938b0c1b6c Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Thu, 14 Apr 2022 09:25:33 -0700
+Subject: [PATCH] server: Adjust the cache alignment assumptions
+
+aarch64 has 256 for hardware_destructive_interference_size and gcc 12
+has added a warning to complain about mismatches which results in
+static_assert failures
+
+In file included from src/mongo/s/commands/cluster_find_cmd.cpp:39:
+src/mongo/db/stats/counters.h:185:47: error: static assertion failed: cache line spill
+ 185 |     static_assert(sizeof(decltype(_together)) <= stdx::hardware_constructive_interference_size,
+     |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The structure need to ensure true sharing for both the elements
+so align it to hardware_constructive_interference_size instead
+
+Upstream-Status: Reported [https://jira.mongodb.org/browse/SERVER-65664]
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/mongo/db/stats/counters.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- a/src/mongo/db/stats/counters.h
++++ b/src/mongo/db/stats/counters.h
+@@ -182,8 +182,8 @@ private:
+         AtomicWord<long long> requests{0};
+     };
+     CacheAligned<Together> _together{};
+-    static_assert(sizeof(decltype(_together)) <= stdx::hardware_constructive_interference_size,
+-                  "cache line spill");
++    static_assert(sizeof(Together) <= stdx::hardware_constructive_interference_size,
++                   "cache line spill");
+
+     CacheAligned<AtomicWord<long long>> _logicalBytesOut{0};
+
