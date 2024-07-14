@@ -1,5 +1,4 @@
-{ 
-  alsa-lib
+{ alsa-lib
   , at-spi2-core
   , atk
   , autoPatchelfHook
@@ -39,10 +38,7 @@
 }:
 
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64" 
-  else if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" 
-  else "ia32";
-
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"  else if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64"  else "ia32";
   os = if stdenv.hostPlatform.system == "aarch64-darwin"  then "osx" else "linux"; 
   dlextension = if stdenv.hostPlatform.system == "aarch64-darwin"  then "zip" else "tar.gz"; 
   flavor = if sdk then "sdk-" else "";
@@ -119,18 +115,11 @@ in
         }."${flavor + bits}";
       };
 
-  #  Disable autoPatchelfHook en macOS
-  nativeBuildInputs = if stdenv.isDarwin then [] else [ 
-
-    autoPatchelfHook 
-    (wrapGAppsHook3.override { inherit makeWrapper; })
-  ];
-
+  nativeBuildInputs = if stdenv.isDarwin then [] else [  autoPatchelfHook (wrapGAppsHook3.override { inherit makeWrapper; }) ];
   buildInputs = if os != "osx" then [ nwEnv ] else [ unzip  ffmpeg libxcb ];
   appendRunpaths = if os != "osx" then map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ] else [];
 
   preFixup = ''
-
     if [ "${os}" = "osx" ]; then
       # Flags for OSX
       gappsWrapperArgs+=(
@@ -143,7 +132,6 @@ in
     fi
   '';
 
-  # Define la fase de desempacado condicionalmente
   unpackPhase = ''
     if [ "${os}" = "osx" ]; then
       echo "Unpacking on macOS using unzip..."
@@ -155,7 +143,6 @@ in
     fi
   '';
 
-
   installPhase = ''
       runHook preInstall
 
@@ -166,19 +153,14 @@ in
         cp -R * $out/share/nwjs
         find $out/share/nwjs
         mkdir -p $out/bin
-
-
         create_symlink() {
             ln -s $(lib.getLib systemd)/lib/libudev.so $out/share/nwjs/libudev.so.0
          }
          create_symlink
          ln -s $out/share/nwjs/nw $out/bin
-
          mkdir $out/lib
          ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
-
        fi
-
        runHook postInstall
   '';
 
