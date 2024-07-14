@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
     "--${if withShishi then "enable" else "disable"}-kerberos5"
   ];
 
-  doCheck = true;
+  # krb5context test uses certificates that expired on 2024-07-11.
+  # Reported to bug-gss@gnu.org with Message-ID: <87cyngavtt.fsf@alyssa.is>.
+  doCheck = !withShishi;
 
   # Fixup .la files
   postInstall = lib.optionalString withShishi ''
