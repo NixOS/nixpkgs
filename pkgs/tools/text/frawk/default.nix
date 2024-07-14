@@ -6,7 +6,6 @@
 , zlib
 , features ? [ "default" ]
 , llvmPackages_12
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {

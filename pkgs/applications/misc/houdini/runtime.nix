@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, callPackage}:
+{ lib, requireFile, callPackage}:
 
 callPackage ./runtime-build.nix rec {
   version = "20.0.688";

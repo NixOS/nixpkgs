@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "globe-cli";

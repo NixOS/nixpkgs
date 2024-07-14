@@ -17226,6 +17226,12 @@ with pkgs;
     x11Support = true;
   };
 
+  # https://py-free-threading.github.io
+  python313FreeThreading = python313.override {
+    pythonAttr = "python313FreeThreading";
+    enableGIL = false;
+  };
+
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python39 python310 python311 python312 python313 python3Minimal pypy27 pypy310 pypy39 rustpython;
 
@@ -23943,27 +23949,6 @@ with pkgs;
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
-
-  SDL2_image = callPackage ../development/libraries/SDL2_image {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-  # Pinned for pygame, toppler
-  SDL2_image_2_0 = SDL2_image.overrideAttrs (oldAttrs: {
-    version = "2.0.5";
-    src = fetchurl {
-      inherit (oldAttrs.src) url;
-      hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
-    };
-  });
-  # Pinned for hedgewars:
-  #   https://github.com/NixOS/nixpkgs/pull/274185#issuecomment-1856764786
-  SDL2_image_2_6 = SDL2_image.overrideAttrs (oldAttrs: {
-    version = "2.6.3";
-    src = fetchurl {
-      inherit (oldAttrs.src) url;
-      hash = "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw=";
-    };
-  });
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 

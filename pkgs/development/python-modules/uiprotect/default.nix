@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "5.2.0";
+  version = "5.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VH8b++7C4bLLoZoefc9zd9S7HTkrDiE7Wle3wkwvjoA=";
+    hash = "sha256-XWsb/sEXJynb8NEdSm9LMPKTZbacwYHHTUaol1nR3kM=";
   };
 
   postPatch = ''

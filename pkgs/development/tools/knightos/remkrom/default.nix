@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage {
   pname = "remkrom";
