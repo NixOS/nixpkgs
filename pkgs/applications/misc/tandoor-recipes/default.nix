@@ -29,6 +29,15 @@ let
           pytest-django
         ];
       });
+
+      # python3.11-extruct-0.16.0 doesn't work with lxml-5.2.2
+      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
+        };
+      });
     };
   };
 
