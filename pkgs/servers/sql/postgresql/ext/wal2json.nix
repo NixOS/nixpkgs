@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wal2json";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
     rev = "wal2json_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-Gpc9uDKrs/dmVSFgdgHM453+TaEnhRh9t0gDbSn8FUI=";
+    sha256 = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
   };
 
   buildInputs = [ postgresql ];
