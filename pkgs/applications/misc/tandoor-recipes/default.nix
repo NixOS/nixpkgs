@@ -1,10 +1,11 @@
 { callPackage
 , nixosTests
-, python3
+, python311
 , fetchFromGitHub
 }:
 let
-  python = python3.override {
+  # python-ldap-3.4.4 does not work with python3(12)
+  python = python311.override {
     packageOverrides = self: super: {
       validators = super.validators.overridePythonAttrs (_: rec {
         version = "0.20.0";
