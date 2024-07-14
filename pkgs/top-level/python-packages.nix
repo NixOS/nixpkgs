@@ -3671,6 +3671,8 @@ self: super: with self; {
 
   dugong = callPackage ../development/python-modules/dugong { };
 
+  dukpy = callPackage ../development/python-modules/dukpy { };
+
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) gnupg;
   };
