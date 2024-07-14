@@ -42,6 +42,6 @@ buildPythonPackage rec {
     mainProgram = "pysassc";
     homepage = "https://sass.github.io/libsass-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }
