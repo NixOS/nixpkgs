@@ -31,6 +31,10 @@ buildMongoDB {
     ./fix-gcc-Wno-exceptions-5.0.patch
     # Fix building with python 3.12 since the imp module was removed
     ./mongodb-python312.patch
-  ] ++ variants.patches;
+  ] ++ variants.patches
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # src/mongo/db/stats/counters.h:224:47: error: static assertion failed: cache line spill
+    ./mongodb-4.4.15-adjust-cache-alignment-assumptions.patch
+  ];
   passthru.tests = { inherit (nixosTests) mongodb; };
 }
