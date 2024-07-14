@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "esr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-inrxICNglZU/tup+YnHaDiVss32K2OXht/7f8lOZI4g=";
+    hash = "sha256-inrxICNglZU/tup+YnHaDiVss32K2OXht/7f8lOZI4g=";
   };
 
   # Remove unnecessary `echo` checks: `/bin/echo` fails, and `echo -n` works as expected.

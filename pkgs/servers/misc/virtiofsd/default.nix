@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "virtio-fs";
     repo = "virtiofsd";
     rev = "v${version}";
-    sha256 = "sha256-dgGdSnMsz/6dggZXh5crwHEoVVIlcUIHMH5MSOO29TE=";
+    hash = "sha256-dgGdSnMsz/6dggZXh5crwHEoVVIlcUIHMH5MSOO29TE=";
   };
 
   separateDebugInfo = true;

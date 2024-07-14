@@ -13,7 +13,7 @@ let
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
+    hash = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
   };
 
   gradleWithJdk = gradle.override { java = jdk17_headless; };
