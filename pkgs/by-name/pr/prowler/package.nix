@@ -16,23 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-7aWWaGdHTveFwXsFNj4+tjX5g83/nD77jLAOrDOw8JE=";
   };
 
-  pythonRelaxDeps = [
-    "azure-identity"
-    "azure-keyvault-keys"
-    "azure-mgmt-compute"
-    "azure-mgmt-containerservice"
-    "azure-mgmt-network"
-    "azure-mgmt-security"
-    "azure-mgmt-storage"
-    "azure-storage-blob"
-    "boto3"
-    "botocore"
-    "google-api-python-client"
-    "jsonschema"
-    "pydantic"
-    "pydantic"
-    "slack-sdk"
-  ];
+  pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [
     poetry-core
