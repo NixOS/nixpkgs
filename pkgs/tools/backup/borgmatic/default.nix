@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4Z5imxNjfvd4fkpFsggSO9XueN5Yzcz4RCl+BqmddCM=";
+    hash = "sha256-4Z5imxNjfvd4fkpFsggSO9XueN5Yzcz4RCl+BqmddCM=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;

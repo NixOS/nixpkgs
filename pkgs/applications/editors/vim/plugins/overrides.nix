@@ -87,6 +87,7 @@
   glib
 , gobject-introspection
 , wrapGAppsHook3
+, writeText
 , # sniprun dependencies
   bashInteractive
 , coreutils
@@ -1482,12 +1483,19 @@
           install -Dt $out/bin ftplugin/evinceSync.py
         '';
       };
+      # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
+      pythonWrapper = writeText "evinceSync-wrapper.py" /* python */ ''
+        #!${python3}/bin/python3
+        import os
+        import sys
+        os.execv("${svedbackend}/bin/evinceSync.py", sys.argv)
+      '';
     in
     super.sved.overrideAttrs {
       preferLocalBuild = true;
       postPatch = ''
         rm ftplugin/evinceSync.py
-        ln -s ${svedbackend}/bin/evinceSync.py ftplugin/evinceSync.py
+        install -m 544 ${pythonWrapper} ftplugin/evinceSync.py
       '';
       meta = {
         description = "synctex support between vim/neovim and evince";

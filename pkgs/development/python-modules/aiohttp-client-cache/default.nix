@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
+    hash = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
   };
   nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [

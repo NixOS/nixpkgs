@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cDSlSh0vnwvbJZFDPqvJ5oXz68gN9yzodcQYkXUAytE=";
+    hash = "sha256-cDSlSh0vnwvbJZFDPqvJ5oXz68gN9yzodcQYkXUAytE=";
   };
 
   propagatedBuildInputs = with python3Packages; [ flask peewee pygments ];
