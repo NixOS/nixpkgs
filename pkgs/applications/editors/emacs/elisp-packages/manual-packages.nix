@@ -15,8 +15,6 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  beancount = callPackage ./manual-packages/beancount { };
-
   cask = callPackage ./manual-packages/cask { };
 
   codeium = callPackage ./manual-packages/codeium { };
@@ -34,8 +32,6 @@ in
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
-
-  enlight = callPackage ./manual-packages/enlight { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
