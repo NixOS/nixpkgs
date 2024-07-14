@@ -60,10 +60,19 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  # Since 2018-07-11, upstream relies on a hardcoded /bin/cat. See:
+  # https://github.com/latchset/clevis/issues/61
+  # https://github.com/latchset/clevis/pull/64
+  #
+  # So, we filter all src files that have the string "/bin/cat" and patch that
+  # string to an absolute path for our coreutils location.
+  # The xargs command is a little bit convoluted because a simpler version would
+  # be vulnerable to code injection. This hint is a courtesy of Stack Exchange:
+  # https://unix.stackexchange.com/a/267438
   postPatch = ''
-    for f in $(find src/ -type f); do
-      grep -q "/bin/cat" "$f" && substituteInPlace "$f" \
-        --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}' || true
+    for f in $(find src/ -type f -print0 |\
+                 xargs -0 -I@ sh -c 'grep -q "/bin/cat" "$1" && echo "$1"' sh @); do
+      substituteInPlace "$f" --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}'
     done
   '';
 
