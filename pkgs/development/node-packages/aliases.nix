@@ -182,8 +182,8 @@ mapAliases {
   vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-json-languageserver-bin = throw "vscode-json-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
-  vue-cli = self."@vue/cli"; # added 2023-08-18
   vue-language-server = self.vls; # added 2023-08-20
+  vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
