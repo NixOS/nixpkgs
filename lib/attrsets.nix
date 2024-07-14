@@ -1799,6 +1799,48 @@ rec {
       else pkg;
 
   /**
+    Like `getOutput` but with a list of fallback output names.
+    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+
+    # Inputs
+
+    `outputs`
+
+    : 1\. Function argument
+
+    `pkg`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    getFirstOutput :: [String] -> Derivation -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getFirstOutput` usage example
+
+    ```nix
+    getFirstOutput [ "include" "dev" ] pkgs.openssl
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
+    ```
+
+    :::
+  */
+  getFirstOutput =
+    candidates: pkg:
+    let
+      outputs = builtins.filter (name: hasAttr name pkg) candidates;
+      output = builtins.head outputs;
+    in
+    if pkg.outputSpecified or false || outputs == [ ] then
+      pkg
+    else
+      pkg.${output};
+
+  /**
     Get a package's `bin` output.
     If the output does not exist, fallback to `.out` and then to the default.
 
@@ -1820,7 +1862,7 @@ rec {
 
     ```nix
     getBin pkgs.openssl
-    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r"
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r"
     ```
 
     :::
@@ -1886,6 +1928,35 @@ rec {
     :::
   */
   getDev = getOutput "dev";
+
+  /**
+    Get a package's `include` output.
+    If the output does not exist, fallback to `.dev`, then to `.out`, and then to the default.
+
+    # Inputs
+
+    `pkg`
+
+    : The package whose `include` output will be retrieved.
+
+    # Type
+
+    ```
+    getInclude :: Derivation -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getInclude` usage example
+
+    ```nix
+    getInclude pkgs.openssl
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
+    ```
+
+    :::
+  */
+  getInclude = getFirstOutput [ "include" "dev" "out" ];
 
 
   /**
