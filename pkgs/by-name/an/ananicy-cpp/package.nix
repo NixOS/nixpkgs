@@ -23,7 +23,7 @@ clangStdenv.mkDerivation rec {
     repo = "ananicy-cpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
+    hash = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
 
   patches = [

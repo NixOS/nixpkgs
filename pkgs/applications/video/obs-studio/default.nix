@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
+    hash = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
     fetchSubmodules = true;
   };
 

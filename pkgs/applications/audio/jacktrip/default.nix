@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     repo = "jacktrip";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-MUP+8Hjrj95D5SONIEsweB5j+kgEhLEWTKWBlEWLt94=";
+    hash = "sha256-MUP+8Hjrj95D5SONIEsweB5j+kgEhLEWTKWBlEWLt94=";
   };
 
   preConfigure = ''

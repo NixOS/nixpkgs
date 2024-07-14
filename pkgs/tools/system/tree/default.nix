@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    sha256 = "sha256-1iBGbzNwjUX7kqkk6XzKISO2e6b05MBH08XgIwR+nyI=";
+    hash = "sha256-1iBGbzNwjUX7kqkk6XzKISO2e6b05MBH08XgIwR+nyI=";
   };
 
   preConfigure = ''

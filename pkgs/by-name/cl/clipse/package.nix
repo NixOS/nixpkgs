@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "clipse";
-  version = "1.0.3";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "savedra1";
     repo = "clipse";
     rev = "v${version}";
-    hash = "sha256-EnT4gnP145FoUysL3L87vY1LrlJoPT1VqDEoH2Fqh2g=";
+    hash = "sha256-G26xPABF2Cdxk1N71EaMjKzju0jl5tDJ1WrISjebZVM=";
   };
 
   vendorHash = "sha256-QEBRlwNS8K44chB3fMOJZxYnIaWMnuDySIhKfF7XtxM=";

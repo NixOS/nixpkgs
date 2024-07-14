@@ -3295,8 +3295,6 @@ with pkgs;
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
-  aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
-
   aws-sso-creds = callPackage ../tools/admin/aws-sso-creds { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
@@ -6810,8 +6808,6 @@ with pkgs;
   };
 
   age = callPackage ../tools/security/age { };
-
-  agebox = callPackage ../tools/security/agebox { };
 
   age-plugin-ledger = callPackage ../tools/security/age-plugin-ledger {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -11140,7 +11136,6 @@ with pkgs;
 
   opendht = callPackage ../development/libraries/opendht  {
     inherit (darwin.apple_sdk.frameworks) Security;
-    restinio = restinio_0_6;
   };
 
   opendkim = callPackage ../development/libraries/opendkim { };
@@ -12716,8 +12711,6 @@ with pkgs;
   shim-unsigned = callPackage ../tools/misc/shim { };
 
   shocco = callPackage ../tools/text/shocco { };
-
-  shopify-cli = callPackage ../development/web/shopify-cli { };
 
   shopify-themekit = callPackage ../development/web/shopify-themekit { };
 
@@ -40370,7 +40363,6 @@ with pkgs;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
-    restinio = restinio_0_6;
   };
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };

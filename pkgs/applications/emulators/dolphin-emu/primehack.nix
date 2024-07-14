@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
+    hash = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
     fetchSubmodules = true;
   };
 

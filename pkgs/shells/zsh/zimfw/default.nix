@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     ## zim only needs this one file to be installed.
     sparseCheckout = [ "zimfw.zsh" ];
-    sha256 = "sha256-JBMrgUMGsvjYasEHJsZ0jZAHmrN3Z0d8T8agI9FiEPs=";
+    hash = "sha256-JBMrgUMGsvjYasEHJsZ0jZAHmrN3Z0d8T8agI9FiEPs=";
   };
   strictDeps = true;
   dontConfigure = true;

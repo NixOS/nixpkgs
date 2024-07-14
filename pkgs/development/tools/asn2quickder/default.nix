@@ -17,7 +17,7 @@ buildPythonApplication rec {
     owner = "arpa2";
     repo = "quick-der";
     rev = "v${version}";
-    sha256 = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
+    hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
   postPatch = ''
