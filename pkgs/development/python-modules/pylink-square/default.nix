@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   psutil,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pylink-square";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-WMpb/b9kF1rFlegDYxNGJbZ2Nz8nuG21tyjgUFLs5mg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     psutil
     six
   ];
