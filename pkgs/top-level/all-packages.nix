@@ -36204,8 +36204,6 @@ with pkgs;
 
   eidolon = callPackage ../games/eidolon { };
 
-  empty-epsilon = callPackage ../games/empty-epsilon { };
-
   endgame-singularity = callPackage ../games/endgame-singularity { };
 
   endless-sky = callPackage ../games/endless-sky { };
