@@ -1,9 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
 , wrapGAppsHook4
-, gtk4
 , meson
 , ninja
 , pkg-config

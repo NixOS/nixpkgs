@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, testers, cbfmt }:
+{ lib, rustPlatform, fetchFromGitHub, testers, cbfmt }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cbfmt";

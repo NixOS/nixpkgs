@@ -3,7 +3,6 @@
 , python3Packages
 , fetchFromGitLab
 , makeWrapper
-, stdenv
 , fetchpatch
 , rspamd
 }:

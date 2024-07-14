@@ -3,7 +3,6 @@
 , lib
 , makeWrapper
 , ncurses
-, stdenv
 }:
 
 buildGoModule rec {

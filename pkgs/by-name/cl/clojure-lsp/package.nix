@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGraalvmNativeImage,
   babashka,
   fetchurl,
