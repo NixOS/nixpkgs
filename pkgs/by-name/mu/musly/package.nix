@@ -4,12 +4,23 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  pkg-config,
   eigen,
-  ffmpeg_4,
+  ffmpeg_7,
+  libresample,
+  kissfft,
 }:
+
 stdenv.mkDerivation {
   pname = "musly";
   version = "0.1-unstable-2019-09-05";
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "dominikschnitzer";
@@ -17,19 +28,31 @@ stdenv.mkDerivation {
     rev = "7a0c6a9a2782e6fca84fb86fce5232a8c8a104ed";
     hash = "sha256-DOvGGx3pCcvPPsT97sQlINjT1sJy8ZWvxLsFGGZbgzE=";
   };
+
+  patches = [
+    # Fix build with FFmpeg 7, C++17, and external libresample and kissfft
+    # https://github.com/dominikschnitzer/musly/pull/53
+    # Last commit omitted, as it is a large non‐functional removal
+    ./0001-Fix-build-with-FFmpeg-7.patch
+    ./0002-Fix-build-with-C-17.patch
+    ./0003-Modernize-CMake-build-system.patch
+    ./0004-Use-pkg-config-to-find-libresample-and-kissfft.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
   ];
+
   buildInputs = [
     eigen
-    ffmpeg_4
+    ffmpeg_7
+    libresample
+    kissfft
   ];
-  fixupPhase = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
-  '';
+
+  doCheck = true;
 
   meta = {
     homepage = "https://www.musly.org";
