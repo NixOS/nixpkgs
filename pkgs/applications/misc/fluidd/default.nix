@@ -1,34 +1,52 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
-stdenvNoCC.mkDerivation rec {
+buildNpmPackage rec {
   pname = "fluidd";
   version = "1.30.1";
 
-  src = fetchurl {
-    name = "fluidd-v${version}.zip";
-    url = "https://github.com/cadriel/fluidd/releases/download/v${version}/fluidd.zip";
-    sha256 = "sha256-R8lCAZkClmCFkiNPf9KGlzj2td3KxCx/7UkdTJgDtwY=";
+  src = fetchFromGitHub {
+    owner = "fluidd-core";
+    repo = "fluidd";
+    rev = "v${version}";
+    hash = "sha256-jG6sjb3YcP5+1lr2N8UE201nOdnkiPjeS6Mep/RG+N0=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  nativeBuildInputs = [ unzip ];
+  npmDepsHash = "sha256-VrYjM9ficPOTn/Ezoir+ZHIK32wztYB9c6ZpC8tte1Q=";
 
-  dontConfigure = true;
-  dontBuild = true;
+  # Prevent Cypress binary download.
+  CYPRESS_INSTALL_BINARY = 0;
 
-  unpackPhase = ''
-    mkdir fluidd
-    unzip $src -d fluidd
+  postPatch = ''
+    # Retrieve the commit saved in the output directory.
+    sed -e "s|.execSync('git rev-parse --short HEAD')|.execSync('cat COMMIT')|g" -i vite.config.inject-version.ts
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fluidd
-    cp -r fluidd $out/share/fluidd/htdocs
+    cp -r ./dist $out/share/fluidd/htdocs
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Klipper web interface";
     homepage = "https://docs.fluidd.xyz";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [
+      zhaofengli
+      wulfsta
+    ];
   };
 }
