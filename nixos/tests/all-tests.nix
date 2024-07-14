@@ -976,6 +976,7 @@ in {
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
+  teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix {};
   terminal-emulators = handleTest ./terminal-emulators.nix {};
   thanos = handleTest ./thanos.nix {};
