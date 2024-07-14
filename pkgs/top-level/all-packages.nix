@@ -33015,8 +33015,6 @@ with pkgs;
 
   nvpy = callPackage ../applications/editors/nvpy { };
 
-  obconf = callPackage ../tools/X11/obconf { };
-
   gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
