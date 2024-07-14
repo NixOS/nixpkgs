@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple Theorem Prover";
-    maintainers = with maintainers; [ McSinyx ];
+    maintainers = with maintainers; [ McSinyx numinit ];
     platforms = platforms.linux;
     license = licenses.mit;
   };
