@@ -21,6 +21,19 @@
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
 
+  containerapp = mkAzExtension rec {
+    pname = "containerapp";
+    version = "0.3.53";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
+    sha256 = "f9b4f3928469efcc1bfbc98cd906d9d92e72617e5c21cf3ade8b37651607c3e1";
+    description = "Microsoft Azure Command-Line Tools Containerapp Extension";
+    propagatedBuildInputs = with python3Packages; [
+      docker
+      pycomposefile
+    ];
+    meta.maintainers = with lib.maintainers; [ giggio ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.6";
