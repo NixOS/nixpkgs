@@ -47,6 +47,14 @@ buildPythonApplication rec {
       --replace "version = get_version()" "version='${version}',"
   '';
 
+  postConfigure = ''
+    python3 -m linodecli bake ${spec} --skip-config
+    cp data-3 linodecli/
+    echo "${version}" > baked_version
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = [
     colorclass
     pyyaml
@@ -58,18 +66,11 @@ buildPythonApplication rec {
     packaging
   ];
 
-  postConfigure = ''
-    python3 -m linodecli bake ${spec} --skip-config
-    cp data-3 linodecli/
-    echo "${version}" > baked_version
-  '';
-
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     for shell in bash fish; do
       installShellCompletion --cmd linode-cli \
