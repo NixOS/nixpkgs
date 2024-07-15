@@ -8,6 +8,7 @@
   darwin,
   pandoc,
   nixosTests,
+  nix-update-script,
   testers,
 }:
 
@@ -62,6 +63,8 @@ rustPlatform.buildRustPackage rec {
         inherit version;
       };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
