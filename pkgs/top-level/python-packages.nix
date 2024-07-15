@@ -5389,6 +5389,10 @@ self: super: with self; {
 
   h5py = callPackage ../development/python-modules/h5py { };
 
+  h5py-numpy_2 = self.h5py.override {
+    numpy = numpy_2;
+  };
+
   h5py-mpi = self.h5py.override {
     hdf5 = pkgs.hdf5-mpi;
   };

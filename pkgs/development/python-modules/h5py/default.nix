@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
   # see: https://github.com/NixOS/nixpkgs/issues/327941
-  postPatch = ''
+  postPatch = lib.optionalString (!numpy.isNumpy2) ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
