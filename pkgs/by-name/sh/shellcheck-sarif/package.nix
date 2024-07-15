@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "shellcheck-sarif";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
     rev = "shellcheck-sarif-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
   };
 
-  cargoHash = "sha256-JuE/Z0qrS/3BRlb0jTGDfV0TYk74Q75X1wv/IERxqeQ=";
+  cargoHash = "sha256-HiZt3AxFMqIpRkg0TFpm8GDFCX6zYWTllO+xtVj7fjY=";
   cargoBuildFlags = [
     "--package"
     "shellcheck-sarif"
