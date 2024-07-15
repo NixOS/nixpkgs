@@ -17,6 +17,7 @@
   pmix,
   ucx,
   ucc,
+  prrte,
   makeWrapper,
   config,
   # Enable CUDA support
@@ -34,23 +35,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "4.1.6";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
+    sha256 = "sha256-mQWC8gazqzLpOKoxu/B8Y5No5EBdyhlvq+fw927tqQs=";
   };
 
   postPatch = ''
     patchShebangs ./
-
-    # Ensure build is reproducible
-    ts=`date -d @$SOURCE_DATE_EPOCH`
-    sed -i 's/OPAL_CONFIGURE_USER=.*/OPAL_CONFIGURE_USER="nixbld"/' configure
-    sed -i 's/OPAL_CONFIGURE_HOST=.*/OPAL_CONFIGURE_HOST="localhost"/' configure
-    sed -i "s/OPAL_CONFIGURE_DATE=.*/OPAL_CONFIGURE_DATE=\"$ts\"/" configure
-    find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
+
+  # Ensure build is reproducible according to manual
+  # https://docs.open-mpi.org/en/v5.0.x/release-notes/general.html#general-notes
+  env = {
+    USER = "nixbld";
+    HOSTNAME = "localhost";
+    SOURCE_DATE_EPOCH = "0";
+  };
 
   outputs = [
     "out"
@@ -70,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       pmix
       ucx
       ucc
+      prrte
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals (stdenv.isLinux || stdenv.isFreeBSD) [ rdma-core ]
@@ -93,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
     (lib.withFeatureAs stdenv.isLinux "pmix" (lib.getDev pmix))
     (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
-    (lib.enableFeature stdenv.isLinux "mpi-cxx")
+    # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
+    (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
@@ -102,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
-    (lib.withFeatureAs fabricSupport "libfabric" (lib.getDev libfabric))
+    (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
+    (lib.withFeatureAs fabricSupport "ofi-libdir" "${lib.getLib libfabric}/lib")
   ];
 
   enableParallelBuilding = true;
@@ -193,21 +198,18 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # ortecc's files don't have c++ and fort companions so it is handled
-      # outside the Nix concatenations above.
-      moveToOutput "bin/ortecc" "''${!outputDev}"
-      moveToOutput "share/openmpi/ortecc-wrapper-data.txt" "''${!outputDev}"
-      substituteInPlace "''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt" \
-        --replace-fail \
-          compiler=${lib.elemAt wrapperDataSubstitutions.cc 0} \
-          compiler=${lib.elemAt wrapperDataSubstitutions.cc 1}
+      # A symlink to ${lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
+      # from some reason.
+      moveToOutput "bin/pcc" "''${!outputDev}"
 
-      for i in orte-info ompi_info oshmem_info; do
+      # Handle informative binaries about the compilation
+      for i in {prte,ompi,oshmem}_info; do
         moveToOutput "bin/$i" "''${!outputDev}"
       done
     '';
 
   postFixup = ''
+    remove-references-to -t "''${!outputDev}" $out/bin/mpirun
     remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
     remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
 
