@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
   clippy,
   clippy-sarif,
@@ -10,19 +10,12 @@ rustPlatform.buildRustPackage rec {
   pname = "clippy-sarif";
   version = "0.5.0";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "clippy-sarif-v${version}";
-    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-ylfL4N1BtbB1R7+Glwtgn5E6/v3wQ6oXWdmeyKNHdOw=";
   };
 
-  cargoHash = "sha256-F97Cwk87M3SpLqXSECH5nZ8x+3c3oz28zxlPvQUZWlg=";
-  cargoBuildFlags = [
-    "--package"
-    "clippy-sarif"
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoHash = "sha256-O0bLgj7rWwbEswVMfexsBGgJyObxseOohYht21Y6HpU=";
 
   passthru = {
     tests.version = testers.testVersion { package = clippy-sarif; };
