@@ -3111,11 +3111,4 @@ self: super: {
   # 2024-07-09: zinza has bumped their QuickCheck and tasty dependencies beyond stackage lts.
   # Can possibly be removed once QuickCheck >= 2.15 and tasty >= 1.5
   zinza = dontCheck super.zinza;
-
-  # Python 3.12 breaks unicode C-API. Requires an upstream fix in the CPython
-  # package to support Python > 3.12 API. Thus, should be removed at next CPython
-  # Hackage release.
-  cpython = super.cpython.override {
-    python3 = pkgs.python311;
-  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
