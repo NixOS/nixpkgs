@@ -9,8 +9,6 @@
 }:
 
 let
-  maven' = maven.override { jdk = jdk8; };
-
   mvnDepsHashes = {
     "x86_64-linux" = "sha256-M8O1EJtlTm+mVy/qxapRcBWxD14eYL/LLUxP2uOBoM4=";
     "aarch64-linux" = "sha256-+ewdV9g0MfgiBiRAimkIZp9lrOTKnKnBB1LqhIlOSaQ=";
@@ -22,7 +20,7 @@ let
     mvnDepsHashes.${stdenv.system}
       or (lib.warn "This platform doesn't have a default mvnDepsHash value, you'll need to specify it manually" lib.fakeHash);
 in
-maven'.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "tika";
   version = "2.9.2";
 
@@ -42,10 +40,11 @@ maven'.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
+  mvnJdk = jdk8;
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
   mvnParameters = toString [
-    "-DskipTests=true" # skip tests (out of memory execptions)
+    "-DskipTests=true" # skip tests (out of memory exceptions)
     "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
   ];
 
