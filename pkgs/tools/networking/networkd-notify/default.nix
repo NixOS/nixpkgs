@@ -24,6 +24,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsNoGuiHook
   ];
+
   propagatedBuildInputs = [
     dbus-python
     pygobject3
