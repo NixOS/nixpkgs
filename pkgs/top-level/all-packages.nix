@@ -1940,8 +1940,6 @@ with pkgs;
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
 
-  ntpd-rs = darwin.apple_sdk_11_0.callPackage ../tools/networking/ntpd-rs { };
-
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
