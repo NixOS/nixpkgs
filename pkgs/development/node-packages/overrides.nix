@@ -121,6 +121,11 @@ final: prev: {
         };
       }
     ] ++ oldAttrs.dependencies;
+
+    meta = oldAttrs.meta // {
+      # ModuleNotFoundError: No module named 'distutils'
+      broken = true;
+    };
   });
 
   jsonplaceholder = prev.jsonplaceholder.override {
