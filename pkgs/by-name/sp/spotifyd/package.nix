@@ -43,7 +43,9 @@ rustPackages.rustPlatform.buildRustPackage rec {
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
-    ++ lib.optional (withMpris || withKeyring) dbus;
+    # The `dbus_keying` feature works on other platforms, but only requires
+    # `dbus` on Linux
+    ++ lib.optional ((withMpris || withKeyring) && stdenv.isLinux) dbus;
 
   buildNoDefaultFeatures = true;
   buildFeatures =
