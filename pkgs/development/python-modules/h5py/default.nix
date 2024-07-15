@@ -87,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "h5py" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
