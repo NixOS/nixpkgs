@@ -1006,6 +1006,11 @@
     meta.maintainers = with lib.maintainers; [ vcunat ];
   };
 
+  middleclass = neovimUtils.buildNeovimPlugin {
+    luaAttr = "middleclass";
+    nvimRequireCheck = "middleclass";
+  };
+
   minimap-vim = super.minimap-vim.overrideAttrs {
     preFixup = ''
       substituteInPlace $out/plugin/minimap.vim \
