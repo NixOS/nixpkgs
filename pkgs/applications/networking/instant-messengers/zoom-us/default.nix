@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in aomhost zopen zoom ZoomLauncher; do
+    for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
     done
 
@@ -166,6 +166,10 @@ stdenv.mkDerivation rec {
     # IPC breaks if the executable name does not end in 'zoom'
     mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
     makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
+      --prefix LD_LIBRARY_PATH ":" ${libs}
+
+    mv $out/opt/zoom/ZoomWebviewHost $out/opt/zoom/.ZoomWebviewHost
+    makeWrapper $out/opt/zoom/.ZoomWebviewHost $out/opt/zoom/ZoomWebviewHost \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     rm $out/bin/zoom
