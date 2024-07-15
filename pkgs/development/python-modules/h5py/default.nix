@@ -92,6 +92,6 @@ buildPythonPackage rec {
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
