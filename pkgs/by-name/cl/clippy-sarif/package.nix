@@ -4,6 +4,7 @@
   rustPlatform,
   clippy,
   clippy-sarif,
+  nix-update-script,
   testers,
 }:
 rustPlatform.buildRustPackage rec {
@@ -19,14 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = clippy-sarif; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "A CLI tool to convert clippy diagnostics into SARIF";
-    mainProgram = "clippy-sarif";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "clippy-sarif";
     inherit (clippy.meta) platforms;
   };
 }
