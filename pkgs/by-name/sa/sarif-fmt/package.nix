@@ -3,6 +3,7 @@
   stdenv,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
   sarif-fmt,
   testers,
 }:
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = sarif-fmt; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
