@@ -2,8 +2,9 @@
   stdenv,
   config,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   cmake,
+  ninja,
   doxygen,
   extra-cmake-modules,
   wrapGAppsHook3,
@@ -47,19 +48,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.3.0";
+  version = "8.4.0";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/digikam/${finalAttrs.version}/digiKam-${finalAttrs.version}-1.tar.xz";
-    hash = "sha256-BbFF/38vIAX6IbxXnBUqsjyBkbZ4/ylEyPBAbWud5tg=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "graphics";
+    repo = "digikam";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
   };
 
   strictDeps = true;
 
-  depsBuildBuild = [ cmake ];
-
   nativeBuildInputs = [
     cmake
+    ninja
     doxygen
     extra-cmake-modules
     libsForQt5.kdoctools
@@ -154,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Photo management application";
     homepage = "https://www.digikam.org/";
+    changelog = "${finalAttrs.src.meta.homepage}-/blob/master/project/NEWS.${finalAttrs.version}";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
