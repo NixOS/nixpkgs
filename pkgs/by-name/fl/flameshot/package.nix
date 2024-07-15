@@ -5,10 +5,14 @@
 , cmake
 , nix-update-script
 , fetchpatch
+, grim
+, makeBinaryWrapper
+, enableWlrSupport ? false
 }:
 
 stdenv.mkDerivation {
   pname = "flameshot";
+  # wlr screenshotting is currently only available on unstable version (>12.1.0)
   version = "12.1.0-unstable-2024-07-02";
 
   src = fetchFromGitHub {
@@ -36,6 +40,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+    (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
   ];
 
   nativeBuildInputs = [
@@ -43,12 +48,21 @@ stdenv.mkDerivation {
     libsForQt5.qttools
     libsForQt5.qtsvg
     libsForQt5.wrapQtAppsHook
+    makeBinaryWrapper
   ];
 
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.kguiaddons
   ];
+
+  dontWrapQtApps = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/flameshot \
+      ${lib.optionalString enableWlrSupport "--prefix PATH : ${lib.makeBinPath [ grim ]}"} \
+      ''${qtWrapperArgs[@]}
+  '';
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
