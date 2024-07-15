@@ -24,9 +24,10 @@ let
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
-      rev = "v${version}";
-      sha256 = "sha256-bS4Zxd2CX8m6zxO/izJi7Cj34260mOaU6GWjEj+xEU8=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-bS4Zxd2CX8m6zxO/izJi7Cj34260mOaU6GWjEj+xEU8=";
     };
+
     enableParallelBuilding = true;
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
@@ -48,22 +49,22 @@ let
       # Prevents afl-gcc picking up any (possibly incorrect) gcc from the path.
       # Replace LLVM_BINDIR with a non-existing path to give a hard error when it's used.
       substituteInPlace src/afl-cc.c \
-        --replace "CLANGPP_BIN" '"${clang}/bin/clang++"' \
-        --replace "CLANG_BIN" '"${clang}/bin/clang"' \
-        --replace '"gcc"' '"${gcc}/bin/gcc"' \
-        --replace '"g++"' '"${gcc}/bin/g++"' \
-        --replace 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
+        --replace-fail "CLANGPP_BIN" '"${clang}/bin/clang++"' \
+        --replace-fail "CLANG_BIN" '"${clang}/bin/clang"' \
+        --replace-fail '"gcc"' '"${gcc}/bin/gcc"' \
+        --replace-fail '"g++"' '"${gcc}/bin/g++"' \
+        --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
 
       substituteInPlace src/afl-ld-lto.c \
-        --replace 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'
+        --replace-fail 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'
 
       # Remove the rest of the line
       sed -i 's|LLVM_BINDIR = .*|LLVM_BINDIR = |' utils/aflpp_driver/GNUmakefile
       substituteInPlace utils/aflpp_driver/GNUmakefile \
-        --replace 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
+        --replace-fail 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
 
       substituteInPlace GNUmakefile.llvm \
-        --replace "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+        --replace-fail "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
     '';
 
     env.NIX_CFLAGS_COMPILE = toString [
@@ -72,9 +73,10 @@ let
     ];
 
     makeFlags = [
-      "PREFIX=$(out)"
+      "PREFIX=${placeholder "out"}"
       "USE_BINDIR=0"
     ];
+
     buildPhase = ''
       runHook preBuild
 
@@ -109,15 +111,15 @@ let
       cp utils/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
       chmod +x $out/bin/afl-cgroup
       substituteInPlace $out/bin/afl-cgroup \
-        --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
-        --replace "cgexec"   "${libcgroup}/bin/cgexec" \
-        --replace "cgdelete" "${libcgroup}/bin/cgdelete"
+        --replace-fail "cgcreate" "${libcgroup}/bin/cgcreate" \
+        --replace-fail "cgexec"   "${libcgroup}/bin/cgexec" \
+        --replace-fail "cgdelete" "${libcgroup}/bin/cgdelete"
 
       patchShebangs $out/bin
 
     '' + lib.optionalString (wine != null) ''
       substitute afl-wine-trace $out/bin/afl-wine-trace \
-        --replace "qemu_mode/unsigaction" "$out/lib/afl"
+        --replace-fail "qemu_mode/unsigaction" "$out/lib/afl"
       chmod +x $out/bin/afl-wine-trace
 
       # qemu needs to be fed ELFs, not wrapper scripts, so we have to cheat a bit if we
@@ -136,17 +138,17 @@ let
 
       # replace references to tools in build directory with references to installed locations
       substituteInPlace test/test-qemu-mode.sh \
-        --replace '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
-        --replace '../afl-qemu-trace' '$out/bin/afl-qemu-trace' \
-        --replace '../afl-fuzz' '$out/bin/afl-fuzz' \
-        --replace '../qemu_mode/unsigaction/unsigaction32.so' '$out/lib/afl/unsigaction32.so' \
-        --replace '../qemu_mode/unsigaction/unsigaction64.so' '$out/lib/afl/unsigaction64.so'
+        --replace-fail '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
+        --replace-fail '../afl-qemu-trace' '$out/bin/afl-qemu-trace' \
+        --replace-fail '../afl-fuzz' '$out/bin/afl-fuzz' \
+        --replace-fail '../qemu_mode/unsigaction/unsigaction32.so' '$out/lib/afl/unsigaction32.so' \
+        --replace-fail '../qemu_mode/unsigaction/unsigaction64.so' '$out/lib/afl/unsigaction64.so'
 
       substituteInPlace test/test-libextensions.sh \
-        --replace '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
-        --replace '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
+        --replace-fail '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
+        --replace-fail '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
       substituteInPlace test/test-llvm.sh \
-        --replace '../afl-cmin.bash' '`$out/bin/afl-cmin.bash`'
+        --replace-fail '../afl-cmin.bash' '`$out/bin/afl-cmin.bash`'
       # perl -pi -e 's|(?<!\.)(?<!-I)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
       patchShebangs .
       cd test && ./test-all.sh
@@ -161,7 +163,7 @@ let
 
     meta = {
       description = ''
-        A heavily enhanced version of AFL, incorporating many features
+        Heavily enhanced version of AFL, incorporating many features
         and improvements from the community
       '';
       homepage    = "https://aflplus.plus";

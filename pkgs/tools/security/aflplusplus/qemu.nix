@@ -135,11 +135,11 @@ stdenv.mkDerivation {
       "--without-default-devices"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AFLplusplus/qemuafl";
     description = "Fork of QEMU with AFL++ instrumentation support";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ris ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ris ];
+    platforms = lib.platforms.linux;
   };
 }
