@@ -2,8 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
-  shellcheck-sarif,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "shellcheck-sarif";
@@ -16,9 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-kkSTRoouuIh4Bsh+zqhtTwIGLxDE+3u8SuP+8i+lw5Q=";
 
-  passthru = {
-    tests.version = testers.testVersion { package = shellcheck-sarif; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool to convert shellcheck diagnostics into SARIF";
