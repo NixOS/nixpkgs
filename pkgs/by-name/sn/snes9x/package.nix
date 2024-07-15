@@ -102,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  enableParallelBuilding = true;
+
   meta = let
     interface = if withGtk then "GTK" else "X11";
   in
