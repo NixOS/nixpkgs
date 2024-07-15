@@ -71,7 +71,10 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    installShellCompletion --cmd linode-cli --bash <($out/bin/linode-cli --skip-config completion bash)
+    for shell in bash fish; do
+      installShellCompletion --cmd linode-cli \
+        --$shell <($out/bin/linode-cli --skip-config completion $shell)
+      done
   '';
 
   passthru.updateScript = ./update.sh;
