@@ -79,6 +79,10 @@ self: super: ({
 
   proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
+  # issues finding libcharset.h without libiconv in buildInputs on darwin.
+  with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
+  with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
+
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = dontCheck super.system-fileio;
 
