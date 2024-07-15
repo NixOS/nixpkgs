@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, imlib2
-, libSM
-, libstartup_notification
-, libxml2
-, openbox
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  imlib2,
+  libSM,
+  libstartup_notification,
+  libxml2,
+  openbox,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obconf";
   version = "unstable-2015-02-13";
 
   src = fetchgit {
     url = "git://git.openbox.org/dana/obconf";
     rev = "63ec47c5e295ad4f09d1df6d92afb7e10c3fec39";
-    sha256 = "sha256-qwm66VA/ueRMFtSUcrmuObNkz+KYgWRnmR7TnQwpxiE=";
+    hash = "sha256-qwm66VA/ueRMFtSUcrmuObNkz+KYgWRnmR7TnQwpxiE=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace configure.ac --replace 2.0.4 ${version}
+    substituteInPlace configure.ac --replace 2.0.4 ${finalAttrs.version}
   '';
 
   meta = {
@@ -50,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "obconf";
   };
-}
+})
