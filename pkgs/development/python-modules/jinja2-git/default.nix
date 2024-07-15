@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "jinja2-git";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "wemake-services";
     repo = "jinja2-git";
     rev = "refs/tags/${version}";
-    hash = "sha256-XuN2L3/HLcZ/WPWiCtufDOmkxj+q4I6IOgjrGQHfNLk=";
+    hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 
   nativeBuildInputs = [ poetry-core ];
