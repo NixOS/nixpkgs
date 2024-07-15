@@ -1168,7 +1168,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-SqbU9YwZ5pvdFUr7XBAkkfoqiLHI0JwJRwH7Wj1JDNg=";
+        cargoHash = "sha256-J9L9j8iyeZQRMjiVqdI7V7BOAkZaiLGOtKDpgq2wyi0=";
 
         preCheck = ''
           mkdir tests/tmp/
