@@ -19,6 +19,7 @@
   ucc,
   prrte,
   makeWrapper,
+  python3,
   config,
   # Enable CUDA support
   cudaSupport ? config.cudaSupport,
@@ -72,11 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     SOURCE_DATE_EPOCH = "0";
   };
 
-  outputs = [
-    "out"
-    "man"
-    "dev"
-  ];
+  outputs =
+    [ "out" ]
+    ++ lib.optionals stdenv.isLinux [
+      "man"
+      "dev"
+    ];
 
   buildInputs =
     [
@@ -94,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals (stdenv.isLinux || stdenv.isFreeBSD) [ rdma-core ]
+    # needed for internal pmix
+    ++ lib.optionals (!stdenv.isLinux) [ python3 ]
     ++ lib.optionals fabricSupport [
       libpsm2
       libfabric
@@ -112,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    (lib.withFeatureAs stdenv.isLinux "pmix" (lib.getDev pmix))
+    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
     (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
@@ -125,8 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
-    (lib.withFeatureAs fabricSupport "ofi-libdir" "${lib.getLib libfabric}/lib")
-  ];
+    # The flag --without-ofi-libdir is not supported from some reason, so we
+    # don't use lib.withFeatureAs
+  ] ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
 
   enableParallelBuilding = true;
 
@@ -226,16 +231,19 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  postFixup = ''
-    remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-    remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
-    remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+  postFixup =
+    lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
+      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+    ''
+    + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
+      remove-references-to -t "''${!outputDev}" $out/bin/mpirun
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
 
-    # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
-    wrapProgram "''${!outputDev}/bin/opal_wrapper" \
-      --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
-      --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
-  '';
+      # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
+      wrapProgram "''${!outputDev}/bin/opal_wrapper" \
+        --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
+        --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
+    '';
 
   doCheck = true;
 
