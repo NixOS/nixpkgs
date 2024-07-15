@@ -76,21 +76,14 @@ import ../make-test-python.nix (
             role = "server";
             package = k3s;
             clusterInit = true;
-            extraFlags = builtins.toString [
-              "--disable"
-              "coredns"
-              "--disable"
-              "local-storage"
-              "--disable"
-              "metrics-server"
-              "--disable"
-              "servicelb"
-              "--disable"
-              "traefik"
-              "--node-ip"
-              "192.168.1.1"
-              "--pause-image"
-              "test.local/pause:local"
+            extraFlags = [
+              "--disable coredns"
+              "--disable local-storage"
+              "--disable metrics-server"
+              "--disable servicelb"
+              "--disable traefik"
+              "--node-ip 192.168.1.1"
+              "--pause-image test.local/pause:local"
             ];
           };
           networking.firewall.allowedTCPPorts = [
