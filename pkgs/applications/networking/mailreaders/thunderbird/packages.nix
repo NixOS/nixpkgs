@@ -13,7 +13,7 @@ let
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-      ./no-buildconfig-115.patch
+      ./no-buildconfig.patch
     ];
 
     meta = with lib; {
