@@ -4,8 +4,6 @@
 , blas
 }:
 
-assert !blas.isILP64;
-
 stdenv.mkDerivation rec {
   pname = "plumed";
   version = "2.9.1";
@@ -20,6 +18,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
   '';
+  configureFlags = [
+    (lib.enableFeature blas.isILP64 "ilp64")
+  ];
 
   buildInputs = [ blas ];
 
