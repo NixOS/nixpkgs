@@ -1,11 +1,11 @@
-{ trivialBuild
-, fetchFromGitHub
-, emacs
-, popup
-, ess
+{
+  ess,
+  fetchFromGitHub,
+  melpaBuild,
+  popup,
 }:
 
-trivialBuild rec {
+melpaBuild rec {
   pname = "ess-R-object-popup";
   version = "1.0";
 
@@ -24,6 +24,5 @@ trivialBuild rec {
   meta = {
     homepage = "https://github.com/myuhe/ess-R-object-popup.el";
     description = "Popup descriptions of R objects";
-    inherit (emacs.meta) platforms;
   };
 }
