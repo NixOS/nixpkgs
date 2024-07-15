@@ -79,6 +79,10 @@ self: super: ({
 
   proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
+  with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
+
+  with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
+
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = dontCheck super.system-fileio;
 
@@ -405,6 +409,8 @@ self: super: ({
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+
+
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9
