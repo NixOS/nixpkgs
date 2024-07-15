@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   setuptools,
-  wheel,
   numpy,
   hdf5,
   cython_0,
@@ -40,7 +39,8 @@ buildPythonPackage rec {
     ./mpi4py-requirement.patch
   ];
 
-  # avoid strict pinning of numpy
+  # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
+  # see: https://github.com/NixOS/nixpkgs/issues/327941
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
@@ -59,10 +59,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython_0
-    numpy
     pkgconfig
     setuptools
-    wheel
   ];
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
