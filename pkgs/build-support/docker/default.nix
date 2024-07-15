@@ -24,6 +24,7 @@
 , runtimeShell
 , shadow
 , skopeo
+, stdenv
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
@@ -922,6 +923,9 @@ rec {
       assert
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+      assert
+      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin)
+        "cannot use enableFakechroot on Darwin. You can work around this by just using `fakeRootCommands` or cross-compiling/using a VM. There is no alternative for the package proot on darwin. See #327311");
       let
         baseName = baseNameOf name;
 
