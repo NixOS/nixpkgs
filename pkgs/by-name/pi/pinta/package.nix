@@ -1,24 +1,25 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, glibcLocales
-, gtk3
-, intltool
-, wrapGAppsHook3
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  glibcLocales,
+  gtk3,
+  intltool,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.1.1";
+  version = "2.1.2";
 
   nativeBuildInputs = [
     intltool
     wrapGAppsHook3
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   runtimeDeps = [ gtk3 ];
   buildInputs = runtimeDeps;
@@ -35,12 +36,12 @@ buildDotnetModule rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-sdSGBf/dk+3Oy/aCfmIDuymwXQZwnth923Wdggir/Q0=";
+    hash = "sha256-/GMYF7G469oX5W1zjv5A9a6tcLX+4g6Sf9cDqxSjgWg=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
 
   # Do the autoreconf/Makefile job manually
   # TODO: use upstream build system
@@ -79,12 +80,13 @@ buildDotnetModule rec {
       -p:InstallPrefix="$out"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = with platforms; linux;
+    changelog = "https://github.com/PintaProject/Pinta/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.linux;
     mainProgram = "pinta";
   };
 }
