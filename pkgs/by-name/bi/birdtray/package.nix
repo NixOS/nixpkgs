@@ -4,6 +4,8 @@
 , cmake
 , pkg-config
 , libsForQt5
+, fetchpatch
+, thunderbird
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,18 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qttools
     libsForQt5.qtx11extras
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "OPT_THUNDERBIRD_CMDLINE" "thunderbird") # get thunderbird from PATH
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-path-handling.patch";
+      url = "https://github.com/gyunaev/birdtray/commit/54b304d92188429792c264b07ff45897699f2d3e.patch";
+      hash = "sha256-ME635Kt1b9RJKCqtAZBFa93OIA0u2Z4tWIlGcI374j0=";
+    })
   ];
 
   # Wayland support is broken.
