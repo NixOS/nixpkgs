@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "v${version}";
+    rev = "v12.1.0";
     sha256 = "sha256-omyMN8d+g1uYsEw41KmpJCwOmVWLokEfbW19vIvG79w=";
   };
 
@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 
   cmakeFlags = [
