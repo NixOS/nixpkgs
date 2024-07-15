@@ -37,7 +37,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
   nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
-  mint-artwork = callPackage ./mint-artwork { };
   mint-cursor-themes = callPackage ./mint-cursor-themes { };
   mint-l-icons = callPackage ./mint-l-icons { };
   mint-l-theme = callPackage ./mint-l-theme { };
@@ -50,6 +49,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
   folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
+  mint-artwork = lib.warn "cinnamon.mint-artwork was moved to top-level. Please use pkgs.mint-artwork directly." pkgs.mint-artwork; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
   xapps = pkgs.cinnamon.xapp; # added 2022-07-27
