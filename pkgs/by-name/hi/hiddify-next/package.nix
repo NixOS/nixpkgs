@@ -82,8 +82,12 @@ in flutter.buildFlutterApplication {
   };
 
   meta = with lib; {
-    description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc. It’s an open-source, secure and ad-free. ";
-    homepage = "https://github.com/hiddify/hiddify-next/";
+    description = "Multi-platform auto-proxy client";
+    longDescription = ''
+      Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria,
+      Reality, Trojan, SSH etc. It’s an open-source, secure and ad-free.
+    '';
+    homepage = "https://hiddify.com";
     mainProgram = "hiddify";
     license = licenses.cc-by-nc-sa-40;
     platforms = platforms.linux;
