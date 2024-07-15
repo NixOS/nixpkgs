@@ -5,6 +5,7 @@
 , pygobject3
 , systemd
 , wirelesstools
+, wrapGAppsNoGuiHook
 }:
 
 buildPythonApplication rec {
@@ -20,6 +21,9 @@ buildPythonApplication rec {
     hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };
 
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+  ];
   propagatedBuildInputs = [
     dbus-python
     pygobject3
@@ -37,6 +41,13 @@ buildPythonApplication rec {
   installPhase = ''
     install -D networkd-notify -t "$out/bin/"
     install -D -m0644 networkd-notify.desktop -t "$out/share/applications/"
+  '';
+
+  # Let the Python wrapper add gappsWrapperArgs, to avoid two layers of wrapping.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
