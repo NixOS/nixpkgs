@@ -49,7 +49,9 @@ let
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
     manPage = ./manpages/nixos-generate-config.8;
-    templateDir = pkgs.substituteAllFiles {
+    templateDir = let
+      areWeUnstable = lib.hasSuffix "-unstable" config.system.defaultChannel;
+    in pkgs.substituteAllFiles {
       name = "nixos-generate-config-templates";
       src = ./config-templates;
       files = let
@@ -70,6 +72,20 @@ let
 
       inherit (nixos-generate-config) hostPlatformSystem;
       hostname = config.networking.hostName;
+      stable = if areWeUnstable then "unstable" else "stable";
+      stableVersion = let
+        currentVersion = lib.sublist 0 2 (lib.versions.splitVersion lib.version);
+        previousVersion = if (lib.toInt (lib.elemAt currentVersion 1)) > 6 then
+          [
+            (lib.elemAt currentVersion 0)
+            (lib.fixedWidthNumber 2 (lib.toInt (lib.elemAt currentVersion 1) - 6))
+          ]
+        else
+          [
+            ((lib.toInt (lib.elemAt currentVersion 0) - 1))
+            (lib.fixedWidthNumber 2 (lib.toInt (lib.elemAt currentVersion 1) + 6))
+          ];
+      in lib.concatStringsSep "." (if areWeUnstable then previousVersion else currentVersion);
     };
   };
 
