@@ -5,8 +5,8 @@
   fetchFromGitHub,
   ntpd-rs,
   installShellFiles,
+  darwin,
   pandoc,
-  Security,
   nixosTests,
   testers,
 }:
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-NRFmb9rZVbd0qYKIkslT4TcbC/aD4QhAjm2GA4BvReY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
   nativeBuildInputs = [
     pandoc
     installShellFiles
