@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
-, withLdap ? true
 , python3
+, withLdap ? false
 , withPostgres ? true
 , nix-update-script
 , nixosTests
