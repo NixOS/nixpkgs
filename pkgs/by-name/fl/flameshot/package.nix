@@ -1,16 +1,13 @@
-{ mkDerivation
+{ libsForQt5
+, stdenv
 , lib
 , fetchFromGitHub
-, qtbase
 , cmake
-, qttools
-, qtsvg
 , nix-update-script
 , fetchpatch
-, kguiaddons
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "flameshot";
   version = "12.1.0";
 
@@ -38,8 +35,17 @@ mkDerivation rec {
     (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
   ];
 
-  nativeBuildInputs = [ cmake qttools qtsvg ];
-  buildInputs = [ qtbase kguiaddons ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.qttools
+    libsForQt5.qtsvg
+    libsForQt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.kguiaddons
+  ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
