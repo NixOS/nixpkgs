@@ -8709,11 +8709,6 @@ with pkgs;
 
   h2 = callPackage ../servers/h2 { };
 
-  h5utils = callPackage ../tools/misc/h5utils {
-    libmatheval = null;
-    hdf4 = null;
-  };
-
   haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
