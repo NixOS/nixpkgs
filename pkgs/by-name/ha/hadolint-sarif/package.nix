@@ -3,6 +3,7 @@
   fetchCrate,
   rustPlatform,
   hadolint-sarif,
+  nix-update-script,
   testers,
 }:
 rustPlatform.buildRustPackage rec {
@@ -18,13 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = hadolint-sarif; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "A CLI tool to convert hadolint diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    mainProgram = "hadolint-sarif";
-    maintainers = with lib.maintainers; [ getchoo ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "hadolint-sarif";
   };
 }
