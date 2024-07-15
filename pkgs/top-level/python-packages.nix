@@ -12910,6 +12910,10 @@ self: super: with self; {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pythran-numpy_2 = self.pythran.override {
+    numpy = numpy_2;
+  };
+
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
