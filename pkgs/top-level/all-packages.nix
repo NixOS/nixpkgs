@@ -34382,6 +34382,8 @@ with pkgs;
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
 
+  thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
+
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
