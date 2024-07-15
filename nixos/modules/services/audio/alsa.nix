@@ -1,15 +1,13 @@
 # ALSA sound support.
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
   imports = [
-    (mkRemovedOptionModule [ "sound" ] "The option was heavily overloaded and can be removed from most configurations.")
+    (lib.mkRemovedOptionModule [ "sound" ] "The option was heavily overloaded and can be removed from most configurations.")
   ];
 
-  options.hardware.alsa.enablePersistence = mkOption {
-    type = types.bool;
+  options.hardware.alsa.enablePersistence = lib.mkOption {
+    type = lib.types.bool;
     default = false;
     description = ''
       Whether to enable ALSA sound card state saving on shutdown.
@@ -17,9 +15,9 @@ with lib;
     '';
   };
 
-  config = mkIf config.hardware.alsa.enablePersistence {
+  config = lib.mkIf config.hardware.alsa.enablePersistence {
     # ALSA provides a udev rule for restoring volume settings.
-    services.udev.packages = [ alsa-utils ];
+    services.udev.packages = [ pkgs.alsa-utils ];
 
     systemd.services.alsa-store = {
       description = "Store Sound Card State";
@@ -32,8 +30,8 @@ with lib;
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
-        ExecStart = "${alsa-utils}/sbin/alsactl restore --ignore";
-        ExecStop = "${alsa-utils}/sbin/alsactl store --ignore";
+        ExecStart = "${pkgs.alsa-utils}/sbin/alsactl restore --ignore";
+        ExecStop = "${pkgs.alsa-utils}/sbin/alsactl store --ignore";
       };
     };
   };
