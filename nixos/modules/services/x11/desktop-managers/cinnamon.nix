@@ -74,9 +74,9 @@ in
           name = mkDefault "Mint-Y-Sand";
           package = mkDefault pkgs.cinnamon.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+          package = mkDefault pkgs.mint-cursor-themes;
         };
       };
 
