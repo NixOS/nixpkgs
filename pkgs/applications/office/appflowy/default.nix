@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchzip
 , autoPatchelfHook
@@ -22,14 +22,14 @@ let
       hash = "sha256-gx+iMo2611uoR549gpBoHlp2h6zQtugPZnU9qbH6VIQ=";
     };
     aarch64-darwin = x86_64-darwin;
-  }."${stdenv.hostPlatform.system}";
+  }."${stdenvNoCC.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
   version = "0.6.4";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-${dist.urlSuffix}";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
     inherit (dist) hash;
     stripRoot = false;
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenvNoCC.isLinux [
     autoPatchelfHook
   ];
 
@@ -50,13 +50,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  installPhase = lib.optionalString stdenv.isLinux ''
+  installPhase = lib.optionalString stdenvNoCC.isLinux ''
     runHook preInstall
 
     cd AppFlowy/
 
-    mkdir -p $out/opt/
-    mkdir -p $out/bin/
+    mkdir -p $out/{bin,opt}
 
     # Copy archive contents to the outpout directory
     cp -r ./* $out/opt/
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
     install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
 
     runHook postInstall
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenvNoCC.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/{Applications,bin}
@@ -74,20 +73,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenvNoCC.isLinux ''
     # Add missing libraries to appflowy using the ones it comes with
     makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
       --set LD_LIBRARY_PATH "$out/opt/lib/" \
       --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenvNoCC.isDarwin ''
     makeWrapper $out/Applications/AppFlowy.app/Contents/MacOS/AppFlowy $out/bin/appflowy
   '';
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenvNoCC.isLinux [
     (makeDesktopItem {
-      name = pname;
+      name = "appflowy";
       desktopName = "AppFlowy";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "appflowy";
       icon = "appflowy";
       categories = [ "Office" ];
@@ -99,9 +98,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
-    changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
+    changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     mainProgram = "appflowy";
   };
-}
+})
