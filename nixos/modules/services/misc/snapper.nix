@@ -96,7 +96,7 @@ let
     };
 
     TIMELINE_LIMIT_HOURLY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -104,7 +104,7 @@ let
     };
 
     TIMELINE_LIMIT_DAILY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -112,7 +112,7 @@ let
     };
 
     TIMELINE_LIMIT_WEEKLY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -120,7 +120,7 @@ let
     };
 
     TIMELINE_LIMIT_MONTHLY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -128,7 +128,7 @@ let
     };
 
     TIMELINE_LIMIT_QUARTERLY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -136,7 +136,7 @@ let
     };
 
     TIMELINE_LIMIT_YEARLY = mkOption {
-      type = types.int;
+      type = types.oneOf [ types.int types.str ];
       default = 10;
       description = ''
         Limits for timeline cleanup.
