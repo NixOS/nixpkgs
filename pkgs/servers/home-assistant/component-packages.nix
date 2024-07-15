@@ -2274,7 +2274,8 @@
       pykmtronic
     ];
     "knocki" = ps: with ps; [
-    ]; # missing inputs: knocki
+      knocki
+    ];
     "knx" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
@@ -5581,6 +5582,7 @@
     "kira"
     "kitchen_sink"
     "kmtronic"
+    "knocki"
     "knx"
     "kodi"
     "konnected"

@@ -3675,6 +3675,8 @@ self: super: with self; {
 
   dugong = callPackage ../development/python-modules/dugong { };
 
+  dukpy = callPackage ../development/python-modules/dukpy { };
+
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) gnupg;
   };
@@ -6563,6 +6565,8 @@ self: super: with self; {
   knack = callPackage ../development/python-modules/knack { };
 
   kneed = callPackage ../development/python-modules/kneed { };
+
+  knocki = callPackage ../development/python-modules/knocki { };
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
