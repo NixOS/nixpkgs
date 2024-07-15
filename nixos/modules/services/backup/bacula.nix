@@ -123,11 +123,7 @@ let
       ${dir_cfg.extraDirectorConfig}
     }
 
-    Catalog {
-      Name = PostgreSQL;
-      dbname = bacula;
-      user = bacula;
-    }
+    ${dir_cfg.catalog}
 
     Messages {
       Name = Standard;
@@ -586,6 +582,20 @@ in {
         description = mdDoc ''
           The director name used by the system administrator. This directive is
           required.
+        '';
+      };
+
+      catalog = mkOption {
+        default = ''
+          Catalog {
+            Name = PostgreSQL;
+            dbname = bacula;
+            user = bacula;
+          }
+        '';
+        type = types.str;
+        description = mdDoc ''
+          Option to overwrite the catalog.
         '';
       };
 
