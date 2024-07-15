@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nonpop";
     repo = "xkblayout-state";
     rev = "v${version}";
-    sha256 = "sha256-diorqwDEBdzcBteKvhRisQaY3bx5seaOaWSaPwBkWDo=";
+    hash = "sha256-diorqwDEBdzcBteKvhRisQaY3bx5seaOaWSaPwBkWDo=";
   };
 
   buildInputs = [ libX11 ];

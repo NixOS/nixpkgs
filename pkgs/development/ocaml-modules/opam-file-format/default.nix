@@ -8,7 +8,7 @@ buildDunePackage rec {
     owner = "ocaml";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ka9pMYB99kM+5X7wf9F13gUrjouZucGevvkSY0TaXGg=";
+    hash = "sha256-Ka9pMYB99kM+5X7wf9F13gUrjouZucGevvkSY0TaXGg=";
   };
 
   useDune2 = true;

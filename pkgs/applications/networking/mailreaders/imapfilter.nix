@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pYnv9slw4bRPfCnhd/tlJC9JEx+3h40nyZ3qUll7p6c=";
+    hash = "sha256-pYnv9slw4bRPfCnhd/tlJC9JEx+3h40nyZ3qUll7p6c=";
   };
   makeFlags = [
     "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "ginuerzh";
     repo = "gost";
     rev = "fd57e80709aba9581757b1cd63b7d8f75e2385d2";
-    sha256 = "sha256-GkXsiUcH5hppgkkt4ddVMLm5riUDORVhjWBGHZXti5A=";
+    hash = "sha256-GkXsiUcH5hppgkkt4ddVMLm5riUDORVhjWBGHZXti5A=";
   };
 
   patches = [

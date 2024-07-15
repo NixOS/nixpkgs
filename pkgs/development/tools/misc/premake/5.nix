@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "premake";
     repo = "premake-core";
     rev = "v${version}";
-    sha256 = "sha256-2R5gq4jaQsp8Ny1oGuIYkef0kn2UG9jMf20vq0714oY=";
+    hash = "sha256-2R5gq4jaQsp8Ny1oGuIYkef0kn2UG9jMf20vq0714oY=";
   };
 
   buildInputs = [ libuuid ] ++ lib.optionals stdenv.isDarwin [ Foundation readline ];

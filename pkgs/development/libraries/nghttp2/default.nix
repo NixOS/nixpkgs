@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Toz37DLUxaQwlmJC1yA10lXNlHCodm1h7tegGQ3VRP0=";
+    hash = "sha256-Toz37DLUxaQwlmJC1yA10lXNlHCodm1h7tegGQ3VRP0=";
   };
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];

@@ -11,7 +11,7 @@ buildDartApplication rec {
     owner = "google";
     repo = "protobuf.dart";
     rev = "protobuf-v${version}";
-    sha256 = "sha256-2QnLS6GHhDHMCnAY+2c1wMyPY3EKtlijWHQC+9AVt0k=";
+    hash = "sha256-2QnLS6GHhDHMCnAY+2c1wMyPY3EKtlijWHQC+9AVt0k=";
   };
   sourceRoot = "${src.name}/protoc_plugin";
 

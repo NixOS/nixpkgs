@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "doitintl";
     repo = "kube-no-trouble";
     rev = version;
-    sha256 = "sha256-/gCbj0RDwV5E8kNkEu+37ilzw/A0BAXiYfHGPdkCsRs=";
+    hash = "sha256-/gCbj0RDwV5E8kNkEu+37ilzw/A0BAXiYfHGPdkCsRs=";
   };
 
   vendorHash = "sha256-6hp7mzE45Tlmt4ybhpdJLYCv+WqQ9ak2S47kJTwyGVI=";

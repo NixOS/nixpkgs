@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "schrodinger";
     repo = "maeparser";
     rev = "v${version}";
-    sha256 = "sha256-+eCTOU0rqFQC87wcxgINGLsULfbIr/wKxQTkRR59JVc=";
+    hash = "sha256-+eCTOU0rqFQC87wcxgINGLsULfbIr/wKxQTkRR59JVc=";
   };
 
   nativeBuildInputs = [ cmake ];

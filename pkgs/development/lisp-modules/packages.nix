@@ -250,7 +250,7 @@ let
       owner = "atlas-engineer";
       repo = "njson";
       rev = version;
-      sha256 = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
+      hash = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
     };
     lispLibs = [ self.cl-json self.com_dot_inuoe_dot_jzon];
     systems = [ "njson" "njson/cl-json" "njson/jzon"];
@@ -263,7 +263,7 @@ let
       owner = "atlas-engineer";
       repo = "nsymbols";
       rev = version;
-      sha256 = "sha256-psk29WEA7Hxgp29oUniBNvI+lyZfMkdpa5A7okc6kKs=";
+      hash = "sha256-psk29WEA7Hxgp29oUniBNvI+lyZfMkdpa5A7okc6kKs=";
     };
     lispLibs = [ self.closer-mop ];
     systems = [ "nsymbols" "nsymbols/star" ];
@@ -277,7 +277,7 @@ let
       owner = "atlas-engineer";
       repo = "nclasses";
       rev = version;
-      sha256 = "sha256-foXmaLxMYMFieB2Yd2iPsU4EX5kLXq7kyElqGZ47OgI=";
+      hash = "sha256-foXmaLxMYMFieB2Yd2iPsU4EX5kLXq7kyElqGZ47OgI=";
     };
     lispLibs = [ self.moptilities ];
   };
@@ -289,7 +289,7 @@ let
       owner = "atlas-engineer";
       repo = "nfiles";
       rev = version;
-      sha256 = "sha256-4rhpBErQgZHcwZRblxgiYaUmKalvllSbJjnRteDVH6k=";
+      hash = "sha256-4rhpBErQgZHcwZRblxgiYaUmKalvllSbJjnRteDVH6k=";
     };
     lispLibs = [
       self.nclasses
@@ -757,7 +757,7 @@ let
       owner = "nikodemus";
       repo = "sb-cga";
       rev = "9a554ea1c01cac998ff7eaa5f767bc5bcdc4c094";
-      sha256 = "sha256-iBM+VXu6JRqGmeIFzfXbGot+elvangmfSpDB7DjFpPg";
+      hash = "sha256-iBM+VXu6JRqGmeIFzfXbGot+elvangmfSpDB7DjFpPg";
     };
     lispLibs = [ self.alexandria ];
   };

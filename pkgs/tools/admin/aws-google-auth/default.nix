@@ -33,7 +33,7 @@ buildPythonApplication rec {
     owner = "cevoaustralia";
     repo = "aws-google-auth";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/Xe4RDA9sBEsBBV1VP91VX0VfO8alK8L70m9WrB7qu4=";
+    hash = "sha256-/Xe4RDA9sBEsBBV1VP91VX0VfO8alK8L70m9WrB7qu4=";
   };
 
   nativeBuildInputs = [

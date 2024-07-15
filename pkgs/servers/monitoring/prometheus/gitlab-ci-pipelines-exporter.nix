@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mvisonneau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-plrQPPclDaJiFHc1HNCk+bYiLO0fJX/HC/vTTO5eoy8=";
+    hash = "sha256-plrQPPclDaJiFHc1HNCk+bYiLO0fJX/HC/vTTO5eoy8=";
   };
 
   subPackages = [ "cmd/${pname}" ];

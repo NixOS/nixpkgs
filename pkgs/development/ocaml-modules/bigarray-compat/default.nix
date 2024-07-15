@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "mirage";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2JVopggK2JuXWEPu8qn12F1jQIJ9OV89XY1rHtUqLkI=";
+    hash = "sha256-2JVopggK2JuXWEPu8qn12F1jQIJ9OV89XY1rHtUqLkI=";
   };
 
   meta = {

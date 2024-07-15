@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "nelhage";
     repo = "reptyr";
     rev = "reptyr-${version}";
-    sha256 = "sha256-jlO/ykrwGJkgKiPxfRQEX4TSksrbPQhkQs+QddwqaQ4=";
+    hash = "sha256-jlO/ykrwGJkgKiPxfRQEX4TSksrbPQhkQs+QddwqaQ4=";
   };
 
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];

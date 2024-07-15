@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "simonccarter";
     repo = "sta";
     rev = "94559e3dfa97d415e3f37b1180b57c17c7222b4f";
-    sha256 = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
+    hash = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

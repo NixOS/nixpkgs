@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jonasvinther";
     repo = "medusa";
     rev = "v${version}";
-    sha256 = "sha256-c5ldU54SQQKnKp2xxUiHVOaCRV9ttC24sN8AUMMuWzQ=";
+    hash = "sha256-c5ldU54SQQKnKp2xxUiHVOaCRV9ttC24sN8AUMMuWzQ=";
   };
 
   vendorHash = "sha256-GdQiPeU5SWZlqWkyk8gU9yVTUQxJlurhY3l1xZXKeJY=";

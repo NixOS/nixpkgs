@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "int128";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sFEFvWizQeQp9VE1guO9xMZl9+cFk6jV43TVCbD8pas=";
+    hash = "sha256-sFEFvWizQeQp9VE1guO9xMZl9+cFk6jV43TVCbD8pas=";
   };
 
   subPackages = ["."];

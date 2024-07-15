@@ -10,7 +10,7 @@ let
     owner = "indradb";
     repo = "indradb";
     rev = "06134dde5bb53eb1d2aaa52afdaf9ff3bf1aa674";
-    sha256 = "sha256-g4Jam7yxMc+piYQzgMvVsNTF+ce1U3thzYl/M9rKG4o=";
+    hash = "sha256-g4Jam7yxMc+piYQzgMvVsNTF+ce1U3thzYl/M9rKG4o=";
   };
 
   meta = with lib; {

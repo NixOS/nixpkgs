@@ -11,7 +11,7 @@ let
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-/A6BzhCdN8e7mV/Tp9TYfOmSAjmaa4S3FNCko4G9Vgs=";
+    hash = "sha256-/A6BzhCdN8e7mV/Tp9TYfOmSAjmaa4S3FNCko4G9Vgs=";
   };
 in
 buildGoModule rec {

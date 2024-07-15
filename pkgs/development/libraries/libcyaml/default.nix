@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "tlsa";
     repo = "libcyaml";
     rev = "v${version}";
-    sha256 = "sha256-iS1T8R0SW+qu0TlP5FVlDzUfQitiZMUkbJUigbxeW0Y=";
+    hash = "sha256-iS1T8R0SW+qu0TlP5FVlDzUfQitiZMUkbJUigbxeW0Y=";
   };
 
   buildInputs = [ libyaml ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "OpenSYCL";
     repo = "OpenSYCL";
     rev = "v${version}";
-    sha256 = "sha256-5YkuUOAnvoAD5xDKxKMPq0B7+1pb6hVisPAhs0Za1ls=";
+    hash = "sha256-5YkuUOAnvoAD5xDKxKMPq0B7+1pb6hVisPAhs0Za1ls=";
   };
 
   nativeBuildInputs = [

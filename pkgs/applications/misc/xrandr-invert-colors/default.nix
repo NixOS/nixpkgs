@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "zoltanp";
     repo = "xrandr-invert-colors";
     rev = "v${version}";
-    sha256 = "sha256-MIbHNJFDQsvjPUbperTKKbHY5GSgItvRyV5OsfpzYT4=";
+    hash = "sha256-MIbHNJFDQsvjPUbperTKKbHY5GSgItvRyV5OsfpzYT4=";
   };
 
   buildInputs = [ libXrandr ];

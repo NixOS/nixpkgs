@@ -8,7 +8,7 @@ buildKodiAddon {
     owner = "teeedubb";
     repo = owner + "-xbmc-repo";
     rev = "d5cea4b590b0ff08ac169b757946b7cb5145b983";
-    sha256 = "sha256-arBMMOoHQuHRcJ7eXD1jvA45Svei7c0srcBZkdAzqY0=";
+    hash = "sha256-arBMMOoHQuHRcJ7eXD1jvA45Svei7c0srcBZkdAzqY0=";
   };
 
   propagatedBuildInputs = [ steam which xdotool ];

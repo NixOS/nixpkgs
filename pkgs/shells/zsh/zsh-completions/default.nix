@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "zsh-users";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GFHlZjIHUWwyeVoCpszgn4AmLPSSE8UVNfRmisnhkpg=";
+    hash = "sha256-GFHlZjIHUWwyeVoCpszgn4AmLPSSE8UVNfRmisnhkpg=";
   };
 
   strictDeps = true;

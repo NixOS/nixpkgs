@@ -12,7 +12,7 @@ buildDotnetModule rec {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
-    sha256 = "sha256-zfL+VoDfICUtw02KeRghaq3XPOa/YnSh8orhqmo3Auo=";
+    hash = "sha256-zfL+VoDfICUtw02KeRghaq3XPOa/YnSh8orhqmo3Auo=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";

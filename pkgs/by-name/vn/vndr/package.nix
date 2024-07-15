@@ -11,7 +11,7 @@ buildGoModule {
     owner = "LK4D4";
     repo = "vndr";
     rev = "87603e47e8ea2ddac96f508fc9e9d6fc17b198b0";
-    sha256 = "sha256-L7OemAPCv7epOVmjrDDtiGqQqzscm5zj3C6dsZP4uUc=";
+    hash = "sha256-L7OemAPCv7epOVmjrDDtiGqQqzscm5zj3C6dsZP4uUc=";
   };
 
   vendorHash = null;

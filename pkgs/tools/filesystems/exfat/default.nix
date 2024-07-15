@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "relan";
     repo = "exfat";
     rev = "v${version}";
-    sha256 = "sha256-5m8fiItEOO6piR132Gxq6SHOPN1rAFTuTVE+UI0V00k=";
+    hash = "sha256-5m8fiItEOO6piR132Gxq6SHOPN1rAFTuTVE+UI0V00k=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

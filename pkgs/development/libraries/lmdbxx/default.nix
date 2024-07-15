@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hoytech";
     repo = "lmdbxx";
     rev = finalAttrs.version;
-    sha256 = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
+    hash = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
   };
 
   buildInputs = [ lmdb ];

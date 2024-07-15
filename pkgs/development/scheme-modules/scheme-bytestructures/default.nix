@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "TaylanUB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
+    hash = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 
   strictDeps = true;

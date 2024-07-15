@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "github";
     repo = "cmark-gfm";
     rev = version;
-    sha256 = "sha256-HiSGtRsSbW03R6aKoMVVFOLrwP5aXtpeXUC/bE5M/qo=";
+    hash = "sha256-HiSGtRsSbW03R6aKoMVVFOLrwP5aXtpeXUC/bE5M/qo=";
   };
 
   nativeBuildInputs = [ cmake ];

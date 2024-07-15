@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "rime";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QHuzpitxSYQ4EcBPY1f0R5zl4UFtefu0bFXA76Iv+j0=";
+    hash = "sha256-QHuzpitxSYQ4EcBPY1f0R5zl4UFtefu0bFXA76Iv+j0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

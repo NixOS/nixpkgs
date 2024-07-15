@@ -9,7 +9,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro.genplus";
     rev = "${version}-Matrix";
-    sha256 = "sha256-F3bt129lBZKlDtp7X0S0q10T9k9C2zNeHG+yIP3818Q=";
+    hash = "sha256-F3bt129lBZKlDtp7X0S0q10T9k9C2zNeHG+yIP3818Q=";
   };
 
   extraCMakeFlags = [

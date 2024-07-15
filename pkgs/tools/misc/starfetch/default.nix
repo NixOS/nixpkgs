@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Haruno19";
     repo = "starfetch";
     rev = version;
-    sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
+    hash = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
   };
 
   postPatch = ''

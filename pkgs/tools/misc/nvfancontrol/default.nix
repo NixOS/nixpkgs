@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "foucault";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
+    hash = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
   };
 
   cargoSha256 = "sha256-fEzdghGQSSeyeyiHjw1ggQ38gsETJFl9bq/tizGxIis=";

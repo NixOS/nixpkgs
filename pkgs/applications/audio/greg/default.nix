@@ -10,7 +10,7 @@ with pythonPackages; buildPythonApplication rec {
     owner = "manolomartinez";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
+    hash = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 
   propagatedBuildInputs = [ setuptools feedparser ];

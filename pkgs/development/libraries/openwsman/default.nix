@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "sha256-CH2pqWs64Dznim3IljmsthKEQfACVlaAKQ/07MgryHo=";
+    hash = "sha256-CH2pqWs64Dznim3IljmsthKEQfACVlaAKQ/07MgryHo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     owner = "trilinos";
     repo = "Trilinos";
     rev = "${pname}-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
+    hash = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
   };
 
   nativeBuildInputs = [ cmake gfortran swig ];

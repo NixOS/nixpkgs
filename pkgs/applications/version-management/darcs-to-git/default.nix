@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "purcell";
     repo = "darcs-to-git";
     rev = "e5fee32495908fe0f7d700644c7b37347b7a0a5b";
-    sha256 = "sha256-UQI3av+0zj1SNwEonwuk5n2RjZN3+tSJFJuFCjrorFM=";
+    hash = "sha256-UQI3av+0zj1SNwEonwuk5n2RjZN3+tSJFJuFCjrorFM=";
   };
 
   patchPhase = let

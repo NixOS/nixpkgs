@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "sha256-xVx3+cnmIdoA7R1S31EaiPj+DOTqkINoQeMgauW61Ys=";
+    hash = "sha256-xVx3+cnmIdoA7R1S31EaiPj+DOTqkINoQeMgauW61Ys=";
   };
 
   nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];

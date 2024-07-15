@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "phillbush";
     repo = "xmenu";
     rev = "v${version}";
-    sha256 = "sha256-Gg4hSBBVBOB/wlY44C5bJOuOnLoA/tPvcNZamXae/WE=";
+    hash = "sha256-Gg4hSBBVBOB/wlY44C5bJOuOnLoA/tPvcNZamXae/WE=";
   };
 
   buildInputs = [ imlib2 libX11 libXft libXinerama ];

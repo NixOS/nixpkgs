@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "aria2";
     repo = "aria2";
     rev = "release-${version}";
-    sha256 = "sha256-xbiNSg/Z+CA0x0DQfMNsWdA+TATyX6dCeW2Nf3L3Kfs=";
+    hash = "sha256-xbiNSg/Z+CA0x0DQfMNsWdA+TATyX6dCeW2Nf3L3Kfs=";
   };
 
   strictDeps = true;

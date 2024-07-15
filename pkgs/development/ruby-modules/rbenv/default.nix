@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "rbenv";
     repo = "rbenv";
     rev = "v${version}";
-    sha256 = "sha256-m/Yy5EK8pLTBFcsgKCrNvQrPFFIlYklXXZbjN4Nmm9c=";
+    hash = "sha256-m/Yy5EK8pLTBFcsgKCrNvQrPFFIlYklXXZbjN4Nmm9c=";
   };
 
   postPatch = ''

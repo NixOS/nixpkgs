@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "dosfstools";
     repo = "dosfstools";
     rev = "v${version}";
-    sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
+    hash = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 
   patches = [

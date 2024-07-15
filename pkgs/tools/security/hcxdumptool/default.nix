@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ZerBea";
     repo = "hcxdumptool";
     rev = version;
-    sha256 = "sha256-InMyDUEH135Y1RYJ3z1+RQxPMi7+QMf670S/S2ZL9vg=";
+    hash = "sha256-InMyDUEH135Y1RYJ3z1+RQxPMi7+QMf670S/S2ZL9vg=";
   };
 
   buildInputs = [ openssl ];

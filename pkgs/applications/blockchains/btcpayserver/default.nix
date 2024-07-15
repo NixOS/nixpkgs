@@ -12,7 +12,7 @@ buildDotnetModule rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p0GNwwbhsgChlSlPVD/RHhzWF/1URdYp/iYQmJxORU8=";
+    hash = "sha256-p0GNwwbhsgChlSlPVD/RHhzWF/1URdYp/iYQmJxORU8=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";

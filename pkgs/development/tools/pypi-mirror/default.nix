@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "montag451";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-bvnOieNs8pCDKuCSJx88vRxFPcOGWUj/i3mNS6E/nok=";
+    hash = "sha256-bvnOieNs8pCDKuCSJx88vRxFPcOGWUj/i3mNS6E/nok=";
   };
 
   pythonImportsCheck = [ "pypi_mirror" ];

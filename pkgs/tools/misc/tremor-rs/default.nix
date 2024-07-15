@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "tremor-rs";
     repo = "tremor-runtime";
     rev = "v${version}";
-    sha256 = "sha256-+cN+nMDMX4rxjs1VQnSgjBvCsjxxAd13otp9qd21SYo=";
+    hash = "sha256-+cN+nMDMX4rxjs1VQnSgjBvCsjxxAd13otp9qd21SYo=";
   };
 
   cargoLock = {

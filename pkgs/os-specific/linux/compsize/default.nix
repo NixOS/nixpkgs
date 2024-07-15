@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "kilobyte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
+    hash = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
   };
 
   buildInputs = [ btrfs-progs ];

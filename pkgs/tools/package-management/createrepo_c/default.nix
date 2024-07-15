@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "rpm-software-management";
     repo   = "createrepo_c";
     rev    = version;
-    sha256 = "sha256-rcrJjcWj+cTAE3k11Ynr7CQCOWD+rb60lcar0G2w06A=";
+    hash = "sha256-rcrJjcWj+cTAE3k11Ynr7CQCOWD+rb60lcar0G2w06A=";
   };
 
   patches = [

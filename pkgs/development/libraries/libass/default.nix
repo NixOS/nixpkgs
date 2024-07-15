@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6CYbUdZrqTP+mSSMb92HZ+2WxaflNjyDmSxzWiwvv3Q=";
+    hash = "sha256-6CYbUdZrqTP+mSSMb92HZ+2WxaflNjyDmSxzWiwvv3Q=";
   };
 
   outputs = [ "out" "dev" ];

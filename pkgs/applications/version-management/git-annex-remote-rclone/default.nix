@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
     rev = "v${version}";
-    sha256 = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
+    hash = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

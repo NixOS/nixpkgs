@@ -8,7 +8,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-2+AV2gt67zLa7bRIfsxQIeB82iJba8Y4P0fq9273r7Q=";
+    hash = "sha256-2+AV2gt67zLa7bRIfsxQIeB82iJba8Y4P0fq9273r7Q=";
   };
 
   ldflags = [

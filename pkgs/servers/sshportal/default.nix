@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "moul";
     repo = "sshportal";
     rev = "v${version}";
-    sha256 = "sha256-XJ8Hgc8YoJaH2gYOvoYhcpY4qgasgyr4M+ecKJ/RXTs=";
+    hash = "sha256-XJ8Hgc8YoJaH2gYOvoYhcpY4qgasgyr4M+ecKJ/RXTs=";
   };
 
   ldflags = [ "-X main.GitTag=${version}" "-X main.GitSha=${version}" "-s" "-w" ];

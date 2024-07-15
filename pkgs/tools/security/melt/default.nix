@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "charmbracelet";
     repo = "melt";
     rev = "v${version}";
-    sha256 = "sha256-AfFsw1Xjj0RsP2LOeMBDffkcqgmxsqsE1iguP/0IDtM=";
+    hash = "sha256-AfFsw1Xjj0RsP2LOeMBDffkcqgmxsqsE1iguP/0IDtM=";
   };
 
   vendorHash = "sha256-Ec3RWH7I8nv6ZVYLrX0b/2RWwZ6cO4qbs0XqQemUYnE=";

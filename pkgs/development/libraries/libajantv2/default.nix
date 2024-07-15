@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "aja-video";
     repo = "ntv2";
     rev = "v${version}";
-    sha256 = "sha256-h5PKWMwqTeI5/EaTWkjYojuvDU0FyMpzIjWB98UOJwc=";
+    hash = "sha256-h5PKWMwqTeI5/EaTWkjYojuvDU0FyMpzIjWB98UOJwc=";
   };
 
   outputs = [ "out" "dev" ];

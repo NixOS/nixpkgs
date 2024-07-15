@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mrlhansen";
     repo = "idrac_exporter";
     rev = "3b311e0e6d602fb0938267287f425f341fbf11da";
-    sha256 = "sha256-N8wSjQE25TCXg/+JTsvQk3fjTBgfXTiSGHwZWFDmFKc=";
+    hash = "sha256-N8wSjQE25TCXg/+JTsvQk3fjTBgfXTiSGHwZWFDmFKc=";
   };
 
   vendorHash = "sha256-iNV4VrdQONq7LXwAc6AaUROHy8TmmloUAL8EmuPtF/o=";

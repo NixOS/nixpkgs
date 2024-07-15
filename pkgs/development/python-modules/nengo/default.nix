@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nengo";
     repo = "nengo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-b9mPjKdewIqIeRrddV1/M3bghSyox7Lz6VbfSLCHZjA=";
+    hash = "sha256-b9mPjKdewIqIeRrddV1/M3bghSyox7Lz6VbfSLCHZjA=";
   };
 
   nativeBuildInputs = [ setuptools ];

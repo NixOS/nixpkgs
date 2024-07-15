@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "lmorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-16eaPxmTauuttpjHUSQlBu/d/S3CWKgQYttqQWp0lkU=";
+    hash = "sha256-16eaPxmTauuttpjHUSQlBu/d/S3CWKgQYttqQWp0lkU=";
   };
 
   vendorHash = "sha256-/qK7Zgdz48vmz+tIMZmo1M5Glr842fOCinMoLAeQasg=";

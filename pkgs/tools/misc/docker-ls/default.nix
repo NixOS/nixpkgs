@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mayflower";
     repo = "docker-ls";
     rev = "v${version}";
-    sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
+    hash = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 
   vendorHash = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";

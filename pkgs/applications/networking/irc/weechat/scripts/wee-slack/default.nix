@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "sha256-EtPhaNFYDxxSrSLXHHnY4ARpRycNNxbg5QPKtnPem04=";
+    hash = "sha256-EtPhaNFYDxxSrSLXHHnY4ARpRycNNxbg5QPKtnPem04=";
   };
 
   patches = [

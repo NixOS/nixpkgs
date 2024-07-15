@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-c-compression";
     rev = "v${version}";
-    sha256 = "sha256-Cf3MvoRWGAy+vlE59JSpTGOBl07dI4mbIaL1HIiLN/I=";
+    hash = "sha256-Cf3MvoRWGAy+vlE59JSpTGOBl07dI4mbIaL1HIiLN/I=";
   };
 
   nativeBuildInputs = [

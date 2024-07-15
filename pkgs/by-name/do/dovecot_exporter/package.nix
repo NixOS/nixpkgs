@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "kumina";
     repo = "dovecot_exporter";
     rev = "7ef79118ba619ff078594837377189477a4d059f";
-    sha256 = "sha256-qJbIBSfHYgFztuivuNjleDa+Bx0KC4OklCh3IvK2XFI=";
+    hash = "sha256-qJbIBSfHYgFztuivuNjleDa+Bx0KC4OklCh3IvK2XFI=";
   };
 
   vendorHash = "sha256-+B8sROL1h6ElBfAUBT286yJF9m9zoRvMOrf0z2SVCj0=";

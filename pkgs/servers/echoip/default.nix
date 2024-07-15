@@ -12,7 +12,7 @@ buildGoModule {
     owner = "mpolden";
     repo = "echoip";
     rev = "ffa6674637a5bf906d78ae6675f9a4680a78ab7b";
-    sha256 = "sha256-yN7PIwoIi2SPwwFWnHDoXnwvKohkPPf4kVsNxHLpqCE=";
+    hash = "sha256-yN7PIwoIi2SPwwFWnHDoXnwvKohkPPf4kVsNxHLpqCE=";
   };
 
   vendorHash = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";

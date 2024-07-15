@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
     url = "https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz";
-    sha256 = "sha256-XHSU+WgoCDLWrbWqGfdFpW8aed8xHlkzjF76b3KF4Wg=";
+    hash = "sha256-XHSU+WgoCDLWrbWqGfdFpW8aed8xHlkzjF76b3KF4Wg=";
   };
 
   strictDeps = true;

@@ -8,7 +8,7 @@ buildDunePackage rec {
     owner = "vincent-hugot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VLY8+Nu6md0szW4RVxTFwlSQ9kyrgUqf7wQEA6GW8BE=";
+    hash = "sha256-VLY8+Nu6md0szW4RVxTFwlSQ9kyrgUqf7wQEA6GW8BE=";
   };
 
   preBuild = ''

@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "dopplerhq";
     repo = "cli";
     rev = version;
-    sha256 = "sha256-lijVKNmqTcmjgIzlcMdm/DUrBA+0xV6Wge9dt5xdWFY=";
+    hash = "sha256-lijVKNmqTcmjgIzlcMdm/DUrBA+0xV6Wge9dt5xdWFY=";
   };
 
   vendorHash = "sha256-NUHWKPszQH/pvnA+j65+bJ6t+C0FDRRbTviqkYztpE4=";

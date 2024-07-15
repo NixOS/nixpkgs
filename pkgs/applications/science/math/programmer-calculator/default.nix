@@ -8,7 +8,7 @@ gccStdenv.mkDerivation rec {
     owner = "alt-romes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
+    hash = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
   };
 
   buildInputs = [ ncurses ];

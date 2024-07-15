@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "printesoi";
     repo = pname;
     rev = "2dd95283076d7194345a460edb3630cfd020759c";
-    sha256 = "sha256-ppAeEfwoHZg7XEj3zGc+uq4Z6hUgJNM2EjuDsc8pFQo=";
+    hash = "sha256-ppAeEfwoHZg7XEj3zGc+uq4Z6hUgJNM2EjuDsc8pFQo=";
   };
 
   installPhase = ''

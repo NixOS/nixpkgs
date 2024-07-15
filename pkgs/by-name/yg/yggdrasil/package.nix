@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "sha256-LiQKAkFN9JRdl7P3TMIzEeRxKBysidFWMWGGW8jEm/E=";
+    hash = "sha256-LiQKAkFN9JRdl7P3TMIzEeRxKBysidFWMWGGW8jEm/E=";
   };
 
   vendorHash = "sha256-Bfq8AjOljSg/mWHUwTSKwslukW3aZXOFi4KigUsIogc=";

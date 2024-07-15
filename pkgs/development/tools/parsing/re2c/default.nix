@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner  = "skvadrik";
     repo   = "re2c";
     rev    = version;
-    sha256 = "sha256-7zZdLby7HdNoURgdkg+xnlp6VDCACcyGCTtjM43OLd4=";
+    hash = "sha256-7zZdLby7HdNoURgdkg+xnlp6VDCACcyGCTtjM43OLd4=";
   };
 
   nativeBuildInputs = [

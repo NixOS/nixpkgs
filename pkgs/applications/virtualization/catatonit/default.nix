@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "openSUSE";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AqJURf4OrPHfTm5joA3oPXH4McE1k0ouvDXAF3jiwgk=";
+    hash = "sha256-AqJURf4OrPHfTm5joA3oPXH4McE1k0ouvDXAF3jiwgk=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

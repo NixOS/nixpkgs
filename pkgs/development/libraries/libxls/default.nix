@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "libxls";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vjmYByk+IDBon8xGR1+oNaEQTiJK+IVpDXsG1IyVNoY=";
+    hash = "sha256-vjmYByk+IDBon8xGR1+oNaEQTiJK+IVpDXsG1IyVNoY=";
   };
 
   patches = [

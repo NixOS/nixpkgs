@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "jf647";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
+    hash = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
   };
   buildInputs = [ bash ];
   nativeBuildInputs = [ makeWrapper ];

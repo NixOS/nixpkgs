@@ -8,7 +8,7 @@ buildFishPlugin rec {
     owner = "laughedelic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Oou2IeNNAqR00ZT3bss/DbhrJjGeMsn9dBBYhgdafBw=";
+    hash = "sha256-Oou2IeNNAqR00ZT3bss/DbhrJjGeMsn9dBBYhgdafBw=";
   };
 
   meta = with lib; {

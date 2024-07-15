@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
       repo = "taskchampion-sync-server";
       rev = "31cb732f0697208ef9a8d325a79688612087185a";
       fetchSubmodules = false;
-      sha256 = "sha256-CUgXJcrCOenbw9ZDFBody5FAvpT1dsZBojJk3wOv9U4=";
+      hash = "sha256-CUgXJcrCOenbw9ZDFBody5FAvpT1dsZBojJk3wOv9U4=";
     };
 
   cargoHash = "sha256-TpShnVQ2eFNLXJzOTlWVaLqT56YkP4zCGCf3yVtNcvI=";

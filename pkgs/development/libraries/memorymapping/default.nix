@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "NimbusKit";
     repo = "memorymapping";
     rev = "fc285afe13cb9d56a40c647b8ed6d6bd40636af7";
-    sha256 = "sha256-9u/QvK9TDsKxcubINH2OAbx5fXXkKF0+YT7LoLDaF0M=";
+    hash = "sha256-9u/QvK9TDsKxcubINH2OAbx5fXXkKF0+YT7LoLDaF0M=";
   };
 
   dontConfigure = true;

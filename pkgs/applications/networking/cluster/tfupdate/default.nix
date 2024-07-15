@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "minamijoyo";
     repo = "tfupdate";
     rev = "v${version}";
-    sha256 = "sha256-RewBCiUNdXA30gwcnBu+wBoMNbVjaIWkCQV+Bat6l0o=";
+    hash = "sha256-RewBCiUNdXA30gwcnBu+wBoMNbVjaIWkCQV+Bat6l0o=";
   };
 
   vendorHash = "sha256-fs61aMsRGF2zmyLro5ySWi3P1qPPgvISTqCvuVWAvz0=";

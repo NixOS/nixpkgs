@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "pulumi";
     repo = "tf2pulumi";
     rev = "v${version}";
-    sha256 = "sha256-i6nK1AEnQY47ro6tNDBExdcb9WvltY/21FVrVaiSTvo=";
+    hash = "sha256-i6nK1AEnQY47ro6tNDBExdcb9WvltY/21FVrVaiSTvo=";
   };
 
   vendorHash = "sha256-x7GAkbvhML2VUQ9/zitrTBBiy9lISb3iTx6yn5WbEig=";

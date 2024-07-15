@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-ZevtYJ1ibSs3an3m1KJNTTquz1w6UfTiFgd1mNHFHWE=";
+    hash = "sha256-ZevtYJ1ibSs3an3m1KJNTTquz1w6UfTiFgd1mNHFHWE=";
   };
 
   cargoHash = "sha256-QHhfHm2fDFR5BpSnw1wzr3dfCWDTzWNDDdRtj2qOoKE=";

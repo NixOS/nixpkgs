@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grpc";
     repo = "grpc-web";
     rev = finalAttrs.version;
-    sha256 = "sha256-yqiSuqan4vynE3AS8OnYdzA+3AVlVFTBkxTuJe17114=";
+    hash = "sha256-yqiSuqan4vynE3AS8OnYdzA+3AVlVFTBkxTuJe17114=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/javascript/net/grpc/web/generator";

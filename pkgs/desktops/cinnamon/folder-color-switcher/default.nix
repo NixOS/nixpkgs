@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     repo = pname;
     # They don't really do tags, this is just a named commit.
     rev = "35aa5b9839935fc3415ba6b7c77171459e7325fa";
-    sha256 = "sha256-2ItjQ3CO1kG2QdAEqNxlrZ1AOfHmUBCE99kLalU7AUc=";
+    hash = "sha256-2ItjQ3CO1kG2QdAEqNxlrZ1AOfHmUBCE99kLalU7AUc=";
   };
 
   nativeBuildInputs = [

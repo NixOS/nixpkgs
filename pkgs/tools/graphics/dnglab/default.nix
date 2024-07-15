@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dnglab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jkOkkcMFK1RLY8Hn/bMMuMZtyGwnwGdm0os8QKhcWqo=";
+    hash = "sha256-jkOkkcMFK1RLY8Hn/bMMuMZtyGwnwGdm0os8QKhcWqo=";
   };
 
   cargoSha256 = "sha256-qwhOJxFYRJC51dKB1pi/WVJs7H955jM6KmKbxsAScDI=";

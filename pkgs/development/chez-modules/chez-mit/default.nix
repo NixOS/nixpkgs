@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "fedeinthemix";
     repo = "chez-mit";
     rev = "v${version}";
-    sha256 = "sha256-YM4/Sj8otuWJCrUBsglVnihxRGI32F6tSbODFM0a8TA=";
+    hash = "sha256-YM4/Sj8otuWJCrUBsglVnihxRGI32F6tSbODFM0a8TA=";
   };
 
   buildInputs = [ chez chez-srfi ];

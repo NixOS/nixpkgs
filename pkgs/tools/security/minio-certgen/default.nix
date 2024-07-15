@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "minio";
     repo = "certgen";
     rev = "v${version}";
-    sha256 = "sha256-bYZfQeqPqroMkqJOqHri3l7xscEK9ml/oNLVPBVSDKk=";
+    hash = "sha256-bYZfQeqPqroMkqJOqHri3l7xscEK9ml/oNLVPBVSDKk=";
   };
 
   vendorHash = null;

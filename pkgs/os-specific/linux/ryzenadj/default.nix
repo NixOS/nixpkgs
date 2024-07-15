@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "FlyGoat";
     repo = "RyzenAdj";
     rev = "v${version}";
-    sha256 = "sha256-aNkVP1fuPcb41Qk5YI1loJnqVmamSzoMFyTGkJtrnvg=";
+    hash = "sha256-aNkVP1fuPcb41Qk5YI1loJnqVmamSzoMFyTGkJtrnvg=";
   };
 
   nativeBuildInputs = [ pciutils cmake ];

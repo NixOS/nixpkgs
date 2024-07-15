@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "beeender";
     repo = "glrnvim";
     rev = "v${version}";
-    sha256 = "sha256-n3t3s3fzmBGXRDydYxNJ13itKul8dyLNW6HP8Di4hY0=";
+    hash = "sha256-n3t3s3fzmBGXRDydYxNJ13itKul8dyLNW6HP8Di4hY0=";
   };
 
   cargoHash = "sha256-cHEse+pXwgPTL8GJyY4s1mhWXGTY8Fnn2rFpA5SNerY=";

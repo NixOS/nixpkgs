@@ -14,7 +14,7 @@ mkDerivation rec {
     owner = "fontmatrix";
     repo = "fontmatrix";
     rev = "v${version}";
-    sha256 = "sha256-DtajGhx79DiecglXHja9q/TKVq8Jl2faQdA5Ib/yT88=";
+    hash = "sha256-DtajGhx79DiecglXHja9q/TKVq8Jl2faQdA5Ib/yT88=";
   };
 
   buildInputs = [ qttools qtwebkit ];

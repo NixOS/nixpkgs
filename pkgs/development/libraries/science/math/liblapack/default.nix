@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xn9HL4YF8JPka1gwet5bGGo2k505H3RfWpxkUIYNecQ=";
+    hash = "sha256-xn9HL4YF8JPka1gwet5bGGo2k505H3RfWpxkUIYNecQ=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Ruunyox";
     repo = pname;
     rev = "26f3420aa5726e152a745278ddb98dc99c0a935e";
-    sha256 = "sha256-R3H6tv6fzQG41Y2rui0K8fdQ/+Ywnc5hqTPFjktrhF8=";
+    hash = "sha256-R3H6tv6fzQG41Y2rui0K8fdQ/+Ywnc5hqTPFjktrhF8=";
   };
 
   makeFlags = [ "CC=$$CXX" ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "flintlib";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bQ2VvCS+lGro5qxs+qBz3RpUenxQTmTr+lm9BFZWYts=";
+    hash = "sha256-bQ2VvCS+lGro5qxs+qBz3RpUenxQTmTr+lm9BFZWYts=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];

@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "derrod";
     repo = "legendary";
     rev = "56d439ed2d3d9f34e2b08fa23e627c23a487b8d6";
-    sha256 = "sha256-yCHeeEGw+9gtRMGyIhbStxJhmSM/1Fqly7HSRDkZILQ=";
+    hash = "sha256-yCHeeEGw+9gtRMGyIhbStxJhmSM/1Fqly7HSRDkZILQ=";
   };
 
   propagatedBuildInputs = [

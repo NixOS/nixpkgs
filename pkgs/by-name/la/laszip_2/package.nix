@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LASzip";
     repo = "LASzip";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
+    hash = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
   };
 
   nativeBuildInputs = [ cmake ];

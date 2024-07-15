@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Palakis";
     repo = "obs-ndi";
     rev = version;
-    sha256 = "sha256-DVUoLV2jCdD8qXSpmGvqjrQh02dCLroKsUAb5+lYTog=";
+    hash = "sha256-DVUoLV2jCdD8qXSpmGvqjrQh02dCLroKsUAb5+lYTog=";
   };
 
   patches = [

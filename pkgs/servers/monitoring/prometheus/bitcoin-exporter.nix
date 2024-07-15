@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     owner = "jvstein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZWr+bBNnRYzqjatOJ4jYGzvTyfheceY2UDvG4Juvo5I=";
+    hash = "sha256-ZWr+bBNnRYzqjatOJ4jYGzvTyfheceY2UDvG4Juvo5I=";
   };
 
   # Copying bitcoind-monitor.py is enough.

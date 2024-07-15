@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "swh";
     repo = "ladspa";
     rev = "v${version}";
-    sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
+    hash = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

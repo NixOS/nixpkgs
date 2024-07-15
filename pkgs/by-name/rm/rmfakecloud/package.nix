@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "ddvk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J8oB5C5FYZTVq9zopHoL6WYpfTyiiyrQ4YSGu+2eaKw=";
+    hash = "sha256-J8oB5C5FYZTVq9zopHoL6WYpfTyiiyrQ4YSGu+2eaKw=";
   };
 
   vendorHash = "sha256-S43qNDAlDWhrkfSffCooveemR1Z7KXS18t97UoolgBM=";

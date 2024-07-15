@@ -7,7 +7,7 @@ buildGoModule rec {
     owner = "b4nst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BHgVJlitRUX/9zYPoK5XfRpzzTZRbLhQVZJcx8KVshk=";
+    hash = "sha256-BHgVJlitRUX/9zYPoK5XfRpzzTZRbLhQVZJcx8KVshk=";
   };
 
   vendorHash = "sha256-280OcGXZQJD4G6z0b2WnWAS+v7XVptyf2WnlPjG99/0=";

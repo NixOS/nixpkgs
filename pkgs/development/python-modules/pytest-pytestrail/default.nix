@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "tolstislon";
     repo = "pytest-pytestrail";
     rev = version;
-    sha256 = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
+    hash = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

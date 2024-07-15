@@ -10,7 +10,7 @@ buildPerlPackage rec {
     owner = "bioperl";
     repo = "bioperl-ext";
     rev = "bioperl-ext-release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-+0tZ6q3PFem8DWa2vq+njOLmjDvMB0JhD0FGk00lVMA=";
+    hash = "sha256-+0tZ6q3PFem8DWa2vq+njOLmjDvMB0JhD0FGk00lVMA=";
   };
 
   patches = [ ./fprintf.patch ];

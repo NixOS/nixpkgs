@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "gomatic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jl98LuEsGN40L9IfybJhLnbzoYP/XpwFVQnjrlmDL9A=";
+    hash = "sha256-jl98LuEsGN40L9IfybJhLnbzoYP/XpwFVQnjrlmDL9A=";
   };
 
   ldflags = [

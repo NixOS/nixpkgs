@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "vincentbernat";
     repo = "xssproxy";
     rev = "v${version}";
-    sha256 = "sha256-BE/v1CJAwKwxlK3Xg3ezD+IXyT7ZFGz3bQzGxFQfEnU=";
+    hash = "sha256-BE/v1CJAwKwxlK3Xg3ezD+IXyT7ZFGz3bQzGxFQfEnU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

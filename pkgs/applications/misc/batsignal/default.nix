@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "electrickite";
     repo = "batsignal";
     rev = version;
-    sha256 = "sha256-yngd2yP6XtRp8y8ZUd0NISdf8+8wJvpLogrQQMdB0lA=";
+    hash = "sha256-yngd2yP6XtRp8y8ZUd0NISdf8+8wJvpLogrQQMdB0lA=";
   };
 
   buildInputs = [ libnotify glib ];

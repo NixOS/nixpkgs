@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     fetchurl {
       url =
         "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
-      sha256 = "sha256-i0GPZHDbCFz1mpkVaFYTVWVW3yv0JxSPGBS3sRhihZQ=";
+      hash = "sha256-i0GPZHDbCFz1mpkVaFYTVWVW3yv0JxSPGBS3sRhihZQ=";
     };
 
   cmakeFlags = [

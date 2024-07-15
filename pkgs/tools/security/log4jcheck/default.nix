@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "NorthwaveSecurity";
     repo = pname;
     rev = "736f1f4044e8a9b7bf5db515e2d1b819253f0f6d";
-    sha256 = "sha256-1al7EMYbE/hFXKV4mYZlkEWTUIKYxgXYU3qBLlczYvs=";
+    hash = "sha256-1al7EMYbE/hFXKV4mYZlkEWTUIKYxgXYU3qBLlczYvs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

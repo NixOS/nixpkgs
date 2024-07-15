@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "d-bahr";
     repo = "CRCpp";
     rev = "release-${version}";
-    sha256 = "sha256-OY8MF8fwr6k+ZSA/p1U+9GnTFoMSnUZxKVez+mda2tA=";
+    hash = "sha256-OY8MF8fwr6k+ZSA/p1U+9GnTFoMSnUZxKVez+mda2tA=";
   };
 
   nativeBuildInputs = [ cmake ];

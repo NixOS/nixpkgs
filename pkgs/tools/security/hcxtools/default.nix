@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ZerBea";
     repo = pname;
     rev = version;
-    sha256 = "sha256-03NPzSThmUPAEg5dBr2QkwaXPgGeu/lEe9nqhY8EkyA=";
+    hash = "sha256-03NPzSThmUPAEg5dBr2QkwaXPgGeu/lEe9nqhY8EkyA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

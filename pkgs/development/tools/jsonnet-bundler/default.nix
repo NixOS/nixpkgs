@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jsonnet-bundler";
     repo = "jsonnet-bundler";
     rev = "v${version}";
-    sha256 = "sha256-vjb5wEiJw48s7FUarpA94ZauFC7iEgRDAkRTwRIZ8pA=";
+    hash = "sha256-vjb5wEiJw48s7FUarpA94ZauFC7iEgRDAkRTwRIZ8pA=";
   };
 
   vendorHash = null;

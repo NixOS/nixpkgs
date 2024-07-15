@@ -7,7 +7,7 @@ buildGoModule rec {
     owner = "jacobbednarz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
+    hash = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
   };
 
   ldflags = [

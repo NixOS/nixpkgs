@@ -16,7 +16,7 @@ buildPythonApplication rec {
     owner = "c4urself";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
+    hash = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
   nativeCheckInputs = [

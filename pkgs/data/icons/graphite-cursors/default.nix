@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Kopl2NweYrq9rhw+0EUMhY/pfGo4g387927TZAhI5/A=";
+    hash = "sha256-Kopl2NweYrq9rhw+0EUMhY/pfGo4g387927TZAhI5/A=";
   };
 
   installPhase = ''

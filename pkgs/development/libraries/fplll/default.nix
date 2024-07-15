@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fplll";
     repo = "fplll";
     rev = version;
-    sha256 = "sha256-taSS7jpVyjVfNe6kSuUDXMD2PgKmtG64V5MjZyQzorI=";
+    hash = "sha256-taSS7jpVyjVfNe6kSuUDXMD2PgKmtG64V5MjZyQzorI=";
   };
 
   patches = [

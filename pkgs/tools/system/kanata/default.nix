@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kuxy6lGzImYYujuJwZZdfuu3X7/PJNOJefeZ0hVJaAA=";
+    hash = "sha256-Kuxy6lGzImYYujuJwZZdfuu3X7/PJNOJefeZ0hVJaAA=";
   };
 
   cargoHash =

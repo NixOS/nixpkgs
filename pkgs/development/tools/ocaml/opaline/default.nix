@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jaapb";
     repo = "opaline";
     rev = "v${version}";
-    sha256 = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
+    hash = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
   };
 
   nativeBuildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild ];

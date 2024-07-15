@@ -7,7 +7,7 @@ buildGoModule {
     owner = "matrix-org";
     repo = "go-neb";
     rev = "8916c80f8ce1732f64b50f9251242ca189082e76";
-    sha256 = "sha256-kuH4vbvS4G1bczxUdY4bd4oL4pIZzuueUxdEp4xuzJM=";
+    hash = "sha256-kuH4vbvS4G1bczxUdY4bd4oL4pIZzuueUxdEp4xuzJM=";
   };
 
   subPackages = [ "." ];

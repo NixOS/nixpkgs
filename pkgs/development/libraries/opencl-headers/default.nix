@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "OpenCL-Headers";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wF9KQjzYKJf6ulXRy80o53bp6lTtm8q1NubKbcH+RY0=";
+    hash = "sha256-wF9KQjzYKJf6ulXRy80o53bp6lTtm8q1NubKbcH+RY0=";
   };
 
   nativeBuildInputs = [ cmake ];

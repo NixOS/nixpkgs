@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "theCapypara";
     repo = "range-typed-integers";
     rev = version;
-    sha256 = "sha256-4+XdalHq6Q2cBbuYi4x7kmCNQh1MwYf+XlLP9FzzzgE=";
+    hash = "sha256-4+XdalHq6Q2cBbuYi4x7kmCNQh1MwYf+XlLP9FzzzgE=";
   };
 
   format = "pyproject";

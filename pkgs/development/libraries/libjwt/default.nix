@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "benmcollins";
     repo = "libjwt";
     rev = "v${version}";
-    sha256 = "sha256-yMnk4gfUa5c6Inppz9I1h6it41nuJ4By3eDO0YrdB2Y=";
+    hash = "sha256-yMnk4gfUa5c6Inppz9I1h6it41nuJ4By3eDO0YrdB2Y=";
   };
 
   buildInputs = [ jansson openssl ];

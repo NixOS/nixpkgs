@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nirvdrum";
     repo = "svn2git";
     rev = "v${version}";
-    sha256 = "sha256-w649l/WO68vYYxZOBKzI8XhGFkaSwWx/O3oVOtnGg6w=";
+    hash = "sha256-w649l/WO68vYYxZOBKzI8XhGFkaSwWx/O3oVOtnGg6w=";
   };
 
   nativeBuildInputs = [ ruby makeWrapper ];

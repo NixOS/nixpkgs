@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "pronovic";
     repo = "banner";
     rev = "BANNER_V${version}";
-    sha256 = "sha256-g9i460W0SanW2xIfZk9Am/vDsRlL7oxJOUhksa+I8zY=";
+    hash = "sha256-g9i460W0SanW2xIfZk9Am/vDsRlL7oxJOUhksa+I8zY=";
   };
 
   meta = with lib; {

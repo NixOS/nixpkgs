@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-indent";
     rev = version;
-    sha256 = "sha256-IyvURw/6R0eKrnahV1fqLV0iIeypykrmxDbliECgbLc=";
+    hash = "sha256-IyvURw/6R0eKrnahV1fqLV0iIeypykrmxDbliECgbLc=";
   };
 
   minimalOCamlVersion = "4.03";

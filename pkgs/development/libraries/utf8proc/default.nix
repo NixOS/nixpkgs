@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "JuliaStrings";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Sgh8vTbclUV+lFZdR29PtNUy8F+9L/OAXk647B+l2mg=";
+    hash = "sha256-Sgh8vTbclUV+lFZdR29PtNUy8F+9L/OAXk647B+l2mg=";
   };
 
   nativeBuildInputs = [ cmake ];

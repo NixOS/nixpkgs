@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "apognu";
     repo = "tuigreet";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-e0YtpakEaaWdgu+bMr2VFoUc6+SUMFk4hYtSyk5aApY=";
+    hash = "sha256-e0YtpakEaaWdgu+bMr2VFoUc6+SUMFk4hYtSyk5aApY=";
   };
 
   cargoSha256 = "sha256-RkJjAmZ++4nc/lLh8g0LxGq2DjZGxQEjFOl8Yzx116A=";

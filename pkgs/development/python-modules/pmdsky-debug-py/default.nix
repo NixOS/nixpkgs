@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D81vXhYGxwvy26PvicniCLiS58LmrSP9ppzXKRzQSJc=";
+    hash = "sha256-D81vXhYGxwvy26PvicniCLiS58LmrSP9ppzXKRzQSJc=";
   };
 
   prePatch = "cd src";

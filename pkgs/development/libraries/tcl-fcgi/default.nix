@@ -8,7 +8,7 @@ tcl.mkTclDerivation rec {
     owner = "mpcjanssen";
     repo = "tcl-fcgi";
     rev = "62452dbf3177ba9458fbb42457834ca77bdf5a82";
-    sha256 = "sha256-RLuV4ARmGWCJTmhs7DbMWENQGj3d5ZXWb821WrgG0qA=";
+    hash = "sha256-RLuV4ARmGWCJTmhs7DbMWENQGj3d5ZXWb821WrgG0qA=";
   };
 
   buildInputs = [

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "tremor-rs";
     repo = "tremor-language-server";
     rev = "v${version}";
-    sha256 = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
+    hash = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
   };
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = finalAttrs.version;
-    sha256 = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
+    hash = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big

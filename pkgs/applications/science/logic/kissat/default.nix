@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-zK20/vhbVihrxmd52DjByDUO99pBAr8SlJtQpX5fmwY=";
+    hash = "sha256-zK20/vhbVihrxmd52DjByDUO99pBAr8SlJtQpX5fmwY=";
   };
 
   outputs = [ "out" "dev" "lib" ];

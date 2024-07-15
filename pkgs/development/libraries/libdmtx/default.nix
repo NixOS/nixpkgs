@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "dmtx";
     repo = "libdmtx";
     rev = "v${version}";
-    sha256 = "sha256-UQy8iFfl8BNT5cBUMVF1tIScFPfHekSofaebtel9JWk=";
+    hash = "sha256-UQy8iFfl8BNT5cBUMVF1tIScFPfHekSofaebtel9JWk=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

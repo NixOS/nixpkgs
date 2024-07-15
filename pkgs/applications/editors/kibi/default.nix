@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ilai-deutel";
     repo = "kibi";
     rev = "v${version}";
-    sha256 = "sha256-ox1qKWxJlUIFzEqeyzG2kqZix3AHnOKFrlpf6O5QM+k=";
+    hash = "sha256-ox1qKWxJlUIFzEqeyzG2kqZix3AHnOKFrlpf6O5QM+k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Ii1001dPtnsVjGmIyYDuqrqKBlb15P+3a1+lfwNZM+w=";
+    hash = "sha256-Ii1001dPtnsVjGmIyYDuqrqKBlb15P+3a1+lfwNZM+w=";
   };
 
   # perl is only used during the check phase.

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "romkatv";
     repo = "powerlevel10k-media";
     rev = "145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d";
-    sha256 = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
+    hash = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
   };
 
   installPhase = ''

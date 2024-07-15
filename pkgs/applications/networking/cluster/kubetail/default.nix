@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
-    sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
+    hash = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

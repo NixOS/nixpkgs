@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "sharkwouter";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-bpNtdMYBl2dJ4PQsxkhm/Y+3A0dD/Y2XC0VaUYyRhvM=";
+    hash = "sha256-bpNtdMYBl2dJ4PQsxkhm/Y+3A0dD/Y2XC0VaUYyRhvM=";
   };
 
   checkPhase = ''

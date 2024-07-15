@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
     owner = "humenda";
     repo = "GladTeX";
     rev = "f84e63836622ff1325dfddc7c5649f11a795afa0";
-    sha256 = "sha256-B5sNEmLO4iIJRDgcPhr9LFKV77dPJws8ITNz4R+FE08=";
+    hash = "sha256-B5sNEmLO4iIJRDgcPhr9LFKV77dPJws8ITNz4R+FE08=";
   };
 
   meta = with lib; {

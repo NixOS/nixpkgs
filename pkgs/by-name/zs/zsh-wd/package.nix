@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "mfaerevaag";
     repo = "wd";
     rev = "v${version}";
-    sha256 = "sha256-Zc49X/8T66xnDkfotf0p6AVyHHd4P3eNDMOsO1sUryY=";
+    hash = "sha256-Zc49X/8T66xnDkfotf0p6AVyHHd4P3eNDMOsO1sUryY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

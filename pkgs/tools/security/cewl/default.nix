@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "digininja";
     repo = "CeWL";
     rev = version;
-    sha256 = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
+    hash = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
   };
 
   buildInputs = [ rubyEnv.wrappedRuby ];

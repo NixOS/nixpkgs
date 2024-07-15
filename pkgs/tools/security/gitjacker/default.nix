@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "liamg";
     repo = "gitjacker";
     rev = "v${version}";
-    sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
+    hash = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 
   vendorHash = null;

@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     owner = "accumulator";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mNU8bhiZqvYbNUU8vJNk9WbpAVrCTi9Fy3hlIpb06ac=";
+    hash = "sha256-mNU8bhiZqvYbNUU8vJNk9WbpAVrCTi9Fy3hlIpb06ac=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "sha256-ig22Rw9VWPqOsJS1Wxy69OjdMRcxh2fOyqMHBEky/Uo=";
+    hash = "sha256-ig22Rw9VWPqOsJS1Wxy69OjdMRcxh2fOyqMHBEky/Uo=";
   };
 
   nativeBuildInputs = [

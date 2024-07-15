@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "Airblader";
     repo = "unclutter-xfixes";
     rev = "v${version}";
-    sha256 = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
+    hash = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoc libxslt docbook_xsl ];

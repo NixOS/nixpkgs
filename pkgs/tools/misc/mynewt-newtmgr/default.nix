@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "apache";
     repo = "mynewt-newtmgr";
     rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
-    sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
+    hash = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
   vendorHash = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";

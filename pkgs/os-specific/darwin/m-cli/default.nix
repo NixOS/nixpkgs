@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "rgcr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
+    hash = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
   };
 
   dontBuild = true;

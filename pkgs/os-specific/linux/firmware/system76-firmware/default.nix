@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pop-os";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nLbDhs+FxIcoVK66bwUAxAubikic5NT8yOA/mH/irgQ=";
+    hash = "sha256-nLbDhs+FxIcoVK66bwUAxAubikic5NT8yOA/mH/irgQ=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

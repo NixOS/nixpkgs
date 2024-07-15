@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "munt";
     repo = "munt";
     rev = "${pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-zY1AFcm8uvFkrKUZHsqtKY2CYTY4bWmkTJ7bZPqXoxk=";
+    hash = "sha256-zY1AFcm8uvFkrKUZHsqtKY2CYTY4bWmkTJ7bZPqXoxk=";
   };
 
   outputs = [ "out" "dev" ];

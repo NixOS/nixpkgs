@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
     rev = "v${version}";
-    sha256 = "sha256-RKqbv0iGkjS7Y7KikqglZ+AK1oiw4G1mB2Zg87tOlbI=";
+    hash = "sha256-RKqbv0iGkjS7Y7KikqglZ+AK1oiw4G1mB2Zg87tOlbI=";
   };
 
   installPhase = ''

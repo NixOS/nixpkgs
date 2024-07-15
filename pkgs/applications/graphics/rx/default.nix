@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "cloudhead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
+    hash = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
   cargoSha256 = "sha256-4hi1U4jl6QA7H8AKHlU+Hqz5iKGYHRXHDsrcqY7imkU=";

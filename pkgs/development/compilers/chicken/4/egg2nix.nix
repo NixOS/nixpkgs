@@ -11,7 +11,7 @@ eggDerivation rec {
     owner = "the-kenny";
     repo = "egg2nix";
     rev = version;
-    sha256 = "sha256-5ov2SWVyTUQ6NHnZNPRywd9e7oIxHlVWv4uWbsNaj/s=";
+    hash = "sha256-5ov2SWVyTUQ6NHnZNPRywd9e7oIxHlVWv4uWbsNaj/s=";
   };
 
   buildInputs = with chickenEggs; [

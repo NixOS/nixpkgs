@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "iwalton3";
     repo = "default-shader-pack";
     rev = "v${version}";
-    sha256 = "sha256-BM2GvmUoWQUUMH464YIIqu5A1t1B+otbJxAGFbySuq8=";
+    hash = "sha256-BM2GvmUoWQUUMH464YIIqu5A1t1B+otbJxAGFbySuq8=";
   };
 
   installPhase = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "wilicc";
     repo = "gpu-burn";
     rev = "b99aedce3e020d2ca419832ee27b7f29dfa6373e";
-    sha256 = "sha256-cLO0GXvujZ+g64j+OY31n43MsVER3ljo8Qrt+EzSKjc=";
+    hash = "sha256-cLO0GXvujZ+g64j+OY31n43MsVER3ljo8Qrt+EzSKjc=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${version}";
-    sha256 = "sha256-xClqqTVCEGghaf63kN40mwo49lkS8KC4k/36NYIngFI=";
+    hash = "sha256-xClqqTVCEGghaf63kN40mwo49lkS8KC4k/36NYIngFI=";
   };
 
   vendorHash = "sha256-Wzzg66yJaHJUCfC2aH3Pk+B0d5l/+L7/bcNhQxo8ro0=";

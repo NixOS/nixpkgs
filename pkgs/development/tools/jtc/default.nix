@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ldn-softdev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
+    hash = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
   };
 
   patches = [

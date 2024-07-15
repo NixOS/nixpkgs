@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "pgrange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kd5h12yjzvR/RBE/IjVXNSyjcf+rz6B2eoO8w2jiaps=";
+    hash = "sha256-kd5h12yjzvR/RBE/IjVXNSyjcf+rz6B2eoO8w2jiaps=";
   };
 
   patchPhase = ''

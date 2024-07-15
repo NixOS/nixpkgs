@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sailfishos";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UJsKjvigZuwDL4DyjUE6fXEecgoHrTE+5pO0hVyCwP4=";
+    hash = "sha256-UJsKjvigZuwDL4DyjUE6fXEecgoHrTE+5pO0hVyCwP4=";
   };
 
   outputs = [ "out" "dev" ];

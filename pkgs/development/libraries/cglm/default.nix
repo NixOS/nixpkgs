@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "recp";
     repo = "cglm";
     rev = "v${version}";
-    sha256 = "sha256-VQgnc3DSZoY1ounc9fj3Mju52noI0JZ7ck8FqWpEgY8=";
+    hash = "sha256-VQgnc3DSZoY1ounc9fj3Mju52noI0JZ7ck8FqWpEgY8=";
   };
 
   nativeBuildInputs = [ cmake ];

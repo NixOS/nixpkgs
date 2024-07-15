@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "manugarg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
+    hash = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };
 
   makeFlags = [ "NO_INTERNET=1" ];

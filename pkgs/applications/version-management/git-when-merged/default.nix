@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mhagger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
+    hash = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
   };
 
   buildInputs = [ python3 ];

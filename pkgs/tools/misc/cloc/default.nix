@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-GZvrsVuPLg09yOlDmdHNZ0QLXoftgSYMFkn6PLf1/Pw=";
+    hash = "sha256-GZvrsVuPLg09yOlDmdHNZ0QLXoftgSYMFkn6PLf1/Pw=";
   };
 
   setSourceRoot = ''

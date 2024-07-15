@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "ofiwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p0L9l1UpxD2WCZWXBNaEz9Zjzr5is3iEODcoQQa1f6M=";
+    hash = "sha256-p0L9l1UpxD2WCZWXBNaEz9Zjzr5is3iEODcoQQa1f6M=";
   };
 
   outputs = [ "out" "dev" "man" ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "lensfun";
     repo = "lensfun";
     rev = "v${version}";
-    sha256 = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
+    hash = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
   };
 
   # replace database with a more recent snapshot

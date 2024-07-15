@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "sha256-XAlb6SSyY2S1iWDaulIlghQ16OGvT/wBCog95/nxkog=";
+    hash = "sha256-XAlb6SSyY2S1iWDaulIlghQ16OGvT/wBCog95/nxkog=";
   };
 
   nativeBuildInputs = [

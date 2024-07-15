@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "facebookincubator";
     repo = "below";
     rev = "v${version}";
-    sha256 = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
+    hash = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
   };
 
   cargoHash = "sha256-y2fNypA0MrCdUI/K6QrZWw/5mkYafj2s6jrGHU2zGXw=";

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "happyleavesaoc";
     repo = "python-orvibo";
     rev = version;
-    sha256 = "sha256-Azmho47CEbRo18emmLKhYa/sViQX0oxUTUk4zdrpOaE=";
+    hash = "sha256-Azmho47CEbRo18emmLKhYa/sViQX0oxUTUk4zdrpOaE=";
   };
 
   # Project as no tests

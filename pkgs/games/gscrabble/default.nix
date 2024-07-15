@@ -10,7 +10,7 @@ buildPythonApplication {
     owner = "RaaH";
     repo = "gscrabble";
     rev = "aba37f062a6b183dcc084c453f395af1dc437ec8";
-    sha256 = "sha256-rYpPHgOlPRnlA+Nkvo/J+/8/vl24/Ssk55fTq9oNCz4=";
+    hash = "sha256-rYpPHgOlPRnlA+Nkvo/J+/8/vl24/Ssk55fTq9oNCz4=";
   };
 
   doCheck = false;

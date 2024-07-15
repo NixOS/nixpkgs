@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "fsaintjacques";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BnHuiCxE0VjzMWFTEMunQ9mkebQKIKbbMxZVfBUO57Y=";
+    hash = "sha256-BnHuiCxE0VjzMWFTEMunQ9mkebQKIKbbMxZVfBUO57Y=";
   };
 
   dontBuild = true; # otherwise we try to 'make' which fails.

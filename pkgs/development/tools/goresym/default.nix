@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "mandiant";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qFDacInIiV1thuYMjyzTG7ru5bkd2Af1iao7Oes1mRg=";
+    hash = "sha256-qFDacInIiV1thuYMjyzTG7ru5bkd2Af1iao7Oes1mRg=";
   };
 
   subPackages = [ "." ];

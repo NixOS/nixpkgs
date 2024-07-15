@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "dlundquist";
     repo = "sniproxy";
     rev = version;
-    sha256 = "sha256-htM9CrzaGnn1dnsWQ+0V6N65Og7rsFob3BlSc4UGfFU=";
+    hash = "sha256-htM9CrzaGnn1dnsWQ+0V6N65Og7rsFob3BlSc4UGfFU=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

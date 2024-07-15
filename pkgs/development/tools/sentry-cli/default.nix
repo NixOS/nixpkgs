@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    sha256 = "sha256-N92qv1CjOSeoknIbf+LA0oAzy75uRGjOpcpHCg7g5lY=";
+    hash = "sha256-N92qv1CjOSeoknIbf+LA0oAzy75uRGjOpcpHCg7g5lY=";
   };
   doCheck = false;
 

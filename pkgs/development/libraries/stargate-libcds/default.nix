@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "stargateaudio";
     repo = "libcds";
     rev = version;
-    sha256 = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
+    hash = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
   };
 
   # Fix 'error: unrecognized command line option' in platforms other than x86

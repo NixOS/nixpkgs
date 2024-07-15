@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "sha256:0qgasd89ayamgl2rfyxsipznmwa3pjllkyq9qg0g1f41h8ixpsfh";
+    hash = "sha256:0qgasd89ayamgl2rfyxsipznmwa3pjllkyq9qg0g1f41h8ixpsfh";
   };
 
   propagatedBuildInputs = [ ppxlib ];

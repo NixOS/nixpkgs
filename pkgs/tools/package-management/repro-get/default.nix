@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "reproducible-containers";
     repo = "repro-get";
     rev = "v${version}";
-    sha256 = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
+    hash = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
   };
 
   vendorHash = "sha256-clpQLRozXFeUGrItL2pfNft2hUNyuyeCP9oMQxagAWs=";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "pothosware";
     repo = "SoapySDRPlay3";
     rev = "soapy-sdrplay3-${version}";
-    sha256 = "sha256-WMcAw0uR2o2SrQR4mBtdVEZlJ/ZXRqwo6zMJNsB/5U4=";
+    hash = "sha256-WMcAw0uR2o2SrQR4mBtdVEZlJ/ZXRqwo6zMJNsB/5U4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

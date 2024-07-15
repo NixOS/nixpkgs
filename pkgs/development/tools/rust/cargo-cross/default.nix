@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "cross-rs";
     repo = "cross";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
+    hash = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 
   cargoSha256 = "sha256-x+DrKo79R8TAeLVuvIIguQs3gdAHiAQ9dUU2/eZRZ0c=";

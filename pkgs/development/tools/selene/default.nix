@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NbVSFYv3nyEjSf0bFajcMaoWP2bS0EfJT8tDddjS7jg=";
+    hash = "sha256-NbVSFYv3nyEjSf0bFajcMaoWP2bS0EfJT8tDddjS7jg=";
   };
 
   cargoHash = "sha256-e3oQUFtgdjqPiB2YpmqnFUG2scmYJhLSpUaw0W6RxIk=";

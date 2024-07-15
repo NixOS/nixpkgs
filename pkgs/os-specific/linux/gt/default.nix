@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-usb-gadgets";
     repo = "gt";
     rev = "7f9c45d98425a27444e49606ce3cf375e6164e8e";
-    sha256 = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
+    hash = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";

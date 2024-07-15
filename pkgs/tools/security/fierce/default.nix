@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "mschwager";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9VTPD5i203BTl2nADjq131W9elgnaHNIWGIUuCiYlHg=";
+    hash = "sha256-9VTPD5i203BTl2nADjq131W9elgnaHNIWGIUuCiYlHg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

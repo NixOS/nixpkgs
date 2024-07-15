@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
-    sha256 = "sha256-xhJnhh1pDANGq4CFBPAEwqtsxSYeIvhKcHEsvYRebbM=";
+    hash = "sha256-xhJnhh1pDANGq4CFBPAEwqtsxSYeIvhKcHEsvYRebbM=";
   };
 
   vendorHash = null;

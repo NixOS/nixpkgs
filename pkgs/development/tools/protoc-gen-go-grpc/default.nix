@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "grpc";
     repo = "grpc-go";
     rev = "cmd/protoc-gen-go-grpc/v${version}";
-    sha256 = "sha256-Zy0k5X/KFzCao9xAGt5DNb0MMGEyqmEsDj+uvXI4xH4=";
+    hash = "sha256-Zy0k5X/KFzCao9xAGt5DNb0MMGEyqmEsDj+uvXI4xH4=";
   };
 
   vendorHash = "sha256-y+/hjYUTFZuq55YAZ5M4T1cwIR+XFQBmWVE+Cg1Y7PI=";

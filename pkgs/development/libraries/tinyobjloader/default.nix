@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "tinyobjloader";
     repo = "tinyobjloader";
     rev = "v${version}";
-    sha256 = "sha256-BNffbicnLTGK2GQ2/bB328LFU9fqHxrpAVj2hJaekWc=";
+    hash = "sha256-BNffbicnLTGK2GQ2/bB328LFU9fqHxrpAVj2hJaekWc=";
   };
 
   nativeBuildInputs = [ cmake ];

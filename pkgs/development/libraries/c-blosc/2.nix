@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XVxui3+IoygjU0I688Mtbof/kHLzpb0HMcVPbt3i7PQ=";
+    hash = "sha256-XVxui3+IoygjU0I688Mtbof/kHLzpb0HMcVPbt3i7PQ=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "soveran";
     repo = "map";
     rev = version;
-    sha256 = "sha256-yGzmhZwv1qKy0JNcSzqL996APQO8OGWQ1GBkEkKTOXA=";
+    hash = "sha256-yGzmhZwv1qKy0JNcSzqL996APQO8OGWQ1GBkEkKTOXA=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

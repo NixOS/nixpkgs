@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "oatpp";
     repo = "oatpp";
     rev = version;
-    sha256 = "sha256-k6RPg53z9iTrrKZXOm5Ga9qxI32mHgB+4d6y+IUvJC0=";
+    hash = "sha256-k6RPg53z9iTrrKZXOm5Ga9qxI32mHgB+4d6y+IUvJC0=";
   };
 
   nativeBuildInputs = [ cmake ];

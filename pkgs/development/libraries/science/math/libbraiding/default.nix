@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "miguelmarco";
     repo = "libbraiding";
     rev = version;
-    sha256 = "sha256-cgg6rvlOvFqGjgbw6i7QXS+tqvfFd1MkPCEjnW/FyFs=";
+    hash = "sha256-cgg6rvlOvFqGjgbw6i7QXS+tqvfFd1MkPCEjnW/FyFs=";
   };
 
   nativeBuildInputs = [

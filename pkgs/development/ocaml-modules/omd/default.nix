@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml/omd/releases/download/${version}/omd-${version}.tbz";
-    sha256 = "sha256-YCPhZCYx8I9njrVyWCCHnte7Wj/+53fN7evCjB+F+ts=";
+    hash = "sha256-YCPhZCYx8I9njrVyWCCHnte7Wj/+53fN7evCjB+F+ts=";
   };
 
   preBuild = ''

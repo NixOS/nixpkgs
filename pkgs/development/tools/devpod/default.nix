@@ -29,7 +29,7 @@ let
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J9Qu9flp7l3BnQGHkDBSWTsNdDQSJUwp0W9GhOJehKo=";
+    hash = "sha256-J9Qu9flp7l3BnQGHkDBSWTsNdDQSJUwp0W9GhOJehKo=";
   };
 
   meta = with lib; {

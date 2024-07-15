@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "MichaelAquilina";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fJX748lwVP1+GF/aIl1J3c6XAy/AtYCpEHsP8weUNo0=";
+    hash = "sha256-fJX748lwVP1+GF/aIl1J3c6XAy/AtYCpEHsP8weUNo0=";
   };
 
   strictDeps = true;

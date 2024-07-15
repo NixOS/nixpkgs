@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "ossec";
     repo = "ossec-hids";
     rev = "c8a36b0af3d4ee5252855b90236407cbfb996eb2";
-    sha256 = "sha256-AZ8iubyhNHXGR/l+hA61ifNDUoan7AQ42l/uRTt5GmE=";
+    hash = "sha256-AZ8iubyhNHXGR/l+hA61ifNDUoan7AQ42l/uRTt5GmE=";
   };
 
   # clear is used during the build process

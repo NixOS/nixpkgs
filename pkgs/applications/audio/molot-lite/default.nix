@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "magnetophon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
+    hash = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

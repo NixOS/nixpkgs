@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kornelski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ceeKG45OQLxiYcwq2Kumbpd+lkyY+W/og1/6Zdpd3zo=";
+    hash = "sha256-ceeKG45OQLxiYcwq2Kumbpd+lkyY+W/og1/6Zdpd3zo=";
     postFetch = ''
       cp ${./Cargo.lock} $out/Cargo.lock
     '';

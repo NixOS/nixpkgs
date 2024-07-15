@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "sineemore";
     repo = pname;
     rev = "c034e04ac912c157f9faa35cb769ba93d92486a0";
-    sha256 = "sha256-YohHF1O0lm6QWJv/wkS4RVJvWaOjcYSZNls6tt4hbqo==";
+    hash = "sha256-YohHF1O0lm6QWJv/wkS4RVJvWaOjcYSZNls6tt4hbqo==";
   };
 
   buildInputs = [ libX11 fontconfig libXft libXrender ];

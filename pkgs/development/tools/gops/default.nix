@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "google";
     repo = "gops";
     rev = "v${version}";
-    sha256 = "sha256-HNM487WSfNWNF31ccDIdotsEG8Mj2C7V85UI47a9drU=";
+    hash = "sha256-HNM487WSfNWNF31ccDIdotsEG8Mj2C7V85UI47a9drU=";
   };
 
   vendorHash = "sha256-ptC2G7cXcAjthJcAXvuBqI2ZpPuSMBqzO+gJiyaAUP0=";

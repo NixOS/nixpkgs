@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "sha256-ZfjOsPUr72Ex+5SR2oVMybbR20hwqlto3teTJcdtALA=";
+    hash = "sha256-ZfjOsPUr72Ex+5SR2oVMybbR20hwqlto3teTJcdtALA=";
   };
 
   vendorHash = "sha256-nrEglhb22LANgm6hiZToPVPfGpkpxpJ7TQlLW0Z7+/4=";

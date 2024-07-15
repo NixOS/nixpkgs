@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "megaease";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vdbzDwFpCYVgH9T8e62+1hnMyWsWrT7e6WPaAlBc2H0=";
+    hash = "sha256-vdbzDwFpCYVgH9T8e62+1hnMyWsWrT7e6WPaAlBc2H0=";
   };
 
   vendorHash = "sha256-ZB6q8XvDVSF5/kx2Avq0PYBkYqSoMD6YHhuXRrotFgk=";

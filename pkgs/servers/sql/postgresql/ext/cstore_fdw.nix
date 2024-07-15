@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "cstore_fdw";
     rev    = "90e22b62fbee6852529104fdd463f532cf7a3311";
-    sha256 = "sha256-02wcCqs8A5ZOZX080fgcNJTQrYQctnlwnA8+YPaRTZc=";
+    hash = "sha256-02wcCqs8A5ZOZX080fgcNJTQrYQctnlwnA8+YPaRTZc=";
   };
 
   installPhase = ''

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${version}";
-    sha256 = "sha256-t9InlnlwVts9mlrH8sHaaTYSrjJKlkFlGs1YCmZzjdE=";
+    hash = "sha256-t9InlnlwVts9mlrH8sHaaTYSrjJKlkFlGs1YCmZzjdE=";
   };
 
   postPatch = ''

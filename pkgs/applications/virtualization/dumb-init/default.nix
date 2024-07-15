@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
+    hash = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''

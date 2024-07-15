@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "hoxu";
     repo = "gitstats";
     rev = "55c5c285558c410bb35ebf421245d320ab9ee9fa";
-    sha256 = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
+    hash = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
   };
 
   patches = [

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "utkuozdemir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QD/yacQOII1AS9VHB/2cTgoxLioyKYoROSizkHooX9w=";
+    hash = "sha256-QD/yacQOII1AS9VHB/2cTgoxLioyKYoROSizkHooX9w=";
   };
 
   subPackages = [ "cmd/pv-migrate" ];

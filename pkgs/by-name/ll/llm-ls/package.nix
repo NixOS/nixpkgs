@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     owner = "huggingface";
     repo = "llm-ls";
     rev = version;
-    sha256 = "sha256-ICMM2kqrHFlKt2/jmE4gum1Eb32afTJkT3IRoqcjJJ8=";
+    hash = "sha256-ICMM2kqrHFlKt2/jmE4gum1Eb32afTJkT3IRoqcjJJ8=";
   };
 
   cargoHash = "sha256-Fat67JxTYIkxkdwGNAyTfnuLt8ofUGVJ2609sbn1frU=";

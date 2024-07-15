@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "bbonev";
     repo = "yascreen";
     rev = "v${version}";
-    sha256 = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
+    hash = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
   };
 
   nativeBuildInputs = [ go-md2man ];

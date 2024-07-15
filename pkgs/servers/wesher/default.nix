@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "costela";
     repo = "wesher";
     rev = "v${version}";
-    sha256 = "sha256-EIajvcBhS5G9dJzRgXhnD1QKOAhmzngdyCU4L7itT8U=";
+    hash = "sha256-EIajvcBhS5G9dJzRgXhnD1QKOAhmzngdyCU4L7itT8U=";
   };
 
   vendorHash = "sha256-BZzhBC4C0OoAxUEDROkggCQF35C9Z4+0/Jk0ZD8Hz1s=";

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "gotify";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Hzdd9T8RcLxHG+vHb4KuKqW4SwcWDrVc6DZ0QUpH2Xc=";
+    hash = "sha256-Hzdd9T8RcLxHG+vHb4KuKqW4SwcWDrVc6DZ0QUpH2Xc=";
   };
 
   vendorHash = "sha256-+G0LWlPiDcYmEou4gpoIU/OAjzQ3VSHftM1ViG9lhYM=";

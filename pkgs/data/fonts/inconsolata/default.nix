@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "fonts";
     rev = "0f203e3740b5eb77e0b179dff1e5869482676782";
-    sha256 = "sha256-Q8eUJ0mkoB245Ifz5ulxx61x4+AqKhG0uqhWF2nSLpw=";
+    hash = "sha256-Q8eUJ0mkoB245Ifz5ulxx61x4+AqKhG0uqhWF2nSLpw=";
   };
 
   installPhase = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "encukou";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
+    hash = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
 
   postPatch = ''

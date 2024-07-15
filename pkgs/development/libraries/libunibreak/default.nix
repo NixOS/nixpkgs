@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "adah1972";
     repo = pname;
     rev = "libunibreak_${rev_version}";
-    sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
+    hash = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

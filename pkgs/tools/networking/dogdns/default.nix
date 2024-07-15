@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ogham";
     repo = "dog";
     rev = "721440b12ef01a812abe5dc6ced69af6e221fad5";
-    sha256 = "sha256-y3T0vXg7631FZ4bzcbQjz3Buui/DFxh9LG8BZWwynp0=";
+    hash = "sha256-y3T0vXg7631FZ4bzcbQjz3Buui/DFxh9LG8BZWwynp0=";
   };
 
   patches = [

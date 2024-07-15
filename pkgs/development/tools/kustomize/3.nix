@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = "kustomize";
     rev = "kustomize/v${version}";
-    sha256 = "sha256-ESIykbAKXdv8zM9be0zEJ71rBAzZby0aTg25NlCsIOM=";
+    hash = "sha256-ESIykbAKXdv8zM9be0zEJ71rBAzZby0aTg25NlCsIOM=";
   };
 
   doCheck = true;

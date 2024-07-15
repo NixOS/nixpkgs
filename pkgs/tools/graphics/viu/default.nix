@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "atanunq";
     repo = "viu";
     rev = "v${version}";
-    sha256 = "sha256-lAuIl25368Gv717a8p2So1o1VMDJJAOlDdqfItYizo4=";
+    hash = "sha256-lAuIl25368Gv717a8p2So1o1VMDJJAOlDdqfItYizo4=";
   };
 
   # tests need an interactive terminal

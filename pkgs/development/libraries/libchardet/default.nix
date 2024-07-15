@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Joungkyun";
     repo = "libchardet";
     rev = version;
-    sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
+    hash = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 
   nativeBuildInputs = [ autoreconfHook perl ];

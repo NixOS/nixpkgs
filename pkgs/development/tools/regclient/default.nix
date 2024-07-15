@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-MumOum8mG2KOSKz2wRZlbTFvgSOEpJ/qMz7+hYooPgk=";
+    hash = "sha256-MumOum8mG2KOSKz2wRZlbTFvgSOEpJ/qMz7+hYooPgk=";
   };
   vendorHash = "sha256-gqnE3kfBLjV8CroYcJwa9QWCFOL/dBIblPQJZR2DW+4=";
 

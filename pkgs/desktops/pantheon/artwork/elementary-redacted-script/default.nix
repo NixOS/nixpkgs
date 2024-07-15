@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "fonts";
     rev = version;
-    sha256 = "sha256-YiE7yaH0ZrF1/Cp+3bcJYm2cExQjFcat6JLMJPjhops=";
+    hash = "sha256-YiE7yaH0ZrF1/Cp+3bcJYm2cExQjFcat6JLMJPjhops=";
   };
 
   dontBuild = true;

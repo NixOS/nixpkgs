@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = "d05af4bd3a9a655dfe17d02760bab3542cc0b909";
-    sha256 = "sha256-lzTSE0WH+4fOad9E/pL3LDc4L151W0hFEmD0zsS0gpQ=";
+    hash = "sha256-lzTSE0WH+4fOad9E/pL3LDc4L151W0hFEmD0zsS0gpQ=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''

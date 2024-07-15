@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anholt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
+    hash = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
   };
 
   patches = [ ./libgl-path.patch ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "npat-efault";
     repo = "picocom";
     rev = "1acf1ddabaf3576b4023c4f6f09c5a3e4b086fb8";
-    sha256 = "sha256-cs2bxqZfTbnY5d+VJ257C5hssaFvYup3tBKz68ROnAo=";
+    hash = "sha256-cs2bxqZfTbnY5d+VJ257C5hssaFvYup3tBKz68ROnAo=";
   };
 
   postPatch = ''

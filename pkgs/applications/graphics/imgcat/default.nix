@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "eddieantonio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-miFjlahTI0GDpgsjnA/K1R4R5654M8AoK78CycoLTqA=";
+    hash = "sha256-miFjlahTI0GDpgsjnA/K1R4R5654M8AoK78CycoLTqA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

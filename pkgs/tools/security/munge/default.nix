@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dun";
     repo = "munge";
     rev = "munge-${finalAttrs.version}";
-    sha256 = "sha256-fv42RMUAP8Os33/iHXr70i5Pt2JWZK71DN5vFI3q7Ak=";
+    hash = "sha256-fv42RMUAP8Os33/iHXr70i5Pt2JWZK71DN5vFI3q7Ak=";
   };
 
   nativeBuildInputs = [

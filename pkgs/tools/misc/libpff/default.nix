@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/libyal/libpff/releases/download/${version}/libpff-alpha-${version}.tar.gz";
-    sha256 = "sha256-UmGRBgi78nDSuuOXi/WmODojWU5AbQGKNQwLseoh714=";
+    hash = "sha256-UmGRBgi78nDSuuOXi/WmODojWU5AbQGKNQwLseoh714=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

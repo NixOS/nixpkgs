@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fornwall";
     repo = pname;
     rev = version;
-    sha256 = "sha256-a9VWPN/mTz159xKgN2RNflrcuutWXVdEFzbTIZJKgdY=";
+    hash = "sha256-a9VWPN/mTz159xKgN2RNflrcuutWXVdEFzbTIZJKgdY=";
   };
 
   cargoHash = "sha256-dawNgQtF9zVhlwIZzP+c5fHzcLJbCLOZx3kgIRAktTk=";

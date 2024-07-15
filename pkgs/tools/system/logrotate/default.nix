@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "logrotate";
     repo = "logrotate";
     rev = version;
-    sha256 = "sha256-D7E2mpC7v2kbsb1EyhR6hLvGbnIvGB2MK1n1gptYyKI=";
+    hash = "sha256-D7E2mpC7v2kbsb1EyhR6hLvGbnIvGB2MK1n1gptYyKI=";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.

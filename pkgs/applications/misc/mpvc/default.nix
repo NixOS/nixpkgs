@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "lwilletts";
     repo = "mpvc";
     rev = version;
-    sha256 = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
+    hash = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

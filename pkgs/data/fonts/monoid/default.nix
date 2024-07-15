@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "larsenwork";
     repo = "monoid";
     rev = "0673c8d6728df093faee9f183b6dfa62939df8c0";
-    sha256 = "sha256-u2jwVOC9QM2JHsdAVBuEpqqdiBAVs+IWnpp48A5Xk28=";
+    hash = "sha256-u2jwVOC9QM2JHsdAVBuEpqqdiBAVs+IWnpp48A5Xk28=";
   };
 
   nativeBuildInputs = [

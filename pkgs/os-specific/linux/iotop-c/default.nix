@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${version}";
-    sha256 = "sha256-m75BHvKMk9ckZ6TgT1QDfHYcEfvfEwWu0bQacnVgSmU=";
+    hash = "sha256-m75BHvKMk9ckZ6TgT1QDfHYcEfvfEwWu0bQacnVgSmU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

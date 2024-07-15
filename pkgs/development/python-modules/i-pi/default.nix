@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "i-pi";
     repo = "i-pi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-c1bs8ZI/dfDwKx5Df8ndtsDxESQrdbMkvrjfI6b9JTg=";
+    hash = "sha256-c1bs8ZI/dfDwKx5Df8ndtsDxESQrdbMkvrjfI6b9JTg=";
   };
 
   nativeBuildInputs = [

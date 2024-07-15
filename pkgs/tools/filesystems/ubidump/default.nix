@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
     owner = "nlitsme";
     repo = "ubidump";
     rev = "c8cffcbb8c2d61ebece81dff643b8eccfe6d5642";
-    sha256 = "sha256-R568pV3bkdpNAexr8tfAbXVpvHEx/9r1KDWhDM+HyVg=";
+    hash = "sha256-R568pV3bkdpNAexr8tfAbXVpvHEx/9r1KDWhDM+HyVg=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "superfly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I12bKImZkvAMyfwb6r/NxE+BcUk+SalN+cIDXP0q4xA=";
+    hash = "sha256-I12bKImZkvAMyfwb6r/NxE+BcUk+SalN+cIDXP0q4xA=";
   };
 
   vendorHash = "sha256-FcYPe4arb+jbxj4Tl6bRRAnkEvw0rkECIo8/zC79lOA=";

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "conradludgate";
     repo = "wordle";
     rev = "v${version}";
-    sha256 = "sha256-wFTvzAzboUFQg3fauIwIdRChK7rmLES92jK+8ff1D3s=";
+    hash = "sha256-wFTvzAzboUFQg3fauIwIdRChK7rmLES92jK+8ff1D3s=";
   };
 
   cargoSha256 = "sha256-PtJbLpAUH44alupFY6wX++t/QsKknn5bXvnXzdYsd9o=";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "libplctag";
     repo = "libplctag";
     rev = "v${version}";
-    sha256 = "sha256-+lsRYKA1FIXQXv0nfDNCAqIbqPunrzlpSC5FoF3VIsg=";
+    hash = "sha256-+lsRYKA1FIXQXv0nfDNCAqIbqPunrzlpSC5FoF3VIsg=";
   };
 
   nativeBuildInputs = [ cmake ];

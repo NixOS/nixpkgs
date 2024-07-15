@@ -11,7 +11,7 @@ let
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "sha256-Vcay8vUYLjV65g526btQX0+m5n/cRocIKx7C2LuWeP4=";
+        hash = "sha256-Vcay8vUYLjV65g526btQX0+m5n/cRocIKx7C2LuWeP4=";
       };
 
       inherit subPackages postInstall;

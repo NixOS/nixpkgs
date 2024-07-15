@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "JuliaLang";
     repo = "openlibm";
     rev = "v${version}";
-    sha256 = "sha256-WSf4mcZXiEL3nKTLQh3Oi1MxeH9MOFRe7DU5zFT2aQE=";
+    hash = "sha256-WSf4mcZXiEL3nKTLQh3Oi1MxeH9MOFRe7DU5zFT2aQE=";
   };
 
   makeFlags = [ "prefix=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];

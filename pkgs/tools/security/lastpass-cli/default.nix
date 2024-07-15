@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "lastpass";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ntUBwZ0bVkkpvWK/jQBkLNpCYEDI14/ki0cLwYpEWXk=";
+    hash = "sha256-ntUBwZ0bVkkpvWK/jQBkLNpCYEDI14/ki0cLwYpEWXk=";
   };
 
   patches = [

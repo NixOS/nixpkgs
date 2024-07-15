@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jU/0FkQCyph59TnEE+lckJXsU9whfvWp7dkdfzprYw8=";
+    hash = "sha256-jU/0FkQCyph59TnEE+lckJXsU9whfvWp7dkdfzprYw8=";
   };
 
   nativeBuildInputs = with py.pkgs; [

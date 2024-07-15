@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "ocamlpro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-31CGhmmfOORJ1ewgp+IU+p1+f2kfX/W+lxK7EGU62vc=";
+    hash = "sha256-31CGhmmfOORJ1ewgp+IU+p1+f2kfX/W+lxK7EGU62vc=";
   };
 
   meta = {

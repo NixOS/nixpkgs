@@ -15,7 +15,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-srt";
     rev = "v${version}";
-    sha256 = "sha256-iD18bCbouBuMpuSzruDZJoYz2YyN080RK8BavUF3beY=";
+    hash = "sha256-iD18bCbouBuMpuSzruDZJoYz2YyN080RK8BavUF3beY=";
   };
 
   buildInputs = [ dune-configurator ];

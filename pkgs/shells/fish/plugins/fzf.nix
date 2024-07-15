@@ -11,7 +11,7 @@ buildFishPlugin rec {
     owner = "jethrokuan";
     repo = pname;
     rev = "479fa67d7439b23095e01b64987ae79a91a4e283";
-    sha256 = "sha256-28QW/WTLckR4lEfHv6dSotwkAKpNJFCShxmKFGQQ1Ew=";
+    hash = "sha256-28QW/WTLckR4lEfHv6dSotwkAKpNJFCShxmKFGQQ1Ew=";
   };
 
   meta = with lib; {

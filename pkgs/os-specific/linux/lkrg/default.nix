@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "lkrg-org";
     repo = "lkrg";
     rev = "v${version}";
-    sha256 = "sha256-+yIKkTvfVbLnFBoXSKGebB1A8KqpaRmsLh8SsNuI9Dc=";
+    hash = "sha256-+yIKkTvfVbLnFBoXSKGebB1A8KqpaRmsLh8SsNuI9Dc=";
   };
   patches = [
     (fetchpatch {

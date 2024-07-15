@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "munt";
     repo = "munt";
     rev = "${char2underscore "-" pname}_${char2underscore "." version}";
-    sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
+    hash = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
   postPatch = ''

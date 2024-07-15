@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "JuliaLang";
     repo = "openspecfun";
     rev = "v${version}";
-    sha256 = "sha256-fx9z6bbU2V4x6Pr7/vmlSxkWxZ6qTYuPxnfqKLv08CA=";
+    hash = "sha256-fx9z6bbU2V4x6Pr7/vmlSxkWxZ6qTYuPxnfqKLv08CA=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

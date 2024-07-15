@@ -8,7 +8,7 @@ buildFishPlugin rec {
     owner = "jorgebucaran";
     repo = "autopair.fish";
     rev = version;
-    sha256 = "sha256-s1o188TlwpUQEN3X5MxUlD/2CFCpEkWu83U9O+wg3VU=";
+    hash = "sha256-s1o188TlwpUQEN3X5MxUlD/2CFCpEkWu83U9O+wg3VU=";
   };
 
   meta = with lib; {

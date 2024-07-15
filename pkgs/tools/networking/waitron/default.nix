@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "ns1";
     repo = "waitron";
     inherit rev;
-    sha256 = "sha256-ZkGhEOckIOYGb6Yjr4I4e9cjAHDfksRwHW+zgOMZ/FE=";
+    hash = "sha256-ZkGhEOckIOYGb6Yjr4I4e9cjAHDfksRwHW+zgOMZ/FE=";
   };
 
   vendorHash = null;

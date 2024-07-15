@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "Mic92";
     repo = "ssh-to-age";
     rev = version;
-    sha256 = "sha256-wGtNaejzAOgOuYDEKz6xMCaoaHsiDuQZj0KKpcejphE=";
+    hash = "sha256-wGtNaejzAOgOuYDEKz6xMCaoaHsiDuQZj0KKpcejphE=";
   };
 
   vendorHash = "sha256-w/REcFeH58DTQwgotxSBVR4y7aQ9rBDX2U0A4vJno7s=";

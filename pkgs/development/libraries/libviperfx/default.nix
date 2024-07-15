@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "vipersaudio";
     repo = "viperfx_core_binary";
     rev = "6f7d0da725affe854f083baf5d90c70e172e4488";
-    sha256 = "sha256-hfX46Kk91eQgiO3uhew91I6eEHxazhdGwSkhfNZ+HvQ=";
+    hash = "sha256-hfX46Kk91eQgiO3uhew91I6eEHxazhdGwSkhfNZ+HvQ=";
   };
 
   dontBuild = true;

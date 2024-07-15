@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "czerwonk";
     repo = "atlas_exporter";
     rev = version;
-    sha256 = "sha256-vhUhWO7fQpUHT5nyxbT8AylgUqDNZRSb+EGRNGZJ14E=";
+    hash = "sha256-vhUhWO7fQpUHT5nyxbT8AylgUqDNZRSb+EGRNGZJ14E=";
   };
 
   vendorHash = "sha256-tR+OHxj/97AixuAp0Kx9xQsKPAxpvF6hDha5BgMBha0=";

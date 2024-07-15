@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "dvidelabs";
     repo = "flatcc";
     rev = "v${version}";
-    sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
+    hash = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
   };
 
   nativeBuildInputs = [ cmake ];

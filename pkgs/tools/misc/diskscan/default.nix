@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "baruch";
     repo   = "diskscan";
     rev    = version;
-    sha256 = "sha256-2y1ncPg9OKxqImBN5O5kXrTsuwZ/Cg/8exS7lWyZY1c=";
+    hash = "sha256-2y1ncPg9OKxqImBN5O5kXrTsuwZ/Cg/8exS7lWyZY1c=";
   };
 
   buildInputs = [ ncurses zlib ];

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0NApMqLjeYOMxEI8tY2zLxccuSD5nHUGNsya+26ghDY=";
+    hash = "sha256-0NApMqLjeYOMxEI8tY2zLxccuSD5nHUGNsya+26ghDY=";
   };
 
   vendorHash = null;

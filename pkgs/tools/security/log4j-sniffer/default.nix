@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "palantir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pO6difzNvQvKQtRLyksXmExtQHlnnwyF3iNEmSBgUmU=";
+    hash = "sha256-pO6difzNvQvKQtRLyksXmExtQHlnnwyF3iNEmSBgUmU=";
   };
 
   vendorHash = null;

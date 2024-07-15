@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "zeromq";
     repo = "libzmq";
     rev = "v${version}";
-    sha256 = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
+    hash = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
   };
 
   nativeBuildInputs = [ cmake asciidoc pkg-config ];

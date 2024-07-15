@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "n0la";
     repo = "rcon";
     rev = version;
-    sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
+    hash = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

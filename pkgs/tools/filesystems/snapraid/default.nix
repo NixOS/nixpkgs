@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    sha256 = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
+    hash = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
   };
 
   VERSION = version;

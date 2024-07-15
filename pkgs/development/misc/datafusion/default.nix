@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "apache";
     repo = "arrow-datafusion";
     rev = version;
-    sha256 = "sha256-ywyzvk50Fr9TSaCrqd14lSi1PJ9ggA1YQ/X0aFGFk1M=";
+    hash = "sha256-ywyzvk50Fr9TSaCrqd14lSi1PJ9ggA1YQ/X0aFGFk1M=";
   };
 
   sourceRoot = "${src.name}/datafusion-cli";

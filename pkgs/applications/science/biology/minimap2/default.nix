@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "sha256-cBl2BKgPCP/xHZW6fTH51cY9/lV/1HVLsN7a1R1Blv4=";
+    hash = "sha256-cBl2BKgPCP/xHZW6fTH51cY9/lV/1HVLsN7a1R1Blv4=";
   };
 
   buildInputs = [ zlib ];

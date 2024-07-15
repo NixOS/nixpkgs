@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "sipa";
     repo = pname;
     rev = "6806dfb15a1fafabf7dd28aae3c9d2bc49db01f1";
-    sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
+    hash = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };
 
     postPatch = lib.optionalString stdenv.isDarwin ''

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "python-hyper";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
+    hash = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
   };
 
   buildInputs = [ brotli ];

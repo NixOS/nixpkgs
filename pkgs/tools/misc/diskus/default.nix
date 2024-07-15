@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "sharkdp";
     repo = "diskus";
     rev = "v${version}";
-    sha256 = "sha256-SKd2CU0F2iR4bSHntu2VKvZyjjf2XJeXJG6XS/fIBMU=";
+    hash = "sha256-SKd2CU0F2iR4bSHntu2VKvZyjjf2XJeXJG6XS/fIBMU=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];

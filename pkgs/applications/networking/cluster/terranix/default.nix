@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mrVanDalo";
     repo = "terranix";
     rev = version;
-    sha256 = "sha256-xiUfVD6rtsVWFotVtUW3Q1nQh4obKzgvpN1wqZuGXvM=";
+    hash = "sha256-xiUfVD6rtsVWFotVtUW3Q1nQh4obKzgvpN1wqZuGXvM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "libpwquality";
     repo = "libpwquality";
     rev = "${pname}-${version}";
-    sha256 = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
+    hash = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
   };
 
   patches = [

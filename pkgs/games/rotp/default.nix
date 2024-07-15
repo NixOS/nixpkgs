@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "rayfowler";
     repo = "rotp-public";
     rev = "e3726fc22c2c44316306c50c79779e3da1c4c140";
-    sha256 = "sha256-oMA8LRpBoBX7t4G+HuRz0a8g+UEwYO7Ya0Qq4j8AWec=";
+    hash = "sha256-oMA8LRpBoBX7t4G+HuRz0a8g+UEwYO7Ya0Qq4j8AWec=";
   };
 
   nativeBuildInputs = [ jdk makeWrapper ];

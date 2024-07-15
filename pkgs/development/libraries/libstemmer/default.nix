@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "snowballstem";
     repo = "snowball";
     rev = "v${version}";
-    sha256 = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
+    hash = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
   };
 
   nativeBuildInputs = [ perl ];

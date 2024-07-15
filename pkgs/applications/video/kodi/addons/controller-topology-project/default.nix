@@ -8,7 +8,7 @@ let
       owner = "kodi-game";
       repo = "controller-topology-project";
       rev = "v${version}";
-      sha256 = "sha256-6g4dyR34b0YgxlzRRS2C/gY3wjlO9MMYEB2fHLSCqC4=";
+      hash = "sha256-6g4dyR34b0YgxlzRRS2C/gY3wjlO9MMYEB2fHLSCqC4=";
     };
 
     postPatch = ''

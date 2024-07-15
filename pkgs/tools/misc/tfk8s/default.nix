@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "jrhouston";
     repo = "tfk8s";
     rev = tag;
-    sha256 = "sha256-VLpXL5ABnCxc+7dV3sZ6wsY2nKn2yfu7eTjtn881/XQ=";
+    hash = "sha256-VLpXL5ABnCxc+7dV3sZ6wsY2nKn2yfu7eTjtn881/XQ=";
   };
 
   vendorHash = "sha256-eTADcUW9b6l47BkWF9YLxdcgvMbCzWTjLF28FneJHg8=";

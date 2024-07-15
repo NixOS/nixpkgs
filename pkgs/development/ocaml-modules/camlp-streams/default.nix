@@ -8,7 +8,7 @@ buildDunePackage rec {
     owner = "ocaml";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
+    hash = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
   };
 
   meta = {

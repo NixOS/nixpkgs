@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
+    hash = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
   };
 
   cargoLock = {

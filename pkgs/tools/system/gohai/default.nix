@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "DataDog";
     repo = "gohai";
     rev = "c614f513e87f04d3d19b2d4ae853cc5703f3a9bc";
-    sha256 = "sha256-vdzGGTg9SHYS0OQUn3VvrQGpKxzqxBRXDKOm0c7FvYY=";
+    hash = "sha256-vdzGGTg9SHYS0OQUn3VvrQGpKxzqxBRXDKOm0c7FvYY=";
   };
 
   vendorHash = "sha256-aN1fwGbBm45e6qdRu+4wnv2ZI7SOsIPONB4vF9o2vlI=";

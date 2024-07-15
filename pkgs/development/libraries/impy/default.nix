@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bcampbell";
     repo = "impy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0bHm3jawYgcIeF2COALWlypX7kvPw1hifB/W+TKcC4M=";
+    hash = "sha256-0bHm3jawYgcIeF2COALWlypX7kvPw1hifB/W+TKcC4M=";
   };
 
   nativeBuildInputs = [

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sunaku";
     repo = "tamzen-font";
     rev = "Tamzen-${version}";
-    sha256 = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
+    hash = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
   };
 
   nativeBuildInputs = [ xorg.mkfontscale ];

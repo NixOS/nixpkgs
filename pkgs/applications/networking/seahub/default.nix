@@ -21,7 +21,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "haiwen";
     repo = "seahub";
     rev = "e8c02236c0eaca6dde009872745f089da4b77e6e"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
+    hash = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
   };
 
   patches = [

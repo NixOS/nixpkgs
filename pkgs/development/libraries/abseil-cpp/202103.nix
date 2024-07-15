@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = version;
-    sha256 = "sha256-fcxPhuI2eL/fnd6nT11p8DpUNwGNaXZmd03yOiZcOT0=";
+    hash = "sha256-fcxPhuI2eL/fnd6nT11p8DpUNwGNaXZmd03yOiZcOT0=";
   };
 
   patches = [

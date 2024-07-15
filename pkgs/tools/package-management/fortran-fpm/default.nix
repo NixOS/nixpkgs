@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/fortran-lang/fpm/releases/download/v${version}/fpm-${version}.F90";
-    sha256 = "sha256-dVPQW2DCp+iJojuhCgeEFVFpugG/x+DKhG986QuE4co=";
+    hash = "sha256-dVPQW2DCp+iJojuhCgeEFVFpugG/x+DKhG986QuE4co=";
   };
 
   dontUnpack = true;

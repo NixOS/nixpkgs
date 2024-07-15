@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     owner  = "mjg59";
     repo   = "python-broadlink";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
+    hash = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
   };
 
   format = "other";

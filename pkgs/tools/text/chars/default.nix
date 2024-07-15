@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "antifuchs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
+    hash = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
   };
 
   cargoHash = "sha256-wqyExG4haco6jg1zpbouz3xMR7sjiVIAC16PnDU2tc8=";

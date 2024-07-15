@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "fablabnbg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uNVhdkZFadL7QNlCsXq51TbhzRKH9KYDPDNCFhw3cQs=";
+    hash = "sha256-uNVhdkZFadL7QNlCsXq51TbhzRKH9KYDPDNCFhw3cQs=";
   };
 
   patches = [

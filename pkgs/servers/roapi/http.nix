@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/roapi/roapi/releases/download/${pname}-v${version}/${pname}-${target}.tar.gz";
-    sha256 = "sha256-lv6BHg/LkrOlyq8D1udAYW8/AbZRb344YCcVnwo3ZHk=";
+    hash = "sha256-lv6BHg/LkrOlyq8D1udAYW8/AbZRb344YCcVnwo3ZHk=";
   };
   dontUnpack = true;
   dontConfigure = true;

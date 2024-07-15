@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "peterhoeg";
     repo   = "dynamic-colors";
     rev    = "v${version}";
-    sha256 = "sha256-jSdwq9WwYZP8MK6z7zJa0q93xfanr6iuvAt8YQkQxxE=";
+    hash = "sha256-jSdwq9WwYZP8MK6z7zJa0q93xfanr6iuvAt8YQkQxxE=";
   };
 
   PREFIX = placeholder "out";

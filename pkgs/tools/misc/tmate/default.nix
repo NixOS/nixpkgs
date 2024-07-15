@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner  = "tmate-io";
     repo   = "tmate";
     rev    = "ac919516f4f1b10ec928e20b3a5034d18f609d68";
-    sha256 = "sha256-t96gfmAMcsjkGf8pvbEx2fNx4Sj3W6oYoQswB3Dklb8=";
+    hash = "sha256-t96gfmAMcsjkGf8pvbEx2fNx4Sj3W6oYoQswB3Dklb8=";
   };
 
   postPatch = ''

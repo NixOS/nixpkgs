@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "Ripser";
     repo = "ripser";
     rev = "v${version}";
-    sha256 = "sha256-BxmkPQ/nl5cF+xwQMTjXnLgkLgdmT/39y7Kzl2wDfpE=";
+    hash = "sha256-BxmkPQ/nl5cF+xwQMTjXnLgkLgdmT/39y7Kzl2wDfpE=";
   };
 
   buildInputs = optional useGoogleHashmap sparsehash;

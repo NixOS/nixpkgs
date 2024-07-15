@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication {
     owner = "muammar";
     repo = "mkchromecast";
     rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
-    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+    hash = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
   buildInputs = lib.optional stdenv.isLinux qtwayland;

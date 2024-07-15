@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mapbox";
     repo = "protozero";
     rev = "v${version}";
-    sha256 = "sha256-R8lGewsEOxPNbKlkIeiM4yIwUcTzi2Dm0+xJ2WrBTBQ=";
+    hash = "sha256-R8lGewsEOxPNbKlkIeiM4yIwUcTzi2Dm0+xJ2WrBTBQ=";
   };
 
   nativeBuildInputs = [ cmake ];

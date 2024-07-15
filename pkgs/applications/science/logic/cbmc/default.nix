@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-7syRpCNL7TRZoJaNrmAdahNy7IyovyniYyOwD/lzhuw=";
+    hash = "sha256-7syRpCNL7TRZoJaNrmAdahNy7IyovyniYyOwD/lzhuw=";
   };
 
   nativeBuildInputs = [

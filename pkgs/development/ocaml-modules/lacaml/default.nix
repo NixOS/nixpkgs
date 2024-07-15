@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
-    sha256 = "sha256-Vg6Hl31u1bvh0hfWU9eqoI8pGZt4YhpGRf3ul3h+SJk=";
+    hash = "sha256-Vg6Hl31u1bvh0hfWU9eqoI8pGZt4YhpGRf3ul3h+SJk=";
   };
 
   buildInputs = [ dune-configurator ];

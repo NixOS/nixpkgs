@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mdlayher";
     repo = "modemmanager_exporter";
     rev = "v${version}";
-    sha256 = "sha256-wQATmTjYsm1J2DicPryoa/jVpbLjXz+1TTQUH5yGV6w=";
+    hash = "sha256-wQATmTjYsm1J2DicPryoa/jVpbLjXz+1TTQUH5yGV6w=";
   };
 
   vendorHash = "sha256-wGCRpFnt9bxc5Ygg6H1kI9sXB4mVFBdLeaahAFtvNbg=";

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "AidenPearce369";
     repo = "ADReaper";
     rev = "ADReaperv${version}";
-    sha256 = "sha256-+FCb5TV9MUcRyex2M4rn2RhcIsXQFbtm1T4r7MpcRQs=";
+    hash = "sha256-+FCb5TV9MUcRyex2M4rn2RhcIsXQFbtm1T4r7MpcRQs=";
   };
 
   vendorHash = "sha256-lU39kj/uz0l7Rodsu6+UMv2o579eu1KUbutUNZni7bM=";

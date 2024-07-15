@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dac-gmbh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Xzx14fvYWTZYM9Pnowf1M3D0PTPRLwsXHUj/PJskRWw=";
+    hash = "sha256-Xzx14fvYWTZYM9Pnowf1M3D0PTPRLwsXHUj/PJskRWw=";
   };
 
   cargoPatches = [

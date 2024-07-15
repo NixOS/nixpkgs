@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "usit-gd";
     repo = "zabbix-cli";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-B5t/vxCmPdRR9YKOc2htI57Kmk1ZrpwPUln4JoUrK6g=";
+    hash = "sha256-B5t/vxCmPdRR9YKOc2htI57Kmk1ZrpwPUln4JoUrK6g=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

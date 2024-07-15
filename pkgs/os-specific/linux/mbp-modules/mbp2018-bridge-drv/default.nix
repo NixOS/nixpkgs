@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "MCMrARM";
     repo = "mbp2018-bridge-drv";
     rev = "b43fcc069da73e051072fde24af4014c9c487286";
-    sha256 = "sha256-o6yGiR+Y5SnX1johdi7fQWP5ts7HdDMqeju75UOhgik=";
+    hash = "sha256-o6yGiR+Y5SnX1johdi7fQWP5ts7HdDMqeju75UOhgik=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

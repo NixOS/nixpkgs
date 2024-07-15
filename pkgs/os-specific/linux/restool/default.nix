@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nxp-qoriq";
     repo = "restool";
     rev = "abd2f5b7181db9d03db9e6ccda0194923b73e9a2";
-    sha256 = "sha256-ryTDyqSy39e8Omf7l8lK4mLWr8jccDhMVPldkVGSQVo=";
+    hash = "sha256-ryTDyqSy39e8Omf7l8lK4mLWr8jccDhMVPldkVGSQVo=";
   };
 
   nativeBuildInputs = [ file pandoc ];

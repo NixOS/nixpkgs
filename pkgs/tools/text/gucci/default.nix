@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "noqcks";
     repo = "gucci";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-bwPQQtaPHby96C5ZHZhBTok+m8GPPS40U1CUPVYqCa4=";
+    hash = "sha256-bwPQQtaPHby96C5ZHZhBTok+m8GPPS40U1CUPVYqCa4=";
   };
 
   vendorHash = "sha256-/4OnbtxxhXQnmSV6UbjgzXdL7szhL9rKiG5BR8FsyqI=";

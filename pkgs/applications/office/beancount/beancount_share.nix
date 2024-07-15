@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "akuukis";
     repo = "beancount_share";
     rev = "8f925422b9947e88babbeab3fdf7d71c53c9aa9e";
-    sha256 = "sha256-+ZA84VS0wf9TdrYleYB5OeKz7T8sDtrl4BM7Ft+k7OI=";
+    hash = "sha256-+ZA84VS0wf9TdrYleYB5OeKz7T8sDtrl4BM7Ft+k7OI=";
   };
 
   format = "pyproject";

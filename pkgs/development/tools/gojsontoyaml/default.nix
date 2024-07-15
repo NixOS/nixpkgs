@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "brancz";
     repo = "gojsontoyaml";
     rev = "v${version}";
-    sha256 = "sha256-ebxz2uTH7XwD3j6JnsfET6aCGYjvsCjow/sU9pagg50=";
+    hash = "sha256-ebxz2uTH7XwD3j6JnsfET6aCGYjvsCjow/sU9pagg50=";
   };
 
   vendorHash = null;

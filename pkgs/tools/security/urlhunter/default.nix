@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "utkusen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lX5zh+fYVSyWPUOnfRNMGZPsiuxjKBSpluPUMN9mZ+k=";
+    hash = "sha256-lX5zh+fYVSyWPUOnfRNMGZPsiuxjKBSpluPUMN9mZ+k=";
   };
 
   vendorHash = "sha256-JDDxarFROBhdi76mY6udn++lReKLdju/JBpj3JhGdQA=";

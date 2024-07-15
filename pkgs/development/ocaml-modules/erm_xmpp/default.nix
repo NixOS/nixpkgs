@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "hannesm";
     repo   = "xmpp";
     rev    = "e54d54e142ac9770c37e144693473692bf473530";
-    sha256 = "sha256-Ize8Em4LI54Cy1Xuzr9BjQGV7JMr3W6KI1YzI8G1q/U=";
+    hash = "sha256-Ize8Em4LI54Cy1Xuzr9BjQGV7JMr3W6KI1YzI8G1q/U=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ];

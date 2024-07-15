@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     owner = "smuellerDD";
     repo = "esdm";
     rev = "v${version}";
-    sha256 = "sha256-UH6ws/hfHdcmbLETyZ0b4wDm8nHPdLsot3ZhIljpUlw=";
+    hash = "sha256-UH6ws/hfHdcmbLETyZ0b4wDm8nHPdLsot3ZhIljpUlw=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ars3niy";
     repo = "tdlib-purple";
     rev = "v${version}";
-    sha256 = "sha256-mrowzTtNLyMc2WwLVIop8Mg2DbyiQs0OPXmJuM9QUnM=";
+    hash = "sha256-mrowzTtNLyMc2WwLVIop8Mg2DbyiQs0OPXmJuM9QUnM=";
   };
 
   patches = [

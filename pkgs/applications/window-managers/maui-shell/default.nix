@@ -41,7 +41,7 @@ mkDerivation rec {
     owner = "Nitrux";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-8D3rlYrqLfyDZQFRSaVlxLaEblbv8w787v8Np2aW3yc=";
+    hash = "sha256-8D3rlYrqLfyDZQFRSaVlxLaEblbv8w787v8Np2aW3yc=";
   };
 
   nativeBuildInputs = [

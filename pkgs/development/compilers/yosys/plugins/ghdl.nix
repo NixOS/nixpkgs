@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner  = "ghdl";
     repo   = "ghdl-yosys-plugin";
     rev    = "c9b05e481423c55ffcbb856fd5296701f670808c";
-    sha256 = "sha256-tT2+DXUtbJIBzBUBcyG2sz+3G+dTkciLVIczcRPr0Jw=";
+    hash = "sha256-tT2+DXUtbJIBzBUBcyG2sz+3G+dTkciLVIczcRPr0Jw=";
   };
 
   buildInputs = [

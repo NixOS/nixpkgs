@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "jvirkki";
     repo  = "dupd";
     rev   = version;
-    sha256 = "sha256-ZiQroJ5fjBCIjU+M8KRA0N3Mrg9h0NVtfYUIS4cYyhw=";
+    hash = "sha256-ZiQroJ5fjBCIjU+M8KRA0N3Mrg9h0NVtfYUIS4cYyhw=";
   };
 
   postPatch = ''

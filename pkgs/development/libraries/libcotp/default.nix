@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/IIzUMms4aS63psyxwL+Ynj78c38R3WwbD2HIpdHF88=";
+    hash = "sha256-/IIzUMms4aS63psyxwL+Ynj78c38R3WwbD2HIpdHF88=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "sassoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w7KU3XntkKep0mcuOUBSG4fJW14yCamioeRH5YrULSo=";
+    hash = "sha256-w7KU3XntkKep0mcuOUBSG4fJW14yCamioeRH5YrULSo=";
   };
 
   vendorHash = "sha256-/P4W+smY01feV1HP5Tsx0PsoOyp//ik7RVWuEaiSepY=";

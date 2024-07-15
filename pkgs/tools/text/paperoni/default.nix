@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "hipstermojo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vTylnDtoPpiRtk/vew1hLq3g8pepWRVqBEBnvSif4Zw=";
+    hash = "sha256-vTylnDtoPpiRtk/vew1hLq3g8pepWRVqBEBnvSif4Zw=";
   };
 
   cargoLock = {

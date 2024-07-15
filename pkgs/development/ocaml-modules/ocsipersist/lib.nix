@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsipersist";
     rev = version;
-    sha256 = "sha256:1d6kdcfjvrz0dl764mnyxc477aa57rvmzkg154qc915w2y1nbz9a";
+    hash = "sha256:1d6kdcfjvrz0dl764mnyxc477aa57rvmzkg154qc915w2y1nbz9a";
   };
 
   buildInputs = [ lwt_ppx ];

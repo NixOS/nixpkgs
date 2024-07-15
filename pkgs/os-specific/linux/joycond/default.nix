@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "DanielOgorchock";
     repo = "joycond";
     rev = "f9a66914622514c13997c2bf7ec20fa98e9dfc1d";
-    sha256 = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
+    hash = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

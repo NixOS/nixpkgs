@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "rolffokkens";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-58yoF6s0WjH+1mTY7X5OX53YgcnDmGxoCR8Kvl6lP+A=";
+    hash = "sha256-58yoF6s0WjH+1mTY7X5OX53YgcnDmGxoCR8Kvl6lP+A=";
   };
 
   nativeBuildInputs = [ pandoc which ];

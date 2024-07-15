@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "georgmartius";
     repo = pname;
     rev = "90c76aca2cb06c3ff6f7476a7cd6851b39436656";
-    sha256 = "sha256-p1VRnkBeUpET3O2FmaJMyN5/EoSOQLdmRIVbzZcQaKY=";
+    hash = "sha256-p1VRnkBeUpET3O2FmaJMyN5/EoSOQLdmRIVbzZcQaKY=";
   };
 
   nativeBuildInputs = [ cmake ];

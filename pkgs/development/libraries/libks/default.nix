@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cSBtNOJfau+7wQ5iUs4hnqSMoo8XYN9opwPfox2ke+E=";
+    hash = "sha256-cSBtNOJfau+7wQ5iUs4hnqSMoo8XYN9opwPfox2ke+E=";
   };
 
   patches = [

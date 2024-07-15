@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "de-vri-es";
     repo = pname;
     rev = "d62fa8633015ebc2676060fcdae88c402977be46";
-    sha256 = "sha256-doYDRIWiuHam2i3r3J3BZuWEhopoN4jms/xPXGyypok=";
+    hash = "sha256-doYDRIWiuHam2i3r3J3BZuWEhopoN4jms/xPXGyypok=";
   };
 
   passthru.scripts = [ "autosort.py" ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "troglobit";
     repo = "libite";
     rev = "v${version}";
-    sha256 = "sha256-q1NoHSiPmFPwkTJqg3L5fEBXF/JjRWvA9e4d532ILE8=";
+    hash = "sha256-q1NoHSiPmFPwkTJqg3L5fEBXF/JjRWvA9e4d532ILE8=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

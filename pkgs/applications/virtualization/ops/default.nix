@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "nanovms";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ac+17hywzyK7ChCP/nhwTP1WEIZ89+BKX9/YmsPpfg8=";
+    hash = "sha256-ac+17hywzyK7ChCP/nhwTP1WEIZ89+BKX9/YmsPpfg8=";
   };
 
   proxyVendor = true; # Doesn't build otherwise

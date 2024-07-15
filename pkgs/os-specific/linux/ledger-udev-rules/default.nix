@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "LedgerHQ";
     repo = "udev-rules";
     rev = "f474382e370c9fa2a2207e6e675b9b364441aed7";
-    sha256 = "sha256-5jN9xy3+kk540PAyfsxIqck9hdI3t2CNpgqKxLbAsDg=";
+    hash = "sha256-5jN9xy3+kk540PAyfsxIqck9hdI3t2CNpgqKxLbAsDg=";
   };
 
   dontBuild = true;

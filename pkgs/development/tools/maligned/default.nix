@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "mdempsky";
     repo = "maligned";
     inherit rev;
-    sha256 = "sha256-exljmDNtVhjJkvh0EomcbBXSsmQx4I59MHDfMWSQyKk=";
+    hash = "sha256-exljmDNtVhjJkvh0EomcbBXSsmQx4I59MHDfMWSQyKk=";
   };
 
   vendorHash = "sha256-q/0lxZWk3a7brMsbLvZUSZ8XUHfWfx79qxjir1Vygx4=";

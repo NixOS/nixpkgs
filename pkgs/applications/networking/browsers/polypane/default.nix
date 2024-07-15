@@ -7,7 +7,7 @@ let
   src = fetchurl {
     url = "https://github.com/firstversionist/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-2fzxEqOGPZnA+nizLUq73f18bKDpDNglUt4RIz+VnS8=";
+    hash = "sha256-2fzxEqOGPZnA+nizLUq73f18bKDpDNglUt4RIz+VnS8=";
   };
 
   appimageContents = appimageTools.extractType2 {

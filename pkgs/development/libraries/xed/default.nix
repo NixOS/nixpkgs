@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     owner = "intelxed";
     repo = "xed";
     rev = "v${version}";
-    sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
+    hash = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 
   nativeBuildInputs = [ mbuild ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.bintools ];

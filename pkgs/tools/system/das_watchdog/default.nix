@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "kmatheussen";
     repo = "das_watchdog";
     rev = "5ac0db0b98e5b4e690aca0aa7fb6ec60ceddcb06";
-    sha256 = "sha256-eacUn/gYCEHtHdQf3lBPYvY3kfN3Bik7AolAPpbbwQs=";
+    hash = "sha256-eacUn/gYCEHtHdQf3lBPYvY3kfN3Bik7AolAPpbbwQs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

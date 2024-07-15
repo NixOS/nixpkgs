@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5OTGBO2EMGPJ4J2Eu3pIlZmYGXYxgL/6uGQgdB+8nPk=";
+    hash = "sha256-5OTGBO2EMGPJ4J2Eu3pIlZmYGXYxgL/6uGQgdB+8nPk=";
   };
 
   vendorHash = "sha256-8hWiVtya/TlVLUlYVJSjOzZUI8vsPm355ksIRPhB2rA=";

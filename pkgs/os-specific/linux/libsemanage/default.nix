@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
-    sha256 = "sha256-4WbK4ppBfasAjbnKCHQCPzU6MBewdpOgNu2XSH7aNbE=";
+    hash = "sha256-4WbK4ppBfasAjbnKCHQCPzU6MBewdpOgNu2XSH7aNbE=";
    };
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";

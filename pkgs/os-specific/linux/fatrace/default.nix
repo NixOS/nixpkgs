@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "martinpitt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MRHM+hyuRevK4L3u6dGw1S3O7w+BJBsprJVcSz6Q9xg=";
+    hash = "sha256-MRHM+hyuRevK4L3u6dGw1S3O7w+BJBsprJVcSz6Q9xg=";
   };
 
   buildInputs = [ python3 which ];

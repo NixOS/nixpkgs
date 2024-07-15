@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "RazrFalcon";
     repo = pname;
     rev = "575eac74400a5ac45c912b144f0c002aa4a0135f";
-    sha256 = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
+    hash = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
   };
 
   cargoSha256 = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";

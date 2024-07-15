@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "brona";
     repo = "iproute2mac";
     rev = "v${version}";
-    sha256 = "sha256-MaL8eb9UOZ71BL4Jvc6Od+EJ+F6j96n9a+vRnHeveIU=";
+    hash = "sha256-MaL8eb9UOZ71BL4Jvc6Od+EJ+F6j96n9a+vRnHeveIU=";
   };
 
   buildInputs = [ python3 ];

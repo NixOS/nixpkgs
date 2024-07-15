@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "trickstercache";
     repo = "trickster";
     rev = "v${version}";
-    sha256 = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
+    hash = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
   };
 
   vendorHash = null;

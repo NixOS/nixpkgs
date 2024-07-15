@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "etr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
+    hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];

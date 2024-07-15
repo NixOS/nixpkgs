@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
+    hash = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2wZBrq/v7EZhLHwt3TPvEGC7chzmSELSqWwz3dtesXY=";
+    hash = "sha256-2wZBrq/v7EZhLHwt3TPvEGC7chzmSELSqWwz3dtesXY=";
   };
 
   buildInputs = [ libsepol ];

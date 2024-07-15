@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "jtesta";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-g5h0A1BJqzOZaSVUxyi7IsCcrbto4+7+HpiVjFZy50Y=";
+    hash = "sha256-g5h0A1BJqzOZaSVUxyi7IsCcrbto4+7+HpiVjFZy50Y=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

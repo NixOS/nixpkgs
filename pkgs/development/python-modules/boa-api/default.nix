@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "boalang";
     repo = "api-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
+    hash = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
   };
 
   # upstream has no tests

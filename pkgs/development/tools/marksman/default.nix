@@ -14,7 +14,7 @@ buildDotnetModule rec {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-g+Y4BZh5r4FQJe1q79hxj7WZe7z9346+5cB7tgJ5+Wo=";
+    hash = "sha256-g+Y4BZh5r4FQJe1q79hxj7WZe7z9346+5cB7tgJ5+Wo=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";

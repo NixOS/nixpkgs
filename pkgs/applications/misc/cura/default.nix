@@ -9,7 +9,7 @@ mkDerivation rec {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
+    hash = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
   };
 
   materials = fetchFromGitHub {

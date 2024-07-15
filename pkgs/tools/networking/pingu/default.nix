@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "sheepla";
     repo = "pingu";
     rev = "v${version}";
-    sha256 = "sha256-iAHj6/qaZgpTfrUZZ9qdsjiNMJ2zH0CzhR4TVSC9oLE=";
+    hash = "sha256-iAHj6/qaZgpTfrUZZ9qdsjiNMJ2zH0CzhR4TVSC9oLE=";
   };
 
   vendorHash = "sha256-xn6la6E0C5QASXxNee1Py/rBs4ls9X/ePeg4Q1e2UyU=";

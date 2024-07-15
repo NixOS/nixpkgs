@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "fredrik-johansson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dt9PZ3Xfn60rhmnxYo7CEzNTEUN/wMVAXe8U5PzUO9U=";
+    hash = "sha256-dt9PZ3Xfn60rhmnxYo7CEzNTEUN/wMVAXe8U5PzUO9U=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];

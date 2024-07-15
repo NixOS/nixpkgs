@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "qhull";
     repo = "qhull";
     rev = version;
-    sha256 = "sha256-djUO3qzY8ch29AuhY3Bn1ajxWZ4/W70icWVrxWRAxRc=";
+    hash = "sha256-djUO3qzY8ch29AuhY3Bn1ajxWZ4/W70icWVrxWRAxRc=";
   };
 
   nativeBuildInputs = [ cmake ]

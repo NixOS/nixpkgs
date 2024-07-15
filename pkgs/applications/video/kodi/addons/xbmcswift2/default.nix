@@ -9,7 +9,7 @@ buildKodiAddon rec {
     owner = "XBMC-Addons";
     repo = namespace;
     rev = version;
-    sha256 = "sha256-Z+rHz3wncoNvV1pwhRzJFB/X0H6wdfwg88otVh27wg8=";
+    hash = "sha256-Z+rHz3wncoNvV1pwhRzJFB/X0H6wdfwg88otVh27wg8=";
   };
 
   passthru = {

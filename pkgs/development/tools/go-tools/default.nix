@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "sha256-oR3fsvZmeddN75WsxOMcYe/RAIjYz+ba03ADJfDUqNg=";
+    hash = "sha256-oR3fsvZmeddN75WsxOMcYe/RAIjYz+ba03ADJfDUqNg=";
   };
 
   vendorHash = "sha256-dUO2Iw+RYk8s+3IV2/TSKjaX61YkD/AROq3177r+wKE=";

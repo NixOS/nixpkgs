@@ -21,7 +21,7 @@
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-0tlWX9vHiFHewiisI8lwsQdHyEhntu+x415hfbymhIo=";
+    hash = "sha256-0tlWX9vHiFHewiisI8lwsQdHyEhntu+x415hfbymhIo=";
   };
 
   cli = buildGoModule {

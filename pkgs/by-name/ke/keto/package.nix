@@ -15,7 +15,7 @@ buildGoModule {
     owner = "ory";
     repo = "keto";
     rev = "v${version}";
-    sha256 = "sha256-0yylaaXogN2HWXY8Tb7ScN4jdyeHecJ0gBYlVvcwaNE=";
+    hash = "sha256-0yylaaXogN2HWXY8Tb7ScN4jdyeHecJ0gBYlVvcwaNE=";
   };
 
   vendorHash = "sha256-lgwV4Ysjmd9e850Rf5c0wSZtMW3U34/piwwG7dQEUV4=";

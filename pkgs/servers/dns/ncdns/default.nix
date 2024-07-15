@@ -20,7 +20,7 @@ let
     owner = "namecoin";
     repo = "x509-compressed";
     rev = "2e30a62a69dac54a977410f283308df232a5d244";
-    sha256 = "sha256-/Bd1gYjguj8AiKHyiaIKT+Y3R7kq5gLZlJhY9g/xFXk=";
+    hash = "sha256-/Bd1gYjguj8AiKHyiaIKT+Y3R7kq5gLZlJhY9g/xFXk=";
     # ncdns must be put in a subdirectory for this to work.
     postFetch = ''
       cp -r --no-preserve=mode "${ncdns}" "$out/ncdns"

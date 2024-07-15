@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "void-linux";
     repo = "musl-obstack";
     rev = "v${version}";
-    sha256 = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
+    hash = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

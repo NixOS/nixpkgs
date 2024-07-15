@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "sha256-sP6KTR50Ns4Yf/DGeSK7kB0dF0lraWbx948EOmsy+8c=";
+    hash = "sha256-sP6KTR50Ns4Yf/DGeSK7kB0dF0lraWbx948EOmsy+8c=";
   };
 
   cargoHash = "sha256-6tiTgyhkPeH/oWcce1U2UsVngEfc4LKbB1zMt7meshA=";

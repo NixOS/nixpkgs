@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "aantron";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ODTD3KceEnrEzD01CeuNg4BNKOtKZEpYaDIB+RIte1U=";
+    hash = "sha256-ODTD3KceEnrEzD01CeuNg4BNKOtKZEpYaDIB+RIte1U=";
   };
 
   propagatedBuildInputs = [ lwt ];

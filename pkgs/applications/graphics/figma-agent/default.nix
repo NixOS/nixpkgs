@@ -18,7 +18,7 @@ buildRustPackage {
     owner = "neetly";
     repo = "figma-agent-linux";
     rev = version;
-    sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
+    hash = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
   };
 
   cargoHash = "sha256-ulYDKMMtKfBYur34CVhac4uaU0kfdkeBCCP/heuUZek=";

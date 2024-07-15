@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "sullo";
     repo = "nikto";
     rev = version;
-    sha256 = "sha256-lWiDbWc2BWAUgyaIm0tvZytja02WogYRoc7na4sHiNM=";
+    hash = "sha256-lWiDbWc2BWAUgyaIm0tvZytja02WogYRoc7na4sHiNM=";
   };
 
   # Nikto searches its configuration file based on its current path

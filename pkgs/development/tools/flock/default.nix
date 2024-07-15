@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "discoteq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
+    hash = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ronn ];

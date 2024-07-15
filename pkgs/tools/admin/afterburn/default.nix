@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "coreos";
     repo = "afterburn";
     rev = "v${version}";
-    sha256 = "sha256-IAYQJviSQHKeayI0uAEbXX+vQxfAbMOqP2fH+2VPamQ=";
+    hash = "sha256-IAYQJviSQHKeayI0uAEbXX+vQxfAbMOqP2fH+2VPamQ=";
   };
 
   cargoHash = "sha256-BJ8WV8FcRrwPHhCY2GiOWDP72/T3K9eJIrPeoIa+9Sk=";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0n3cPF3KBuzNOagrn88HeTvFAu1sYTkijpiGr77X5GI=";
+    hash = "sha256-0n3cPF3KBuzNOagrn88HeTvFAu1sYTkijpiGr77X5GI=";
   };
 
   patches = [

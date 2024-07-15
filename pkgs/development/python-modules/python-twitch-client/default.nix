@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tsifrer";
     repo = "python-twitch-client";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-gxBpltwExb9bg3HLkz/MNlP5Q3/x97RHxhbwNqqanIM=";
+    hash = "sha256-gxBpltwExb9bg3HLkz/MNlP5Q3/x97RHxhbwNqqanIM=";
   };
 
   nativeBuildInputs = [ setuptools ];

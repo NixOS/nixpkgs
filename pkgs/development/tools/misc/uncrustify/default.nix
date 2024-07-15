@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
-    sha256 = "sha256-M9LfLWpkMoCNrvnmMhFhfJhyOwbnitjpm7LKay1M0dI=";
+    hash = "sha256-M9LfLWpkMoCNrvnmMhFhfJhyOwbnitjpm7LKay1M0dI=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

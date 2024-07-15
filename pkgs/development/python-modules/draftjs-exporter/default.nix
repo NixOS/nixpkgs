@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "draftjs_exporter";
     owner = "springload";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
+    hash = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
   };
 
   passthru.optional-dependencies = {

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "confluentinc";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "sha256-RLjshOnMmCdlv73M8siIvBZ5kVG3v2XttkLVPU+BHY4=";
+    hash = "sha256-RLjshOnMmCdlv73M8siIvBZ5kVG3v2XttkLVPU+BHY4=";
   };
 
   nativeBuildInputs = [ pkg-config python3 which ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "backtracking";
     repo = "bitv";
     rev = version;
-    sha256 = "sha256-sZwq6c10hBBS9tGvKlWD9GE3JBrZPByfDrXE6xIPcG4=";
+    hash = "sha256-sZwq6c10hBBS9tGvKlWD9GE3JBrZPByfDrXE6xIPcG4=";
   };
 
   nativeBuildInputs = [ autoreconfHook which ocaml findlib ];

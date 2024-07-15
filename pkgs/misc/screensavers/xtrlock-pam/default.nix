@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "aanatoly";
     repo = "xtrlock-pam";
     rev = "6f4920fcfff54791c0779057e9efacbbbbc05df6";
-    sha256 = "sha256-TFfs418fpjBrAJNGW8U3jE0K7jQkfL4vCquAViKkXPw=";
+    hash = "sha256-TFfs418fpjBrAJNGW8U3jE0K7jQkfL4vCquAViKkXPw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
