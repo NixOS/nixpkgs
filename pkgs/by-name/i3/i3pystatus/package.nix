@@ -10,14 +10,14 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2020-06-12";
+  version = "3.35-unstable-2024-06-13";
   pname = "i3pystatus";
 
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "dad5eb0c5c8a2ecd20c37ade4732586c6e53f44b";
-    sha256 = "18ygvkl92yr69kxsym57k1mc90asdxpz4b943i61qr0s4fc5n4mq";
+    rev = "f3c539ad78ad1c54fc36e8439bf3905a784ccb34";
+    sha256 = "3AGREY+elHQk8kaoFp8AHEzk2jNC/ICGYPh2hXo2G/w=";
   };
 
   nativeBuildInputs = [
