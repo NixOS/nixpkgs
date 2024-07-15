@@ -3,6 +3,7 @@
   fetchCrate,
   rustPlatform,
   clang-tidy-sarif,
+  nix-update-script,
   testers,
 }:
 rustPlatform.buildRustPackage rec {
@@ -18,13 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = clang-tidy-sarif; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "A CLI tool to convert clang-tidy diagnostics into SARIF";
-    mainProgram = "clang-tidy-sarif";
     homepage = "https://psastras.github.io/sarif-rs";
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "clang-tidy-sarif";
     license = lib.licenses.mit;
   };
 }
