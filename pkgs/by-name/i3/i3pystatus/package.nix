@@ -5,6 +5,7 @@
 , gobject-introspection
 , python3Packages
 , unstableGitUpdater
+, fetchpatch
 , extraLibs ? [] }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,11 +21,27 @@ python3Packages.buildPythonApplication rec {
     sha256 = "3AGREY+elHQk8kaoFp8AHEzk2jNC/ICGYPh2hXo2G/w=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
+  patches = [
+    # absolutifies the path to the test data in buds test so it can be run from anywhere
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/enkore/i3pystatus/pull/869.patch";
+      hash = "sha256-irrD+yQui9GV+tnsDD3Gr9zJNJxWtvMIw+Hm0cUt7og=";
+    })
   ];
 
-  buildInputs = [ libpulseaudio libnotify ];
+  nativeBuildInputs = [
+    gobject-introspection
+    python3Packages.pytestCheckHook
+  ];
+
+  buildInputs = [
+    libpulseaudio
+    libnotify
+  ];
+
+  checkInputs = [
+    python3Packages.requests
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     keyring colour netifaces psutil basiciw pygobject3
@@ -46,12 +63,10 @@ python3Packages.buildPythonApplication rec {
       ''${makeWrapperArgs[@]}
   '';
 
-  # no tests in tarball
-  doCheck = false;
-
   passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
+    mainProgram = "i3pystatus";
     homepage = "https://github.com/enkore/i3pystatus";
     description = "Complete replacement for i3status";
     longDescription = ''
