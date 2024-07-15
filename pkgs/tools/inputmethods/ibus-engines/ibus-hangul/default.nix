@@ -5,6 +5,7 @@
 , gettext
 , pkg-config
 , wrapGAppsHook3
+, gobject-introspection
 , autoreconfHook
 , gtk3
 , ibus
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    gobject-introspection.setupHook
     autoreconfHook
   ];
 
