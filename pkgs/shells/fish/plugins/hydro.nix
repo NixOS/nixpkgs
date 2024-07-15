@@ -8,7 +8,7 @@ buildFishPlugin rec {
     owner = "jorgebucaran";
     repo = "hydro";
     rev = "bc31a5ebc687afbfb13f599c9d1cc105040437e1";
-    sha256 = "sha256-0MMiM0NRbjZPJLAMDXb+Frgm+du80XpAviPqkwoHjDA=";
+    hash = "sha256-0MMiM0NRbjZPJLAMDXb+Frgm+du80XpAviPqkwoHjDA=";
   };
 
   meta = with lib; {
