@@ -1,15 +1,12 @@
-{ mkDerivation
-  , lib
-  , fetchFromGitHub
-
-  , cmake
-  , pkg-config
-  , qtbase
-  , qttools
-  , qtx11extras
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsForQt5
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "birdtray";
   version = "1.11.4";
 
@@ -20,9 +17,16 @@ mkDerivation rec {
     sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+  ];
+
   buildInputs = [
-    qtbase qttools qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtx11extras
   ];
 
   # Wayland support is broken.
