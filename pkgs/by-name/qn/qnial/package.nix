@@ -1,20 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, makeWrapper, ncurses, libxcrypt }:
+{
+  lib,
+  fetchFromBitbucket,
+  libxcrypt,
+  ncurses,
+  pkg-config,
+  stdenv,
+  unzip,
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qnial";
-  version = "6.3";
+  version = "6.3_1";
 
-  src = fetchFromGitHub {
-    sha256 = "0426hb8w0wpkisvmf3danj656j6g7rc6v91gqbgzkcj485qjaliw";
-    rev = "cfe8720a4577d6413034faa2878295431bfe39f8";
+  src = fetchFromBitbucket {
+    owner = "museoa";
     repo = "qnial";
-    owner = "vrthra";
+    rev = finalAttrs.version;
+    hash = "sha256-QhjEq6YKO6OKy7+dlHeTWQvCvrF8zS7o8QfPD8WDXy0=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    unzip
+  ];
+
+  buildInputs = [
+     ncurses
+     libxcrypt
+  ];
+
+  strictDeps = true;
 
   preConfigure = ''
-    cd build;
+    cd build
   '';
 
   installPhase = ''
@@ -24,17 +42,12 @@ stdenv.mkDerivation {
     cp -r niallib $out/lib/
   '';
 
-  buildInputs = [
-     ncurses
-     libxcrypt
-  ];
-
   meta = {
     description = "Array language from Nial Systems";
-    mainProgram = "nial";
-    homepage = "https://github.com/vrthra/qnial";
+    homepage = "https://bitbucket.com/museoa/qnial";
     license = lib.licenses.artistic1;
-    maintainers = [ ];
+    mainProgram = "nial";
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
   };
-}
+})
