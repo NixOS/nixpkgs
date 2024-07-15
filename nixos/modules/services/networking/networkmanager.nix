@@ -43,21 +43,13 @@ let
     ResultAny=yes
     ResultInactive=no
     ResultActive=yes
-
-    [modem-manager]
-    Identity=unix-group:networkmanager
-    Action=org.freedesktop.ModemManager*
-    ResultAny=yes
-    ResultInactive=no
-    ResultActive=yes
   */
   polkitConf = ''
     polkit.addRule(function(action, subject) {
       if (
         subject.isInGroup("networkmanager")
-        && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
-            || action.id.indexOf("org.freedesktop.ModemManager")  == 0
-        ))
+        && action.id.indexOf("org.freedesktop.NetworkManager.") == 0
+        )
           { return polkit.Result.YES; }
     });
   '';
@@ -115,8 +107,7 @@ let
   };
 
   packages = [
-    pkgs.modemmanager
-    pkgs.networkmanager
+    cfg.package
   ]
   ++ cfg.plugins
   ++ lib.optionals (!delegateWireless && !enableIwd) [
@@ -147,6 +138,8 @@ in
           to change network settings to this group.
         '';
       };
+
+      package = mkPackageOption pkgs "networkmanager" { };
 
       connectionConfig = mkOption {
         type = with types; attrsOf (nullOr (oneOf [
@@ -219,6 +212,14 @@ in
         description = ''
           List of NetworkManager plug-ins to enable.
           Some plug-ins are enabled by the NetworkManager module by default.
+        '';
+      };
+
+      enableDefaultPlugins = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable a set of recommended plugins.
         '';
       };
 
@@ -358,26 +359,6 @@ in
         '';
       };
 
-      fccUnlockScripts = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            id = mkOption {
-              type = types.str;
-              description = "vid:pid of either the PCI or USB vendor and product ID";
-            };
-            path = mkOption {
-              type = types.path;
-              description = "Path to the unlock script";
-            };
-          };
-        });
-        default = [ ];
-        example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
-        description = ''
-          List of FCC unlock scripts to enable on the system, behaving as described in
-          https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
-        '';
-      };
       ensureProfiles = {
         profiles = with lib.types; mkOption {
           type = attrsOf (submodule {
@@ -480,7 +461,7 @@ in
       might conflict with vendor-provided unlock scripts, and should
       be a conscious decision on a per-device basis.
       Instead it's recommended to use the
-      `networking.networkmanager.fccUnlockScripts` option.
+      `networking.modemmanager.fccUnlockScripts` option.
     '')
     (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
@@ -493,6 +474,10 @@ in
     (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
       This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "fccUnlockScripts" ]
+      [ "networking" "modemmanager" "fccUnlockScripts" ]
+    )
   ];
 
 
@@ -520,11 +505,6 @@ in
         source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
       })
       cfg.plugins)
-    // builtins.listToAttrs (map
-      (e: nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
-        source = e.path;
-      })
-      cfg.fccUnlockScripts)
     // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
       {
         "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
@@ -584,11 +564,6 @@ in
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager = {
-      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
-      path = lib.optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
-    };
-
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile overrideNameserversScript ];
@@ -612,7 +587,7 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
         '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
       + ''
-        ${pkgs.networkmanager}/bin/nmcli connection reload
+        ${cfg.package}/bin/nmcli connection reload
       '';
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;
@@ -627,7 +602,7 @@ in
         useDHCP = false;
       })
 
-      {
+      (mkIf cfg.enableDefaultPlugins {
         networkmanager.plugins = with pkgs; [
           networkmanager-fortisslvpn
           networkmanager-iodine
@@ -637,7 +612,7 @@ in
           networkmanager-vpnc
           networkmanager-sstp
         ];
-      }
+      })
 
       (mkIf cfg.enableStrongSwan {
         networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
@@ -648,6 +623,8 @@ in
       })
 
       {
+        modemmanager.enable = lib.mkDefault true;
+
         networkmanager.connectionConfig = {
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
