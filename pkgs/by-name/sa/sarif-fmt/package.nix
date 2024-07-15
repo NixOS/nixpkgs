@@ -4,8 +4,7 @@
   fetchCrate,
   rustPlatform,
   nix-update-script,
-  sarif-fmt,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
@@ -33,8 +32,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_clipp"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = sarif-fmt; };
     updateScript = nix-update-script { };
   };
 
