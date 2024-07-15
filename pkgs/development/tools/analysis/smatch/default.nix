@@ -10,17 +10,19 @@
 , libxml2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smatch";
   version = "1.73";
 
   src = fetchFromGitHub {
     owner = "error27";
     repo = "smatch";
-    rev = version;
-    sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
+
+  enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ sqlite openssl ]
@@ -29,11 +31,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
-  meta = with lib; {
+  meta = {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})
