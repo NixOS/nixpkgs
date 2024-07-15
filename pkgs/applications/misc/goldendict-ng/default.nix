@@ -4,7 +4,6 @@
 , pkg-config
 , cmake
 , libvorbis
-, ffmpeg
 , libeb
 , hunspell
 , opencc
@@ -61,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     opencc
     libeb
-    ffmpeg
     xapian
     libzim
   ];
@@ -76,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_XAPIAN=ON"
     "-DWITH_ZIM=ON"
-    "-DWITH_FFMPEG_PLAYER=ON"
+    "-DWITH_FFMPEG_PLAYER=OFF"
     "-DWITH_EPWING_SUPPORT=ON"
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_TOML=ON"
