@@ -33336,8 +33336,6 @@ with pkgs;
 
   pinpoint = callPackage ../applications/office/pinpoint { };
 
-  pinta = callPackage ../applications/graphics/pinta { };
-
   pistol = callPackage ../tools/misc/pistol { };
 
   piston-cli = callPackage ../tools/misc/piston-cli { };
