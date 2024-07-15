@@ -11135,15 +11135,9 @@ with pkgs;
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
-  opendylan = callPackage ../development/compilers/opendylan {
-    opendylan-bootstrap = opendylan_bin;
-  };
-
   openfec = callPackage ../development/libraries/openfec { };
 
   ophis = python3Packages.callPackage ../development/compilers/ophis { };
-
-  opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
@@ -33325,8 +33319,6 @@ with pkgs;
 
   pinpoint = callPackage ../applications/office/pinpoint { };
 
-  pinta = callPackage ../applications/graphics/pinta { };
-
   pistol = callPackage ../tools/misc/pistol { };
 
   piston-cli = callPackage ../tools/misc/piston-cli { };
@@ -37117,9 +37109,6 @@ with pkgs;
     name = "prio-wrapped";
     appls = [ prio ];
   };
-
-  budgie = recurseIntoAttrs (callPackage ../desktops/budgie { });
-  budgiePlugins = recurseIntoAttrs (callPackage ../desktops/budgie/plugins { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
