@@ -77,6 +77,7 @@ in
     (mkRemovedOptionModule [ "services" "mxisd" ] "The mxisd module has been removed as both mxisd and ma1sd got removed.")
     (mkRemovedOptionModule [ "services" "moinmoin" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "neard" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
