@@ -41,9 +41,14 @@ self: super: {
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
         {
+          Cabal = cself.Cabal_3_12_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_12_1_0;
+          cabal-install-solver = cself.cabal-install-solver_3_12_1_0;
+          hackage-security = cself.hackage-security_0_6_2_6;
+
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10") {
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
           Cabal = cself.Cabal_3_10_3_0;
           Cabal-syntax = cself.Cabal-syntax_3_10_3_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
