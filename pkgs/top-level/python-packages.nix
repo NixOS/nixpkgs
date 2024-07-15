@@ -4924,6 +4924,8 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
+  giturlparse = callPackage ../development/python-modules/giturlparse { };
+
   git-versioner = callPackage ../development/python-modules/git-versioner { };
 
   glad =  callPackage ../development/python-modules/glad { };
