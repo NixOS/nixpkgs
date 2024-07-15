@@ -3,9 +3,8 @@
   fetchCrate,
   rustPlatform,
   clippy,
-  clippy-sarif,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clippy-sarif";
@@ -18,8 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-O0bLgj7rWwbEswVMfexsBGgJyObxseOohYht21Y6HpU=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = clippy-sarif; };
     updateScript = nix-update-script { };
   };
 
