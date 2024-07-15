@@ -44,12 +44,14 @@ let
         qemu-utils
         qemu_kvm
         rsync
+        skopeo
         squashfs-tools-ng
         squashfsTools
         sshfs
         swtpm
         systemd
         thin-provisioning-tools
+        umoci
         util-linux
         virtiofsd
         xdelta
@@ -109,7 +111,7 @@ let
   environment = lib.mkMerge [
     {
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
-      INCUS_OVMF_PATH = ovmf;
+      INCUS_EDK2_PATH = ovmf;
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       PATH = lib.mkForce serverBinPath;
     }
