@@ -15752,18 +15752,6 @@ self: super: with self; {
 
   twitter = callPackage ../development/python-modules/twitter { };
 
-  twitter-common-collections = callPackage ../development/python-modules/twitter-common-collections { };
-
-  twitter-common-confluence = callPackage ../development/python-modules/twitter-common-confluence { };
-
-  twitter-common-dirutil = callPackage ../development/python-modules/twitter-common-dirutil { };
-
-  twitter-common-lang = callPackage ../development/python-modules/twitter-common-lang { };
-
-  twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
-
-  twitter-common-options = callPackage ../development/python-modules/twitter-common-options { };
-
   twitterapi = callPackage ../development/python-modules/twitterapi { };
 
   twofish = callPackage ../development/python-modules/twofish { };
