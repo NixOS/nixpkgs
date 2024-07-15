@@ -2031,6 +2031,7 @@
     '';
   };
   LeaderF = super.LeaderF.overrideAttrs {
+    nativeBuildInputs = [ python3.pkgs.setuptools ];
     buildInputs = [ python3 ];
     # rm */build/ to prevent dependencies on gcc
     # strip the *.so to keep files small
