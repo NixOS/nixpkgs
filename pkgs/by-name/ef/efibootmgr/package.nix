@@ -2,20 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
   efivar,
   nix-update-script,
+  pkg-config,
   popt,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "efibootmgr";
   version = "18";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "efibootmgr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-DYYQGALEn2+mRHgqCJsA7OQCF7xirIgQlWexZ9uoKcg=";
   };
 
@@ -34,16 +35,17 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=${placeholder "out"}" ];
 
   passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
-    changelog = "https://github.com/rhboot/efibootmgr/releases/tag/${src.rev}";
+    changelog = "https://github.com/rhboot/efibootmgr/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "efibootmgr";
     platforms = lib.platforms.linux;
   };
-}
+})
