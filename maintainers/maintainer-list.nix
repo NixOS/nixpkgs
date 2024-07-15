@@ -11457,6 +11457,12 @@
     github = "liberatys";
     githubId = 35100156;
   };
+  liberodark = {
+    email = "liberodark@gmail.com";
+    github = "liberodark";
+    githubId = 4238928;
+    name = "liberodark";
+  };
   libjared = {
     email = "jared@perrycode.com";
     github = "libjared";

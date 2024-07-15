@@ -18,7 +18,6 @@
   pydocstyle,
   pyflakes,
   pylint,
-  pyqt5,
   pytestCheckHook,
   python-lsp-jsonrpc,
   pythonOlder,
@@ -111,9 +110,7 @@ buildPythonPackage rec {
       pandas
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.all
-    # pyqt5 is broken on aarch64-darwin
-    ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
+    ++ passthru.optional-dependencies.all;
 
   disabledTests =
     [
@@ -123,9 +120,7 @@ buildPythonPackage rec {
       "test_numpy_completions"
       "test_workspace_loads_pycodestyle_config"
       "test_autoimport_code_actions_and_completions_for_notebook_document"
-    ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-      # pyqt5 is broken on aarch64-darwin
+      # avoid dependencies on many Qt things just to run one singular test
       "test_pyqt_completion"
     ];
 

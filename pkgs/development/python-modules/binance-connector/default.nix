@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "binance-connector";
-  version = "3.7.0";
+  version = "3.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "binance";
     repo = "${pname}-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hmn8WKr+krzOzHNJ/aynXAbf+rHxDfyKDgycdQQU3xk=";
+    hash = "sha256-hW6pTfPaDQRRX8hBNKtpRcI3htlu5DrD37wYHu0BpNY=";
   };
 
   propagatedBuildInputs = [

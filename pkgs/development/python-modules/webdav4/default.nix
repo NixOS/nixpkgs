@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "webdav4";
-  version = "0.9.8";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "skshetry";
     repo = "webdav4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
+    hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 
   postPatch = ''

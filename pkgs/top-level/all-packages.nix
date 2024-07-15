@@ -3843,8 +3843,6 @@ with pkgs;
 
   imagelol = callPackage ../tools/compression/imagelol { };
 
-  imageworsener = callPackage ../tools/graphics/imageworsener { };
-
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
@@ -3996,8 +3994,6 @@ with pkgs;
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
   xc = callPackage ../development/tools/xc { };
-
-  ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -11139,15 +11135,9 @@ with pkgs;
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
-  opendylan = callPackage ../development/compilers/opendylan {
-    opendylan-bootstrap = opendylan_bin;
-  };
-
   openfec = callPackage ../development/libraries/openfec { };
 
   ophis = python3Packages.callPackage ../development/compilers/ophis { };
-
-  opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
@@ -20492,7 +20482,7 @@ with pkgs;
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9 fmt_10;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9 fmt_10 fmt_11;
 
   fmt = fmt_10;
 
@@ -20627,8 +20617,6 @@ with pkgs;
   };
 
   geogram = callPackage ../development/libraries/geogram { };
-
-  geographiclib = callPackage ../development/libraries/geographiclib { };
 
   geoip = callPackage ../development/libraries/geoip { };
 
@@ -25494,10 +25482,6 @@ with pkgs;
 
   hydron = callPackage ../servers/hydron { };
 
-  hyprspace = callPackage ../applications/networking/hyprspace {
-    inherit (darwin) iproute2mac;
-  };
-
   ic-keysmith = callPackage ../tools/security/ic-keysmith { };
 
   icecream = callPackage ../servers/icecream { };
@@ -27977,7 +27961,6 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
-  bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
   apple-cursor = callPackage ../data/icons/apple-cursor { };
@@ -33053,7 +33036,7 @@ with pkgs;
 
   omxplayer = callPackage ../applications/video/omxplayer { };
 
-  inherit (python3Packages.callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
+  inherit (callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
 
   openambit = qt5.callPackage ../applications/misc/openambit { };
 
@@ -33335,8 +33318,6 @@ with pkgs;
   pinfo = callPackage ../applications/misc/pinfo { };
 
   pinpoint = callPackage ../applications/office/pinpoint { };
-
-  pinta = callPackage ../applications/graphics/pinta { };
 
   pistol = callPackage ../tools/misc/pistol { };
 
@@ -37129,9 +37110,6 @@ with pkgs;
     appls = [ prio ];
   };
 
-  budgie = recurseIntoAttrs (callPackage ../desktops/budgie { });
-  budgiePlugins = recurseIntoAttrs (callPackage ../desktops/budgie/plugins { });
-
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
@@ -38720,8 +38698,6 @@ with pkgs;
   cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 { };
 
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
-
-  darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
 
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
