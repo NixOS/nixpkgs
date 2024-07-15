@@ -36,6 +36,7 @@ my $rootDir = ""; # = /
 my $force = 0;
 my $noFilesystems = 0;
 my $showHardwareConfig = 0;
+my $showTemplates = 0;
 my $configTemplate = "none";
 
 for (my $n = 0; $n < scalar @ARGV; $n++) {
@@ -65,6 +66,9 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
     elsif ($arg eq "--show-hardware-config") {
         $showHardwareConfig = 1;
     }
+    elsif ($arg eq "--show-templates") {
+        $showTemplates = 1;
+    }
     elsif ($arg eq "--template") {
         $n++;
         die "$0: '$arg' requires an argument\n" unless defined $ARGV[$n];
@@ -76,17 +80,65 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
 }
 
 
-# Resolve template aliases
+# Resolves template aliases
 # alias is <templateName>.alias containing only the template name
-my $i = 0;
-while (-f "@templateDir@/$configTemplate.alias") {
-    if ($i > 10) {
-        die "Too many template aliases, possible loop detected";
+sub resolveTemplateAlias {
+    my $alias = shift;
+    my $i = 0;
+    while (-f "@templateDir@/$alias.alias") {
+        if ($i > 10) {
+            die "Too many template aliases, possible loop detected";
+        }
+        $alias = read_file("@templateDir@/$alias.alias");
+        chomp $alias;
+        $i++;
     }
-    $configTemplate = read_file("@templateDir@/$configTemplate.alias");
-    chomp $configTemplate;
-    $i++;
+    return $alias;
 }
+
+if ($showTemplates) {
+    my $templateDir = "@templateDir@";
+    my @templates = `find $templateDir -mindepth 1 -maxdepth 1 -type d | xargs -n 1 basename`;
+    my @aliasFiles = `find $templateDir -mindepth 1 -maxdepth 1 -name "*.alias" -type f`;
+
+    my %aliases = ();
+    foreach my $aliasFile (@aliasFiles) {
+        chomp $aliasFile;
+        my $dst = read_file("$aliasFile");
+        $aliasFile =~ s/\.alias$//;
+        my $src = basename($aliasFile);
+        chomp $dst;
+        chomp $src;
+        if (exists $aliases{$dst}) {
+            push @{$aliases{$dst}}, $src;
+        } else {
+            $aliases{$dst} = [$src];
+        }
+    }
+
+    print STDERR "Available templates:\n";
+    sub printTemplate {
+        my $template = shift;
+        my $depth = shift;
+
+        if ($depth > 10) {
+            die "Too many template aliases, possible loop detected";
+        }
+        my $indent = "  " x $depth;
+
+        print STDOUT "$indent- $template\n";
+        foreach my $alias (@{$aliases{$template}}) {
+            printTemplate($alias, $depth + 1);
+        }
+    }
+    foreach my $template (@templates) {
+        chomp $template;
+        printTemplate($template, 0);
+    }
+    exit 0;
+}
+
+$configTemplate = resolveTemplateAlias($configTemplate);
 
 my $templateDir = "";
 
