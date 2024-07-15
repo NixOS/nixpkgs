@@ -1391,6 +1391,10 @@ with pkgs;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
+  mitm-cache = callPackage ../build-support/mitm-cache {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
@@ -18568,10 +18572,17 @@ with pkgs;
     inherit jdk11 jdk17 jdk21;
   };
   gradleGen = gradle-packages.gen;
-  gradle_6 = callPackage gradle-packages.gradle_6 { };
-  gradle_7 = callPackage gradle-packages.gradle_7 { };
-  gradle_8 = callPackage gradle-packages.gradle_8 { };
-  gradle = gradle_8;
+  wrapGradle = callPackage gradle-packages.wrapGradle { };
+
+  gradle_6-unwrapped = callPackage gradle-packages.gradle_6 { };
+  gradle_7-unwrapped = callPackage gradle-packages.gradle_7 { };
+  gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
+  gradle-unwrapped = gradle_8-unwrapped;
+
+  gradle_6 = wrapGradle gradle_6-unwrapped;
+  gradle_7 = wrapGradle gradle_7-unwrapped;
+  gradle_8 = wrapGradle gradle_8-unwrapped;
+  gradle = wrapGradle gradle-unwrapped;
 
   grcov = callPackage ../development/tools/misc/grcov { };
 
@@ -29860,8 +29871,9 @@ with pkgs;
 
   daktilo = callPackage ../tools/misc/daktilo { };
 
+  # TODO(@sternenseemann): remove ghc version special casing when haskellPackages has caught up
   darcs = haskell.lib.compose.disableCabalFlag "library"
-    (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
+    (haskell.lib.compose.justStaticExecutables haskell.packages.ghc966.darcs);
 
   darkman = callPackage ../applications/misc/darkman { };
 
@@ -36785,11 +36797,11 @@ with pkgs;
   };
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
-  rkpd2 = callPackage ../games/shattered-pixel-dungeon/rkpd2.nix { };
-  rat-king-adventure = callPackage ../games/shattered-pixel-dungeon/rat-king-adventure.nix { };
-  experienced-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/experienced-pixel-dungeon.nix { };
-  summoning-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/summoning-pixel-dungeon.nix { };
-  shorter-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/shorter-pixel-dungeon.nix { };
+  rkpd2 = callPackage ../games/shattered-pixel-dungeon/rkpd2 { };
+  rat-king-adventure = callPackage ../games/shattered-pixel-dungeon/rat-king-adventure { };
+  experienced-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/experienced-pixel-dungeon { };
+  summoning-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/summoning-pixel-dungeon { };
+  shorter-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/shorter-pixel-dungeon { };
 
   shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
 

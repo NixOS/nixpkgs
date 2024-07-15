@@ -4,11 +4,15 @@
 {
   adaptive_lighting = callPackage ./adaptive_lighting {};
 
+  alarmo = callPackage ./alarmo {};
+
   auth-header = callPackage ./auth-header {};
 
   awtrix = callPackage ./awtrix {};
 
   better_thermostat = callPackage ./better_thermostat {};
+
+  elevenlabs_tts = callPackage ./elevenlabs_tts {};
 
   emporia_vue = callPackage ./emporia_vue {};
 
@@ -41,6 +45,8 @@
   omnik_inverter = callPackage ./omnik_inverter {};
 
   prometheus_sensor = callPackage ./prometheus_sensor {};
+
+  samsungtv-smart = callPackage ./samsungtv-smart {};
 
   sensi = callPackage ./sensi {};
 
