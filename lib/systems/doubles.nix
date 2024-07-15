@@ -69,6 +69,7 @@ in {
 
   arm           = filterDoubles predicates.isAarch32;
   armv7         = filterDoubles predicates.isArmv7;
+  aarch         = filterDoubles predicates.isAarch;
   aarch64       = filterDoubles predicates.isAarch64;
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
