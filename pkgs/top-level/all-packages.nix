@@ -35559,15 +35559,6 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin-unlimited  = libsForQt5.callPackage ../applications/blockchains/bitcoin-unlimited {
-    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
-    withGui = true;
-  };
-  bitcoind-unlimited = callPackage ../applications/blockchains/bitcoin-unlimited {
-    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
-    withGui = false;
-  };
-
   btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
 
   btcpayserver-altcoins = callPackage ../applications/blockchains/btcpayserver { altcoinSupport = true; };
