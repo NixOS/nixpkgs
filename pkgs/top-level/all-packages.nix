@@ -35685,15 +35685,6 @@ with pkgs;
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
-  pivx = libsForQt5.callPackage ../applications/blockchains/pivx { withGui = true; };
-  pivxd = callPackage ../applications/blockchains/pivx {
-    withGui = false;
-    qtbase = null;
-    qttools = null;
-    wrapQtAppsHook = null;
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   ethabi = callPackage ../applications/blockchains/ethabi { };
 
   pycoin = with python3Packages; toPythonApplication pycoin;
