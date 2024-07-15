@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_29
+, electron_30
 , fetchFromGitHub
 , glib
 , gnome-keyring
@@ -17,7 +17,7 @@
 , nodejs_20
 , patchutils_0_4_2
 , pkg-config
-, python3
+, python311
 , runCommand
 , rustc
 , rustPlatform
@@ -26,16 +26,16 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_29;
+  electron = electron_30;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.6.4";
+  version = "2024.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-oQ2VZoxePdYUC+xMKlRMpvPubSPULvt31XSh/OBw3Ec=";
+    hash = "sha256-FH7++E+kc86lksHjTbVFU0mP0ZB2xb6ZCojdyNm1iWU=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-9d9pWrFYelAx/PPDHY3m92Frp8RSQuBqpiOjmWtm/1g=";
+  npmDepsHash = "sha256-F2iqTWgK+5ts2wd5NLsuyMZp1FnsbJmSjT3lJzV9PUo=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-ZmblY1APVa8moAR1waVBZPhrf5Wt1Gi6dvAxkhizckQ=";
+    hash = "sha256-kEMu7IvIBfcold3rORZpnilyLfO1GrzoqKIluAdRlQQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -90,7 +90,7 @@ in buildNpmPackage rec {
     moreutils
     napi-rs-cli
     pkg-config
-    python3
+    python311
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
@@ -107,13 +107,17 @@ in buildNpmPackage rec {
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    pushd apps/desktop/desktop_native/napi
+    npm run build
+    popd
   '';
 
   postBuild = ''
     pushd apps/desktop
 
     # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
+    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-x64-musl.node
 
     npm exec electron-builder -- \
       --dir \
