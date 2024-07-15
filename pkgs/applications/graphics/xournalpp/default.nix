@@ -6,6 +6,7 @@
 , wrapGAppsHook3
 , pkg-config
 
+, adwaita-icon-theme
 , alsa-lib
 , binutils
 , glib
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [
       alsa-lib
     ] ++ [
+      adwaita-icon-theme
       glib
       gsettings-desktop-schemas
       gtk3
