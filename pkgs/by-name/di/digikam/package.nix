@@ -45,12 +45,12 @@
   cudaPackages ? { },
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
   version = "8.3.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}-1.tar.xz";
+    url = "mirror://kde/stable/digikam/${finalAttrs.version}/digiKam-${finalAttrs.version}-1.tar.xz";
     hash = "sha256-BbFF/38vIAX6IbxXnBUqsjyBkbZ4/ylEyPBAbWud5tg=";
   };
 
@@ -146,18 +146,19 @@ stdenv.mkDerivation rec {
         enblend-enfuse
       ]
     })
-    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/${pname})
+    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
   '';
 
-  meta = with lib; {
-    description = "Photo Management Program";
-    license = licenses.gpl2;
-    homepage = "https://www.digikam.org";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+  meta = {
+    description = "Photo management application";
+    homepage = "https://www.digikam.org/";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "digikam";
   };
-}
+})
