@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clang-tidy-sarif";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
     rev = "clang-tidy-sarif-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
   };
 
-  cargoHash = "sha256-NzdgfHRDgLB6sMhBflk9rACEocLP23KlZL22iAfBfh8=";
+  cargoHash = "sha256-zH0d519vld00opTRWPyL78WKXPYJ+7uTjcDnjDl8hjE=";
   cargoBuildFlags = [
     "--package"
     "clang-tidy-sarif"
