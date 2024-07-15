@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mackyle";
     repo = "topgit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-K0X1DGc1LQsoteUhoHLxVJRrZaaPLKSSF61OKyGB5Qg=";
+    hash = "sha256-K0X1DGc1LQsoteUhoHLxVJRrZaaPLKSSF61OKyGB5Qg=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

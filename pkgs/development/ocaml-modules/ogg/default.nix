@@ -8,7 +8,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-ogg";
     rev = "v${version}";
-    sha256 = "sha256-S6rJw90c//a9d63weCLuOBoQwNqbpTb+lRytvHUOZuc=";
+    hash = "sha256-S6rJw90c//a9d63weCLuOBoQwNqbpTb+lRytvHUOZuc=";
   };
 
   minimalOCamlVersion = "4.08";

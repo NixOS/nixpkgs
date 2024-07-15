@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "simonthum";
     repo = "git-sync";
     rev = "8466b77a38b3d5e8b4ed9e3cb1b635e475eeb415";
-    sha256 = "sha256-8rCwpmHV6wgFCLzPJOKzwN5mG8uD5KIlGFwcgQD+SK4=";
+    hash = "sha256-8rCwpmHV6wgFCLzPJOKzwN5mG8uD5KIlGFwcgQD+SK4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

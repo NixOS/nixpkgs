@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Drive-Trust-Alliance";
     repo = "sedutil";
     rev = version;
-    sha256 = "sha256-NG/7aqe48ShHWW5hW8axYWV4+zX0dBE7Wy9q58l0S3E=";
+    hash = "sha256-NG/7aqe48ShHWW5hW8axYWV4+zX0dBE7Wy9q58l0S3E=";
   };
 
   patches = [

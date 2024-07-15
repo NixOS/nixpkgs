@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mna";
     repo = "pigeon";
     rev = "v${version}";
-    sha256 = "sha256-0Cp/OnFvVZj9UZgl3F5MCzemBaHI4smGWU46VQnhLOg=";
+    hash = "sha256-0Cp/OnFvVZj9UZgl3F5MCzemBaHI4smGWU46VQnhLOg=";
   };
 
   vendorHash = "sha256-JbBXRkxnB7LeeWdBLIQvyjvWo0zZ1EOuEUPXxHWiq+E=";

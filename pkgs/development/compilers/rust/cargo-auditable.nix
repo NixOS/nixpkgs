@@ -9,7 +9,7 @@ let
       owner = "rust-secure-code";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-ERIzx9Fveanq7/aWcB2sviTxIahvSu0sTwgpGf/aYE8=";
+      hash = "sha256-ERIzx9Fveanq7/aWcB2sviTxIahvSu0sTwgpGf/aYE8=";
     };
 
     patches = [

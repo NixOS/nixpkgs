@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "poacpm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JgGa7lomDvZG5HLxGJMALcezjnZprexJDTxyTUjLetg=";
+    hash = "sha256-JgGa7lomDvZG5HLxGJMALcezjnZprexJDTxyTUjLetg=";
   };
 
   preConfigure = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-4w5aQIh3loHrxFGhWt6pW2jgj/JuqQSYmNsnAkEuKoI=";
+    hash = "sha256-4w5aQIh3loHrxFGhWt6pW2jgj/JuqQSYmNsnAkEuKoI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

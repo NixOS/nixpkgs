@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "spectralops";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SrBtgirg52q7gM3GZsJsV8ASACvb4sYv5HDbyItpjbk=";
+    hash = "sha256-SrBtgirg52q7gM3GZsJsV8ASACvb4sYv5HDbyItpjbk=";
   };
 
   cargoSha256 = "sha256-MFP3AqlfaclmZxRwaWFw6hsZwCQMRKJEyFEyUN+QLqo=";

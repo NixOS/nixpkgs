@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "AdaCore";
     repo = "xmlada";
     rev = "v${version}";
-    sha256 = "sha256-vvM7bdf3dAa3zKgxbGeAGlBT6fvafzmleimJHyRdlvc=";
+    hash = "sha256-vvM7bdf3dAa3zKgxbGeAGlBT6fvafzmleimJHyRdlvc=";
   };
 
   nativeBuildInputs = [

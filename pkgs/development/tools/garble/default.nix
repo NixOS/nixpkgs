@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "burrowers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
+    hash = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
   };
 
   vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";

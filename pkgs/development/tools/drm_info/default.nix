@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "ascent12";
     repo = "drm_info";
     rev = "v${version}";
-    sha256 = "sha256-UTDYLe3QezPCyG9CIp+O+KX716JDTL9mn+OEjjyTwlg=";
+    hash = "sha256-UTDYLe3QezPCyG9CIp+O+KX716JDTL9mn+OEjjyTwlg=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "asciinema";
     repo = "agg";
     rev = "v${version}";
-    sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
+    hash = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
 
   cargoLock = {

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "${pname}-${builtins.replaceStrings ["."] ["_"] version}-release";
-    sha256 = "sha256-Eqgnm31s8iPJdhTpk5HM89HSZTXTK+e7YZ/CCdbeJX4=";
+    hash = "sha256-Eqgnm31s8iPJdhTpk5HM89HSZTXTK+e7YZ/CCdbeJX4=";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext ];

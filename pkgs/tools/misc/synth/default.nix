@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "shuttle-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
+    hash = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
   cargoSha256 = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";

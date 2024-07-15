@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "buildkite";
     repo = "test-collector-rust";
     rev = "v${version}";
-    sha256 = "sha256-PF2TFfzWmHXLgTopzJ04dfnzd3Sc/A6Hduffz2guxmU=";
+    hash = "sha256-PF2TFfzWmHXLgTopzJ04dfnzd3Sc/A6Hduffz2guxmU=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "teleshoes";
     repo = "tpacpi-bat";
     rev = "v${version}";
-    sha256 = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
+    hash = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
   };
 
   buildInputs = [ perl ];

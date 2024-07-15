@@ -8,7 +8,7 @@ buildGoModule {
     owner = "asciimoo";
     repo = "morty";
     rev = "f5bff1e285d3f973cacf73318e55175edafd633f";
-    sha256 = "sha256-ik2VAPdxllt76UVFt77c1ltxIwFNahAKjn3FuErNFYo=";
+    hash = "sha256-ik2VAPdxllt76UVFt77c1ltxIwFNahAKjn3FuErNFYo=";
   };
 
   vendorHash = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";

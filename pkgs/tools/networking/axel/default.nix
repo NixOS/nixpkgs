@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "axel-download-accelerator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
+    hash = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config autoconf-archive txt2man ];

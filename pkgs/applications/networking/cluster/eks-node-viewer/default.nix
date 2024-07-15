@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BK84hxbwZSJDO5WoyborJnVBS5pB69jTMU1csgiT0sw=";
+    hash = "sha256-BK84hxbwZSJDO5WoyborJnVBS5pB69jTMU1csgiT0sw=";
   };
 
   vendorHash = "sha256-EJAL5jNftA/g5H6WUMBJ98EyRp7QJ1C53EKr6GRz71I=";

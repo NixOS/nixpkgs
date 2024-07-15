@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "zk-org";
     repo = "zk";
     rev = "v${version}";
-    sha256 = "sha256-PbF2k7b03Oo3fIWIN4BHUZJ625HUeX+htT9FTINowIs=";
+    hash = "sha256-PbF2k7b03Oo3fIWIN4BHUZJ625HUeX+htT9FTINowIs=";
   };
 
   vendorHash = "sha256-UZsJa5hmMQwe9lhrp4ey8GGTkWUF8xJW+LPWMR0qfoo=";

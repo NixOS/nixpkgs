@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner  = "lkl";
     repo   = "linux";
     rev  = "ffbb4aa67b3e0a64f6963f59385a200d08cb2d8b";
-    sha256 = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
+    hash = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
   };
 
   nativeBuildInputs = [ bc bison flex python3 ];

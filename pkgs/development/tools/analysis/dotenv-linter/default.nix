@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dotenv-linter";
     repo = "dotenv-linter";
     rev = "v${version}";
-    sha256 = "sha256-HCP1OUWm/17e73TbinmDxYUi18/KXxppstyUSixjlSo=";
+    hash = "sha256-HCP1OUWm/17e73TbinmDxYUi18/KXxppstyUSixjlSo=";
   };
 
   cargoSha256 = "sha256-4r4NTq2rLnpmm/nwxJ9RoN2+JrUI6XKGfYFI78NY710=";

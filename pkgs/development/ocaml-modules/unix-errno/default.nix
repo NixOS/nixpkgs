@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/xapi-project/ocaml-unix-errno/releases/download/${version}/unix-errno-${version}.tbz";
-    sha256 = "sha256-LWqbyGcxs6f/FcOPo3JYR3U+AL0JHeWCiGjuYhxxrWU=";
+    hash = "sha256-LWqbyGcxs6f/FcOPo3JYR3U+AL0JHeWCiGjuYhxxrWU=";
   };
 
   propagatedBuildInputs = [ ctypes integers result ];

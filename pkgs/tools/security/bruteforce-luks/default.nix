@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
+    hash = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
     rev = version;
     repo = "bruteforce-luks";
     owner = "glv2";

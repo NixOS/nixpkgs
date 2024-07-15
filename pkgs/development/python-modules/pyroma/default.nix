@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "regebro";
     repo = "pyroma";
     rev = version;
-    sha256 = "sha256-ElSw+bY6fbHJPTX7O/9JZ4drttfbUQsU/fv3Cqqb/J4=";
+    hash = "sha256-ElSw+bY6fbHJPTX7O/9JZ4drttfbUQsU/fv3Cqqb/J4=";
   };
 
   propagatedBuildInputs = [

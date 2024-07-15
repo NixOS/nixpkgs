@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "ocamllabs";
     repo = "ocaml-integers";
     rev = version;
-    sha256 = "sha256-zuUgP1jOiVT0q6GisGpkqx7nybWbARgnAcU8NYqvCzA=";
+    hash = "sha256-zuUgP1jOiVT0q6GisGpkqx7nybWbARgnAcU8NYqvCzA=";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];

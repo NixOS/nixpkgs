@@ -15,7 +15,7 @@ buildLua rec {
     owner = "emilazy";
     repo = pname;
     rev = "a2bab8b2fd8e8d14faa875b5cc3a73f1276cd88a";
-    sha256 = "sha256-EwVkhyB87TJ3i9xJmmZMSTMUKvfbImI1S+y1vgRWbDk=";
+    hash = "sha256-EwVkhyB87TJ3i9xJmmZMSTMUKvfbImI1S+y1vgRWbDk=";
   };
 
   patches = [

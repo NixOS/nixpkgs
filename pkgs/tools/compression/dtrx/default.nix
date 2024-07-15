@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "dtrx-py";
     repo = "dtrx";
     rev = version;
-    sha256 = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
+    hash = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
   };
 
   makeWrapperArgs =

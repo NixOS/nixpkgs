@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "alewmoose";
     repo = "2048-in-terminal";
     rev = "bf22f868a2e0e572f22153468585ec0226a4b8b2";
-    sha256 = "sha256-Y5ZQYWOiG3QZZsr+d7olUDGAQ1LhRG9X2hBNQDx+Ztw=";
+    hash = "sha256-Y5ZQYWOiG3QZZsr+d7olUDGAQ1LhRG9X2hBNQDx+Ztw=";
   };
 
   buildInputs = [ ncurses ];

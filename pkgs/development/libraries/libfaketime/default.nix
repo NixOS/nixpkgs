@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "wolfcw";
     repo = "libfaketime";
     rev = "v${version}";
-    sha256 = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
+    hash = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
   };
 
   patches = [

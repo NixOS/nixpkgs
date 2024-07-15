@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "iamthehorker";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eEUhOrKqb2hHWanY+knpY9FBEnjkkFTB+x6BZgMBpbo=";
+    hash = "sha256-eEUhOrKqb2hHWanY+knpY9FBEnjkkFTB+x6BZgMBpbo=";
   };
 
   outputs = [ "out" "dev" ];

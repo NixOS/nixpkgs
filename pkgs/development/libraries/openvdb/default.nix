@@ -11,7 +11,7 @@ stdenv.mkDerivation rec
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
     rev = "v${version}";
-    sha256 = "sha256-wDDjX0nKZ4/DIbEX33PoxR43dJDj2NF3fm+Egug62GQ=";
+    hash = "sha256-wDDjX0nKZ4/DIbEX33PoxR43dJDj2NF3fm+Egug62GQ=";
   };
 
   nativeBuildInputs = [ cmake ];

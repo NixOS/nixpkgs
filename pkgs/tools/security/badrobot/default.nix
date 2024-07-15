@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mLBJLeB85QeC4PYH4FyOI8lHz1OxIJlJbqgDfXTNnhM=";
+    hash = "sha256-mLBJLeB85QeC4PYH4FyOI8lHz1OxIJlJbqgDfXTNnhM=";
   };
   vendorHash = "sha256-SB7gGgm7BwMSo4ocKX4UGB+OdjVY92S5YZfOmTl4VEk=";
 

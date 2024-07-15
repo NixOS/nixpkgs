@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "WeiDUorg";
     repo = pname;
     rev = "a7eb4bb2151c00cc080613a770d37560f62a285c";
-    sha256 = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
+    hash = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
   };
 
   postPatch = ''

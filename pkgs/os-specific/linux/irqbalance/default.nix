@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "irqbalance";
     repo = "irqbalance";
     rev = "v${version}";
-    sha256 = "sha256-7es7wwsPnDSF37uL5SCgAQB+u+qGWmWDHOh3JkHuXMs=";
+    hash = "sha256-7es7wwsPnDSF37uL5SCgAQB+u+qGWmWDHOh3JkHuXMs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

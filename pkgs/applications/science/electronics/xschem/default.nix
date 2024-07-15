@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "StefanSchippers";
     repo = "xschem";
     rev = version;
-    sha256 = "sha256-1jP1SJeq23XNkOQgcl2X+rBrlka4a04irmfhoKRM1j4=";
+    hash = "sha256-1jP1SJeq23XNkOQgcl2X+rBrlka4a04irmfhoKRM1j4=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config ];

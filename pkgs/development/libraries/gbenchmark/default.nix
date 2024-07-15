@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    sha256 = "sha256-gztnxui9Fe/FTieMjdvfJjWHjkImtlsHn6fM1FruyME=";
+    hash = "sha256-gztnxui9Fe/FTieMjdvfJjWHjkImtlsHn6fM1FruyME=";
   };
 
   nativeBuildInputs = [ cmake ];

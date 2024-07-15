@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "czerwonk";
     repo = "junos_exporter";
     rev = version;
-    sha256 = "sha256-5haMQlwGJO0WdT75AEfs41k1oWUqrFk9nj+DOcKAom0=";
+    hash = "sha256-5haMQlwGJO0WdT75AEfs41k1oWUqrFk9nj+DOcKAom0=";
   };
 
   vendorHash = "sha256-qHs6KuBmJmmkmR23Ae7COadb2F7N8CMUmScx8JFt98Q=";

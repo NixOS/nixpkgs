@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "go-acme";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DF9Bx6CzZLdnyqe8PNWU2I9ym2SBDAjdwG9/zxvSjgs=";
+    hash = "sha256-DF9Bx6CzZLdnyqe8PNWU2I9ym2SBDAjdwG9/zxvSjgs=";
   };
 
   vendorHash = "sha256-tX/QpAZLuQEYhm1I1twlg3TefaLqfiEz9cXID+r6EHA=";

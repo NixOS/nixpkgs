@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
     owner = "unused-code";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+1M8dUfjjrT4llS0C6WYDyNxJ9QZ5s9v+W185TbgwMw=";
+    hash = "sha256-+1M8dUfjjrT4llS0C6WYDyNxJ9QZ5s9v+W185TbgwMw=";
   };
 
   nativeBuildInputs = [ cmake ];

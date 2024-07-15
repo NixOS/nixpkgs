@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
+    hash = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
   nativeBuildInputs = [

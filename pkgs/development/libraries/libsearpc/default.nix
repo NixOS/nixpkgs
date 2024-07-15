@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "haiwen";
     repo = "libsearpc";
     rev = commit;
-    sha256 = "sha256-nYYp3EyA8nufhbWaw4Lv/c4utGYaxC+PoFyamUEVJx4=";
+    hash = "sha256-nYYp3EyA8nufhbWaw4Lv/c4utGYaxC+PoFyamUEVJx4=";
   };
 
   nativeBuildInputs = [

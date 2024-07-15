@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K7UDmV56VW4TM5YUl+xUWmE8GUAYbWowm/hU7xBG+Hs=";
+    hash = "sha256-K7UDmV56VW4TM5YUl+xUWmE8GUAYbWowm/hU7xBG+Hs=";
   };
 
   vendorHash = null;

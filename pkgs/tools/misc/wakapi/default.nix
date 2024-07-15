@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "muety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lBjYtb64blFUH/iW/SmC4A7nX9asokvsNKu6QVYgmZ8=";
+    hash = "sha256-lBjYtb64blFUH/iW/SmC4A7nX9asokvsNKu6QVYgmZ8=";
   };
 
   vendorHash = "sha256-Kt7RzAGZeLFhwvq+V6AK88rivqkoTE1Zep7NMh3BXXQ=";

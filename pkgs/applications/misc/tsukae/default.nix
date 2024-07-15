@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "irevenko";
     repo = pname;
     rev = "8111dddd67e4b4f83ae4bca7d7305f6dc64e77cd";
-    sha256 = "sha256-1y/WYLW6/HMGmuaX2wOlQbwYn0LcgQCMb4qw8BtCgxQ=";
+    hash = "sha256-1y/WYLW6/HMGmuaX2wOlQbwYn0LcgQCMb4qw8BtCgxQ=";
   };
 
   vendorHash = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";

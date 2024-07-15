@@ -8,7 +8,7 @@ buildKodiAddon rec {
     owner = "nilzen";
     repo = "xbmc-" + pname;
     rev = "v${version}";
-    sha256 = "sha256-CZtBUqFaKtMmKcpfBQp0Mb8sVvpCTkqcpfdYe41YSJs=";
+    hash = "sha256-CZtBUqFaKtMmKcpfBQp0Mb8sVvpCTkqcpfdYe41YSJs=";
   };
 
   meta = with lib; {

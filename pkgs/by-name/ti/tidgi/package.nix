@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       fetchurl
       {
         url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}/TidGi-darwin-x64-${version}.zip";
-        sha256 = "sha256-5jHW/QrgzsGQfX4LvsRebdOJPzYTvhtC5mczxp2wPI8=";
+        hash = "sha256-5jHW/QrgzsGQfX4LvsRebdOJPzYTvhtC5mczxp2wPI8=";
       };
 
   dontBuild = true;

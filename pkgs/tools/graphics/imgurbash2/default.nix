@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ram-on";
     repo = "imgurbash2";
     rev = version;
-    sha256 = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
+    hash = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
   };
 
   installPhase = ''

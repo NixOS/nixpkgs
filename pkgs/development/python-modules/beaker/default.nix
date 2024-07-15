@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "bbangert";
     repo = "beaker";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-HzjhOPXElwKoJLrhGIbVn798tbX/kaS1EpQIX+vXCtE=";
+    hash = "sha256-HzjhOPXElwKoJLrhGIbVn798tbX/kaS1EpQIX+vXCtE=";
   };
 
   propagatedBuildInputs =

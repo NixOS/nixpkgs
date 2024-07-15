@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Nefcore";
     repo = "CRLFsuite";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
+    hash = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

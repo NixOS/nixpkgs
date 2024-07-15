@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "openvenues";
     repo = "libpostal";
     rev = "v${version}";
-    sha256 = "sha256-gQTD2LQibaB2TK0SbzoILAljAGExURvDcF3C/TfDXqk=";
+    hash = "sha256-gQTD2LQibaB2TK0SbzoILAljAGExURvDcF3C/TfDXqk=";
   };
 
   patches = [

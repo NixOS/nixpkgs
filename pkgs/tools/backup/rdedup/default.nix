@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dpc";
     repo = "rdedup";
     rev = "v${version}";
-    sha256 = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
+    hash = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
   };
 
   cargoSha256 = "sha256-I6d3IyPBcUsrvlzF7W0hFM4hcXi4wWro9bCeP4eArHI=";

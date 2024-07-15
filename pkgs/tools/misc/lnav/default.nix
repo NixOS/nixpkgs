@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-grEW3J50osKJzulNQFN7Gir5+wk1qFPc/YaT+EZMAqs=";
+    hash = "sha256-grEW3J50osKJzulNQFN7Gir5+wk1qFPc/YaT+EZMAqs=";
   };
 
   enableParallelBuilding = true;

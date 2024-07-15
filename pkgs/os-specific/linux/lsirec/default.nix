@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "marcan";
     repo = "lsirec";
     rev = "2dfb6dc92649feb01a3ddcfd117d4a99098084f2";
-    sha256 = "sha256-8v+KKjAJlJNpUT0poedRTQfPiDiwahrosXD35Bmh3jM=";
+    hash = "sha256-8v+KKjAJlJNpUT0poedRTQfPiDiwahrosXD35Bmh3jM=";
   };
 
   buildInputs = [ python3 ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "jcs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
+    hash = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
   };
 
   makeFlags=[ "PREFIX=$(out)" ];

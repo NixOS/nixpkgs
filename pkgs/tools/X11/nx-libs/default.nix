@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
+    hash = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
   patches = [

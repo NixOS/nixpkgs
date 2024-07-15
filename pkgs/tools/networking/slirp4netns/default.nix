@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "sha256-dXz5gNALrVjaFGUgEFp0k47c7aWDzwLMflphe6R6GaM=";
+    hash = "sha256-dXz5gNALrVjaFGUgEFp0k47c7aWDzwLMflphe6R6GaM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "blblapco";
     repo = "xmcp";
     rev = "ee56225f1665f9edc04fe5c165809f2fe160a420";
-    sha256 = "sha256-B3YkYrVEg6UJ2ApaVook4N2XvrCboxDMUG5CN9I79Sg=";
+    hash = "sha256-B3YkYrVEg6UJ2ApaVook4N2XvrCboxDMUG5CN9I79Sg=";
   };
 
   buildInputs = [ libX11 ];

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-zWaEtfxrJYaROQ05nBQvM5fiIRSG+hCecU+BVnpIuck=";
+    hash = "sha256-zWaEtfxrJYaROQ05nBQvM5fiIRSG+hCecU+BVnpIuck=";
   };
 
   vendorHash = "sha256-0Wi9FCTaOD+kzO5cRjpqbXHqx5UAKSGu+hc9bpj+PWo=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "gnotclub";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V7WzletBFOOXBXClDJZIGT2comnC5WDApO1ZCoPKThY=";
+    hash = "sha256-V7WzletBFOOXBXClDJZIGT2comnC5WDApO1ZCoPKThY=";
   };
 
   nativeBuildInputs = [

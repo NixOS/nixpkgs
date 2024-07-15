@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "drscream";
     repo = "lemonbar-xft";
     rev = "481e12363e2a0fe0ddd2176a8e003392be90ed02";
-    sha256 = "sha256-BNYBbUouqqsRQaPkpg+UKg62IV9uI34gKJuiAM94CBU=";
+    hash = "sha256-BNYBbUouqqsRQaPkpg+UKg62IV9uI34gKJuiAM94CBU=";
   };
 
   buildInputs = [ libxcb libXft perl ];

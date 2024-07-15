@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vxl";
     repo = "vxl";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-4kMpIrywEZzt0JH95LHeDLrDneii0R/Uw9GsWkvED+E=";
+    hash = "sha256-4kMpIrywEZzt0JH95LHeDLrDneii0R/Uw9GsWkvED+E=";
   };
 
   nativeBuildInputs = [

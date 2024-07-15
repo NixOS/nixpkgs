@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "libinotify-kqueue";
     repo = "libinotify-kqueue";
     rev = version;
-    sha256 = "sha256-9A5s8rPGlRv3KbxOukk0VB2IQrDxVjklO5RB+IA1cDY=";
+    hash = "sha256-9A5s8rPGlRv3KbxOukk0VB2IQrDxVjklO5RB+IA1cDY=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

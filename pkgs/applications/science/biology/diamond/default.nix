@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "sha256-cTg9TEpz3FSgX2tpfU4y55cCgFY5+mQY86FziHAwd+s=";
+    hash = "sha256-cTg9TEpz3FSgX2tpfU4y55cCgFY5+mQY86FziHAwd+s=";
   };
 
 

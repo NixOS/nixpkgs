@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "github";
     repo = "mona-sans";
-    sha256 = "sha256-XvqLFzlgIqx9aZH2SEAtwMiuWgUiDi/gHGSpfreUHuk=";
+    hash = "sha256-XvqLFzlgIqx9aZH2SEAtwMiuWgUiDi/gHGSpfreUHuk=";
   };
 
   installPhase = ''

@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "opcr-io";
     repo = "policy";
     rev = "v${version}";
-    sha256 = "sha256-nHxP9Dzc0sbgUE/SOqNIvofoi9/voYp8fFdRzMoBOHw=";
+    hash = "sha256-nHxP9Dzc0sbgUE/SOqNIvofoi9/voYp8fFdRzMoBOHw=";
   };
   vendorHash = "sha256-KxMODAjpqDqQO2nfqMrEPa/WZDU3XKPDQCoil/vkqEI=";
 

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "instrumenta";
     repo = "kubeval";
     rev = "v${version}";
-    sha256 = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
+    hash = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
   };
 
   patches = [

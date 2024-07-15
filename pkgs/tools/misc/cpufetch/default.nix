@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Dr-Noob";
     repo = "cpufetch";
     rev = "v${version}";
-    sha256 = "sha256-8g4nFV3PgYRagzUG7S2ifpuSaCCZ5HlwsjkQ+wdk4Yw=";
+    hash = "sha256-8g4nFV3PgYRagzUG7S2ifpuSaCCZ5HlwsjkQ+wdk4Yw=";
   };
 
   nativeBuildInputs = [

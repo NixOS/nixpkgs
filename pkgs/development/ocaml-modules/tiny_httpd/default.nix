@@ -13,7 +13,7 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9L4WCduQNj5Jd/u3SozuXiGTkgojwfGIP5KgQmnWgQw=";
+    hash = "sha256-9L4WCduQNj5Jd/u3SozuXiGTkgojwfGIP5KgQmnWgQw=";
   };
 
   buildInputs = [ result ];

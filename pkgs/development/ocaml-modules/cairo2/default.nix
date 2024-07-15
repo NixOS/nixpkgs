@@ -7,7 +7,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
-    sha256 = "sha256-QDVzUtcgXTpXNYVWQ4MMs0Xy24OP+dGaUyAYdg1GigU=";
+    hash = "sha256-QDVzUtcgXTpXNYVWQ4MMs0Xy24OP+dGaUyAYdg1GigU=";
   };
 
   minimalOCamlVersion = "4.02";

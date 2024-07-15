@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pjmp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
+    hash = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
   };
 
   cargoSha256 = "sha256-zKa2FP0lBS2XjgPWfyPZ60aHyeAe0uNIFbmuX4Uo1rA=";

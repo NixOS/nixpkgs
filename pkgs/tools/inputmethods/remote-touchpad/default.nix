@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "unrud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LytZBVubsGajx4hFYwP3MwHkAW7LlIr77aVLpeHwWxU=";
+    hash = "sha256-LytZBVubsGajx4hFYwP3MwHkAW7LlIr77aVLpeHwWxU=";
   };
 
   buildInputs = [ libXi libXrandr libXt libXtst ];

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "sentriz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U78G7X9x3GQg3qcBINni8jWa0wSXQu+TjYChuRPPcLE=";
+    hash = "sha256-U78G7X9x3GQg3qcBINni8jWa0wSXQu+TjYChuRPPcLE=";
   };
 
   vendorHash = "sha256-O4jOFWygmFxm8ydOq1xtB1DESyWpFGXeSp8a6tT+too=";

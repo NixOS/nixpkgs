@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "rasdaemon";
     rev = "v${version}";
-    sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
+    hash = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
   };
 
   patches = [

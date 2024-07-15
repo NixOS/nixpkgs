@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     owner  = "dadoomer";
     repo   = "markdown-slides";
     rev = "fd27dd09cf90f00093a393338e08953c8d65d68e";
-    sha256 = "sha256-31ALsy1P/vfI+H6Onmg4TXLeKbVAQ1FlnFs4k6ZOgHQ=";
+    hash = "sha256-31ALsy1P/vfI+H6Onmg4TXLeKbVAQ1FlnFs4k6ZOgHQ=";
   };
 
   doCheck = false;

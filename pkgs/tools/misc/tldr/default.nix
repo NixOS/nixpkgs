@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "tldr-pages";
     repo = "tldr-c-client";
     rev = "v${version}";
-    sha256 = "sha256-1L9frURnzfq0XvPBs8D+hBikybAw8qkb0DyZZtkZleY=";
+    hash = "sha256-1L9frURnzfq0XvPBs8D+hBikybAw8qkb0DyZZtkZleY=";
   };
 
   buildInputs = [ curl libzip ];

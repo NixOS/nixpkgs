@@ -7,7 +7,7 @@ buildGoModule rec {
     owner = "bouk";
     repo = "babelfish";
     rev = "v${version}";
-    sha256 = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
+    hash = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
   };
 
   vendorHash = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";

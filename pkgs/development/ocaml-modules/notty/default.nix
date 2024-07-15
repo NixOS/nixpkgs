@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
-    sha256 = "sha256-dGWfsUBz20Q4mJiRqyTyS++Bqkl9rBbZpn+aHJwgCCQ=";
+    hash = "sha256-dGWfsUBz20Q4mJiRqyTyS++Bqkl9rBbZpn+aHJwgCCQ=";
   };
 
   nativeBuildInputs = [ cppo ];

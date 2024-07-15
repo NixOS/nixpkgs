@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "RustemB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
+    hash = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
   };
 
   nativeBuildInputs = [ gprolog ];

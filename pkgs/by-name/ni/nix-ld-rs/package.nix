@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
     owner = "nix-community";
     repo = "nix-ld-rs";
     rev = "f7154a6aedba4917c8cc72b805b79444b5bfafca";
-    sha256 = "sha256-tx6gO6NR4BnYVhoskyvQY9l6/8sK0HwoDHvsYcvIlgo=";
+    hash = "sha256-tx6gO6NR4BnYVhoskyvQY9l6/8sK0HwoDHvsYcvIlgo=";
   };
 
   cargoHash = "sha256-4IDu5qAgF4Zq4GOsimuy8NiRCN9PXM+8oVzD2GO3QmM=";

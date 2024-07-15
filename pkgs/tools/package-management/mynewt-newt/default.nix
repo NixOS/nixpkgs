@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "apache";
     repo = "mynewt-newt";
     rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
-    sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
+    hash = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
   };
 
   vendorHash = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";

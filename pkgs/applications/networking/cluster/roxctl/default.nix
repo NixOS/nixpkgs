@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
-    sha256 = "sha256-1eu7khgs6nzp+d1Gtz2DggD2Gie08auw1XxSZsnRdaM=";
+    hash = "sha256-1eu7khgs6nzp+d1Gtz2DggD2Gie08auw1XxSZsnRdaM=";
   };
 
   vendorHash = "sha256-j/ouxh4nMg5hyzT2RuP+hJrAeK7+PleT2W0DWxxjOfA=";

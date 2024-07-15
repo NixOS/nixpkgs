@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "imapsync";
     repo = "imapsync";
     rev = "imapsync-${version}";
-    sha256 = "sha256-nlNePOV3Y0atEPSRByRo3dHj/WjIaefEDeWdMKTo4gc=";
+    hash = "sha256-nlNePOV3Y0atEPSRByRo3dHj/WjIaefEDeWdMKTo4gc=";
   };
 
   postPatch = ''

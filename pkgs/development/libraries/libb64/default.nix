@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "libb64";
     repo = "libb64";
     rev = "v${version}";
-    sha256 = "sha256-9loDftr769qnIi00MueO86kjha2EiG9pnCLogp0Iq3c=";
+    hash = "sha256-9loDftr769qnIi00MueO86kjha2EiG9pnCLogp0Iq3c=";
   };
 
   patches = [

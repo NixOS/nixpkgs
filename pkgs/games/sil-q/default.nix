@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     owner = "sil-quirk";
     repo = "sil-q";
     rev = "v${version}";
-    sha256 = "sha256-v/sWhPWF9cCKD8N0RHpwzChMM1t9G2yrMDmi1cZxdOs=";
+    hash = "sha256-v/sWhPWF9cCKD8N0RHpwzChMM1t9G2yrMDmi1cZxdOs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

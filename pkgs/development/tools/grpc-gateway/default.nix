@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     rev = "v${version}";
-    sha256 = "sha256-CnnJRgEGarwIaE2LkphN3gogzIhwQ5hAaUZFpLR/HxU=";
+    hash = "sha256-CnnJRgEGarwIaE2LkphN3gogzIhwQ5hAaUZFpLR/HxU=";
   };
 
   vendorHash = "sha256-aNOWu+TXbXn3jZ29BwU+x+vWMtL76NZoPElFuUwcHiI=";

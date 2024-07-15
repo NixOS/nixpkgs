@@ -14,7 +14,7 @@ let
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-ic631e4pyby6EibUkxIGc/uQnVuPY9RFZ9hWvw3u1zk=";
+    hash = "sha256-ic631e4pyby6EibUkxIGc/uQnVuPY9RFZ9hWvw3u1zk=";
   };
 
   meta = with lib; {

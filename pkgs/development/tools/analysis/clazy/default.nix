@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner  = "KDE";
     repo   = "clazy";
     rev    = "v${version}";
-    sha256 = "sha256-Fex0BAmCZUYcNJriHHt/QPi5IgSH/yhnpGCFFZMMD/g=";
+    hash = "sha256-Fex0BAmCZUYcNJriHHt/QPi5IgSH/yhnpGCFFZMMD/g=";
   };
 
   buildInputs = [

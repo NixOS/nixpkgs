@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
     owner = "gtk-rs";
     repo = "gir";
     rev = version;
-    sha256 = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
+    hash = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
   };
 
   cargoLock = {

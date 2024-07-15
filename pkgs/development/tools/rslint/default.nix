@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rslint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
+    hash = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
   cargoSha256 = "sha256-bqF5v52uxbvmVmphXAmcWlCI6nbQzZemCxlTcqhRDTY=";

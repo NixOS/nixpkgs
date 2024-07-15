@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "ibara";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-r75jjH1E7/36b0ebjsZK7rAuOHEyaIta5Bi8nB4zVjo=";
+    hash = "sha256-r75jjH1E7/36b0ebjsZK7rAuOHEyaIta5Bi8nB4zVjo=";
   };
 
   strictDeps = true;

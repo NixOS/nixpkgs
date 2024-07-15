@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "instaloader";
     repo = "instaloader";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EqE184tYW815Hp42EB5g0l9f5AWpYSqH+cY4z4zsCSQ=";
+    hash = "sha256-EqE184tYW815Hp42EB5g0l9f5AWpYSqH+cY4z4zsCSQ=";
   };
 
   nativeBuildInputs = [

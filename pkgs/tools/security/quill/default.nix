@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dfinity";
     repo = "quill";
     rev = "v${version}";
-    sha256 = "sha256-0DHTtnQU26l4DXUVDeHF+hkavlVY7rQykXxgWGSUc/k=";
+    hash = "sha256-0DHTtnQU26l4DXUVDeHF+hkavlVY7rQykXxgWGSUc/k=";
   };
 
   ic = fetchFromGitHub {

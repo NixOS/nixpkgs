@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sahlberg";
     repo = "libnfs";
     rev = "libnfs-${version}";
-    sha256 = "sha256-rdxi5bPXHTICZQIj/CmHgZ/V70svnITJj/OSF4mmC3o=";
+    hash = "sha256-rdxi5bPXHTICZQIj/CmHgZ/V70svnITJj/OSF4mmC3o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

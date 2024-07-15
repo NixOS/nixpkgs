@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "martin-helmich";
     repo = "prometheus-nginxlog-exporter";
     rev = "v${version}";
-    sha256 = "sha256-UkXrVHHHZ9mEgsMUcHu+wI6NZFw4h3X4atDBjpBcz8E=";
+    hash = "sha256-UkXrVHHHZ9mEgsMUcHu+wI6NZFw4h3X4atDBjpBcz8E=";
   };
 
   vendorHash = "sha256-RzqfmP1d3zqageiGSr+CxSJQxAXmOKRCwj/7KO2f3EE=";

@@ -8,7 +8,7 @@ tcl.mkTclDerivation rec {
     owner = "ianka";
     repo = "mustache.tcl";
     rev = "v${version}";
-    sha256 = "sha256-apM57LEZ0Y9hXcEPWrKYOoTVtP5QSqiaQrjTHQc3pc4=";
+    hash = "sha256-apM57LEZ0Y9hXcEPWrKYOoTVtP5QSqiaQrjTHQc3pc4=";
   };
 
   buildInputs = [

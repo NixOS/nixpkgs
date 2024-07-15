@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "megatokio";
     repo = "zasm";
     rev = version;
-    sha256 = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
+    hash = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
     postFetch = ''
       # remove folder containing files with weird names (causes the hash to turn out differently under macOS vs. Linux)
       rm -rv $out/Test

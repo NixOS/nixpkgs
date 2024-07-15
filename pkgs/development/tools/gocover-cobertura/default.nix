@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "boumenot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nbwqfObU1tod5gWa9UbhmS6CpLLilvFyvNJ6XjeR8Qc=";
+    hash = "sha256-nbwqfObU1tod5gWa9UbhmS6CpLLilvFyvNJ6XjeR8Qc=";
   };
 
   vendorHash = null;

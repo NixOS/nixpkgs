@@ -11,7 +11,7 @@ buildFishPlugin {
     owner = "Scrumplex";
     repo = "bobthefisher";
     rev = "f4179a14b087c7fbfc2e892da429adad40a39e44";
-    sha256 = "sha256-l1DHSZa40BX2/4GCjm5E53UOeFEnMioWbZtCW14WX6k=";
+    hash = "sha256-l1DHSZa40BX2/4GCjm5E53UOeFEnMioWbZtCW14WX6k=";
   };
 
   meta = with lib; {

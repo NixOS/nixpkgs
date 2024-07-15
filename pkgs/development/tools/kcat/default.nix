@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "edenhill";
     repo = "kcat";
     rev = version;
-    sha256 = "sha256-pCIYNx0GYPGDYzTLq9h/LbOrJjhKWLAV4gq07Ikl5O4=";
+    hash = "sha256-pCIYNx0GYPGDYzTLq9h/LbOrJjhKWLAV4gq07Ikl5O4=";
   };
 
   nativeBuildInputs = [ pkg-config which ];

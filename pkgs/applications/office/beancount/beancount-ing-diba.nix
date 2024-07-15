@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "siddhantgoel";
     repo = "beancount-ing-diba";
     rev = "v${version}";
-    sha256 = "sha256-1cdXqdeTz38n0g13EXJ1/IF/gJJCe1uL/Z5NJz4DL+E=";
+    hash = "sha256-1cdXqdeTz38n0g13EXJ1/IF/gJJCe1uL/Z5NJz4DL+E=";
   };
 
   patches = [

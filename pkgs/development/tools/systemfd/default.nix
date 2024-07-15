@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     repo = "systemfd";
     owner = "mitsuhiko";
     rev = version;
-    sha256 = "sha256-HUJgYPD4C9fMUYKpzmIy9gDT6HAZDWw1JLMKLgzRQTY=";
+    hash = "sha256-HUJgYPD4C9fMUYKpzmIy9gDT6HAZDWw1JLMKLgzRQTY=";
   };
 
   cargoSha256 = "sha256-UhfE9Q5E79rN2mjkNB5IAN/J0fbpoy9CmM6ojHQcFP0=";

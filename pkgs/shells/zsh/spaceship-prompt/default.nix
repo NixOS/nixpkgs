@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "denysdovhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WjeUF8yD3il9DAava/SYv7ID6iM9AbR1ppazJnypgnk=";
+    hash = "sha256-WjeUF8yD3il9DAava/SYv7ID6iM9AbR1ppazJnypgnk=";
   };
 
   strictDeps = true;

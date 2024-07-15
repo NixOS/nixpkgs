@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J1fP3CtTLkUMZxzsbu3ZMbg4ag1NFvaI5AibFT7eZso=";
+    hash = "sha256-J1fP3CtTLkUMZxzsbu3ZMbg4ag1NFvaI5AibFT7eZso=";
   };
 
   passthru = {

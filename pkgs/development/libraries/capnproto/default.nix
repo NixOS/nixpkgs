@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    sha256 = "sha256-LVdkqVBTeh8JZ1McdVNtRcnFVwEJRNjt0JV2l7RkuO8=";
+    hash = "sha256-LVdkqVBTeh8JZ1McdVNtRcnFVwEJRNjt0JV2l7RkuO8=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage {
     owner = "mgunyho";
     repo = "tere";
     rev = "659422ecb2810f91446a71e52b82524d4f1755d8";
-    sha256 = "sha256-CH8gcfkjSAknG6kKHp0aODcrjEJjzHbgeVaE/PK1zRA=";
+    hash = "sha256-CH8gcfkjSAknG6kKHp0aODcrjEJjzHbgeVaE/PK1zRA=";
   };
 
   cargoHash = "sha256-GtGWuvYdxP3dgGekoXYaM+lnZJBgJX1UIWe0EH+/52M=";

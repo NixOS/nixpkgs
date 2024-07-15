@@ -14,7 +14,7 @@ buildPythonApplication rec {
     owner = "tomduck";
     repo = pname;
     rev = version;
-    sha256 = "sha256-J9KLZvioYM3Pl2UXjrEgd4PuLTwCLYy9SsJIzgw5/jU=";
+    hash = "sha256-J9KLZvioYM3Pl2UXjrEgd4PuLTwCLYy9SsJIzgw5/jU=";
   };
 
   nativeBuildInputs = [

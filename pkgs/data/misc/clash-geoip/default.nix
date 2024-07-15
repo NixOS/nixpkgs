@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Dreamacro/maxmind-geoip/releases/download/${version}/Country.mmdb";
-    sha256 = "sha256-uLXdQUrhBZC7av5MWvlVC0W8UQBWDsYhdmKwKEfOQfk=";
+    hash = "sha256-uLXdQUrhBZC7av5MWvlVC0W8UQBWDsYhdmKwKEfOQfk=";
   };
 
   dontUnpack = true;

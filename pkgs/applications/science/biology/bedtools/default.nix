@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
+    hash = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
   };
 
   strictDeps = true;

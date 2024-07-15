@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "skywind3000";
     repo = "z.lua";
     rev = version;
-    sha256 = "sha256-QSwZhdBXO+x4vcwRnZjdYdIdWW0Nfu0oImftUgm4wyo=";
+    hash = "sha256-QSwZhdBXO+x4vcwRnZjdYdIdWW0Nfu0oImftUgm4wyo=";
   };
 
   dontBuild = true;

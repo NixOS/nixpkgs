@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "Clever";
     repo = "microplane";
     rev = "v${version}";
-    sha256 = "sha256-ZrBkVXRGZp8yGFIBo7sLGvJ8pMQq7Cq0xJiko57z164=";
+    hash = "sha256-ZrBkVXRGZp8yGFIBo7sLGvJ8pMQq7Cq0xJiko57z164=";
   };
 
   vendorHash = "sha256-PqSjSFTVrIsQ065blIxZ9H/ARku6BEcnjboH+0K0G14=";

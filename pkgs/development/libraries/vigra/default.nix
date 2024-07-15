@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "ukoethe";
     repo = "vigra";
     rev = "093d57d15c8c237adf1704d96daa6393158ce299";
-    sha256 = "sha256-pFANoT00Wkh1/Dyd2x75IVTfyaoVA7S86tafUSr29Og=";
+    hash = "sha256-pFANoT00Wkh1/Dyd2x75IVTfyaoVA7S86tafUSr29Og=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";

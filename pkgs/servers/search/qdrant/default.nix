@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PM2nzHkZVvlH/ojZK8o2ELkLUtMNr0I2cezFlaPqYSA=";
+    hash = "sha256-PM2nzHkZVvlH/ojZK8o2ELkLUtMNr0I2cezFlaPqYSA=";
   };
 
   cargoLock = {

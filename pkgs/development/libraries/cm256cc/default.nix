@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "f4exb";
     repo = "cm256cc";
     rev = "v${version}";
-    sha256 = "sha256-T7ZUVVYGdzAialse//MoqWCVNBpbZvzWMAKc0cw7O9k=";
+    hash = "sha256-T7ZUVVYGdzAialse//MoqWCVNBpbZvzWMAKc0cw7O9k=";
   };
 
   patches = [

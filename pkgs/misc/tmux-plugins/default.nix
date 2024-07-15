@@ -181,7 +181,7 @@ in rec {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
       rev = "98d787191bc3e8f19c3de54b96ba1caf61385861";
-      sha256 = "sha256-ymmCI6VYvf94Ot7h2GAboTRBXPIREP+EB33+px5aaJk=";
+      hash = "sha256-ymmCI6VYvf94Ot7h2GAboTRBXPIREP+EB33+px5aaJk=";
     };
   };
 
@@ -377,7 +377,7 @@ in rec {
       owner = "MunifTanjim";
       repo = "tmux-mode-indicator";
       rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
-      sha256 = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
+      hash = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
     };
     meta = with lib; {
       homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
@@ -567,7 +567,7 @@ in rec {
       owner = "rose-pine";
       repo = "tmux";
       rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
-      sha256 = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
+      hash = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
     };
     meta = {
       homepage = "https://github.com/rose-pine/tmux";
@@ -598,7 +598,7 @@ in rec {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
+      hash = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -755,7 +755,7 @@ in rec {
       owner = "joshmedeski";
       repo = "t-smart-tmux-session-manager";
       rev = "v${version}";
-      sha256 = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+      hash = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

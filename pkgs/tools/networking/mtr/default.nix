@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "traviscross";
     repo = "mtr";
     rev = "v${version}";
-    sha256 = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
+    hash = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
   };
 
   patches = [ (fetchpatch { # https://github.com/traviscross/mtr/pull/468

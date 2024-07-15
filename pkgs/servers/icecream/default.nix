@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "icecc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
+    hash = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
   enableParallelBuilding = true;
 

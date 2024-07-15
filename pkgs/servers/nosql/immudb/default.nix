@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bNMJZWXelHQatW9rhqf3eYs61nJJEBwMXZhUZWQv6S0=";
+    hash = "sha256-bNMJZWXelHQatW9rhqf3eYs61nJJEBwMXZhUZWQv6S0=";
   };
 
   preBuild = ''

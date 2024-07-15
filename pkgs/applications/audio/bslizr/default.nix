@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sjaehn";
     repo = "BSlizr";
     rev = version;
-    sha256 = "sha256-5DvVkTz79CLvZMZ3XnI0COIfxnhERDSvzbVoJAcqNRI=";
+    hash = "sha256-5DvVkTz79CLvZMZ3XnI0COIfxnhERDSvzbVoJAcqNRI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

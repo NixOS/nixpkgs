@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
-    sha256 = "sha256-O+Fg6NtWdBe0k+XhE/h62C1tvC6Y1BQZWva63sXJDfY=";
+    hash = "sha256-O+Fg6NtWdBe0k+XhE/h62C1tvC6Y1BQZWva63sXJDfY=";
   };
 
   outputs = [ "out" "dev" ];

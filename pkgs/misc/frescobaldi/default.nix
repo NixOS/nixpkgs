@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
+    hash = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
   };
 
   propagatedBuildInputs = with python3Packages; [

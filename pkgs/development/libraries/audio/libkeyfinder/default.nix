@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mixxxdj";
     repo = "libkeyfinder";
     rev = "v${version}";
-    sha256 = "sha256-7w/Wc9ncLinbnM2q3yv5DBtFoJFAM2e9xAUTsqvE9mg=";
+    hash = "sha256-7w/Wc9ncLinbnM2q3yv5DBtFoJFAM2e9xAUTsqvE9mg=";
   };
 
   # in main post 2.2.6, see https://github.com/mixxxdj/libkeyfinder/issues/21

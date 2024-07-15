@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jarro2783";
     repo = "cxxopts";
     rev = "v${version}";
-    sha256 = "sha256-aOF3owz7SIV4trJY0PnMtIcwqoUpDbB3tNxZcsl9dzM=";
+    hash = "sha256-aOF3owz7SIV4trJY0PnMtIcwqoUpDbB3tNxZcsl9dzM=";
   };
 
   buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];

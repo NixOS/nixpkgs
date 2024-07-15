@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "ChaoticWeg";
     repo = "discord.sh";
     rev = "v${version}";
-    sha256 = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
+    hash = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
   };
 
   # ignore Makefile by disabling buildPhase. Upstream Makefile tries to download

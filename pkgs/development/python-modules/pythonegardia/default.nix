@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jeroenterheerdt";
     repo = "python-egardia";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lQ/7tH74MllwFe2kF5OcYSb4rQd+yJU1W6ztG4Z6Y0U=";
+    hash = "sha256-lQ/7tH74MllwFe2kF5OcYSb4rQd+yJU1W6ztG4Z6Y0U=";
   };
 
   propagatedBuildInputs = [ requests ];

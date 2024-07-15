@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = meta.homepage + "/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qAaCqJ2RX99gs10xYjL7BOvzb/8n/am9Of6KONPNPxI=";
+    hash = "sha256-qAaCqJ2RX99gs10xYjL7BOvzb/8n/am9Of6KONPNPxI=";
   };
 
   meta = with lib; {

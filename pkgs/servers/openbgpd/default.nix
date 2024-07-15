@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     owner = "openbgpd-portable";
     repo = "openbgpd-portable";
     rev = version;
-    sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
+    hash = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool m4 bison ];

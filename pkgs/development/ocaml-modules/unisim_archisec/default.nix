@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/binsec/unisim_archisec/releases/download/0.0.8/unisim_archisec-0.0.8.tbz";
-    sha256 = "sha256-D8DumHaQnLsMaVHoUL7w8KgGRTh9Rk+22NNSa0a/qII=";
+    hash = "sha256-D8DumHaQnLsMaVHoUL7w8KgGRTh9Rk+22NNSa0a/qII=";
   };
 
   duneVersion = "3";

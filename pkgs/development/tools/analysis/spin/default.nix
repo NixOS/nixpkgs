@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "nimble-code";
     repo = "Spin";
     rev = "version-${version}";
-    sha256 = "sha256-drvQXfDZCZRycBZt/VNngy8zs4XVJg+d1b4dQXVcyFU=";
+    hash = "sha256-drvQXfDZCZRycBZt/VNngy8zs4XVJg+d1b4dQXVcyFU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -19,7 +19,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-191PYpxs/TbVXoBPHvuyTp81ZMtw1YaFznY1hUSbh+0=";
+      hash = "sha256-191PYpxs/TbVXoBPHvuyTp81ZMtw1YaFznY1hUSbh+0=";
     };
 
     preferLocalBuild = true;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "vapier";
     repo = "pcalc";
     rev = "d93be9e19ecc0b2674cf00ec91cbb79d32ccb01d";
-    sha256 = "sha256-m4xdsEJGKxLgp/d5ipxQ+cKG3z7rlvpPL6hELnDu6Hk=";
+    hash = "sha256-m4xdsEJGKxLgp/d5ipxQ+cKG3z7rlvpPL6hELnDu6Hk=";
   };
 
   makeFlags = [ "DESTDIR= BINDIR=$(out)/bin" ];

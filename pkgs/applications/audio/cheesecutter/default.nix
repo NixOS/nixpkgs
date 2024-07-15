@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "theyamo";
     repo = "CheeseCutter";
     rev = "84450d3614b8fb2cabda87033baab7bedd5a5c98";
-    sha256 = "sha256:0q4a791nayya6n01l0f4kk497rdq6kiq0n72fqdpwqy138pfwydn";
+    hash = "sha256:0q4a791nayya6n01l0f4kk497rdq6kiq0n72fqdpwqy138pfwydn";
   };
 
   patches = [

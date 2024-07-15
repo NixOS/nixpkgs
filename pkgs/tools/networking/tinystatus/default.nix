@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "bderenzo";
     repo = "tinystatus";
     rev = "fc128adf240261ac99ea3e3be8d65a92eda52a73";
-    sha256 = "sha256-FvQwibm6F10l9/U3RnNTGu+C2JjHOwbv62VxXAfI7/s=";
+    hash = "sha256-FvQwibm6F10l9/U3RnNTGu+C2JjHOwbv62VxXAfI7/s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

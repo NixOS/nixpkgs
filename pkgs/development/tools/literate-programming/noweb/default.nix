@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nrnrnr";
     repo = "noweb";
     rev = "v${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    sha256 = "sha256-COcWyrYkheRaSr2gqreRRsz9SYRTX2PSl7km+g98ljs=";
+    hash = "sha256-COcWyrYkheRaSr2gqreRRsz9SYRTX2PSl7km+g98ljs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

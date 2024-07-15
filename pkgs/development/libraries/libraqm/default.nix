@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "HOST-Oman";
     repo = "libraqm";
     rev = "v${version}";
-    sha256 = "sha256-H9W+7Mob3o5ctxfp5UhIxatSdXqqvkpyEibJx9TO7a8=";
+    hash = "sha256-H9W+7Mob3o5ctxfp5UhIxatSdXqqvkpyEibJx9TO7a8=";
   };
 
   buildInputs = [ freetype harfbuzz fribidi ];

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "wargus";
     repo = "wargus";
     rev = "v${version}";
-    sha256 = "sha256-yJeMFxCD0ikwVPQApf+IBuMQ6eOjn1fVKNmqh6r760c=";
+    hash = "sha256-yJeMFxCD0ikwVPQApf+IBuMQ6eOjn1fVKNmqh6r760c=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ffmpeg ];

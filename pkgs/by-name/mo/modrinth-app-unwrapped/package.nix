@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
     owner = "modrinth";
     repo = "theseus";
     rev = "v${modrinth-app-unwrapped.version}";
-    sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
+    hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
   cargoLock = {

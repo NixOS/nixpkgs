@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mpereira";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
+    hash = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
   };
 
   patches = [

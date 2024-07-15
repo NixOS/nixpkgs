@@ -10,7 +10,7 @@ callPackage ./generic.nix {
     owner = "sm64pc";
     repo = "sm64ex";
     rev = "afc7e8da695bdf1aea5400a0d5c8b188d16a2088";
-    sha256 = "sha256-TbA9yGPtP2uGsxN3eFaQwFeNjAjZ5hSk8Qmx1pRQxf8=";
+    hash = "sha256-TbA9yGPtP2uGsxN3eFaQwFeNjAjZ5hSk8Qmx1pRQxf8=";
   };
 
   extraMeta = {

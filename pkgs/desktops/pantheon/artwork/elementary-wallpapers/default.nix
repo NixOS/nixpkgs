@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "wallpapers";
     rev = version;
-    sha256 = "sha256-i9tIz5UckON8uwGlE62b/y0M0Neqt86rR3VdNUWBo04=";
+    hash = "sha256-i9tIz5UckON8uwGlE62b/y0M0Neqt86rR3VdNUWBo04=";
   };
 
   nativeBuildInputs = [

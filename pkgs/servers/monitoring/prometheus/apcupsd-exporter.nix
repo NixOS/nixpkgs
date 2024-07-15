@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mdlayher";
     repo = "apcupsd_exporter";
     rev = "v${version}";
-    sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
+    hash = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
   vendorHash = "sha256-bvLwHLviIAGmxYY1O0wFDWAMginEUklicrbjIbbPuUw=";

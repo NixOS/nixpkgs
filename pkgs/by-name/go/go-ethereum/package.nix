@@ -15,7 +15,7 @@ in buildGoModule rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X9XwVZpRnkp7oVKwyvQbs8ZaWwLkuLEEHNfV5BvfVvI=";
+    hash = "sha256-X9XwVZpRnkp7oVKwyvQbs8ZaWwLkuLEEHNfV5BvfVvI=";
   };
 
   proxyVendor = true;

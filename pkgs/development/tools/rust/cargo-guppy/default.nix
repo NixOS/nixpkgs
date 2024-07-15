@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "guppy-rs";
     repo = "guppy";
     rev = "837d0ae762b9ae79cc8ca5d629842e5ca34293b4";
-    sha256 = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
+    hash = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
   };
 
   cargoSha256 = "sha256-IyU5fJSFzef8P5v8ILufGcTP3+5Gm0PH4Cox2G5saHw=";

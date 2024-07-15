@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "git-chglog";
     repo = "git-chglog";
     rev = "v${version}";
-    sha256 = "sha256-rTJn2vUrEnmG2japqCxHv3BR9MpmMfpMLO2FBP6ONbw=";
+    hash = "sha256-rTJn2vUrEnmG2japqCxHv3BR9MpmMfpMLO2FBP6ONbw=";
   };
 
   vendorHash = "sha256-skhEHpSnxOTZrL8XLlQZL3s224mg8XRINKJnatYCQko=";

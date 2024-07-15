@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/checkpolicy-${version}.tar.gz";
-    sha256 = "sha256-GzRrPN1PinihV2J7rWSjs0ecZ7ahnRXm1chpRiDq28E=";
+    hash = "sha256-GzRrPN1PinihV2J7rWSjs0ecZ7ahnRXm1chpRiDq28E=";
   };
 
   nativeBuildInputs = [ bison flex ];

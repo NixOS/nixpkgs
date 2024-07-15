@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Oberon00";
     repo = "luabind";
     rev = "49814f6b47ed99e273edc5198a6ebd7fa19e813a";
-    sha256 = "sha256-JcOsoQHRvdzF2rsZBW6egOwIy7+7C4wy0LiYmbV590Q";
+    hash = "sha256-JcOsoQHRvdzF2rsZBW6egOwIy7+7C4wy0LiYmbV590Q";
   };
 
   nativeBuildInputs = [ cmake ];

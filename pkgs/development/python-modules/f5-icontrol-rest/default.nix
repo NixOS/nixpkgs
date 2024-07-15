@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "F5Networks";
     repo = "f5-icontrol-rest-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-asAFIRoc2zll8a8gMMt4ZRQILhMAes8wf3PGwG5wF9c=";
+    hash = "sha256-asAFIRoc2zll8a8gMMt4ZRQILhMAes8wf3PGwG5wF9c=";
   };
 
   propagatedBuildInputs = [

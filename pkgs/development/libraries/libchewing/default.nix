@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "chewing";
     repo = "libchewing";
     rev = "452f6221fbad90c0706a3963b17e226216e40dd7";
-    sha256 = "sha256-w3/K2O/CU+XVzqzVCYJyq1vLgToN6iIUhJ9J7ia4p9E=";
+    hash = "sha256-w3/K2O/CU+XVzqzVCYJyq1vLgToN6iIUhJ9J7ia4p9E=";
   };
 
   buildInputs = [ sqlite ];

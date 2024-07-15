@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "42wim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-APlnJUu/ttK/S2AxO+SadU2ttmEnU+js/3GUf3x0aSQ=";
+    hash = "sha256-APlnJUu/ttK/S2AxO+SadU2ttmEnU+js/3GUf3x0aSQ=";
   };
 
   subPackages = [ "." ];

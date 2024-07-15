@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "sha256-2oM78YgP14oyFBWZ8KdHlGsN3hjoWTBcIvOI+93sSyM=";
+    hash = "sha256-2oM78YgP14oyFBWZ8KdHlGsN3hjoWTBcIvOI+93sSyM=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;

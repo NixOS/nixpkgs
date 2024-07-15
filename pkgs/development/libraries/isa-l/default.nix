@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "isa-l";
     rev = "v${version}";
-    sha256 = "sha256-xBBtpjtWyba0DogdLobtuWmiiAHTXMK4oRnjYuTUCNk=";
+    hash = "sha256-xBBtpjtWyba0DogdLobtuWmiiAHTXMK4oRnjYuTUCNk=";
   };
 
   nativeBuildInputs = [ nasm autoreconfHook ];

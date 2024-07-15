@@ -14,7 +14,7 @@ buildPythonApplication rec {
     owner = "dnsviz";
     repo = "dnsviz";
     rev = "v${version}";
-    sha256 = "sha256-x6LdPVQFfsJIuKde1+LbFKz5bBEi+Mri9sVH0nGsbCU=";
+    hash = "sha256-x6LdPVQFfsJIuKde1+LbFKz5bBEi+Mri9sVH0nGsbCU=";
   };
 
   patches = [

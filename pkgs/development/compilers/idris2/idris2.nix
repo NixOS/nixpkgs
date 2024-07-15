@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     owner = "idris-lang";
     repo = "Idris2";
     rev = "v${version}";
-    sha256 = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
+    hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
   };
 
   strictDeps = true;

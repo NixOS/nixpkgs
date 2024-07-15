@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner = "virtualabs";
     repo = "btlejack";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Q6y9murV1o2i1sluqTVB5+X3B7ywFsI0ZvlJjHrHSpo=";
+    hash = "sha256-Q6y9murV1o2i1sluqTVB5+X3B7ywFsI0ZvlJjHrHSpo=";
   };
 
   postPatch = ''

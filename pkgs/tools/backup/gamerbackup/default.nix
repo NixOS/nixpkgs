@@ -8,7 +8,7 @@ buildGoModule {
     owner = "leijurv";
     repo = "gb";
     rev = "61383d445af7b035fb8e1df0cacc424340dd16df";
-    sha256 = "sha256-YRrD2gW+gzxD2JwadCbF/SBSsHeeGPsa8kKZHHAytVo=";
+    hash = "sha256-YRrD2gW+gzxD2JwadCbF/SBSsHeeGPsa8kKZHHAytVo=";
   };
 
   vendorHash = "sha256-H3Zf4VNJVX9C3GTeqU4YhNqCIQz1R55MfhrygDgJTxc=";

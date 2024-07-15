@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "cupcakearmy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g7P/q29LMZEibEP6Pmve2WwuxdmSpdqQpwG6/RPDMAM=";
+    hash = "sha256-g7P/q29LMZEibEP6Pmve2WwuxdmSpdqQpwG6/RPDMAM=";
   };
 
   vendorHash = "sha256-1ya1h/v5uEVoZpPVugxXQC3FCH5GKPhcHIDm8rSY9OU=";

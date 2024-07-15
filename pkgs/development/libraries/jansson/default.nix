@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "akheron";
     repo = "jansson";
     rev = "v${version}";
-    sha256 = "sha256-FQgy2+g3AyRVJeniqPQj0KNeHgPdza2pmEIXqSyYry4=";
+    hash = "sha256-FQgy2+g3AyRVJeniqPQj0KNeHgPdza2pmEIXqSyYry4=";
   };
 
   nativeBuildInputs = [ cmake ];

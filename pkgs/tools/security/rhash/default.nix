@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
-    sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
+    hash = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
   patches = [ ./dont-fail-ln.patch ./do-link-so.patch ];

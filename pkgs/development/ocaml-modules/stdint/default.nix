@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/andrenth/ocaml-stdint/releases/download/${version}/stdint-${version}.tbz";
-    sha256 = "sha256-FWAZjYvJx68+qVLEDavoJmZpQhDsw/35u/60MhHpd+Y=";
+    hash = "sha256-FWAZjYvJx68+qVLEDavoJmZpQhDsw/35u/60MhHpd+Y=";
   };
 
   # 1. disable remaining broken tests, see

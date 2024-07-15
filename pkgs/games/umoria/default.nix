@@ -18,7 +18,7 @@ gcc9Stdenv.mkDerivation rec {
     owner = "dungeons-of-moria";
     repo = "umoria";
     rev = "v${version}";
-    sha256 = "sha256-1j4QkE33UcTzM06qAjk1/PyK5uNA7E/kyDe3bZcFKUM=";
+    hash = "sha256-1j4QkE33UcTzM06qAjk1/PyK5uNA7E/kyDe3bZcFKUM=";
   };
 
   nativeBuildInputs = [ cmake ];

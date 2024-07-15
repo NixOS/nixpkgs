@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3+irejeDltf7x+gyJxWBgvPgpQx5uU3DewU23Z4Nr/A=";
+    hash = "sha256-3+irejeDltf7x+gyJxWBgvPgpQx5uU3DewU23Z4Nr/A=";
   };
 
   cargoSha256 = "sha256-sAFsG+EPSmvPDFR9R0fZ5f+y/PXVpTJlMzL61vwf4SY=";

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Changaco";
     repo = "python-${pname}";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
+    hash = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
   };
 
   LC_ALL = "en_US.UTF-8";

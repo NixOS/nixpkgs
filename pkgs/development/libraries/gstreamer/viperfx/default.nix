@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Audio4Linux";
     repo = "gst-plugin-viperfx";
     rev = "a5c1b03dfe1ab0822b717a5f9392e9f1237fdba0";
-    sha256 = "sha256-0so4jV56nl3tZHuZpvtyMrpOZ4tNJ59Pyj6zbV5bJ5Y=";
+    hash = "sha256-0so4jV56nl3tZHuZpvtyMrpOZ4tNJ59Pyj6zbV5bJ5Y=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];

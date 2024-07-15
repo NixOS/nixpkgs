@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "LuRsT";
     repo = "hr";
     rev = version;
-    sha256 = "sha256-Pcnkiq7ipLoz6MFWZkCIxneUuZ3w/d+iqiyTz55WZvs=";
+    hash = "sha256-Pcnkiq7ipLoz6MFWZkCIxneUuZ3w/d+iqiyTz55WZvs=";
   };
 
   dontBuild = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "LLNL";
     repo = "zfp";
     rev = version;
-    sha256 = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
+    hash = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
   };
 
   nativeBuildInputs = [ cmake ];

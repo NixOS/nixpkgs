@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
+    hash = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

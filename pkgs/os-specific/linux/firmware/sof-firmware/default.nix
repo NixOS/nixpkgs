@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
-    sha256 = "sha256-T9ky97vBUXsG+nkR5tVmgU1dxP7FYIvbROfE/kkp+/Y=";
+    hash = "sha256-T9ky97vBUXsG+nkR5tVmgU1dxP7FYIvbROfE/kkp+/Y=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed

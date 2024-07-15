@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "0xInfection";
     repo = "LogMePwn";
     rev = "v${version}";
-    sha256 = "sha256-VL/Hp7YaXNcV9JPb3kgRHcdhJJ5p3KHUf3hHbT3gKVk=";
+    hash = "sha256-VL/Hp7YaXNcV9JPb3kgRHcdhJJ5p3KHUf3hHbT3gKVk=";
   };
 
   vendorHash = "sha256-3NTaJ/Y3Tc6UGLfYTKjZxAAI43GJyZQ5wQVYbnXHSYc=";

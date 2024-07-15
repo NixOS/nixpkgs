@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "astrofrog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
+    hash = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
   };
 
   nativeBuildInputs = [

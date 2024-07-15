@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-yNaMyS47yxc/p5Rs/kHwD/pgjGXnHBdybYdo1GIEmA4=";
+    hash = "sha256-yNaMyS47yxc/p5Rs/kHwD/pgjGXnHBdybYdo1GIEmA4=";
   };
 
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];

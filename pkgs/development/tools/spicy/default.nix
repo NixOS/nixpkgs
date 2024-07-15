@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "trhodeos";
     repo = "spicy";
     rev = "v${version}";
-    sha256 = "sha256-TodMm4UbnLB+LiyfPVXT7bcVLbyBFbGoOYQSsz3IMfM=";
+    hash = "sha256-TodMm4UbnLB+LiyfPVXT7bcVLbyBFbGoOYQSsz3IMfM=";
   };
 
   vendorHash = "sha256-uy33vfsvyLCep1aN8qO0BMmpPylhzTLhosjjD5ghmHE=";

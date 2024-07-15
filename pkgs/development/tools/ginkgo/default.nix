@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-+Kh+Pn0oEq/eDXE+vsYrSOqhSoeQoIueb6mVpT2bljc=";
+    hash = "sha256-+Kh+Pn0oEq/eDXE+vsYrSOqhSoeQoIueb6mVpT2bljc=";
   };
   vendorHash = "sha256-ccqhuUL99dtIeiEM4hRdi0479I0cyf8pxSZz0G6Vm+w=";
 

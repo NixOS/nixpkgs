@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Audio4Linux";
     repo = "Viper4Linux-GUI";
     rev = "2d0c84d7dda76c59e31c850e38120002eb779b7a";
-    sha256 = "sha256-5YlLCF598i/sldczPEgCB+1KJDA7jqM964QDSNjgTKM=";
+    hash = "sha256-5YlLCF598i/sldczPEgCB+1KJDA7jqM964QDSNjgTKM=";
   };
 
   desktopItems = [

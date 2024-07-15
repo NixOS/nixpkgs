@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
-    sha256 = "sha256-z8FPSqWlSubtt+gurntWnkeKsdO2B+KZXTv2Y+TL7t4=";
+    hash = "sha256-z8FPSqWlSubtt+gurntWnkeKsdO2B+KZXTv2Y+TL7t4=";
   };
 
   nativeBuildInputs = [ cmake ];

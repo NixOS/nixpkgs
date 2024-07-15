@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jstemmer";
     repo = "go-junit-report";
     rev = "v${version}";
-    sha256 = "sha256-s4XVjACmpd10C5k+P3vtcS/aWxI6UkSUPyxzLhD2vRI=";
+    hash = "sha256-s4XVjACmpd10C5k+P3vtcS/aWxI6UkSUPyxzLhD2vRI=";
   };
 
   vendorHash = "sha256-+KmC7m6xdkWTT/8MkGaW9gqkzeZ6LWL0DXbt+12iTHY=";

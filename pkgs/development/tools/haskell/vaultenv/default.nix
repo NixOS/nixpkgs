@@ -35,7 +35,7 @@ mkDerivation rec {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    sha256 = "sha256-EPu4unzXIg8naFUEZwbJ2VJXD/TeCiKzPHCXnRkdyBE=";
+    hash = "sha256-EPu4unzXIg8naFUEZwbJ2VJXD/TeCiKzPHCXnRkdyBE=";
   };
 
   buildTools = [ hpack ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "unclechu";
     repo = "MIDI-Trigger";
     rev = "v${version}";
-    sha256 = "sha256-tMnN8mTd6Bm46ZIDy0JPSVe77xCZws2XwQLQexDWPgU=";
+    hash = "sha256-tMnN8mTd6Bm46ZIDy0JPSVe77xCZws2XwQLQexDWPgU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

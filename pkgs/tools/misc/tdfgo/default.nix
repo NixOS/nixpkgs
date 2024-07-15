@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "digitallyserviced";
     repo = "tdfgo";
     rev = "9f0b3315eed32409639a05aca55d7a0252681193";
-    sha256 = "sha256-Lr4+bXdVxYbCXKVzE+fjeLD559HuABK6lOLJ0sBBGNY=";
+    hash = "sha256-Lr4+bXdVxYbCXKVzE+fjeLD559HuABK6lOLJ0sBBGNY=";
   };
 
   vendorHash = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";

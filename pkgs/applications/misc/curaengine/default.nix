@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "sha256-dx0Q6cuA66lG4nwR7quW5Tvs9sdxjdV4gtpxXirI4nY=";
+    hash = "sha256-dx0Q6cuA66lG4nwR7quW5Tvs9sdxjdV4gtpxXirI4nY=";
   };
 
   nativeBuildInputs = [ cmake ];

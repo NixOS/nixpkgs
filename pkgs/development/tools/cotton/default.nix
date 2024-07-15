@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "danielhuang";
     repo = pname;
     rev = "df9d79a4b0bc4b140e87ddd7795924a93775a864";
-    sha256 = "sha256-ZMQaVMH8cuOb4PQ19g0pAFAMwP8bR60+eWFhiXk1bYE=";
+    hash = "sha256-ZMQaVMH8cuOb4PQ19g0pAFAMwP8bR60+eWFhiXk1bYE=";
   };
 
   cargoLock = {

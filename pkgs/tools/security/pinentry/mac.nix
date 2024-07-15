@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "GPGTools";
     repo = "pinentry";
     rev = "v${version}";
-    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
+    hash = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
   # use pregenerated nib files because generating them requires XCode

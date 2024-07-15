@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-egxQ1tGC6R5p1stYm4r05+b2HkuT+nBySTZPGqeAbSE=";
+    hash = "sha256-egxQ1tGC6R5p1stYm4r05+b2HkuT+nBySTZPGqeAbSE=";
   };
 
   meta = with lib; {

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tenox7";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
+    hash = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
   };
 
   vendorHash = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";

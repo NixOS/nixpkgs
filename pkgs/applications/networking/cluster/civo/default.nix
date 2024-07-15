@@ -8,7 +8,7 @@ buildGoModule rec {
     owner  = "civo";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-9uoh0rdBgIONqiGwak9Hvrf3davqcvuB6KbhmyU16fk=";
+    hash = "sha256-9uoh0rdBgIONqiGwak9Hvrf3davqcvuB6KbhmyU16fk=";
   };
 
   vendorHash = "sha256-bEyknQc7TCxbWj7VsjJ2WGz65BG8HaP8ldL2kb+bbtc=";

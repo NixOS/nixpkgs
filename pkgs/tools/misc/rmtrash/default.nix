@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "PhrozenByte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
+    hash = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

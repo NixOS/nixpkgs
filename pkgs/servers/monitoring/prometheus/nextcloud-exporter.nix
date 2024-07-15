@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "xperimental";
     repo = "nextcloud-exporter";
     rev = "v${version}";
-    sha256 = "sha256-tbzXxrAzMZyyePeI+Age31+XJFJcp+1RqoCAGCKaLmQ=";
+    hash = "sha256-tbzXxrAzMZyyePeI+Age31+XJFJcp+1RqoCAGCKaLmQ=";
   };
 
   vendorHash = "sha256-9ABGc5uSOIjhKcnTH5WOuwg0kXhFsxOlAkatcOQy3dg=";

@@ -23,7 +23,7 @@ let
         owner = "SimonKagstrom";
         repo = "kcov";
         rev = "v${version}";
-        sha256 = "sha256-8/182RjuNuyFzSyCgyyximGaveDyhStwIQg29S5U/pI=";
+        hash = "sha256-8/182RjuNuyFzSyCgyyximGaveDyhStwIQg29S5U/pI=";
       };
 
       preConfigure = "patchShebangs src/bin-to-c-source.py";

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-PoWpNuv3Tw3vjuMRZGcpy6R6OeSYSHy1DMmzE7P2LLY=";
+    hash = "sha256-PoWpNuv3Tw3vjuMRZGcpy6R6OeSYSHy1DMmzE7P2LLY=";
   };
 
   vendorHash = null;

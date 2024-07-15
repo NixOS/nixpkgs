@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
+    hash = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
   };
 
   meta = {

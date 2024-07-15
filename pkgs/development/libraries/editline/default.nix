@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "troglobit";
     repo = "editline";
     rev = version;
-    sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
+    hash = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
   };
 
   patches = [

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-vKn1dTP1SOQs9oCPw0R5956D6mR5UuW9GbqGilxeV3c=";
+    hash = "sha256-vKn1dTP1SOQs9oCPw0R5956D6mR5UuW9GbqGilxeV3c=";
   };
 
   vendorHash = "sha256-/Wpnj99yHyEc7uPBo00k6lJawX5HqqVwEHavyH3luaY=";

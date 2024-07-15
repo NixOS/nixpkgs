@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "apache";
     repo = "cloudstack-cloudmonkey";
     rev = version;
-    sha256 = "sha256-mkEGOZw7GDIFnYUpgvCetA4dU9R1m4q6MOUDG0TWN64=";
+    hash = "sha256-mkEGOZw7GDIFnYUpgvCetA4dU9R1m4q6MOUDG0TWN64=";
   };
 
   vendorHash = null;

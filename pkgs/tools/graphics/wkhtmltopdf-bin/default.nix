@@ -42,7 +42,7 @@ let
     version = "0.12.6-3";
     src = fetchurl {
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.archlinux-x86_64.pkg.tar.xz";
-      sha256 = "sha256-6Ewu8sPRbqvYWj27mBlQYpEN+mb+vKT46ljrdEUxckI=";
+      hash = "sha256-6Ewu8sPRbqvYWj27mBlQYpEN+mb+vKT46ljrdEUxckI=";
     };
 
     nativeBuildInputs = [ autoPatchelfHook ];

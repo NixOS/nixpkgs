@@ -11,7 +11,7 @@ buildNpmPackage rec {
     owner = "AppThreat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CmX19UdmXTbmO+6nFzsFbZspmIWYFtcUVaA0j8iU7GI=";
+    hash = "sha256-CmX19UdmXTbmO+6nFzsFbZspmIWYFtcUVaA0j8iU7GI=";
   };
 
   npmDepsHash = "sha256-Vd+zRExQFmmv9f8uWQFE/nWRs6y86nLFu5HrM6iCf7U=";

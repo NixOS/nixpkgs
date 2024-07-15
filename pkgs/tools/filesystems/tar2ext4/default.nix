@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "microsoft";
     repo = "hcsshim";
     rev = "v${version}";
-    sha256 = "sha256-aK1XZPHZSgTf6MTrJv+5SBr7FCT53VNXSTZQVnHM2GA=";
+    hash = "sha256-aK1XZPHZSgTf6MTrJv+5SBr7FCT53VNXSTZQVnHM2GA=";
   };
 
   sourceRoot = "${src.name}/cmd/tar2ext4";

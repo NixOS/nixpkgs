@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "Project-OSRM";
     repo   = "osrm-backend";
     rev = "v${version}";
-    sha256 = "sha256-kqRYE26aeq7nCen56TJo3BlyLFWn4NMltsq+re64/VQ=";
+    hash = "sha256-kqRYE26aeq7nCen56TJo3BlyLFWn4NMltsq+re64/VQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

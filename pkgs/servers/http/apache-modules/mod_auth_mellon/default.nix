@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "latchset";
     repo = "mod_auth_mellon";
     rev = "v${version}";
-    sha256 = "sha256-frSfhddLfEZ2xSI7/HPZkr5AiTJ9nnYmnJZY8aC3zwI=";
+    hash = "sha256-frSfhddLfEZ2xSI7/HPZkr5AiTJ9nnYmnJZY8aC3zwI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];

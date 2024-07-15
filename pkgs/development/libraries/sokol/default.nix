@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "floooh";
     repo = "sokol";
     rev = "47d92ff86298fc96b3b84d93d0ee8c8533d3a2d2";
-    sha256 = "sha256-TsM5wK9a2ectrAY8VnrMPaxCNV3e1yW92SBBCHgs+0k=";
+    hash = "sha256-TsM5wK9a2ectrAY8VnrMPaxCNV3e1yW92SBBCHgs+0k=";
   };
 
   dontBuild = true;

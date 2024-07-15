@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Microsoft/mssql-jdbc/releases/download/v${version}/mssql-jdbc-${version}.jre8.jar";
-    sha256 = "sha256-Q5XwJ3j6J06DjX2tIVM676tXvKSrBb0W6/EucHpyTI4=";
+    hash = "sha256-Q5XwJ3j6J06DjX2tIVM676tXvKSrBb0W6/EucHpyTI4=";
   };
 
   dontUnpack = true;

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     rev = "v${version}";
-    sha256 = "sha256-l/1paghG/ARD0JfzNh0xj2UD5kW6FddM8Xrd/FCygYc=";
+    hash = "sha256-l/1paghG/ARD0JfzNh0xj2UD5kW6FddM8Xrd/FCygYc=";
   };
 
   cargoSha256 = "sha256-9/kIIZDIsOhUvRT3TyXN5PGFUB+a8m2yXmzBbsPUK28=";

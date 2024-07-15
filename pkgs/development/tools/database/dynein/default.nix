@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "awslabs";
     repo = "dynein";
     rev = "v${version}";
-    sha256 = "sha256-QhasTFGOFOjzNKdQtA+eBhKy51O4dFt6vpeIAIOM2rQ=";
+    hash = "sha256-QhasTFGOFOjzNKdQtA+eBhKy51O4dFt6vpeIAIOM2rQ=";
   };
 
   # Use system openssl.

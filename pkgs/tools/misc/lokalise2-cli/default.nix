@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
     rev = "v${version}";
-    sha256 = "sha256-kCD7PovmEU27q9zhXypOHiCy3tHipvuCLVHRcxjHObM=";
+    hash = "sha256-kCD7PovmEU27q9zhXypOHiCy3tHipvuCLVHRcxjHObM=";
   };
 
   vendorHash = "sha256-SDI36+35yFy7Fp+VrnQMyIDUY1kM2tylwdS3I9E2vyk=";

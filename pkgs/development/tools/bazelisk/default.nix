@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UNrfLuSadkP3GBlFMg2V3mK/GSNlyvIxeHnkTuPjfy4=";
+    hash = "sha256-UNrfLuSadkP3GBlFMg2V3mK/GSNlyvIxeHnkTuPjfy4=";
   };
 
   vendorHash = "sha256-hjV7Pc3DFExSCsA0jKVxb1GxoXQ7LRFGuot3V0IHG58=";

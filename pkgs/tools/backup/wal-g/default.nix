@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "sha256-k+GaOb+o5b+Rmggk+Wq3NscDS+fIvyK0e/EhX6UMlqM=";
+    hash = "sha256-k+GaOb+o5b+Rmggk+Wq3NscDS+fIvyK0e/EhX6UMlqM=";
   };
 
   vendorHash = "sha256-ZsVqR02D4YmZP/tVz2UWpXa6fM7HU7Hi2CSnvuVx9UU=";

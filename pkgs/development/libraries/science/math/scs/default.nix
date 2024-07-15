@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "cvxgrp";
     repo = "scs";
     rev = version;
-    sha256 = "sha256-0g0r3DNgkPZgag0qtz79Wk3Cre1I2yaabFi3OgUzgfc=";
+    hash = "sha256-0g0r3DNgkPZgag0qtz79Wk3Cre1I2yaabFi3OgUzgfc=";
   };
 
   # Actually link and add libgfortran to the rpath

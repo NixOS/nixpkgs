@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "linbox-team";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
+    hash = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
   patches = [
     # Pull upstream fix for gcc-13:

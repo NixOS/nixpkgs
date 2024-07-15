@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ierton";
     repo = "xkb-switch";
     rev = version;
-    sha256 = "sha256-DZAIL6+D+Hgs+fkJwRaQb9BHrEjAkxiqhOZyrR+Mpuk=";
+    hash = "sha256-DZAIL6+D+Hgs+fkJwRaQb9BHrEjAkxiqhOZyrR+Mpuk=";
   };
 
   nativeBuildInputs = [ cmake ];

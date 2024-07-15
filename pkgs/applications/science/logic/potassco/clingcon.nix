@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "potassco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-R2kgcw8VUwhOdvPXnsahT5gnoUd5DXLqfdH++8rFoAA=";
+    hash = "sha256-R2kgcw8VUwhOdvPXnsahT5gnoUd5DXLqfdH++8rFoAA=";
    };
 
   postPatch = ''

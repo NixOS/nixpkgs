@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
     rev = "v${version}";
-    sha256 = "sha256-txbs1SzAaV1nCl104m0Ht5DwzCmK+sBDn4rZ1newdLc=";
+    hash = "sha256-txbs1SzAaV1nCl104m0Ht5DwzCmK+sBDn4rZ1newdLc=";
   };
 
   vendorHash = "sha256-QbjiQVclT8paEKYQmMwj5MLq40mAVh5Ji5VJJTOmEZI=";

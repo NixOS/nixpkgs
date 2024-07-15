@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "accellera-official";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qeQUrPhD+Gb1lResM7NZzO/vEgJd3NE6lbnM380VVa0=";
+    hash = "sha256-qeQUrPhD+Gb1lResM7NZzO/vEgJd3NE6lbnM380VVa0=";
   };
 
   nativeBuildInputs = [ cmake ];

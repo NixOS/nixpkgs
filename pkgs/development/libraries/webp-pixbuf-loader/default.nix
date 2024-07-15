@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-2GDH5+YCwb2mPdMfEscmWDOzdGnWRcppE+4rcDCZog4=";
+    hash = "sha256-2GDH5+YCwb2mPdMfEscmWDOzdGnWRcppE+4rcDCZog4=";
   };
 
   nativeBuildInputs = [

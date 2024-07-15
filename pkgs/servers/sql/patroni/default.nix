@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "zalando";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GyPPBoYcJnuMer9FYGhWqursX/qJLaAlc9zFULoJqo4=";
+    hash = "sha256-GyPPBoYcJnuMer9FYGhWqursX/qJLaAlc9zFULoJqo4=";
   };
 
   propagatedBuildInputs = with pythonPackages; [

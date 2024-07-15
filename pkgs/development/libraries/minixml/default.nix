@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "michaelrsweet";
     repo = "mxml";
     rev = "v${version}";
-    sha256 = "sha256-l7GUA+vlSECi/72eU3Y9COpGtLTRh3vYcHUi+uRkCn8=";
+    hash = "sha256-l7GUA+vlSECi/72eU3Y9COpGtLTRh3vYcHUi+uRkCn8=";
   };
 
   # remove the -arch flags which are set by default in the build

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "momiji";
     repo = "tpm-luks";
     rev = "c9c5b7fdddbcdac1cd4d2ea6baddd0617cc88ffa";
-    sha256 = "sha256-HHyZLZAXfmuimpHV8fOWldZmi4I5uV1NnSmP4E7ZQtc=";
+    hash = "sha256-HHyZLZAXfmuimpHV8fOWldZmi4I5uV1NnSmP4E7ZQtc=";
   };
 
   patches = [

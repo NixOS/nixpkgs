@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-ethereum";
     repo = "ethabi";
     rev = "v${version}";
-    sha256 = "sha256-bl46CSVP1MMYI3tkVAHFrjMFwTt8QoleZCV9pMIMZyc=";
+    hash = "sha256-bl46CSVP1MMYI3tkVAHFrjMFwTt8QoleZCV9pMIMZyc=";
   };
 
   cargoLock = {

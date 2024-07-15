@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "riscv";
     repo = "riscv-isa-sim";
     rev = "v${version}";
-    sha256 = "sha256-4D2Fezej0ioOOupw3kgMT5VLs+/jXQjwvek6v0AVMzI=";
+    hash = "sha256-4D2Fezej0ioOOupw3kgMT5VLs+/jXQjwvek6v0AVMzI=";
   };
 
   patches = [

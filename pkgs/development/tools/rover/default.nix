@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c1Tnb9ACyV6RZmYnLL+KnybGgy8kwGi0JyWYcoH1J6M=";
+    hash = "sha256-c1Tnb9ACyV6RZmYnLL+KnybGgy8kwGi0JyWYcoH1J6M=";
   };
 
   cargoSha256 = "sha256-wTvQ4QBysppMgwv9pjQckVjMoBzLiDReOt6sJImqKFY=";

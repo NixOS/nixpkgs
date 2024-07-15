@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "openbabel";
     repo = "openbabel";
     rev = "openbabel-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-+pXsWMzex7rB1mm6dnTHzAcyw9jImgx1OZuLeCvbeJ0=";
+    hash = "sha256-+pXsWMzex7rB1mm6dnTHzAcyw9jImgx1OZuLeCvbeJ0=";
   };
 
   patches = [

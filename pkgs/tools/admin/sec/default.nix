@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "simple-evcorr";
     repo = "sec";
     rev = version;
-    sha256 = "sha256-s5xalQfZIrvj8EcLvN0swpYBgRhE1YUoPmQYVFB0lWA=";
+    hash = "sha256-s5xalQfZIrvj8EcLvN0swpYBgRhE1YUoPmQYVFB0lWA=";
   };
 
   buildInputs = [ perl ];

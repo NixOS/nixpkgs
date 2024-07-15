@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "prometheus-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zLg4cOZUh50OFPp4mKR/FY0JfzVmXmDFcKkhB6DalGc=";
+    hash = "sha256-zLg4cOZUh50OFPp4mKR/FY0JfzVmXmDFcKkhB6DalGc=";
   };
 
   ldflags = [

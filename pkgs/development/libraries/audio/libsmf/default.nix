@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "stump";
     repo = "libsmf";
     rev = "libsmf-${version}";
-    sha256 = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
+    hash = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

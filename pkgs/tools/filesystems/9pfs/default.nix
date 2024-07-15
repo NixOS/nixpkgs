@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ftrvxmtrx";
     repo = "9pfs";
     rev = version;
-    sha256 = "sha256-ywWG/H2ilt36mjlDSgIzYpardCFXpmbLiml6wy47XuA=";
+    hash = "sha256-ywWG/H2ilt36mjlDSgIzYpardCFXpmbLiml6wy47XuA=";
   };
 
   postPatch = ''

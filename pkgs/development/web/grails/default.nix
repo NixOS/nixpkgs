@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "sha256-PoiXZuAJbKsyBRVaxwsKSDh1BzPYlgAwe/xC0qfeDgs=";
+    hash = "sha256-PoiXZuAJbKsyBRVaxwsKSDh1BzPYlgAwe/xC0qfeDgs=";
   };
 
   nativeBuildInputs = [ unzip ];

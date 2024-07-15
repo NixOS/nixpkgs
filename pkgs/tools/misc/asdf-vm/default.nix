@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
-    sha256 = "sha256-DmwKzW0oHjokMxj2RMT4iogurEMKeAcl7MWlPTOqMmg=";
+    hash = "sha256-DmwKzW0oHjokMxj2RMT4iogurEMKeAcl7MWlPTOqMmg=";
   };
 
   nativeBuildInputs = [

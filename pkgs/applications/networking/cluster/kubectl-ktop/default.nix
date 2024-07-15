@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
-    sha256 = "sha256-nVZ1e/GKiJFTwuq5dPIzF4Jrv2DJ2wwWAiOn304hTA4=";
+    hash = "sha256-nVZ1e/GKiJFTwuq5dPIzF4Jrv2DJ2wwWAiOn304hTA4=";
   };
 
   vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";

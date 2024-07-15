@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "nodauf";
     repo = "GoMapEnum";
     rev = "v${version}";
-    sha256 = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
+    hash = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
   };
 
   vendorHash = "sha256-5C0dDY/42H8oHNdQaKYiuqpi2QqqgHC7VMO/0kFAofY=";

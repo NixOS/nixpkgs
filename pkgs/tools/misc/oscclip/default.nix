@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "rumpelsepp";
     repo = "oscclip";
     rev = "v${version}";
-    sha256 = "sha256-WQvZn+SWamEqEXPutIZVDZTIczybtHUG9QsN8XxUeg8=";
+    hash = "sha256-WQvZn+SWamEqEXPutIZVDZTIczybtHUG9QsN8XxUeg8=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];

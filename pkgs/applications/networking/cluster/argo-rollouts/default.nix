@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "argoproj";
     repo = "argo-rollouts";
     rev = "v${version}";
-    sha256 = "sha256-5ly5VJSXIo9s2ilWYhf5FJij+tcITd+rmYEKFdFrq44=";
+    hash = "sha256-5ly5VJSXIo9s2ilWYhf5FJij+tcITd+rmYEKFdFrq44=";
   };
 
   vendorHash = "sha256-38BLPNc6en70+UxlldmrwtRTMRLh/fCPL6FtuA2ODGM=";

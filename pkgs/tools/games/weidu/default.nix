@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "WeiDUorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
+    hash = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 
   postPatch = ''

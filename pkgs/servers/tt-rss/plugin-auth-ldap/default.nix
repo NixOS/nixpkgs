@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "hydrian";
     repo = "TTRSS-Auth-LDAP";
     rev = "582ade49fd433a30b403caa1d0689fca5f3c99e1";
-    sha256 = "sha256-favz/2KvWqvv8ehTv3gc7TBbFDjkrOmutChnyKPgces=";
+    hash = "sha256-favz/2KvWqvv8ehTv3gc7TBbFDjkrOmutChnyKPgces=";
   };
 
   installPhase = ''

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "swaggo";
     repo = "swag";
     rev = "v${version}";
-    sha256 = "sha256-wS5m3dBiILxmVb6P559fGcONdCWc/5hhLAVMC+G1QZs=";
+    hash = "sha256-wS5m3dBiILxmVb6P559fGcONdCWc/5hhLAVMC+G1QZs=";
   };
 
   vendorHash = "sha256-BxWmEcx5IIT/yI46CJGE0vE1BRm5zwngc0x1dVy/04s=";

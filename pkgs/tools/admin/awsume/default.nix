@@ -18,7 +18,7 @@ buildPythonApplication rec {
     owner = "trek10inc";
     repo = "awsume";
     rev = version;
-    sha256 = "sha256-An7omHk2Yxjc6db6Y8QSrtgUvSF5rlVhgxMTpNOePHo=";
+    hash = "sha256-An7omHk2Yxjc6db6Y8QSrtgUvSF5rlVhgxMTpNOePHo=";
   };
 
   AWSUME_SKIP_ALIAS_SETUP = 1;

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "FedeDP";
     repo = "libmodule";
     rev = version;
-    sha256 = "sha256-wkRiDWO9wUyxkAeqvm99u22Jq4xnQJx6zS7Sb+R8iMg=";
+    hash = "sha256-wkRiDWO9wUyxkAeqvm99u22Jq4xnQJx6zS7Sb+R8iMg=";
   };
 
   nativeBuildInputs = [

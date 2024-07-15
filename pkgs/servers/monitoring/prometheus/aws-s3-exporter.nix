@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "ribbybibby";
     repo = "s3_exporter";
     rev = "v${version}";
-    sha256 = "sha256-dYkMCCAIlFDFOFUNJd4NvtAeJDTsHeJoH90b5pSGlQE=";
+    hash = "sha256-dYkMCCAIlFDFOFUNJd4NvtAeJDTsHeJoH90b5pSGlQE=";
   };
 
   vendorHash = null;

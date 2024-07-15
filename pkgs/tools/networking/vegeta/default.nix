@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "tsenart";
     repo = "vegeta";
     rev = "v${version}";
-    sha256 = "sha256-09DowdlbCsBQsAuAqC2QyUYvZHz7QmttO8Q6KHQCqLo=";
+    hash = "sha256-09DowdlbCsBQsAuAqC2QyUYvZHz7QmttO8Q6KHQCqLo=";
   };
 
   vendorHash = "sha256-5MvcZLg+NDDsqlpVV2FhTiEhXUJHq7eaP7Pba3iIipo=";

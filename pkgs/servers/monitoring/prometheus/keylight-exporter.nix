@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "mdlayher";
     repo = "keylight_exporter";
     rev = "v${version}";
-    sha256 = "sha256-yI1mmEb5SP2lbP37CpPxYITJL/nvd/mIwxB0RIQRe4I=";
+    hash = "sha256-yI1mmEb5SP2lbP37CpPxYITJL/nvd/mIwxB0RIQRe4I=";
   };
 
   vendorHash = "sha256-0QSsGgokErRNIHQIjZQn5t1dvc306uZck8uLSgjcrck=";

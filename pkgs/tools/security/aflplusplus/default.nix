@@ -25,7 +25,7 @@ let
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = "v${version}";
-      sha256 = "sha256-elghcBw2tIttQo7bkMFRCx8iNqxwY0NCz0343wc8hWA=";
+      hash = "sha256-elghcBw2tIttQo7bkMFRCx8iNqxwY0NCz0343wc8hWA=";
     };
     enableParallelBuilding = true;
 

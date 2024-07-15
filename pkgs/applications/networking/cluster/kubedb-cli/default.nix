@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "kubedb";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-U5BRkH0jqTEBYtiT93YP/UpQYekPjAHEGl59HPk7TfQ=";
+    hash = "sha256-U5BRkH0jqTEBYtiT93YP/UpQYekPjAHEGl59HPk7TfQ=";
   };
 
   vendorHash = null;

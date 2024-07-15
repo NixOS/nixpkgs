@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-UqUr57D5nZh+zanzCmxujLbA8eICKx0NUlP78YH8x/Q=";
+    hash = "sha256-UqUr57D5nZh+zanzCmxujLbA8eICKx0NUlP78YH8x/Q=";
   };
 
   vendorHash = "sha256-A5buz9JOAiXx9X4qmi7mTMJiy/E6XBaFlG/sXOG5AKw=";

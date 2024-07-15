@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "sha256-LCyw3xGsYjsbExueRHVRqoJYluji9MmZq5zGclvSSDk=";
+    hash = "sha256-LCyw3xGsYjsbExueRHVRqoJYluji9MmZq5zGclvSSDk=";
   };
 
   patches = [

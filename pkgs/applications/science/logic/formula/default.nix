@@ -8,7 +8,7 @@ buildDotnetModule rec {
     owner = "VUISIS";
     repo = "formula-dotnet";
     rev = "8ee2e6abfd4ce038e1d9cb9c8602dec1ed6c0163";
-    sha256 = "sha256-2ulv//YV3OqrfFltgUCeDe4rOPC0qqJ+80/D2lIoih8=";
+    hash = "sha256-2ulv//YV3OqrfFltgUCeDe4rOPC0qqJ+80/D2lIoih8=";
   };
 
   nugetDeps = ./nuget.nix;

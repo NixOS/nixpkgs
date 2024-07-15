@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "czerwonk";
     repo = "bird_exporter";
     rev = version;
-    sha256 = "sha256-aClwJ+J83iuZbfNP+Y1vKEjBULD5wh/R3TMceCccacc=";
+    hash = "sha256-aClwJ+J83iuZbfNP+Y1vKEjBULD5wh/R3TMceCccacc=";
   };
 
   vendorHash = "sha256-0EXRpehdpOYpq6H9udmNnQ24EucvAcPUKOlFSAAewbE=";

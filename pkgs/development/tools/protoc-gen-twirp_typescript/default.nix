@@ -8,7 +8,7 @@ buildGoModule {
     owner = "larrymyers";
     repo = "protoc-gen-twirp_typescript";
     rev = "535986b31881a214db3c04f122bcc96a2823a155";
-    sha256 = "sha256-LfF/n96LwRX8aoPHzCRI/QbDmZR9yMhE5yGhFAqa8nA=";
+    hash = "sha256-LfF/n96LwRX8aoPHzCRI/QbDmZR9yMhE5yGhFAqa8nA=";
   };
 
   proxyVendor = true;

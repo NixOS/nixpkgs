@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner  = "microsoft";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-slAi8Ht/jwpsFy5zC3CpfTdAkxEMpHJlgmNqMgz+psU=";
+    hash = "sha256-slAi8Ht/jwpsFy5zC3CpfTdAkxEMpHJlgmNqMgz+psU=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;

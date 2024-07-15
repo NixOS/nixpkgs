@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "emikulic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dcNoGU08tu950PlwSghoZwGSaSbP8NJ5qhWUi3bAtZY=";
+    hash = "sha256-dcNoGU08tu950PlwSghoZwGSaSbP8NJ5qhWUi3bAtZY=";
   };
 
   enableParallelBuilding = true;

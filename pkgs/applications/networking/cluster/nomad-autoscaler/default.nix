@@ -25,7 +25,7 @@ let
       owner = "hashicorp";
       repo = "nomad-autoscaler";
       rev = "v${version}";
-      sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
+      hash = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
     vendorHash = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";

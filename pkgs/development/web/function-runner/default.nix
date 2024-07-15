@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U47kA2D2dvJu8ym1OT/ThSsNC22b5hJ0Kqxerg8RPSI=";
+    hash = "sha256-U47kA2D2dvJu8ym1OT/ThSsNC22b5hJ0Kqxerg8RPSI=";
   };
 
   cargoHash = "sha256-pznA7aTLrc4I5uElh+4Oxp3lXHRfV5YMn9abcaJSHIc=";

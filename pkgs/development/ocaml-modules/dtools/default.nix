@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-dtools";
     rev = "v${version}";
-    sha256 = "sha256-NLQkQx3ZgxU1zvaQjOi+38nSeX+zKCXW40zOxVNekZA=";
+    hash = "sha256-NLQkQx3ZgxU1zvaQjOi+38nSeX+zKCXW40zOxVNekZA=";
   };
 
   meta = with lib; {

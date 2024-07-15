@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jandelgado";
     repo = "rabtap";
     rev = "v${version}";
-    sha256 = "sha256-5SX6Ma8AMpm642vCGUR1HI6fkKBui16sf7Fm0IpPK6M=";
+    hash = "sha256-5SX6Ma8AMpm642vCGUR1HI6fkKBui16sf7Fm0IpPK6M=";
   };
 
   vendorHash = "sha256-wZOkQjSPMZW3+ohZb+MlBWNU3WTL4/lqggAOJLrYFHc=";

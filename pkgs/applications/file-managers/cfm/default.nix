@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "willeccles";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uXL0RO9P+NYSZ0xCv91KzjHOJJI500YUT8IJkFS86pE=";
+    hash = "sha256-uXL0RO9P+NYSZ0xCv91KzjHOJJI500YUT8IJkFS86pE=";
   };
 
   makeFlags = [

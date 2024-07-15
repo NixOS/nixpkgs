@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "pwnesia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
+    hash = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
   };
 
   patches = [

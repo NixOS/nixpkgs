@@ -8,7 +8,7 @@ mkCoqDerivation {
 
   release = {
     "1.0.0".sha256 = "10g0gp3hk7wri7lijkrqna263346wwf6a3hbd4qr9gn8hmsx70wg";
-    "1.0.1".sha256 = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
+    "1.0.1".hash = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
   };
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [

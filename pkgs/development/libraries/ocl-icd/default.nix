@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "OCL-dev";
     repo = "ocl-icd";
     rev = "v${version}";
-    sha256 = "sha256-nx9Zz5DpS29g1HRIwPAQi6i+d7Blxd53WQ7Sb1a3FHg=";
+    hash = "sha256-nx9Zz5DpS29g1HRIwPAQi6i+d7Blxd53WQ7Sb1a3FHg=";
   };
 
   nativeBuildInputs = [

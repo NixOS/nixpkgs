@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elogind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+Nv6FL9Yjmfxs24+2mUTP//wbjzGUq4ftgJLfuEqBJg=";
+    hash = "sha256-+Nv6FL9Yjmfxs24+2mUTP//wbjzGUq4ftgJLfuEqBJg=";
   };
 
   nativeBuildInputs = [

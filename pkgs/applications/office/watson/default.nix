@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "TailorDev";
     repo = "Watson";
     rev = version;
-    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
+    hash = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
   patches = [

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     rev = "v${version}";
-    sha256 = "sha256-EGj9VVY+Zbmth7H1oTgq38KNLT/aWoTPn8k4sVkScgg=";
+    hash = "sha256-EGj9VVY+Zbmth7H1oTgq38KNLT/aWoTPn8k4sVkScgg=";
   };
 
   cargoPatches = [ ./fix-cargo-lock.patch ];

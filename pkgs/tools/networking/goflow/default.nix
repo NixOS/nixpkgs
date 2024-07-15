@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2tQADlAajuiNtygdu2SCu2EF3NAuloQL0ROBMUZudZU=";
+    hash = "sha256-2tQADlAajuiNtygdu2SCu2EF3NAuloQL0ROBMUZudZU=";
   };
 
   vendorHash = "sha256-fOlfVI8v7KqNSRhAPlZBSHKfZRlCbCgjnMV/6bsqDhg=";

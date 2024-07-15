@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "sha256-gVYDvda+6ZJkShJXUxUEVxq4enkRrhdvlTTxYWq4Aho=";
+    hash = "sha256-gVYDvda+6ZJkShJXUxUEVxq4enkRrhdvlTTxYWq4Aho=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];

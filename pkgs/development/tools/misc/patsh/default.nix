@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     owner = "nix-community";
     repo = "patsh";
     rev = "v${version}";
-    sha256 = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
+    hash = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
   };
 
   cargoHash = "sha256-hAWMm3YjwTB8ajn3QeXEOJYmPzbbitdwyO4k/IyhlOI=";

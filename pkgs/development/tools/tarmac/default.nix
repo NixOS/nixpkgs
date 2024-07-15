@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Roblox";
     repo = "tarmac";
     rev = "v${version}";
-    sha256 = "sha256-O6qrAzGiAxiE56kpuvH/jDKHRXxHZ2SlDL5nwOOd4EU=";
+    hash = "sha256-O6qrAzGiAxiE56kpuvH/jDKHRXxHZ2SlDL5nwOOd4EU=";
   };
 
   cargoLock = {

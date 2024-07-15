@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "stsundermann";
     repo = "appindicator-sharp";
     rev = version;
-    sha256 = "sha256:1i0vqbp05l29f5v9ygp7flm4s05pcnn5ivl578mxmhb51s7ncw6l";
+    hash = "sha256:1i0vqbp05l29f5v9ygp7flm4s05pcnn5ivl578mxmhb51s7ncw6l";
   };
 
   nativeBuildInputs = [

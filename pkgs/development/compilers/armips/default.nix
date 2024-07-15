@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Kingcom";
     repo = "armips";
     rev = "v${version}";
-    sha256 = "sha256-L+Uxww/WtvDJn1xZqoqA6Pkzq/98sy1qTxZbv6eEjbA=";
+    hash = "sha256-L+Uxww/WtvDJn1xZqoqA6Pkzq/98sy1qTxZbv6eEjbA=";
   };
 
   nativeBuildInputs = [ cmake ];

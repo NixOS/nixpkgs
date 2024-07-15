@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Dushistov";
     repo = "sdcv";
     rev = "v${version}";
-    sha256 = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
+    hash = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
   };
 
   hardeningDisable = [ "format" ];

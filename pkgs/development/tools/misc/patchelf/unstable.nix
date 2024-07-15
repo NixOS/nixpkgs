@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "NixOS";
     repo = "patchelf";
     rev = "a0f54334df36770b335c051e540ba40afcbf8378";
-    sha256 = "sha256-FSoxTcRZMGHNJh8dNtKOkcUtjhmhU6yQXcZZfUPLhQM=";
+    hash = "sha256-FSoxTcRZMGHNJh8dNtKOkcUtjhmhU6yQXcZZfUPLhQM=";
   };
 
   # Drop test that fails on musl (?)

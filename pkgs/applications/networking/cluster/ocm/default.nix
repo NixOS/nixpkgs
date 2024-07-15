@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "sha256-hcbCUzC+E7VHmqATw/1LQxdMLiFibgYiWrQHpm3jZLA=";
+    hash = "sha256-hcbCUzC+E7VHmqATw/1LQxdMLiFibgYiWrQHpm3jZLA=";
   };
 
   vendorHash = "sha256-NP5LLP27hn8p2gUVO/qpdu1Yp3t8iarUUKR/FjU0Qlc=";

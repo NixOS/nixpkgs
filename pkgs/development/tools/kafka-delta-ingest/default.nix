@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "delta-io";
     repo = pname;
     rev = "c48c854145b5aab1b8f36cc04978880794a2273c";
-    sha256 = "sha256-q0jOVZlxMHIhnc8y2N8o7Sl5Eg7DfJ96kXrPIV8RD1Y=";
+    hash = "sha256-q0jOVZlxMHIhnc8y2N8o7Sl5Eg7DfJ96kXrPIV8RD1Y=";
   };
 
   nativeBuildInputs = [

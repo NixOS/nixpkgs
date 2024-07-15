@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "lballabio";
     repo = "QuantLib";
     rev = "v${version}";
-    sha256 = "sha256-qrMaIBiDg7bFtWTDAQgAMtekb/7VrI7Ix+G59mU4WHI=";
+    hash = "sha256-qrMaIBiDg7bFtWTDAQgAMtekb/7VrI7Ix+G59mU4WHI=";
   };
 
   nativeBuildInputs = [ cmake ];

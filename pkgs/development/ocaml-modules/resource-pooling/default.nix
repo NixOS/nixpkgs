@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GNYPxjMTo7y40y7aQdseuFyeVF/hSCZKXfEaH/WIO9w=";
+    hash = "sha256-GNYPxjMTo7y40y7aQdseuFyeVF/hSCZKXfEaH/WIO9w=";
   };
 
   propagatedBuildInputs = [ lwt_log ];

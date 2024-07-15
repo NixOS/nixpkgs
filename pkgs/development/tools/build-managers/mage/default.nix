@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aZPv3+F4VMiThjR0nFP+mKQLI9zKj2jaOawClROnT34=";
+    hash = "sha256-aZPv3+F4VMiThjR0nFP+mKQLI9zKj2jaOawClROnT34=";
   };
 
   vendorHash = null;

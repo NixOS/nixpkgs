@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
+    hash = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

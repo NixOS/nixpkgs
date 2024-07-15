@@ -10,7 +10,7 @@ buildNimPackage (finalAttrs: {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IkCLlIugnOO2LpS79gakURvPR1ZuayFtrOOoPyNKLMQ=";
+    hash = "sha256-IkCLlIugnOO2LpS79gakURvPR1ZuayFtrOOoPyNKLMQ=";
   };
 
   lockFile = ./lock.json;

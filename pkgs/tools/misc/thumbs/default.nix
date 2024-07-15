@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fcsonline";
     repo = "tmux-thumbs";
     rev = version;
-    sha256 = "sha256-XMz1ZOTz2q1Dt4QdxG83re9PIsgvxTTkytESkgKxhGM=";
+    hash = "sha256-XMz1ZOTz2q1Dt4QdxG83re9PIsgvxTTkytESkgKxhGM=";
   };
 
   cargoSha256 = "sha256-PfTx6PcW5DESShfr9Ekhbq1asZ0xUGM4Vi9EwmoDv+s";

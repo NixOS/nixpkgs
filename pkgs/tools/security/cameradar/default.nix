@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "Ullaakut";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
+    hash = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
   };
 
   vendorHash = "sha256-AIi57DWMvAKl0PhuwHO/0cHoDKk5e0bJsqHYBka4NiU=";

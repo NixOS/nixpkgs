@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "symisc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
+    hash = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
   };
 
   nativeBuildInputs = [ cmake ];

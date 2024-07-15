@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "capstone-engine";
     repo = "capstone";
     rev = version;
-    sha256 = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
+    hash = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
   };
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];

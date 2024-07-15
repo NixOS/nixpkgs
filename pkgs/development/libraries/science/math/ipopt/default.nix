@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "coin-or";
     repo = "Ipopt";
     rev = "releases/${version}";
-    sha256 = "sha256-ZuiZZMq7NzOm6CCJgMBgEWs8PEfM3pVr2yOWbS42l8U=";
+    hash = "sha256-ZuiZZMq7NzOm6CCJgMBgEWs8PEfM3pVr2yOWbS42l8U=";
   };
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];

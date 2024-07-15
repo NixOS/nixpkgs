@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "twekkel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XdqQQw87gvWvdx150fQhnCio478PNCQBMw/g/l/T1ZA=";
+    hash = "sha256-XdqQQw87gvWvdx150fQhnCio478PNCQBMw/g/l/T1ZA=";
   };
 
   makeFlags = [

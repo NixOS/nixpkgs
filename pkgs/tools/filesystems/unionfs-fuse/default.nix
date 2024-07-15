@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     rev = "v${version}";
-    sha256 = "sha256-EJryML6E0CW4kvsqMRqV3cq77j50HuylNzgaHD6CL/o=";
+    hash = "sha256-EJryML6E0CW4kvsqMRqV3cq77j50HuylNzgaHD6CL/o=";
   };
 
   patches = [

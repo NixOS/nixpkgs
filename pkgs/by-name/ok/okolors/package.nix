@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Ivordir";
     repo = "Okolors";
     rev = "v${version}";
-    sha256 = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
+    hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
   };
 
   cargoHash = "sha256-xRCxpmIocvkg1ErYVqBLHb/jXV2eWeWHg4IO/QsnnF0=";

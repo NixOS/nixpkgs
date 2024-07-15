@@ -39,7 +39,7 @@ let base = {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-YyvlMeBux80OpVhsCv+6IVxKXFRsgdr+1siupMR13JM=";
+      hash = "sha256-YyvlMeBux80OpVhsCv+6IVxKXFRsgdr+1siupMR13JM=";
     };
 
     configureFlags = base.configureFlags ++ [ "--with-system-icu" ];
@@ -61,7 +61,7 @@ let base = {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
+      hash = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];
@@ -76,7 +76,7 @@ let base = {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-hddW/cozboGw693q4k5f4+x9ccQFWFytXPUaBVkFnL4=";
+      hash = "sha256-hddW/cozboGw693q4k5f4+x9ccQFWFytXPUaBVkFnL4=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];

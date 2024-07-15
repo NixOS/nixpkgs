@@ -13,7 +13,7 @@ buildDotnetModule rec {
     owner = "secana";
     repo = "CertDump";
     rev = "1300005115786b3c214d73fa506de2de06a62cbb";
-    sha256 = "sha256-VqKOoW4fAXr0MtY5rgWvRqay1dazF+ZpzJUHkDeXpPs=";
+    hash = "sha256-VqKOoW4fAXr0MtY5rgWvRqay1dazF+ZpzJUHkDeXpPs=";
   };
 
   projectFile = [ "CertDump.sln" ];

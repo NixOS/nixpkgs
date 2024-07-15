@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "docopt";
     repo = "docopts";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
+    hash = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
   };
 
   patches = [

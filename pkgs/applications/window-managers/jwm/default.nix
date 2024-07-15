@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-HPcNXf+frYbT8lr5vU5xpUnyjGpQ5rc2G14EjDwpk3c=";
+    hash = "sha256-HPcNXf+frYbT8lr5vU5xpUnyjGpQ5rc2G14EjDwpk3c=";
   };
 
   nativeBuildInputs = [

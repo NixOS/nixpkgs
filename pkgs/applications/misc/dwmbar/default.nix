@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "thytom";
     repo = "dwmbar";
     rev = "574f5703c558a56bc9c354471543511255423dc7";
-    sha256 = "sha256-IrelZpgsxq2dnsjMdh7VC5eKffEGRbDkZmZBD+tROPs=";
+    hash = "sha256-IrelZpgsxq2dnsjMdh7VC5eKffEGRbDkZmZBD+tROPs=";
   };
 
   postPatch = ''

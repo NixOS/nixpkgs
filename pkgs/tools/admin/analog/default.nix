@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "c-amie";
     repo = "analog-ce";
     rev = version;
-    sha256 = "sha256-89nNkIUKzlcKKy0TfthA9T27A446Fqv9hYllGjYkDP4=";
+    hash = "sha256-89nNkIUKzlcKKy0TfthA9T27A446Fqv9hYllGjYkDP4=";
   };
 
   postPatch = ''

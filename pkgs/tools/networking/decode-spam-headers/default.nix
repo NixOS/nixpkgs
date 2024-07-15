@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     owner = "mgeeky";
     repo = "decode-spam-headers";
     rev = "492b6e744475cd5d3dd68a8140bc3478244b7df1";
-    sha256 = "sha256-gBDkvlZCndQjochn6TZtM/Lanza64LqMjNnLjn+pPR4=";
+    hash = "sha256-gBDkvlZCndQjochn6TZtM/Lanza64LqMjNnLjn+pPR4=";
   };
 
   format = "other";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "stoeckmann";
     repo = "xwallpaper";
     rev = "v${version}";
-    sha256 = "sha256-onxneLmXs1rYwpTzcnn+rbDboWVoEQgtGMHx/bMPRa8=";
+    hash = "sha256-onxneLmXs1rYwpTzcnn+rbDboWVoEQgtGMHx/bMPRa8=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook installShellFiles ];

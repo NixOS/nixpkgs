@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "caverym";
     repo = pname;
     rev = version;
-    sha256 = "sha256-srzahBMihkEP9/+7oRij5POHkCcH6QBh4kGz42Pz0nM=";
+    hash = "sha256-srzahBMihkEP9/+7oRij5POHkCcH6QBh4kGz42Pz0nM=";
   };
 
   cargoHash = "sha256-LBXCcFqqscCGgtTzt/gr7Lz0ExT9kAWrXPuPuKzKt0E=";

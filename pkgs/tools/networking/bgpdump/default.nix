@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "RIPE-NCC";
     repo = "bgpdump";
     rev = "v${version}";
-    sha256 = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
+    hash = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
   };
 
   postPatch = ''

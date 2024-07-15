@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "vaporup";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PDoljR/e/qraPhG9RRjHx1gBIMtTJ815TZDJws8Qg6o=";
+    hash = "sha256-PDoljR/e/qraPhG9RRjHx1gBIMtTJ815TZDJws8Qg6o=";
   };
 
   installPhase = ''

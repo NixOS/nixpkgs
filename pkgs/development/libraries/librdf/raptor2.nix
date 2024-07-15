@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "dajobe";
     repo = "raptor";
     rev = "3cca62a33da68143b687c9e486eefc7c7cbb4586";
-    sha256 = "sha256-h03IyFH1GHPqajfHBBTb19lCEu+VXzQLGC1wiEGVvgY=";
+    hash = "sha256-h03IyFH1GHPqajfHBBTb19lCEu+VXzQLGC1wiEGVvgY=";
   };
 
   cmakeFlags = [

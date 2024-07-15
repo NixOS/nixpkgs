@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "open-iscsi";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "sha256-Vz6VqqvEr0f8AdN9NcVnruapswmoOgvAXxXSfrM3yRA=";
+    hash = "sha256-Vz6VqqvEr0f8AdN9NcVnruapswmoOgvAXxXSfrM3yRA=";
   };
 
   propagatedBuildInputs = [ openssl ];

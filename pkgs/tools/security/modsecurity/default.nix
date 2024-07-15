@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "owasp-modsecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
+    hash = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

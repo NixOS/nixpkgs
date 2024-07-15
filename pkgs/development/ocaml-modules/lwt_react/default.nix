@@ -10,7 +10,7 @@ buildDunePackage {
     owner = "ocsigen";
     repo = "lwt";
     rev = "5.5.0";
-    sha256 = "sha256:1jbjz2rsz3j56k8vh5qlmm87hhkr250bs2m3dvpy9vsri8rkzj9z";
+    hash = "sha256:1jbjz2rsz3j56k8vh5qlmm87hhkr250bs2m3dvpy9vsri8rkzj9z";
   };
 
   nativeBuildInputs = [ cppo ];

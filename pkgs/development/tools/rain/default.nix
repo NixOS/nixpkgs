@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "aws-cloudformation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oj9/xVbb8+J4g/ul2CEs5LH7OKJdEqTTZonCHVlDc7M=";
+    hash = "sha256-oj9/xVbb8+J4g/ul2CEs5LH7OKJdEqTTZonCHVlDc7M=";
   };
 
   vendorHash = "sha256-NcM+SdIgqtSRg7Fcwml/V73qYHcowBdOtmuF7EMSBB8=";

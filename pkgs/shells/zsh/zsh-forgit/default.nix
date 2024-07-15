@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    sha256 = "sha256-DoOtrnEJwSxkCZtsVek+3w9RZH7j7LTvdleBC88xyfI=";
+    hash = "sha256-DoOtrnEJwSxkCZtsVek+3w9RZH7j7LTvdleBC88xyfI=";
   };
 
   strictDeps = true;

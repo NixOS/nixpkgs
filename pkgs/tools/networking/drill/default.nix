@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fcsonline";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4y5gpkQB0U6Yq92O6DDD5eq/i/36l/VfeyiE//pcZOk=";
+    hash = "sha256-4y5gpkQB0U6Yq92O6DDD5eq/i/36l/VfeyiE//pcZOk=";
   };
 
   cargoHash = "sha256-96eUCg0mzgUFLOKxpwRfzj1jH2Z+aDohBTztvRVWln0=";

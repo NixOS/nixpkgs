@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = version;
-    sha256 = "sha256-FBpf1YApwVpWSpUfa2LOrkS1Ef34sKCIZ6ic+Pczs14=";
+    hash = "sha256-FBpf1YApwVpWSpUfa2LOrkS1Ef34sKCIZ6ic+Pczs14=";
   };
 
   postPatch = ''

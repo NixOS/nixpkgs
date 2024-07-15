@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "KevinOConnor";
     repo = "klipper";
     rev = "00cb683def53be4b437bfb3e3a637d2d5879946c";
-    sha256 = "sha256-OtFUEhCZ8DrDfxKXYnLE/6/d2/4oyJYwSfKvsvbn/II=";
+    hash = "sha256-OtFUEhCZ8DrDfxKXYnLE/6/d2/4oyJYwSfKvsvbn/II=";
   };
 
   sourceRoot = "${src.name}/klippy";

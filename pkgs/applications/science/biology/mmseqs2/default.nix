@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "soedinglab";
     repo = pname;
     rev = version;
-    sha256 = "sha256-L+zOWrGkCLz/wqpBuji8H4/93sDFpcfnDOE8FHq1j84=";
+    hash = "sha256-L+zOWrGkCLz/wqpBuji8H4/93sDFpcfnDOE8FHq1j84=";
   };
 
   nativeBuildInputs = [ cmake xxd perl installShellFiles ];

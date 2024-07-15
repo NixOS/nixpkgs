@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "kshvmdn";
     repo = "fsql";
     rev = "v${version}";
-    sha256 = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
+    hash = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
   };
 
   vendorHash = "sha256-+laTnx6Xkrv3QQel5opqYQSuFmo54UMI2A653xbBWzQ=";

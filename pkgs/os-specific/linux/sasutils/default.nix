@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     owner = "stanford-rc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DK0mEqlPf9UGtUxqbzB0l1xX0P4htYm2NYvV7zilhx0=";
+    hash = "sha256-DK0mEqlPf9UGtUxqbzB0l1xX0P4htYm2NYvV7zilhx0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

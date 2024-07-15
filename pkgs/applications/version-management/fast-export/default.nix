@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "frej";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
+    hash = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

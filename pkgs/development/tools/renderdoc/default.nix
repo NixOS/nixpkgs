@@ -38,7 +38,7 @@ mkDerivation rec {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-BQR7ENgdblzamO5GgtLJriNiJFICsj0/iWVn1usxBjU=";
+    hash = "sha256-BQR7ENgdblzamO5GgtLJriNiJFICsj0/iWVn1usxBjU=";
   };
 
   buildInputs = [

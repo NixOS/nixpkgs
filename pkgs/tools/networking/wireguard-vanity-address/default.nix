@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "warner";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SjzcVIQ9HwhP6Y/uCwXGSdZgrYcUQ9kE/Bow8pyOKNo=";
+    hash = "sha256-SjzcVIQ9HwhP6Y/uCwXGSdZgrYcUQ9kE/Bow8pyOKNo=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];

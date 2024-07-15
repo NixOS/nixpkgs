@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-qUUVEnxZbWAygIFCSM1HvSmnDBZvYCO/1oJu6P46Y3g=";
+    hash = "sha256-qUUVEnxZbWAygIFCSM1HvSmnDBZvYCO/1oJu6P46Y3g=";
   };
 
   vendorHash = "sha256-uy/TyAnkb8D3qqOK+zf49082o2974G/YiJO0nb7MioM=";

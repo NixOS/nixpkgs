@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "google";
     repo = "addlicense";
     rev = "v${version}";
-    sha256 = "sha256-YMMHj6wctKtJi/rrcMIrLmNw/uvO6wCwokgYRQxcsFw=";
+    hash = "sha256-YMMHj6wctKtJi/rrcMIrLmNw/uvO6wCwokgYRQxcsFw=";
   };
 
   patches = [

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-Pza1MK5yWpuNfaaFAJy5/Pf+t0TN1Hzc5wKcpmMpEf0=";
+    hash = "sha256-Pza1MK5yWpuNfaaFAJy5/Pf+t0TN1Hzc5wKcpmMpEf0=";
   };
 
   cargoHash = "sha256-b6WfsDTAZgxA977JhdlafE+POPvMLl8Z7CzEf+L2+Us=";

@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BLAKE2";
     repo = "BLAKE2";
     rev = finalAttrs.version;
-    sha256 = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
+    hash = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
   };
 
   # Use the generic C implementation rather than the SSE optimised version on non-x86 platforms

@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner = "jarun";
     repo = "pdd";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
+    hash = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
   };
 
   format = "other";

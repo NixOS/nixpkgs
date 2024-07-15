@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "bombela";
     repo = "backward-cpp";
     rev = "v${version}";
-    sha256 = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
+    hash = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
   };
 
   installPhase = ''

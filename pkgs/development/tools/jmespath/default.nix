@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jmespath";
     repo = "go-jmespath";
     rev = "v${version}";
-    sha256 = "sha256-djA/7TCmAqCsht28b1itoiWd8Mtdsn/5uLxyT23K/qM=";
+    hash = "sha256-djA/7TCmAqCsht28b1itoiWd8Mtdsn/5uLxyT23K/qM=";
   };
 
   vendorHash = "sha256-Q12muprcKB7fCxemESb4sGPyYIdmgOt3YXVUln7oabw=";

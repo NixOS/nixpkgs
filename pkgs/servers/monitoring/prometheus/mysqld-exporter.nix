@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "prometheus";
     repo = "mysqld_exporter";
     rev = "v${version}";
-    sha256 = "sha256-P7EoWa0BWuAr3sjtrUxzofwlklhRLpzwpGVe31hFo7Q=";
+    hash = "sha256-P7EoWa0BWuAr3sjtrUxzofwlklhRLpzwpGVe31hFo7Q=";
   };
 
   vendorHash = "sha256-GEL9sMwwdGqpklm4yKNqzSOM6I/JzZjg3+ZB2ix2M8w=";

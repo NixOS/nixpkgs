@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "linbox-team";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
+    hash = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
 
   nativeCheckInputs = [

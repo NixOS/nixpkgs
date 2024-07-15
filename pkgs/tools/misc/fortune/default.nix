@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BpMhu01K46v1VJPQQ86gZTTck/Giwp6GaU2e2xOAoOM=";
+    hash = "sha256-BpMhu01K46v1VJPQQ86gZTTck/Giwp6GaU2e2xOAoOM=";
   };
 
   nativeBuildInputs = [ cmake perl rinutils ];

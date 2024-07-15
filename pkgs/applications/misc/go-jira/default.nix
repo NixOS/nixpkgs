@@ -8,7 +8,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "go-jira";
     repo = "jira";
-    sha256 = "sha256-h/x77xGqdOxPBxdchElZU9GFgjnNo89o9gx4fYM5dME=";
+    hash = "sha256-h/x77xGqdOxPBxdchElZU9GFgjnNo89o9gx4fYM5dME=";
   };
 
   vendorHash = "sha256-r69aFl3GwgZ1Zr4cEy4oWlqsrjNCrqjwW9BU9+d8xDQ=";

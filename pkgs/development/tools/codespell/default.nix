@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
+    hash = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
   };
 
   postPatch = ''

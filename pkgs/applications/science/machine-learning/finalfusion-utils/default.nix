@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "finalfusion";
     repo = pname;
     rev = version;
-    sha256 = "sha256-suzivynlgk4VvDOC2dQR40n5IJHoJ736+ObdrM9dIqE=";
+    hash = "sha256-suzivynlgk4VvDOC2dQR40n5IJHoJ736+ObdrM9dIqE=";
   };
 
   cargoSha256 = "sha256-HekjmctuzOWs5k/ihhsV8vVkm6906jEnFf3yvhkrA5Y=";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    sha256 = "sha256-ryBQjzg1DyYd/LBZzjHxq8m/7ZXRSKNNGRkIII0eHK0=";
+    hash = "sha256-ryBQjzg1DyYd/LBZzjHxq8m/7ZXRSKNNGRkIII0eHK0=";
     rev = "poco-${version}-release";
   };
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ibara";
     repo = "mg";
     rev = "mg-${version}";
-    sha256 = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
+    hash = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
   };
 
   postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

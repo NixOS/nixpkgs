@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "golang-migrate";
     repo = "migrate";
     rev = "v${version}";
-    sha256 = "sha256-9PJ3XxEA2PEaPFE3BbZkJB8XdJmm0gZf2Ko5T9DAZBw=";
+    hash = "sha256-9PJ3XxEA2PEaPFE3BbZkJB8XdJmm0gZf2Ko5T9DAZBw=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch

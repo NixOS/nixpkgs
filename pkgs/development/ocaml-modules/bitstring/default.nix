@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "xguerin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eO7/S9PoMybZPnQQ+q9qbqKpYO4Foc9OjW4uiwwNds8=";
+    hash = "sha256-eO7/S9PoMybZPnQQ+q9qbqKpYO4Foc9OjW4uiwwNds8=";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "kaworu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
+    hash = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
   };
 
   sourceRoot = "${src.name}/src";

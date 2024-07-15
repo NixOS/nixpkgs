@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yF4i1V50TpR3pEqHQfAK4VTUW+GmT+XU6WVTWMzCUwo=";
+    hash = "sha256-yF4i1V50TpR3pEqHQfAK4VTUW+GmT+XU6WVTWMzCUwo=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back

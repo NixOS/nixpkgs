@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "kevinlawler";
     repo = "kona";
     rev = "Win64-${version}";
-    sha256 = "sha256-m3a9conyKN0qHSSAG8zAb3kx8ir+7dqgxm1XGjCQcfk=";
+    hash = "sha256-m3a9conyKN0qHSSAG8zAb3kx8ir+7dqgxm1XGjCQcfk=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
+    hash = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
   };
 
   cargoSha256 = "sha256-rSHuKy86iJNLAKSVcb7fn7A/cc75EOc97jGI14EaC6k=";

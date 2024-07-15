@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${version}";
-    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
+    hash = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
   doCheck = true;

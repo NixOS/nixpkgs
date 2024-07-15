@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "major";
     repo = "MySQLTuner-perl";
     rev = version;
-    sha256 = "sha256-ezF0zjQB/KWD5rUcbXx2uwiNLsIJ7ZKMoqkclP7oc98=";
+    hash = "sha256-ezF0zjQB/KWD5rUcbXx2uwiNLsIJ7ZKMoqkclP7oc98=";
   };
 
   postPatch = ''

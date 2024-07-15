@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "karelzak";
     repo = "util-linux";
     rev = "v${version}";
-    sha256 = "sha256-X39os2iHqSrrYP6HVHPOkuTfc6vNB3pmsOP3VjW50fI=";
+    hash = "sha256-X39os2iHqSrrYP6HVHPOkuTfc6vNB3pmsOP3VjW50fI=";
   };
 
   configureFlags = [ "--disable-all-programs" "--enable-libsmartcols" ];

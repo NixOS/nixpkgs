@@ -267,7 +267,7 @@ in {
     version = "0.5.0-rc.1";
     src = fetchurl {
       url = "https://github.com/graylog-labs/graylog-plugin-splunk/releases/download/0.5.0-rc.1/graylog-plugin-splunk-0.5.0-rc.1.jar";
-      sha256 = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
+      hash = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";

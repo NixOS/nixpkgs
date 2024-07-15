@@ -11,7 +11,7 @@ buildKodiAddon rec {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
     rev = "v${version}";
-    sha256 = "sha256-Uyo8GClJU2/gdk4PeFNnoyvxOhooaxeXN3Wc5YGuCiM=";
+    hash = "sha256-Uyo8GClJU2/gdk4PeFNnoyvxOhooaxeXN3Wc5YGuCiM=";
   };
 
   nativeBuildInputs = [

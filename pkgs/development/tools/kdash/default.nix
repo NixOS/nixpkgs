@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kdash-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XY6aBqLHbif3RsytNm7JnDXspICJuhS7SJ+ApwTeqX4=";
+    hash = "sha256-XY6aBqLHbif3RsytNm7JnDXspICJuhS7SJ+ApwTeqX4=";
   };
 
   nativeBuildInputs = [ perl python3 pkg-config ];

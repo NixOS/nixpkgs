@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Tiiffi";
     repo = "mcrcon";
     rev = "v${version}";
-    sha256 = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
+    hash = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
   };
 
   buildPhase = ''

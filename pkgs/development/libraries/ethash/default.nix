@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       owner = "chfast";
       repo = "ethash";
       rev = "v${version}";
-      sha256 = "sha256-BjgfWDn72P4NJhzq0ySW8bvZI3AQB9jOaRqFIeCfJ8k=";
+      hash = "sha256-BjgfWDn72P4NJhzq0ySW8bvZI3AQB9jOaRqFIeCfJ8k=";
     };
 
   nativeBuildInputs = [

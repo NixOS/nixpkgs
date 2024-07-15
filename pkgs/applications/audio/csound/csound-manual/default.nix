@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "manual";
     rev = version;
-    sha256 = "sha256-W8MghqUBr3V7LPgNwU6Ugw16wdK3G37zAPuasMlZ2+I=";
+    hash = "sha256-W8MghqUBr3V7LPgNwU6Ugw16wdK3G37zAPuasMlZ2+I=";
   };
 
   prePatch = ''

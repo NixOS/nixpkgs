@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "dmbaturin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
+    hash = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
   };
 
   nativeBuildInputs = [ menhir ];

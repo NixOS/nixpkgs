@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "ValiValpas";
     repo = "taskopen";
     rev = "v${version}";
-    sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
+    hash = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
   };
 
   postPatch = ''

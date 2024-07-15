@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/conduktor/builds/releases/download/v${version}/Conduktor-linux-${version}.zip";
-    sha256 = "sha256-9y/7jni5zIITUWd75AxsfG/b5vCYotmeMeC9aYM2WEs=";
+    hash = "sha256-9y/7jni5zIITUWd75AxsfG/b5vCYotmeMeC9aYM2WEs=";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];

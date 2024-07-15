@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "redis";
     repo = "hiredis";
     rev = "v${version}";
-    sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
+    hash = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
   };
 
   PREFIX = "\${out}";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "RickdeJager";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
+    hash = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };
 
   nativeBuildInputs = [ cmake ];

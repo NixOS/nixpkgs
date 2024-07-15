@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-mJkAV4eUecJv2H3smfTNPcj+liCH8wNl/wiO+Q92eDE=";
+    hash = "sha256-mJkAV4eUecJv2H3smfTNPcj+liCH8wNl/wiO+Q92eDE=";
   };
   vendorHash = "sha256-immUT11gO3dFkrwrjwwYtPLxhYvSKcxmwaEkjFGrMsE=";
 

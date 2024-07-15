@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "anrieff";
     repo = "libcpuid";
     rev = "v${version}";
-    sha256 = "sha256-Bq16UH4IUR7dU57bGHKq8P6JsjaB4arOJ4zFeNyxXSg=";
+    hash = "sha256-Bq16UH4IUR7dU57bGHKq8P6JsjaB4arOJ4zFeNyxXSg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

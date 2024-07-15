@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "redlab-i";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eLLFHrCgOQzOtVxlAsZ5X91KK+vZiKMGL7zbQFiIZtI=";
+    hash = "sha256-eLLFHrCgOQzOtVxlAsZ5X91KK+vZiKMGL7zbQFiIZtI=";
   };
 
   outputs = [ "out" "dev" ];

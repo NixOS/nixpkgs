@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-32FNnCybXO67Vtg1LM6miJUaK+r0mlfjxgLQg1LD8Es=";
+    hash = "sha256-32FNnCybXO67Vtg1LM6miJUaK+r0mlfjxgLQg1LD8Es=";
   };
 
   strictDeps = true;

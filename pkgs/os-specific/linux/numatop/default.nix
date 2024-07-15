@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "numatop";
     rev = "v${version}";
-    sha256 = "sha256-GJvTwqgx34ZW10eIJj/xiKe3ZkAfs7GlJImz8jrnjfI=";
+    hash = "sha256-GJvTwqgx34ZW10eIJj/xiKe3ZkAfs7GlJImz8jrnjfI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

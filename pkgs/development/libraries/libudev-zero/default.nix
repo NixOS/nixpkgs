@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = version;
-    sha256 = "sha256-NXDof1tfr66ywYhCBDlPa+8DUfFj6YH0dvSaxHFqsXI=";
+    hash = "sha256-NXDof1tfr66ywYhCBDlPa+8DUfFj6YH0dvSaxHFqsXI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" "AR=${stdenv.cc.targetPrefix}ar" ];

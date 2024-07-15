@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "erpalma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
+    hash = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
   };
 
   nativeBuildInputs = [

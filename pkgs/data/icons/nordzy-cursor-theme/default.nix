@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "alvatip";
     repo = "Nordzy-cursors";
     rev = "v${version}";
-    sha256 = "sha256-q9PEEyxejRQ8UCwbqsfOCL7M70pLCOLyCx8gEFmZkWA=";
+    hash = "sha256-q9PEEyxejRQ8UCwbqsfOCL7M70pLCOLyCx8gEFmZkWA=";
   };
 
   installPhase = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "umurmur";
     repo = "umurmur";
     rev = version;
-    sha256 = "sha256-jp5+NbGmT90ksffvpLYIX2q5cPeVidDCYMPvLHCiP68=";
+    hash = "sha256-jp5+NbGmT90ksffvpLYIX2q5cPeVidDCYMPvLHCiP68=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

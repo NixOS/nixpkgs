@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage {
     owner = "siraben";
     repo = "regenkfs";
     rev = "652155445fc39bbe6628f6b9415b5cd6863f592f";
-    sha256 = "sha256-zkwOpMNPGstn/y1l1s8blUKpBebY4Ta9hiPYxVLvG6Y=";
+    hash = "sha256-zkwOpMNPGstn/y1l1s8blUKpBebY4Ta9hiPYxVLvG6Y=";
   };
 
   cargoSha256 = "sha256-05VmQdop4vdzw2XEvVdp9+RNmyZvay1Q7gKN2n8rDEQ=";

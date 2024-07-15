@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     repo = "kallisto";
     owner = "pachterlab";
     rev = "v${version}";
-    sha256 = "sha256-JJZJOl4u6FzngrrMuC2AfD5ry2LBOT8tdz2piH+9LFE=";
+    hash = "sha256-JJZJOl4u6FzngrrMuC2AfD5ry2LBOT8tdz2piH+9LFE=";
   };
 
   nativeBuildInputs = [ autoconf cmake ];

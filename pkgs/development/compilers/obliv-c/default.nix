@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "samee";
     repo = "obliv-c";
     rev = "e02e5c590523ef4dae06e167a7fa00037bb3fdaf";
-    sha256 = "sha256:02vyr4689f4dmwqqs0q1mrack9h3g8jz3pj8zqiz987dk0r5mz7a";
+    hash = "sha256:02vyr4689f4dmwqqs0q1mrack9h3g8jz3pj8zqiz987dk0r5mz7a";
   };
 
   hardeningDisable = [ "fortify" ];

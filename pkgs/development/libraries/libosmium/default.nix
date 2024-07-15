@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "osmcode";
     repo = "libosmium";
     rev = "v${version}";
-    sha256 = "sha256-QM6Nj2cmrhUysR2enFKhTWXdBXNqM21/Yqdn/zXEfYE=";
+    hash = "sha256-QM6Nj2cmrhUysR2enFKhTWXdBXNqM21/Yqdn/zXEfYE=";
   };
 
   nativeBuildInputs = [ cmake ];

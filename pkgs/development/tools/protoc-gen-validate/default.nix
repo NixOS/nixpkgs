@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "bufbuild";
     repo = "protoc-gen-validate";
     rev = "v${version}";
-    sha256 = "sha256-NPjBVd5Ch8h2+48uymMRjjY6nepmGiY8z9Kwt+wN4lI=";
+    hash = "sha256-NPjBVd5Ch8h2+48uymMRjjY6nepmGiY8z9Kwt+wN4lI=";
   };
 
   vendorHash = "sha256-1bR6cV7R9JEmayE3XN2fcrPQL6xspkKb+WYf+IrOhds=";

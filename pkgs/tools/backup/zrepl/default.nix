@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "zrepl";
     repo = "zrepl";
     rev = "v${version}";
-    sha256 = "sha256-sFSWcJ0aBMay+ngUqnr0PKBMOfCcKHgBjff6KRpPZrg=";
+    hash = "sha256-sFSWcJ0aBMay+ngUqnr0PKBMOfCcKHgBjff6KRpPZrg=";
   };
 
   vendorHash = "sha256-75fGejR7eiECsm1j3yIU1lAWaW9GrorrVnv8JEzkAtU=";

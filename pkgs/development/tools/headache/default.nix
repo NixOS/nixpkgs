@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "frama-c";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
+    hash = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
   };
 
   propagatedBuildInputs = [

@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchurl {
     url = "https://github.com/trinsic-id/sdk/releases/download/v${version}/trinsic-cli-vendor-${version}.tar.gz";
-    sha256 = "sha256-lPw55QcGMvY2YRYJGq4WC0fPbKiika4NF55tlb+i6So=";
+    hash = "sha256-lPw55QcGMvY2YRYJGq4WC0fPbKiika4NF55tlb+i6So=";
   };
 
   cargoVendorDir = "vendor";

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "redox-os";
     repo = "ion";
     rev = "3bb8966fc99ba223033e1e02b0a6d50fc25cbef4";
-    sha256 = "sha256-6KW/YkMQFeGb1i+1YdADZRW89UruHsfPhMq9Cvxjl/4=";
+    hash = "sha256-6KW/YkMQFeGb1i+1YdADZRW89UruHsfPhMq9Cvxjl/4=";
   };
 
   cargoLock = {

@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication {
     repo = "sdat2img";
     owner = "xpirt";
     rev = "b432c988a412c06ff24d196132e354712fc18929";
-    sha256 = "sha256-NCbf9H0hoJgeDtP6cQY0H280BQqgKXv3ConZ87QixVY=";
+    hash = "sha256-NCbf9H0hoJgeDtP6cQY0H280BQqgKXv3ConZ87QixVY=";
   };
 
   format = "other";

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jterrace";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VvxQTvDTDms6Ccyclbf9P0HEQksl5atPPzHuH8yXTmc=";
+    hash = "sha256-VvxQTvDTDms6Ccyclbf9P0HEQksl5atPPzHuH8yXTmc=";
   };
 
   patches = [

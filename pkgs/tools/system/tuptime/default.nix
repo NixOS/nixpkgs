@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "rfmoz";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-kR+Pi7/nsRzmmvibp95wjj8/B/Q6FCDSn2A7vJ3sM94=";
+    hash = "sha256-kR+Pi7/nsRzmmvibp95wjj8/B/Q6FCDSn2A7vJ3sM94=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

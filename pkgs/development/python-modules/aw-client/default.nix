@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-client";
     rev = "v${version}";
-    sha256 = "sha256-A9f1Wj4F6qRvCVj3iRQvsnILewJK1L5tfI2MnAXZ4nY=";
+    hash = "sha256-A9f1Wj4F6qRvCVj3iRQvsnILewJK1L5tfI2MnAXZ4nY=";
   };
 
   disabled = pythonOlder "3.8";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "derat";
     repo = "xsettingsd";
     rev = "v${version}";
-    sha256 = "sha256-CIYshZqJICuL8adKHIN4R6nudaqWOCK2UPrGhsKf9pE=";
+    hash = "sha256-CIYshZqJICuL8adKHIN4R6nudaqWOCK2UPrGhsKf9pE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

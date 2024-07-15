@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    hash = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
   };
 
   nativeBuildInputs = [ cmake ];

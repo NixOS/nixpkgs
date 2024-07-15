@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "leveldb";
     rev = version;
-    sha256 = "sha256-RL+dfSFZZzWvUobSqiPbuC4nDiGzjIIukbVJZRacHbI=";
+    hash = "sha256-RL+dfSFZZzWvUobSqiPbuC4nDiGzjIIukbVJZRacHbI=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "IzakMarais";
     repo = "reporter";
-    sha256 = "sha256-lsraJwx56I2Gn8CePWUlQu1qdMp78P4xwPzLxetYUcw=";
+    hash = "sha256-lsraJwx56I2Gn8CePWUlQu1qdMp78P4xwPzLxetYUcw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

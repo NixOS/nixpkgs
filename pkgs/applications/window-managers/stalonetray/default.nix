@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "kolbusa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
+    hash = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
   };
 
   preConfigure =

@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/atelier-anchor/smiley-sans/releases/download/v${version}/smiley-sans-v${version}.zip";
-    sha256 = "sha256-p6DwX5MBPemAfV99L9ayLkEWro31ip4tf+wBQr8mkbs=";
+    hash = "sha256-p6DwX5MBPemAfV99L9ayLkEWro31ip4tf+wBQr8mkbs=";
     stripRoot = false;
   };
 

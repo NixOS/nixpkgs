@@ -16,7 +16,7 @@ let cg3 = stdenv.mkDerivation rec {
     owner = "GrammarSoft";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "sha256-TiEhhk90w5GibGZ4yalIf+4qLA8NoU6+GIPN6QNTz2A=";
+    hash = "sha256-TiEhhk90w5GibGZ4yalIf+4qLA8NoU6+GIPN6QNTz2A=";
   };
 
   nativeBuildInputs = [

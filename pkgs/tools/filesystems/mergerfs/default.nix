@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
+    hash = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
   };
 
   nativeBuildInputs = [

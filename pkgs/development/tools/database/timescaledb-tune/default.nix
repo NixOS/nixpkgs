@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "timescale";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rOAXCru3m31lVFUyxywkuyKWUOJneA7ECMPyvAfw4mg=";
+    hash = "sha256-rOAXCru3m31lVFUyxywkuyKWUOJneA7ECMPyvAfw4mg=";
   };
 
   vendorHash = "sha256-8Q+KMYu1yiHEYS035NmCvxSgIS/+oRhhcZa6SwmvGgk=";

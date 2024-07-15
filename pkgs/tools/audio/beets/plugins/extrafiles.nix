@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication {
     repo = "beets-extrafiles";
     owner = "Holzhaus";
     rev = "a1d6ef9a9682b6bf7af9483541e56a3ff12247b8";
-    sha256 = "sha256-ajuEbieWjTCNjdRZuGUwvStZwjx260jmY0m+ZqNd7ec=";
+    hash = "sha256-ajuEbieWjTCNjdRZuGUwvStZwjx260jmY0m+ZqNd7ec=";
   };
 
   postPatch = ''

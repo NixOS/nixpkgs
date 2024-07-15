@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "raspberrypi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU=";
+    hash = "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU=";
   };
 
   nativeBuildInputs = [ cmake ];

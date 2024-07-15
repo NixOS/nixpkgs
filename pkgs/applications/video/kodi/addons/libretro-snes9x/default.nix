@@ -9,7 +9,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro.snes9x";
     rev = "${version}-Matrix";
-    sha256 = "sha256-LniZf8Gae4+4Rgc9OGhMCkOI3IA7CPjVrN/gbz9te38=";
+    hash = "sha256-LniZf8Gae4+4Rgc9OGhMCkOI3IA7CPjVrN/gbz9te38=";
   };
 
   extraCMakeFlags = [

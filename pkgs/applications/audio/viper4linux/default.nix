@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Audio4Linux";
     repo = "Viper4Linux";
     rev = "5da25644824f88cf0db24378d2c84770ba4f6816";
-    sha256 = "sha256-CJNVr/1ehJzX45mxunXcRAypBBGEBdswOzAVG2H+ayg=";
+    hash = "sha256-CJNVr/1ehJzX45mxunXcRAypBBGEBdswOzAVG2H+ayg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

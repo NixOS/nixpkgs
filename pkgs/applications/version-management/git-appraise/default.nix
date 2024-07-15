@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "google";
     repo = "git-appraise";
     rev = "99aeb0e71544d3e1952e208c339b1aec70968cf3";
-    sha256 = "sha256-TteTI8yGP2sckoJ5xuBB5S8xzm1upXmZPlcDLvXZrpc=";
+    hash = "sha256-TteTI8yGP2sckoJ5xuBB5S8xzm1upXmZPlcDLvXZrpc=";
   };
 
   vendorHash = "sha256-Lzq4qpDAUjKFA2T685eW9NCfzEhDsn5UR1A1cIaZadE=";

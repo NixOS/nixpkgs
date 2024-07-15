@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "nix-community";
     repo = "nixdoc";
     rev = "v${version}";
-    sha256 = "sha256-9gBrFudzn75rzx7bTPgr+zzUpX2cLHOmE12xFtoH1eA=";
+    hash = "sha256-9gBrFudzn75rzx7bTPgr+zzUpX2cLHOmE12xFtoH1eA=";
   };
 
   cargoHash = "sha256-/f67AhaNLHS/3veAzNZwYujMMM/Vmq/U4MHNHvfRoBE=";

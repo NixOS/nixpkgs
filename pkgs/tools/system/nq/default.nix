@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "chneukirchen";
     repo = "nq";
     rev = "v${version}";
-    sha256 = "sha256-g14t2Wy2GwiqnfEDiLAPGehzUgK6mLC+5PAZynez62s=";
+    hash = "sha256-g14t2Wy2GwiqnfEDiLAPGehzUgK6mLC+5PAZynez62s=";
   };
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "eriklax";
     repo = "xva-img";
     rev = version;
-    sha256 = "sha256-QHCKGsHSMT2P64No1IUCjenm1XZMSgEvsJGJOyHFZS8=";
+    hash = "sha256-QHCKGsHSMT2P64No1IUCjenm1XZMSgEvsJGJOyHFZS8=";
   };
 
   nativeBuildInputs = [ cmake ];

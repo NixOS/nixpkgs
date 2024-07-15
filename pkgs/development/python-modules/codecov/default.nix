@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "codecov";
     repo = "codecov-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cZEpAw8uv/XGiGzdBZ9MnabNaTP0did2GT+BkKMJM/E=";
+    hash = "sha256-cZEpAw8uv/XGiGzdBZ9MnabNaTP0did2GT+BkKMJM/E=";
   };
 
   propagatedBuildInputs = [

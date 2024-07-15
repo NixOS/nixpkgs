@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Pulse-Eight";
     repo = "platform";
     rev = "p8-platform-${version}";
-    sha256 = "sha256-zAI/AOLJAunv+cCQ6bOXrgkW+wl5frj3ktzx2cDeCCk=";
+    hash = "sha256-zAI/AOLJAunv+cCQ6bOXrgkW+wl5frj3ktzx2cDeCCk=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "AngusJohnson";
     repo = "Clipper2";
     rev = "Clipper2_${version}";
-    sha256 = "sha256-3TKhb48cABl0QcbeG12xlA1taQ/8/RdUUHSp0Qh85eE=";
+    hash = "sha256-3TKhb48cABl0QcbeG12xlA1taQ/8/RdUUHSp0Qh85eE=";
   };
 
   sourceRoot = "${src.name}/CPP";

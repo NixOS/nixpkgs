@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "bouncepaw";
     repo = "mycorrhiza";
     rev = "v${version}";
-    sha256 = "sha256-ovlLOacVhf8phL9LNrMf55oo5KgaCKYeS/of/abE8Bo=";
+    hash = "sha256-ovlLOacVhf8phL9LNrMf55oo5KgaCKYeS/of/abE8Bo=";
   };
 
   vendorHash = "sha256-0O831ILIwv2uyTU23x+tnLbUbkrp9ew316uPmqjhxWM=";

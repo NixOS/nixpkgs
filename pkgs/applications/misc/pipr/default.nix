@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ElKowar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
+    hash = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
   };
 
   cargoSha256 = "sha256-SLOiX8z8LuQ9VA/lg0lOhqs85MGs0vmeP74cS6sgghI=";

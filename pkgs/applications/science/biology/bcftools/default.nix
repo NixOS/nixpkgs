@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MSuDKd5RMN06N2eMcSlR5h5XcVV8cSmnCjJ6MA/ahiA=";
+    hash = "sha256-MSuDKd5RMN06N2eMcSlR5h5XcVV8cSmnCjJ6MA/ahiA=";
   };
 
   nativeBuildInputs = [

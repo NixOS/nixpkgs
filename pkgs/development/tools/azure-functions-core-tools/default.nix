@@ -12,7 +12,7 @@ let
     owner = "Azure";
     repo = "azure-functions-core-tools";
     rev = version;
-    sha256 = "sha256-Ip1m0/l0YWFosYfp8UeREg9DP5pnvRnXyAaAuch7Op4=";
+    hash = "sha256-Ip1m0/l0YWFosYfp8UeREg9DP5pnvRnXyAaAuch7Op4=";
   };
   gozip = buildGoModule {
     pname = "gozip";

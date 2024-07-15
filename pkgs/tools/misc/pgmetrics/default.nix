@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "rapidloop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8pF3E0Zh/SsH6+5iXt1KFwud2ijoisYfcu+QHRM9x9s=";
+    hash = "sha256-8pF3E0Zh/SsH6+5iXt1KFwud2ijoisYfcu+QHRM9x9s=";
   };
 
   vendorHash = "sha256-KIMnvGMIipuIFPTSeERtCfvlPuvHvEHdjBJ1TbT2d1s=";

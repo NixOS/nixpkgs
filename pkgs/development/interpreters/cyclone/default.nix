@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     owner = "justinethier";
     repo = "cyclone";
     rev = "v${version}";
-    sha256 = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
+    hash = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
   };
 
   enableParallelBuilding = true;

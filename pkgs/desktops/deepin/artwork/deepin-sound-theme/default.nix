@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BvG/ygZfM6sDuDSzAqwCzDXGT/bbA6Srlpg3br117OU=";
+    hash = "sha256-BvG/ygZfM6sDuDSzAqwCzDXGT/bbA6Srlpg3br117OU=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "KBNLresearch";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
+    hash = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ setuptools six ];

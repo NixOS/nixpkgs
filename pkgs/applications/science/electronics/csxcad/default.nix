@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "thliebig";
     repo = "CSXCAD";
     rev = "v${version}";
-    sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
+    hash = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
   };
 
   patches = [./searchPath.patch ];

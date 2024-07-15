@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "valum-framework";
     repo = "valum";
     rev = "v${version}";
-    sha256 = "sha256-baAv83YiX8HdBm/t++ktB7pmTVlt4aWZ5xnsAs/NrTI=";
+    hash = "sha256-baAv83YiX8HdBm/t++ktB7pmTVlt4aWZ5xnsAs/NrTI=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

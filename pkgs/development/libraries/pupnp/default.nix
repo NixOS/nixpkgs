@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "pupnp";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
+    hash = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
   };
 
   nativeBuildInputs = [

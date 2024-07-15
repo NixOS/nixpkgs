@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "risc0";
     repo = "risc0";
     rev = "v${version}";
-    sha256 = "sha256-niYPHcTh0tO51paac6rXtwkYoTOAMqdVrHwSnGRObck=";
+    hash = "sha256-niYPHcTh0tO51paac6rXtwkYoTOAMqdVrHwSnGRObck=";
   };
 
   buildAndTestSubdir = "risc0/r0vm";

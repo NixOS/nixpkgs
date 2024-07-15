@@ -274,7 +274,7 @@ final: prev:
       owner = "henriklovhaug";
       repo = "Preview.nvim";
       rev = "388882f3bfd09bcb0d5b4ab3d0fa5bc2dacbbc2e";
-      sha256 = "sha256-Tnl2TkLY9QXk/5qX2LcX5G2aq/sysH6BnD2YqXlneIU=";
+      hash = "sha256-Tnl2TkLY9QXk/5qX2LcX5G2aq/sysH6BnD2YqXlneIU=";
     };
     meta.homepage = "https://github.com/henriklovhaug/Preview.nvim/";
   };
@@ -1597,7 +1597,7 @@ final: prev:
       owner = "tzachar";
       repo = "cmp-ai";
       rev = "2b787129314c5fb8bfd41a6919d4889210e6b265";
-      sha256 = "sha256-ul2X6kIdreJ9dCQERw7C3l2dss7Mtcwtm7CGhAxjjvY=";
+      hash = "sha256-ul2X6kIdreJ9dCQERw7C3l2dss7Mtcwtm7CGhAxjjvY=";
     };
     meta.homepage = "https://github.com/tzachar/cmp-ai/";
   };
@@ -2160,7 +2160,7 @@ final: prev:
       owner = "chrisgrieser";
       repo = "cmp_yanky";
       rev = "c3d089186ccead26eba01023502f3eeadd7a92d2";
-      sha256 = "sha256-jWNoKzY0x5GPFP7JsQi4nqgg1YFJV4DqxwJRqsg6KaQ=";
+      hash = "sha256-jWNoKzY0x5GPFP7JsQi4nqgg1YFJV4DqxwJRqsg6KaQ=";
     };
     meta.homepage = "https://github.com/chrisgrieser/cmp_yanky/";
   };
@@ -3641,7 +3641,7 @@ final: prev:
       owner = "pteroctopus";
       repo = "faster.nvim";
       rev = "e85c5bdff0cd1e17cbee855ae23c25e7b8e597cb";
-      sha256 = "sha256-oruxdxoMq46F9lf1JxkbrqdzR0JwDE1y/cVCaTD4SBg=";
+      hash = "sha256-oruxdxoMq46F9lf1JxkbrqdzR0JwDE1y/cVCaTD4SBg=";
     };
     meta.homepage = "https://github.com/pteroctopus/faster.nvim/";
   };
@@ -4158,7 +4158,7 @@ final: prev:
       owner = "mikesmithgh";
       repo = "git-prompt-string-lualine.nvim";
       rev = "5426ce15462abe4faf5cd76db7476b2686120fe9";
-      sha256 = "sha256-BM1AEpIcOd5nr4N/ZoxK9NodiUbUuY9hw7n/wRTXzzk=";
+      hash = "sha256-BM1AEpIcOd5nr4N/ZoxK9NodiUbUuY9hw7n/wRTXzzk=";
     };
     meta.homepage = "https://github.com/mikesmithgh/git-prompt-string-lualine.nvim/";
   };
@@ -4182,7 +4182,7 @@ final: prev:
       owner = "wintermute-cell";
       repo = "gitignore.nvim";
       rev = "2455191ec94da8ed222806a4fe3aa358eac1e558";
-      sha256 = "sha256-p6k0NP3Vne6Kl98YodzSruVmJwxyrXziJj8N7u79o1w=";
+      hash = "sha256-p6k0NP3Vne6Kl98YodzSruVmJwxyrXziJj8N7u79o1w=";
     };
     meta.homepage = "https://github.com/wintermute-cell/gitignore.nvim/";
   };
@@ -4816,7 +4816,7 @@ final: prev:
       owner = "nvimtools";
       repo = "hydra.nvim";
       rev = "8578056a2226ed49fc608167edc143a87f75d809";
-      sha256 = "sha256-Qxp2FigXlupAw/ZwZRVJ+hRKzVRtupV6L4a6jOslwI0=";
+      hash = "sha256-Qxp2FigXlupAw/ZwZRVJ+hRKzVRtupV6L4a6jOslwI0=";
     };
     meta.homepage = "https://github.com/nvimtools/hydra.nvim/";
   };
@@ -4864,7 +4864,7 @@ final: prev:
       owner = "ShinKage";
       repo = "idris2-nvim";
       rev = "8bff02984a33264437e70fd9fff4359679d910da";
-      sha256 = "sha256-guEmds98XEBKuJVdB+rQB01G+RmnQaG+RTjM6smccAI=";
+      hash = "sha256-guEmds98XEBKuJVdB+rQB01G+RmnQaG+RTjM6smccAI=";
     };
     meta.homepage = "https://github.com/ShinKage/idris2-nvim/";
   };
@@ -4912,7 +4912,7 @@ final: prev:
       owner = "backdround";
       repo = "improved-search.nvim";
       rev = "9480bfb0e05f990a1658464c1d349dd2acfb9c34";
-      sha256 = "sha256-k35uJZfarjRskS9MgCjSQ3gfl57d+r8vWvw0Uq16Z30=";
+      hash = "sha256-k35uJZfarjRskS9MgCjSQ3gfl57d+r8vWvw0Uq16Z30=";
     };
     meta.homepage = "https://github.com/backdround/improved-search.nvim/";
   };
@@ -10696,7 +10696,7 @@ final: prev:
       owner = "themaxmarchuk";
       repo = "tailwindcss-colors.nvim";
       rev = "ccb5be2f84673c1a0ef90a0c0a76733e85e5265b";
-      sha256 = "sha256-2eUr4rB8gpax0xJ8U4O2O93UXUxF+HZV6Co8LwPZ3JE=";
+      hash = "sha256-2eUr4rB8gpax0xJ8U4O2O93UXUxF+HZV6Co8LwPZ3JE=";
     };
     meta.homepage = "https://github.com/themaxmarchuk/tailwindcss-colors.nvim/";
   };
@@ -10950,7 +10950,7 @@ final: prev:
       owner = "nvim-telescope";
       repo = "telescope-smart-history.nvim";
       rev = "81a4cceaa54d65d5f7c7c26178ee63b634d3e26d";
-      sha256 = "sha256-riBl0vSkRtM9Gtw/FNSKodSmqgGUpDnH7d5w+uU4ReQ=";
+      hash = "sha256-riBl0vSkRtM9Gtw/FNSKodSmqgGUpDnH7d5w+uU4ReQ=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-smart-history.nvim/";
   };
@@ -11360,7 +11360,7 @@ final: prev:
       owner = "xiyaowong";
       repo = "transparent.nvim";
       rev = "fd35a46f4b7c1b244249266bdcb2da3814f01724";
-      sha256 = "sha256-wT+7rmp08r0XYGp+MhjJX8dsFTar8+nf10CV9OdkOSk=";
+      hash = "sha256-wT+7rmp08r0XYGp+MhjJX8dsFTar8+nf10CV9OdkOSk=";
     };
     meta.homepage = "https://github.com/xiyaowong/transparent.nvim/";
   };
@@ -13509,7 +13509,7 @@ final: prev:
       owner = "habamax";
       repo = "vim-godot";
       rev = "f9c0b36b299efcc4aa4cb119a2be36a83fe10388";
-      sha256 = "sha256-HKp3CQwAOs+7TL8MjWZ2EHLHMZ3Ss7AckAZ5eOjTDEg=";
+      hash = "sha256-HKp3CQwAOs+7TL8MjWZ2EHLHMZ3Ss7AckAZ5eOjTDEg=";
     };
     meta.homepage = "https://github.com/habamax/vim-godot/";
   };
@@ -16886,7 +16886,7 @@ final: prev:
       owner = "lukas-reineke";
       repo = "virt-column.nvim";
       rev = "b62b4ef0774d19452d4ed18e473e824c7a756f2f";
-      sha256 = "sha256-7ljjJ7UwN2U1xPCtsYbrKdnz6SGQGbM/HrxPTxNKlwo=";
+      hash = "sha256-7ljjJ7UwN2U1xPCtsYbrKdnz6SGQGbM/HrxPTxNKlwo=";
     };
     meta.homepage = "https://github.com/lukas-reineke/virt-column.nvim/";
   };

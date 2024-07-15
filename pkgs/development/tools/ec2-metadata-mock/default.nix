@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "aws";
     repo = "amazon-ec2-metadata-mock";
     rev = "v${version}";
-    sha256 = "sha256-hYyJtkwAzweH8boUY3vrvy6Ug+Ier5f6fvR52R+Di8o=";
+    hash = "sha256-hYyJtkwAzweH8boUY3vrvy6Ug+Ier5f6fvR52R+Di8o=";
   };
 
   vendorHash = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";

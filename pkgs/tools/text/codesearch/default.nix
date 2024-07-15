@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "google";
     repo = "codesearch";
     rev = "v${version}";
-    sha256 = "sha256-i03w8PZ31j5EutUZaamZsHz+z4qgX4prePbj5DLA78s=";
+    hash = "sha256-i03w8PZ31j5EutUZaamZsHz+z4qgX4prePbj5DLA78s=";
   };
 
   vendorHash = null;

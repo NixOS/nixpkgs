@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "tobychui";
     repo = "zoraxy";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-fyhnP+MtX5dYR9yzIp7vpahJKbkuvopZSSTwt7JnaMI=";
+    hash = "sha256-fyhnP+MtX5dYR9yzIp7vpahJKbkuvopZSSTwt7JnaMI=";
   };
 
   sourceRoot = "${src.name}/src";

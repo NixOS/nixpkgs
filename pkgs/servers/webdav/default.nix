@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "hacdias";
     repo = "webdav";
     rev = "v${version}";
-    sha256 = "sha256-4rgDO1vItmmCRXRiO24MPa9IPzrsfzCWLH6hl6oKkxk=";
+    hash = "sha256-4rgDO1vItmmCRXRiO24MPa9IPzrsfzCWLH6hl6oKkxk=";
   };
 
   vendorHash = "sha256-az+EasmKitFPWD5JfKaSKZGok/n/dPmIv90RiL750KY=";

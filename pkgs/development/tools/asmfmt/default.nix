@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "klauspost";
     repo = "asmfmt";
     rev = "v${version}";
-    sha256 = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
+    hash = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
   };
 
   vendorHash = null;

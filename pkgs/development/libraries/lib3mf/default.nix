@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "3MFConsortium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
+    hash = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
   };
 
   patches = [ ./upgrade-to-cpp-14.patch ];

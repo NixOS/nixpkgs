@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     repo = "ClanLib";
     owner = "sphair";
     rev = "v${version}";
-    sha256 = "sha256-SVsLWcTP+PCIGDWLkadMpJPj4coLK9dJrW4sc2+HotE=";
+    hash = "sha256-SVsLWcTP+PCIGDWLkadMpJPj4coLK9dJrW4sc2+HotE=";
   };
 
   nativeBuildInputs = [

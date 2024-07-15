@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
     rev = "v${version}";
-    sha256 = "sha256-/0wua0rIpAQAq+ZgmQu/0vHGPgn7pNwAo1theTMG0PA=";
+    hash = "sha256-/0wua0rIpAQAq+ZgmQu/0vHGPgn7pNwAo1theTMG0PA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -8,7 +8,7 @@ buildGoModule rec {
     rev = version;
     owner = "lablabs";
     repo = pname;
-    sha256 = "sha256-7cyHAN4VQWfWMdlFbZvHL38nIEeC1z/vpCDR5R2pOAw=";
+    hash = "sha256-7cyHAN4VQWfWMdlFbZvHL38nIEeC1z/vpCDR5R2pOAw=";
   };
 
   vendorHash = "sha256-c1drgbzoA5AlbB0K+E8kuJnyShgUg7spPQKAAwxCr6M=";

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "mateoconlechuga";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zCRM62xwaPaN8+cg+CeaqK/9hKpZmSBBeUOQqAvQGYw=";
+    hash = "sha256-zCRM62xwaPaN8+cg+CeaqK/9hKpZmSBBeUOQqAvQGYw=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''

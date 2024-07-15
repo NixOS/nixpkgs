@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "MesserLab";
     repo = "SLiM";
     rev = "v${version}";
-    sha256 = "sha256-TlB7Hj4pVN4p4VanACWjQBeTxP9/DvRvdCdgelrXx60=";
+    hash = "sha256-TlB7Hj4pVN4p4VanACWjQBeTxP9/DvRvdCdgelrXx60=";
   };
 
   nativeBuildInputs = [ cmake gcc gcc-unwrapped ];

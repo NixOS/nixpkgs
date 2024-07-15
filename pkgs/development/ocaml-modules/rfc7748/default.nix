@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "burgerdev";
     repo = "ocaml-rfc7748";
     rev = "v${version}";
-    sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
+    hash = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
   # Compatibility with OCaml 5.0

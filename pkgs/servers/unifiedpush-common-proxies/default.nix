@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "unifiedpush";
     repo = "common-proxies";
     rev = "v${version}";
-    sha256 = "sha256-pMzKK18FZCqJ86nqXfOT7tKCqIw6P0ioxRUi72aef0A=";
+    hash = "sha256-pMzKK18FZCqJ86nqXfOT7tKCqIw6P0ioxRUi72aef0A=";
   };
 
   vendorHash = "sha256-wVZR/h0AtwZ1eo7EoRKNzaS2Wp0X01e2u3Ugmsnj644=";

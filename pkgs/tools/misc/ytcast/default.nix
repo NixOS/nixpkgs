@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "MarcoLucidi01";
     repo = "ytcast";
     rev = "v${version}";
-    sha256 = "sha256-iy9+MgXwP4ALz4NHJyn2ghC5boR53H3ioB2+7tcJunE=";
+    hash = "sha256-iy9+MgXwP4ALz4NHJyn2ghC5boR53H3ioB2+7tcJunE=";
   };
 
   vendorHash = null;
