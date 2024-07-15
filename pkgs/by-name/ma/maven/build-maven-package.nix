@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, jdk
 , maven
 }:
 
@@ -10,6 +11,7 @@
 , patches ? [ ]
 , pname
 , version
+, mvnJdk ? jdk
 , mvnHash ? ""
 , mvnFetchExtraArgs ? { }
 , mvnDepsParameters ? ""
@@ -31,6 +33,8 @@ let
     nativeBuildInputs = [
       maven
     ] ++ args.nativeBuildInputs or [ ];
+
+    JAVA_HOME = mvnJdk;
 
     buildPhase = ''
       runHook preBuild
