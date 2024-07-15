@@ -10,6 +10,7 @@
 , perl
 , pkg-config
 , zlib
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
@@ -63,6 +64,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/cha ${makeWrapperArgs}
     wrapProgram $out/bin/mancha ${makeWrapperArgs}
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
