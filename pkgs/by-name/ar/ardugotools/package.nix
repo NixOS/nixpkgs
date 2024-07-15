@@ -5,7 +5,7 @@
   ...
 }:
 let
-  version = "0.5.2";
+  version = "0.6.0";
 in
 buildGoModule {
   pname = "ardugotools";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "randomouscrap98";
     repo = "ardugotools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ugYkcYrVHoGC58u6zQNEjlWspAFONmEQVnVDWdWeVnw=";
+    hash = "sha256-lYpUb+AiQrcrBGBvnOwzDC4aX1F8o21DUnad56qb7zo=";
   };
 
   vendorHash = "sha256-Z9ObsS+GwVsz6ZlXCgN0WlShHzbmx4WLa/1/XLSSAAs=";
