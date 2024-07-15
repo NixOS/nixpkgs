@@ -12379,6 +12379,8 @@ self: super: with self; {
 
   pytest-mockservers = callPackage ../development/python-modules/pytest-mockservers { };
 
+  pytest-mpi = callPackage ../development/python-modules/pytest-mpi { };
+
   pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
