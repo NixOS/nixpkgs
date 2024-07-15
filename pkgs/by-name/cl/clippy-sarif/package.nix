@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clippy-sarif";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
     rev = "clippy-sarif-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
   };
 
-  cargoHash = "sha256-F3NrqkqLdvMRIuozCMMqwlrrf5QrnmcEhy4TGSzPhiU=";
+  cargoHash = "sha256-F97Cwk87M3SpLqXSECH5nZ8x+3c3oz28zxlPvQUZWlg=";
   cargoBuildFlags = [
     "--package"
     "clippy-sarif"
