@@ -11139,15 +11139,9 @@ with pkgs;
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
-  opendylan = callPackage ../development/compilers/opendylan {
-    opendylan-bootstrap = opendylan_bin;
-  };
-
   openfec = callPackage ../development/libraries/openfec { };
 
   ophis = python3Packages.callPackage ../development/compilers/ophis { };
-
-  opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
