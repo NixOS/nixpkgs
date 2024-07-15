@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "skylot";
-    repo = finalAttrs.pname;
+    repo = "jadx";
     rev = "v${finalAttrs.version}";
     hash = "sha256-3t2e3WfH/ohkdGWlfV3t9oHJ1Q6YM6nSLOgmzgJEkls=";
   };
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
+    pname = "jadx";
     data = ./deps.json;
   };
 
