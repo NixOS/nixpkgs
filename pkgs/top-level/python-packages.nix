@@ -607,6 +607,8 @@ self: super: with self; {
 
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
+  ansible-gendoc = callPackage ../development/python-modules/ansible-gendoc { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-navigator = callPackage ../development/python-modules/ansible-navigator { };
