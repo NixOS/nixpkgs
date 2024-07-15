@@ -108,7 +108,8 @@ in
 
   # Not recommended; too fragile.
   nixops_unstable_full = minimal.withPlugins (ps: [
-    ps.nixops-aws
+    # currently broken
+    # ps.nixops-aws
     ps.nixops-digitalocean
     ps.nixops-encrypted-links
     ps.nixops-hercules-ci
