@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, json-glib
-, libICE
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_412
-, python3
-, libxslt
-, gettext
-, makeWrapper
-, systemd
-, xorg
-, libepoxy
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  json-glib,
+  libICE,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  python3,
+  libxslt,
+  gettext,
+  makeWrapper,
+  nix-update-script,
+  systemd,
+  xorg,
+  libepoxy,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,12 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mz+Yh3NK2Tag+MWVofFFXYYXspxhmYBD6YCiuATpZSI=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gsettings = "${glib.bin}/bin/gsettings";
-      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      bash = "${bash}/bin/bash";
+      gsettings = lib.getExe' glib "gsettings";
+      dbusLaunch = lib.getExe' dbus "dbus-launch";
+      bash = lib.getExe bash;
     })
   ];
 
@@ -92,9 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Session manager for Budgie";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-session/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;

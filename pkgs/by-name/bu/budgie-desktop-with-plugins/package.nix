@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, glib
-, xorg
-, wrapGAppsHook3
-, budgie-desktop
-, plugins ? [ ]
+{
+  lib,
+  stdenv,
+  glib,
+  xorg,
+  wrapGAppsHook3,
+  budgie-desktop,
+  plugins ? [ ],
 }:
 
 stdenv.mkDerivation {
@@ -13,9 +14,7 @@ stdenv.mkDerivation {
 
   src = null;
 
-  paths = [
-    budgie-desktop
-  ] ++ plugins;
+  paths = [ budgie-desktop ] ++ plugins;
 
   passAsFile = [ "paths" ];
 
@@ -49,5 +48,14 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (budgie-desktop) meta;
+  meta = {
+    inherit (budgie-desktop.meta)
+      description
+      homepage
+      changelog
+      license
+      maintainers
+      platforms
+      ;
+  };
 }

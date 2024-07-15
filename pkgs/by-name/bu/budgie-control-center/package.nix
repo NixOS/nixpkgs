@@ -1,62 +1,65 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, accountsservice
-, adwaita-icon-theme
-, budgie-desktop
-, cheese
-, clutter
-, clutter-gtk
-, colord
-, colord-gtk
-, cups
-, docbook-xsl-nons
-, fontconfig
-, gcr
-, gdk-pixbuf
-, gettext
-, glib
-, glib-networking
-, glibc
-, gnome
-, gnome-desktop
-, gnome-user-share
-, gsettings-desktop-schemas
-, gsound
-, gtk3
-, ibus
-, libcanberra-gtk3
-, libepoxy
-, libgnomekbd
-, libgtop
-, libgudev
-, libhandy
-, libkrb5
-, libnma
-, libpulseaudio
-, libpwquality
-, librsvg
-, libsecret
-, libwacom
-, libxml2
-, libxslt
-, meson
-, modemmanager
-, networkmanager
-, networkmanagerapplet
-, ninja
-, pkg-config
-, polkit
-, samba
-, shadow
-, shared-mime-info
-, tzdata
-, udisks2
-, upower
-, webp-pixbuf-loader
-, wrapGAppsHook3
-, enableSshSocket ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  accountsservice,
+  adwaita-icon-theme,
+  budgie-desktop,
+  cheese,
+  clutter,
+  clutter-gtk,
+  colord,
+  colord-gtk,
+  cups,
+  docbook-xsl-nons,
+  fontconfig,
+  gcr,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  glib-networking,
+  glibc,
+  gnome,
+  gnome-desktop,
+  gnome-user-share,
+  gsettings-desktop-schemas,
+  gsound,
+  gtk3,
+  ibus,
+  libcanberra-gtk3,
+  libepoxy,
+  libgnomekbd,
+  libgtop,
+  libgudev,
+  libhandy,
+  libkrb5,
+  libnma,
+  libpulseaudio,
+  libpwquality,
+  librsvg,
+  libsecret,
+  libwacom,
+  libxml2,
+  libxslt,
+  meson,
+  modemmanager,
+  networkmanager,
+  networkmanagerapplet,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  polkit,
+  samba,
+  shadow,
+  shared-mime-info,
+  testers,
+  tzdata,
+  udisks2,
+  upower,
+  webp-pixbuf-loader,
+  wrapGAppsHook3,
+  enableSshSocket ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,7 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./paths.patch;
       budgie_desktop = budgie-desktop;
       gcm = gnome.gnome-color-manager;
-      inherit cups glibc libgnomekbd shadow;
+      inherit
+        cups
+        glibc
+        libgnomekbd
+        shadow
+        ;
       inherit networkmanagerapplet tzdata;
     })
   ];
@@ -136,9 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     upower
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "ssh" enableSshSocket)
-  ];
+  mesonFlags = [ (lib.mesonBool "ssh" enableSshSocket) ];
 
   preConfigure = ''
     # For ITS rules
@@ -148,12 +154,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   preFixup = ''
@@ -170,12 +178,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
-    license = lib.licenses.gpl2Plus;
   };
 })

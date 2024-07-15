@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, accountsservice
-, budgie
-, gtk3
-, intltool
-, libgee
-, libpeas
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  accountsservice,
+  budgie-desktop,
+  gtk3,
+  intltool,
+  libgee,
+  libpeas,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  sassc,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,12 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     accountsservice
-    budgie.budgie-desktop
+    budgie-desktop
     gtk3
     libgee
     libpeas
     sassc
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Manage your user session from the Budgie panel";
