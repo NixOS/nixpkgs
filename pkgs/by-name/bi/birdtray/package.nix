@@ -1,15 +1,14 @@
-{ mkDerivation
-  , lib
-  , fetchFromGitHub
-
-  , cmake
-  , pkg-config
-  , qtbase
-  , qttools
-  , qtx11extras
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsForQt5
+, fetchpatch
+, thunderbird
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "birdtray";
   version = "1.11.4";
 
@@ -20,9 +19,28 @@ mkDerivation rec {
     sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+  ];
+
   buildInputs = [
-    qtbase qttools qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtx11extras
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "OPT_THUNDERBIRD_CMDLINE" "thunderbird") # get thunderbird from PATH
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-path-handling.patch";
+      url = "https://github.com/gyunaev/birdtray/commit/54b304d92188429792c264b07ff45897699f2d3e.patch";
+      hash = "sha256-ME635Kt1b9RJKCqtAZBFa93OIA0u2Z4tWIlGcI374j0=";
+    })
   ];
 
   # Wayland support is broken.

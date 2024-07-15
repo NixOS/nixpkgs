@@ -4211,8 +4211,6 @@ with pkgs;
 
   binwalk = with python3Packages; toPythonApplication binwalk;
 
-  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
-
   blitz = callPackage ../development/libraries/blitz { };
 
   blockbook = callPackage ../servers/blockbook { };
