@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
     rev = "sarif-fmt-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
   };
 
-  cargoHash = "sha256-dHOxVLXtnqSHMX5r1wFxqogDf9QdnOZOjTyYFahru34=";
+  cargoHash = "sha256-VonkXSeyp8Kxo5mE+eI5ialgqcCFvDALv/XXl2i8DZ0=";
   cargoBuildFlags = [
     "--package"
     "sarif-fmt"
