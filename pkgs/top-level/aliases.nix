@@ -70,6 +70,7 @@ mapAliases ({
   adom = throw "'adom' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   advcpmv = throw "'advcpmv' has been removed, as it is not being actively maintained and break recent coreutils."; # Added 2024-03-29
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
+  aeon = throw "aeon has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-07-15
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
   agebox = throw "agebox has been removed due to lack of upstream maintenance"; # Added 2024-07-13
@@ -131,6 +132,8 @@ mapAliases ({
   bee-unstable = throw "bee-unstable has been removed, use 'bee' instead"; # Added 2024-02-12
   bee-clef = throw "bee-clef has been removed as the upstream project was archived"; # Added 2024-02-12
   beignet = throw "beignet was removed as it was never ported from old llvmPackages_6 upstream"; # added 2024-01-08
+  bitcoin-unlimited = throw "bitcoin-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
+  bitcoind-unlimited = throw "bitcoind-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
   binance = throw "binance has been removed, because it depends on a very outdated and insecure version of electron"; # Added 2023-11-09
   bird2 = bird; # Added 2022-02-21
   bitwarden = bitwarden-desktop; # Added 2024-02-25
@@ -606,6 +609,8 @@ mapAliases ({
   ### I ###
 
   i3-gaps = i3; # Added 2023-01-03
+  ib-tws = throw "ib-tws has been removed from nixpkgs as it was broken"; # Added 2024-07-15
+  ib-controller = throw "ib-controller has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   icedtea8_web = throw "'icedtea8_web' has been renamed to/replaced by 'adoptopenjdk-icedtea-web'"; # Converted to throw 2023-09-10
   icedtea_web = throw "'icedtea_web' has been renamed to/replaced by 'adoptopenjdk-icedtea-web'"; # Converted to throw 2023-09-10
   ignite = throw "'ignite' has been removed as the upstream project was archived, please use 'flintlock' instead"; # Added 2024-01-07
@@ -766,6 +771,7 @@ mapAliases ({
   linuxPackages_6_7 = linuxKernel.packages.linux_6_7;
   linuxPackages_6_8 = linuxKernel.packages.linux_6_8;
   linuxPackages_6_9 = linuxKernel.packages.linux_6_9;
+  linuxPackages_6_10 = linuxKernel.packages.linux_6_10;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -794,6 +800,7 @@ mapAliases ({
   linux_6_7 = linuxKernel.kernels.linux_6_7;
   linux_6_8 = linuxKernel.kernels.linux_6_8;
   linux_6_9 = linuxKernel.kernels.linux_6_9;
+  linux_6_10 = linuxKernel.kernels.linux_6_10;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -1114,6 +1121,8 @@ mapAliases ({
   pinentry_gtk2 = throw "'pinentry_gtk2' has been renamed to/replaced by 'pinentry-gtk2'"; # Converted to throw 2023-09-10
   pinentry_qt = throw "'pinentry_qt' has been renamed to/replaced by 'pinentry-qt'"; # Converted to throw 2023-09-10
   pinentry_qt5 = pinentry-qt; # Added 2020-02-11
+  pivx = throw "pivx has been removed as it was marked as broken"; # Added 2024-07-15
+  pivxd = throw "pivxd has been removed as it was marked as broken"; # Added 2024-07-15
 
   PlistCpp = plistcpp; # Added 2024-01-05
   pocket-updater-utility = pupdate; # Added 2024-01-25
@@ -1329,6 +1338,7 @@ mapAliases ({
   ssb = throw "'ssb' has been removed, as it was broken and unmaintained"; # Added 2023-12-21
   ssm-agent = amazon-ssm-agent; # Added 2023-10-17
   starboard-octant-plugin = throw "starboard-octant-plugin has been dropped due to needing octant which is archived"; # Added 2023-09-29
+  starspace = throw "starspace has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   steam-run-native = steam-run; # added 2022-02-21
   StormLib = stormlib; # Added 2024-01-21
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
@@ -1341,6 +1351,7 @@ mapAliases ({
 
   ### T ###
 
+  tabula = throw "tabula has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   tangogps = foxtrotgps; # Added 2020-01-26
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
@@ -1376,6 +1387,7 @@ mapAliases ({
   trezor_agent = trezor-agent; # Added 2024-01-07
   trustedGrub = throw "trustedGrub has been removed, because it is not maintained upstream anymore"; # Added 2023-05-10
   trustedGrub-for-HP = throw "trustedGrub-for-HP has been removed, because it is not maintained upstream anymore"; # Added 2023-05-10
+  tumpa = throw "tumpa has been removed, as it is broken"; # Added 2024-07-15
   tvbrowser-bin = tvbrowser; # Added 2023-03-02
   typst-fmt = typstfmt; # Added 2023-07-15
   typst-preview = throw "The features of 'typst-preview' have been consolidated to 'tinymist', an all-in-one language server for typst"; # Added 2024-07-07

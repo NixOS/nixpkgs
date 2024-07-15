@@ -12,6 +12,7 @@
 , writeShellApplication
 , jq
 , removeReferencesTo
+, nixosTests
 }:
 
 let
@@ -118,6 +119,9 @@ stdenvNoCC.mkDerivation rec {
 
   passthru = {
     inherit extractOpensslInfo opensslSrc toolchain;
+    tests = {
+      inherit (nixosTests) osquery;
+    };
   };
 
   meta = with lib; {
