@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rhboot/efibootmgr/releases/tag/${src.rev}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "efibootmgr";
     platforms = lib.platforms.linux;
   };
 }
