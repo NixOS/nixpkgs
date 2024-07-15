@@ -102,7 +102,7 @@ let
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
-    pathsToLink = ["/bin" "/sbin"];
+    pathsToLink = ["/bin"];
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
@@ -407,7 +407,7 @@ in {
         fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
-      managerEnvironment.PATH = "/bin:/sbin";
+      managerEnvironment.PATH = "/bin";
 
       contents = {
         "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
@@ -416,7 +416,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
+          DefaultEnvironment=PATH=/bin
           ${cfg.extraConfig}
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
@@ -431,9 +431,9 @@ in {
         "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
-        "/sbin".source = "${initrdBinEnv}/sbin";
+        "/sbin".source = "${initrdBinEnv}/bin";
 
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /bin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
         "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
           ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
