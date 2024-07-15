@@ -4,6 +4,7 @@
 , libnotify
 , gobject-introspection
 , python3Packages
+, unstableGitUpdater
 , extraLibs ? [] }:
 
 python3Packages.buildPythonApplication rec {
@@ -48,6 +49,8 @@ python3Packages.buildPythonApplication rec {
   # no tests in tarball
   doCheck = false;
 
+  passthru.updateScript = unstableGitUpdater {};
+
   meta = with lib; {
     homepage = "https://github.com/enkore/i3pystatus";
     description = "Complete replacement for i3status";
@@ -57,6 +60,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.igsha ];
+    maintainers = [ maintainers.igsha maintainers.lucasew ];
   };
 }
