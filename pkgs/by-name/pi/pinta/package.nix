@@ -80,12 +80,13 @@ buildDotnetModule rec {
       -p:InstallPrefix="$out"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = with platforms; linux;
+    changelog = "https://github.com/PintaProject/Pinta/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.linux;
     mainProgram = "pinta";
   };
 }
