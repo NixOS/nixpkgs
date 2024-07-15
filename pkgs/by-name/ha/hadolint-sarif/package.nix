@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hadolint-sarif";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
     rev = "hadolint-sarif-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
   };
 
-  cargoHash = "sha256-AMRL1XANyze8bJe3fdgZvBnl/NyuWP13jixixqiPmiw=";
+  cargoHash = "sha256-x2JHMc8OcOVCJ0X68tTyMI8P7bM8javjkYlrHBLMjus=";
   cargoBuildFlags = [
     "--package"
     "hadolint-sarif"
