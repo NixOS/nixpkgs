@@ -2,6 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
@@ -18,11 +19,15 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "CLI tool to convert shellcheck diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    mainProgram = "shellcheck-sarif";
-    maintainers = with lib.maintainers; [ getchoo ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "shellcheck-sarif";
   };
 }
