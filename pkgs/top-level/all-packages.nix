@@ -11973,7 +11973,10 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy { };
+  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy {
+    # https://github.com/benfred/py-spy/issues/633
+    python3 = python311;
+  };
 
   pydeps = with python3Packages; toPythonApplication pydeps;
 
