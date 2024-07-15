@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.2.5";
 
   src = fetchurl {
-    url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
+    url = "https://github.com/FreeRADIUS/freeradius-server/releases/download/release_${lib.replaceStrings [ "." ] [ "_" ] version}/freeradius-server-${version}.tar.gz";
     hash = "sha256-HnX1/Blh2YVNHLPGkhYS++K57bjuUIpafL1p8edgcRU=";
   };
 
