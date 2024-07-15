@@ -2,9 +2,8 @@
   lib,
   fetchCrate,
   rustPlatform,
-  hadolint-sarif,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hadolint-sarif";
@@ -17,8 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bwEQ9lZXvZL6JN24N8gRdbV5gcFiH1fQ59PQILfW1z8=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = hadolint-sarif; };
     updateScript = nix-update-script { };
   };
 
