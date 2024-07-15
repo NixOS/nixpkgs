@@ -16,7 +16,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # We keep this in sync with a default Mint installation
   # Right now (only) nemo-share is missing
   nemoExtensions = [
-    folder-color-switcher
+    pkgs.folder-color-switcher
     nemo-emblems
     nemo-fileroller
     nemo-python
@@ -32,7 +32,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
-  folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
   nemo-emblems = callPackage ./nemo-extensions/nemo-emblems { };
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
@@ -50,6 +49,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
+  folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
   xapps = pkgs.cinnamon.xapp; # added 2022-07-27
