@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   efivar,
+  nix-update-script,
   popt,
 }:
 
@@ -31,6 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "prefix=${placeholder "out"}" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
