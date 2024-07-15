@@ -421,6 +421,8 @@ self: super: with self; {
 
   aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
 
+  aiosolaredge = callPackage ../development/python-modules/aiosolaredge { };
+
   aiosomecomfort = callPackage ../development/python-modules/aiosomecomfort { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
@@ -6562,6 +6564,8 @@ self: super: with self; {
 
   kneed = callPackage ../development/python-modules/kneed { };
 
+  knocki = callPackage ../development/python-modules/knocki { };
+
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
   kombu = callPackage ../development/python-modules/kombu { };
@@ -11138,6 +11142,8 @@ self: super: with self; {
   pyecoforest = callPackage ../development/python-modules/pyecoforest { };
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
+
+  pyecotrend-ista = callPackage ../development/python-modules/pyecotrend-ista { };
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };
 
