@@ -30538,7 +30538,7 @@ with pkgs;
   };
 
   greetd = recurseIntoAttrs {
-    dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
+    dlm = throw "greetd.dlm has been removed as it is broken and abandoned upstream"; #Added 2024-07-15
     greetd = callPackage ../applications/display-managers/greetd { };
     gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
     regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
