@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ (with libsForQt5; [
       libkipi
       libksane
-      libqtav
 
       qtbase
       qtxmlpatterns
