@@ -2,9 +2,8 @@
   lib,
   fetchCrate,
   rustPlatform,
-  clang-tidy-sarif,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clang-tidy-sarif";
@@ -17,8 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-R0IyXinUhIVqGal2Vt0EdU0EFyzs3KIbp/UIseWlj1Y=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = clang-tidy-sarif; };
     updateScript = nix-update-script { };
   };
 
