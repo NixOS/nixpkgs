@@ -79,11 +79,12 @@ buildPythonApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
-    mainProgram = "linode-cli";
+  meta = {
     description = "Linode Command Line Interface";
+    changelog = "https://github.com/linode/linode-cli/releases/tag/v${version}";
     homepage = "https://github.com/linode/linode-cli";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ryantm techknowlogick ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ryantm techknowlogick ];
+    mainProgram = "linode-cli";
   };
 }
