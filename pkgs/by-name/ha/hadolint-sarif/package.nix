@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
   hadolint-sarif,
   testers,
@@ -9,19 +9,12 @@ rustPlatform.buildRustPackage rec {
   pname = "hadolint-sarif";
   version = "0.5.0";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "hadolint-sarif-v${version}";
-    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-Zh3y31Q+ue1TqncZpdX+fAp2yfEnv8W8jkzUW7UvrKg=";
   };
 
-  cargoHash = "sha256-x2JHMc8OcOVCJ0X68tTyMI8P7bM8javjkYlrHBLMjus=";
-  cargoBuildFlags = [
-    "--package"
-    "hadolint-sarif"
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoHash = "sha256-bwEQ9lZXvZL6JN24N8gRdbV5gcFiH1fQ59PQILfW1z8=";
 
   passthru = {
     tests.version = testers.testVersion { package = hadolint-sarif; };
