@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
   clang-tidy-sarif,
   testers,
@@ -9,19 +9,12 @@ rustPlatform.buildRustPackage rec {
   pname = "clang-tidy-sarif";
   version = "0.5.0";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "clang-tidy-sarif-v${version}";
-    hash = "sha256-RnoJfmkrqdhOioGkB7rTzHQ3kx9vIRfWDJN30/8JAvM=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-lxZtuE6hvmeX2CCO8UeGDORnCV5N7ZNiVZR+9LOCrdk=";
   };
 
-  cargoHash = "sha256-zH0d519vld00opTRWPyL78WKXPYJ+7uTjcDnjDl8hjE=";
-  cargoBuildFlags = [
-    "--package"
-    "clang-tidy-sarif"
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoHash = "sha256-R0IyXinUhIVqGal2Vt0EdU0EFyzs3KIbp/UIseWlj1Y=";
 
   passthru = {
     tests.version = testers.testVersion { package = clang-tidy-sarif; };
