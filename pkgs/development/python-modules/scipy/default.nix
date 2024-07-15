@@ -58,7 +58,7 @@ let
   # Additional cross compilation related properties that scipy reads in scipy/meson.build
   crossFileScipy = writeText "cross-file-scipy.conf" ''
     [properties]
-    numpy-include-dir = '${numpy}/${python.sitePackages}/numpy/core/include'
+    numpy-include-dir = '${numpy}/${numpy.coreIncludeDir}'
     pythran-include-dir = '${pythran}/${python.sitePackages}/pythran'
     host-python-path = '${python.interpreter}'
     host-python-version = '${python.pythonVersion}'
@@ -89,7 +89,7 @@ buildPythonPackage {
   # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
   # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
   # experience.
-  postPatch = ''
+  postPatch = lib.optionalString (!numpy.isNumpy2) ''
     substituteInPlace pyproject.toml \
       --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
   '';

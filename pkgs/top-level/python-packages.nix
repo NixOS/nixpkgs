@@ -13956,6 +13956,11 @@ self: super: with self; {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  scipy-numpy_2 = self.scipy.override {
+    numpy = numpy_2;
+    pythran = pythran-numpy_2;
+  };
+
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 
   scour = callPackage ../development/python-modules/scour { };
