@@ -23,6 +23,13 @@ final: prev: {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
     '';
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash zsh; do
+      installShellCompletion --cmd ng \
+        --$shell <($out/bin/ng completion script)
+    done
+    '';
   };
 
   "@electron-forge/cli" = prev."@electron-forge/cli".override {
