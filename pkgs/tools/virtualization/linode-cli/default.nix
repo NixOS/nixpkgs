@@ -1,17 +1,18 @@
-{ buildPythonApplication
-, colorclass
-, fetchPypi
-, fetchurl
-, installShellFiles
-, lib
-, linode-metadata
-, openapi3
-, packaging
-, pyyaml
-, requests
-, rich
-, setuptools
-, terminaltables
+{
+  buildPythonApplication,
+  colorclass,
+  fetchPypi,
+  fetchurl,
+  installShellFiles,
+  lib,
+  linode-metadata,
+  openapi3,
+  packaging,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  terminaltables,
 }:
 
 let
@@ -37,9 +38,7 @@ buildPythonApplication rec {
     hash = "sha256-OCnO7Bf2tDnC4g7kYS0WFlV9plAS25GbzRO6mpDYYxk=";
   };
 
-  patches = [
-    ./remove-update-check.patch
-  ];
+  patches = [ ./remove-update-check.patch ];
 
   # remove need for git history
   prePatch = ''
@@ -87,7 +86,10 @@ buildPythonApplication rec {
     downloadPage = "https://pypi.org/project/linode-cli";
     homepage = "https://github.com/linode/linode-cli";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ryantm techknowlogick ];
+    maintainers = with lib.maintainers; [
+      ryantm
+      techknowlogick
+    ];
     mainProgram = "linode-cli";
   };
 }
