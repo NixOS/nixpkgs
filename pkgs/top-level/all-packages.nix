@@ -29473,9 +29473,7 @@ with pkgs;
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
 
-  bino3d = libsForQt5.callPackage ../applications/video/bino3d {
-    glew = glew110;
-  };
+  bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
