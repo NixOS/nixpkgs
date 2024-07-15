@@ -1,27 +1,46 @@
 {
+  lib,
   stdenv,
   fetchzip,
   jam,
   unzip,
+  # writeText,
+  buildPackages,
+  substituteAll,
+  writeScript,
+
+  # Common deps
+  openssl,
+  libtiff,
+  libjpeg,
+  libpng,
+  libusb1,
+
+  # Linux specific
   libX11,
   libXxf86vm,
   libXrandr,
   libXinerama,
   libXrender,
   libXext,
-  libtiff,
-  libjpeg,
-  libpng,
   libXScrnSaver,
-  writeText,
   libXdmcp,
   libXau,
-  lib,
-  openssl,
-  buildPackages,
-  substituteAll,
-  writeScript,
+
+  # MacOS specific
+  darwin,
 }:
+
+let
+  inherit (darwin.apple_sdk.frameworks)
+    AppKit
+    AudioToolbox
+    Carbon
+    Cocoa
+    CoreFoundation
+    IOKit
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
@@ -39,6 +58,41 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
+  buildInputs =
+    [
+      libtiff
+      libjpeg
+      libpng
+      openssl
+      libusb1
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libX11
+      libXxf86vm
+      libXrandr
+      libXinerama
+      libXext
+      libXrender
+      libXScrnSaver
+      libXdmcp
+      libXau
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      AudioToolbox
+      Carbon
+      Cocoa
+      CoreFoundation
+      IOKit
+    ];
+
+  buildFlags = [ "all" ];
+
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "REFSUBDIR=share/argyllcms"
+  ];
+
   patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     # Build process generates files by compiling and then invoking an executable.
     substituteAll {
@@ -47,120 +101,60 @@ stdenv.mkDerivation rec {
     }
   );
 
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace Jambase \
-      --replace "-m64" ""
+  postPatch = ''
+      substituteInPlace Makefile --replace-fail "-j 3" "-j $NIX_BUILD_CORES"
+      substituteInPlace Jamtop --replace-fail "EXIT Unable" "ECHO Unable"
+
+      # Keep udev rules
+      mkdir udev-rules
+      mv usb/*.rules udev-rules
+
+      # Remove bundled libraries, making the build fail if not provided externally
+      rm -rf tiff jpeg png usb zlib
+
+      export AR="$AR rusc"
+
+      cat "$extraJamtopPath" >> Jamtop
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace Jambase --replace-fail "-m64" ""
   '';
 
-  preConfigure =
+  extraJamtop =
     let
-      # The contents of this file comes from the Jamtop file from the
-      # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
-      # library paths. When ArgyllCMS is updated, make sure that changes
-      # in that file is reflected here.
-      jamTop = writeText "argyllcms_jamtop" ''
-        DESTDIR = "/" ;
-        REFSUBDIR = "share/argyllcms" ;
-
-        # Keep this DESTDIR anchored to Jamtop. PREFIX is used literally
-        ANCHORED_PATH_VARS = DESTDIR ;
-
-        # Tell standalone libraries that they are part of Argyll:
-        DEFINES += ARGYLLCMS ;
-
-        # enable serial instruments & support
-        USE_SERIAL = true ;
-
-        # enable fast serial instruments & support
-        USE_FAST_SERIAL = true ;                # (Implicit in USE_SERIAL too)
-
-        # enable USB instruments & support
-        USE_USB = true ;
-
-        # enable dummy Demo Instrument (only if code is available)
-        USE_DEMOINST = true ;
-
-        # enable Video Test Patch Generator and 3DLUT device support
-        # (V2.0.0 and above)
-        USE_VTPGLUT = false ;
-
-        # enable Printer device support
-        USE_PRINTER = false ;
-
-        # enable CMF Measurement device and accessory support (if present)
-        USE_CMFM = false ;
-
-        # Use ArgyllCMS version of libusb (deprecated - don't use)
-        USE_LIBUSB = false ;
-
-        # Compile in graph plotting code (Not fully implemented)
-        USE_PLOT = true ;		# [true]
-
-        JPEGLIB = ;
-        JPEGINC = ;
-        HAVE_JPEG = true ;
-
-        TIFFLIB = ;
-        TIFFINC = ;
-        HAVE_TIFF = true ;
-
-        PNGLIB = ;
-        PNGINC = ;
-        HAVE_PNG = true ;
-
-        ZLIB = ;
-        ZINC = ;
-        HAVE_Z = true ;
-
-        SSLLIB = ;
-        SSLINC = ;
-        HAVE_SSL = true ;
-
-        LINKFLAGS +=
-          ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
-          -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
-          -ljpeg -ltiff -lpng -lssl ;
+      commonLinkFlags = "-ljpeg -lpng -ltiff -lusb-1.0 -lz -lssl";
+      markPresent = name: ''
+        HAVE_${name} = true ;
+        ${name}INC = ;
+        ${name}LIB = ;
       '';
     in
     ''
-      cp ${jamTop} Jamtop
-      substituteInPlace Makefile --replace "-j 3" "-j $NIX_BUILD_CORES"
-      # Remove tiff, jpg and png to be sure the nixpkgs-provided ones are used
-      rm -rf tiff jpg png
+      ${markPresent "JPEG"}
+      ${markPresent "PNG"}
+      ${markPresent "SSL"}
+      ${markPresent "TIFF"}
+      ${markPresent "Z"}
+      ${markPresent "ZLIB"}
 
-      export AR="$AR rusc"
+      ${lib.optionalString stdenv.isLinux ''
+        LINKFLAGS = ${lib.concatMapStringsSep " " (dep: "-L${lib.getOutput "lib" dep}/lib") buildInputs} ;
+        LINKFLAGS += -ldl -lrt ${commonLinkFlags} ;
+        GUILINKFLAGS = -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss ;
+      ''}
+
+      ${lib.optionalString stdenv.isDarwin ''
+        LINKFLAGS += ${commonLinkFlags} ;
+      ''}
     '';
 
-  buildInputs = [
-    libtiff
-    libjpeg
-    libpng
-    libX11
-    libXxf86vm
-    libXrandr
-    libXinerama
-    libXext
-    libXrender
-    libXScrnSaver
-    libXdmcp
-    libXau
-    openssl
-  ];
+  passAsFile = [ "extraJamtop" ];
 
-  buildFlags = [ "all" ];
-
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
-
-  # Install udev rules, but remove lines that set up the udev-acl
-  # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
   postInstall = ''
-    rm -v $out/bin/License.txt
-    mkdir -p $out/etc/udev/rules.d
-    sed -i '/udev-acl/d' usb/55-Argyll.rules
-    cp -v usb/55-Argyll.rules $out/etc/udev/rules.d/
-
     sed -i -e 's/^CREATED .*/CREATED "'"$(date -d @$SOURCE_DATE_EPOCH)"'"/g' $out/share/argyllcms/RefMediumGamut.gam
 
+    ${lib.optionalString stdenv.isLinux ''
+      install -Dm444 udev-rules/55-Argyll.rules $out/etc/udev/rules.d/55-Argyll.rules
+    ''}
   '';
 
   passthru = {
@@ -182,6 +176,5 @@ stdenv.mkDerivation rec {
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
   };
 }
