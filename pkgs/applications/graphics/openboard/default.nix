@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
+{ stdenv, lib, fetchFromGitHub, fetchpatch2, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
+, ffmpeg_7, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
@@ -34,6 +34,22 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
   };
 
+  patches = [
+    # fix: Support FFmpeg 7.0
+    # https://github.com/OpenBoard-org/OpenBoard/pull/1017
+    (fetchpatch2 {
+      url = "https://github.com/OpenBoard-org/OpenBoard/commit/4f45b6c4016972cf5835f9188bda6197b1b4ed2f.patch?full_index=1";
+      hash = "sha256-MUJbHfOCMlRO4pg5scm+DrBsngZwB7UPuDJZss5x9Zs=";
+    })
+
+    # fix: Resolve FFmpeg 7.0 warnings
+    # https://github.com/OpenBoard-org/OpenBoard/pull/1017
+    (fetchpatch2 {
+      url = "https://github.com/OpenBoard-org/OpenBoard/commit/315bcac782e10cc6ceef1fc8b78fff40541ea38f.patch?full_index=1";
+      hash = "sha256-736eX+uXuZwHJxOXAgxs2/vjjD1JY9mMyj3rR45/7xk=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace OpenBoard.pro \
       --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
@@ -52,7 +68,7 @@ in stdenv.mkDerivation (finalAttrs: {
     fontconfig
     openssl
     poppler
-    ffmpeg
+    ffmpeg_7
     libva
     alsa-lib
     SDL
