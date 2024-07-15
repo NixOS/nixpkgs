@@ -35,6 +35,8 @@ let
     descriptionClass = "conjunction";
   };
 
+  intOrSafeStr = lib.types.either lib.types.ints.unsigned safeStr;
+
   configOptions = {
     SUBVOLUME = lib.mkOption {
       type = lib.types.path;
@@ -93,7 +95,7 @@ let
     };
 
     TIMELINE_LIMIT_HOURLY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -101,7 +103,7 @@ let
     };
 
     TIMELINE_LIMIT_DAILY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -109,7 +111,7 @@ let
     };
 
     TIMELINE_LIMIT_WEEKLY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -117,7 +119,7 @@ let
     };
 
     TIMELINE_LIMIT_MONTHLY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -125,7 +127,7 @@ let
     };
 
     TIMELINE_LIMIT_QUARTERLY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -133,7 +135,7 @@ let
     };
 
     TIMELINE_LIMIT_YEARLY = lib.mkOption {
-      type = lib.types.int;
+      type = intOrSafeStr;
       default = 10;
       description = ''
         Limits for timeline cleanup.
