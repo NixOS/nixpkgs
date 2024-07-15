@@ -36845,8 +36845,6 @@ with pkgs;
 
   stardust = callPackage ../games/stardust { };
 
-  starspace = callPackage ../applications/science/machine-learning/starspace { };
-
   stockfish = callPackage ../games/stockfish { };
 
   steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
