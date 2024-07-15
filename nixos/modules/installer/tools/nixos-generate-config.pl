@@ -97,6 +97,17 @@ if (-d "@templateDir@/$configTemplate") {
 }
 
 
+sub fetchRevision {
+    my $channel = shift;
+    my $response = `@curl@ -sfL https://nixos.org/channels/$channel/git-revision`;
+    if ($? != 0) {
+        print STDERR "warning: failed to fetch $channel git revision\n";
+        return "$channel";
+    }
+    return $response;
+}
+
+
 my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
@@ -731,6 +742,8 @@ EOF
 @configuration@
 EOF
         # Apply template
+        my $unstableRevision = "";
+        my $stableRevision = "";
 
         if ($templateDir ne "") {
             my $templateFiles = `find $templateDir -type f`;
@@ -745,6 +758,19 @@ EOF
                 my $targetDir = dirname($targetPath);
 
                 my $templateContent = read_file($templateFile);
+                if ($unstableRevision eq "" && $templateContent =~ /  version = "nixos-unstable"/) {
+                    $unstableRevision = fetchRevision("nixos-unstable");
+                }
+                if ($templateContent =~ /  version = "nixos-unstable"/ && $unstableRevision ne "" ) {
+                    $templateContent =~ s/  version = "nixos-unstable"/  version = "$unstableRevision"/;
+                }
+                if ($stableRevision eq "" && $templateContent =~ /  version = "nixos-@stableVersion@"/) {
+                    $stableRevision = fetchRevision("nixos-@stableVersion@");
+                }
+                if ($templateContent =~ /  version = "nixos-@stableVersion@"/ && $stableRevision ne "" ) {
+                    $templateContent =~ s/  version = "nixos-@stableVersion@"/  version = "$stableRevision"/;
+                }
+
                 print STDERR "writing $targetPath...\n";
                 mkpath($targetDir, 0, 0755);
                 write_file($targetPath, $templateContent);

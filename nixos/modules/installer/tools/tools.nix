@@ -42,6 +42,7 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
+    curl = lib.getExe pkgs.curl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
     hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
@@ -86,7 +87,10 @@ let
             (lib.fixedWidthNumber 2 (lib.toInt (lib.elemAt currentVersion 1) + 6))
           ];
       in lib.concatStringsSep "." (if areWeUnstable then previousVersion else currentVersion);
+      thisNixpkgs = builtins.toString ../../../..;
     };
+    inherit (nixos-generate-config.templateDir) stableVersion;
+    nixpkgsVersion = lib.trivial.release;
   };
 
   inherit (pkgs) nixos-option;
