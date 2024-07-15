@@ -31,6 +31,10 @@
   fabricSupport ? stdenv.isLinux && stdenv.isx86_64,
   # Enable Fortran support
   fortranSupport ? true,
+  # AVX/SSE options. See passthru.defaultAvxOptions for the available options.
+  # note that opempi fails to build with AVX disabled, meaning that everything
+  # up to AVX is enabled by default.
+  avxOptions ? { },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs ./
+
+    # This is dynamically detected. Configure does not provide fine grained options
+    # We just disable the check in the configure script for now
+    ${lib.pipe (finalAttrs.passthru.defaultAvxOptions // avxOptions) [
+      (lib.mapAttrsToList (
+        option: val: ''
+          substituteInPlace configure \
+            --replace-fail \
+              ompi_cv_op_avx_check_${option}=yes \
+              ompi_cv_op_avx_check_${option}=${if val then "yes" else "no"}
+        ''
+      ))
+      (lib.concatStringsSep "\n")
+    ]}
   '';
 
   # Ensure build is reproducible according to manual
@@ -222,6 +240,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
+    defaultAvxOptions = {
+      sse3 = true;
+      sse41 = true;
+      avx = true;
+      avx2 = stdenv.hostPlatform.avx2Support;
+      avx512 = stdenv.hostPlatform.avx512Support;
+    };
     inherit cudaSupport;
     cudatoolkit = cudaPackages.cudatoolkit; # For backward compatibility only
   };
