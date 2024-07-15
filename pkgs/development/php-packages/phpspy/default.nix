@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gnugrep,
   binutils,
   makeBinaryWrapper,
@@ -21,6 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QphoDdnSFPVRvEro0WDUC/yRsOf4I5p5BpHq32olqJI=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/adsr/phpspy/commit/8854e60ac38cfd2455d4a3d797f283eb3940cb7b.patch";
+      hash = "sha256-IMO9GV0Z8PDEAVhLevg5jGh/PHcbNq3f3fMGFaKoLL4=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
