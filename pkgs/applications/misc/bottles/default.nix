@@ -28,13 +28,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.11";
+  version = "2022.12.14.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-uS3xmTu+LrVFX93bYcJvYjl6179d3IjpxLKrOXn8Z8Y=";
+    sha256 = "sha256-hoWyXCP7/0m8akUGBJyuF2yQcRKR8C7MDBLUdPdtBgE=";
   };
 
   patches = [
