@@ -1,8 +1,8 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index e6f1267..3bf16a5 100644
+index cccafd9..75d2a85 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1632,7 +1632,8 @@ dependencies = [
+@@ -1655,7 +1655,8 @@ dependencies = [
  [[package]]
  name = "librespot"
  version = "0.4.2"
@@ -12,7 +12,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "base64 0.13.1",
   "env_logger",
-@@ -1658,7 +1659,8 @@ dependencies = [
+@@ -1681,7 +1682,8 @@ dependencies = [
  [[package]]
  name = "librespot-audio"
  version = "0.4.2"
@@ -22,7 +22,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "aes-ctr",
   "byteorder",
-@@ -1673,7 +1675,8 @@ dependencies = [
+@@ -1696,7 +1698,8 @@ dependencies = [
  [[package]]
  name = "librespot-connect"
  version = "0.4.2"
@@ -32,7 +32,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "form_urlencoded",
   "futures-util",
-@@ -1693,7 +1696,8 @@ dependencies = [
+@@ -1716,7 +1719,8 @@ dependencies = [
  [[package]]
  name = "librespot-core"
  version = "0.4.2"
@@ -42,7 +42,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "aes",
   "base64 0.13.1",
-@@ -1733,7 +1737,8 @@ dependencies = [
+@@ -1756,7 +1760,8 @@ dependencies = [
  [[package]]
  name = "librespot-discovery"
  version = "0.4.2"
@@ -52,7 +52,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "aes-ctr",
   "base64 0.13.1",
-@@ -1754,7 +1759,8 @@ dependencies = [
+@@ -1777,7 +1782,8 @@ dependencies = [
  [[package]]
  name = "librespot-metadata"
  version = "0.4.2"
@@ -62,7 +62,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "async-trait",
   "byteorder",
-@@ -1767,7 +1773,8 @@ dependencies = [
+@@ -1790,7 +1796,8 @@ dependencies = [
  [[package]]
  name = "librespot-playback"
  version = "0.4.2"
@@ -72,7 +72,7 @@ index e6f1267..3bf16a5 100644
  dependencies = [
   "byteorder",
   "cpal",
-@@ -1792,7 +1799,8 @@ dependencies = [
+@@ -1815,7 +1822,8 @@ dependencies = [
  [[package]]
  name = "librespot-protocol"
  version = "0.4.2"
@@ -83,15 +83,15 @@ index e6f1267..3bf16a5 100644
   "glob",
   "protobuf 2.28.0",
 diff --git a/Cargo.toml b/Cargo.toml
-index 40ca2c1..734a3fb 100644
+index c7e2fe2..28e895a 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -29,7 +29,7 @@ reqwest = "0.11"
+@@ -30,7 +30,7 @@ reqwest = "0"
  colored = "2"
- lame = "0.1"
- aspotify = "0.7.1"
+ lame = "0"
+ aspotify = "0"
 -librespot = { git = "ssh://git@github.com/oSumAtrIX/free-librespot.git" }
 +librespot = "0.4.2"
- async-std = { version = "1.12", features = ["attributes", "tokio1"] }
- serde_json = "1.0"
- async-stream = "0.3"
+ async-std = { version = "1", features = ["attributes", "tokio1"] }
+ serde_json = "1"
+ async-stream = "0"
