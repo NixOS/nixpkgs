@@ -793,6 +793,19 @@ EOF
         write_file($fn, <<EOF);
 @configuration@
 EOF
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
+    } else {
+        print STDERR "warning: not overwriting existing $fn\n";
+    }
+
+    opendir(my $dH, $outDir);
+    my @outDirContents = grep {
+        $_ ne "configuration.nix"
+        && $_ ne "hardware-configuration.nix"
+    } readdir($dH);
+    closedir($dH);
+
+    if ($force || length(scalar @outDirContents) == 0) {
         # Apply template
         my $unstableRevision = "";
         my $stableRevision = "";
@@ -828,12 +841,8 @@ EOF
                 write_file($targetPath, $templateContent);
             }
         }
-        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
-    } else {
-        print STDERR "warning: not overwriting existing $fn\n";
-        if ($templateDir ne "") {
-            print STDERR "warning: template files were not applied\n  if you want to apply template, consider using --dir and copy template files over manually.\n";
-        }
+    } elsif ($templateDir ne "") {
+        print STDERR "warning: template files were not applied\n  if you want to apply template, consider using --dir and copy template files over manually.\n";
     }
 }
 
