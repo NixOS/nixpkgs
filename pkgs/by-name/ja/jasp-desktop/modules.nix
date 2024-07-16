@@ -1,5 +1,4 @@
 {
-  R,
   rPackages,
   fetchFromGitHub,
   jasp-src,
@@ -117,8 +116,8 @@ let
     src = fetchFromGitHub {
       owner = "dustinfife";
       repo = "flexplot";
-      rev = "4223ad5fb56028018b964d6f9f5aa5bac8710821";
-      hash = "sha256-L+Ed2bIWjq3ZIAGookp8dAjDSeldEbcwynwFVVZ9IcU=";
+      rev = "303a03968f677e71c99a5e22f6352c0811b7b2fb";
+      hash = "sha256-iT5CdtNk0Oi8gga76L6YtyWGACAwpN8A/yTBy7JJERc=";
     };
     propagatedBuildInputs = [
       cowplot
@@ -194,6 +193,7 @@ in
       car
       colorspace
       emmeans
+      effectsize
       ggplot2
       jaspBase
       jaspDescriptives
@@ -202,6 +202,8 @@ in
       KernSmooth
       matrixStats
       multcomp
+      multcompView
+      mvShapiroTest
       onewaytests
       plyr
       stringi
@@ -253,6 +255,13 @@ in
       ggrepel
       jaspBase
       jaspGraphs
+      jaspTTests
+      forecast
+      flexplot
+      ggrain
+      ggpp
+      ggtext
+      dplyr
     ];
     jaspDistributions = buildJaspModule "jaspDistributions" [
       car
@@ -292,6 +301,7 @@ in
     jaspFrequencies = buildJaspModule "jaspFrequencies" [
       abtest
       BayesFactor
+      bridgesampling
       conting'
       multibridge
       ggplot2
@@ -310,6 +320,7 @@ in
       jaspBase
       jaspGraphs
       rjags
+      runjags
       scales
       stringr
     ];
@@ -325,6 +336,7 @@ in
       scales
       ggalluvial
       ragg
+      rjags
       runjags
       ggdist
       png
@@ -449,11 +461,14 @@ in
       imputeTS
     ];
     jaspProcess = buildJaspModule "jaspProcess" [
+      blavaan
       dagitty
       ggplot2
       ggraph
       jaspBase
       jaspGraphs
+      jaspJags
+      runjags
     ];
     jaspProphet = buildJaspModule "jaspProphet" [
       rstan
@@ -581,12 +596,14 @@ in
     jaspTimeSeries = buildJaspModule "jaspTimeSeries" [
       jaspBase
       jaspGraphs
+      jaspDescriptives
       forecast
     ];
     jaspVisualModeling = buildJaspModule "jaspVisualModeling" [
       flexplot
       jaspBase
       jaspGraphs
+      jaspDescriptives
     ];
   };
 }
