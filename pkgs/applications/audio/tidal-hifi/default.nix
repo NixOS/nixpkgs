@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.14.1";
+  version = "5.15.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-3oVQyFtAFqlh4GOgavN2e2TVhCILg6Rhf5GZcot+aKo=";
+    sha256 = "sha256-0OXNynf56On+emLO0ZfNIcoT3GEhSXdoQhfxapLYYic=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
