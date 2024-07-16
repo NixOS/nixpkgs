@@ -227,8 +227,8 @@ stdenvNoCC.mkDerivation (args // {
         else
           ''$(mktemp -t "${pname}-deps-XXXXXX.nix")'';
       storeSrc = srcOnly args;
-      projectFileStr = lib.escapeShellArg projectFiles;
-      testProjectFileStr = lib.escapeShellArg testProjectFiles;
+      projectFileStr = lib.escapeShellArgs projectFiles;
+      testProjectFileStr = lib.escapeShellArgs testProjectFiles;
       path = lib.makeBinPath [
         coreutils
         runtimeShellPackage

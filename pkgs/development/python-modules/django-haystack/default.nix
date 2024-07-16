@@ -10,6 +10,7 @@
 
   # dependencies
   django,
+  packaging,
 
   # tests
   elasticsearch,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ django ];
+  propagatedBuildInputs = [ packaging ];
 
   optional-dependencies = {
     elasticsearch = [ elasticsearch ];

@@ -16,7 +16,6 @@
 , libssh
 , zstd
 , lz4
-, boost
 , readline
 , libtirpc
 , rpcsvc-proto
@@ -34,33 +33,42 @@
 
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
+
+  mysqlShellVersion = "8.4.1";
+  mysqlServerVersion = "8.4.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.37";
+  version = mysqlShellVersion;
 
   srcs = [
     (fetchurl {
-      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-4GOgkazZ7EC7BfLATfZPiZan5OJuiDu2UChJ1fa0pho=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
+      hash = "sha256-20Hxl9cXDFTX7cDQyaJzDCJfSvBeztD2S+z5u2wRAT4=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-UtZ7/Ip5h9CXKy3lkSt8/TXJgbPPUO73rMSIFPfX0Is=";
+      hash = "sha256-wTwoaoaCrTQqaqgE35Sg8zn8HqjsjQowbtgMZTpkYQU=";
     })
   ];
 
   sourceRoot = "mysql-shell-${finalAttrs.version}-src";
 
   postUnpack = ''
-    mv mysql-${finalAttrs.version} mysql
+    mv mysql-${mysqlServerVersion} mysql
   '';
 
-  postPatch = ''
-    substituteInPlace ../mysql/cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  patches = [
+    # No openssl bundling on macOS. It's not working.
+    # See https://github.com/mysql/mysql-shell/blob/5b84e0be59fc0e027ef3f4920df15f7be97624c1/cmake/ssl.cmake#L53
+    ./no-openssl-bundling.patch
+  ];
 
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
+  postPatch = ''
+    substituteInPlace ../mysql/cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
+
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
@@ -68,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
-    boost
     curl
     libedit
     libssh
@@ -95,22 +102,22 @@ stdenv.mkDerivation (finalAttrs: {
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_BOOST=system -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
-  '';
 
-  cmakeFlags = [
-    "-DMYSQL_SOURCE_DIR=../mysql"
-    "-DMYSQL_BUILD_DIR=../mysql/build"
-    "-DMYSQL_CONFIG_EXECUTABLE=../../mysql/build/scripts/mysql_config"
-    "-DWITH_ZSTD=system"
-    "-DWITH_LZ4=system"
-    "-DWITH_ZLIB=system"
-    "-DWITH_PROTOBUF=${protobuf}"
-    "-DHAVE_PYTHON=1"
-  ];
+    cmakeFlagsArray+=(
+      "-DMYSQL_SOURCE_DIR=''${NIX_BUILD_TOP}/mysql"
+      "-DMYSQL_BUILD_DIR=''${NIX_BUILD_TOP}/mysql/build"
+      "-DMYSQL_CONFIG_EXECUTABLE=''${NIX_BUILD_TOP}/mysql/build/scripts/mysql_config"
+      "-DWITH_ZSTD=system"
+      "-DWITH_LZ4=system"
+      "-DWITH_ZLIB=system"
+      "-DWITH_PROTOBUF=system"
+      "-DHAVE_PYTHON=1"
+    )
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"

@@ -49,7 +49,7 @@ import ../make-test-python.nix (
         services.k3s.role = "server";
         services.k3s.package = k3s;
         # Slightly reduce resource usage
-        services.k3s.extraFlags = builtins.toString [
+        services.k3s.extraFlags = [
           "--disable coredns"
           "--disable local-storage"
           "--disable metrics-server"
