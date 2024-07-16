@@ -85,7 +85,9 @@ in
 
     services.odoo.settings.options = {
       proxy_mode = cfg.domain != null;
-    };
+    } // (lib.optionalAttrs (cfg.addons != []) {
+      addons_path = concatMapStringsSep "," escapeShellArg cfg.addons;
+    });
 
     users.users.odoo = {
       isSystemUser = true;
@@ -101,12 +103,16 @@ in
       path = [ config.services.postgresql.package ];
 
       requires = [ "postgresql.service" ];
-      script = "HOME=$STATE_DIRECTORY ${cfg.package}/bin/odoo ${optionalString (cfg.addons != []) "--addons-path=${concatMapStringsSep "," escapeShellArg cfg.addons}"} -c ${cfgFile}";
 
       serviceConfig = {
+        ExecStart = "${cfg.package}/bin/odoo";
         DynamicUser = true;
         User = "odoo";
         StateDirectory = "odoo";
+        Environment = [
+          "HOME=%S/odoo"
+          "ODOO_RC=${cfgFile}"
+        ];
       };
     };
 
