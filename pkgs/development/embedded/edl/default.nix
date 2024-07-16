@@ -37,7 +37,6 @@ python3Packages.buildPythonPackage {
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
-    cp $src/Drivers/50-android.rules $out/etc/udev/rules.d/50-android.rules
     cp $src/Drivers/51-edl.rules $out/etc/udev/rules.d/51-edl.rules
   '';
 
