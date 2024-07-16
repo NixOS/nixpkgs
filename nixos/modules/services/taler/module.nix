@@ -11,7 +11,10 @@ let
 in
 
 {
-  imports = [ ./exchange.nix ];
+  imports = [
+    ./exchange.nix
+    ./libeufin.nix
+  ];
 
   options.services.taler = {
     enable = lib.mkEnableOption "the GNU Taler system";
