@@ -127,34 +127,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     ''
-      remove-references-to -t $dev $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
-      remove-references-to -t $man $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
 
       # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
-      wrapProgram $dev/bin/opal_wrapper \
-        --set OPAL_INCLUDEDIR $dev/include \
-        --set OPAL_PKGDATADIR $dev/share/openmpi
+      wrapProgram "''${!outputDev}/bin/opal_wrapper" \
+        --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
+        --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
 
       # default compilers should be indentical to the
       # compilers at build time
 
-      echo "$dev/share/openmpi/mpicc-wrapper-data.txt"
+      echo "''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt"
       sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-        $dev/share/openmpi/mpicc-wrapper-data.txt
+        ''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt
 
-      echo "$dev/share/openmpi/ortecc-wrapper-data.txt"
+      echo "''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt"
       sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-         $dev/share/openmpi/ortecc-wrapper-data.txt
+         ''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt
 
-      echo "$dev/share/openmpi/mpic++-wrapper-data.txt"
+      echo "''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt"
       sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
-         $dev/share/openmpi/mpic++-wrapper-data.txt
+         ''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt
     ''
     + lib.optionalString fortranSupport ''
 
-      echo "$dev/share/openmpi/mpifort-wrapper-data.txt"
+      echo "''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt"
       sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
-         $dev/share/openmpi/mpifort-wrapper-data.txt
+         ''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt
 
     '';
 
