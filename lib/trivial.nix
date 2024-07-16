@@ -711,7 +711,7 @@ in {
           assert isString msg;
           if mustAbort
           then builtins.trace "[1;31mevaluation warning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-          else builtins.trace "[1;31mevaluation warning: ${msg}[0m" v
+          else builtins.trace "[1;35mevaluation warning: ${msg}[0m" v
     );
 
   /**
