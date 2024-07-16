@@ -107,24 +107,98 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = let
+    # The file names we need to iterate are a combination of ${p}${s}, and there
+    # are 7x3 such options. We use lib.mapCartesianProduct to iterate them all.
+    fileNamesToIterate = {
+      p = [
+        "mpi"
+        "shmem"
+        "osh"
+      ];
+      s =
+        [
+          "CC"
+          "c++"
+          "cxx"
+          "cc"
+        ]
+        ++ lib.optionals fortranSupport [
+          "f77"
+          "f90"
+          "fort"
+        ];
+    };
+    wrapperDataSubstitutions =
+      {
+        # The attr key is the filename prefix. The list's 1st value is the
+        # compiler=_ line that should be replaced by a compiler=#2 string, where
+        # #2 is the 2nd value in the list.
+        "cc" = [
+          "gcc"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
+        ];
+        "c++" = [
+          "g++"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
+        ];
+      }
+      // lib.optionalAttrs fortranSupport {
+        "fort" = [
+          "gfortran"
+          "${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran"
+        ];
+      };
+    # The -wrapper-data.txt files that are not symlinks, need to be iterated as
+    # well, here they start withw ${part1}${part2}, and we use
+    # lib.mapCartesianProduct as well.
+    wrapperDataFileNames = {
+      part1 = [
+        "mpi"
+        "shmem"
+      ];
+      part2 = builtins.attrNames wrapperDataSubstitutions;
+    };
+  in ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
     # The main wrapper that all the rest of the commonly used binaries are
     # symlinked to
     moveToOutput "bin/opal_wrapper" "''${!outputDev}"
-    for f in mpi shmem osh; do
-      for i in f77 f90 CC c++ cxx cc fort; do
-        moveToOutput "bin/$f$i" "''${!outputDev}"
-        echo "move $fi$i"
-        moveToOutput "share/openmpi/$f$i-wrapper-data.txt" "''${!outputDev}"
-      done
-    done
-
+    # All of the following files are symlinks to opal_wrapper
+    ${lib.pipe fileNamesToIterate [
+      (lib.mapCartesianProduct (
+        { p, s }:
+        ''
+          echo "handling ${p}${s}"
+          moveToOutput "bin/${p}${s}" "''${!outputDev}"
+          moveToOutput "share/openmpi/${p}${s}-wrapper-data.txt" "''${!outputDev}"
+        ''
+      ))
+      (lib.concatStringsSep "\n")
+    ]}
+    # default compilers should be indentical to the
+    # compilers at build time
+    ${lib.pipe wrapperDataFileNames [
+      (lib.mapCartesianProduct (
+        { part1, part2 }:
+        ''
+          substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
+            --replace-fail \
+              compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
+              compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 1}
+        ''
+      ))
+      (lib.concatStringsSep "\n")
+    ]}
     # ortecc's files don't have c++ and fort companions so it is handled
-    # outside the for loops above
+    # outside the Nix concatenations above.
     moveToOutput "bin/ortecc" "''${!outputDev}"
     moveToOutput "share/openmpi/ortecc-wrapper-data.txt" "''${!outputDev}"
+    substituteInPlace "''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt" \
+      --replace-fail \
+        compiler=${lib.elemAt wrapperDataSubstitutions.cc 0} \
+        compiler=${lib.elemAt wrapperDataSubstitutions.cc 1}
 
     for i in orte-info ompi_info oshmem_info; do
       moveToOutput "bin/$i" "''${!outputDev}"
@@ -140,36 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "''${!outputDev}/bin/opal_wrapper" \
         --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
         --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
-
-      # default compilers should be indentical to the
-      # compilers at build time
-
-      echo "''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt"
-      substituteInPlace ''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt \
-        --replace-fail \
-          compiler=gcc \
-          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
-
-      echo "''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt"
-      substituteInPlace ''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt \
-        --replace-fail \
-          compiler=gcc \
-          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
-
-      echo "''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt"
-      substituteInPlace ''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt \
-        --replace-fail \
-          compiler=g++ \
-          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++
-    ''
-    + lib.optionalString fortranSupport ''
-
-      echo "''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt"
-      substituteInPlace ''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt \
-        --replace-fail \
-          compiler=gfortran \
-          compiler=${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran
-
     '';
 
   doCheck = true;
