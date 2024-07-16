@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace ''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt \
         --replace-fail \
           compiler=gfortran \
-          compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran
+          compiler=${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran
 
     '';
 
