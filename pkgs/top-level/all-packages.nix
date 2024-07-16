@@ -9695,8 +9695,6 @@ with pkgs;
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly { };
-
   m2r = with python3Packages; toPythonApplication m2r;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
@@ -29682,7 +29680,9 @@ with pkgs;
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
-  chirp = callPackage ../applications/radio/chirp { };
+  chirp = callPackage ../applications/radio/chirp {
+    python3 = python311;
+  };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
@@ -30355,7 +30355,7 @@ with pkgs;
 
   font-manager = callPackage ../by-name/fo/font-manager/package.nix {
     libsoup = libsoup_3;
-    webkitgtk = webkitgtk_4_1;
+    webkitgtk = webkitgtk_6_0;
   };
 
   fontfinder = callPackage ../applications/misc/fontfinder { };
@@ -32397,8 +32397,6 @@ with pkgs;
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monitorcontrol = callPackage ../applications/misc/monitorcontrol { };
-
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
@@ -37725,10 +37723,10 @@ with pkgs;
     inherit (darwin) DarwinTools;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
-    protobuf = protobuf_21;
+    protobuf = protobuf_23;
     # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_202301.override {
       static = true;
       cxxStandard = "20";
     };

@@ -6446,6 +6446,8 @@ self: super: with self; {
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
+  kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
+
   kaggle = callPackage ../development/python-modules/kaggle { };
 
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
@@ -14403,8 +14405,6 @@ self: super: with self; {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
-  solaredge = callPackage ../development/python-modules/solaredge { };
-
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
@@ -14916,6 +14916,8 @@ self: super: with self; {
   };
 
   sudachipy = callPackage ../development/python-modules/sudachipy { };
+
+  suds = callPackage ../development/python-modules/suds { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 

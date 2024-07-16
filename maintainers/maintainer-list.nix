@@ -12660,6 +12660,13 @@
     name = "Matthias Wimmer";
     keys = [ { fingerprint = "CAEC A12D CE23 37A6 6DFD  17B0 7AC7 631D 70D6 C898"; } ];
   };
+  max = {
+    email = "max+nixpkgs@privatevoid.net";
+    matrix = "@max:privatevoid.net";
+    github = "max-privatevoid";
+    githubId = 55053574;
+    name = "Max Headroom";
+  };
   max-amb = {
     email = "max_a@e.email";
     github = "max-amb";
@@ -16162,6 +16169,11 @@
     github = "posch";
     githubId = 146413;
     name = "Tobias Poschwatta";
+  };
+  potb = {
+    name = "Peïo Thibault";
+    github = "potb";
+    githubId = 10779093;
   };
   poweredbypie = {
     name = "poweredbypie";
