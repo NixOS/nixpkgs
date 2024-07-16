@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
 
   pname = "realm-studio";
