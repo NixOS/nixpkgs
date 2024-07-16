@@ -8,6 +8,8 @@
 , buildc2xml ? false
 , libllvm
 , libxml2
+, substituteAll
+, llvmPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
+  patches = [
+    (let
+      clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);
+      clang-lib = lib.getLib llvmPackages.clang-unwrapped;
+
+      clang = "${clang-lib}/lib/clang/${clang-major}/include";
+      libc = "${lib.getDev stdenv.cc.libc}/include";
+    in substituteAll {
+      src = ./fix_include_path.patch;
+
+      inherit clang libc;
+    })
+  ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
