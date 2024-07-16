@@ -29682,7 +29682,9 @@ with pkgs;
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
-  chirp = callPackage ../applications/radio/chirp { };
+  chirp = callPackage ../applications/radio/chirp {
+    python3 = python311;
+  };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
