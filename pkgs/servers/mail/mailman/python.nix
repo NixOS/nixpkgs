@@ -28,10 +28,6 @@ python3.override {
           hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
         };
       });
-
-      readme-renderer = super.readme-renderer.overridePythonAttrs (_: {
-        propagatedBuildInputs = [ self.cmarkgfm ];
-      });
     })
 
     overlay;
