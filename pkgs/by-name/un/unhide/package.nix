@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     cp ${makefile} Makefile
   '';
 
+  dontConfigure = true;
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -47,10 +51,6 @@ stdenv.mkDerivation rec {
     procps
     psmisc
   ];
-
-  dontConfigure = true;
-
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "Forensic tool to find hidden processes and TCP/UDP ports by rootkits/LKMs";
