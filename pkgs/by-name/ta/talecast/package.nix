@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  stdenv,
   testers,
   talecast
 }:
