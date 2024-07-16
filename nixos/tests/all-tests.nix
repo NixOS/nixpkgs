@@ -610,6 +610,7 @@ in {
   nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
   nimdow = handleTest ./nimdow.nix {};
