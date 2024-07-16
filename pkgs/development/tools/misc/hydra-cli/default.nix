@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
-, testers
-, hydra-cli
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
+  testers,
+  hydra-cli,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,15 +25,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WokdTMNA7MrbFcKNeFIRU2Tw6LyM80plDoZPX1v/hrc=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -46,6 +41,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hydra-cli";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ lewo aleksana ];
+    maintainers = with lib.maintainers; [
+      lewo
+      aleksana
+    ];
   };
 }
