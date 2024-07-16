@@ -2101,7 +2101,7 @@ self: super: {
   # Requests latest versions of crypton-connection and tls
   darcs = super.darcs.overrideScope (self: super: {
     crypton-connection = self.crypton-connection_0_4_1;
-    tls = self.tls_2_0_6;
+    tls = self.tls_2_1_0;
   });
 
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
