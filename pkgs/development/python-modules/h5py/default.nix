@@ -12,6 +12,7 @@
   mpi4py ? null,
   openssh,
   pytestCheckHook,
+  pytest-mpi,
   cached-property,
 }:
 
@@ -74,12 +75,15 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  # tests now require pytest-mpi, which isn't available and difficult to package
-  doCheck = false;
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-mpi
     openssh
   ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
+  '';
 
   pythonImportsCheck = [ "h5py" ];
 
