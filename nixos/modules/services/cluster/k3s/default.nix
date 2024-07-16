@@ -206,9 +206,12 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
-      type = types.str;
-      default = "";
-      example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
+      type = with types; either str (listOf str);
+      default = [ ];
+      example = [
+        "--no-deploy traefik"
+        "--cluster-cidr 10.24.0.0/16"
+      ];
     };
 
     disableAgent = mkOption {
@@ -427,7 +430,7 @@ in
           ++ (optional (cfg.token != "") "--token ${cfg.token}")
           ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
           ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-          ++ [ cfg.extraFlags ]
+          ++ (lib.flatten cfg.extraFlags)
         );
       };
     };
