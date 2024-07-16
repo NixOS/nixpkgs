@@ -143,75 +143,10 @@ backendStdenv.mkDerivation (
       withGpu = finalAttrs.finalPackage.overrideAttrs {
         testWithGpuAccess = true;
         requiredSystemFeatures = [ "cuda" ];
-        # NOTE: Because the test cases immediately create and try to run the binaries, we don't have an opportunity to patch
-        # them with autoAddDriverRunpath. To get around this, we add the driver runpath to the environment.
-        # NOTE: readlink -e won't resolve "${addDriverRunpath.driverLink}", and returns an empty string.
-        # NOTE: readlink -e or -f won't resolve "${addDriverRunpath.driverLink}/lib", and returns an empty string.
-        # NOTE: Symlink has the following settings:
-        # lrwxrwxrwx 1 nobody nogroup 60 Jul  8 21:24 /run/opengl-driver -> /nix/store/0nsv6k19a2v437yk34inhmc3r5fcxnl8-graphics-drivers
+        # NOTE: Because the test cases immediately create and try to run the binaries, we don't have an opportunity
+        # to patch them with autoAddDriverRunpath. To get around this, we add the driver runpath to the environment.
         preCheck = ''
-          echo "withGpu: Running preCheck hook" >&2
-          echo "withGpu: Current user: $(whoami)" >&2
-          echo "withGpu: Current groups: $(groups)" >&2
-          echo "withGpu: /dev/dri/* matches $(echo /dev/dri/*)" >&2
-          echo "withGpu: /dev/nvidia* matches $(echo /dev/nvidia*)" >&2
-
-          local -r graphicsDriversDirSymlink="${addDriverRunpath.driverLink}"
-          if [[ ! -L "$graphicsDriversDirSymlink" ]]; then
-            echo "withGpu: Graphics drivers symlink $graphicsDriversDirSymlink does not exist" >&2
-            exit 1
-          else
-            echo "withGpu: Graphics drivers symlink $graphicsDriversDirSymlink exists" >&2
-            echo "withGpu: Properties of $graphicsDriversDirSymlink:" >&2
-            ls -la "$graphicsDriversDirSymlink" >&2
-          fi
-
-          function printPathInfo() {
-            local -r path="$1"
-            echo "withGpu: Testing properties of $path" >&2
-            if [[ -e "$path" ]]; then
-              echo "withGpu: $path is accessible" >&2
-              if [[ -d "$path" ]]; then
-                echo "withGpu: $path is a directory" >&2
-                if [[ -r "$path" ]]; then
-                  echo "withGpu: $path has read permission" >&2
-                else
-                  echo "withGpu: $path does not have read permission" >&2
-                fi
-
-                if [[ -x "$path" ]]; then
-                  echo "withGpu: $path has execute permission" >&2
-                else
-                  echo "withGpu: $path does not have execute permission" >&2
-                fi
-              else
-                echo "withGpu: $path is not a directory" >&2
-              fi
-            else
-              echo "withGpu: $path is not accessible" >&2
-            fi
-            return 0
-          }
-
-          local -r graphicsDriversDir="$(readlink -mnv "$graphicsDriversDirSymlink")"
-          if [[ -z "$graphicsDriversDir" ]]; then
-            echo "withGpu: Failed to resolve graphics drivers path" >&2
-            exit 1
-          else
-            echo "withGpu: Resolved graphics drivers path to $graphicsDriversDir" >&2
-            printPathInfo "$graphicsDriversDir"
-          fi
-
-          local -r graphicsDriversLibDir="$(readlink -mnv "$graphicsDriversDir/lib")"
-          if [[ -z "$graphicsDriversLibDir" ]]; then
-            echo "withGpu: Failed to resolve graphics drivers library path" >&2
-            exit 1
-          else
-            echo "withGpu: Resolved graphics drivers library path to $graphicsDriversLibDir" >&2
-            printPathInfo "$graphicsDriversLibDir"
-          fi
-
-          exit 1
+          export LD_LIBRARY_PATH="$(readlink -mnv "${addDriverRunpath.driverLink}/lib")"
         '';
       };
     };
