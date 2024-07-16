@@ -4,8 +4,7 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  fetchpatch,
-  ffmpeg_5-headless,
+  ffmpeg_6-headless,
   numpy,
   pillow,
   pkg-config,
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "11.0.0";
+  version = "12.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,17 +24,8 @@ buildPythonPackage rec {
     owner = "mikeboers";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pCKP+4ZmZCJcG7/Qy9H6aS4svQdgaRA9S1QVNWFYhSQ=";
+    hash = "sha256-yPVAtL71pL/ok3bli+r/IruCrmmhNyv98pr7z3m8sbo=";
   };
-
-  patches = [
-    # merged upstream PR: https://github.com/PyAV-Org/PyAV/pull/1387
-    (fetchpatch {
-      name = "use-pkg-config-env-var-fix-cross.patch";
-      url = "https://github.com/PyAV-Org/PyAV/commit/ba7a2c9f716af506838d399e6ed27ed6d64d2435.patch";
-      sha256 = "sha256-oH+g8sVoVCQe6DimRN38VT2GdziriwHYRAhldNxz9/E=";
-    })
-  ];
 
   nativeBuildInputs = [
     cython
@@ -43,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ffmpeg_5-headless ];
+  buildInputs = [ ffmpeg_6-headless ];
 
   preCheck = ''
     # ensure we import the built version
