@@ -1,39 +1,35 @@
 {
-  lib,
   boto3,
   botocore,
   buildPythonPackage,
   dateparser,
-  fetchFromGitHub,
+  fetchPypi,
+  lib,
   matplotlib,
   numpy,
   pandas,
   poetry-core,
   prometheus-api-client,
-  pydantic,
+  pydantic_1,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "prometrix";
-  version = "0.1.18-unstable-2024-04-30";
+  version = "0.1.18";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "robusta-dev";
-    repo = "prometrix";
-    # https://github.com/robusta-dev/prometrix/issues/19
-    rev = "35128847d46016b88455e0a98f0eeec08d042107";
-    hash = "sha256-g8ZqgL9ETVwpKLMQS7s7A4GpSGfaFEDLOr8JBvFl2C4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-PqV0zMFmBPcLPn2YexIJZ7f2IDPJBumu843rLnTBXpI=";
   };
+
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
     "pydantic"
     "urllib3"
   ];
-
-  build-system = [ poetry-core ];
-
 
   dependencies = [
     boto3
@@ -43,13 +39,9 @@ buildPythonPackage rec {
     numpy
     pandas
     prometheus-api-client
-    pydantic
+    pydantic_1
     requests
   ];
-
-  # Fixture is missing
-  # https://github.com/robusta-dev/prometrix/issues/9
-  doCheck = false;
 
   pythonImportsCheck = [ "prometrix" ];
 
@@ -62,8 +54,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/robusta-dev/prometrix";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
-    # prometheus-api-client 0.5.5 is not working
-    # https://github.com/robusta-dev/prometrix/issues/14
-    broken = versionAtLeast prometheus-api-client.version "0.5.3";
   };
 }
