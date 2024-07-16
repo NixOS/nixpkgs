@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, alcotest, logs, lwt, fmt
+{ buildDunePackage, alcotest, logs, lwt, fmt
 , re, cmdliner
 }:
 

@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , shared-memory-ring
 , ppx_cstruct
 , cstruct
