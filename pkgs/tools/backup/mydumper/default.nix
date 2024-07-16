@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
       --replace-fail "/etc" "$out/etc" \
   '';
 
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "High-performance MySQL backup tool";
