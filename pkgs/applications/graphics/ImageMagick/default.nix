@@ -30,11 +30,9 @@
 , ApplicationServices
 , Foundation
 , testers
-, imagemagick
 , nixos-icons
 , perlPackages
 , python3
-, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
