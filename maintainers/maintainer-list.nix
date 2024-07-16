@@ -18363,6 +18363,12 @@
     githubId = 1151264;
     name = "Sebastian Graf";
   };
+  shackra = {
+    name = "Jorge Javier Araya Navarro";
+    email = "jorge@esavara.cr";
+    github = "shackra";
+    githubId = 1055216;
+  };
   shadaj = {
     github = "shadaj";
     githubId = 543055;
