@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.25.1";
+  version = "2.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -37,13 +37,8 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-Z0PQtuADqXiVnDcLoy+R5Mrg6KMGWILbLdMM5fNBqaM=";
+    hash = "sha256-+82zQtC20Q2u3/ujnt8UfmK4oYCpH6Eo2TTlk2g3z+s=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==0.28" "versioneer[toml]"
-  '';
 
   pythonRelaxDeps = [
     "scipy"
