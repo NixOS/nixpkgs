@@ -12,7 +12,9 @@ in stdenv.mkDerivation {
   pname = "mkl-test";
   version = mkl.version;
 
-  src = ./.;
+  unpackPhase = ''
+    cp ${./test.c} test.c
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 

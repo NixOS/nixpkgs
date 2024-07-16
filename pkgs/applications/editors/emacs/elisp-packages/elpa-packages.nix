@@ -210,4 +210,5 @@ self: let
 
   in elpaPackages // { inherit elpaBuild; });
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in
+generateElpa { }

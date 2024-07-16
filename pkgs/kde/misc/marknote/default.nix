@@ -5,7 +5,6 @@
   qtdeclarative,
   qtsvg,
   qtwayland,
-  qqc2-desktop-style
 }:
 mkKdeDerivation rec {
   pname = "marknote";
@@ -20,7 +19,6 @@ mkKdeDerivation rec {
     qtdeclarative
     qtsvg
     qtwayland
-    qqc2-desktop-style
   ];
 
   meta.license = [ lib.licenses.gpl2Plus ];
