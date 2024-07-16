@@ -81,6 +81,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     import re
     import subprocess
 
+    # Will not succeed unless ConditionFirstBoot=yes
+    machine.wait_for_unit("first-boot-complete.target")
+
     machine.wait_for_x()
     # wait for user services
     machine.wait_for_unit("default.target", "alice")

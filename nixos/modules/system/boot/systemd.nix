@@ -33,6 +33,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+      "first-boot-complete.target"
     ] ++ optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
