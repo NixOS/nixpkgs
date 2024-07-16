@@ -23,7 +23,7 @@ buildDotnetModule rec {
 
   meta = {
     changelog = "https://github.com/samuel-lucas6/Kryptor/releases/tag/v${version}";
-    description = "A simple, modern, and secure encryption and signing tool that aims to be a better version of age and Minisign";
+    description = "Simple, modern, and secure encryption and signing tool that aims to be a better version of age and Minisign";
     homepage = "https://github.com/samuel-lucas6/Kryptor";
     license = lib.licenses.gpl3Only;
     mainProgram = "kryptor";
