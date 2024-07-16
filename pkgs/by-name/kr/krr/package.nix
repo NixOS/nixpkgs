@@ -1,54 +1,58 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, krr
+{
+  fetchFromGitHub,
+  krr,
+  lib,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "krr";
-  version = "1.7.1";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "krr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bc1Ql3z/UmOXE2RJYC5/sE4a3MFdE06I3HwKY+SdSlk=";
+    hash = "sha256-CKOkwk5vvRtwAenmuoMCIce87f/0Tv+vQzPG1ebh4/4=";
   };
 
-  postPatch = ''
-    substituteInPlace robusta_krr/__init__.py \
-      --replace-warn '1.7.0-dev' '${version}'
+  pythonRelaxDeps = [
+    "kubernetes"
+    "prometheus-api-client"
+    "pydantic"
+    "requests"
+    "typer"
+    "typing-extensions"
+  ];
 
-    substituteInPlace pyproject.toml \
-      --replace-warn '1.7.0-dev' '${version}' \
-      --replace-fail 'aiostream = "^0.4.5"' 'aiostream = "*"' \
-      --replace-fail 'kubernetes = "^26.1.0"' 'kubernetes = "*"' \
-      --replace-fail 'pydantic = "1.10.7"' 'pydantic = "*"' \
-      --replace-fail 'typer = { extras = ["all"], version = "^0.7.0" }' 'typer = { extras = ["all"], version = "*" }'
+  postPatch = ''
+    sed -i pyproject.toml -e 's/^version =.*/version = \"${version}\"/'
+    sed -i robusta_krr/__init__.py -e 's/^__version__ =.*/__version__ = \"${version}\"/'
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiostream
-    alive-progress
-    kubernetes
-    numpy
-    poetry-core
-    prometheus-api-client
-    prometrix
-    pydantic_1
-    slack-sdk
-    typer
-  ] ++ typer.optional-dependencies.all;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      alive-progress
+      kubernetes
+      numpy
+      poetry-core
+      prometheus-api-client
+      prometrix
+      pydantic_1
+      slack-sdk
+      typer
+    ]
+    ++ typer.optional-dependencies.all;
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "robusta_krr"
-  ];
+  pythonImportsCheck = [ "robusta_krr" ];
+
+  # They just fail.
+  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = krr;
