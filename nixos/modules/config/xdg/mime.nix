@@ -17,7 +17,7 @@ in
   options = {
     xdg.mime.enable = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to install files to support the
         [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/shared-mime-info-spec-latest.html) and the
