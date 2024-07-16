@@ -192,7 +192,7 @@ in {
       };
 
       network = mkOption {
-        type = types.enum [ "mainnet" "prater" "goerli" "gnosis" "kiln" "ropsten" "sepolia" ];
+        type = types.enum [ "mainnet" "gnosis" "chiado" "sepolia" "holesky" ];
         default = "mainnet";
         description = ''
           The network to connect to. Mainnet is the default ethereum network.

@@ -43,10 +43,16 @@ stdenv.mkDerivation {
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
     (lib.cmakeBool "USE_SYSTEM_GLM" true)
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
-    # debug logging macros cause format-security warnings
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ];
+
+  # NOTE: `cmakeFlags` will get later tokenized by bash and there is no way
+  # of inserting a flag value with a space in it (inserting `"` or `'` won't help).
+  # https://discourse.nixos.org/t/cmakeflags-and-spaces-in-option-values/20170/2
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      "-DCMAKE_CXX_FLAGS=-DGLM_ENABLE_EXPERIMENTAL -Wno-error=format-security"
+    )
+  '';
 
   installPhase = ''
     runHook preInstall

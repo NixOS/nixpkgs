@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
       mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu6.0-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
+
+      Alternatively, you can use the following command to download the
+      file directly:
+
+      nix-prefetch-url --name ${name} https://www.synaptics.com/sites/default/files/exe_files/2024-05/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.0-EXE.zip
     '';
   };
 

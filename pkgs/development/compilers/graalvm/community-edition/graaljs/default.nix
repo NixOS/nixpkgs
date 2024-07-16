@@ -7,7 +7,7 @@ graalvmCEPackages.buildGraalvmProduct {
   src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
   version = (import ./hashes.nix).version;
 
-  product = "js-installable-svm";
+  product = "graaljs";
 
   doInstallCheck = true;
   installCheckPhase = ''

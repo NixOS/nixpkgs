@@ -563,6 +563,12 @@ mapAliases ({
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
+  twitter-common-collections = throw "twitter-common-collections has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-confluence = throw "twitter-common-confluence has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-dirutil = throw "twitter-common-dirutil has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-lang = throw "twitter-common-lang has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07

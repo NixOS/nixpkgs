@@ -13,30 +13,23 @@
 
 buildPythonPackage rec {
   pname = "pykeepass";
-  version = "4.0.7";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = "v${version}";
-    hash = "sha256-qUNMjnIhQpUSQY0kN9bA4IxQx8fiFIA6p8rPqNqdjNo=";
+    hash = "sha256-33bpkj2ADpxSqiTOVcawE5aJdqWHfcY9WrlQJdg3vHY=";
   };
 
-  postPatch = ''
-    # https://github.com/libkeepass/pykeepass/pull/378
-    substituteInPlace pyproject.toml \
-      --replace-fail 'packages = ["pykeepass"]' 'packages = ["pykeepass", "pykeepass.kdbx_parsing"]'
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     construct
     lxml
     pycryptodomex
-    setuptools
   ];
 
   propagatedNativeBuildInputs = [ argon2-cffi ];

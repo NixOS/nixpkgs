@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
-  version = "0.3.14";
+  version = "0.3.14-unstable-2024-02-27";
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NciyzKiDKIMeuHhTjzmHIc3dYW4AniuCNjZugm4hMss=";
+    rev = "8dd54929106916a3c961cc57c1172793ce126180";
+    hash = "sha256-rrngOqlXIJXbh3A7OBEcgoakZyyuvlHHXhWo3/1BRpY=";
   };
 
-  cargoHash = "sha256-nm+44YWSJOOg9a9d8b3APXW50ThV3iA2C/QsJMttscE=";
+  cargoHash = "sha256-gNnuuq2cz168Gaw+gL2nJ8EC32BMPu9DgnRzIh1hGKk=";
 
   # error: linker `arm-linux-gnueabihf-gcc` not found
   postPatch = ''
