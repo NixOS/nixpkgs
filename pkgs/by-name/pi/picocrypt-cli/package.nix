@@ -25,7 +25,7 @@ buildGoModule rec {
   CGO_ENABLED = 1;
 
   meta = {
-    description = "A command-line interface for Picocrypt";
+    description = "Command-line interface for Picocrypt";
     homepage = "https://github.com/Picocrypt/CLI";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ arthsmn ];
