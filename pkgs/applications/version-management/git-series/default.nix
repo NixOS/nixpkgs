@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, curl
-, installShellFiles
-, libgit2
-, libssh2
-, openssl
-, zlib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  curl,
+  installShellFiles,
+  libgit2,
+  libssh2,
+  openssl,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage {
@@ -27,18 +28,14 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ curl ];
 
   buildInputs = [
     libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ curl ];
 
   env = {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
@@ -58,7 +55,10 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/git-series/git-series";
     license = licenses.mit;
-    maintainers = with maintainers; [ edef vmandela ];
+    maintainers = with maintainers; [
+      edef
+      vmandela
+    ];
     mainProgram = "git-series";
   };
 }
