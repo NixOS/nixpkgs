@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "presto8";
   domain = "frigate";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     rev = "v${version}";
-    hash = "sha256-6W9U0Q0wW36RsErvtFQo1sc1AF7js6MMHxgMQcDFexw=";
+    hash = "sha256-OWpOYNVzowdn0iZfJwhdMrAYeqDpNJvSwHpsJX9fDk4=";
   };
 
   propagatedBuildInputs = [

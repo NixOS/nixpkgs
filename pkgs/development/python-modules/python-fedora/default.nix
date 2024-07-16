@@ -6,7 +6,6 @@
   kitchen,
   lockfile,
   munch,
-  nose,
   openidc-client,
   pytestCheckHook,
   pythonOlder,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    nose
   ];
 
   disabledTestPaths = [

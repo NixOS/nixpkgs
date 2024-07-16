@@ -171,7 +171,7 @@
            then ./docs-sphinx-7-ghc98.patch
            else ./docs-sphinx-7.patch )
         ]
-        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
           (fetchpatch {
             name = "fix-fully_static.patch";
             url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";

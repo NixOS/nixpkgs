@@ -3137,6 +3137,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  camcalaquian = {
+    email = "camcalaquian@gmail.com";
+    github = "camcalaquian";
+    githubId = 36902555;
+    name = "Carl Calaquian";
+  };
   camelpunch = {
     email = "me@andrewbruce.net";
     github = "camelpunch";
@@ -11426,6 +11432,12 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+  liammurphy14 = {
+    email = "liam.murphy137@gmail.com";
+    github = "liam-murphy14";
+    githubId = 54590679;
+    name = "Liam Murphy";
+  };
   liarokapisv = {
     email = "liarokapis.v@gmail.com";
     github = "liarokapisv";
@@ -11444,6 +11456,12 @@
     name = "Nick Anthony Flueckiger";
     github = "liberatys";
     githubId = 35100156;
+  };
+  liberodark = {
+    email = "liberodark@gmail.com";
+    github = "liberodark";
+    githubId = 4238928;
+    name = "liberodark";
   };
   libjared = {
     email = "jared@perrycode.com";
@@ -12641,6 +12659,13 @@
     githubId = 2042030;
     name = "Matthias Wimmer";
     keys = [ { fingerprint = "CAEC A12D CE23 37A6 6DFD  17B0 7AC7 631D 70D6 C898"; } ];
+  };
+  max = {
+    email = "max+nixpkgs@privatevoid.net";
+    matrix = "@max:privatevoid.net";
+    github = "max-privatevoid";
+    githubId = 55053574;
+    name = "Max Headroom";
   };
   max-amb = {
     email = "max_a@e.email";
@@ -15207,6 +15232,12 @@
     name = "Alvar Penning";
     keys = [ { fingerprint = "EB14 4E67 E57D 27E2 B5A4  CD8C F32A 4563 7FA2 5E31"; } ];
   };
+  oynqr = {
+    email = "pd-nixpkgs@3b.pm";
+    github = "oynqr";
+    githubId = 71629732;
+    name = "Philipp David";
+  };
   oyren = {
     email = "m.scheuren@oyra.eu";
     github = "oyren";
@@ -16138,6 +16169,11 @@
     github = "posch";
     githubId = 146413;
     name = "Tobias Poschwatta";
+  };
+  potb = {
+    name = "Peïo Thibault";
+    github = "potb";
+    githubId = 10779093;
   };
   poweredbypie = {
     name = "poweredbypie";
@@ -17397,6 +17433,12 @@
     github = "rople380";
     githubId = 55679162;
     keys = [ { fingerprint = "1401 1B63 393D 16C1 AA9C  C521 8526 B757 4A53 6236"; } ];
+  };
+  rorosen = {
+    email = "robert.rose@mailbox.org";
+    github = "rorosen";
+    githubId = 76747196;
+    name = "Robert Rose";
   };
   rosehobgoblin = {
     name = "J. L. Bowden";

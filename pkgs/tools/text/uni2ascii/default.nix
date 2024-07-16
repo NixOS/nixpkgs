@@ -2,12 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "uni2ascii";
-  version = "4.18";
+  version = "4.20";
 
   src = fetchurl {
     url = "https://billposer.org/Software/Downloads/uni2ascii-${version}.tar.gz";
-    sha256 = "03lklnzr6ngs4wqiqa7rifd246f441gfvardbsaa5l6fn9pbn94y";
+    hash = "sha256-7tjYOpwdLb0NfKTFJRmYg9cxfWiLQhtXjQmKJ7b/cFY=";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://github.com/Homebrew/formula-patches/raw/bb92449ad6b3878b4d6f472237152df28080df86/uni2ascii/uni2ascii-4.20.patch";
+      hash = "sha256-JQpSntoTbQ7fnmO5Km/pX071360/lOb9jYdxOK2oV/g=";
+    })
+  ];
 
   meta = {
     license = lib.licenses.gpl3;

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libnl, openssl, sqlite ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libnl,
+  openssl,
+  nixosTests,
+  sqlite ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
@@ -147,6 +157,10 @@ stdenv.mkDerivation rec {
     install -vD hostapd.8 -t $man/share/man/man8
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+  };
 
   meta = with lib; {
     homepage = "https://w1.fi/hostapd/";

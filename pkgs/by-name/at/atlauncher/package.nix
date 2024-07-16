@@ -22,11 +22,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.36.9";
+  version = "3.4.36.10";
 
   src = fetchurl {
     url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-2kO7CRkA3RlWcNqv2d5sJIaLPupUU0ox2wc3T16i7e8=";
+    hash = "sha256-JZTiYcea5ik8a4RmNLxZcuea7spGWftUGRiRW2Ive7c=";
   };
 
   env.ICON = fetchurl {

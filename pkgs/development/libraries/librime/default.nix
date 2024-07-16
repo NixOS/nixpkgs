@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  yaml-cpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
+  yaml-cpp, gtest, capnproto, pkg-config, librime-lua, plugins ? [ librime-lua ] }:
 
 let
   copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";

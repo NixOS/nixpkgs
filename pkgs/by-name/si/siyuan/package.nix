@@ -13,23 +13,30 @@
 
 let
   pnpm = pnpm_9;
+
+  platformIds = {
+    "x86_64-linux" = "linux";
+    "aarch64-linux" = "linux-arm64";
+  };
+
+  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.0.11";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-s82g5os944us85V2TBnm+HNd37vVzNjaOJYrbBrgLSI=";
+    hash = "sha256-UIPASTSW7YGpxJJHfCq28M/U6CzyqaJiISZGtE0aDPw=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-onZBrw0fDsjqXgQF06C40ArxNmsbFDIwD57fJ0jB0ls=";
+    vendorHash = "sha256-s4dW43Qy3Lrc5WPpugQpN6BDEFVxqnorXpp40SGFk7I=";
 
     patches = [
       (substituteAll {
@@ -70,28 +77,32 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-9+4pAEka6+tymkh6calacjPbcJ++HuNTA6qBEAQ7zPg=";
+    hash = "sha256-QSaBNs0m13Pfrvl8uUVqRpP3m8PoOBIY5VU5Cg/G2jY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  postConfigure = ''
+    # remove prebuilt pandoc archives
+    rm -r pandoc
+
+    # link kernel into the correct starting place so that electron-builder can copy it to it's final location
+    mkdir kernel-${platformId}
+    ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+  '';
+
   buildPhase = ''
     runHook preBuild
 
     pnpm build
 
-    substituteInPlace electron-builder-linux.yml \
-        --replace-fail '- target: "AppImage"' "" \
-        --replace-fail '- target: "tar.gz"' '- target: "dir"'
-
-    # add extra fields to resolve the electron provided by nixpkgs
-    sed -e 1i'electronDist: ${electron}/libexec/electron' \
-        -e 1i'electronVersion: ${electron.version}' \
-        -i electron-builder-linux.yml
-
-    pnpm run dist-linux
+    npm exec electron-builder -- \
+        --dir \
+        --config electron-builder-${platformId}.yml \
+        -c.electronDist=${electron}/libexec/electron \
+        -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -101,9 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/siyuan
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
-
-    mkdir $out/share/siyuan/resources/kernel
-    ln -s ${finalAttrs.kernel}/bin/kernel $out/share/siyuan/resources/kernel/SiYuan-Kernel
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
         --chdir $out/share/siyuan/resources \
@@ -121,6 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    platforms = lib.attrNames platformIds;
   };
 })

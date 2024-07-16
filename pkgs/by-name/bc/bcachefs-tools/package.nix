@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-1GsRBAVAfD0SAM1gk8W+bX7MtxunGKOLtXweL4rrf9Q=";
+    hash = "sha256-vKRjxehwqbvvgq+EMHoF3KRiPIxay06MpZRjapBFdVU=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-rabiNqw4hg0Js8VadxfkhNLIsrKfMuoKa5lFIfSMNPY=";
+    hash = "sha256-JOfS3vCkqI5wvFWgGkw1PIfmzW9yuP/Zp/x98MPdbUQ=";
   };
 
   makeFlags = [

@@ -1,46 +1,86 @@
 { lib
 , stdenvNoCC
-, version, src
-, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
+, nodejs
+, yarn-berry
+, cacert
+, version
+, src
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "tilt-assets";
+  src = "${src}/web";
+  inherit version;
 
-  inherit src version;
+  nativeBuildInputs = [ nodejs yarn-berry ];
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
+  yarnOfflineCache = stdenvNoCC.mkDerivation {
+    name = "tilt-assets-deps";
+    src = "${src}/web";
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/web/yarn.lock";
-    hash = "sha256-0JpoAQKRmU7P1bzYNR/vqtPjOOSw8wSlNjXl2f6uBrw=";
+    nativeBuildInputs = [ yarn-berry ];
+
+    supportedArchitectures = builtins.toJSON {
+      os = [ "darwin" "linux" ];
+      cpu = [ "arm" "arm64" "ia32" "x64" ];
+      libc = [ "glibc" "musl" ];
+    };
+
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    configurePhase = ''
+      runHook preConfigure
+
+      export HOME="$NIX_BUILD_TOP"
+      export YARN_ENABLE_TELEMETRY=0
+
+      yarn config set enableGlobalCache false
+      yarn config set cacheFolder $out
+      yarn config set supportedArchitectures --json "$supportedArchitectures"
+
+      runHook postConfigure
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      mkdir -p $out
+      yarn install --immutable --mode skip-build
+
+      runHook postBuild
+    '';
+
+    dontInstall = true;
+
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-5f9lKRD6vc2FOnUeSxK/zlu/tshS1+RCSB0slGSO/Rc=";
+    outputHashMode = "recursive";
   };
 
   configurePhase = ''
-    export HOME=$(mktemp -d)/yarn_home
+    runHook preConfigure
+
+    export HOME="$NIX_BUILD_TOP"
+    export YARN_ENABLE_TELEMETRY=0
+
+    yarn config set enableGlobalCache false
+    yarn config set cacheFolder $yarnOfflineCache
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-
-    cd web
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-engines
-    patchShebangs node_modules
-    export PATH=$PWD/node_modules/.bin:$PATH
-    ./node_modules/.bin/react-scripts build
-
-    mkdir -p $out
-    cd ..
+    yarn install --immutable --immutable-cache
+    yarn build
 
     runHook postBuild
   '';
 
   installPhase = ''
-    cp -r web/build/* $out
+    mkdir -p $out
+    cp -r build/. $out/
   '';
 
   meta = with lib; {

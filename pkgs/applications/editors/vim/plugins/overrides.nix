@@ -135,6 +135,10 @@
     nvimRequireCheck = "alpha";
   };
 
+  advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
+    dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
+  };
+
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
   };
@@ -335,12 +339,12 @@
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.8.25";
+    codeiumVersion = "1.8.80";
     codeiumHashes = {
-      x86_64-linux = "sha256-6sIYDI6+1/p54Af+E/GmRAFlfDYJVwxhn0qF47ZH+Zg=";
-      aarch64-linux = "sha256-1ImcjAqCZm5KZZYHWhG1eO7ipAdrP4Qjj2eBxTst++s=";
-      x86_64-darwin = "sha256-yHthItxZYFejJlwJJ7BrM2csnLsZXjy/IbzF1iaCCyI=";
-      aarch64-darwin = "sha256-GIx0yABISj/rH/yVkkx6NBs5qF0P8nhpMyvnzXJ92mA=";
+      x86_64-linux = "sha256-ULHO7NrbW0DDlOYiSHGXwJ+NOa68Ma+HMHgq2WyAKBA=";
+      aarch64-linux = "sha256-WVqPV/D9jPADkxt5XmydqXjSG8461URPsk1+W/kyZV0=";
+      x86_64-darwin = "sha256-0P/eYZp0Wieza0btOA+yxqKtoIYlUN6MhN0dI6R8GEg=";
+      aarch64-darwin = "sha256-2Cv22+Ii+otKLDQ404l9R/x42PkKTEzPB72/gc9wfig=";
     };
 
     codeium' = codeium.overrideAttrs rec {
@@ -1168,7 +1172,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-SqbU9YwZ5pvdFUr7XBAkkfoqiLHI0JwJRwH7Wj1JDNg=";
+        cargoHash = "sha256-J9L9j8iyeZQRMjiVqdI7V7BOAkZaiLGOtKDpgq2wyi0=";
 
         preCheck = ''
           mkdir tests/tmp/
@@ -2031,6 +2035,7 @@
     '';
   };
   LeaderF = super.LeaderF.overrideAttrs {
+    nativeBuildInputs = [ python3.pkgs.setuptools ];
     buildInputs = [ python3 ];
     # rm */build/ to prevent dependencies on gcc
     # strip the *.so to keep files small

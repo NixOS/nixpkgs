@@ -14,7 +14,7 @@
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
-/ci @infinisil
+/ci @infinisil @NixOS/Security
 
 # Develompent support
 /.editorconfig @Mic92 @zowoq

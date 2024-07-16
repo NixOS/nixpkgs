@@ -5,7 +5,7 @@
   fetchFromGitHub,
   isPyPy,
   ordered-set,
-  python3,
+  python,
   setuptools,
   zstandard,
   wheel,
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    ${python3.interpreter} tests/basics/run_all.py search
+    ${python.interpreter} tests/basics/run_all.py search
 
     runHook postCheck
   '';

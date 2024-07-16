@@ -95,7 +95,10 @@ with lib.maintainers;
   };
 
   budgie = {
-    members = [ bobby285271 ];
+    members = [
+      bobby285271
+      getchoo
+    ];
     scope = "Maintain Budgie desktop environment";
     shortName = "Budgie";
   };
@@ -359,6 +362,7 @@ with lib.maintainers;
 
   geospatial = {
     members = [
+      autra
       imincik
       l0b0
       nh2
@@ -502,6 +506,7 @@ with lib.maintainers;
       euank
       marcusramberg
       mic92
+      rorosen
       superherointj
       wrmilling
       yajo

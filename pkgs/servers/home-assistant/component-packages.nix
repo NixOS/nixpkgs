@@ -209,13 +209,15 @@
       apprise
     ];
     "aprilaire" = ps: with ps; [
-    ]; # missing inputs: pyaprilaire
+      pyaprilaire
+    ];
     "aprs" = ps: with ps; [
       aprslib
       geopy
     ];
     "apsystems" = ps: with ps; [
-    ]; # missing inputs: apsystems-ez1
+      apsystems-ez1
+    ];
     "aquacell" = ps: with ps; [
       fnv-hash-fast
       ifaddr
@@ -2150,7 +2152,8 @@
     "iss" = ps: with ps; [
     ]; # missing inputs: pyiss
     "ista_ecotrend" = ps: with ps; [
-    ]; # missing inputs: pyecotrend-ista
+      pyecotrend-ista
+    ];
     "isy994" = ps: with ps; [
       pyisy
     ];
@@ -2271,7 +2274,8 @@
       pykmtronic
     ];
     "knocki" = ps: with ps; [
-    ]; # missing inputs: knocki
+      knocki
+    ];
     "knx" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
@@ -4178,8 +4182,9 @@
       zeroconf
     ];
     "solaredge" = ps: with ps; [
+      aiosolaredge
       stringcase
-    ]; # missing inputs: aiosolaredge
+    ];
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
@@ -5266,7 +5271,9 @@
     "apple_tv"
     "application_credentials"
     "apprise"
+    "aprilaire"
     "aprs"
+    "apsystems"
     "aranet"
     "arcam_fmj"
     "aseko_pool_live"
@@ -5561,6 +5568,7 @@
     "ipp"
     "iqvia"
     "isal"
+    "ista_ecotrend"
     "isy994"
     "izone"
     "jellyfin"
@@ -5574,6 +5582,7 @@
     "kira"
     "kitchen_sink"
     "kmtronic"
+    "knocki"
     "knx"
     "kodi"
     "konnected"
@@ -5870,6 +5879,7 @@
     "snips"
     "snmp"
     "snooz"
+    "solaredge"
     "solax"
     "soma"
     "somfy_mylink"
