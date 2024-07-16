@@ -55,6 +55,9 @@ buildDotnetModule rec {
 
   postPatch = ''
     ln --force --symbolic "${lib.getExe _7zzWithOptionalUnfreeRarSupport}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
+
+    # for some reason these tests fail (intermittently?) with a zero timestamp
+    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
   '';
 
   makeWrapperArgs = [
