@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, http-parser, icu, bash
-, pkg-config, which, buildPackages
+, ninja, pkgconf, unixtools, runCommand, buildPackages
 , testers
 # for `.pkgs` attribute
 , callPackage
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
-, darwin, xcbuild
+, darwin
 , installShellFiles
 }:
 
@@ -104,6 +104,20 @@ let
       (name: "${lib.getDev sharedLibDeps.${name}}/include/*")
       (builtins.attrNames sharedLibDeps);
 
+  # Currently stdenv sets CC/LD/AR/etc environment variables to program names
+  # instead of absolute paths. If we add cctools to nativeBuildInputs, that
+  # would shadow stdenv’s bintools and potentially break other parts of the
+  # build. The correct behavior is to use absolute paths, and there is a PR for
+  # that, see https://github.com/NixOS/nixpkgs/pull/314920. As a temporary
+  # workaround, we use only a single program we need (and that is not part of
+  # the stdenv).
+  darwin-cctools-only-libtool =
+    # Would be nice to have onlyExe builder similar to onlyBin…
+    runCommand "darwin-cctools-only-libtool" { cctools = lib.getBin buildPackages.cctools; } ''
+      mkdir -p "$out/bin"
+      ln -s "$cctools/bin/libtool" "$out/bin/libtool"
+    '';
+
   package = stdenv.mkDerivation (finalAttrs:
   let
     /** the final package fixed point, after potential overrides */
@@ -128,11 +142,30 @@ let
     # NB: technically, we do not need bash in build inputs since all scripts are
     # wrappers over the corresponding JS scripts. There are some packages though
     # that use bash wrappers, e.g. polaris-web.
-    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
 
-    nativeBuildInputs = [ installShellFiles pkg-config python which ]
-      ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    nativeBuildInputs =
+      [
+        installShellFiles
+        ninja
+        pkgconf
+        python
+      ]
+      ++ lib.optionals stdenv.buildPlatform.isDarwin [
+        # gyp checks `sysctl -n hw.memsize` if `sys.platform == "darwin"`.
+        unixtools.sysctl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # For gyp-mac-tool if `flavor == "mac"`.
+        darwin-cctools-only-libtool
+      ];
+
+    # We currently rely on Makefile and stdenv for build phases, so do not let
+    # ninja’s setup hook to override default stdenv phases.
+    dontUseNinjaBuild = true;
+    dontUseNinjaCheck = true;
+    dontUseNinjaInstall = true;
 
     outputs = [ "out" "libv8" ];
     setOutputFlags = false;
@@ -140,6 +173,9 @@ let
 
     configureFlags =
       [
+        "--ninja"
+        "--with-intl=system-icu"
+        "--openssl-use-def-ca-store"
         "--no-cross-compiling"
         "--dest-os=${destOS}"
         "--dest-cpu=${destCPU}"
@@ -167,11 +203,7 @@ let
           FIXME: the statement above is outdated, we have to include pkg-config
           in build inputs for system-icu.
         */
-      ]) (builtins.attrNames sharedLibDeps)
-      ++ [
-        "--with-intl=system-icu"
-        "--openssl-use-def-ca-store"
-      ];
+      ]) (builtins.attrNames sharedLibDeps);
 
     configurePlatforms = [ ];
 
@@ -182,6 +214,12 @@ let
     '';
 
     enableParallelBuilding = true;
+
+    makeFlags = [
+      # Tell ninja to avoid ANSI sequences, otherwise we don’t see build
+      # progress in Nix logs.
+      "TERM=dumb"
+    ];
 
     # Don't allow enabling content addressed conversion as `nodejs`
     # checksums it's image before conversion happens and image loading
@@ -299,7 +337,7 @@ let
 
       # assemble a static v8 library and put it in the 'libv8' output
       mkdir -p $libv8/lib
-      pushd out/Release/obj.target
+      pushd out/Release/obj
       find . -path "./torque_*/**/*.o" -or -path "./v8*/**/*.o" | sort -u >files
       $AR -cqs $libv8/lib/libv8.a @files
       popd
