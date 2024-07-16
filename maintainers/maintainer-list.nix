@@ -18050,12 +18050,6 @@
     githubId = 70169773;
     name = "Tarun Chinmai Sekar";
   };
-  schnow265 = {
-    email = "thesnowbox@icloud.com";
-    github = "schnow265";
-    githubId = 57457177;
-    name = "Luca Scalet";
-  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
@@ -18073,6 +18067,12 @@
     github = "schneefux";
     githubId = 15379000;
     name = "schneefux";
+  };
+  schnow265 = {
+    email = "thesnowbox@icloud.com";
+    github = "schnow265";
+    githubId = 57457177;
+    name = "Luca Scalet";
   };
   schnusch = {
     github = "schnusch";
