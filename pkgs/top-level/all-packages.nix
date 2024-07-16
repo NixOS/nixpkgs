@@ -14432,9 +14432,7 @@ with pkgs;
 
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
-  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
-    openssl = openssl_1_1;
-  };
+  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
 
   wml = callPackage ../development/web/wml { };
 
