@@ -32398,8 +32398,6 @@ with pkgs;
 
   monitorcontrol = callPackage ../applications/misc/monitorcontrol { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
-
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
   xmrig-mo = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/moneroocean.nix { };
