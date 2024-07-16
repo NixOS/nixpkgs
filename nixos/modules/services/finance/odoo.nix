@@ -86,6 +86,7 @@ in
     };
 
     services.odoo.settings.options = {
+      data_dir = "/var/lib/private/odoo/data";
       proxy_mode = cfg.domain != null;
     } // (lib.optionalAttrs (cfg.addons != []) {
       addons_path = concatMapStringsSep "," escapeShellArg cfg.addons;
@@ -108,16 +109,33 @@ in
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/odoo";
+        ExecStartPre = pkgs.writeShellScript "odoo-start-pre.sh" (
+          ''
+          set -euo pipefail
+
+          cd "$STATE_DIRECTORY"
+
+          # Auto-migrate old deployments
+          if [[ -d .local/share/Odoo ]]; then
+            echo "pre-start: migrating state directory from $STATE_DIRECTORY/.local/share/Odoo to $STATE_DIRECTORY/data"
+            mv .local/share/Odoo ./data
+            rmdir .local/share
+            rmdir .local
+          fi
+          ''
+          + (lib.optionalString cfg.autoInit ''
+            echo "pre-start: auto-init"
+            ${cfg.package}/bin/odoo --init=INIT --database=odoo --db_user=odoo --stop-after-init
+          '')
+          + "echo pre-start: OK"
+        );
         DynamicUser = true;
         User = "odoo";
         StateDirectory = "odoo";
         Environment = [
-          "HOME=%S/odoo"
           "ODOO_RC=${cfgFile}"
         ];
-      } // (lib.optionalAttrs cfg.autoInit {
-        ExecStartPre = "${cfg.package}/bin/odoo --init=INIT --database=odoo --db_user=odoo --stop-after-init";
-      });
+      };
     };
 
     services.postgresql = {
