@@ -2,8 +2,7 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
-  testers,
-  cargo-shear,
+  versionCheckHook
 }:
 let
   version = "1.0.0";
@@ -23,9 +22,9 @@ rustPlatform.buildRustPackage {
 
   # https://github.com/Boshen/cargo-shear/blob/a0535415a3ea94c86642f39f343f91af5cdc3829/src/lib.rs#L20-L23
   SHEAR_VERSION = version;
-  passthru.tests.version = testers.testVersion {
-    package = cargo-shear;
-  };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Detect and remove unused dependencies from Cargo.toml";

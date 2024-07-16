@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
-, goatcounter
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -31,11 +30,10 @@ buildGoModule rec {
     "-X zgo.at/goatcounter/v2.Version=${src.rev}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = goatcounter;
-    command = "goatcounter version";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Easy web analytics. No tracking of personal data";

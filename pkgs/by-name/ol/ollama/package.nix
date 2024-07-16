@@ -19,7 +19,7 @@
 , autoAddDriverRunpath
 
 , nixosTests
-, testers
+, versionCheckHook
 , ollama
 , ollama-rocm
 , ollama-cuda
@@ -205,13 +205,12 @@ goBuild ((lib.optionalAttrs enableRocm {
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit ollama;
     service = nixosTests.ollama;
-    version = testers.testVersion {
-      inherit version;
-      package = ollama;
-    };
   } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
   };

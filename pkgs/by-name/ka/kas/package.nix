@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, testers, kas }:
+{ lib, fetchFromGitHub, python3, versionCheckHook }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
@@ -15,10 +15,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # Tests require network as they try to clone repos
   doCheck = false;
-  passthru.tests.version = testers.testVersion {
-    package = kas;
-    command = "${pname} --version";
-  };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/siemens/kas";

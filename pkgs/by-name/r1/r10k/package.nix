@@ -28,6 +28,7 @@ bundlerApp {
   '';
 
   passthru = {
+    # TODO: use `versionCheckHook` if possible
     tests.version = testers.testVersion {
       command = "${lib.getExe r10k} version";
       package = r10k;

@@ -2,14 +2,13 @@
 , buildGoModule
 , fetchFromGitHub
 , getent
-, goss
 , lib
 , makeWrapper
 , nix-update-script
 , nixosTests
 , stdenv
 , systemd
-, testers
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -43,14 +42,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath runtimeDependencies}"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       inherit (nixosTests) goss;
-      version = testers.testVersion {
-        command = "goss --version";
-        package = goss;
-        version = "v${version}";
-      };
     };
     updateScript = nix-update-script { };
   };

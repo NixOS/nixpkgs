@@ -7,8 +7,7 @@
 , gobject-introspection
 , wrapGAppsHook3
 , nix-update-script
-, testers
-, menulibre
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -36,6 +35,8 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'data_dir =' "data_dir = '$out/share/menulibre' #" \
@@ -46,12 +47,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = menulibre;
-      command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";
-    };
   };
 
   meta = with lib; {

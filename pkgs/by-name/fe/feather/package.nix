@@ -14,9 +14,9 @@
 , qt6
 , readline
 , stdenv
-, testers
 , tor
 , unbound
+, versionCheckHook
 , zxing-cpp
 }:
 
@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DTOR_VERSION=${tor.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = ''
-      QT_QPA_PLATFORM=minimal ${finalAttrs.finalPackage.meta.mainProgram} --version
-    '';
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export QT_QPA_PLATFORM=minimal
+  '';
 
   meta = with lib; {
     description = "Free Monero desktop wallet";

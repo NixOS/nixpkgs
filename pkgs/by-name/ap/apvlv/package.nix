@@ -15,12 +15,11 @@
   libxml2,
   libxshmfence,
   man,
-  nix-update-script,
   pcre,
   pkg-config,
   poppler,
   stdenv,
-  testers,
+  versionCheckHook,
   webkitgtk,
   wrapGAppsHook3,
 }:
@@ -89,13 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     "../apvlv.desktop"
   ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      command = "${lib.getExe finalAttrs.finalPackage} -v";
-      package = finalAttrs.finalPackage;
-      version = "${finalAttrs.version}-rel";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-v";
 
   meta = {
     changelog = "https://github.com/naihe2010/apvlv/blob/v${finalAttrs.version}/NEWS";

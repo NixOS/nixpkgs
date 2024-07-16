@@ -3,7 +3,7 @@
 , fetchurl
 , autoreconfHook
 , makeWrapper
-, testers
+, versionCheckHook
 , guile
 , pkg-config
 , texinfo
@@ -16,7 +16,6 @@
 , readline
 , guile-opengl
 , guile-sdl2
-, guile-chickadee
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-chickadee";
@@ -61,10 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = guile-chickadee;
-    command = "chickadee -v";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/chickadee";
+  versionCheckProgramArg = "-v";
 
   doCheck = !stdenv.isDarwin;
 

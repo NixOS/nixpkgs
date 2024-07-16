@@ -1,8 +1,7 @@
 { lib
 , fetchPypi
 , python3Packages
-, latexminted
-, testers
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,9 +23,8 @@ python3Packages.buildPythonApplication rec {
     latex2pydata
   ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = latexminted; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Python executable for LaTeX minted package";

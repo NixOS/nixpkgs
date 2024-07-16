@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, plow }:
+{ lib, buildGoModule, fetchFromGitHub, versionCheckHook }:
 
 buildGoModule rec {
   pname = "plow";
@@ -15,9 +15,8 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = plow;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "High-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";

@@ -1,9 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitea
-, testers
-, forgejo-runner
 , nixosTests
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -28,12 +27,13 @@ buildGoModule rec {
 
   doCheck = false; # Test try to lookup code.forgejo.org.
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "act_runner";
+
   passthru.tests = {
     inherit (nixosTests.forgejo) sqlite3;
-    version = testers.testVersion {
-      package = forgejo-runner;
-      version = src.rev;
-    };
   };
 
   meta = with lib; {

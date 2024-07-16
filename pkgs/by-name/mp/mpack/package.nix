@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  testers,
-  mpack,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,15 +37,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      command = ''
-        mpack 2>&1 || echo "mpack exited with error code $?"
-      '';
-      package = mpack;
-      version = "mpack version ${version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "";
 
   meta = with lib; {
     description = "Utilities for encoding and decoding binary files in MIME";

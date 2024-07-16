@@ -3,9 +3,8 @@
 , gdk-pixbuf
 , gobject-introspection
 , gtk3
-, mcomix
 , python3
-, testers
+, versionCheckHook
 , wrapGAppsHook3
 
   # Recommended Dependencies:
@@ -62,9 +61,8 @@ python3.pkgs.buildPythonApplication rec {
     cp -a share $out/
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mcomix;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Comic book reader and image viewer";

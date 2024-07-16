@@ -14,8 +14,7 @@
   help2man,
   html-tidy,
   libsForQt5,
-  testers,
-  lgogdownloader,
+  versionCheckHook,
 
   enableGui ? true,
 }:
@@ -55,9 +54,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
 
-  passthru.tests = {
-    version = testers.testVersion { package = lgogdownloader; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";

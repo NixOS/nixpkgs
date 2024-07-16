@@ -12,7 +12,7 @@
 , ncurses
 , bison
 , autoPatchelfHook
-, testers
+, versionCheckHook
 , signify
 , withSsh ? true, openssh
 # Default editor to use when neither VISUAL nor EDITOR are defined
@@ -59,9 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-include getopt.h"
   ]);
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://gameoftrees.org/releases/CHANGES";

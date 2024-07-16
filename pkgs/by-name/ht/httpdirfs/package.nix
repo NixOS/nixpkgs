@@ -10,7 +10,7 @@
   nix-update-script,
   pkg-config,
   stdenv,
-  testers,
+  versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,14 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     make man
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  # Disabled for Darwin because requires macFUSE installed outside NixOS
+  doInstallCheck = stdenv.isLinux;
+
   passthru = {
-    # Disabled for Darwin because requires macFUSE installed outside NixOS
-    tests.version = lib.optionalAttrs stdenv.isLinux (
-      testers.testVersion {
-        command = "${lib.getExe finalAttrs.finalPackage} --version";
-        package = finalAttrs.finalPackage;
-      }
-    );
     updateScript = nix-update-script { };
   };
 

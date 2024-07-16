@@ -11,8 +11,7 @@
 , mariadb-connector-c
 , re2
 , nlohmann_json
-, testers
-, manticoresearch
+, versionCheckHook
 }:
 
 let
@@ -109,11 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    inherit (finalAttrs) version;
-    package = manticoresearch;
-    command = "searchd --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/searchd";
 
   meta = with lib; {
     description = "Easy to use open source fast database for search";

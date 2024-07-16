@@ -1,8 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, testers
-, wizer
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,9 +29,8 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = wizer; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "WebAssembly pre-initializer";

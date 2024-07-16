@@ -6,8 +6,7 @@
 , oniguruma
 , darwin
 , installShellFiles
-, zola
-, testers
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,7 +42,8 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/zola completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion { package = zola; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Fast static site generator with everything built-in";

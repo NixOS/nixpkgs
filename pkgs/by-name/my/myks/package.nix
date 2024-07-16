@@ -1,10 +1,9 @@
 { lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
   installShellFiles,
-  myks,
   stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -34,8 +33,6 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  passthru.tests.version = testers.testVersion { package = myks; };
-
   postInstall =
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd myks \
@@ -43,6 +40,9 @@ buildGoModule rec {
         --zsh <($out/bin/myks completion zsh) \
         --fish <($out/bin/myks completion fish)
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";

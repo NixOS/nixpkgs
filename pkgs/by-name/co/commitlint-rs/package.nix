@@ -3,8 +3,7 @@
   lib,
   nix-update-script,
   rustPlatform,
-  testers,
-  commitlint-rs,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitlint-rs";
@@ -18,9 +17,11 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-W6HkLCUoylgQQc2fFprmJeLH8KtpVUD4+BXWbNECVZ4=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = commitlint-rs; };
   };
 
   meta = with lib; {

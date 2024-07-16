@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub, pcre, testers }:
+{ lib, buildNimPackage, fetchFromGitHub, pcre, versionCheckHook }:
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";
@@ -17,11 +17,8 @@ buildNimPackage (finalAttrs: {
 
   buildInputs = [ pcre ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";

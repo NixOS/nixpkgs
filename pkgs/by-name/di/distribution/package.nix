@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, testers
-, distribution
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -41,11 +40,12 @@ buildGoModule rec {
     "-skip=^TestHTTPChecker$|^TestInMemoryDriverSuite$"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/registry";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = distribution;
-      version = "v${version}";
-    };
     updateScript = nix-update-script { };
   };
 

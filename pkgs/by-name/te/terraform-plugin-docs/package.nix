@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , go
-, testers
-, terraform-plugin-docs
+, versionCheckHook
 , nix-update-script
 }:
 
@@ -42,11 +41,12 @@ buildGoModule rec {
     wrapProgram $out/bin/tfplugindocs --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "tfplugindocs";
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "tfplugindocs --version";
-      package = terraform-plugin-docs;
-    };
     updateScript = nix-update-script { };
   };
 

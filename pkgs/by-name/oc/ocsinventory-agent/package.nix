@@ -78,6 +78,7 @@ perlPackages.buildPerlPackage rec {
   passthru = {
     tests = {
       inherit (nixosTests) ocsinventory-agent;
+      # TODO: use `versionCheckHook` when the below is resolved
       version = testers.testVersion {
         package = ocsinventory-agent;
         command = "ocsinventory-agent --version";

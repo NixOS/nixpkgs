@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, jq, quicktype, testers }:
+{ lib, buildNpmPackage, fetchFromGitHub, jq, versionCheckHook }:
 
 buildNpmPackage rec {
   pname = "quicktype";
@@ -21,9 +21,8 @@ buildNpmPackage rec {
     mv packages/ $out/lib/node_modules/quicktype/
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = quicktype; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Generate types and converters from JSON, Schema, and GraphQL";

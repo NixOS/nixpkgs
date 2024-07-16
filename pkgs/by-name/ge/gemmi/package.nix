@@ -6,7 +6,7 @@
   zlib,
   enablePython ? true,
   python3Packages,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,15 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "gemmi" ];
 
-  doInstallCheck = enablePython;
-
-  nativeInstallCheckInputs = [ python3Packages.pytestCheckHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ] ++ lib.optional enablePython python3Packages.pytestCheckHook;
 
   pytestFlagsArray = [ "../tests" ];
-
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

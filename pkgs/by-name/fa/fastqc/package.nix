@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  testers
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,10 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/FastQC/fastqc $out/bin/fastqc --prefix PATH : ${jre}/bin
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "A quality control application for high throughput sequence data";

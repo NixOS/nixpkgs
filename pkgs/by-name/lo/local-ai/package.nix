@@ -17,6 +17,7 @@
 , buildGoModule
 , makeWrapper
 , ncurses
+, versionCheckHook
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -525,6 +526,9 @@ let
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
         --prefix PATH : "${ffmpeg}/bin"
       '';
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
 
     passthru.local-packages = {
       inherit

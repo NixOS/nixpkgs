@@ -8,8 +8,7 @@
 , stdenv
 , darwin
 , nix-update-script
-, testers
-, tinymist
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,12 +52,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=e2e"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-V";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "${meta.mainProgram} -V";
-      package = tinymist;
-    };
   };
 
   meta = {

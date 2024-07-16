@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, zlib, perl, testers }:
+{ lib, stdenv, fetchFromGitHub, sqlite, zlib, perl, versionCheckHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
@@ -21,10 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/felt/tippecanoe/issues/148
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Build vector tilesets from large collections of GeoJSON features";

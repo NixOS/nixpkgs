@@ -7,9 +7,8 @@
 , curl
 , jq
 , yq
-, dynamodb-local
-, testers
 , common-updater-scripts
+, versionCheckHook
 , writeShellScript
 }:
 let
@@ -49,10 +48,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = dynamodb-local;
-    };
     updateScript = writeShellScript "update-dynamodb-local" ''
       set -o errexit
       export PATH="${lib.makeBinPath [ curl jq yq common-updater-scripts ]}:$PATH"

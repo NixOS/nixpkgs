@@ -1,10 +1,9 @@
 {
   buildGoModule,
-  docker-credential-gcr,
   fetchFromGitHub,
   lib,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -32,11 +31,12 @@ buildGoModule rec {
     "-X github.com/GoogleCloudPlatform/docker-credential-gcr/v2/config.Version=${version}"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = docker-credential-gcr;
-      command = "docker-credential-gcr version";
-    };
     updateScript = nix-update-script { };
   };
 

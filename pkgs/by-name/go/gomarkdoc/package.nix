@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  gomarkdoc
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -28,11 +27,8 @@ buildGoModule rec {
     "-X main.commit=${src.rev}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = gomarkdoc;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Generate markdown documentation for Go (golang) code";

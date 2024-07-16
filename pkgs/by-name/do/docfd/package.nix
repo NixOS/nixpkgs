@@ -9,8 +9,7 @@
   makeWrapper,
   pandoc,
   poppler_utils,
-  testers,
-  docfd,
+  versionCheckHook,
 }:
 
 let
@@ -66,7 +65,8 @@ buildDunePackage' rec {
     }"
   '';
 
-  passthru.tests.version = testers.testVersion { package = docfd; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";

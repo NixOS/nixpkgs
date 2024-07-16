@@ -4,8 +4,7 @@
 , fetchFromGitHub
 , ffmpeg
 , libsForQt5
-, testers
-, corrscope
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -60,13 +59,16 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = corrscope;
-    # Tries writing to
-    # - $HOME/.local/share/corrscope on Linux
-    # - $HOME/Library/Application Support/corrscope on Darwin
-    command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "corr";
+  # Tries writing to
+  # - $HOME/.local/share/corrscope on Linux
+  # - $HOME/Library/Application Support/corrscope on Darwin
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";

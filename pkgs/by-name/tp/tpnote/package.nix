@@ -7,8 +7,7 @@
 , oniguruma
 , darwin
 , installShellFiles
-, tpnote
-, testers
+, versionCheckHook
 }:
 
 
@@ -45,7 +44,8 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  passthru.tests.version = testers.testVersion { package = tpnote; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";

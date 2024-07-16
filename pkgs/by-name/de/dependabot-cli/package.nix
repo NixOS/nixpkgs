@@ -1,9 +1,8 @@
 { buildGoModule
-, dependabot-cli
 , fetchFromGitHub
 , installShellFiles
 , lib
-, testers
+, versionCheckHook
 }:
 let
   pname = "dependabot-cli";
@@ -40,16 +39,10 @@ buildGoModule {
     "-skip=TestIntegration|TestNewProxy_customCert|TestRun"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dependabot --help
-  '';
 
-  passthru.tests.version = testers.testVersion {
-    package = dependabot-cli;
-    command = "dependabot --version";
-    version = "v${version}";
-  };
+  versionCheckProgram = "dependabot";
 
   meta = with lib; {
     changelog = "https://github.com/dependabot/cli/releases/tag/v${version}";

@@ -1,8 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, testers
-, krr
+, versionCheckHook
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -50,10 +49,10 @@ python3.pkgs.buildPythonPackage rec {
     "robusta_krr"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = krr;
-    command = "krr version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Prometheus-based Kubernetes resource recommendations";

@@ -2,8 +2,7 @@
 , fetchFromGitHub
 , lib
 , installShellFiles
-, testers
-, cue
+, versionCheckHook
 , callPackage
 }:
 
@@ -37,15 +36,15 @@ buildGoModule rec {
       --zsh <($out/bin/cue completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru = {
     writeCueValidator = callPackage ./validator.nix { };
     tests = {
       test-001-all-good = callPackage ./tests/001-all-good.nix { };
-      version = testers.testVersion {
-        package = cue;
-        command = "cue version";
-        version = "v${version}";
-      };
     };
   };
 

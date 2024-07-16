@@ -1,4 +1,4 @@
-{ buildNpmPackage, lib, makeWrapper, bundlerEnv, testers, shopify-cli }:
+{ buildNpmPackage, lib, makeWrapper, bundlerEnv, versionCheckHook }:
 let
   version = "3.63.2";
 
@@ -27,10 +27,6 @@ buildNpmPackage {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = shopify-cli;
-      command = "shopify version";
-    };
   };
 
   postInstall = ''
@@ -44,6 +40,11 @@ buildNpmPackage {
       --set SHOPIFY_CLI_VERSION ${version} \
       --set SHOPIFY_CLI_BUNDLED_THEME_CLI 0
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = {
     platforms = lib.platforms.all;

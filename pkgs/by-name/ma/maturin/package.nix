@@ -6,9 +6,8 @@
   rustPlatform,
   darwin,
   libiconv,
-  testers,
   nix-update-script,
-  maturin,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,12 +28,15 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   # Requires network access, fails in sandbox.
   doCheck = false;
 
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion { package = maturin; };
       pyo3 = callPackage ./pyo3-test { };
     };
 

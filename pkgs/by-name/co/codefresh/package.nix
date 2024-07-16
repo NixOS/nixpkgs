@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, npmHooks, nodejs, testers }:
+{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, npmHooks, nodejs, versionCheckHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codefresh";
@@ -23,11 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Tries to fetch stuff from the internet
   dontNpmPrune = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # codefresh needs to read a config file, this is faked out with a subshell
-    command = "codefresh --cfconfig <(echo 'contexts:') version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--cfconfig <(echo 'contexts:') version";
 
   meta = {
     changelog = "https://github.com/codefresh-io/cli/releases/tag/v${finalAttrs.version}";

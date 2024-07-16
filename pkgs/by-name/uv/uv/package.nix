@@ -8,9 +8,8 @@
 , python3Packages
 , rustPlatform
 , stdenv
-, testers
-, uv
 , nix-update-script
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -48,6 +47,8 @@ python3Packages.buildPythonApplication rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   dontUseCmakeConfigure = true;
 
   cargoBuildFlags = [ "--package" "uv" ];
@@ -65,9 +66,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = uv;
-    };
     updateScript = nix-update-script { };
   };
 

@@ -2,10 +2,9 @@
 , buildGoModule
 , fetchFromGitHub
 , nixosTests
-, caddy
-, testers
 , installShellFiles
 , stdenv
+, versionCheckHook
 }:
 let
   version = "2.8.4";
@@ -61,12 +60,13 @@ buildGoModule {
       --zsh <($out/bin/caddy completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru.tests = {
     inherit (nixosTests) caddy;
-    version = testers.testVersion {
-      command = "${caddy}/bin/caddy version";
-      package = caddy;
-    };
   };
 
   meta = with lib; {

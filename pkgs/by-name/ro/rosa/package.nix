@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script, versionCheckHook }:
 
 buildGoModule rec {
   pname = "rosa";
@@ -36,11 +36,12 @@ buildGoModule rec {
       --zsh <($out/bin/rosa completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version --client";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = rosa;
-      command = "rosa version --client";
-    };
     updateScript = nix-update-script { };
   };
 

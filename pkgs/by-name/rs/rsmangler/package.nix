@@ -1,8 +1,8 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, testers
 , ruby
+, versionCheckHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,11 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm555 rsmangler.rb $out/bin/rsmangler
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "rsmangler --help";
-    version = "rsmangler v ${lib.versions.majorMinor finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Perform various manipulations on the wordlists";

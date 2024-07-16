@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  stackql,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -33,10 +32,8 @@ buildGoModule rec {
 
   checkFlags = [ "--tags json1,sqleanal" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = stackql;
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/stackql/stackql";

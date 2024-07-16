@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchNpmDeps
-, testers
+, versionCheckHook
 }:
 
 let
@@ -42,9 +42,8 @@ let
       ln -s $out/share/${pname}/node_modules/.bin $out/bin
     '';
 
-    passthru.tests = {
-      version = testers.testVersion { inherit package; };
-    };
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
 
     meta = {
       description = "Chez Scheme back-end for PureScript";

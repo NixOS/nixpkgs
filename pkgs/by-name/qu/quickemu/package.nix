@@ -26,8 +26,7 @@
   zsync,
   OVMF,
   OVMFFull,
-  quickemu,
-  testers,
+  versionCheckHook,
   installShellFiles,
 }:
 let
@@ -99,9 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion {
-    package = quickemu;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

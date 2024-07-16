@@ -2,8 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
-, testers
-, mercure
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -32,13 +31,13 @@ buildGoModule rec {
 
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      version = "v${version}";
-      package = mercure;
-      command = "mercure version";
-    };
   };
 
   meta = with lib; {

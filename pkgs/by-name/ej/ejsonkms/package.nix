@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  ejsonkms,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -25,12 +24,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = ejsonkms;
-      version = "v${version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Integrates EJSON with AWS KMS";

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchzip,
   installShellFiles,
-  testers,
+  versionCheckHook,
   writeShellScript,
   common-updater-scripts,
   curl,
@@ -13,7 +13,6 @@
   jq,
   xcodebuild,
   xxd,
-  yabai,
 }:
 let
   inherit (darwin.apple_sdk_11_0.frameworks)
@@ -85,12 +84,10 @@ stdenv'.mkDerivation (finalAttrs: {
         --replace 'return screen.safeAreaInsets.top;' 'return 0;'
       '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = yabai;
-      version = "yabai-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  passthru = {
     sources = {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.

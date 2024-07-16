@@ -7,8 +7,7 @@
 , stdenv
 , darwin
 , nix-update-script
-, testers
-, typstyle
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,9 +42,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=e2e"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = typstyle; };
   };
 
   meta = {

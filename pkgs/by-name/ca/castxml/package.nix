@@ -7,7 +7,7 @@
   llvmPackages,
   python3,
   stdenv,
-  testers,
+  versionCheckHook,
   zlib,
   # Boolean flags
   withHTML ? true,
@@ -59,9 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.tests = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/CastXML/CastXML";

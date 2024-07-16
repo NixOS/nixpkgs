@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  spicetify-cli,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -34,12 +33,10 @@ buildGoModule rec {
     cp -r ${src}/Themes $out/bin/Themes
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/spicetify --help > /dev/null
-  '';
 
-  passthru.tests.version = testers.testVersion { package = spicetify-cli; };
+  versionCheckProgram = "${placeholder "out"}/bin/spicetify";
 
   meta = with lib; {
     description = "Command-line tool to customize Spotify client";

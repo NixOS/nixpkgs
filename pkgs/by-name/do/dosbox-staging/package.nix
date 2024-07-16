@@ -28,7 +28,7 @@
   pkg-config,
   speexdsp,
   stdenv,
-  testers,
+  versionCheckHook,
   zlib-ng,
 }:
 
@@ -109,13 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/dosbox";
+
   passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "dosbox --version";
-      };
-    };
     updateScript = gitUpdater {
       rev-prefix = "v";
     };

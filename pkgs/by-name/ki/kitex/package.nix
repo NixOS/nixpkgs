@@ -1,8 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, testers
-, kitex
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -27,10 +26,8 @@ buildGoModule rec {
     ln -s $out/bin/kitex $out/bin/thrift-gen-kitex
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = kitex;
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib;  {
     description = "A high-performance and strong-extensibility Golang RPC framework";

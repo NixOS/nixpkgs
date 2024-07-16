@@ -5,8 +5,8 @@
   openssl,
   readline,
   stdenv,
-  testers,
   valgrind,
+  versionCheckHook,
   xxd,
   # Boolean flags
   checkLeaks ? false,
@@ -69,14 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkFlags = [ "test" ] ++ lib.optionals checkLeaks [ "leaks" ];
 
-  passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        version = "v${finalAttrs.version}";
-      };
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/tpl";
 
   meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";

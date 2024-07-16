@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , lib
 , stdenvNoCC
-, testers
+, versionCheckHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,10 +19,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Show uncommitted, untracked and unpushed changes for multiple Git repos";

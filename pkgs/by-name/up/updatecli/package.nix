@@ -5,8 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   installShellFiles,
-  testers,
-  updatecli,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -37,10 +36,6 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = updatecli;
-      command = "updatecli version";
-    };
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,6 +49,11 @@ buildGoModule rec {
     $out/bin/updatecli man > updatecli.1
     installManPage updatecli.1
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Declarative Dependency Management tool";

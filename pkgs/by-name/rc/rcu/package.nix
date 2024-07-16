@@ -2,14 +2,13 @@
 , lib
 , requireFile
 , runCommand
-, rcu
-, testers
 , copyDesktopItems
 , desktopToDarwinBundle
 , libsForQt5
 , makeDesktopItem
 , python3Packages
 , system-config-printer
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -131,15 +130,8 @@ python3Packages.buildPythonApplication rec {
       --add-flags $out/share/rcu/main.py
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = rcu;
-      version = let
-        versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-      in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${lib.strings.substring versionSuffixPos 1 rcu.version})";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     mainProgram = "rcu";

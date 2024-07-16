@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, immich-go }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, versionCheckHook }:
 buildGoModule rec {
   pname = "immich-go";
   version = "0.19.1";
@@ -40,13 +40,11 @@ buildGoModule rec {
     ldflags+=" -X main.date=$(cat SOURCE_DATE)"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.versionTest = testers.testVersion {
-      package = immich-go;
-      command = "immich-go -version";
-      version = version;
-    };
   };
 
   meta = {

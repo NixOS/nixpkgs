@@ -4,8 +4,7 @@
   rustPlatform,
   stdenv,
   darwin,
-  stu,
-  testers,
+  versionCheckHook,
 }:
 let
   version = "0.5.0";
@@ -28,7 +27,8 @@ rustPlatform.buildRustPackage {
     darwin.apple_sdk.frameworks.CoreGraphics
   ];
 
-  passthru.tests.version = testers.testVersion { package = stu; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Terminal file explorer for S3 buckets";

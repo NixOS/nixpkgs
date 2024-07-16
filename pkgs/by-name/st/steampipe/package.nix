@@ -5,8 +5,7 @@
   lib,
   makeWrapper,
   nix-update-script,
-  steampipe,
-  testers,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -65,12 +64,10 @@ buildGoModule rec {
       --zsh <($out/bin/steampipe --install-dir $INSTALL_DIR completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "${lib.getExe steampipe} --version";
-      package = steampipe;
-      version = "v${version}";
-    };
     updateScript = nix-update-script { };
   };
 

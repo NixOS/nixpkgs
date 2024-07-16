@@ -5,8 +5,7 @@
 , installShellFiles
 , bc
 , ncurses
-, testers
-, fzf
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -75,9 +74,8 @@ buildGoModule rec {
     chmod +x $out/bin/fzf-share
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = fzf;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/junegunn/fzf/blob/${src.rev}/CHANGELOG.md";

@@ -14,10 +14,9 @@
 , clangStdenv
 , gccStdenv
 , hello
-, mold
 , mold-wrapped
 , runCommandCC
-, testers
+, versionCheckHook
 , useMoldLinker
 }:
 
@@ -54,6 +53,9 @@ stdenv.mkDerivation rec {
     "-faligned-allocation"
   ]);
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
     tests =
@@ -88,10 +90,7 @@ stdenv.mkDerivation rec {
               fi
             ''
         ;
-      in
-      {
-        version = testers.testVersion { package = mold; };
-      } // lib.optionalAttrs stdenv.isLinux {
+      in lib.optionalAttrs stdenv.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (hello.override (old: { stdenv = useMoldLinker gccStdenv; }));
         adapter-llvm = helloTest "adapter-llvm" (hello.override (old: { stdenv = useMoldLinker clangStdenv; }));
         wrapped = helloTest "wrapped" (hello.overrideAttrs (previousAttrs: {

@@ -7,6 +7,7 @@
   testers,
   dart-sass,
   runCommand,
+  versionCheckHook,
   writeText,
 }:
 
@@ -46,15 +47,13 @@ buildDartApplication rec {
 
   dartCompileFlags = [ "--define=version=${version}" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     inherit embedded-protocol-version embedded-protocol;
     updateScript = ./update.sh;
     tests = {
-      version = testers.testVersion {
-        package = dart-sass;
-        command = "dart-sass --version";
-      };
-
       simple = testers.testEqualContents {
         assertion = "dart-sass compiles a basic scss file";
         expected = writeText "expected" ''

@@ -4,8 +4,7 @@
 , unixODBC
 , icu
 , nix-update-script
-, testers
-, usql
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -54,13 +53,11 @@ buildGoModule rec {
   # All the checks currently require docker instances to run the databases.
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      inherit version;
-      package = usql;
-      command = "usql --version";
-    };
   };
 
   meta = with lib; {

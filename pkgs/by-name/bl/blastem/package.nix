@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # TODO: use `versionCheckHook` when possible
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "blastem -v";

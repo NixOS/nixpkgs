@@ -2,8 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
-, testers
-, kickstart
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=generation::tests::can_generate_from_remote_repo"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = kickstart;
-    };
   };
 
   meta = with lib; {

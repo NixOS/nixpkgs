@@ -3,8 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   linux-pam,
-  testers,
-  shpool,
+  versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,10 +40,10 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 systemd/shpool.socket -t $out/lib/systemd/user
   '';
 
-  passthru.tests.version = testers.testVersion {
-    command = "shpool version";
-    package = shpool;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Persistent session management like tmux, but more lightweight";

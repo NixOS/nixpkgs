@@ -2,8 +2,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , makeWrapper
-, redocly
-, testers
+, versionCheckHook
 }:
 
 buildNpmPackage rec {
@@ -42,11 +41,8 @@ buildNpmPackage rec {
     ln -s $out/bin/redocly $out/bin/redocly-cli
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = redocly;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://redocly.com/docs/cli/changelog/";

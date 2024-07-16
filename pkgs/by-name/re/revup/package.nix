@@ -3,7 +3,7 @@
   fetchPypi,
   gitUpdater,
   python3Packages,
-  testers,
+  versionCheckHook
 }:
 
 let
@@ -39,11 +39,11 @@ let
       pytest
     ];
 
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
+
     passthru = {
       updateScript = gitUpdater { };
-      tests.version = testers.testVersion {
-        package = self;
-      };
     };
 
     meta = {

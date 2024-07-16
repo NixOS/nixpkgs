@@ -6,8 +6,7 @@
   fetchFromGitHub,
   clojure,
   writeScript,
-  testers,
-  clojure-lsp,
+  versionCheckHook
 }:
 
 buildGraalvmNativeImage rec {
@@ -48,11 +47,8 @@ buildGraalvmNativeImage rec {
       runHook postCheck
     '';
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = clojure-lsp;
-    command = "clojure-lsp --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell

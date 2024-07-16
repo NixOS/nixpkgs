@@ -1,9 +1,8 @@
 { lib
 , fetchFromGitHub
-, dooit
 , python3
-, testers
 , nix-update-script
+, versionCheckHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,12 +38,14 @@ python3.pkgs.buildPythonApplication rec {
   # No tests available
   doCheck = false;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = dooit;
-      command = "HOME=$(mktemp -d) dooit --version";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru = {
     updateScript = nix-update-script { };
   };
 

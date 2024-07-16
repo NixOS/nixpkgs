@@ -22,7 +22,7 @@
 , libavif
 , openexr_3
 , bash-completion
-, testers
+, versionCheckHook
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
@@ -67,9 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     openexr_3
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";

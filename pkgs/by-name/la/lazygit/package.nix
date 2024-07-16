@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  lazygit,
-  testers,
+  versionCheckHook
 }:
 buildGoModule rec {
   pname = "lazygit";
@@ -24,7 +23,8 @@ buildGoModule rec {
     "-X main.buildSource=nix"
   ];
 
-  passthru.tests.version = testers.testVersion { package = lazygit; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Simple terminal UI for git commands";

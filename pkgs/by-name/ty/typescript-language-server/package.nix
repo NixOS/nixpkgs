@@ -6,8 +6,8 @@
 , makeWrapper
 , nodejs
 , prefetch-yarn-deps
+, versionCheckHook
 , yarn
-, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,11 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/typescript-language-server/typescript-language-server/releases/tag/v${finalAttrs.version}";

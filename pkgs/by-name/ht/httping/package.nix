@@ -9,7 +9,7 @@
   nix-update-script,
   openssl,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "${lib.getExe finalAttrs.finalPackage} --version";
-      package = finalAttrs.finalPackage;
-    };
     updateScript = nix-update-script { };
   };
 

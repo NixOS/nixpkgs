@@ -3,9 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , darwin
-, testers
 , nix-update-script
-, committed
+, versionCheckHook
 }:
 let
   version = "1.0.20";
@@ -24,8 +23,10 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = committed; };
     updateScript = nix-update-script { };
   };
 

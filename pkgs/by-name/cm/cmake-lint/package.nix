@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  testers,
-  cmake-lint,
+  versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,13 +26,13 @@ python3Packages.buildPythonApplication rec {
     nose
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   checkPhase = ''
     nosetests
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = cmake-lint; };
-  };
+  versionCheckProgram = "cmakelint";
 
   meta = {
     description = "Static code checker for CMake files";
