@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [
       edef
       vmandela
+      aleksana
     ];
     mainProgram = "git-series";
   };
