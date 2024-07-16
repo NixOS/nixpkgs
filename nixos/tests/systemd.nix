@@ -75,9 +75,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       rebootTime = "10min";
       kexecTime = "5min";
     };
+
+    environment.etc."systemd/system-preset/10-testservice.preset".text = ''
+      disable ${config.systemd.services.testservice1.name}
+    '';
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: ''
     import re
     import subprocess
 
@@ -213,5 +217,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("systemd environment is properly set"):
         machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ
         machine.succeed("grep -q TZDIR=/etc/zoneinfo /proc/1/environ")
+
+    with subtest("systemd presets are ignored"):
+        machine.succeed("systemctl preset ${nodes.machine.systemd.services.testservice1.name}")
+        machine.succeed("test -e /etc/systemd/system/${nodes.machine.systemd.services.testservice1.name}")
   '';
 })

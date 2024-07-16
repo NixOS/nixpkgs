@@ -566,6 +566,15 @@ in
       "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
       "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
+
+      # Ignore all other preset files so systemd doesn't try to enable/disable
+      # units during runtime.
+      "systemd/system-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
+      "systemd/user-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
     });
 
     services.dbus.enable = true;
