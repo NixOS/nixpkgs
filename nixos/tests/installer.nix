@@ -392,6 +392,7 @@ let
       #   - the "backdoor" shell is not a proper session and does not have `NIX_PATH=""` set
       #   - seeing no nix path settings at all, Nix loads its hardcoded default value,
       #     which is unfortunately non-empty
+      # Or maybe it's the new default NIX_PATH?? :(
       # with subtest("builtins.nixPath is now empty"):
       #   target.succeed("""
       #     (
