@@ -16,10 +16,12 @@
 , libxkbcommon
 , libGLU
 , wayland
-, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+# "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
+, withBackends ? [ "libjxl" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
 , freeimage
 , libtiff
 , libjpeg_turbo
+, libjxl
 , libpng
 , librsvg
 , netsurf
@@ -40,7 +42,7 @@ let
   };
 
   backends = {
-    inherit freeimage libtiff libpng librsvg libheif;
+    inherit freeimage libtiff libpng librsvg libheif libjxl;
     libjpeg = libjpeg_turbo;
     inherit (netsurf) libnsgif;
   };
@@ -62,14 +64,14 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.4.0";
+  version = "4.5.0";
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~exec64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "sha256-LLEEbriHzZhAOQivqHqdr6g7lh4uj++ytlme8AfRjf4=";
+    sha256 = "sha256-aJ2EXgsS0WUTxMqC1Q+uOWLG8BeuwAyXPmJB/9/NCCU=";
   };
 
   mesonFlags = [
@@ -78,9 +80,10 @@ stdenv.mkDerivation rec {
     "-Dman=enabled"
   ] ++ backendFlags;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
-    cmocka
     docbook_xsl
     libxslt
     meson
@@ -89,6 +92,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cmocka
     icu
     libxkbcommon
     pango
@@ -114,7 +118,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A command line image viewer for tiling window managers";
+    description = "Command line image viewer for tiling window managers";
     homepage = "https://sr.ht/~exec64/imv/";
     license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];

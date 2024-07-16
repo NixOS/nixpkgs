@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "unifont_upper";
-  version = "15.1.04";
+  version = "15.1.05";
 
   src = fetchurl {
     url = "mirror://gnu/unifont/unifont-${version}/${pname}-${version}.otf";
-    hash = "sha256-SUsG2xhrn47zrGpNzRn1g76qyt2vQyH/UBmYtzCD0UA=";
+    hash = "sha256-A/Z/+IMNUH/3Ir3ewf/U2xqkkpZDUDKO+dlnRYt+7U0=";
   };
 
   dontUnpack = true;
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
     # Basically GPL2+ with font exception.
     license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.mathnerd314 maintainers.vrthra ];
+    maintainers = [ maintainers.mathnerd314 ];
     platforms = platforms.all;
   };
 }

@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, icalendar
-, lxml
-, pytestCheckHook
-, pythonOlder
-, pytz
-, recurring-ical-events
-, requests
-, setuptools
-, tzlocal
-, vobject
-, xandikos
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  icalendar,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  python,
+  pytz,
+  recurring-ical-events,
+  requests,
+  setuptools,
+  toPythonModule,
+  tzlocal,
+  vobject,
+  xandikos,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.3.8";
+  version = "1.3.9";
 
   pyproject = true;
   disabled = pythonOlder "3.7";
@@ -25,12 +28,10 @@ buildPythonPackage rec {
     owner = "python-caldav";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CZ/cqBvxQiNYJUX4BFtTjG9umf5pGPOaRcN4N1o06QM=";
+    hash = "sha256-R9zXwD0sZE4bg6MTHWWCWWlZ5wH0H6g650zA7AboAo8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     vobject
@@ -44,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    xandikos
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 
   pythonImportsCheck = [ "caldav" ];
@@ -54,6 +55,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-caldav/caldav";
     changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz dotlambda ];
+    maintainers = with maintainers; [
+      marenz
+      dotlambda
+    ];
   };
 }

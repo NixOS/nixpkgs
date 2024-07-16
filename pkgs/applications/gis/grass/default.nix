@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , bison
 , blas
@@ -23,8 +23,7 @@
 , pkg-config
 , postgresql
 , proj
-, proj-datumgrid
-, python3Packages
+, python311Packages
 , readline
 , sqlite
 , wxGTK32
@@ -32,20 +31,23 @@
 , zstd
 }:
 
+let
+  pyPackages = python311Packages;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.1";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-SoJq4SuDYImfkM2e991s47vYusrmnrQaXn7p3xwyOOQ=";
+    hash = "sha256-loeg+7h676d2WdYOMcJFyzeEZcxjBynir6Hz0J/GBns=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient # for `mysql_config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -71,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     pdal
     postgresql
     proj
-    proj-datumgrid
     readline
     sqlite
     wxGTK32
@@ -88,12 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Correct mysql_config query
   postPatch = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
+    substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
   configureFlags = [
     "--with-blas"
-    "--with-fftw"
     "--with-geos"
     # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
@@ -107,11 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
-    "--with-wxwidgets"
-    "--with-zstd"
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
     "--without-freetype"
@@ -134,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
+    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

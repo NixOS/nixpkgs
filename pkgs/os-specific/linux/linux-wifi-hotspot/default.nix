@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-wifi-hotspot";
-  version = "4.6.0";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "lakinduakash";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-u9OdSpdxnjHOrK6PP/SFvGRtezssoZSoJFGVdRbOIPU=";
+    sha256 = "sha256-+WHYWQ4EyAt+Kq0LHEgC7Kk5HpIqThz6W3PIdW8Wojk=";
   };
 
   nativeBuildInputs = [

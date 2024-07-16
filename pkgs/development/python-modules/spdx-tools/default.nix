@@ -1,19 +1,20 @@
-{ lib
-, beartype
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, license-expression
-, ply
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rdflib
-, semantic-version
-, setuptools
-, setuptools-scm
-, uritools
-, xmltodict
+{
+  lib,
+  beartype,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  license-expression,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rdflib,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
+  uritools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -29,8 +30,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-KB+tfuz0ZnoQcMX3H+IZXjcmPZ4x2ecl8ofz1/3r0/8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -49,13 +48,9 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "spdx_tools.spdx"
-  ];
+  pythonImportsCheck = [ "spdx_tools.spdx" ];
 
   disabledTestPaths = [
     # Test depends on the currently not packaged pyshacl module

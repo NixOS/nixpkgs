@@ -1,3 +1,5 @@
+diff --git a/tools/srp_shared.c b/tools/srp_shared.c
+index f782126..23e82a5 100644
 --- a/tools/srp_shared.c
 +++ b/tools/srp_shared.c
 @@ -173,7 +173,11 @@ void user_verifier_lookup(char * username,
@@ -5,9 +7,9 @@
  		return;
  
 +#if defined(__APPLE__)
-+	*generation = (buf.st_mtimespec.tv_sec << 32) | buf.st_mtimespec.tv_nsec;
++	*generation = ((uint64_t)buf.st_mtimespec.tv_sec << 32) | buf.st_mtimespec.tv_nsec;
 +#else
- 	*generation = (buf.st_mtim.tv_sec << 32) | buf.st_mtim.tv_nsec;
+ 	*generation = ((uint64_t)buf.st_mtim.tv_sec << 32) | buf.st_mtim.tv_nsec;
 +#endif
  #endif
  

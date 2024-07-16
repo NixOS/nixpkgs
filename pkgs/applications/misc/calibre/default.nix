@@ -21,22 +21,23 @@
 , qmake
 , qtbase
 , qtwayland
-, removeReferencesTo
 , speechd
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
-, wrapGAppsHook
+, wrapGAppsHook3
+, popplerSupport ? true
+, speechSupport ? true
 , unrarSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.1.0";
+  version = "7.13.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cKUV+tBZ5ZdXkoLdJPdURKnWP5B5gzCUQQehVQIRgko=";
+    hash = "sha256-t0nSLsT3X5MoYHhLjbRpqyKbV6NdAqNurSjbcik/n7Q=";
   };
 
   patches = [
@@ -44,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
-      hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
+      hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
     })
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-eTzwo8aAIJnZTIZ/8DqCQi3ZbKxycEdiv+UxRuxo12g=";
+      hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -69,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qmake
-    removeReferencesTo
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -91,48 +91,48 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtwayland
     sqlite
+    (python3Packages.python.withPackages
+      (ps: with ps; [
+        (apsw.overrideAttrs (oldAttrs: {
+          setupPyBuildFlags = [ "--enable=load_extension" ];
+        }))
+        beautifulsoup4
+        css-parser
+        cssselect
+        python-dateutil
+        dnspython
+        faust-cchardet
+        feedparser
+        html2text
+        html5-parser
+        lxml
+        markdown
+        mechanize
+        msgpack
+        netifaces
+        pillow
+        pychm
+        pyqt-builder
+        pyqt6
+        python
+        regex
+        sip
+        setuptools
+        zeroconf
+        jeepney
+        pycryptodome
+        xxhash
+        # the following are distributed with calibre, but we use upstream instead
+        odfpy
+      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+        # much of calibre's functionality is usable without a web
+        # browser, so we enable building on platforms which qtwebengine
+        # does not support by simply omitting qtwebengine.
+        pyqt6-webengine
+      ] ++ lib.optional (unrarSupport) unrardll)
+    )
     xdg-utils
-  ] ++ (
-    with python3Packages; [
-      (apsw.overrideAttrs (oldAttrs: {
-        setupPyBuildFlags = [ "--enable=load_extension" ];
-      }))
-      beautifulsoup4
-      css-parser
-      cssselect
-      python-dateutil
-      dnspython
-      faust-cchardet
-      feedparser
-      html2text
-      html5-parser
-      lxml
-      markdown
-      mechanize
-      msgpack
-      netifaces
-      pillow
-      pychm
-      pyqt-builder
-      pyqt6
-      python
-      regex
-      sip
-      setuptools
-      speechd
-      zeroconf
-      jeepney
-      pycryptodome
-      xxhash
-      # the following are distributed with calibre, but we use upstream instead
-      odfpy
-    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
-      # much of calibre's functionality is usable without a web
-      # browser, so we enable building on platforms which qtwebengine
-      # does not support by simply omitting qtwebengine.
-      pyqt6-webengine
-    ] ++ lib.optional (unrarSupport) unrardll
-  );
+  ] ++ lib.optional (speechSupport) speechd;
 
   installPhase = ''
     runHook preInstall
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --root=$out \
+    python setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
@@ -173,23 +173,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
-  # Remove some references to shrink the closure size. This reference (as of
-  # 2018-11-06) was a single string like the following:
-  #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
-  preFixup = ''
-    remove-references-to -t ${podofo.dev} \
-      $out/lib/calibre/calibre/plugins/podofo.so
-
-    for program in $out/bin/*; do
-      wrapProgram $program \
-        ''${qtWrapperArgs[@]} \
-        ''${gappsWrapperArgs[@]} \
-        --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix PATH : ${poppler_utils.out}/bin
-    done
-  '';
-
-  disallowedReferences = [ podofo.dev ];
+  preFixup =
+    let
+      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+    in
+    ''
+      for program in $out/bin/*; do
+        wrapProgram $program \
+          ''${qtWrapperArgs[@]} \
+          ''${gappsWrapperArgs[@]} \
+          ${if popplerSupport then popplerArgs else ""}
+      done
+    '';
 
   meta = {
     homepage = "https://calibre-ebook.com";

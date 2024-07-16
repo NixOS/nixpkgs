@@ -1,25 +1,26 @@
-{ callPackage
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, semantic-version
-, setuptools
-, setuptools-scm
-, tomli
-, typing-extensions
+{
+  callPackage,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
+  tomli,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.7.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xxAJmZSCNaOK5+VV/hmapmwlPcOEsSX12FRzv4Hq46M=";
+    hash = "sha256-cE3wlI8uTMYMJZatboQOpnn09D5Y7UrQwYV4ByQOq5Y=";
   };
 
   nativeBuildInputs = [
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     semantic-version
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  pythonImportsCheck = [
-    "setuptools_rust"
-  ];
+  pythonImportsCheck = [ "setuptools_rust" ];
 
   doCheck = false;
 

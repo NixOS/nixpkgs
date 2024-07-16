@@ -8,19 +8,19 @@
 , gobject-introspection
 , mpv
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "4.2";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-YmVMcNbvbkODAmEgv8Ofgo07Mew/F4xv5cBaWKsH1S4=";
+    hash = "sha256-tcBBPJr9C+3FC8VWAM+KzETKAovfyehBvlmn7mIR7VQ=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

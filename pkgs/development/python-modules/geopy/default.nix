@@ -1,12 +1,13 @@
-{ lib
-, async-generator
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, geographiclib
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  geographiclib,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -22,12 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
-  propagatedBuildInputs = [
-    geographiclib
-  ];
+  propagatedBuildInputs = [ geographiclib ];
 
   nativeCheckInputs = [
-    async-generator
     docutils
     pytestCheckHook
     pytz
@@ -37,6 +35,8 @@ buildPythonPackage rec {
     # ignore --skip-tests-requiring-internet flag
     "test_user_agent_default"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
   pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
 

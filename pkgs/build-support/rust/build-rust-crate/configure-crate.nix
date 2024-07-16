@@ -7,12 +7,18 @@
 , completeBuildDeps
 , completeDeps
 , crateAuthors
-, crateLinks
 , crateDescription
-, crateHomepage
 , crateFeatures
+, crateHomepage
+, crateLicense
+, crateLicenseFile
+, crateLinks
 , crateName
+, crateType
+, crateReadme
 , crateRenames
+, crateRepository
+, crateRustVersion
 , crateVersion
 , extraLinkFlags
 , extraRustcOptsForBuildRs
@@ -120,6 +126,8 @@ in ''
 
   EXTRA_BUILD=""
   BUILD_OUT_DIR=""
+
+  # Set up Cargo Environment variables: https://doc.rust-lang.org/cargo/reference/environment-variables.html
   export CARGO_PKG_NAME=${crateName}
   export CARGO_PKG_VERSION=${crateVersion}
   export CARGO_PKG_AUTHORS="${authors}"
@@ -147,6 +155,11 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
+  export CARGO_PKG_LICENSE="${crateLicense}"
+  export CARGO_PKG_LICENSE_FILE="${crateLicenseFile}"
+  export CARGO_PKG_README="${crateReadme}"
+  export CARGO_PKG_REPOSITORY="${crateRepository}"
+  export CARGO_PKG_RUST_VERSION="${crateRustVersion}"
   export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
@@ -182,17 +195,25 @@ in ''
          export CARGO_FEATURE_$feature=1
        done
 
-       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+       target/build/${crateName}/build_script_build | tee target/build/${crateName}.opt
      )
 
      set +e
-     EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
-     EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS=$(sed -n "s/^cargo:rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo:rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo:rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_LIBS=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+     # We want to support the new prefix invocation syntax which uses two colons
+     # See https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
+
+     EXTRA_BUILD=$(sed -n "s/^cargo::\{0,1\}rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+     EXTRA_FEATURES=$(sed -n "s/^cargo::\{0,1\}rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_LIBS=$(sed -n "s/^cargo::\{0,1\}rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_SEARCH=$(sed -n "s/^cargo::\{0,1\}rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+
+     ${lib.optionalString (lib.elem "cdylib" crateType) ''
+     CRATE_TYPE_IS_CDYLIB="true"
+     EXTRA_CDYLIB_LINK_ARGS=$(sed -n "s/^cargo::\{0,1\}rustc-cdylib-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+''}
 
      # We want to read part of every line that has cargo:rustc-env= prefix and
      # export it as environment variables. This turns out tricky if the lines
@@ -205,14 +226,15 @@ in ''
      #
      _OLDIFS="$IFS"
      IFS=$'\n'
-     for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
+     for env in $(sed -n "s/^cargo::\{0,1\}rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
        export "$env"
      done
      IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
-     grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
-       | awk -F= "/^cargo:/ { sub(/^cargo:/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \$2 }" > target/env
+     grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
+       | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
+                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
      set -e
   fi
   runHook postConfigure

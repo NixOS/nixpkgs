@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cachetools
-, numpy
-, pythonOlder
-, redis
-, redis-om
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cachetools,
+  numpy,
+  pythonOlder,
+  redis,
+  redis-om,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Semantic cache for LLMs and fully integrated with LangChain and llama_index";
+    mainProgram = "gptcache_server";
     homepage = "https://github.com/zilliztech/GPTCache";
     changelog = "https://github.com/zilliztech/GPTCache/releases/tag/${src.rev}";
     license = licenses.mit;

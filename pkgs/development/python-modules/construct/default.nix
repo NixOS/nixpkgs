@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, arrow
-, buildPythonPackage
-, cloudpickle
-, cryptography
-, fetchFromGitHub
-, lz4
-, numpy
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, setuptools
+{
+  lib,
+  stdenv,
+  arrow,
+  buildPythonPackage,
+  cloudpickle,
+  cryptography,
+  fetchFromGitHub,
+  lz4,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "construct";
-  version = "2.10.69";
+  version = "2.10.70";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,12 +25,10 @@ buildPythonPackage rec {
     owner = "construct";
     repo = "construct";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v1ieZytX9I2BR6UBD6TztCBT4KWtqfFZVKNtXIRNEB0=";
+    hash = "sha256-5otjjIyje0+z/Y/C2ivmu08PNm0oJcSSvZkQfGxHDuQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     # Not an explicit dependency, but it's imported by an entrypoint
@@ -50,15 +49,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "construct"
-  ];
+  pythonImportsCheck = [ "construct" ];
 
-  disabledTests = [
-    "test_benchmarks"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_multiprocessing"
-  ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

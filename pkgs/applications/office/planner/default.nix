@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "planner";
-  version = "0.14.91";
+  version = "0.14.92";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "planner";
     rev = version;
-    hash = "sha256-LxctZv/CKolJ1I4Hql20E+/+p+ZoJLR1eZe34HPMqvY=";
+    hash = "sha256-2LmNeyZURVtA52Vosyn44wT8zSaJn8tR+8sPM9atAwM=";
   };
 
   postPatch = ''
@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Project management tool for the GNOME desktop";
-    homepage = "https://wiki.gnome.org/Apps/Planner";
+    mainProgram = "planner";
+    homepage = "https://gitlab.gnome.org/World/planner";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = lib.platforms.unix;

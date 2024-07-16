@@ -1,7 +1,7 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
+{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
 , nim-unwrapped-2, nim-unwrapped-1, nim }:
 
@@ -76,12 +76,12 @@ in {
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "2.0.0";
+    version = "2.0.8";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-vWEB2EADb7eOk6ad9s8/n9DCHNdUtpX/hKO0rdjtCvc=";
+      hash = "sha256-VwLahEcA0xKdtzFwtcYGrb37h+grgWwNkRB+ogpl3xY=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -147,7 +147,7 @@ in {
       ln -sf $out/nim/bin/nim $out/bin/nim
       ln -sf $out/nim/lib $out/lib
       ./install.sh $out
-      cp -a tools $out/nim/
+      cp -a tools dist $out/nim/
       runHook postInstall
     '';
 
@@ -161,10 +161,10 @@ in {
   });
 
   nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
-    version = "1.6.14";
+    version = "1.6.20";
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
+      hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
     };
 
     patches = [
@@ -303,7 +303,7 @@ in {
         meta = nim'.meta // {
           description = nim'.meta.description
             + " (${targetPlatformConfig} wrapper)";
-          platforms = with lib.platforms; unix ++ genode;
+          platforms = with lib.platforms; unix ++ genode ++ windows;
         };
       });
 in {

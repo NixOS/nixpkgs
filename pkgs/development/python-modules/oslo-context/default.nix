@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  oslotest,
+  stestr,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "oslo.context";
-  version = "5.1.1";
+  version = "5.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ly55FxBE79GAfFVxPtLH9AaLGNc9AngZFlxIGbKHz68=";
+    hash = "sha256-6uAxeymSjxk030xguGD+hiUkfLKXxcxi/vjrWCexL6w=";
   };
 
   postPatch = ''

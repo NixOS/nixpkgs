@@ -6,19 +6,18 @@
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "unstable-2023-11-22";
+  version = "0-unstable-2024-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbraud";
     repo = "memtree";
-    rev = "edc09d91dcd72f175d6adc1d08b261dd95cc4fbf";
-    hash = "sha256-YLZm0wjkjaTw/lHY5k4cqPXCgINe+49SGPLZq+eRdI4=";
+    rev = "97615952eabdc5e8e1a4bd590dd1f4971f3c5a24";
+    hash = "sha256-Ifp8hwkuyBw57fGer3GbDiJaRjL4TD3hzj+ecGXWqI0=";
   };
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
-    pytestCheckHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -27,11 +26,11 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = with python3Packages; [
     hypothesis
-    pytest
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "-v" ];
-  pythonImportChecks = [ "memtree" ];
+  pythonImportsCheck = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

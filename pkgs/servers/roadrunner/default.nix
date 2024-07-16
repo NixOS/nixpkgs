@@ -6,12 +6,13 @@
 
 buildGoModule rec {
   pname = "roadrunner";
-  version = "2023.3.4";
+  version = "2024.1.2";
+
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
-    rev = "v${version}";
-    hash = "sha256-khG0T88TR7hg9OO7E9eCGTB3q3c5r94nANSZ1J6vCj0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qaG7krLu6D08izPwRwqzSpnGVQjTgNwoSky3jmSwOdM=";
   };
 
   nativeBuildInputs = [
@@ -22,8 +23,8 @@ buildGoModule rec {
   # https://github.com/roadrunner-server/roadrunner/blob/fe572d0eceae8fd05225fbd99ba50a9eb10c4393/.github/workflows/release.yml#L89
   ldflags = [
     "-s"
-    "-X github.com/roadrunner-server/roadrunner/v2023/internal/meta.version=${version}"
-    "-X github.com/roadrunner-server/roadrunner/v2023/internal/meta.buildTime=1970-01-01T00:00:00Z"
+    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.version=${version}"
+    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.buildTime=1970-01-01T00:00:00Z"
   ];
 
   postInstall = ''
@@ -44,7 +45,7 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
-  vendorHash = "sha256-UP+a47EALxFTxMl9yxinF4QiifQXAgAZ6ZOt9ebhlDc=";
+  vendorHash = "sha256-vwOvp8hckamdN0qKnvaL2pm30nCMelQ8+LjqcPZR/ZQ=";
 
   meta = {
     changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";

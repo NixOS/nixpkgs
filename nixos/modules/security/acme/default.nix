@@ -515,19 +515,19 @@ let
       validMinDays = mkOption {
         type = types.int;
         inherit (defaultAndText "validMinDays" 30) default defaultText;
-        description = lib.mdDoc "Minimum remaining validity before renewal in days.";
+        description = "Minimum remaining validity before renewal in days.";
       };
 
       renewInterval = mkOption {
         type = types.str;
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Systemd calendar expression when to check for renewal. See
           {manpage}`systemd.time(7)`.
         '';
       };
 
-      enableDebugLogs = mkEnableOption (lib.mdDoc "debug logging for this certificate") // {
+      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
         inherit (defaultAndText "enableDebugLogs" true) default defaultText;
       };
 
@@ -535,7 +535,7 @@ let
         type = types.nullOr types.str;
         inherit (defaultAndText "webroot" null) default defaultText;
         example = "/var/lib/acme/acme-challenge";
-        description = lib.mdDoc ''
+        description = ''
           Where the webroot of the HTTP vhost is located.
           {file}`.well-known/acme-challenge/` directory
           will be created below the webroot if it doesn't exist.
@@ -546,18 +546,20 @@ let
 
       server = mkOption {
         type = types.nullOr types.str;
-        inherit (defaultAndText "server" null) default defaultText;
-        description = lib.mdDoc ''
-          ACME Directory Resource URI. Defaults to Let's Encrypt's
-          production endpoint,
-          <https://acme-v02.api.letsencrypt.org/directory>, if unset.
+        inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
+        example = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        description = ''
+          ACME Directory Resource URI.
+          Defaults to Let's Encrypt's production endpoint.
+          For testing Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
+          should be used to avoid the rather tight rate limit on the production endpoint.
         '';
       };
 
       email = mkOption {
         type = types.nullOr types.str;
         inherit (defaultAndText "email" null) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Email address for account creation and correspondence from the CA.
           It is recommended to use the same email for all certs to avoid account
           creation limits.
@@ -567,13 +569,13 @@ let
       group = mkOption {
         type = types.str;
         inherit (defaultAndText "group" "acme") default defaultText;
-        description = lib.mdDoc "Group running the ACME client.";
+        description = "Group running the ACME client.";
       };
 
       reloadServices = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "reloadServices" []) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           The list of systemd services to call `systemctl try-reload-or-restart`
           on.
         '';
@@ -583,7 +585,7 @@ let
         type = types.lines;
         inherit (defaultAndText "postRun" "") default defaultText;
         example = "cp full.pem backup.pem";
-        description = lib.mdDoc ''
+        description = ''
           Commands to run after new certificates go live. Note that
           these commands run as the root user.
 
@@ -594,7 +596,7 @@ let
       keyType = mkOption {
         type = types.str;
         inherit (defaultAndText "keyType" "ec256") default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
           at <https://go-acme.github.io/lego/usage/cli/options/>.
@@ -605,7 +607,7 @@ let
         type = types.nullOr types.str;
         inherit (defaultAndText "dnsProvider" null) default defaultText;
         example = "route53";
-        description = lib.mdDoc ''
+        description = ''
           DNS Challenge provider. For a list of supported providers, see the "code"
           field of the DNS providers listed at <https://go-acme.github.io/lego/dns/>.
         '';
@@ -615,7 +617,7 @@ let
         type = types.nullOr types.str;
         inherit (defaultAndText "dnsResolver" null) default defaultText;
         example = "1.1.1.1:53";
-        description = lib.mdDoc ''
+        description = ''
           Set the resolver to use for performing recursive DNS queries. Supported:
           host:port. The default is to use the system resolvers, or Google's DNS
           resolvers if the system's cannot be determined.
@@ -625,7 +627,7 @@ let
       environmentFile = mkOption {
         type = types.nullOr types.path;
         inherit (defaultAndText "environmentFile" null) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
           To find out what values you need to set, consult the documentation at
@@ -637,7 +639,7 @@ let
       credentialFiles = mkOption {
         type = types.attrsOf (types.path);
         inherit (defaultAndText "credentialFiles" {}) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Environment variables suffixed by "_FILE" to set for the cert's service
           for your selected dnsProvider.
           To find out what values you need to set, consult the documentation at
@@ -655,7 +657,7 @@ let
       dnsPropagationCheck = mkOption {
         type = types.bool;
         inherit (defaultAndText "dnsPropagationCheck" true) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Toggles lego DNS propagation check, which is used alongside DNS-01
           challenge to ensure the DNS entries required are available.
         '';
@@ -664,7 +666,7 @@ let
       ocspMustStaple = mkOption {
         type = types.bool;
         inherit (defaultAndText "ocspMustStaple" false) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
 
@@ -676,7 +678,7 @@ let
       extraLegoFlags = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "extraLegoFlags" []) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Additional global flags to pass to all lego commands.
         '';
       };
@@ -684,7 +686,7 @@ let
       extraLegoRenewFlags = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "extraLegoRenewFlags" []) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Additional flags to pass to lego renew.
         '';
       };
@@ -692,7 +694,7 @@ let
       extraLegoRunFlags = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "extraLegoRunFlags" []) default defaultText;
-        description = lib.mdDoc ''
+        description = ''
           Additional flags to pass to lego run.
         '';
       };
@@ -723,13 +725,13 @@ let
         type = types.str;
         readOnly = true;
         default = "/var/lib/acme/${name}";
-        description = lib.mdDoc "Directory where certificate and other state is stored.";
+        description = "Directory where certificate and other state is stored.";
       };
 
       domain = mkOption {
         type = types.str;
         default = name;
-        description = lib.mdDoc "Domain to fetch certificate for (defaults to the entry name).";
+        description = "Domain to fetch certificate for (defaults to the entry name).";
       };
 
       extraDomainNames = mkOption {
@@ -741,7 +743,7 @@ let
             "mydomain.org"
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           A list of extra domain names, which are included in the one certificate to be issued.
         '';
       };
@@ -753,7 +755,7 @@ let
         type = types.nullOr types.str;
         default = null;
         example = ":1360";
-        description = lib.mdDoc ''
+        description = ''
           Interface and port to listen on to solve HTTP challenges
           in the form [INTERFACE]:PORT.
           If you use a port other than 80, you must proxy port 80 to this port.
@@ -764,7 +766,7 @@ let
         type = types.nullOr types.str;
         default = null;
         example = "acme";
-        description = lib.mdDoc ''
+        description = ''
           S3 bucket name to use for HTTP-01 based challenges. Challenges will be written to the S3 bucket.
         '';
       };
@@ -772,7 +774,7 @@ let
       inheritDefaults = mkOption {
         default = true;
         example = true;
-        description = lib.mdDoc "Whether to inherit values set in `security.acme.defaults` or not.";
+        description = "Whether to inherit values set in `security.acme.defaults` or not.";
         type = lib.types.bool;
       };
     };
@@ -785,7 +787,7 @@ in {
       preliminarySelfsigned = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether a preliminary self-signed certificate should be generated before
           doing ACME requests. This can be useful when certificates are required in
           a webserver, but ACME needs the webserver to make its requests.
@@ -798,7 +800,7 @@ in {
       acceptTerms = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Accept the CA's terms of service. The default provider is Let's Encrypt,
           you can find their ToS at <https://letsencrypt.org/repository/>.
         '';
@@ -807,7 +809,7 @@ in {
       useRoot = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use the root user when generating certs. This is not recommended
           for security + compatibility reasons. If a service requires root owned certificates
           consider following the guide on "Using ACME with services demanding root
@@ -818,7 +820,7 @@ in {
 
       defaults = mkOption {
         type = types.submodule (inheritableModule true);
-        description = lib.mdDoc ''
+        description = ''
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
           can also be ignored on a per-cert basis using the
@@ -829,7 +831,7 @@ in {
       certs = mkOption {
         default = { };
         type = with types; attrsOf (submodule [ (inheritableModule false) certOpts ]);
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of certificates to get signed and renewed. Creates
           `acme-''${cert}.{service,timer}` systemd units for
           each certificate defined here. Other services can add dependencies
@@ -853,7 +855,7 @@ in {
       maxConcurrentRenewals = mkOption {
         default = 5;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of concurrent certificate generation or renewal jobs. All other
           jobs will queue and wait running jobs to finish. Reduces the system load of
           certificate generation.
@@ -897,10 +899,10 @@ in {
         certs = attrValues cfg.certs;
       in [
         {
-          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
-            `security.acme.email` to register with the CA. Note that using
+            `security.acme.defaults.email` to register with the CA. Note that using
             many different addresses for certs may trigger account rate limits.
           '';
         }

@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, go
-, ffmpeg-headless
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  go,
+  ffmpeg-headless,
 }:
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,13 +21,13 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-kuLhmCG80BmXdqpW67UanBnuYiL2Oh1jKt7IgmVNEAM=";
+    hash = "sha256-q41JjAWcIiD2nJck5Zzb/lhfIZ3xJGU1I2crsMN0T8Q=";
   };
 
   postPatch = ''
     # default to store ffmpeg
     substituteInPlace ffmpy.py \
-      --replace 'executable="ffmpeg",' 'executable="${ffmpeg-headless}/bin/ffmpeg",'
+      --replace-fail 'executable="ffmpeg",' 'executable="${ffmpeg-headless}/bin/ffmpeg",'
 
     #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
     for fname in tests/*.py; do
@@ -34,9 +37,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ffmpy" ];
 
+  nativeBuildInputs = [ setuptools ];
+
   nativeCheckInputs = [
     pytestCheckHook
     go
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expects a FFExecutableNotFoundError, gets a NotADirectoryError raised by os
+    "test_invalid_executable_path"
   ];
 
   # the vendored ffmpeg mock binary assumes FHS
@@ -47,7 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple python interface for FFmpeg/FFprobe";
+    description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

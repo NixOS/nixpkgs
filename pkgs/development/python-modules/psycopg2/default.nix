@@ -1,30 +1,35 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, isPyPy
-, fetchPypi
-, postgresql
-, openssl
-, sphinxHook
-, sphinx-better-theme
-, buildPackages
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  isPyPy,
+  fetchPypi,
+  postgresql,
+  postgresqlTestHook,
+  openssl,
+  sphinxHook,
+  sphinx-better-theme,
+  buildPackages,
 }:
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.7";
+  version = "2.9.9";
   format = "setuptools";
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
   # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
   disabled = pythonOlder "3.6" || isPyPy;
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8AzDW9cRnx/tF7hb0QB4VRlN3iy9jeAauOuxdIdECtg=";
+    hash = "sha256-0UVL3pP7HiJBZoEWlNYA50ZDDABvuwMeoG7MLqQb8VY=";
   };
 
   postPatch = ''
@@ -40,27 +45,33 @@ buildPythonPackage rec {
     sphinx-better-theme
   ];
 
-  buildInputs = [
-    postgresql
-  ] ++ lib.optionals stdenv.isDarwin [
-    openssl
-  ];
+  buildInputs = [ postgresql ] ++ lib.optionals stdenv.isDarwin [ openssl ];
 
   sphinxRoot = "doc/src";
 
-  # Requires setting up a PostgreSQL database
+  # test suite breaks at some point with:
+  #   current transaction is aborted, commands ignored until end of transaction block
   doCheck = false;
 
-  pythonImportsCheck = [
-    "psycopg2"
-  ];
+  nativeCheckInputs = [ postgresqlTestHook ];
 
-  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.postgresql ];
+  env = {
+    PGDATABASE = "psycopg2_test";
+  };
+
+  pythonImportsCheck = [ "psycopg2" ];
+
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.postgresql
+  ];
 
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";
     homepage = "https://www.psycopg.org";
-    license = with licenses; [ lgpl3Plus zpl20 ];
+    license = with licenses; [
+      lgpl3Plus
+      zpl20
+    ];
     maintainers = with maintainers; [ ];
   };
 }

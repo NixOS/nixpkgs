@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jsonconversion
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  cbor2,
+  docopt,
+  fetchFromGitHub,
+  jsonconversion,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
-    hash = "sha256-0/+bX02qTbOydWDxex4OWL7woP7dW1yJZBmDZAivE7U=";
+    hash = "sha256-L21FYl4Q+nhB3CU1maOxBHSLU+ox1POHtMio8SSZ/r0=";
   };
 
   postPatch = ''
@@ -31,9 +33,7 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jsonconversion
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cbor2
     docopt
     pytestCheckHook
     tabulate
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     "tests/test_benchmark_cli.py"
   ];
 
-  pythonImportsCheck = [
-    "amazon.ion"
-  ];
+  pythonImportsCheck = [ "amazon.ion" ];
 
   meta = with lib; {
     description = "Python implementation of Amazon Ion";

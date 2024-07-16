@@ -1,47 +1,47 @@
-{ lib
-, buildPythonPackage
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, accelerate
-, bentoml
-, bitsandbytes
-, build
-, click
-, ctranslate2
-, datasets
-, docker
-, einops
-, ghapi
-, huggingface-hub
-, hypothesis
-, ipython
-, jupyter
-, jupytext
-, nbformat
-, notebook
-, openai
-, openllm-client
-, openllm-core
-, optimum
-, peft
-, pytest-mock
-, pytest-randomly
-, pytest-rerunfailures
-, pytest-xdist
-, safetensors
-, scipy
-, sentencepiece
-, soundfile
-, syrupy
-, tabulate
-, tiktoken
-, transformers
-, openai-triton
-, xformers
+{
+  lib,
+  buildPythonPackage,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
+  accelerate,
+  bentoml,
+  bitsandbytes,
+  build,
+  click,
+  ctranslate2,
+  datasets,
+  docker,
+  einops,
+  ghapi,
+  huggingface-hub,
+  hypothesis,
+  ipython,
+  jupyter,
+  jupytext,
+  nbformat,
+  notebook,
+  openai,
+  openllm-client,
+  openllm-core,
+  optimum,
+  peft,
+  pytest-mock,
+  pytest-randomly,
+  pytest-rerunfailures,
+  pytest-xdist,
+  safetensors,
+  scipy,
+  sentencepiece,
+  soundfile,
+  syrupy,
+  tabulate,
+  tiktoken,
+  transformers,
+  openai-triton,
+  xformers,
 }:
 
 buildPythonPackage rec {
@@ -51,42 +51,43 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-python";
+  sourceRoot = "${src.name}/openllm-python";
 
-  nativeBuildInputs = [
-    hatch-fancy-pypi-readme
-    hatch-vcs
-    hatchling
-    pythonRelaxDepsHook
-  ];
 
   pythonRemoveDeps = [
     # remove cuda-python as it has an unfree license
     "cuda-python"
   ];
 
-  propagatedBuildInputs = [
-    accelerate
-    bentoml
-    bitsandbytes
-    build
-    click
-    einops
-    ghapi
-    openllm-client
-    openllm-core
-    optimum
-    safetensors
-    scipy
-    sentencepiece
-    tabulate
-    transformers
-  ] ++ bentoml.optional-dependencies.io
-  ++ tabulate.optional-dependencies.widechars
-  ++ transformers.optional-dependencies.tokenizers
-  ++ transformers.optional-dependencies.torch;
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
-  passthru.optional-dependencies = {
+  dependencies =
+    [
+      accelerate
+      bentoml
+      bitsandbytes
+      build
+      click
+      einops
+      ghapi
+      openllm-client
+      openllm-core
+      optimum
+      safetensors
+      scipy
+      sentencepiece
+      transformers
+    ]
+    ++ bentoml.optional-dependencies.io
+    ++ tabulate.optional-dependencies.widechars
+    ++ transformers.optional-dependencies.tokenizers
+    ++ transformers.optional-dependencies.torch;
+
+  optional-dependencies = {
     agents = [
       # diffusers
       soundfile
@@ -101,12 +102,8 @@ buildPythonPackage rec {
     chatglm = [
       # cpm-kernels
     ];
-    ctranslate = [
-      ctranslate2
-    ];
-    falcon = [
-      xformers
-    ];
+    ctranslate = [ ctranslate2 ];
+    falcon = [ xformers ];
     fine-tune = [
       datasets
       huggingface-hub
@@ -119,12 +116,8 @@ buildPythonPackage rec {
     gptq = [
       # auto-gptq
     ]; # ++ autogptq.optional-dependencies.triton;
-    grpc = [
-      bentoml
-    ] ++ bentoml.optional-dependencies.grpc;
-    mpt = [
-      openai-triton
-    ];
+    grpc = [ bentoml ] ++ bentoml.optional-dependencies.grpc;
+    mpt = [ openai-triton ];
     openai = [
       openai
       tiktoken
@@ -136,16 +129,30 @@ buildPythonPackage rec {
       nbformat
       notebook
     ];
-    starcoder = [
-      bitsandbytes
-    ];
+    starcoder = [ bitsandbytes ];
     vllm = [
       # vllm
     ];
-    full = with passthru.optional-dependencies; (
-      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt ++ openai ++ playground ++ starcoder ++ vllm
-    );
-    all = passthru.optional-dependencies.full;
+    full =
+      with optional-dependencies;
+      (
+        agents
+        ++ awq
+        ++ baichuan
+        ++ chatglm
+        ++ ctranslate
+        ++ falcon
+        ++ fine-tune
+        ++ ggml
+        ++ gptq
+        ++ mpt
+        # disambiguate between derivation input and passthru field
+        ++ optional-dependencies.openai
+        ++ playground
+        ++ starcoder
+        ++ vllm
+      );
+    all = optional-dependencies.full;
   };
 
   nativeCheckInputs = [
@@ -185,6 +192,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/bentoml/OpenLLM/tree/main/openllm-python";
     changelog = "https://github.com/bentoml/OpenLLM/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada natsukium ];
+    maintainers = with maintainers; [
+      happysalada
+      natsukium
+    ];
   };
 }

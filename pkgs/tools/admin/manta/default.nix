@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "manta";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-manta";
     rev = "v${version}";
-    hash = "sha256-C6O5yTCBABMsz2scot8v3IwPbdYvJyZbcPOLfeDXCoo=";
+    hash = "sha256-Uj3fNzeERiO++sW2uyAbtfN/1Ed6uRVBBvCecncq/QY=";
   };
 
-  npmDepsHash = "sha256-4Zz9sSUXE2dXdkIka2z5bQ2pNmCXXCBS2Sr0JHQOBQw=";
+  npmDepsHash = "sha256-Xk/K90K+X73ZTV6u2GJij8815GdBn6igXmpWLaCfKF4=";
 
   dontBuild = true;
 
@@ -50,6 +50,7 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Manta Object-Storage Client CLIs and Node.js SDK";
     homepage = "https://github.com/TritonDataCenter/node-manta";
+    changelog = "https://github.com/TritonDataCenter/node-manta/blob/v${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ teutat3s ];
     mainProgram = "mls";

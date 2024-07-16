@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, nixosTests, testers, jre }:
+{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre }:
 
 let
-  common = { version, hash }: stdenv.mkDerivation (finalAttrs: {
+  common = { version, hash }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
     inherit version;
 
@@ -29,7 +29,7 @@ let
 
     meta = with lib; {
       homepage = "https://tomcat.apache.org/";
-      description = "An implementation of the Java Servlet and JavaServer Pages technologies";
+      description = "Implementation of the Java Servlet and JavaServer Pages technologies";
       platforms = jre.meta.platforms;
       maintainers = with maintainers; [ anthonyroussel ];
       license = [ licenses.asl20 ];
@@ -39,12 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    version = "9.0.83";
-    hash = "sha256-dgktroncHzrm3RFATWSFJ2GkAfGM03PJO1/37yzk+Qo=";
+    version = "9.0.90";
+    hash = "sha256-MYSRxL5DSU5ocrUnfEDKyFBpAddErQnTffYuiFQ/YiM=";
   };
 
   tomcat10 = common {
-    version = "10.1.16";
-    hash = "sha256-QysLmKN3RQ8TuaR7gup9947QvPLuS3WRgrTH/cH+WEE=";
+    version = "10.1.25";
+    hash = "sha256-8SQKMrh5xEWkpEGcm23YdYG9uW+KUfewyhk1Fkux6EI=";
   };
 }

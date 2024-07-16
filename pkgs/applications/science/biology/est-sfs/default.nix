@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/est-usfs";
     description = "Estimate the unfolded site frequency spectrum and ancestral states";
+    mainProgram = "est-sfs";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.all;

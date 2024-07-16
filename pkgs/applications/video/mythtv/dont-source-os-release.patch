@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -5894,9 +5894,9 @@ else
+@@ -5451,9 +5451,9 @@ else
      die "ERROR: cannot find soundtouch 1.8.0 or later."
  fi
  

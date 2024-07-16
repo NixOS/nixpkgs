@@ -1,14 +1,13 @@
 { buildGoModule
 , dependabot-cli
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , lib
 , testers
 }:
 let
   pname = "dependabot-cli";
-  version = "1.39.0";
+  version = "1.41.0";
 in
 buildGoModule {
   inherit pname version;
@@ -17,10 +16,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-QuhgFWF97B72KTX/QKSXNl/4RDAKUMDga7vLYiZw4SM=";
+    hash = "sha256-CnSDvLcLupWKBp1Wr6E9BScA8VsBlfmmfPwh8cyERZg=";
   };
 
-  vendorHash = "sha256-mNpNp/zeQGgcljj2VhGl4IN1HG1R8CJSTWKzrgC0z44=";
+  vendorHash = "sha256-vN5r1OtHT16LeJ6iPmHmXTx9Oo+WALhV4PWqzMiUwSA=";
 
   ldflags = [
     "-s"
@@ -54,7 +53,8 @@ buildGoModule {
 
   meta = with lib; {
     changelog = "https://github.com/dependabot/cli/releases/tag/v${version}";
-    description = "A tool for testing and debugging Dependabot update jobs";
+    description = "Tool for testing and debugging Dependabot update jobs";
+    mainProgram = "dependabot";
     homepage = "https://github.com/dependabot/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];

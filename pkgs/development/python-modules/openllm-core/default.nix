@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, accelerate
-, attrs
-, bitsandbytes
-, bentoml
-, cattrs
-, click-option-group
-, datasets
-, deepmerge
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, inflection
-, mypy-extensions
-, orjson
-, peft
-, transformers
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  accelerate,
+  attrs,
+  bitsandbytes,
+  bentoml,
+  cattrs,
+  click-option-group,
+  datasets,
+  deepmerge,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  inflection,
+  mypy-extensions,
+  orjson,
+  peft,
+  pydantic,
+  transformers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.4.22";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,20 +34,31 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hgwc4rneY0d7KZHuBIWRpndLksts5DTvaYuwZOO4sdI=";
+    hash = "sha256-sEZLszzoo39WUnziHGp7zWNO0YaqkXeXAoIxvyhw42w=";
   };
 
-  sourceRoot = "source/openllm-core";
+  sourceRoot = "${src.name}/openllm-core";
 
-  nativeBuildInputs = [
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatch-vcs==" "hatch-vcs>=" \
+      --replace-fail "hatchling==" "hatchling>=" \
+      --replace-fail "hatch-fancy-pypi-readme==" "hatch-fancy-pypi-readme>="
+  '';
+
+  pythonRelaxDeps = [ "cattrs" ];
+
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cattrs
+    pydantic
     # not listed in pyproject.toml, but required at runtime
     click-option-group
     deepmerge
@@ -55,13 +68,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vllm = [
       # vllm
     ];
-    bentoml = [
-      bentoml
-    ];
+    bentoml = [ bentoml ];
     fine-tune = [
       accelerate
       bitsandbytes
@@ -69,10 +80,15 @@ buildPythonPackage rec {
       peft
       transformers
       # trl
-    ] ++ transformers.optional-dependencies.torch
-      ++ transformers.optional-dependencies.tokenizers
-      ++ transformers.optional-dependencies.accelerate;
-    full = with passthru.optional-dependencies; ( vllm ++ bentoml ++ fine-tune );
+    ] ++ transformers.optional-dependencies.torch ++ transformers.optional-dependencies.tokenizers;
+    full =
+      with optional-dependencies;
+      (
+        vllm
+        # use absolute path to disambiguate with derivbation argument
+        ++ optional-dependencies.bentoml
+        ++ fine-tune
+      );
   };
 
   # there is no tests

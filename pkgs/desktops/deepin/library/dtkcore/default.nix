@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkcore";
-  version = "5.6.17";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-/MGSvT8tPn+KqqlM6FY2iFsArmAkYMW5Q3Sl4g4zvH0=";
+    hash = "sha256-toqbEobi2R5tGnCYaShLyFdp4toEybMrWU+IORI/vu4=";
   };
 
   patches = [
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/dsysinfo.cpp \
-      --replace "/usr/share/deepin/distribution.info" "/etc/distribution.info" \
+    substituteInPlace misc/DtkCoreConfig.cmake.in \
+      --subst-var-by PACKAGE_TOOL_INSTALL_DIR ${placeholder "out"}/libexec/dtk5/DCore/bin
   '';
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
     "-DDSG_PREFIX_PATH='/run/current-system/sw'"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
+    "-DTOOL_INSTALL_DIR=${placeholder "out"}/libexec/dtk5/DCore/bin"
     "-DD_DSG_APP_DATA_FALLBACK=/var/dsg/appdata"
     "-DBUILD_WITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
   ];
@@ -77,6 +77,12 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DCore/bin/*; do
+      wrapQtApp $binary
+    done
+  '';
 
   meta = with lib; {
     description = "Deepin tool kit core library";

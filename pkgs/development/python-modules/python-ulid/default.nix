@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, freezegun
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  freezegun,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-d5jCPxWUOfw/OCtbA9Db9+s1D5DAdL+vbPR8zavgbbo=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
@@ -40,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ULID implementation for Python";
+    mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
     changelog = "https://github.com/mdomke/python-ulid/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

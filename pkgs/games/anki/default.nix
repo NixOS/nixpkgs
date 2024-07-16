@@ -12,7 +12,7 @@
 , nixosTests
 , nodejs
 , nodejs-slim
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , protobuf
 , python3
 , qt6
@@ -28,21 +28,20 @@
 
 let
   pname = "anki";
-  version = "23.10.1";
-  rev = "fac9e0ee1436ba5ac3366c72dd9394a6e692b1cf";
+  version = "24.04";
+  rev = "429bc9e14cefb597646a0e1beac6ef140f226b6f";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-leGdamjCehffv2ByL7JWdaUhxRA4ZEPRKxBphUVzfRw=";
+    hash = "sha256-H/Y6ZEJ7meprk4SWIPkoABs6AV1CzbK2l22jEnMSvyk=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "fsrs-0.1.0" = "sha256-bnLmJk2aaWBdgdsiasRrDG4NiTDMCDCXotCSoc0ldlk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
@@ -51,7 +50,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ckpKxALSpZAu5xyBOYzMcNDQDfCMaYAtSGONHTCBhw4=";
+    hash = "sha256-7yBN6si1Q+xvyosP7YnOw9ZfGcLZdy5ukXXFvvI20Js=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -103,7 +102,7 @@ let
 
     nativeBuildInputs = [
       nodejs-slim
-      prefetch-yarn-deps
+      fixup-yarn-lock
       yarn
     ];
 
@@ -138,7 +137,7 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = [
     fakeGit
     offlineYarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
 
     cargo
     installShellFiles
@@ -155,22 +154,25 @@ python3.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
+    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
     #      sort | uniq | grep -v "^#$"
     # in their repo at the git tag for this version
     # There's probably a more elegant way, but the above extracted all the
     # names, without version numbers, of their python dependencies. The hope is
     # that nixpkgs versions are "close enough"
     # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+    attrs
     beautifulsoup4
+    blinker
+    build
     certifi
     charset-normalizer
     click
     colorama
     decorator
-    distro
     flask
     flask-cors
+    google-api-python-client
     idna
     importlib-metadata
     itsdangerous
@@ -179,21 +181,27 @@ python3.pkgs.buildPythonApplication {
     markdown
     markupsafe
     orjson
-    pep517
-    pyparsing
+    packaging
+    pip
+    pip-system-certs
+    pip-tools
+    protobuf
+    pyproject-hooks
     pyqt6
     pyqt6-sip
     pyqt6-webengine
     pyrsistent
     pysocks
-    python3.pkgs.protobuf
     requests
     send2trash
-    six
+    setuptools
     soupsieve
+    tomli
     urllib3
     waitress
     werkzeug
+    wheel
+    wrapt
     zipp
   ] ++ lib.optionals stdenv.isDarwin [
     AVKit
@@ -277,6 +285,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Spaced repetition flashcard program";
+    mainProgram = "anki";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
       more efficient than traditional study methods, you can either greatly
@@ -292,7 +301,7 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij paveloom ];
+    maintainers = with maintainers; [ euank oxij ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };

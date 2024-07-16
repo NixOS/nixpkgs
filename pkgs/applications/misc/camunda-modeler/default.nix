@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "camunda-modeler";
-  version = "5.18.0";
+  version = "5.25.0";
 
   src = fetchurl {
     url = "https://github.com/camunda/camunda-modeler/releases/download/v${version}/camunda-modeler-${version}-linux-x64.tar.gz";
-    hash = "sha256-f7XYcFleEe1f6Uh6mOqfakzfWzOiQtBPhowTJUZU1MU=";
+    hash = "sha256-4YeeeIC37s/cXZ4TjIxn/yvDVKP92f9uSBajLCj7NZw=";
   };
   sourceRoot = "camunda-modeler-${version}-linux-x64";
 
@@ -66,6 +66,7 @@ stdenvNoCC.mkDerivation rec {
     maintainers = teams.wdz.members;
     license = licenses.mit;
     inherit (electron.meta) platforms;
+    mainProgram = "camunda-modeler";
   };
 }
 

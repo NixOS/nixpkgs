@@ -87,7 +87,7 @@ in
     configuration = mkOption {
       internal = true;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The NixOS module that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -104,7 +104,7 @@ in
       internal = true;
       type = types.listOf types.lines;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Text to preseed the desktop configuration that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -122,7 +122,7 @@ in
     internal = true;
     type = types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
       read-only systems which are not expected to be rebuild or
@@ -177,11 +177,15 @@ in
         # services.printing.enable = true;
 
         # Enable sound.
-        # sound.enable = true;
         # hardware.pulseaudio.enable = true;
+        # OR
+        # services.pipewire = {
+        #   enable = true;
+        #   pulse.enable = true;
+        # };
 
         # Enable touchpad support (enabled default in most desktopManager).
-        # services.xserver.libinput.enable = true;
+        # services.libinput.enable = true;
 
         # Define a user account. Don't forget to set a password with ‘passwd’.
         # users.users.alice = {
@@ -231,7 +235,8 @@ in
         # even if you've upgraded your system to a new NixOS release.
         #
         # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-        # so changing it will NOT upgrade your system.
+        # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+        # to actually do that.
         #
         # This value being lower than the current NixOS release does NOT mean your system is
         # out of date, out of support, or vulnerable.

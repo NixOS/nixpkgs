@@ -2,8 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, qtbase
-, qtx11extras ? null # qt5 only
+, qt6
 , wrapQtAppsHook
 
 # before that => zeal
@@ -15,20 +14,15 @@
 , yt-dlp
 # optional
 , makeWrapper}:
-
-let
-  isQt5 = lib.versions.major qtbase.version == "5";
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.2.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DUAr+twlIzyi+PnQYsTz9j9KcbzI0GhtC+f4nTekhs0=";
+    hash = "sha256-3WOtf7cgYxAMlNPSBmTzaQF1HN9mU61giLp2woBAidY=";
   };
 
   nativeBuildInputs = [
@@ -38,14 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
     sqlite
     json_c
     libzip
     mecab
-  ] ++ lib.optionals isQt5 [ qtx11extras ];
+  ];
 
-  propagatedBuildInputs = [ mpv  ];
+  propagatedBuildInputs = [ mpv ];
 
   preFixup = ''
      wrapProgram "$out/bin/memento" \
@@ -53,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An mpv-based video player for studying Japanese";
+    description = "Mpv-based video player for studying Japanese";
     homepage = "https://ripose-jp.github.io/Memento/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ teto ];

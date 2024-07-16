@@ -1,21 +1,22 @@
-{ beautifulsoup4
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, lxml
-, packaging
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, scramp
+{
+  beautifulsoup4,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  lxml,
+  packaging,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  scramp,
 }:
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.0.914";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fGOo9FgVMI6ayyB3EMN6RGThwWciShcBZzWTZWtOt8E=";
+    hash = "sha256-sQRnnibkuA+Ejk6TDxDSdtIkkW7CMafYh9zQ/xtuCV4=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest

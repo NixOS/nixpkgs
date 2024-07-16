@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "g4music";
-  version = "3.3";
+  version = "3.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sajA8+G1frQA0p+8RK84hvh2P36JaarmSZx/sxMoFqo=";
+    hash = "sha256-fG8OBAzdCdr3Yo8Vei93HlNa2TIL5gxWG+0jFYjSDZ8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A beautiful, fast, fluent, light weight music player written in GTK4";
+    description = "Beautiful, fast, fluent, light weight music player written in GTK4";
+    mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ magnouvean ];

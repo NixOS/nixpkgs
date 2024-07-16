@@ -27,20 +27,15 @@ in {
   ];
 
   options.services.amazon-ssm-agent = {
-    enable = mkEnableOption (lib.mdDoc "Amazon SSM agent");
-
-    package = mkOption {
-      type = types.path;
-      description = lib.mdDoc "The Amazon SSM agent package to use";
-      default = pkgs.amazon-ssm-agent.override { overrideEtc = false; };
-      defaultText = literalExpression "pkgs.amazon-ssm-agent.override { overrideEtc = false; }";
-    };
+    enable = mkEnableOption "Amazon SSM agent";
+    package = mkPackageOption pkgs "amazon-ssm-agent" {};
   };
 
   config = mkIf cfg.enable {
     # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
+      wants    = [ "network-online.target" ];
       after    = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 

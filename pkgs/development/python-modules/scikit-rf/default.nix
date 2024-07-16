@@ -1,38 +1,39 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pandas
-, matplotlib
-, tox
-, coverage
-, flake8
-, nbval
-, pyvisa
-, networkx
-, ipython
-, ipykernel
-, ipywidgets
-, jupyter-client
-, sphinx-rtd-theme
-, sphinx
-, nbsphinx
-, openpyxl
-, qtpy
-, pyqtgraph
-, pyqt5
-, setuptools
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
+{
+  stdenv,
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pandas,
+  matplotlib,
+  tox,
+  coverage,
+  flake8,
+  nbval,
+  pyvisa,
+  networkx,
+  ipython,
+  ipykernel,
+  ipywidgets,
+  jupyter-client,
+  sphinx-rtd-theme,
+  sphinx,
+  nbsphinx,
+  openpyxl,
+  qtpy,
+  pyqtgraph,
+  pyqt5,
+  setuptools,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "0.29.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,12 +42,10 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sLE6rcBGUKmk5y7oO06rHON3GVIjcvnKlr6Tgddj64Y=";
+    hash = "sha256-xLgttefCRj8U2Wqif/28FiSjPjQn9YYCB+stlhZiIUo=";
   };
 
-  buildInputs = [
-    setuptools
-  ];
+  buildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -55,18 +54,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    plot = [
-      matplotlib
-    ];
-    xlsx = [
-      openpyxl
-    ];
-    netw = [
-      networkx
-    ];
-    visa = [
-      pyvisa
-    ];
+    plot = [ matplotlib ];
+    xlsx = [ openpyxl ];
+    netw = [ networkx ];
+    visa = [ pyvisa ];
     docs = [
       ipython
       ipykernel
@@ -97,22 +88,18 @@ buildPythonPackage rec {
     networkx
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # test_calibration.py generates a divide by zero error on darwin
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths =
-    lib.optional (stdenv.isAarch64 && stdenv.isDarwin)
-    "skrf/calibration/tests/test_calibration.py";
+  disabledTestPaths = lib.optional (
+    stdenv.isAarch64 && stdenv.isDarwin
+  ) "skrf/calibration/tests/test_calibration.py";
 
-  pythonImportsCheck = [
-    "skrf"
-  ];
+  pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
-    description = "A Python library for RF/Microwave engineering";
+    description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
     license = licenses.bsd3;

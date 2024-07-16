@@ -58,12 +58,17 @@ in stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+       # This doesn't apply to cross-building for FreeBSD because the host
+       # uses libstdc++, but the target (used for building std) uses libc++
+       optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+    ++ optional stdenv.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
+
+  RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
@@ -91,7 +96,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # attempts to download the missing source tarball
     "--set=build.rustfmt=${rustfmt}/bin/rustfmt"
   ] ++ [
-    "--tools=rustc,rust-analyzer-proc-macro-srv"
+    "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
@@ -99,6 +104,10 @@ in stdenv.mkDerivation (finalAttrs: {
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
       stdenv.targetPlatform.rust.rustcTargetSpec
+
+    # Other targets that don't need any extra dependencies to build.
+    ] ++ optionals (!fastCross) [
+      "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
@@ -133,6 +142,10 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
+  ] ++ optionals fastCross [
+    # Since fastCross only builds std, it doesn't make sense (and
+    # doesn't work) to build a linker.
+    "--disable-llvm-bitcode-linker"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
@@ -159,7 +172,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
-    python ./x.py --keep-stage=0 --stage=1 build library/std
+    python ./x.py --keep-stage=0 --stage=1 build library
 
     runHook postBuild
   " else null;
@@ -169,8 +182,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
-    ln -s ${rustc.unwrapped}/bin/rustc $out/bin
-    makeWrapper ${rustc.unwrapped}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
     ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
@@ -187,22 +199,16 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/etc
 
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
+
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Useful debugging parameter
     # export VERBOSE=1
-  '' + lib.optionalString (stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic) ''
-    # Upstream rustc still assumes that musl = static[1].  The fix for
-    # this is to disable crt-static by default for non-static musl
-    # targets.
-    #
-    # Even though Cargo will build build.rs files for the build platform,
-    # cross-compiling _from_ musl appears to work fine, so we only need
-    # to do this when rustc's target platform is dynamically linked musl.
-    #
-    # [1]: https://github.com/rust-lang/compiler-team/issues/422
-    substituteInPlace compiler/rustc_target/src/spec/linux_musl_base.rs \
-        --replace "base.crt_static_default = true" "base.crt_static_default = false"
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
@@ -215,6 +221,11 @@ in stdenv.mkDerivation (finalAttrs: {
     [source.vendored-sources]
     directory = "vendor"
     EOF
+  '' + lib.optionalString (stdenv.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -274,14 +285,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
-    description = "A safe, concurrent, practical language";
+    description = "Safe, concurrent, practical language";
     maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = [
       # Platforms with host tools from
       # https://doc.rust-lang.org/nightly/rustc/platform-support.html
       "x86_64-darwin" "i686-darwin" "aarch64-darwin"
-      "i686-freebsd13" "x86_64-freebsd13"
+      "i686-freebsd" "x86_64-freebsd"
       "x86_64-solaris"
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
       "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
@@ -292,4 +303,10 @@ in stdenv.mkDerivation (finalAttrs: {
       "i686-windows" "x86_64-windows"
     ];
   };
+} // lib.optionalAttrs stdenv.cc.isClang { # FIXME: move inside again when rebuilds are OK
+  hardeningDisable = optionals stdenv.cc.isClang [
+    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
+    # addressed properly
+    "zerocallusedregs"
+  ];
 })

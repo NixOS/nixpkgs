@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.73";
+  version = "1.84";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-f5deXMSyZIDKPO7hsNONes/kTFLFodx4nuEjZzkR5Aw=";
+    hash = "sha256-RPrNpm+0N//CpVtG6cJD+m+0G6ca75hZwdEdHsGadEg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -38,12 +38,13 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
+    description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "ft2-clone";
   };
 }

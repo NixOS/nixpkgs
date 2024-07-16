@@ -1,28 +1,30 @@
-{ lib
-, aiohttp
-, botocore
-, bottle
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, httpx
-, importlib-metadata
-, jsonpickle
-, pymysql
-, pytest-asyncio
-, pynamodb
-, pytestCheckHook
-, pythonOlder
-, requests
-, sqlalchemy
-, webtest
-, wrapt
+{
+  lib,
+  aiohttp,
+  botocore,
+  bottle,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  httpx,
+  importlib-metadata,
+  jsonpickle,
+  pymysql,
+  pytest-asyncio,
+  pynamodb,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  sqlalchemy,
+  webtest,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
-  version = "2.12.1";
-  format = "setuptools";
+  version = "2.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,17 +32,17 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-xray-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-NLFNst4Yqsz2u5IXwe8OdJPW77irLRO5tWWn1uV3tMg=";
+    hash = "sha256-rWP0yQ+Ril0UByOCWJKcL3mD7TvzK8Ddq9JlFIRBFU4=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     botocore
     jsonpickle
     requests
     wrapt
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     aiohttp
@@ -63,9 +65,7 @@ buildPythonPackage rec {
     "tests/test_patcher.py"
   ];
 
-  pythonImportsCheck = [
-    "aws_xray_sdk"
-  ];
+  pythonImportsCheck = [ "aws_xray_sdk" ];
 
   meta = with lib; {
     description = "AWS X-Ray SDK for the Python programming language";

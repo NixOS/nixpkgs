@@ -33,10 +33,13 @@ let
       );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit fetchpatch makeWrapper coq2html lib stdenv;
+        ocamlPackages = ocamlPackages_4_14;
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+      coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
+      coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
@@ -116,19 +119,26 @@ let
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
+      ssprove = callPackage ../development/coq-modules/ssprove {};
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
       trakt = callPackage ../development/coq-modules/trakt {};
-      vcfloat = callPackage ../development/coq-modules/vcfloat {};
+      vcfloat = callPackage ../development/coq-modules/vcfloat (lib.optionalAttrs
+        (lib.versions.range "8.16" "8.18" self.coq.version) {
+          interval = self.interval.override { version = "4.9.0"; };
+        });
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
+      Vpl = callPackage ../development/coq-modules/Vpl {};
+      VplTactic = callPackage ../development/coq-modules/VplTactic {};
+      vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server {};
       VST = callPackage ../development/coq-modules/VST ((lib.optionalAttrs
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version = with lib.versions; lib.switch self.coq.version [
-              { case = range "8.15" "8.17"; out = "3.13.1"; }
+              { case = range "8.15" "8.19"; out = "3.13.1"; }
               { case = isEq "8.14"; out = "3.11"; }
             ] null;
           };
@@ -189,6 +199,8 @@ in rec {
   coq_8_16 = mkCoq "8.16";
   coq_8_17 = mkCoq "8.17";
   coq_8_18 = mkCoq "8.18";
+  coq_8_19 = mkCoq "8.19";
+  coq_8_20 = mkCoq "8.20";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5 // { __attrsFailEvaluation = true; };
   coqPackages_8_6 = mkCoqPackages coq_8_6 // { __attrsFailEvaluation = true; };
@@ -204,8 +216,10 @@ in rec {
   coqPackages_8_16 = mkCoqPackages coq_8_16 // { __attrsFailEvaluation = true; };
   coqPackages_8_17 = mkCoqPackages coq_8_17 // { __attrsFailEvaluation = true; };
   coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
+  coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
+  coqPackages_8_20 = mkCoqPackages coq_8_20 // { __attrsFailEvaluation = true; };
   coqPackages =
-    let cp = recurseIntoAttrs coqPackages_8_18;
+    let cp = recurseIntoAttrs coqPackages_8_19;
     in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };
   coq = coqPackages.coq;
 

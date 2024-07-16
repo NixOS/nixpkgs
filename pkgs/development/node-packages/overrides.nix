@@ -29,17 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  autoprefixer = prev.autoprefixer.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/autoprefixer" \
-        --prefix NODE_PATH : ${final.postcss}/lib/node_modules
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/autoprefixer.nix { inherit (final) autoprefixer; };
-    };
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -57,7 +46,7 @@ final: prev: {
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      export PUPPETEER_SKIP_DOWNLOAD=1
     '';
     postInstall = ''
       wrapProgram $out/bin/fast \
@@ -72,20 +61,11 @@ final: prev: {
     '';
   };
 
-
-  graphite-cli = prev."@withgraphite/graphite-cli".override (old: {
-    name = "graphite-cli";
-    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
-    buildInputs = with pkgs; [ cairo pango pixman ];
-    # 'gt completion' auto-detects zshell from environment variables:
-    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
-    postInstall = ''
-      installShellCompletion --cmd gt \
-        --bash <($out/bin/gt completion) \
-        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
-    '';
+  grammarly-languageserver = prev.grammarly-languageserver.override (old: {
     meta = old.meta // {
-      license = lib.licenses.unfree; # no license specified
+      # requires EOL Node.js 16
+      # https://github.com/znck/grammarly/issues/334
+      broken = true;
     };
   });
 
@@ -113,7 +93,7 @@ final: prev: {
     meta = oldAttrs.meta // { license = lib.licenses.unfree; };
   });
 
-  joplin = prev.joplin.override {
+  joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
@@ -135,7 +115,21 @@ final: prev: {
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
-  };
+
+    # add newer node-addon-api to build sharp
+    # https://github.com/lovell/sharp/issues/3920
+    dependencies = [
+      {
+        name = "node-addon-api";
+        packageName = "node-addon-api";
+        version = "7.1.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.0.tgz";
+          sha512 = "mNcltoe1R8o7STTegSOHdnJNN7s5EUvhoS7ShnTHDyOSd+8H+UdWODq6qSv67PjC8Zc5JRT8+oLAMCr0SIXw7g==";
+        };
+      }
+    ] ++ oldAttrs.dependencies;
+  });
 
   jsonplaceholder = prev.jsonplaceholder.override {
     buildInputs = [ nodejs ];
@@ -212,31 +206,55 @@ final: prev: {
     '';
   };
 
-  pnpm = prev.pnpm.override {
+  postcss-cli = prev.postcss-cli.override (oldAttrs: let
+    esbuild-version = (lib.findFirst (dep: dep.name == "esbuild") null oldAttrs.dependencies).version;
+    esbuild-linux-x64 = {
+      name = "_at_esbuild_slash_esbuild-linux-x64";
+      packageName = "@esbuild/linux-x64";
+      version = esbuild-version;
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
+        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
+      };
+    };
+    esbuild-linux-arm64 = {
+      name = "_at_esbuild_slash_esbuild-linux-arm64";
+      packageName = "@esbuild/linux-arm64";
+      version = esbuild-version;
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
+        sha512 = "sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==";
+      };
+    };
+    esbuild-darwin-x64 = {
+      name = "_at_esbuild_slash_esbuild-darwin-x64";
+      packageName = "@esbuild/darwin-x64";
+      version = esbuild-version;
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
+        sha512 = "sha512-tBcXp9KNphnNH0dfhv8KYkZhjc+H3XBkF5DKtswJblV7KlT9EI2+jeA8DgBjp908WEuYll6pF+UStUCfEpdysA==";
+      };
+    };
+    esbuild-darwin-arm64 = {
+      name = "_at_esbuild_slash_esbuild-darwin-arm64";
+      packageName = "@esbuild/darwin-arm64";
+      version = esbuild-version;
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
+        sha512 = "sha512-4J6IRT+10J3aJH3l1yzEg9y3wkTDgDk7TSDFX+wKFiWjqWp/iCfLIYzGyasx9l0SAFPT1HwSCR+0w/h1ES/MjA==";
+      };
+    };
+  in{
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    preRebuild = ''
-      sed 's/"link:/"file:/g' --in-place package.json
-    '';
-
-    postInstall = let
-      pnpmLibPath = lib.makeBinPath [
-        nodejs.passthru.python
-        nodejs
-      ];
-    in ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-      done
-    '';
-  };
-
-  postcss-cli = prev.postcss-cli.override (oldAttrs: {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    dependencies = oldAttrs.dependencies
+      ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) esbuild-linux-x64
+      ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) esbuild-linux-arm64
+      ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) esbuild-darwin-x64
+      ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) esbuild-darwin-arm64;
     postInstall = ''
       wrapProgram "$out/bin/postcss" \
         --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
-        --prefix NODE_PATH : ${final.autoprefixer}/lib/node_modules
+        --prefix NODE_PATH : ${pkgs.autoprefixer}/node_modules
       ln -s '${final.postcss}/lib/node_modules/postcss' "$out/lib/node_modules/postcss"
     '';
     passthru.tests = {
@@ -260,7 +278,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-ej3h4LlF/pkAYeDxePb7wMc8zrfxKMnrp1ogZLoFU+0=";
+      hash = "sha256-TlwKCuDQRFM6+Hhx9eFCfXbtLZq6RwBTIFCWzE4D8N8=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -360,13 +378,6 @@ final: prev: {
     '';
   };
 
-  typescript-language-server = prev.typescript-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      ${pkgs.xorg.lndir}/bin/lndir ${pkgs.typescript} $out
-    '';
-  };
-
   uppy-companion = prev."@uppy/companion".override {
     name = "uppy-companion";
   };
@@ -400,10 +411,6 @@ final: prev: {
       };
   };
 
-  volar = final."@volar/vue-language-server".override {
-    name = "volar";
-  };
-
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
     # These dependencies are required by
@@ -421,62 +428,4 @@ final: prev: {
   webtorrent-cli = prev.webtorrent-cli.override {
     buildInputs = [ final.node-gyp-build ];
   };
-
-  wrangler = prev.wrangler.override (oldAttrs:
-    let
-      linuxWorkerd = {
-        name = "_at_cloudflare_slash_workerd-linux-64";
-        packageName = "@cloudflare/workerd-linux-64";
-        # Should be same version as workerd
-        version = "1.20231030.0";
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20231030.0.tgz";
-          sha512 = "2HUeRTvoCC17fxE0qdBeR7J9dO8j4A8ZbdcvY8pZxdk+zERU6+N03RTbk/dQMU488PwiDvcC3zZqS4gwLfVT8g==";
-        };
-      };
-      linuxWorkerdArm = {
-        name = "_at_cloudflare_slash_workerd-linux-arm64";
-        packageName = "@cloudflare/workerd-linux-arm64";
-        # Should be same version as workerd
-        version = "1.20231030.0";
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20231030.0.tgz";
-          sha512 = "4/GK5zHh+9JbUI6Z5xTCM0ZmpKKHk7vu9thmHjUxtz+o8Ne9DoD7DlDvXQWgMF6XGaTubDWyp3ttn+Qv8jDFuQ==";
-        };
-      };
-      darwinWorkerd = {
-        name = "_at_cloudflare_slash_workerd-darwin-64";
-        packageName = "@cloudflare/workerd-darwin-64";
-        # Should be same version as workerd
-        version = "1.20231030.0";
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20231030.0.tgz";
-          sha512 = "0iy34j997llj3jl3l8dipnsyms89qv9nxkza9l2gxmcj6mqwv5m6c8cvgca78qfccl1f5zsrzj855q1fz631p91yydbri2gxgvd10r7";
-        };
-      };
-      darwinWorkerdArm = {
-        name = "_at_cloudflare_slash_workerd-darwin-arm64";
-        packageName = "@cloudflare/workerd-darwin-arm64";
-        # Should be same version as workerd
-        version = "1.20231030.0";
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20231030.0.tgz";
-          sha512 = "WSJJjm11Del4hSneiNB7wTXGtBXI4QMCH9l5qf4iT5PAW8cESGcCmdHtWDWDtGAAGcvmLT04KNvmum92vRKKQQ==";
-        };
-      };
-
-    in
-    {
-      meta = oldAttrs.meta // { broken = before "16.13"; };
-      buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
-      preFixup = ''
-        # patch elf is trying to patch binary for sunos
-        rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
-      '';
-      dependencies = oldAttrs.dependencies
-        ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) linuxWorkerd
-        ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) linuxWorkerdArm
-        ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) darwinWorkerd
-        ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwinWorkerdArm;
-    });
 }

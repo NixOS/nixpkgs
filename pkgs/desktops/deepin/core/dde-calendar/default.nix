@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-calendar";
-  version = "5.11.0";
+  version = "5.13.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-AgomXDydGHzfybE3r4IW94zIWKtwURmLW68MwqjLBWE=";
+    hash = "sha256-Hn759Cxtzv+HBllA2vdZcH6P8EWZkjawpgkmLiE2+uA=";
   };
 
   patches = [
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Calendar for Deepin Desktop Environment";
+    mainProgram = "dde-calendar";
     homepage = "https://github.com/linuxdeepin/dde-calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

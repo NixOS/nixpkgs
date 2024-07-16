@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Scan a QR code in the terminal using the system camera or a given image";
+    mainProgram = "qrscan";
     homepage = "https://github.com/sayanarijit/qrscan";
     license = licenses.mit;
     broken = stdenv.isDarwin;

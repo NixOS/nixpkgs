@@ -1,7 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -15,6 +17,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/madzak/python-json-logger/issues/185
+    "test_custom_object_serialization"
+    "test_percentage_format"
+    "test_rename_reserved_attrs"
+  ];
 
   meta = with lib; {
     description = "Json Formatter for the standard python logger";

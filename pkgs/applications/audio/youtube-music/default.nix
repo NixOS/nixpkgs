@@ -1,46 +1,43 @@
 { lib
 , fetchFromGitHub
-, buildNpmPackage
 , makeWrapper
-, electron_25
+, electron
 , python3
 , stdenv
 , copyDesktopItems
+, nodejs
+, pnpm
 , makeDesktopItem
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "2.1.0";
+  version = "3.3.12";
 
   src = fetchFromGitHub {
     owner = "th-ch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-aYEEUv+dybzcH0aNJlZ19XF++8cswFunrU0H+ZaKm4Y=";
+    repo = "youtube-music";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kBGMp58086NQ77x1YGS5NewWfiDaXHOEbyflHPtdfIs=";
   };
 
-  electron = electron_25;
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-t5omzz6y8lVFGAuhtc+HF5gwu4Ntt/dxml+nWysEpVs=";
+  };
 
-in
-buildNpmPackage {
-  inherit pname version src;
-
-  nativeBuildInputs = [ makeWrapper python3 ]
+  nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
-  npmDepsHash = "sha256-XGV0mTywYYxpMitojzIILB/Eu/8dfk/aCvUxIkx4SDQ=";
-  makeCacheWritable = true;
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild = lib.optionalString stdenv.isDarwin ''
     cp -R ${electron}/Applications/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
-    npm exec electron-builder -- \
+    pnpm build
+    ./node_modules/.bin/electron-builder \
       --dir \
       -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
@@ -83,16 +80,17 @@ buildNpmPackage {
       icon = "youtube-music";
       desktopName = "Youtube Music";
       startupWMClass = "Youtube Music";
-      categories = ["AudioVideo"];
+      categories = [ "AudioVideo" ];
     })
   ];
 
   meta = with lib; {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
+    changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${lib.replaceStrings ["."] [""] finalAttrs.src.rev}";
     license = licenses.mit;
-    maintainers = [ maintainers.aacebedo ];
+    maintainers = with maintainers; [ aacebedo SuperSandro2000 ];
     mainProgram = "youtube-music";
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
-}
+})

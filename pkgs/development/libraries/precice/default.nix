@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.5.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "precice";
-    repo = pname;
+    repo = "precice";
     rev = "v${version}";
-    sha256 = "sha256-n/UuiVHw1zwlhwR/HDaKgoMnPy6fm9HWZ5FmAr7F/GE=";
+    hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
   };
 
   cmakeFlags = [
@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
     "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]
+    # libxml2-2.12 changed const qualifiers
+    ++ [ "-fpermissive" ]
+  );
 
-  nativeBuildInputs = [ cmake gcc ];
-  buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];
+  nativeBuildInputs = [ cmake gcc pkg-config python3 python3.pkgs.numpy  ];
+  buildInputs = [ boost eigen libxml2 mpi petsc ];
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
@@ -32,5 +36,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-
-

@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     repo = pname;
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
+    hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
 
   outputs = [ "out" "doc" ];
@@ -93,6 +93,11 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
     # Find FLTK without requiring an OpenGL library in buildInputs
     ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+
+  CXXFLAGS = [
+    # GCC 13: error: 'uint8_t' does not name a type
+    "-include cstdint"
+  ];
 
   doCheck = true;
   nativeCheckInputs = [ cxxtest ruby ];
@@ -136,6 +141,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High quality software synthesizer (${guiName} GUI)";
+    mainProgram = "zynaddsubfx";
     homepage =
       if guiModule == "zest"
       then "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"

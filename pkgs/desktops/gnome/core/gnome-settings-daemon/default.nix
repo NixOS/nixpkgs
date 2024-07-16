@@ -31,7 +31,7 @@
 , gnome-desktop
 , geocode-glib_2
 , docbook_xsl
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , tzdata
 , gcr_4
@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "u03EaVDiqQ848jIlhIhW0qextxjInQKFzhl7cBa7Hcg=";
+    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     docbook_xsl
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 

@@ -1,28 +1,29 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pytest-asyncio
-, pytest-rerunfailures
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "11.0.1";
-  format = "pyproject";
+  version = "11.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1jPIsFEJ17kjtCBiX4IvSf2FxYw9DkH3MrrJ85N71tc=";
+    hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
   };
 
   postPatch = ''
@@ -48,18 +49,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mcstatus"
-  ];
+  pythonImportsCheck = [ "mcstatus" ];
 
   disabledTests = [
     # DNS features are limited in the sandbox
     "test_query"
     "test_query_retry"
+    "test_resolve_localhost"
+    "test_async_resolve_localhost"
   ];
 
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
+    mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
     changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

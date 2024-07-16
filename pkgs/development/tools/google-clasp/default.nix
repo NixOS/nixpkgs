@@ -21,6 +21,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Develop Apps Script Projects locally";
+    mainProgram = "clasp";
     homepage = "https://github.com/google/clasp#readme";
     changelog = "https://github.com/google/clasp/releases/tag/v${version}";
     license = licenses.asl20;

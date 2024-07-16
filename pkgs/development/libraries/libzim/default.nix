@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, icu
-, meson
-, ninja
-, pkg-config
-, python3
-, xapian
-, xz
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  icu,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  xapian,
+  xz,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libzim";
-  version = "9.0.0";
+  version = "9.2.2";
 
   src = fetchFromGitHub {
     owner = "openzim";
-    repo = pname;
+    repo = "libzim";
     rev = "refs/tags/${version}";
-    hash = "sha256-K1S2MiugUeqCfPq0Oclmghb9064xrsKgUEVjFCJHt0U=";
+    hash = "sha256-V81TzoYUFiI+07ooDQtG7ahxQFEh/6Y8IgoceHMSgOk=";
   };
 
   nativeBuildInputs = [

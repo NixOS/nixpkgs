@@ -1,11 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
-  pname = "PyCRC";
+  pname = "pycrc";
   version = "1.21";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyCRC";
+    inherit version;
     sha256 = "d3b0e788b501f48ae2ff6eeb34652343c9095e4356a65df217ed29b51e4045b6";
   };
 

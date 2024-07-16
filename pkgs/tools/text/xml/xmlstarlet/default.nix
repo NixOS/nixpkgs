@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , libxml2
@@ -20,8 +21,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt ];
 
   patches = [
-    # Fixes an incompatible function pointer error with clang 16.
-    ./fix-incompatible-function-pointer.patch
+    (fetchpatch {
+      name = "0001-Fix-build-with-libxml2-2.12.patch";
+      url = "https://sourceforge.net/p/xmlstar/patches/_discuss/thread/890e29655a/66ca/attachment/0001-Fix-build-with-libxml2-2.12.patch";
+      hash = "sha256-XEk7aFOdrzdec1j2ffERJQbLH0AUNJA52QwA9jf4XWA=";
+    })
   ];
 
   preConfigure = ''
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A command line tool for manipulating and querying XML data";
+    description = "Command line tool for manipulating and querying XML data";
     homepage = "https://xmlstar.sourceforge.net/";
     license = lib.licenses.mit;
     mainProgram = "xmlstarlet";

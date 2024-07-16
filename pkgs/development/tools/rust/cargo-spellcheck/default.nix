@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pJsRY9fDHDQTd0J/gbSzl/JM3kzm8v+w13JRbTYnMFM=";
+    hash = "sha256-NrtPV2bd9BuA1nnniIcth85gJQmFGy9LHdajqmW8j4Q=";
   };
 
-  cargoHash = "sha256-XDGOhPO09d5nq355LiDBKc5v8dx8RuzGKC2fnFF/M+E=";
+  cargoHash = "sha256-mxx4G77ldPfVorNa1LGTcA0Idwmrcl8S/ze+UUoLHhI=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Checks rust documentation for spelling and grammar mistakes";
+    mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

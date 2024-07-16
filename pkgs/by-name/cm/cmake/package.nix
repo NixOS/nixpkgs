@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, substituteAll
 , buildPackages
 , bzip2
 , curlMinimal
@@ -29,10 +30,11 @@
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
+, gitUpdater
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
@@ -46,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.27.8";
+  version = "3.29.6";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/s4kVj9peHD7uYLqi/F0gsnV+FXYyb8LgkY9dsno0Mw=";
+    hash = "sha256-E5ExMAO4PUjiqxFai1JaVX942MFURhi0jR2QGEoQ8K8=";
   };
 
   patches = [
@@ -65,9 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
   ++ lib.optional (stdenv.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
+  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
+  # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
+  ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) (
+    substituteAll {
+      src = ./007-darwin-bsd-ps-abspath.diff;
+      ps = lib.getExe ps;
+    });
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
+  separateDebugInfo = true;
   setOutputFlags = false;
 
   setupHooks = [
@@ -96,9 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
+  ++ lib.optional stdenv.isDarwin CoreServices
   ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
-
-  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
   preConfigure = ''
     fixCmakeFiles .
@@ -107,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
   '';
 
   # The configuration script is not autoconf-based, although being similar;
@@ -138,8 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
     "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
   ]
-  # Workaround missing atomic ops with gcc <13
-  ++ lib.optional stdenv.hostPlatform.isRiscV "LDFLAGS=-latomic"
   ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -177,6 +183,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.kitware.com/cmake/cmake.git";
+    rev-prefix = "v";
+    ignoredVersions = "-"; # -rc1 and friends
+  };
+
   meta = {
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
@@ -191,6 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
     platforms = lib.platforms.all;
+    mainProgram = "cmake";
     broken = (qt5UI && stdenv.isDarwin);
   };
 })

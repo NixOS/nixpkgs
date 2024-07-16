@@ -16,16 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.23.00";
+  version = "2.26.3";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-TMftm1fz8c8ndSyA3HUd7JWT0DINxvbdUSDrmVMwmws=";
-  };
-
-  devsrc = fetchurl {
-    url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-dev-${version}.deb";
-    sha256 = "sha256-uW5iF3rvFlowFhMBVDTOHkJ2K4LBgAxxC79tXpMhy5U=";
+    sha256 = "sha256-BE/apFPutNdhlS1NWRHdVcVrt/16aFfZ6zRcjphIlZA=";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper wrapQtAppsHook ];
@@ -36,7 +31,6 @@ stdenv.mkDerivation rec {
     runHook preUnpack
 
     dpkg -x $src ./deconz-src
-    dpkg -x $devsrc ./deconz-devsrc
 
     runHook postUnpack
   '';
@@ -46,7 +40,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out"
     cp -r deconz-src/* "$out"
-    cp -r deconz-devsrc/* "$out"
 
     # Flatten /usr and manually merge lib/ and usr/lib/, since mv refuses to.
     mv "$out/lib" "$out/orig_lib"

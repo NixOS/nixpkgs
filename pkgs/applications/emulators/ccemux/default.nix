@@ -11,7 +11,7 @@ let
     if useCCTweaked
     then fetchurl {
       url = "${baseUrl}-cct.jar";
-      hash = "sha256-B9Zan6wpYnUtaNbUIrXvkchPiEquMs9R2Kiqg85/VdY=";
+      hash = "sha256-nna5KRp6jVLkbWKOHGtQqaPr3Zl05mVkCf/8X9C5lRY=";
     }
     else fetchurl {
       url = "${baseUrl}-cc.jar";
@@ -59,10 +59,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modular ComputerCraft emulator";
+    description = "Modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer viluon ];
+    mainProgram = "ccemux";
   };
 }

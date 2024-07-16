@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, cloudpathlib
-, confection
-, packaging
-, pydantic
-, requests
-, smart-open
-, srsly
-, typer
-, wasabi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cloudpathlib,
+  confection,
+  fetchFromGitHub,
+  packaging,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  smart-open,
+  srsly,
+  typer,
+  wasabi,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +30,14 @@ buildPythonPackage rec {
     hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
   };
 
+  pythonRelaxDeps = [
+    "cloudpathlib"
+    "smart-open"
+    "typer"
+  ];
+
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -49,9 +54,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weasel" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # This test requires internet access
@@ -59,8 +62,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Weasel: A small and easy workflow system";
+    description = "Small and easy workflow system";
+    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
+    changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
   };

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , gobject-introspection
 , gsettings-desktop-schemas
@@ -13,17 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    hash = "sha256-akEweZpnfNeLuiUK1peI83uYsjVrFeQ0Is/+bpdNwdU=";
+    hash = "sha256-S4wAcwlJnXHYQEnP9WApCTjvVHKMrAt7gQ2l8zvFrs0=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gsettings-desktop-schemas
     gettext
     gobject-introspection
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bulk rename app";
+    mainProgram = "bulky";
     homepage = "https://github.com/linuxmint/bulky";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

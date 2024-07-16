@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Lambdabot IRC bot";
+        description = "Enable the Lambdabot IRC bot";
       };
 
       package = mkPackageOption pkgs "lambdabot" { };
@@ -29,7 +29,7 @@ in
       script = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Lambdabot script";
+        description = "Lambdabot script";
       };
 
     };

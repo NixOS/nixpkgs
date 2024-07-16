@@ -12,6 +12,7 @@
 , boost
 , gmp
 , icu
+, gnuradioAtLeast
 }:
 
 let
@@ -33,7 +34,7 @@ let
 in mkDerivation {
   pname = "gr-rds";
   inherit version src;
-  disabledForGRafter = "3.9";
+  disabled = gnuradioAtLeast "3.9";
 
   buildInputs = [
     logLib

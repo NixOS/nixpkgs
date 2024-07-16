@@ -5,16 +5,29 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.2";
+  version = "1.15.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
+    repo = "cfripper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ymuxZwW3Pwx/CyG2iPoY7LP9e+1K6EUBi/TApg0YvkE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "pluggy"
+  ];
+
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+  ];
+
+  dependencies = with python3.pkgs; [
     boto3
     cfn-flip
     click
@@ -29,13 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     moto
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click~=7.1.1" "click" \
-      --replace "pluggy~=0.13.1" "pluggy" \
-      --replace "pydash~=4.7.6" "pydash"
-  '';
 
   disabledTestPaths = [
     # Tests are failing
@@ -55,7 +61,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";
     homepage = "https://github.com/Skyscanner/cfripper";
+    changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cfripper";
   };
 }

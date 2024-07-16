@@ -1,5 +1,7 @@
 { lib, stdenv, fetchFromGitHub, perl, autoconf, automake
-, libtool, python3, flex, libevent, hwloc, munge, zlib, pandoc, gitMinimal
+, removeReferencesTo, libtool, python3, flex, libevent
+, targetPackages, makeWrapper
+, hwloc, munge, zlib, pandoc, gitMinimal
 } :
 
 stdenv.mkDerivation rec {
@@ -13,6 +15,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZuuzQ8j5zqQ/9mBFEODAaoX9/doWB9Nt9Sl75JkJyqU=";
     fetchSubmodules = true;
   };
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     patchShebangs ./autogen.pl
@@ -28,6 +32,8 @@ stdenv.mkDerivation rec {
     flex
     gitMinimal
     python3
+    removeReferencesTo
+    makeWrapper
   ];
 
   buildInputs = [ libevent hwloc munge zlib ];
@@ -46,6 +52,27 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput "bin/pmix_info" "''${!outputDev}"
+    moveToOutput "bin/pmixcc" "''${!outputDev}"
+    moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
+
+    # The path to the pmixcc-wrapper-data.txt is hard coded and
+    # points to $out instead of dev. Use wrapper to fix paths.
+    wrapProgram $dev/bin/pmixcc \
+      --set PMIX_INCLUDEDIR $dev/include \
+      --set PMIX_PKGDATADIR $dev/share/pmix
+  '';
+
+  postFixup = ''
+    # The build info (parameters to ./configure) are hardcoded
+    # into the library. This clears all references to $dev/include.
+    remove-references-to -t $dev $(readlink -f $out/lib/libpmix.so)
+
+    # Pin the compiler to the current version in a cross compiler friendly way.
+    # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
+    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
+      $dev/share/pmix/pmixcc-wrapper-data.txt
   '';
 
   enableParallelBuilding = true;

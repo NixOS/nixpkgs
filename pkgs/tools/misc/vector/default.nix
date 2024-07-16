@@ -9,6 +9,7 @@
 , oniguruma
 , zstd
 , rust-jemalloc-sys
+, rust-jemalloc-sys-unprefixed
 , Security
 , libiconv
 , coreutils
@@ -35,7 +36,7 @@
 
 let
   pname = "vector";
-  version = "0.34.1";
+  version = "0.39.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -44,28 +45,27 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
+    hash = "sha256-S6yzh8ISIh6xzw5DwQaoZdpfmDHE9gfjlEtxIZerSak=";
   };
-
-  patches = [ ./vector-pr19075.patch ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "aws-config-0.54.1" = "sha256-AVumLhybVbMnEah9/JqiQOQ4R0e2OsbB8WAJ422R6uk=";
-      "greptime-proto-0.1.0" = "sha256-kSOy/0s8ZJ1RfqOb469oaVlreABtHxesNaMzFH6H+aE=";
-      "greptimedb-client-0.1.0" = "sha256-mGgbxp/h55snowS2BV+QRwrhnE5vywfRF9Gc+8MoAdY=";
-      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
+      "greptimedb-client-0.1.0" = "sha256-evL8Q2Ikct9s0r4DWTgSP/8g4XTishuJHmwRoCfQFbU=";
+      "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
       "tokio-util-0.7.8" = "sha256-HCvtfohOoa1ZjD4s7QLDbIV4fe/MVBKtgM1QQX7gGKQ=";
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
+
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
   buildInputs =
-    [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices SystemConfiguration ];
+    [ oniguruma openssl protobuf rdkafka zstd ]
+    ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -76,6 +76,9 @@ rustPlatform.buildRustPackage {
 
   # needed to dynamically link rdkafka
   CARGO_FEATURE_DYNAMIC_LINKING=1;
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   buildNoDefaultFeatures = true;
   buildFeatures = features;
@@ -122,7 +125,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A high-performance observability data pipeline";
+    description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];

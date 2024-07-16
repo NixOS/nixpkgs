@@ -1,54 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
-, pythonRelaxDepsHook
-, click
-, docutils
-, jinja2
-, jsonschema
-, linkify-it-py
-, myst-nb
-, pyyaml
-, sphinx
-, sphinx-comments
-, sphinx-copybutton
-, sphinx-external-toc
-, sphinx-jupyterbook-latex
-, sphinx-design
-, sphinx-thebe
-, sphinx-book-theme
-, sphinx-togglebutton
-, sphinxcontrib-bibtex
-, sphinx-multitoc-numbering
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
+  click,
+  jinja2,
+  jsonschema,
+  linkify-it-py,
+  myst-nb,
+  myst-parser,
+  pyyaml,
+  sphinx,
+  sphinx-comments,
+  sphinx-copybutton,
+  sphinx-external-toc,
+  sphinx-jupyterbook-latex,
+  sphinx-design,
+  sphinx-thebe,
+  sphinx-book-theme,
+  sphinx-togglebutton,
+  sphinxcontrib-bibtex,
+  sphinx-multitoc-numbering,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.15.1";
+  version = "1.0.2";
+  pyproject = true;
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ihY07Bb37t7g0Rbx5ft8SCAyia2S2kLglRnccdlWwBA=";
+    inherit version;
+    pname = "jupyter_book";
+    hash = "sha256-rRXuSanf7Hc6HTBJ2sOFY4KqL5txRKGAEUduZcEbX0Y=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click
-    docutils
     jinja2
     jsonschema
     linkify-it-py
     myst-nb
+    myst-parser
     pyyaml
     sphinx
     sphinx-comments
@@ -63,13 +60,9 @@ buildPythonPackage rec {
     sphinx-multitoc-numbering
   ];
 
-  pythonRelaxDeps = [
-    "docutils"
-    "sphinx-design"
-  ];
-
   pythonImportsCheck = [
     "jupyter_book"
+    "jupyter_book.cli.main"
   ];
 
   meta = with lib; {
@@ -77,6 +70,7 @@ buildPythonPackage rec {
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "jupyter-book";
   };
 }

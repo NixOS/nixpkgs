@@ -1,12 +1,13 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, python
-, azure-common
-, azure-mgmt-nspkg
-, requests
-, msrestazure
-, isPy3k
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  azure-common,
+  azure-mgmt-nspkg,
+  requests,
+  msrestazure,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +29,8 @@ buildPythonPackage rec {
   ];
 
   postInstall = pkgs.lib.optionalString (!isPy3k) ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/${python.sitePackages}"/azure/mgmt/__init__.py
+    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/${python.sitePackages}"/azure/__init__.py
   '';
 
   doCheck = false;
@@ -38,6 +39,9 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Resource Management common code";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson ];
+    maintainers = with maintainers; [
+      olcai
+      maxwilson
+    ];
   };
 }

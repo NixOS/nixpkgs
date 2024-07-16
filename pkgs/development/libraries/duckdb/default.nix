@@ -5,6 +5,7 @@
 , ninja
 , openssl
 , openjdk11
+, python3
 , unixODBC
 , withJdbc ? false
 , withOdbc ? false
@@ -12,49 +13,48 @@
 
 let
   enableFeature = yes: if yes then "ON" else "OFF";
+  versions = lib.importJSON ./versions.json;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  version = "0.9.2";
+  inherit (versions) rev version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QFK8mEMcqQwALFNvAdD8yWixwMYHSbeo6xqx86PvejU=";
+    # to update run:
+    # nix-shell maintainers/scripts/update.nix --argstr path duckdb
+    inherit (versions) hash;
+    owner = "duckdb";
+    repo = "duckdb";
+    rev = "refs/tags/v${finalAttrs.version}";
   };
 
-  patches = [ ./version.patch ];
+  outputs = [ "out" "lib" "dev" ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
-  '';
-
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/in_tree_extensions.cmake"
+    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
-  ] ++ lib.optionals doInstallCheck [
+    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
 
-  doInstallCheck = true;
-
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
+  postInstall = ''
+    mkdir -p $lib
+    mv $out/lib $lib
   '';
+
+  doInstallCheck = true;
 
   installCheckPhase =
     let
-      excludes = map (pattern: "exclude:'${pattern}'") [
+      excludes = map (pattern: "exclude:'${pattern}'") ([
         "[s3]"
         "Test closing database during long running query"
         "Test using a remote optimizer pass in case thats important to someone"
@@ -91,22 +91,33 @@ stdenv.mkDerivation rec {
         "[!hide]"
         # this test apparently never terminates
         "test/sql/copy/csv/auto/test_csv_auto.test"
+        # test expects installed file timestamp to be > 2024
+        "test/sql/table_function/read_text_and_blob.test"
+        # fails with Out of Memory Error
+        "test/sql/copy/parquet/batched_write/batch_memory_usage.test"
+        # wants http connection
+        "test/sql/copy/csv/recursive_query_csv.test"
+        "test/sql/copy/csv/test_mixed_lines.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
-      ];
+      ]);
+      LD_LIBRARY_PATH = lib.optionalString stdenv.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstallCheck
+      (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      $PWD/test/unittest ${lib.concatStringsSep " " excludes}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 
       runHook postInstallCheck
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
-    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${version}";
+    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
@@ -114,4 +125,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ costrouc cpcloud ];
     platforms = platforms.all;
   };
-}
+})

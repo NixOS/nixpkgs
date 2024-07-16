@@ -7,33 +7,33 @@
 , atk
 , gtk3
 , gtkspell3
-, gnome
+, adwaita-icon-theme
 , glib
 , goocanvas2
 , gdk-pixbuf
 , pango
 , fontconfig
 , freetype
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "5.4.2";
+  version = "7.2.3";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
+    hash = "sha256-W5DXOLUr4c9w9Zcp9i5esNjSSIMewe+NJGh+h3PiD30=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype
@@ -62,7 +62,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "The client of the Tryton application platform";
+    description = "Client of the Tryton application platform";
+    mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using

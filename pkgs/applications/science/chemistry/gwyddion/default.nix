@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, python2Packages,
   gnome2,
   openexrSupport ? true, openexr,
   libzipSupport ? true, libzip,
@@ -15,16 +14,12 @@
   openglSupport ? !stdenv.isDarwin, libGL
 }:
 
-let
-    inherit (python2Packages) pygtk pygobject2 python;
-in
-
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.64";
+   version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-FDL4XDHH6WYF47OsnhxpM7s7YadutiCDjcJKCF8ZlCw=";
+    sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
@@ -42,9 +37,6 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
-
-  propagatedBuildInputs = with lib;
-    optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if
@@ -68,6 +60,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.cge ];
-    broken = true; # Build error: h5py-3.9.0 not supported for interpreter python2.7
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

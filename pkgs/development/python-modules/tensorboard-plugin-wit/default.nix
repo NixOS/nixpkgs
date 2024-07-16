@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +17,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "What-If Tool TensorBoard plugin.";
+    description = "What-If Tool TensorBoard plugin";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];

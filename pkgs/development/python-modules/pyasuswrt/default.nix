@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyasuswrt";
-  version = "0.1.20";
+  version = "0.1.21";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,23 +18,17 @@ buildPythonPackage rec {
     owner = "ollo69";
     repo = "pyasuswrt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QsqyijOYEtp6k2rsDheGMVij4s5a5ZfUfsLIq+BaYV8=";
+    hash = "sha256-kg475AWmc0i/W4dBg8jFmNyz3V67xjvzPkSlS09/9Oc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require physical hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyasuswrt"
-  ];
+  pythonImportsCheck = [ "pyasuswrt" ];
 
   meta = with lib; {
     description = "Library for communication with ASUSWRT routers via HTTP";

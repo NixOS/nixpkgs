@@ -1,53 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, pandas
-, pyyaml
-, poetry-core
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, toml-adapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  lxml,
+  pandas,
+  pyyaml,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  toml-adapt,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.2.6";
-  format = "pyproject";
+  version = "0.3.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
     rev = "refs/tags/${version}";
-    hash = "sha256-CGDgt6tv+KysrytJsgDKwf2yv6shXizvD67XsGBg+nI=";
+    hash = "sha256-+S4ekvaQvbBxjUQkG+Bd9lYdZwHB3oq7Ay9kWquCcyE=";
   };
 
-  pythonRelaxDeps = [
-    "flask"
-    "pandas"
-  ];
+  pythonRelaxDeps = [ "flask" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     flask
+    lxml
     pandas
     pyyaml
+    xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "succulent"
-  ];
+  pythonImportsCheck = [ "succulent" ];
 
   meta = with lib; {
     description = "Collect POST requests";

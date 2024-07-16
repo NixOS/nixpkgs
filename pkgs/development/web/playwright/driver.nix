@@ -5,12 +5,12 @@
 , git
 , jq
 , nodejs
-, fetchFromGitHub
 , fetchurl
 , makeFontsConf
 , makeWrapper
 , runCommand
 , unzip
+, cacert
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -78,6 +78,7 @@ let
       }.${system} or throwSystem;
       browsers-chromium = browsers-linux {};
     };
+    meta.mainProgram = "playwright";
   });
 
   browsers-mac = stdenv.mkDerivation {
@@ -85,6 +86,10 @@ let
     inherit (driver) version;
 
     dontUnpack = true;
+
+    nativeBuildInputs = [
+      cacert
+    ];
 
     installPhase = ''
       runHook preInstall

@@ -57,9 +57,7 @@ in
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
-           && stdenv.buildPlatform.system != "i686-freebsd"
-           && stdenv.buildPlatform.system != "x86_64-solaris"
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-solaris"
            && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
 
 , # The configuration attribute set
@@ -110,8 +108,9 @@ let
   trivialBuilders = self: super:
     import ../build-support/trivial-builders {
       inherit lib;
+      inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) shellcheck-minimal;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
@@ -243,6 +242,16 @@ let
       };
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
+    # If already linux: the same package set unaltered
+    # Otherwise, return a natively built linux package set for the current cpu architecture string.
+    # (ABI and other details will be set to the default for the cpu/os pair)
+    pkgsLinux =
+      if stdenv.hostPlatform.isLinux
+      then self
+      else nixpkgsFun {
+        localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+      };
+
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
     # in one go when calling Nixpkgs, for performance and simplicity.
@@ -272,10 +281,24 @@ let
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
+        gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
+          stdenv.hostPlatform.gcc or {};
       };
     });
+
+    pkgsExtraHardening = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsExtraHardening = super';
+          stdenv = super'.withDefaultHardeningFlags (
+            super'.stdenv.cc.defaultHardeningFlags ++ [
+              "stackclashprotection"
+              "trivialautovarinit"
+            ]
+          ) super'.stdenv;
+        })
+      ] ++ overlays;
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.

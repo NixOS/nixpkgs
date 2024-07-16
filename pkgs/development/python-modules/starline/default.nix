@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch,
+  setuptools,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;
 
   pythonImportsCheck = [ "starline" ];
+
+  # https://github.com/Anonym-tsk/starline/issues/4
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Unofficial python library for StarLine API";

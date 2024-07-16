@@ -15,18 +15,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.5";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
-    rev = version;
-    hash = "sha256-veRhTruM+Nw2rerzXC/kpi2Jr8mMMBLqOM2YBCpFePU=";
+    rev = "v${version}";
+    hash = "sha256-W08R1ny4LyzWehnsWSMCRjCxmvV0k7ARVbmZ740hg8w=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-kuKsBnmH3bPgwuJ1q49iHMNT47Djx9BKxcMBbJ3zqis=";
 
   buildInputs = optionals isDarwin [
     SystemConfiguration
@@ -39,9 +37,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Check phase tries to query crates.io
 
   meta = with lib; {
-    description = "A build tool for the Leptos web framework";
+    description = "Build tool for the Leptos web framework";
+    mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
-    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/${version}";
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ benwis ];
   };

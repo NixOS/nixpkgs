@@ -5,21 +5,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "djlint";
-  version = "1.32.1";
-  format = "pyproject";
+  version = "1.34.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
-    rev = "v${version}";
-    hash = "sha256-///ZEkVohioloBJn6kxpEK5wmCzMp9ZYeAH1mONOA0E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p9RIzX9zoZxBrhiNaIeCX9OgfQm/lXNwYsh6IcsnIVk=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  build-system = with python3.pkgs; [
+    poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "pathspec"
+    "regex"
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     colorama
     cssbeautifier
@@ -36,10 +41,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "djlint" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang";
+    mainProgram = "djlint";
     homepage = "https://github.com/Riverside-Healthcare/djlint";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

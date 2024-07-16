@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "8.1.0";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-uNAqjklgBWM2v2z6qu17ZMFO4gn3fsnYPxyGO++UtTw=";
+    hash = "sha256-2UFccB+xXAw3uRw0G1TKlqTVl9tUl1sRPFG4H05vq04=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     swig
     doxygen
     python3Packages.python
+  ] ++ lib.optionals enablePython [
+    python3Packages.build
+    python3Packages.installer
+    python3Packages.wheel
   ] ++ lib.optional enableCuda addOpenGLRunpath;
 
   buildInputs = [ fftwSinglePrec ]
@@ -84,9 +88,8 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build
-      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
-      mv $out/lib/python*/site-packages/OpenMM*.egg/{openmm,simtk} $out/lib/python*/site-packages/.
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m build --no-isolation --outdir dist/ --wheel
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m installer --prefix $out dist/*.whl
     '';
 
   postFixup = ''
@@ -100,6 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit for molecular simulation using high performance GPU code";
+    mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus mit ];
     platforms = platforms.linux;

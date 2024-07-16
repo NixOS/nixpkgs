@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, ply
-, pythonOlder
-, six
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  ply,
+  pythonOlder,
+  six,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "thriftpy2";
-  version = "0.4.16";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Thriftpy";
-    repo = pname;
+    repo = "thriftpy2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o+h38NREnh14M23gyF2X2UdW7/spmHFo0rqvkKnmSRQ=";
+    hash = "sha256-GBJL+IqZpT1/msJLiwiS5YDyB4hIe/e3pYPWx0A+lWY=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ cython ];
+
+  dependencies = [
     ply
     six
     tornado
@@ -35,9 +37,7 @@ buildPythonPackage rec {
   # Not all needed files seems to be present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "thriftpy2"
-  ];
+  pythonImportsCheck = [ "thriftpy2" ];
 
   meta = with lib; {
     description = "Python module for Apache Thrift";

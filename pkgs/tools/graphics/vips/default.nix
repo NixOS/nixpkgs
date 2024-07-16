@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.15.0";
+  version = "8.15.2";
 
   outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libvips";
     repo = "libvips";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-WfKq+maLcAXyjk1sq66wSU92ALv4MfRDPKe4Mki0KRQ=";
+    hash = "sha256-jp6RPceFzzWgFBzcfvggniAkhXaAGszT/sy4H6aCtGc=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''

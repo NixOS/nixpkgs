@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage {
@@ -19,8 +20,8 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
+    mainProgram = "bugz";
     license = licenses.gpl2;
     maintainers = [ ];
   };
-
 }

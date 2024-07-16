@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.0.20231113";
+  version = "0.1.0";
 in
 stdenvNoCC.mkDerivation {
   inherit version;
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
     owner = "minoki";
     repo = "LunarML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LmS+pkdCraY8sor+lsq/vCODFyVneKkZqjZqbJ1trb4=";
+    hash = "sha256-wM6ppH0g8yIi+4fwTejzZGn1uv/Wvlajn87A+IKbPXw=";
   };
 
   outputs = [ "out" "doc" ];
@@ -49,6 +49,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Standard ML compiler that produces Lua/JavaScript";
+    mainProgram = "lunarml";
     homepage = "https://github.com/minoki/LunarML";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toastal ratsclub ];

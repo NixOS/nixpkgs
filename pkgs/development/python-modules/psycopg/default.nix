@@ -1,47 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, pythonOlder
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+  pythonOlder,
+  substituteAll,
 
-# build
-, postgresql
-, setuptools
+  # build
+  postgresql,
+  setuptools,
 
-# propagates
-, backports-zoneinfo
-, typing-extensions
+  # propagates
+  backports-zoneinfo,
+  typing-extensions,
 
-# psycopg-c
-, cython_3
-, tomli
+  # psycopg-c
+  cython,
+  tomli,
 
-# docs
-, furo
-, shapely
-, sphinxHook
-, sphinx-autodoc-typehints
+  # docs
+  furo,
+  shapely,
+  sphinxHook,
+  sphinx-autodoc-typehints,
 
-# tests
-, anyio
-, pproxy
-, pytest-randomly
-, pytestCheckHook
-, postgresqlTestHook
+  # tests
+  anyio,
+  pproxy,
+  pytest-randomly,
+  pytestCheckHook,
+  postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.1.14";
+  version = "3.1.19";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zocRBnrQoJDWI4qhxDnxxIeiLdaWolvsujqfHBYQc/A=";
+    hash = "sha256-Fvg67sGWSNwChZTO5QdLSOKrbGfxzQZJqCjI5Jidcqo=";
   };
 
   patches = [
@@ -49,12 +49,6 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
-    })
-
-    (fetchpatch {
-      # add fixture to mark flaky ref count tests
-      url = "https://github.com/psycopg/psycopg/commit/70ef364324ba3448ef9ac0e29329c9d802380e4b.patch";
-      hash = "sha256-8PlrBcIumlxFjNXCAfm4NpSIxAnvLR8TopHzneJyzf0=";
     })
   ];
 
@@ -79,7 +73,7 @@ let
     '';
 
     nativeBuildInputs = [
-      cython_3
+      cython
       postgresql
       setuptools
       tomli
@@ -106,9 +100,7 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = [
-      typing-extensions
-    ];
+    propagatedBuildInputs = [ typing-extensions ];
 
     # tested in psycopg
     doCheck = false;
@@ -117,7 +109,6 @@ let
       description = "Connection Pool for Psycopg";
     };
   };
-
 in
 
 buildPythonPackage rec {
@@ -135,8 +126,8 @@ buildPythonPackage rec {
 
   # Introduce this file necessary for the docs build via environment var
   LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/REL_14_STABLE/doc/src/sgml/libpq.sgml";
-    hash = "sha256-yn09fR9+7zQni8SvTG7BUmYRD7MK7u2arVAznWz2oAw=";
+    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
   };
 
   inherit patches;
@@ -157,9 +148,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   pythonImportsCheck = [
     "psycopg"
@@ -172,16 +161,17 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs = [
-    anyio
-    pproxy
-    pytest-randomly
-    pytestCheckHook
-    postgresql
-  ]
-  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
-  ++ passthru.optional-dependencies.c
-  ++ passthru.optional-dependencies.pool;
+  nativeCheckInputs =
+    [
+      anyio
+      pproxy
+      pytest-randomly
+      pytestCheckHook
+      postgresql
+    ]
+    ++ lib.optional (stdenv.isLinux) postgresqlTestHook
+    ++ passthru.optional-dependencies.c
+    ++ passthru.optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -189,11 +179,13 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck = ''
-    cd ..
-  '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-  '';
+  preCheck =
+    ''
+      cd ..
+    ''
+    + lib.optionalString (stdenv.isLinux) ''
+      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+    '';
 
   disabledTests = [
     # don't depend on mypy for tests
@@ -211,8 +203,13 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o" "cache_dir=$TMPDIR"
-    "-m" "'not refcount and not timing'"
+    "-o"
+    "cache_dir=$TMPDIR"
+    "-m"
+    "'not refcount and not timing'"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    "-W"
+    "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
   postCheck = ''

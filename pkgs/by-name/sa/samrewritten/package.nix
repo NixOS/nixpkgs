@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
-  version = "unstable-2023-05-23";
+  version = "202008-unstable-2023-05-22";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
@@ -39,9 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Steam Achievement Manager For Linux. Rewritten in C++";
+    mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
+    changelog = "https://github.com/PaulCombal/SamRewritten/releases";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ludovicopiero ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

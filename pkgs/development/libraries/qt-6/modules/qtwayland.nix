@@ -12,12 +12,13 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
+
   patches = [
-    # Fix potential crash issues when some submenus are expanded
-    # https://codereview.qt-project.org/c/qt/qtwayland/+/519344/
+    # Included in qtwayland 6.7.3
+    # Fixes https://bugs.kde.org/show_bug.cgi?id=489259
     (fetchpatch {
-      url = "https://code.qt.io/cgit/qt/qtwayland.git/patch/?id=aae65c885d8e38d8abc2959cded7b5e9e5fc88b3";
-      hash = "sha256-FD1VaiTgl9Z1y+5EDpWYShM1ULoFdET86FoFfqDmjyo=";
+      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/92bcb8f6b7a852c7a5d662fc34de561692a7a454.diff";
+      sha256 = "sha256-XgGO8VnmQHLhUxTGf9CniwkCr5FsFiuUbnVP0NLNekI=";
     })
   ];
 }

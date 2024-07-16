@@ -6,7 +6,7 @@ index 573b3e4..6f2799e 100755
  
  # ld will find the right path to load the library, including for 32-bit apps.
  LD_PRELOAD="${GAMEMODEAUTO_NAME}${LD_PRELOAD:+:$LD_PRELOAD}"
-+LD_LIBRARY_PATH="@libraryPath@${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
++LD_LIBRARY_PATH="@libraryPath@${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
  
 -exec env LD_PRELOAD="${LD_PRELOAD}" $GAMEMODERUNEXEC "$@"
 +exec env LD_PRELOAD="${LD_PRELOAD}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" $GAMEMODERUNEXEC "$@"

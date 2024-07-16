@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , nix-update-script
 }:
 
@@ -35,12 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "topiary-cli" ];
   cargoTestFlags = cargoBuildFlags;
 
-  env = {
-    TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
   postInstall = ''
     install -Dm444 queries/* -t $out/share/queries
@@ -49,7 +43,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
+    description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
+    mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
     changelog = "https://github.com/tweag/topiary/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

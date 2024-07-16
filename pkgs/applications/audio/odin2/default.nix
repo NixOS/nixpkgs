@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     repo = "odin2";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
+    hash = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
   };
 
   postPatch = ''
@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ magnetophon ];
+    mainProgram = "Odin2";
   };
 }

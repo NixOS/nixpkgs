@@ -2,8 +2,10 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, cmake
 , gfortran
+, meson
+, ninja
+, pkg-config
 , blas
 , lapack
 , mctc-lib
@@ -35,7 +37,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     blas
@@ -48,18 +55,16 @@ stdenv.mkDerivation rec {
     simple-dftd3
   ];
 
+  outputs = [ "out" "dev" ];
+
   doCheck = true;
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}" ""
-  '';
-
   meta = with lib; {
     description = "Light-weight tight-binding framework";
+    mainProgram = "tblite";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     homepage = "https://github.com/tblite/tblite";
     platforms = platforms.linux;

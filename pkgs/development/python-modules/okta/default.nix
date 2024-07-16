@@ -1,35 +1,35 @@
-{ lib
-, stdenv
-, aenum
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, flatdict
-, pycryptodome
-, pycryptodomex
-, pydash
-, pyfakefs
-, pytest-asyncio
-, pytest-mock
-, pytest-recording
-, pytestCheckHook
-, python-jose
-, pythonOlder
-, pyyaml
-, xmltodict
-, yarl
+{
+  lib,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  flatdict,
+  pycryptodome,
+  pycryptodomex,
+  pydash,
+  pyfakefs,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-recording,
+  pytestCheckHook,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.3";
+  version = "2.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mOKVCRp8cLY7p0AVbvphWdB3II6eB6HlN8i1HrVUH+o=";
+    hash = "sha256-wW3QiWcyH9byMywsRAdWLulFUagouWM87vMJtQ+q2UE=";
   };
 
   propagatedBuildInputs = [
@@ -53,9 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"

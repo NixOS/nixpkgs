@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, amazon-ion, six, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  amazon-ion,
+  six,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "ionhash";
@@ -24,7 +32,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [ amazon-ion six ];
+  propagatedBuildInputs = [
+    amazon-ion
+    six
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -35,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amzn/ion-hash-python";
     license = licenses.asl20;
     maintainers = [ maintainers.terlar ];
+    broken = true; # last successful build 2023-09-28
   };
 }

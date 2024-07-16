@@ -24,19 +24,25 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.1";
-    rev = "6b9db09c69965d5bfb37bdd29693f8b7f9e9e9ec";
+    version = "1.30.4";
+    rev = "32113313a357829ba3a5dce0795b6780bf8cbf4d";
+    hash = "sha256-u9lTVe40pwXTt0YRwJXRuZonS5KJL2JQUQ3L9ymuA74=";
   };
+
+  # these need to be updated for any changes to fetchAttrs
+  depsHash = {
+    x86_64-linux = "sha256-m7dMr/dCmjpKLPT+8FXBHGkTlNoN9x1oQ7D6uO0sHtQ=";
+    aarch64-linux = "sha256-9GqVpWkMHP9nb5EZHjGKixkWazi//oLlIUum45xTvoM=";
+  }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev;
-    hash = "sha256-eZ3UCVqQbtK2GbawUVef5+BMSQbqe+owtwH+b887mQE=";
+    inherit (srcVer) hash rev;
 
     postFetch = ''
       chmod -R +w $out
@@ -49,8 +55,6 @@ buildBazelPackage rec {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
-
-    cp ${./protobuf.patch} bazel/protobuf.patch
   '';
 
   patches = [
@@ -78,14 +82,8 @@ buildBazelPackage rec {
     linuxHeaders
   ];
 
-  # external/com_github_grpc_grpc/src/core/ext/transport/binder/transport/binder_transport.cc:756:29: error: format not a string literal and no format arguments [-Werror=format-security]
-  hardeningDisable = [ "format" ];
-
   fetchAttrs = {
-    sha256 = {
-      x86_64-linux = "sha256-OQ4vg4S3DpM+Zo+igncx3AXJnL8FkJbwh7KnBhbnCUM=";
-      aarch64-linux = "sha256-/X8i1vzQ4QvFxi1+5rc1/CGHmRhhu5F3X5A3PgbW+Mc=";
-    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+    sha256 = depsHash;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -111,6 +109,9 @@ buildBazelPackage rec {
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
+
+      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
+      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
     '';
   };
   buildAttrs = {
@@ -159,6 +160,14 @@ buildBazelPackage rec {
     "--java_runtime_version=local_jdk"
     "--tool_java_runtime_version=local_jdk"
 
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+
     "--define=wasm=${wasmRuntime}"
   ] ++ (lib.optionals stdenv.isAarch64 [
     # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
@@ -166,9 +175,16 @@ buildBazelPackage rec {
     #       |         ^
     "--define=tcmalloc=disabled"
   ]);
+
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # https://github.com/bazelbuild/rules_go/issues/3844
+    "--repo_env=GOPROXY=https://proxy.golang.org,direct"
+    "--repo_env=GOSUMDB=sum.golang.org"
   ];
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
     envoy = nixosTests.envoy;
@@ -178,7 +194,9 @@ buildBazelPackage rec {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
+    mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

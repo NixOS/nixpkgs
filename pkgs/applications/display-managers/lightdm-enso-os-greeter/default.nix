@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, linkFarm, lightdm-enso-os-greeter
 , dbus, pcre, libepoxy, xorg, at-spi2-core, libxklavier, libxkbcommon
-, gtk3, vala, cmake, libgee, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
+, gtk3, vala, cmake, libgee, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook3, librsvg }:
 
 stdenv.mkDerivation {
   pname = "lightdm-enso-os-greeter";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -61,6 +61,7 @@ stdenv.mkDerivation {
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
+    mainProgram = "pantheon-greeter";
     homepage = "https://github.com/nick92/Enso-OS";
     platforms = platforms.linux;
     license = licenses.gpl3;

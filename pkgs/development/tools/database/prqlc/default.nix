@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prqlc";
-  version = "0.10.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
     rev = version;
-    hash = "sha256-E6++xmEzY9Ndq4RCKALEHF9mh1E1NBME1gaJN70O2sE=";
+    hash = "sha256-nD3B4R2eBX52wekBrBT3jiIYdE/p6xgnHrvDFFofl/s=";
   };
 
-  cargoHash = "sha256-WLJ9XrtCXDGfqhSccSdel28EARNxZgoGbC6B+W9CsTc=";
+  cargoHash = "sha256-Rhvl9rqtJyEpZZYUaN+ih6KXgEVKZCyovf34l883bZM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
+    description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
     changelog = "https://github.com/prql/prql/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

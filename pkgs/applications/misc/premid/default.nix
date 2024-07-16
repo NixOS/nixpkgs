@@ -1,4 +1,4 @@
-{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook, fetchurl, copyDesktopItems
+{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook3, fetchurl, copyDesktopItems
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "premid";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-TuID63cVZkQ2kBl2iZeuVvjRUJYBt62ppPvgffBlOXY=";
+    sha256 = "sha256-ime6SCxm+fhMR2wagv1RItqwLjPxvJnVziW3DZafP50=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 
@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ natto1784 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "premid";
   };
 }

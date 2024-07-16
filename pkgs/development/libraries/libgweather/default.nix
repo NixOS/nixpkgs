@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.4.0";
+  version = "4.4.2";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Nm6Gb/KnCLiUz+qUdbjo/1TLPitHfqcqit4Nq+5fSKQ=";
+    hash = "sha256-puQntHcK2kiUXzqpBq9xD8gzz/DULfkfGCgwJ0DXlOw=";
   };
 
   patches = [
@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
     (lib.mesonBool "introspection" withIntrospection)
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dc_args=-D_DARWIN_C_SOURCE"
   ];
 
   postPatch = ''
@@ -98,8 +100,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to access weather information from online services for numerous locations";
-    homepage = "https://wiki.gnome.org/Projects/LibGWeather";
+    description = "Library to access weather information from online services for numerous locations";
+    homepage = "https://gitlab.gnome.org/GNOME/libgweather";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

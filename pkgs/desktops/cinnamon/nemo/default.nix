@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -7,13 +6,15 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
 , gvfs
 , cinnamon-desktop
 , xapp
 , libexif
+, json-glib
+, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.0.0";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JeiBhgfGyGyNT9eNhtUl6Pp1jgG02NRlm5lam592lS0=";
+    sha256 = "sha256-wyz2pzwJGYMFKoKVqrhLnkJqXG8Qg2+BygpOm2yegpM=";
   };
 
   patches = [
@@ -50,13 +51,15 @@ stdenv.mkDerivation rec {
     exempi
     gvfs
     libgsf
+    json-glib
+    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
     gobject-introspection
@@ -65,7 +68,16 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # enabled by default in Mint packaging (see debian/rules)
+    "-Dgtk_layer_shell=true"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
 
   preFixup = ''
     # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)

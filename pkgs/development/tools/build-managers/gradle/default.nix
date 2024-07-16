@@ -26,17 +26,26 @@ rec {
       ]
     }:
 
-    { lib, stdenv, fetchurl, makeWrapper, unzip, ncurses5, ncurses6,
+    { lib
+    , stdenv
+    , fetchurl
+    , makeWrapper
+    , unzip
+    , ncurses5
+    , ncurses6
+    , testers
+    , runCommand
+    , writeText
 
-      # The JDK/JRE used for running Gradle.
-      java ? defaultJava,
+    # The JDK/JRE used for running Gradle.
+    , java ? defaultJava
 
-      # Additional JDK/JREs to be registered as toolchains.
-      # See https://docs.gradle.org/current/userguide/toolchains.html
-      javaToolchains ? [ ]
+    # Additional JDK/JREs to be registered as toolchains.
+    # See https://docs.gradle.org/current/userguide/toolchains.html
+    , javaToolchains ? [ ]
     }:
 
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "gradle";
       inherit version;
 
@@ -99,6 +108,30 @@ rec {
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
+      passthru.tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle --version
+          '';
+        };
+
+        java-application = testers.testEqualContents {
+          assertion = "can build and run a trivial Java application";
+          expected = writeText "expected" "hello\n";
+          actual = runCommand "actual" {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+            src = ./tests/java-application;
+          } ''
+            cp -a $src/* .
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle run --no-daemon --quiet --console plain > $out
+          '';
+        };
+      };
+      passthru.jdk = defaultJava;
+
       meta = with lib; {
         inherit platforms;
         description = "Enterprise-grade build system";
@@ -121,23 +154,23 @@ rec {
         maintainers = with maintainers; [ lorenzleutgeb liff ];
         mainProgram = "gradle";
       };
-    };
+    });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.5";
-    nativeVersion = "0.22-milestone-25";
-    hash = "sha256-nZJnhwZqCBc56CAIWDOLSmnoN8OoIaM6yp2wndSkECY=";
+    version = "8.8";
+    nativeVersion = "0.22-milestone-26";
+    hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
     defaultJava = jdk21;
   };
 
   gradle_7 = gen {
-    version = "7.6.3";
+    version = "7.6.4";
     nativeVersion = "0.22-milestone-25";
-    hash = "sha256-dAwuRy7kMmwzv3WlyfXNHmns8/m1gPbiNshtHz2Yz6w=";
+    hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 
@@ -147,4 +180,43 @@ rec {
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
+
+  wrapGradle = {
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook
+    }:
+    gradle-unwrapped:
+    lib.makeOverridable (args:
+    let
+      gradle = gradle-unwrapped.override args;
+    in symlinkJoin {
+      name = "gradle-${gradle.version}";
+
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (substituteAll {
+              src = ./setup-hook.sh;
+              # jdk used for keytool
+              inherit (gradle) jdk;
+              init_script = ./init-build.gradle;
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
+
+      passthru = {
+        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+        inherit (gradle) jdk;
+      };
+
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or 0) + 1;
+      };
+    }) { };
 }

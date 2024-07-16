@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
-, fetchpatch
 , openssl
 , pkg-config
 , protobuf
@@ -24,6 +23,12 @@ let
       inherit sha256;
     };
 
+    postPatch = ''
+      # Starting in 0.9.x series, Garage is using mold in local development
+      # and this leaks in this packaging, we remove it to use the default linker.
+      rm .cargo/config.toml || true
+    '';
+
     inherit cargoSha256;
 
     nativeBuildInputs = [ protobuf pkg-config ];
@@ -43,7 +48,7 @@ let
     buildFeatures = [
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "metrics"
       "k2v"
       "telemetry-otlp"
@@ -59,18 +64,24 @@ let
       "k2v"
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "lmdb"
       "sqlite"
+    ];
+
+    disabledTests = [
+      # Upstream told us this test is flakey.
+      "k2v::poll::test_poll_item"
     ];
 
     passthru.tests = nixosTests.garage;
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
+      changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
-      maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
+      maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s ];
       knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
       inherit broken;
       mainProgram = "garage";
@@ -81,29 +92,34 @@ rec {
   # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
+  # Please add new versions to nixos/tests/garage/default.nix as well.
 
-  garage_0_8_4 = generic {
-    version = "0.8.4";
-    sha256 = "sha256-YgMw41ofM59h7OnHK1H8+Se5mZEdYypPIdkqbyX9qfs=";
-    cargoSha256 = "sha256-dEtksOVqy5wAPoqCuXJj3c4TB6UbR8PTaB70fbL6iR8=";
+  garage_0_8_7 = generic {
+    version = "0.8.7";
+    sha256 = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
+    cargoSha256 = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
+    broken = stdenv.isDarwin;
   };
 
-  garage_0_8 = garage_0_8_4;
+  garage_0_8 = garage_0_8_7;
 
-  garage_0_9_0 = (generic {
-    version = "0.9.0";
-    sha256 = "sha256-Bw7ohMAfnbkhl43k8KxYu2OJd5689PqDS0vAcgU09W8=";
-    cargoSha256 = "sha256-JqCt/8p24suQMRzEyTE2OkbzZCGUDLuGq32kCq3eZ7o=";
-  }).overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      (fetchpatch {
-        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/c7f5dcd953ff1fdfa002a8bccfb43eafcc6fddd4.patch";
-        sha256 = "sha256-q7E6gtPjnj5O/K837LMP6LPEFcgdkifxRFrYzBuqkk0=";
-      })
-    ];
-  });
+  garage_0_9_4 = generic {
+    version = "0.9.4";
+    sha256 = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
+    cargoSha256 = "sha256-Cssls9csn6qribF+pAAagBydX9e9WTq4K/ehaLCWOOA=";
+    broken = stdenv.isDarwin;
+  };
 
-  garage_0_9 = garage_0_9_0;
+  garage_1_0_0 = generic {
+    version = "1.0.0";
+    sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
+    cargoSha256 = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
+    broken = stdenv.isDarwin;
+  };
 
-  garage = garage_0_9;
+  garage_0_9 = garage_0_9_4;
+
+  garage_1_x = garage_1_0_0;
+
+  garage = garage_1_x;
 }

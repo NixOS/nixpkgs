@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "fastnumbers";
-  version = "5.0.1";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,16 +22,12 @@ buildPythonPackage rec {
     owner = "SethMMorton";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-y9QnFh44zHC+CSlYtKPmkhLSFBUquYZv4qP/pQxu9e0=";
+    hash = "sha256-TC9+xOvskABpChlrSJcHy6O7D7EnIKL6Ekt/vaLBX2E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   # Tests fail due to numeric precision differences on ARM
   # See https://github.com/SethMMorton/fastnumbers/issues/28
@@ -42,13 +39,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--hypothesis-profile=standard"
-  ];
+  pytestFlagsArray = [ "--hypothesis-profile=standard" ];
 
-  pythonImportsCheck = [
-    "fastnumbers"
-  ];
+  pythonImportsCheck = [ "fastnumbers" ];
 
   meta = with lib; {
     description = "Python module for number conversion";

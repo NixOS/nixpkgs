@@ -1,5 +1,7 @@
 { lib
-, python3Packages
+# Python 3.12 demonstrates a peculiar segmentation fault with pyqt5. Using
+# pyqt6 with Python 3.12 should work, but this is not released yet.
+, python311Packages
 , fetchFromGitHub
 
 , chromaprint
@@ -11,23 +13,24 @@
 }:
 
 let
-  pythonPackages = python3Packages;
+  pythonPackages = python311Packages;
   pyqt5 =
     if enablePlayback then
-      pythonPackages.pyqt5_with_qtmultimedia
+      pythonPackages.pyqt5-multimedia
     else
       pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.10";
+  # nix-update --commit picard --version-regex 'release-(.*)'
+  version = "2.12";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-wgIJ813mOSpFzFJESDwNvRSZcX42MTtOyFgSeeRR28g=";
+    hash = "sha256-+++NDJzXw4tA5eQd24r+l3UK3YS8Jy1t9WNiEU9sH0Q=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +63,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
-  setupPyGlobalFlags = [ "build" "--disable-autoupdate" ];
+  setupPyGlobalFlags = [ "build" "--disable-autoupdate" "--localedir=$out/share/locale" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -76,8 +79,8 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
-    description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ ehmry paveloom ];
+    description = "Official MusicBrainz tagger";
+    mainProgram = "picard";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

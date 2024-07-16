@@ -102,6 +102,8 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
 
     # We have to patch the GMP paths for the integer-gmp package.
@@ -220,7 +222,7 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "powerpc64le-linux"
     ];
-    # build segfaults, use ghc8102Binary which has proper musl support instead
+    # build segfaults, use ghc8107Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
     maintainers = with lib.maintainers; [
       guibou

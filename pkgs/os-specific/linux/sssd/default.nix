@@ -3,23 +3,23 @@
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
-  docbook_xsl, docbook_xml_dtd_44,
+  nss_wrapper, ncurses, Po4a, jansson, jose,
+  docbook_xsl, docbook_xml_dtd_45,
   testers, nix-update-script, nixosTests,
   withSudo ? false }:
 
 let
-  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.3";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-WTVOt2TpTCyMmFYzWJMBQdwgmov7m1Sd8CwyL4ywPUY=";
+    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson jose ];
+                  nss_wrapper ncurses Po4a jansson jose ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit (nixosTests) sssd sssd-ldap;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "sssd --version";
@@ -117,5 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ illustris ];
+    pkgConfigModules = [
+      "ipa_hbac"
+      "sss_certmap"
+      "sss_idmap"
+      "sss_nss_idmap"
+    ];
   };
 })

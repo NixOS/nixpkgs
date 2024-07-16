@@ -1,0 +1,84 @@
+From 783ec26c0d83013baf04579a6a415d7f8776ac93 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sun, 7 Jan 2024 11:48:24 +0000
+Subject: [PATCH] ldCache(): patch for @driverLink@
+
+---
+ internal/pkg/util/paths/resolve.go | 41 +++++++++++++++++++++++++++---
+ 1 file changed, 38 insertions(+), 3 deletions(-)
+
+diff --git a/internal/pkg/util/paths/resolve.go b/internal/pkg/util/paths/resolve.go
+index db45d9db1..9d0110b6b 100644
+--- a/internal/pkg/util/paths/resolve.go
++++ b/internal/pkg/util/paths/resolve.go
+@@ -14,6 +14,7 @@ import (
+ 	"fmt"
+ 	"os"
+ 	"os/exec"
++	"path"
+ 	"path/filepath"
+ 	"regexp"
+ 	"strings"
+@@ -154,14 +155,49 @@ func Resolve(fileList []string) ([]string, []string, error) {
+ // lists three variants of libEGL.so.1 that are in different locations, we only
+ // report the first, highest priority, variant.
+ func ldCache() (map[string]string, error) {
++    driverDirs := strings.Split("@driverLink@/lib", ":")
++    if machine, err := elfMachine(); err == nil && machine == elf.EM_386 {
++        driverDirs = strings.Split("@driverLink@-32/lib", ":")
++    }
++
++    soPattern, err := regexp.Compile(`[^\s]+\.so(\.\d+(\.\d+(\.\d+)?)?)?$`)
++    if err != nil {
++		return nil, fmt.Errorf("could not compile ldconfig regexp: %v", err)
++    }
++
++	ldCache := make(map[string]string)
++    for _, dirPath := range driverDirs {
++        dir, err := os.Open(dirPath)
++        if err != nil {
++            /* Maybe we're not running under NixOS */
++            continue
++        }
++        files, err := dir.ReadDir(-1)
++        if err != nil {
++            continue
++        }
++        for _, f := range files {
++            if !soPattern.MatchString(f.Name()) {
++                continue
++            }
++            libName := f.Name()
++            libPath := path.Join(dirPath, f.Name())
++			if _, ok := ldCache[libName]; !ok {
++				ldCache[libName] = libPath
++			}
++        }
++    }
++
+ 	// walk through the ldconfig output and add entries which contain the filenames
+ 	// returned by nvidia-container-cli OR the nvliblist.conf file contents
+ 	ldconfig, err := bin.FindBin("ldconfig")
+-	if err != nil {
++	if err != nil && len(ldCache) == 0 {
++        // Note that missing ldconfig is only an "error" as long
++        // as there's no driverLink
+ 		return nil, err
+ 	}
+ 	out, err := exec.Command(ldconfig, "-p").Output()
+-	if err != nil {
++	if err != nil && len(ldCache) == 0 {
+ 		return nil, fmt.Errorf("could not execute ldconfig: %v", err)
+ 	}
+ 
+@@ -173,7 +209,6 @@ func ldCache() (map[string]string, error) {
+ 	}
+ 
+ 	// store library name with associated path
+-	ldCache := make(map[string]string)
+ 	for _, match := range r.FindAllSubmatch(out, -1) {
+ 		if match != nil {
+ 			// libName is the "libnvidia-ml.so.1" (from the above example)
+-- 
+2.42.0
+

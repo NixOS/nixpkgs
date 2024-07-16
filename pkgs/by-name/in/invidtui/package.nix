@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "invidtui";
-  version = "0.3.6";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "invidtui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zUr0zrIJPpqhHvL7PFFN7cgcgBXV+WHO/eRes7+HzxM=";
+    hash = "sha256-C465lzbZIh8LYDUHNa5u66nFteFsKAffilvy1Danfpg=";
   };
 
-  vendorHash = "sha256-cKvY3/3N3SESBVol7Af3M3mJaPwxLzd/rKN8P+qh7sY=";
+  vendorHash = "sha256-C7O2GJuEdO8geRPfHx1Sq6ZveDE/u65JBx/Egh3cnK4=";
 
   doCheck = true;
 
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://darkhz.github.io/invidtui/";
-    description = "An invidious TUI client";
+    description = "Invidious TUI client";
     license = licenses.mit;
     maintainers = with maintainers; [ rettetdemdativ ];
     mainProgram = "invidtui";

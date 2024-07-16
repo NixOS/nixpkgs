@@ -104,6 +104,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ats.wait_for_open_port(80)
     httpbin.wait_for_unit("httpbin")
     httpbin.wait_for_open_port(80)
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
 
     with subtest("Traffic Server is running"):

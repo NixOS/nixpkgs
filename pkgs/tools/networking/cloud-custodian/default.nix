@@ -1,34 +1,41 @@
-{ lib, buildPythonApplication, fetchPypi
-, argcomplete
-, boto3
-, botocore
-, certifi
-, python-dateutil
-, jsonpatch
-, jsonschema
-, pyyaml
-, tabulate
-, urllib3
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cloud-custodian";
-  version = "0.8.45.1";
+  version = "0.9.38.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "c7n";
-    inherit version;
-    sha256 = "0c199gdmpm83xfghrbzp02xliyxiygsnx2fvb35j9qpf37wzzp3z";
+  src = fetchFromGitHub {
+    owner = "cloud-custodian";
+    repo = "cloud-custodian";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jGWPwHiETS4+hk9euLLxs0PBb7mxz2PHCbYYlFfLQUw=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "docutils"
+    "importlib-metadata"
+    "referencing"
+    "urllib3"
+  ];
+
+  build-system = with python3.pkgs; [ poetry-core ];
+
+
+  dependencies = with python3.pkgs; [
     argcomplete
     boto3
     botocore
     certifi
-    python-dateutil
+    docutils
+    importlib-metadata
     jsonpatch
     jsonschema
+    python-dateutil
     pyyaml
     tabulate
     urllib3
@@ -42,7 +49,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Rules engine for cloud security, cost optimization, and governance";
     homepage = "https://cloudcustodian.io";
+    changelog = "https://github.com/cloud-custodian/cloud-custodian/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple ];
+    mainProgram = "custodian";
   };
 }

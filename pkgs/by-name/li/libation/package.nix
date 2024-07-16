@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  wrapGAppsHook3,
 
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
-, glew
-, gtk3
+  libX11,
+  libICE,
+  libSM,
+  libXi,
+  libXcursor,
+  libXext,
+  libXrandr,
+  fontconfig,
+  glew,
+  gtk3,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.1.0";
+  version = "11.3.6";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-NxG1H8lj+aBpgKj03CDpX/tLT0SxDS3pnZGQ2ultBnQ=";
+    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nugetDeps = ./deps.nix;
 
@@ -43,7 +44,7 @@ buildDotnetModule rec {
     "HangoverAvalonia/HangoverAvalonia.csproj"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   runtimeDeps = [
     # For Avalonia UI
@@ -61,10 +62,10 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-    install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-    install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace "/usr/bin/libation" "${meta.mainProgram}"
+    install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
+    install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
+    substituteInPlace $out/share/applications/libation.desktop \
+        --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
   '';
 
   # wrap manually, because we need lower case excutables
@@ -87,7 +88,7 @@ buildDotnetModule rec {
 
   meta = {
     changelog = "https://github.com/rmcrackan/Libation/releases/tag/${src.rev}";
-    description = "An Audible audiobook manager";
+    description = "Audible audiobook manager";
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Only;
     mainProgram = "libation";

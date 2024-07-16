@@ -70,6 +70,7 @@
        (if localSystem.isMips64n32
         then ./bootstrap-files/mips64el-unknown-linux-gnuabin32.nix
         else ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix);
+      powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
       riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
     };
@@ -89,9 +90,9 @@
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}
-    or (abort "unsupported libc for the pure Linux stdenv");
+    or (throw "unsupported libc for the pure Linux stdenv");
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
-    else (abort "unsupported platform for the pure Linux stdenv"));
+    else (throw "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 
@@ -184,9 +185,9 @@ let
           name = "${name}-gcc-wrapper";
           nativeTools = false;
           nativeLibc = false;
-          buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
-            inherit (prevStage) stdenv;
-          };
+          expand-response-params = lib.optionalString
+            (prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null")
+            prevStage.expand-response-params;
           cc = prevStage.gcc-unwrapped;
           bintools = prevStage.binutils;
           isGNU = true;
@@ -195,6 +196,7 @@ let
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
           fortify-headers = prevStage.fortify-headers;
+          runtimeShell = prevStage.ccWrapperStdenv.shell;
         }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
           # This affects only `xgcc` (the compiler which compiles the final compiler).
           postFixup = (a.postFixup or "") + ''
@@ -259,11 +261,12 @@ in
         name = "bootstrap-stage0-binutils-wrapper";
         nativeTools = false;
         nativeLibc = false;
-        buildPackages = { };
+        expand-response-params = "";
         libc = getLibc self;
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
+        runtimeShell = "${bootstrapTools}/bin/bash";
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -327,12 +330,20 @@ in
     assert isBuiltByBootstrapFilesCompiler prevStage.patchelf;
     stageFun prevStage {
       name = "bootstrap-stage-xgcc";
-      overrides = final: prev: {
+      overrides = self: super: {
         inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
         ${localSystem.libc} = getLibc prevStage;
-        gmp      = prev.gmp.override { cxx = false; };
+        gmp = super.gmp.override { cxx = false; };
+        # This stage also rebuilds binutils which will of course be used only in the next stage.
+        # We inherit this until stage3, in stage4 it will be rebuilt using the adjacent bash/runtimeShell pkg.
+        # TODO(@sternenseemann): Can we already build the wrapper with the actual runtimeShell here?
+        # Historically, the wrapper didn't use runtimeShell, so the used shell had to be changed explicitly
+        # (or stdenvNoCC.shell would be used) which happened in stage4.
+        binutils = super.binutils.override {
+          runtimeShell = "${bootstrapTools}/bin/bash";
+        };
         gcc-unwrapped =
-          (prev.gcc-unwrapped.override (commonGccOverrides // {
+          (super.gcc-unwrapped.override (commonGccOverrides // {
             # The most logical name for this package would be something like
             # "gcc-stage1".  Unfortunately "stage" is already reserved for the
             # layers of stdenv, so using "stage" in the name of this package
@@ -375,7 +386,7 @@ in
             #
             configureFlags = (a.configureFlags or []) ++ [
               "--with-native-system-header-dir=/include"
-              "--with-build-sysroot=${lib.getDev final.stdenv.cc.libc}"
+              "--with-build-sysroot=${lib.getDev self.stdenv.cc.libc}"
             ];
 
             # This is a separate phase because gcc assembles its phase scripts
@@ -543,13 +554,10 @@ in
       # other purposes (binutils and top-level pkgs) too.
       inherit (prevStage) gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
+      # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
       binutils = super.binutils.override {
-        # Don't use stdenv's shell but our own
-        shell = self.bash + "/bin/bash";
         # Build expand-response-params with last stage like below
-        buildPackages = {
-          inherit (prevStage) stdenv;
-        };
+        inherit (prevStage) expand-response-params;
       };
 
       # To allow users' overrides inhibit dependencies too heavy for
@@ -560,15 +568,12 @@ in
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        buildPackages = {
-          inherit (prevStage) stdenv;
-        };
+        inherit (prevStage) expand-response-params;
         cc = prevStage.gcc-unwrapped;
         bintools = self.binutils;
         libc = getLibc self;
         inherit lib;
-        inherit (self) stdenvNoCC coreutils gnugrep;
-        shell = self.bash + "/bin/bash";
+        inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
         fortify-headers = self.fortify-headers;
       };
     };
@@ -645,7 +650,9 @@ in
         # More complicated cases
         ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev
-            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
+              binutils gcc gcc.cc gcc.cc.lib
+              gcc.expand-response-params # != (prevStage.)expand-response-params
+              gcc.cc.libgcc glibc.passthru.libgcc
           ]
         ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
         ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]

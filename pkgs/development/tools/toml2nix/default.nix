@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-YhluLS4tFMibFrDzgIvNtfjM5dAqJQvygeZocKn3+Jg=";
+    hash = "sha256-YhluLS4tFMibFrDzgIvNtfjM5dAqJQvygeZocKn3+Jg=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to convert TOML files to Nix expressions";
+    description = "Tool to convert TOML files to Nix expressions";
+    mainProgram = "toml2nix";
     homepage = "https://crates.io/crates/toml2nix";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];

@@ -3,13 +3,13 @@
 , enableQT             ? false # deprecated name
 , enableQt             ? enableQT
 , enableXM             ? false
-, mesa
-, enableOpenGLX11      ? !mesa.meta.broken
+, libGLX
+, enableOpenGLX11      ? !libGLX.meta.broken
 , enablePython         ? false
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, lib, stdenv, fetchurl, fetchpatch, cmake
+, lib, stdenv, fetchurl, cmake
 
 , clhep
 , expat
@@ -48,12 +48,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.1.3";
+  version = "11.2.2";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-TF++pnidjWGe2sygYx1rUhGmDhv5l0w9P6ue+eImkvU=";
+    hash = "sha256-0k9lc1uKCgOcAPlDSZHpnvEZuGxRDQ8qshFV24KjSR0=";
   };
 
   # Fix broken paths in a .pc
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
   ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
-    "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
-    "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
+    "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
   ] ++ lib.optionals enableInventor [
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A toolkit for the simulation of the passage of particles through matter";
+    description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
       Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.

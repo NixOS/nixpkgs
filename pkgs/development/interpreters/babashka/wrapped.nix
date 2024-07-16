@@ -39,8 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --set-default JAVA_HOME ${jdkBabashka}
 
       installShellCompletion --cmd bb --bash ${babashka-unwrapped}/share/bash-completion/completions/bb.bash
-      installShellCompletion --cmd bb --zsh ${babashka-unwrapped}/share/fish/vendor_completions.d/bb.fish
-      installShellCompletion --cmd bb --fish ${babashka-unwrapped}/share/zsh/site-functions/_bb
+      installShellCompletion --cmd bb --zsh ${babashka-unwrapped}/share/zsh/site-functions/_bb
+      installShellCompletion --cmd bb --fish ${babashka-unwrapped}/share/fish/vendor_completions.d/bb.fish
     '' +
     lib.optionalString withRlwrap ''
       substituteInPlace $out/bin/bb \

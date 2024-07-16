@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-# propagated
-, httpx
-, pydantic
-, typing-extensions
-, anyio
-, distro
-, sniffio
-, tqdm
-# optional
-, numpy
-, pandas
-, pandas-stubs
-# tests
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, respx
-, dirty-equals
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  cached-property,
+  dirty-equals,
+  distro,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  numpy,
+  pandas,
+  pandas-stubs,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  sniffio,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.3.7";
+  version = "1.35.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -34,23 +34,23 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pa53s3U5vby1Fq14WMCJnSR6KA3xkVHmBexkNoX/0sk=";
+    hash = "sha256-THsA284Z/LRQ3GJLnAR5GtFJUYw6EJJZzcFTsiCKxaY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pydantic
+    typing-extensions
     anyio
     distro
     sniffio
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   passthru.optional-dependencies = {
     datalib = [
@@ -60,9 +60,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "openai"
-  ];
+  pythonImportsCheck = [ "openai" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -72,11 +70,22 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
-  OPENAI_API_KEY = "sk-foo";
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # Tests make network requests
+    "test_streaming_response"
+    "test_copy_build_request"
+
+    # Test fails with pytest>=8
+    "test_basic_attribute_access_works"
+  ];
 
   disabledTestPaths = [
-    # makes network requests
-    "tests/test_client.py"
+    # Test makes network requests
     "tests/api_resources"
   ];
 
@@ -86,5 +95,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
+    mainProgram = "openai";
   };
 }

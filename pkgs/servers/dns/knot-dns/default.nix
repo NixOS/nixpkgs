@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.3.3";
+  version = "3.3.7";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "aab40aab2acd735c500f296bacaa5c84ff0488221a4068ce9946e973beacc5ae";
+    sha256 = "18ceb398578342e9a3d5b75f2423945a2f8d1d7c730f24f4d2aa4a24b50e831d";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -46,9 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CFLAGS = [ "-O2" "-DNDEBUG" ]
-    # https://gitlab.nic.cz/knot/knot-dns/-/issues/909
-    ++ lib.optional stdenv.isDarwin "-D__APPLE_USE_RFC_3542";
+  CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
   checkFlags = [ "V=1" ]; # verbose output in case some test fails

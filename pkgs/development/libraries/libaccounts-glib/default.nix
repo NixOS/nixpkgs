@@ -1,21 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, meson, mesonEmulatorHook, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
+{ lib, stdenv, fetchFromGitLab, gitUpdater, meson, mesonEmulatorHook, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
 , libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
-  version = "1.24";
+  version = "1.27";
 
   outputs = [ "out" "dev" "devdoc" "py" ];
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "libaccounts-glib";
-    rev = version;
-    sha256 = "0y8smg1rd279lrr9ad8b499i8pbkajmwd4xn41rdh9h93hs9apn7";
+    rev = "VERSION_${version}";
+    hash = "sha256-mLhcwp8rhCGSB1K6rTWT0tuiINzgwULwXINfCbgPKEg=";
   };
-
-  # See: https://gitlab.com/accounts-sso/libaccounts-glib/merge_requests/22
-  patches = [ ./py-override.patch ];
 
   nativeBuildInputs = [
     check
@@ -49,11 +46,17 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
+    "-Dinstall-py-overrides=true"
     "-Dpy-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "VERSION_";
+  };
+
   meta = with lib; {
     description = "Library for managing accounts which can be used from GLib applications";
+    homepage = "https://gitlab.com/accounts-sso/libaccounts-glib";
     platforms = platforms.linux;
     license = licenses.lgpl21;
   };

@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+OTWFDnHCF2bxQU8f7DfULYG1cA9tOZCsNRPdKobns8=";
+    hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Command-line tool for helping developers maintain useful changelogs.";
+    description = "Command-line tool for helping developers maintain useful changelogs";
     homepage = "https://github.com/nedbat/scriv";
     changelog = "https://github.com/nedbat/scriv/releases/tag/${version}";
     license = lib.licenses.asl20;

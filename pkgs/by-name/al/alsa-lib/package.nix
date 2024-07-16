@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.9";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-3JxkP9xMz9BXLMaFhY3UHgivtYPzBGCzF+QYgnX2FbI=";
+    url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-nz8vabmV+a03NZBy+8aaOoi/uggfyD6b4w4UZieVu00=";
   };
 
   patches = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
+    mainProgram = "aserver";
 
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and

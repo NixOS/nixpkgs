@@ -12,25 +12,25 @@ in {
 
   guiStable = mkGui {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-Ae1Yij81/rhZOMMfLYaQKR4Dxx1gDGZBpBj0gLCSToI=";
+    version = "2.2.47";
+    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
   };
 
   guiPreview = mkGui {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-Ae1Yij81/rhZOMMfLYaQKR4Dxx1gDGZBpBj0gLCSToI=";
+    version = "2.2.47";
+    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
   };
 
   serverStable = mkServer {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-YtYXTEZj5009L8OU7jdhegYu5Xll3jZAW6NJFWOvxHQ=";
+    version = "2.2.47";
+    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
   };
 
   serverPreview = mkServer {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-YtYXTEZj5009L8OU7jdhegYu5Xll3jZAW6NJFWOvxHQ=";
+    version = "2.2.47";
+    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
   };
 }

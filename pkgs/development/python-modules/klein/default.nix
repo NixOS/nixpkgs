@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, wheel
+  # build-system
+  setuptools,
+  wheel,
 
-# dependencies
-, attrs
-, hyperlink
-, incremental
-, tubes
-, twisted
-, werkzeug
-, zope_interface
+  # dependencies
+  attrs,
+  hyperlink,
+  incremental,
+  tubes,
+  twisted,
+  werkzeug,
+  zope-interface,
 
-# tests
-, idna
-, python
-, treq
+  # tests
+  idna,
+  python,
+  treq,
 }:
 
 buildPythonPackage rec {
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     twisted
     tubes
     werkzeug
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
@@ -62,9 +63,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "klein"
-  ];
+  pythonImportsCheck = [ "klein" ];
 
   meta = with lib; {
     changelog = "https://github.com/twisted/klein/releases/tag/${version}";

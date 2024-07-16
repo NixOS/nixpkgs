@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     repo = "sml-redprl";
     rev = "c72190de76f7ed1cfbe1d2046c96e99ac5022b0c";
     fetchSubmodules = true;
-    sha256 = "sha256-xrQT5o0bsIN+mCYUOz9iY4+j3HGROb1I6R2ADcLy8n4=";
+    hash = "sha256-xrQT5o0bsIN+mCYUOz9iY4+j3HGROb1I6R2ADcLy8n4=";
   };
 
   buildInputs = [ mlton ];
@@ -28,7 +28,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A proof assistant for Nominal Computational Type Theory";
+    description = "Proof assistant for Nominal Computational Type Theory";
+    mainProgram = "redprl";
     homepage = "http://www.redprl.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ acowley ];

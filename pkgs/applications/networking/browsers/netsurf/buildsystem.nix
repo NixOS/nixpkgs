@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-buildsystem";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/buildsystem-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k4QeMUpoggmiC4dF8GU5PzqQ8Bvmj0Xpa8jS9KKqmio=";
+    hash = "sha256-PT451WnkRnfEsXkSm95hTGV5jis+YlMWAjnR/W6uTXk=";
   };
 
   makeFlags = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf browser shared build system";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vrthra AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

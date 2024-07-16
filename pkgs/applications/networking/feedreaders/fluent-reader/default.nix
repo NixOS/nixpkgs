@@ -14,8 +14,6 @@ in appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
@@ -27,6 +25,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Modern desktop RSS reader built with Electron, React, and Fluent UI";
+    mainProgram = "fluent-reader";
     homepage = "https://hyliu.me/fluent-reader";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

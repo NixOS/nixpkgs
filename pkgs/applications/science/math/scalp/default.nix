@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     url = "https://digidev.digi.e-technik.uni-kassel.de/git/scalp.git";
     # mirrored at https://git.sr.ht/~weijia/scalp
     rev = "185b84e4ff967f42cf2de5db4db4e6fa0cc18fb8";
-    sha256 = "sha256-NyMZdJwdD3FR6uweYCclJjfcf3Y24Bns1ViwsmJ5izg=";
+    hash = "sha256-NyMZdJwdD3FR6uweYCclJjfcf3Y24Bns1ViwsmJ5izg=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scalable Linear Programming Library";
+    mainProgram = "scalp";
     homepage = "https://digidev.digi.e-technik.uni-kassel.de/scalp/";
     license = licenses.lgpl3;
     platforms = platforms.unix;

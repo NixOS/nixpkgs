@@ -1,6 +1,6 @@
 { version, rev, sourceSha256 }:
 
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
 , expat, fftw, gdcm, hdf5-cpp, libjpeg, libminc, libtiff, libpng
 , libX11, libuuid, xz, vtk, zlib, Cocoa }:
 
@@ -37,6 +37,14 @@ stdenv.mkDerivation {
     inherit rev;
     sha256 = sourceSha256;
   };
+
+  patches = lib.optionals (lib.versionOlder version "5.4") [
+    (fetchpatch {
+      name = "fix-gcc13-build";
+      url = "https://github.com/InsightSoftwareConsortium/ITK/commit/9a719a0d2f5f489eeb9351b0ef913c3693147a4f.patch";
+      hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
@@ -101,6 +109,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
+    mainProgram = "itkTestDriver";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [viric];

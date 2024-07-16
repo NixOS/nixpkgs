@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.90.1";
+  version = "0.103.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-JKcYvJtuN38VrhcVFHRc0CKTH+x8HShs1/Ui0iN1jNo=";
+    hash = "sha256-xmsxr1A0/kyWXLNVZglZy8K7ieZT1GS4lGqsSrUkttI=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-vaWOUc4CwiCDqe1szrBcgbHXQH/OkGTN0iqh+3CKPLQ=";
+  vendorHash = "sha256-1NDGfzg/60VJNrWkMtGS2t3Cv1CXSguR1qLp4mqF1UM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,7 +50,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "Vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

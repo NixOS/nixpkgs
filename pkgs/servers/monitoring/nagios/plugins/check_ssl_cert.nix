@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "2.78.0";
+  version = "2.82.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5a9mrRd3YqKuz/VG7/CheMWpy99PpnyPaA5/VFEvj3Y=";
+    hash = "sha256-u+/IXevDt4mlnQ4a1M1t2Zh26/FBd9yAtpr71NrdXTY=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nagios plugin to check the CA and validity of an X.509 certificate";
+    mainProgram = "check_ssl_cert";
     homepage = "https://github.com/matteocorti/check_ssl_cert";
     changelog = "https://github.com/matteocorti/check_ssl_cert/releases/tag/v${version}";
     license = licenses.gpl3Plus;

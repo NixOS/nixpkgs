@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unbook";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "unbook";
     rev = version;
-    hash = "sha256-KYnSIT/zIrbDFRWIaQRto0sPPmpJC8V7f00j4t/AsGQ=";
+    hash = "sha256-THCPJ4zOKSXKZDa5DuqpBfBKZ96TdFEuDMVw/HmO7Eo=";
   };
 
-  cargoHash = "sha256-AjyeTFgjl3XLplo8w9jne5FyKd2EciwbAKKiaDshpcA=";
+  cargoHash = "sha256-EbSayNz9cPmMDQOaOiyQAYmtlnb+4jzbffm1On0BBxI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An ebook to self-contained-HTML converter";
+    description = "Ebook to self-contained-HTML converter";
     homepage = "https://unbook.ludios.org";
     license = licenses.cc0;
     maintainers = with maintainers; [ jmbaur ];

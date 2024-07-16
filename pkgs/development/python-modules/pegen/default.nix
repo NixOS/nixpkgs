@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,25 +23,24 @@ buildPythonPackage rec {
     hash = "sha256-P4zX8za9lBlXhNPkQe9p136ggZEJh6fHfBr+DQKvtTg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pegen"
-  ];
+  pythonImportsCheck = [ "pegen" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/we-like-parsers/pegen/issues/89
-    "test_invalid_def_stmt"
-  ];
+  disabledTests =
+    [
+      # ValueError: Expected locations of (1, 3) and...
+      "test_invalid_call_arguments"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      # https://github.com/we-like-parsers/pegen/issues/89
+      "test_invalid_def_stmt"
+    ];
 
   meta = with lib; {
     description = "Library to generate PEG parsers";

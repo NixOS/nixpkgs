@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6758ej7bTvwZPWifl239rQMazM8uw+Y4+3EbjE8XsTg=";
   };
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "svix-server";
-    description = "The enterprise-ready webhooks service";
+    description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
     changelog =
       "https://github.com/svix/svix-webhooks/releases/tag/v${version}";

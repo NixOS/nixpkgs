@@ -1,79 +1,82 @@
-{ aiohttp
-, aiohttp-cors
-, aiorwlock
-, aiosignal
-, attrs
-, autoPatchelfHook
-, buildPythonPackage
-, fetchPypi
-, click
-, cloudpickle
-, colorama
-, colorful
-, cython
-, dm-tree
-, fastapi
-, filelock
-, frozenlist
-, fsspec
-, gpustat
-, grpcio
-, gym
-, jsonschema
-, lib
-, lz4
-, matplotlib
-, msgpack
-, numpy
-, opencensus
-, packaging
-, pandas
-, py-spy
-, prometheus-client
-, psutil
-, pyarrow
-, pydantic
-, python
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, scikit-image
-, scipy
-, setproctitle
-, smart-open
-, starlette
-, tabulate
-, tensorboardx
-, uvicorn
-, virtualenv
+{
+  aiohttp,
+  aiohttp-cors,
+  aiorwlock,
+  aiosignal,
+  attrs,
+  autoPatchelfHook,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  cloudpickle,
+  colorama,
+  colorful,
+  cython,
+  dm-tree,
+  fastapi,
+  filelock,
+  frozenlist,
+  fsspec,
+  gpustat,
+  grpcio,
+  gym,
+  jsonschema,
+  lib,
+  lz4,
+  matplotlib,
+  msgpack,
+  numpy,
+  opencensus,
+  packaging,
+  pandas,
+  py-spy,
+  prometheus-client,
+  psutil,
+  pyarrow,
+  pydantic,
+  python,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  requests,
+  scikit-image,
+  scipy,
+  setproctitle,
+  smart-open,
+  starlette,
+  tabulate,
+  tensorboardx,
+  uvicorn,
+  virtualenv,
 }:
 
 let
   pname = "ray";
-  version = "2.7.0";
+  version = "2.32.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
   src =
     let
-      pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or {};
+      pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
     in
-    fetchPypi ({
-      inherit pname version format;
-      dist = pyShortVersion;
-      python = pyShortVersion;
-      abi = pyShortVersion;
-      platform = "manylinux2014_x86_64";
-    } // binary-hash);
+    fetchPypi (
+      {
+        inherit pname version format;
+        dist = pyShortVersion;
+        python = pyShortVersion;
+        abi = pyShortVersion;
+        platform = "manylinux2014_x86_64";
+      }
+      // binary-hash
+    );
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     data-deps = [
       pandas
       pyarrow
@@ -108,7 +111,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -118,7 +120,7 @@ buildPythonPackage rec {
     "virtualenv"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     aiohttp
     aiohttp-cors
@@ -152,16 +154,14 @@ buildPythonPackage rec {
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}
   '';
 
-  pythonImportsCheck = [
-    "ray"
-  ];
+  pythonImportsCheck = [ "ray" ];
 
-  meta = with lib; {
-    description = "A unified framework for scaling AI and Python applications";
+  meta = {
+    description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
     platforms = [ "x86_64-linux" ];
   };
 }

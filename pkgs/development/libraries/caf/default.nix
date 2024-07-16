@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
-  version = "0.19.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
     rev = version;
-    hash = "sha256-Qi3nyUSwrYBy8lCP+R6/u/WtnZJcgSwb07pZVScAzcU=";
+    hash = "sha256-woyl6HcUGOB3WWiNVMrmrpDAePFTzNtqK9V4UOzDb50=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with lib; {
-    description = "An open source implementation of the actor model in C++";
+    description = "Open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;

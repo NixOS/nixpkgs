@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, docutils
-, mistune
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  docutils,
+  mistune,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qvtn/EnPsdieRqNEOsdH4V9LtC3yDtBPBnrZ777iVqs=";
+    hash = "sha256-qvtn/EnPsdieRqNEOsdH4V9LtC3yDtBPBnrZ777iVqs=";
   };
 
   patches = [
@@ -31,7 +32,10 @@ buildPythonPackage rec {
       --replace "optional" "positional"
   '';
 
-  propagatedBuildInputs = [ mistune docutils ];
+  propagatedBuildInputs = [
+    mistune
+    docutils
+  ];
 
   nativeCheckInputs = [ pygments ];
 

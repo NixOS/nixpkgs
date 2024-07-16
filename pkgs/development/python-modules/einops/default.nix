@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, chainer
-, fetchFromGitHub
-, hatchling
-, jupyter
-, nbconvert
-, numpy
-, parameterized
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jupyter,
+  nbconvert,
+  numpy,
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,13 +23,12 @@ buildPythonPackage rec {
     owner = "arogozhnikov";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wCs3rMnYCk07kJ3iPItxwCQATflKBYHk6tfBCjiF+bc=";
+    hash = "sha256-6x9AttvSvgYrHaS5ESKOwyEnXxD2BitYTGtqqSKur+0=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
-    chainer
     jupyter
     nbconvert
     numpy
@@ -38,15 +37,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env.EINOPS_TEST_BACKENDS = "numpy,chainer";
+  env.EINOPS_TEST_BACKENDS = "numpy";
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "einops"
-  ];
+  pythonImportsCheck = [ "einops" ];
 
   disabledTests = [
     # Tests are failing as mxnet is not pulled-in
@@ -56,9 +53,9 @@ buildPythonPackage rec {
     "test_backends_installed"
   ];
 
-  disabledTestPaths = [
-    "tests/test_layers.py"
-  ];
+  disabledTestPaths = [ "tests/test_layers.py" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Flexible and powerful tensor operations for readable and reliable code";
@@ -67,4 +64,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ yl3dy ];
   };
 }
-

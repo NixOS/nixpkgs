@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A sexy and modern icon theme with Tango influences";
+    description = "Sexy and modern icon theme with Tango influences";
     homepage = "https://snwh.org/moka";
     license = with licenses; [ cc-by-sa-40 gpl3 ];
     platforms = platforms.all;

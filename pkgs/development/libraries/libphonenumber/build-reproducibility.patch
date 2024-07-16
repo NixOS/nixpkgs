@@ -1,8 +1,6 @@
-diff --git a/tools/cpp/src/cpp-build/generate_geocoding_data.cc b/tools/cpp/src/cpp-build/generate_geocoding_data.cc
-index 205947e831..1e628e2cd2 100644
---- a/tools/cpp/src/cpp-build/generate_geocoding_data.cc
-+++ b/tools/cpp/src/cpp-build/generate_geocoding_data.cc
-@@ -97,7 +97,8 @@ class DirEntry {
+--- a/tools/cpp/src/cpp-build/generate_geocoding_data.cc.orig	1970-01-01 01:00:01.000000000 +0100
++++ b/tools/cpp/src/cpp-build/generate_geocoding_data.cc	2024-01-16 19:03:45.409089423 +0100
+@@ -94,7 +94,8 @@
    DirEntryKinds kind_;
  };
  
@@ -12,13 +10,19 @@ index 205947e831..1e628e2cd2 100644
  // success.
  bool ListDirectory(const string& path, vector<DirEntry>* entries) {
    entries->clear();
-@@ -135,6 +136,9 @@ bool ListDirectory(const string& path, vector<DirEntry>* entries) {
+@@ -114,8 +115,14 @@
+     // http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
+     errno = 0;
+     entry = readdir(dir);
++    if (errno != 0) {
++      return false;
++    }
+     if (entry == NULL) {
+-      return errno == 0;
++      std::sort(
++          entries->begin(), entries->end(),
++          [](const DirEntry& a, const DirEntry& b) { return a.name() < b.name(); });
++      return true;
      }
-     entries->push_back(DirEntry(entry->d_name, kind));
-   }
-+  std::sort(
-+      entries->begin(), entries->end(),
-+      [](const DirEntry& a, const DirEntry& b) { return a.name() < b.name(); });
- }
- 
- // Returns true if s ends with suffix.
+     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+        continue;

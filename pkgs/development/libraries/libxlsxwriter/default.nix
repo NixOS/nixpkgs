@@ -8,18 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
     rev = "RELEASE_${version}";
-    hash = "sha256-fC03LwZIUkEsAs9TN0n2z0iSOGPAtVCeuW5rxC7Ek7Q=";
+    hash = "sha256-bJ0NMbK9c21YYdcg/TW3ePSDVi5hly6lSW7wXFskI8M=";
   };
-
-  nativeBuildInputs = [
-    python3.pkgs.pytest
-  ];
 
   buildInputs = [
     minizip
@@ -35,6 +31,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   doCheck = true;
+
+  nativeCheckInputs = [
+    python3.pkgs.pytest
+  ];
 
   checkTarget = "test";
 

@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
-, icu
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  six,
+  icu,
 }:
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.11";
+  version = "2.13.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyICU";
     inherit version;
-    hash = "sha256-OrUxJkz+kTKz0qxdcI2ppGSdJfbmgTcwrIjPBAoIqEQ=";
+    hash = "sha256-1JGQheqgfaErrejuch57v3reAVHKD4KUaibI9LmM3Os=";
   };
 
   nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
   buildInputs = [ icu ];
-  nativeCheckInputs = [ pytestCheckHook six ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
   pythonImportsCheck = [ "icu" ];
 

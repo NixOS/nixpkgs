@@ -1,67 +1,61 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchpatch
-, fetchPypi
-, axisregistry
-, babelfont
-, beautifulsoup4
-, beziers
-, cmarkgfm
-, collidoscope
-, defcon
-, dehinter
-, fonttools
-, font-v
-, freetype-py
-, gflanguages
-, git
-, glyphsets
-, lxml
-, installShellFiles
-, munkres
-, opentypespec
-, ots-python
-, packaging
-, pip-api
-, protobuf
-, pytestCheckHook
-, pytest-xdist
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, requests-mock
-, rich
-, setuptools-scm
-, shaperglot
-, stringbrewer
-, toml
-, unicodedata2
-, ufo2ft
-, ufolint
-, vharfbuzz
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  axisregistry,
+  babelfont,
+  beautifulsoup4,
+  beziers,
+  cmarkgfm,
+  collidoscope,
+  defcon,
+  dehinter,
+  fonttools,
+  font-v,
+  freetype-py,
+  gflanguages,
+  gfsubsets,
+  git,
+  glyphsets,
+  lxml,
+  installShellFiles,
+  jinja2,
+  munkres,
+  opentypespec,
+  ots-python,
+  packaging,
+  pip-api,
+  protobuf,
+  pytestCheckHook,
+  pytest-xdist,
+  pyyaml,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  setuptools-scm,
+  shaperglot,
+  stringbrewer,
+  toml,
+  unicodedata2,
+  ufo2ft,
+  ufolint,
+  vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.10.4";
-  format = "setuptools";
+  version = "0.12.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ye/TMGvURxSU2yoohwYbSo5RvrmbHKdMnFNj2lUvtMk=";
+    hash = "sha256-7cZeazEyAyU+WDop2n7wneg2wzh+9U9atKSRcreJpGw=";
   };
 
-  patches = [
-    # Mock HTTP requests in tests (note we still have to skip some below)
-    # https://github.com/googlefonts/fontbakery/pull/4124
-    (fetchpatch {
-      url = "https://github.com/fonttools/fontbakery/pull/4124.patch";
-      hash = "sha256-NXuC2+TtxpHYMdd0t+cF0FJ3lrh4exP5yxspEasKKd0=";
-    })
-  ];
+  pyproject = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     axisregistry
     babelfont
     beautifulsoup4
@@ -74,8 +68,10 @@ buildPythonPackage rec {
     font-v
     freetype-py
     gflanguages
+    gfsubsets
     glyphsets
     lxml
+    jinja2
     munkres
     ots-python
     opentypespec
@@ -93,10 +89,12 @@ buildPythonPackage rec {
     vharfbuzz
     ufo2ft
   ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
-    setuptools-scm
   ];
 
   pythonRelaxDeps = [
@@ -125,7 +123,14 @@ buildPythonPackage rec {
   '';
   disabledTests = [
     # These require network access:
+    "test_check_description_broken_links"
+    "test_check_description_family_update"
+    "test_check_metadata_designer_profiles"
+    "test_check_metadata_has_tags"
+    "test_check_metadata_includes_production_subsets"
+    "test_check_vertical_metrics"
     "test_check_vertical_metrics_regressions"
+    "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
   ];
@@ -144,4 +149,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

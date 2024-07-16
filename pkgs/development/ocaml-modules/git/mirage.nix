@@ -44,7 +44,6 @@ buildDunePackage {
   inherit (git) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   buildInputs = [
     dns
@@ -92,6 +91,6 @@ buildDunePackage {
   ];
 
   meta = git.meta // {
-    description = "A package to use ocaml-git with MirageOS backend";
+    description = "Package to use ocaml-git with MirageOS backend";
   };
 }

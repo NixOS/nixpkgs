@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openjdk, glib, dpkg, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, openjdk, glib, dpkg, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "bluej";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
   };
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   dontWrapGApps = true;
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple integrated development environment for Java";
+    description = "Simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
-    mainProgram = pname;
+    mainProgram = "bluej";
     maintainers = with maintainers; [ chvp ];
     platforms = platforms.linux;
   };

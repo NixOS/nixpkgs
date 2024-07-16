@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -25,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Language Server Protocol server for Jsonnet";
+    mainProgram = "jsonnet-language-server";
     homepage = "https://github.com/grafana/jsonnet-language-server";
     changelog = "https://github.com/grafana/jsonnet-language-server/releases/tag/v${version}";
     license = licenses.agpl3Only;

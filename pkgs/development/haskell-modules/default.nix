@@ -9,6 +9,7 @@
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
+, configurationJS ? import ./configuration-ghcjs-9.x.nix
 }:
 
 let
@@ -26,10 +27,13 @@ let
     (configurationArm { inherit pkgs haskellLib; })
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (configurationDarwin { inherit pkgs haskellLib; })
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isGhcjs [
+    (configurationJS { inherit pkgs haskellLib; })
+  ]
+  ;
 
   extensions = lib.composeManyExtensions ([
-    nonHackagePackages
+    (nonHackagePackages { inherit pkgs haskellLib; })
     (configurationNix { inherit pkgs haskellLib; })
     (configurationCommon { inherit pkgs haskellLib; })
   ] ++ platformConfigurations ++ [

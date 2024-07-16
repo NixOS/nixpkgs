@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     knownVulnerabilities = [
-      "CVE-2018-12437" # CVE is about LibTomCrypt
+      "CVE-2021-40528"
     ];
   };
 }

@@ -54,7 +54,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
             name = "eth1";
             networkConfig.Bridge = "br0";
             bridgeVLANs = [
-              { bridgeVLANConfig = { PVID = 2; EgressUntagged = 2; }; }
+              { PVID = 2; EgressUntagged = 2; }
             ];
           };
           "02-br0" = {
@@ -69,8 +69,8 @@ import ./make-test-python.nix ({pkgs, ...}: {
               PoolSize = 1;
             };
             bridgeVLANs = [
-              { bridgeVLANConfig = { PVID = 1; EgressUntagged = 1; }; }
-              { bridgeVLANConfig = { VLAN = 2; }; }
+              { PVID = 1; EgressUntagged = 1; }
+              { VLAN = 2; }
             ];
           };
           "02-vlan2" = {
@@ -101,6 +101,9 @@ import ./make-test-python.nix ({pkgs, ...}: {
   };
   testScript = { ... }: ''
     start_all()
+
+    router.systemctl("start network-online.target")
+    client.systemctl("start network-online.target")
     router.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_until_succeeds("ping -c 5 10.0.2.1")

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , substituteAll
 , buildGoModule
@@ -7,7 +6,7 @@
 , deepin-gettext-tools
 , gettext
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , ddcutil
 , alsa-lib
 , glib
@@ -38,16 +37,16 @@
 
 buildGoModule rec {
   pname = "dde-daemon";
-  version = "6.0.22";
+  version = "6.0.34";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-D7s6wWZeZHYl/aP/0qLYNn+lZEwGJAjFNbO0whKymck=";
+    hash = "sha256-NIFgv6EUSnCqSdPttx6wrr7K1nRV/JIZJy9uS7uu0Sc=";
   };
 
-  vendorHash = "sha256-U+G5CELpor34RgFzHpxfvJ/jBfWfE4ShjY2b2Z61BhE=";
+  vendorHash = "sha256-F39QGxY0aD+hHWguHosSrSzcB/ahYbnFW9vVtS5oUnU=";
 
   patches = [
     ./0001-dont-set-PATH.diff
@@ -64,22 +63,26 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace session/eventlog/{app_event.go,login_event.go} \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
 
     substituteInPlace inputdevices/layout_list.go \
-      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
+      --replace-fail "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
 
-    substituteInPlace bin/dde-system-daemon/wallpaper.go accounts1/user.go \
-     --replace "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
+    substituteInPlace accounts1/user.go \
+      --replace-fail "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
 
     substituteInPlace timedate1/zoneinfo/zone.go \
-     --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      --replace-fail "/usr/share/dde" "$out/share/dde" \
+      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
 
     substituteInPlace accounts1/image_blur.go grub2/modify_manger.go \
-      --replace "/usr/lib/deepin-api" "/run/current-system/sw/lib/deepin-api"
+      --replace-fail "/usr/lib/deepin-api" "/run/current-system/sw/lib/deepin-api"
 
     substituteInPlace accounts1/user_chpwd_union_id.go \
-      --replace "/usr/lib/dde-control-center" "/run/current-system/sw/lib/dde-control-center"
+      --replace-fail "/usr/lib/dde-control-center" "/run/current-system/sw/lib/dde-control-center"
+
+    substituteInPlace system/uadp1/crypto.go \
+      --replace-fail "/usr/share/uadp" "/var/lib/dde-daemon/uadp"
 
     for file in $(grep "/usr/lib/deepin-daemon" * -nR |awk -F: '{print $1}')
     do
@@ -94,7 +97,7 @@ buildGoModule rec {
     deepin-gettext-tools
     gettext
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -60,6 +60,7 @@ qt5.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
+    mainProgram = "x2goclient";
     homepage = "http://x2go.org/";
     maintainers = with maintainers; [ ];
     license = licenses.gpl2;

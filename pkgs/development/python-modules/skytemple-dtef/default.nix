@@ -1,43 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, pytestCheckHook
-, pythonOlder
-, skytemple-files
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  skytemple-files,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-dtef";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-dtef";
     rev = version;
-    hash = "sha256-ngIjM8DW9HQJpa/U2f1sy+6CeWdccayp60vbJmos+A8=";
+    hash = "sha256-vVh4WRjx/iFJnTZC7D/OCi0gOwKaXs/waVXUEu5Cda8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pillow
     skytemple-files
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "skytemple_dtef"
-  ];
+  pythonImportsCheck = [ "skytemple_dtef" ];
 
   meta = with lib; {
-    description = "A format for standardized rule-based tilesets with 256 adjacency combinations";
+    description = "Format for standardized rule-based tilesets with 256 adjacency combinations";
     homepage = "https://github.com/SkyTemple/skytemple-dtef";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

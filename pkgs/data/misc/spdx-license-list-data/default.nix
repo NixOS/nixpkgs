@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.22";
+  version = "3.24.0";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    hash = "sha256-ZADijP8TKMSXJApY7pVTJoqsEPPL8PX7dUFJHFX5utw=";
+    hash = "sha256-G7xRxHakkDphzMydxqfKEDLUp5ay2JwAtWhTTYiK+IM=";
   };
 
   # List of file formats to package.

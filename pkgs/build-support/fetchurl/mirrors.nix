@@ -125,6 +125,7 @@
 
   # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
+    "https://cdn.download.kde.org/"
     "https://download.kde.org/download.php?url="
     "https://ftp.gwdg.de/pub/linux/kde/"
     "https://mirrors.ocf.berkeley.edu/kde/"
@@ -309,6 +310,12 @@
     "https://cpan.perl.org/"
     "https://mirrors.kernel.org/CPAN/"
     "https://backpan.perl.org/"  # for old releases
+  ];
+
+  # D DUB
+  dub = [
+    "https://code.dlang.org/packages/"
+    "https://codemirror.dlang.org/packages/"
   ];
 
   # Haskell Hackage

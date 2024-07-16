@@ -9,17 +9,17 @@ let
   inherit (lib.types) nonEmptyStr nullOr;
 
   options.services.tsmBackup = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       automatic backups with the
       IBM Storage Protect (Tivoli Storage Manager, TSM) client.
       This also enables
       {option}`programs.tsmClient.enable`
-    '');
+    '';
     command = mkOption {
       type = nonEmptyStr;
       default = "backup";
       example = "incr";
-      description = lib.mdDoc ''
+      description = ''
         The actual command passed to the
         `dsmc` executable to start the backup.
       '';
@@ -27,7 +27,7 @@ let
     servername = mkOption {
       type = nonEmptyStr;
       example = "mainTsmServer";
-      description = lib.mdDoc ''
+      description = ''
         Create a systemd system service
         `tsm-backup.service` that starts
         a backup based on the given servername's stanza.
@@ -45,7 +45,7 @@ let
       type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
-      description = lib.mdDoc ''
+      description = ''
         The backup service will be invoked
         automatically at the given date/time,
         which must be in the format described in
@@ -90,7 +90,7 @@ in
       environment.HOME = "/var/lib/tsm-backup";
       serviceConfig = {
         # for exit status description see
-        # https://www.ibm.com/docs/en/storage-protect/8.1.20?topic=clients-client-return-codes
+        # https://www.ibm.com/docs/en/storage-protect/8.1.23?topic=clients-client-return-codes
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.

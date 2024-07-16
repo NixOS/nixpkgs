@@ -1,4 +1,8 @@
-{ fetchFromGitHub, lib, php }:
+{
+  fetchFromGitHub,
+  lib,
+  php,
+}:
 
 php.buildComposerProject (finalAttrs: {
   pname = "psysh";
@@ -16,7 +20,8 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
-    description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
+    description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP";
+    mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
     maintainers = lib.teams.php.members;

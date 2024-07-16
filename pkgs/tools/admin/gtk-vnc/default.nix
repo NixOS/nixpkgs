@@ -70,9 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK VNC widget";
-    homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
+    homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
     platforms = platforms.unix;
+    mainProgram = "gvnccapture";
   };
 }

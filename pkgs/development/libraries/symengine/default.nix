@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    hash = "sha256-TB6wZnPZ16k8N8r0F6x+363zlTCJbM4HsKLvMZy1uYA=";
+    hash = "sha256-SfifujR2VM1OlPN0ZRUC3hWImXO/8PuiyrBdpyNoKW4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A fast symbolic manipulation library";
+    description = "Fast symbolic manipulation library";
     homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;
     license = licenses.bsd3;

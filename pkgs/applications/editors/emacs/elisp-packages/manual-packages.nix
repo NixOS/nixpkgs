@@ -5,6 +5,8 @@ let
   inherit (self) callPackage;
 in
 {
+  inherit (pkgs) emacspeak;
+
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
@@ -17,9 +19,13 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
+
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
@@ -27,7 +33,9 @@ in
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
-  emacspeak = callPackage ./manual-packages/emacspeak { };
+  emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
+
+  enlight = callPackage ./manual-packages/enlight { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
@@ -35,9 +43,11 @@ in
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
+  ghc-mod = callPackage ./manual-packages/ghc-mod { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
+
+  grid = callPackage ./manual-packages/grid { };
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
@@ -80,6 +90,8 @@ in
   structured-haskell-mode = self.shm;
 
   sv-kalender = callPackage ./manual-packages/sv-kalender { };
+
+  texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 

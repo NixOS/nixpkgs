@@ -1,19 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  stdenv,
+  anthropic,
+  attr,
+  buildPythonPackage,
+  dataclasses-json,
+  fastapi,
+  fetchFromGitHub,
+  freezegun,
+  httpx,
+  instructor,
+  orjson,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.69";
-  format = "pyproject";
+  version = "0.1.85";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,25 +31,32 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LP97bGCmLw2uFcFdFcDWM7hSuki7r7T6WFHI6i3rF34=";
+    hash = "sha256-IPbamCfaurikFAqKnvMp8+x5ULCeQ61d5oZFO9+s4SQ=";
   };
 
   sourceRoot = "${src.name}/python";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    orjson
     pydantic
     requests
   ];
 
   nativeCheckInputs = [
+    anthropic
+    dataclasses-json
+    fastapi
     freezegun
+    httpx
+    instructor
     pytest-asyncio
     pytestCheckHook
-  ];
+    uvicorn
+  ] ++ lib.optionals stdenv.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -49,16 +66,25 @@ buildPythonPackage rec {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+    # Test requires git repo
+    "test_git_info"
+    # Tests require OpenAI API key
+    "test_chat_async_api"
+    "test_chat_sync_api"
+    "test_completions_async_api"
+    "test_completions_sync_api"
   ];
 
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/unit_tests/test_client.py"
+    # Tests require a Langsmith API key
+    "tests/evaluation/test_evaluation.py"
+    "tests/external/test_instructor_evals.py"
   ];
 
-  pythonImportsCheck = [
-    "langsmith"
-  ];
+  pythonImportsCheck = [ "langsmith" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -68,5 +94,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "langsmith";
   };
 }

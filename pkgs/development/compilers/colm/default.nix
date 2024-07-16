@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A programming language for the analysis and transformation of computer languages";
+    description = "Programming language for the analysis and transformation of computer languages";
+    mainProgram = "colm";
     homepage = "http://www.colm.net/open-source/colm";
     license = licenses.gpl2;
     platforms = platforms.unix;

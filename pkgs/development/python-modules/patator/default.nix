@@ -1,21 +1,22 @@
-{ lib
-, ajpy
-, buildPythonPackage
-, cx_oracle
-, dnspython
-, fetchPypi
-, impacket
-, ipy
-, mysqlclient
-, paramiko
-, psycopg2
-, pyasn1
-, pycrypto
-, pycurl
-, pyopenssl
-, pysnmp
-, pysqlcipher3
-, pythonOlder
+{
+  lib,
+  ajpy,
+  buildPythonPackage,
+  cx-oracle,
+  dnspython,
+  fetchPypi,
+  impacket,
+  ipy,
+  mysqlclient,
+  paramiko,
+  psycopg2,
+  pyasn1,
+  pycrypto,
+  pycurl,
+  pyopenssl,
+  pysnmp,
+  pysqlcipher3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ajpy
-    cx_oracle
+    cx-oracle
     dnspython
     impacket
     ipy

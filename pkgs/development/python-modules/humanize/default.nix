@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, gettext
-, pytestCheckHook
-, pythonOlder
-, hatch-vcs
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  gettext,
+  pytestCheckHook,
+  pythonOlder,
+  hatch-vcs,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-sLlgR6c65RmUNZdH2pHuxzo7dm71uUZXGqzcqyxCrk4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-vcs
@@ -44,15 +43,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "humanize"
-  ];
+  pythonImportsCheck = [ "humanize" ];
 
   meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
     changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ rmcgibbo Luflosi ];
+    maintainers = with maintainers; [
+      rmcgibbo
+      Luflosi
+    ];
   };
 }

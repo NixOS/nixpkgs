@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, cython_3
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  cython,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.18.0";
+  version = "1.19.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AN0zalYQ4JQCaBDrE4tq2WwVEXz0LBlfvrxNiPL4oOs=";
+    hash = "sha256-ofcGdHHd1P+R9ykJGtwHURTzHCeiJ603EqtgUgLPnmM=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -28,27 +29,21 @@ buildPythonPackage rec {
   env.REQUIRE_CYTHON = 1;
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=bluetooth_data_tools --cov-report=term-missing:skip-covered" ""
   '';
 
-  pythonImportsCheck = [
-    "bluetooth_data_tools"
-  ];
+  pythonImportsCheck = [ "bluetooth_data_tools" ];
 
   meta = with lib; {
     description = "Library for converting bluetooth data and packets";

@@ -70,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.36.2";
+  version = "1.37.5";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-GyQqI3ciRO0TRaAeM4rGu+j/eB4bJlQ7VBTTxUGMNt4=";
+    hash = "sha256-vv2AMt6ufrfxRX2yF28X3E500MYP9hnGfDb3I9RdMVU=";
   };
 
   configureFlags = [
@@ -97,11 +97,16 @@ mkDerivation rec {
     (lib.withFeature stdenv.isLinux "inotify")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIXPKGS"
+    "-fpermissive" # libxml2-2.12 changed const qualifiers
+  ];
 
   patches = [
     # fix "No/bad main configuration file" error
     ./fix-datadir.patch
+    # use the same configure based build for darwin as linux
+    ./0001-no-qtgui-darwin-bundle.patch
   ];
 
   nativeBuildInputs = [
@@ -132,6 +137,10 @@ mkDerivation rec {
     libiconv
   ];
 
+  qtWrapperArgs = [
+    "--prefix PATH : ${filterPath}"
+  ];
+
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
@@ -147,10 +156,10 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
-    wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
-    wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rcljoplin.py \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
@@ -160,10 +169,15 @@ mkDerivation rec {
     mv $out/bin/recoll.app $out/Applications
   '';
 
+  # create symlink after fixup to prevent double wrapping of recoll
+  postFixup = lib.optionalString (stdenv.isDarwin && withGui) ''
+    ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A full-text search tool";
+    description = "Full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments.

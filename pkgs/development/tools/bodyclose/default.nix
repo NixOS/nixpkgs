@@ -1,25 +1,29 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "bodyclose";
-  version = "2023-04-21";
+  version = "0-unstable-2024-01-26";
 
   src = fetchFromGitHub {
     owner = "timakin";
     repo = "bodyclose";
-    rev = "574207250966ef48b7c65325648b17ff2c3a900a";
-    hash = "sha256-qUt8uOk1vgj2rtzTevGh9c4McxbFKgEw83pq7IAlRdg=";
+    rev = "f835fa56326ac81b2d54408f1a3a6c43bca4d5aa";
+    hash = "sha256-yPvBDJx6ECrSLDazdNDRl79iogsZO2qNWHuUuwQoRHU=";
   };
 
-  vendorHash = "sha256-TSYaY7Rg0ZoXdIN1sTNmgjC4PcVcgwSTuE43FYbzlAs=";
+  vendorHash = "sha256-8grdJuV8aSETsJr2VazC/3ctfnGh3UgjOWD4/xf3uC8=";
 
   ldflags = [ "-s" "-w" ];
 
+  passthru.updateScript = unstableGitUpdater {};
+
   meta = with lib; {
     description = "Golang linter to check whether HTTP response body is closed and a re-use of TCP connection is not blocked";
+    mainProgram = "bodyclose";
     homepage = "https://github.com/timakin/bodyclose";
     license = licenses.mit;
     maintainers = with maintainers; [ meain ];

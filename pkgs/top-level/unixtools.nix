@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, lib, stdenv }:
+{ pkgs, buildEnv, runCommand, lib, stdenv, freebsd }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -10,9 +10,14 @@
 # instance, if your program needs to use "ps", just list it as a build
 # input, not "procps" which requires Linux.
 
-with lib;
-
 let
+  inherit (lib)
+    getBin
+    getOutput
+    mapAttrs
+    platforms
+    ;
+
   version = "1003.1-2008";
 
   singleBinary = cmd: providers: let
@@ -23,7 +28,7 @@ let
       meta = {
         mainProgram = cmd;
         priority = 10;
-        platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
+        platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
       };
       passthru = { inherit provider; };
       preferLocalBuild = true;
@@ -54,6 +59,7 @@ let
     arp = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.arp;
     };
     col = {
       linux = pkgs.util-linux;
@@ -75,6 +81,7 @@ let
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
+      freebsd = pkgs.freebsd.getent;
     };
     getopt = {
       linux = pkgs.util-linux;
@@ -83,6 +90,7 @@ let
     fdisk = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.fdisk;
     };
     fsck = {
       linux = pkgs.util-linux;
@@ -95,10 +103,12 @@ let
     hostname = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.bin;
     };
     ifconfig = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.ifconfig;
     };
     killall = {
       linux = pkgs.psmisc;
@@ -107,6 +117,7 @@ let
     locale = {
       linux = pkgs.glibc;
       darwin = pkgs.darwin.adv_cmds;
+      freebsd = pkgs.freebsd.locale;
     };
     logger = {
       linux = pkgs.util-linux;
@@ -118,18 +129,22 @@ let
     mount = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = freebsd.mount;
     };
     netstat = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.netstat;
     };
     ping = {
       linux = pkgs.iputils;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = freebsd.ping;
     };
     ps = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.ps;
+      freebsd = pkgs.freebsd.bin;
     };
     quota = {
       linux = pkgs.linuxquota;
@@ -138,6 +153,7 @@ let
     route = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.route;
     };
     script = {
       linux = pkgs.util-linux;
@@ -146,10 +162,12 @@ let
     sysctl = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.system_cmds;
+      freebsd = pkgs.freebsd.sysctl;
     };
     top = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.top;
+      freebsd = pkgs.freebsd.top;
     };
     umount = {
       linux = pkgs.util-linux;
@@ -166,16 +184,18 @@ let
       linux = pkgs.procps;
 
       # watch is the only command from procps that builds currently on
-      # Darwin. Unfortunately no other implementations exist currently!
+      # Darwin/FreeBSD. Unfortunately no other implementations exist currently!
       darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      freebsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
     };
     write = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.basic_cmds;
     };
     xxd = {
-      linux = pkgs.vim;
-      darwin = pkgs.vim;
+      linux = pkgs.vim.xxd;
+      darwin = pkgs.vim.xxd;
+      freebsd = pkgs.vim.xxd;
     };
   };
 
@@ -187,7 +207,7 @@ let
 
   # Compatibility derivations
   # Provided for old usage of these commands.
-  compat = with bins; lib.mapAttrs makeCompat {
+  compat = with bins; mapAttrs makeCompat {
     procps = [ ps sysctl top watch ];
     util-linux = [ fsck fdisk getopt hexdump mount
                   script umount whereis write col column ];

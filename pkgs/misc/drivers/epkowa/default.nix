@@ -99,6 +99,35 @@ let plugins = {
     };
     meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
   };
+  v550 = stdenv.mkDerivation rec {
+    pname = "iscan-perfection-v550-bundle";
+    version = "2.30.4";
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "f8b3abf21354fc5b9bc87753cef950b6c0f07bf322a94aaff2c163bafcf50cd9";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v550-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x013b "$plugin/lib/esci/libiscan-plugin-perfection-v550 $plugin/share/esci/esfweb.bin"
+      '';
+      hw = "Perfection V550 Photo";
+    };
+    meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
+  };
   v600 = stdenv.mkDerivation rec {
     pname = "iscan-gt-x820-bundle";
     version = "2.30.4";
@@ -222,6 +251,38 @@ let plugins = {
 
     meta = common_meta // { description = "iscan esci s80 plugin for " + passthru.hw; };
   };
+  s600 = stdenv.mkDerivation rec {
+    name = "iscan-gt-s600-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "fe1356b1d5c40bc5ac985a5693166efb9e5049a78b412f49c385eb503eadf2c6";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x012d "$plugin/lib/esci/libesint66 $plugin/share/esci/esfw66.bin"
+      '';
+      hw = "GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
+    };
+    meta = common_meta // { description = "iscan gt-s600 plugin for " + passthru.hw; };
+  };
   s650 = stdenv.mkDerivation rec {
     name = "iscan-gt-s650-bundle";
     version = "2.30.4";
@@ -286,6 +347,38 @@ let plugins = {
       hw = "GT-X750, Perfection 4490";
     };
     meta = common_meta // { description = "iscan GT-X750 for " + passthru.hw; };
+  };
+  gt1500 = stdenv.mkDerivation rec {
+    name = "iscan-gt-1500-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "sha256-1rVsbBsb+QtCOT1FsyhgvCbZIN6IeQH7rZXNmsD7cl8=";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0133 "$plugin/lib/esci/libesint86 $plugin/share/esci/esfw86.bin"
+      '';
+      hw = "GT-1500";
+    };
+    meta = common_meta // { description = "iscan GT-1500 for " + passthru.hw; };
   };
   network = stdenv.mkDerivation rec {
     pname = "iscan-nt-bundle";

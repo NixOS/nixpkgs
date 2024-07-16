@@ -8,11 +8,11 @@
 in {
   options.programs.direnv = {
 
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       direnv integration. Takes care of both installation and
       setting up the sourcing of the shell. Additionally enables nix-direnv
       integration. Note that you need to logout and login for this change to apply
-    '');
+    '';
 
     package = lib.mkPackageOption pkgs "direnv" {};
 
@@ -23,33 +23,40 @@ in {
         export FOO="foo"
         echo "loaded direnv!"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra lines to append to the sourced direnvrc
       '';
     };
 
-    silent = lib.mkEnableOption (lib.mdDoc ''
+    silent = lib.mkEnableOption ''
       the hiding of direnv logging
-    '');
+    '';
 
     loadInNixShell =
-      lib.mkEnableOption (lib.mdDoc ''
+      lib.mkEnableOption ''
         loading direnv in `nix-shell` `nix shell` or `nix develop`
-      '')
+      ''
       // {
         default = true;
       };
 
     nix-direnv = {
       enable =
-        (lib.mkEnableOption (lib.mdDoc ''
+        (lib.mkEnableOption ''
           a faster, persistent implementation of use_nix and use_flake, to replace the built-in one
-        ''))
+        '')
         // {
           default = true;
         };
 
-      package = lib.mkPackageOption pkgs "nix-direnv" {};
+      package = lib.mkOption {
+        default = pkgs.nix-direnv.override { nix = config.nix.package; };
+        defaultText = "pkgs.nix-direnv";
+        type = lib.types.package;
+        description = ''
+          The nix-direnv package to use
+        '';
+      };
     };
   };
 

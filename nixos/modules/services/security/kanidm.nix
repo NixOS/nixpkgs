@@ -65,9 +65,9 @@ let
 in
 {
   options.services.kanidm = {
-    enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
-    enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
-    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
+    enableClient = lib.mkEnableOption "the Kanidm client";
+    enableServer = lib.mkEnableOption "the Kanidm server";
+    enablePam = lib.mkEnableOption "the Kanidm PAM and NSS integration";
 
     package = lib.mkPackageOption pkgs "kanidm" {};
 
@@ -77,13 +77,13 @@ in
 
         options = {
           bindaddress = lib.mkOption {
-            description = lib.mdDoc "Address/port combination the webserver binds to.";
+            description = "Address/port combination the webserver binds to.";
             example = "[::1]:8443";
             type = lib.types.str;
           };
           # Should be optional but toml does not accept null
           ldapbindaddress = lib.mkOption {
-            description = lib.mdDoc ''
+            description = ''
               Address and port the LDAP server is bound to. Setting this to `null` disables the LDAP interface.
             '';
             example = "[::1]:636";
@@ -91,12 +91,12 @@ in
             type = lib.types.nullOr lib.types.str;
           };
           origin = lib.mkOption {
-            description = lib.mdDoc "The origin of your Kanidm instance. Must have https as protocol.";
+            description = "The origin of your Kanidm instance. Must have https as protocol.";
             example = "https://idm.example.org";
             type = lib.types.strMatching "^https://.*";
           };
           domain = lib.mkOption {
-            description = lib.mdDoc ''
+            description = ''
               The `domain` that Kanidm manages. Must be below or equal to the domain
               specified in `serverSettings.origin`.
               This can be left at `null`, only if your instance has the role `ReadOnlyReplica`.
@@ -109,33 +109,55 @@ in
             type = lib.types.nullOr lib.types.str;
           };
           db_path = lib.mkOption {
-            description = lib.mdDoc "Path to Kanidm database.";
+            description = "Path to Kanidm database.";
             default = "/var/lib/kanidm/kanidm.db";
             readOnly = true;
             type = lib.types.path;
           };
           tls_chain = lib.mkOption {
-            description = lib.mdDoc "TLS chain in pem format.";
+            description = "TLS chain in pem format.";
             type = lib.types.path;
           };
           tls_key = lib.mkOption {
-            description = lib.mdDoc "TLS key in pem format.";
+            description = "TLS key in pem format.";
             type = lib.types.path;
           };
           log_level = lib.mkOption {
-            description = lib.mdDoc "Log level of the server.";
+            description = "Log level of the server.";
             default = "info";
             type = lib.types.enum [ "info" "debug" "trace" ];
           };
           role = lib.mkOption {
-            description = lib.mdDoc "The role of this server. This affects the replication relationship and thereby available features.";
+            description = "The role of this server. This affects the replication relationship and thereby available features.";
             default = "WriteReplica";
             type = lib.types.enum [ "WriteReplica" "WriteReplicaNoUI" "ReadOnlyReplica" ];
+          };
+          online_backup = {
+            path = lib.mkOption {
+              description = "Path to the output directory for backups.";
+              type = lib.types.path;
+              default = "/var/lib/kanidm/backups";
+            };
+            schedule = lib.mkOption {
+              description = "The schedule for backups in cron format.";
+              type = lib.types.str;
+              default = "00 22 * * *";
+            };
+            versions = lib.mkOption {
+              description = ''
+                Number of backups to keep.
+
+                The default is set to `0`, in order to disable backups by default.
+              '';
+              type = lib.types.ints.unsigned;
+              default = 0;
+              example = 7;
+            };
           };
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Settings for Kanidm, see
         [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
@@ -148,12 +170,12 @@ in
         freeformType = settingsFormat.type;
 
         options.uri = lib.mkOption {
-          description = lib.mdDoc "Address of the Kanidm server.";
+          description = "Address of the Kanidm server.";
           example = "http://127.0.0.1:8080";
           type = lib.types.str;
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Configure Kanidm clients, needed for the PAM daemon. See
         [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
@@ -165,13 +187,20 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        options.pam_allowed_login_groups = lib.mkOption {
-          description = lib.mdDoc "Kanidm groups that are allowed to login using PAM.";
-          example = "my_pam_group";
-          type = lib.types.listOf lib.types.str;
+        options = {
+          pam_allowed_login_groups = lib.mkOption {
+            description = "Kanidm groups that are allowed to login using PAM.";
+            example = "my_pam_group";
+            type = lib.types.listOf lib.types.str;
+          };
+          hsm_pin_path = lib.mkOption {
+            description = "Path to a HSM pin.";
+            default = "/var/cache/kanidm-unixd/hsm-pin";
+            type = lib.types.path;
+          };
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Configure Kanidm unix daemon.
         See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
@@ -226,6 +255,14 @@ in
 
     environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
 
+    systemd.tmpfiles.settings."10-kanidm" = {
+      ${cfg.serverSettings.online_backup.path}.d = {
+        mode = "0700";
+        user = "kanidm";
+        group = "kanidm";
+      };
+    };
+
     systemd.services.kanidm = lib.mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
@@ -246,6 +283,8 @@ in
           BindPaths = [
             # To create the socket
             "/run/kanidmd:/run/kanidmd"
+            # To store backups
+            cfg.serverSettings.online_backup.path
           ];
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

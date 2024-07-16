@@ -1,5 +1,4 @@
-{ autoPatchelfHook
-, autoSignDarwinBinariesHook
+{ autoSignDarwinBinariesHook
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
@@ -23,13 +22,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.311.0";
+  version = "2.317.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-71SwPuX1XZygT/TdAHECudxFxsQuXrl/tcAYVAxfxfI=";
+    hash = "sha256-+VwEH4hmEjeYFWm7TOndD5SOJwsyPZEhKkCSyl7x8cE=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -114,8 +113,6 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     which
     git
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ];
@@ -159,6 +156,11 @@ buildDotnetModule rec {
       "UseExternalsRuntimeTrimmedPackage"
       "UseExternalsTrimmedPackage"
       "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterV2L0.${x}") [
+      "TestSelfUpdateAsync_DownloadRetry"
+      "TestSelfUpdateAsync_ValidateHash"
+      "TestSelfUpdateAsync"
     ]
     ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"

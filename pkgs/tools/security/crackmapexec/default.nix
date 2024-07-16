@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -35,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     pypsrp
     pywerview
     requests
-    requests_ntlm
+    requests-ntlm
     termcolor
     terminaltables
     xmltodict

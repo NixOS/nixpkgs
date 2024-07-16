@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
-, maven, jdk, makeShellWrapper, glib, wrapGAppsHook
+, maven, jdk, makeShellWrapper, glib, wrapGAppsHook3
 , libayatana-appindicator
 }:
 
@@ -14,17 +14,17 @@ in
 assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-NMNlDEUpwKUywzhXhxlNX7NiE+6wOov2Yt8nTfbKTNI=";
+    hash = "sha256-aKj8/yQzNWWV2m+sF2Or59OyPMiBqPeXEHn88w2VUkU=";
   };
 
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-cmwU9k7TRRJ07bT1EmY3pIBkvvqmFyE7WJeVL7VFDyc=";
+  mvnHash = "sha256-bZGTYkxRXgjGoxAdVkgiZZgVSghKz3Mq9pCBdivMNPQ=";
 
   preBuild = ''
     VERSION=${version}
@@ -33,6 +33,8 @@ mavenJdk.buildMavenPackage rec {
 
   # This is based on the instructins in https://github.com/cryptomator/cryptomator/blob/develop/dist/linux/appimage/build.sh
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/ $out/share/cryptomator/libs/ $out/share/cryptomator/mods/
 
     cp target/libs/* $out/share/cryptomator/libs/
@@ -70,21 +72,28 @@ mavenJdk.buildMavenPackage rec {
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator256.png $out/share/icons/hicolor/256x256/apps/org.cryptomator.Cryptomator.png
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator512.png $out/share/icons/hicolor/512x512/apps/org.cryptomator.Cryptomator.png
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray-unlocked.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.tray-unlocked.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.tray.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray-unlocked.svg $out/share/icons/hicolor/symbolic/apps/org.cryptomator.Cryptomator.tray-unlocked-symbolic.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray.svg $out/share/icons/hicolor/symbolic/apps/org.cryptomator.Cryptomator.tray-symbolic.svg
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.desktop $out/share/applications/org.cryptomator.Cryptomator.desktop
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.metainfo.xml $out/share/metainfo/org.cryptomator.Cryptomator.metainfo.xml
     cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     jdk
   ];
   buildInputs = [ fuse3 jdk glib libayatana-appindicator ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
+    mainProgram = "cryptomator";
     homepage = "https://cryptomator.org";
     sourceProvenance = with sourceTypes; [
       fromSource

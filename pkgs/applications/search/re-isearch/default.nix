@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-D0PDqlWzIOHqdS2MlNzR2T5cyhiLcFlf30v6eFokoRQ=";
   };
 
+  postPatch = ''
+    # Fix gcc-13 build due to missing <cstdint> include.
+    sed -e '1i #include <cstdint>' -i src/mmap.cxx
+  '';
+
   buildinputs = [
     db
     file # libmagic
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cd build
     makeFlagsArray+=(
-      EXTRA_INC="-I${db.dev}/include -I${file}/include"
+      EXTRA_INC="-I${db.dev}/include -I${lib.getDev file}/include"
       LD_PATH="-L../lib -L${db.out}/lib -L${file}/lib -L${libnsl}/lib"
     )
   '';

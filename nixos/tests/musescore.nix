@@ -43,13 +43,10 @@ in
     )
 
     # Start MuseScore window
-    machine.execute("DISPLAY=:0.0 mscore >&2 &")
+    machine.execute("env XDG_RUNTIME_DIR=$PWD DISPLAY=:0.0 mscore >&2 &")
 
     # Wait until MuseScore has launched
-    machine.wait_for_window("MuseScore 4")
-
-    # Wait until the window has completely initialised
-    machine.wait_for_text("MuseScore 4")
+    machine.wait_for_window("MuseScore Studio")
 
     machine.screenshot("MuseScore0")
 
@@ -63,14 +60,11 @@ in
 
     machine.send_key("tab")
     machine.send_key("tab")
-    machine.send_key("tab")
-    machine.send_key("tab")
-    machine.send_key("right")
-    machine.send_key("right")
     machine.send_key("ret")
 
-    machine.sleep(1)
+    machine.sleep(2)
 
+    machine.send_key("tab")
     # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
     machine.send_chars("cdef6gg5aaaa7g")
     machine.sleep(1)
@@ -78,29 +72,22 @@ in
     machine.screenshot("MuseScore2")
 
     # Go to the export dialogue and create a PDF
-    machine.send_key("alt-f")
-    machine.sleep(1)
-    machine.send_key("e")
+    machine.send_key("ctrl-p")
 
-    # Wait until the export dialogue appears.
-    machine.wait_for_text("Export")
-
-    machine.screenshot("MuseScore3")
-
-    machine.send_key("shift-tab")
-    machine.sleep(1)
-    machine.send_key("ret")
-    machine.sleep(1)
-    machine.send_key("ret")
+    # Wait until the Print dialogue appears.
+    machine.wait_for_window("Print")
 
     machine.screenshot("MuseScore4")
-
-    # Wait until PDF is exported
-    machine.wait_for_file('"/root/Documents/MuseScore4/Scores/Untitled score.pdf"')
-
-    # Check that it contains the title of the score
-    machine.succeed('pdfgrep "Untitled score" "/root/Documents/MuseScore4/Scores/Untitled score.pdf"')
+    machine.send_key("alt-p")
+    machine.sleep(1)
 
     machine.screenshot("MuseScore5")
+
+    # Wait until PDF is exported
+    machine.wait_for_file('"/root/Untitled score.pdf"')
+
+    ## Check that it contains the title of the score
+    machine.succeed('pdfgrep "Untitled score" "/root/Untitled score.pdf"')
+    machine.copy_from_vm("/root/Untitled score.pdf")
   '';
 })

@@ -26,10 +26,11 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A slide show presentation tool";
+    description = "Slide show presentation tool";
 
     platforms = platforms.unix;
     license  = licenses.gpl3;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
+    mainProgram = "xsw";
   };
 }

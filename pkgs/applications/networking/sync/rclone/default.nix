@@ -1,21 +1,21 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
-, enableCmount ? true, fuse, macfuse-stubs
+, enableCmount ? true, fuse, fuse3, macfuse-stubs
 , librclone
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.65.0";
+  version = "1.67.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "rclone";
+    repo = "rclone";
     rev = "v${version}";
-    hash = "sha256-hlkX8JrBz/hFwQj0xCZfuBt2t3CP3Xa1JkNDH0zomxg=";
+    hash = "sha256-rTibyh5z89QuPgZMvv3Y6FCugxMIytAg1gdCxE3+QLE=";
   };
 
-  vendorHash = "sha256-qKRIT2HqNDpEtZBNHZMXp4Yhh5fCkQSTPU5MQ7FmCHI=";
+  vendorHash = "sha256-Sw9zZf0rup+VyncIpJHp9PKUp60lv+TV4wbWtVTTK3w=";
 
   subPackages = [ "." ];
 
@@ -46,12 +46,12 @@ buildGoModule rec {
       ln -s $out/bin/rclone $out/bin/rclonefs
       ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
-      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount3,
       # as the setuid wrapper is required as non-root on NixOS.
       ''
       wrapProgram $out/bin/rclone \
-        --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
-        --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+        --suffix PATH : "${lib.makeBinPath [ fuse3 ] }" \
+        --prefix LD_LIBRARY_PATH : "${fuse3}/lib"
     '';
 
   passthru.tests = {
@@ -64,6 +64,6 @@ buildGoModule rec {
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
     mainProgram = "rclone";
-    maintainers = with maintainers; [ marsam SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 tomfitzhenry ];
   };
 }

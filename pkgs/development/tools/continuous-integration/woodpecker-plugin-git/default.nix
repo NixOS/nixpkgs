@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "woodpecker-plugin-git";
-  version = "2.2.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
     rev = "refs/tags/${version}";
-    hash = "sha256-BQG1+icfV21qZCwgNvLQm8+1f5WF8owKnQKTIF7O80A=";
+    hash = "sha256-vGJk9IfpuZp0FNLzojFiUGvOpj7EP4cr9ylIoUbddmY=";
   };
 
-  vendorHash = "sha256-ol5k37gGFsyeEnGOVcJaerkIejShHyNCBu4RZ8WyHvU=";
+  vendorHash = "sha256-rUXi3oaawTJoGPmVxmdR1v2eh8BIvCBjxJBz3XRygEg=";
 
   CGO_ENABLED = "0";
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion { package = woodpecker-plugin-git; };
 
   meta = with lib; {
-    description = "Woodpecker plugin for cloning Git repositories.";
+    description = "Woodpecker plugin for cloning Git repositories";
     homepage = "https://woodpecker-ci.org/";
     changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${version}";
     license = licenses.asl20;

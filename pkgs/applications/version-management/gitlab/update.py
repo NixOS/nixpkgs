@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git
 
 import click
 import click_log
@@ -49,19 +49,13 @@ class GitLabRepo:
             reverse=True,
         )
         return versions
-
     def get_git_hash(self, rev: str):
         return (
             subprocess.check_output(
                 [
-                    "nix-universal-prefetch",
-                    "fetchFromGitLab",
-                    "--owner",
-                    self.owner,
-                    "--repo",
-                    self.repo,
-                    "--rev",
-                    rev,
+                    "nix-prefetch-url",
+                    "--unpack",
+                    f"https://gitlab.com/{self.owner}/{self.repo}/-/archive/{rev}/{self.repo}-{rev}.tar.gz",
                 ]
             )
             .decode("utf-8")

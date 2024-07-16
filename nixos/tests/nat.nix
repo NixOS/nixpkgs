@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
     name = "nat" + (lib.optionalString nftables "Nftables")
                  + (if withFirewall then "WithFirewall" else "Standalone");
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ eelco rob ];
+      maintainers = [ rob ];
     };
 
     nodes =

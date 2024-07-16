@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchpatch, makeWrapper, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchpatch, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
@@ -13,7 +13,7 @@
 }:
 
 mkDerivation rec {
-  pname = "krita";
+  pname = "krita-unwrapped";
   inherit version;
 
   src = fetchurl {
@@ -22,15 +22,15 @@ mkDerivation rec {
   };
 
   patches = [
+    # Fixes build with SIP 6.8
     (fetchpatch {
-      name = "krita-opencolorio-2.3-compat.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/520c633c2c868f2236d8e56eefecdcb6e3ebd840.patch";
-      hash = "sha256-eXsgBN8OnKjZOQsOxViPypts6CVh3L+IYKMB/mDUcfQ=";
-      includes = [ "plugins/dockers/lut/ocio_display_filter_vfx2021.cpp" ];
+      name = "bump-SIP-ABI-version-to-12.8.patch";
+      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
+      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
@@ -66,14 +66,11 @@ mkDerivation rec {
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
-  preInstall = ''
-    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-  '';
-
   meta = with lib; {
-    description = "A free and open source painting application";
+    description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
+    mainProgram = "krita";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

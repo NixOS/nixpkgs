@@ -4,6 +4,7 @@
 , desktop-file-utils
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , gtk4
 , libadwaita
 , wrapGAppsHook4
@@ -19,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "MMAClwKIPcjYFg5t4dYRaHfNbCW8lQ1OSQKmq0Z7L6Q=";
+    hash = "sha256-FTgmcFzPZy4U8v5N/Hgvjom3xMvkqv6VpVMvveej1J0=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     libadwaita
     gjs
     libgweather
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     geoclue2
     gsettings-desktop-schemas
   ];
@@ -68,8 +69,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Weather";
+    homepage = "https://apps.gnome.org/Weather/";
     description = "Access current weather conditions and forecasts";
+    mainProgram = "gnome-weather";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

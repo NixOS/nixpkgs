@@ -1,34 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, setuptools
+  setuptools,
 
-, defusedxml
-, pillow
-, fonttools
+  defusedxml,
+  pillow,
+  fonttools,
 
-, pytestCheckHook
-, qrcode
-, camelot
-, uharfbuzz
+  pytestCheckHook,
+  qrcode,
+  camelot,
+  uharfbuzz,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.7.6";
+  version = "2.7.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
-    rev = version;
-    hash = "sha256-wiCKmS+GlrYV2/6TEdXUbmWIMWU4hyzswFJZR9EOWxc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8CuK8ZFn4msOSNIdgOFjD3ygVeiBUw4/Bc3w1J6Kn9U=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=fpdf --cov-report=xml" ""
+      --replace-fail "--cov=fpdf --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -44,6 +46,7 @@ buildPythonPackage rec {
     qrcode
     camelot
     uharfbuzz
+    lxml
   ];
 
   disabledTestPaths = [
@@ -55,6 +58,9 @@ buildPythonPackage rec {
     "test_png_url" # tries to download file
     "test_page_background" # tries to download file
     "test_share_images_cache" # uses timing functions
+    "test_bidi_character" # tries to download file
+    "test_bidi_conformance" # tries to download file
+    "test_insert_jpg_jpxdecode" # JPEG2000 is broken
   ];
 
   meta = {

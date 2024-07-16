@@ -1,29 +1,30 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cattrs
-, fetchFromGitHub
-, flit-core
-, importlib-resources
-, jsonschema
-, nox
-, pyhamcrest
-, pytest
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cattrs,
+  fetchFromGitHub,
+  flit-core,
+  importlib-resources,
+  jsonschema,
+  nox,
+  pyhamcrest,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2023.0.0b1";
-  format = "pyproject";
+  version = "2023.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
+    repo = "lsprotocol";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y/Mp/8MskRB6irNU3CBOKmo2Zt5S69h+GyMg71sQ9Uw=";
+    hash = "sha256-PHjLKazMaT6W4Lve1xNxm6hEwqE3Lr2m5L7Q03fqb68=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     cattrs
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkInputs = [
     importlib-resources
@@ -63,14 +62,16 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "lsprotocol"
-  ];
+  pythonImportsCheck = [ "lsprotocol" ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";
+    changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar fab ];
+    maintainers = with maintainers; [
+      doronbehar
+      fab
+    ];
   };
 }

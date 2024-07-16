@@ -15,6 +15,11 @@ stdenv.mkDerivation {
     sha256 = "0042nbgagl4gcxa5fj7bikjdi1gbk0jwyqnzc5lswpb0l5y0i1ql";
   };
 
+  postPatch = ''
+    # New toolchainsd like gcc-13 trigger warnings and fail the build.
+    substituteInPlace configure.ac --replace "-Werror" ""
+  '';
+
   preAutoreconf = ''
     mkdir m4
   '';
@@ -25,6 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Stubbed XMPP Server";
+    mainProgram = "stabber";
     homepage = "https://github.com/profanity-im/stabber";
     license = licenses.gpl3;
     platforms = platforms.unix;

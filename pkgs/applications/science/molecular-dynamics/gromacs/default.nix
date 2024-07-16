@@ -7,6 +7,7 @@
 , perl
 , blas
 , lapack
+, llvmPackages
 , mpi
 , cudaPackages
 , plumed
@@ -18,8 +19,12 @@
 , cpuAcceleration ? null
 }:
 
+
+# CUDA is only implemented for single precission
+assert enableCuda -> singlePrec;
+
 let
-  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 
   # Select reasonable defaults for all major platforms
   # The possible values are defined in CMakeLists.txt:
@@ -40,8 +45,8 @@ let
       }
     else
       {
-        version = "2023.3";
-        hash = "sha256-Tsj40MevdrE/j9FtuOLBIOdJ3kOa6VVNn2U/gS140cs=";
+        version = "2024.2";
+        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
       };
 
 in stdenv.mkDerivation rec {
@@ -74,10 +79,11 @@ in stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional enableMpi mpi
   ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
-  ];
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
@@ -105,10 +111,10 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optionals enableCuda [
     "-DGMX_GPU=CUDA"
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
     # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
   ];
 
   postInstall = ''

@@ -1,50 +1,61 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  pytest-asyncio,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.9.4";
-  format = "setuptools";
+  version = "0.10.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dieselrabbit";
-    repo = pname;
+    repo = "screenlogicpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OdAhA+vzIrUnE8Xdv52x7ij0LJKyxawaSY4QORP1TUg=";
+    hash = "sha256-z6cM0sihZvOHCA3v1DYQEev0axf4AcqEW13WA1EMhQM=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Tests require network access
-    "test_gateway_discovery"
-    "test_async_discovery"
-    "test_gateway"
-    "test_async"
-    "test_asyncio_gateway_discovery"
-  ];
+  disabledTests =
+    [
+      # Tests require network access
+      "test_async_discovery"
+      "test_async"
+      "test_asyncio_gateway_discovery"
+      "test_discovery_async_discover"
+      "test_gateway_discovery"
+      "test_gateway"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Tests block on Python 3.12
+      "test_sub_unsub"
+      "test_attach_existing"
+      "test_login_async_connect_to_gateway"
+      "test_login_async_gateway_connect"
+    ];
 
-  pythonImportsCheck = [
-    "screenlogicpy"
-  ];
+  pythonImportsCheck = [ "screenlogicpy" ];
 
   meta = with lib; {
     description = "Python interface for Pentair Screenlogic devices";
+    mainProgram = "screenlogicpy";
     homepage = "https://github.com/dieselrabbit/screenlogicpy";
     changelog = "https://github.com/dieselrabbit/screenlogicpy/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];

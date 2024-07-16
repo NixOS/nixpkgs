@@ -33,7 +33,8 @@ let
       boot.initrd.network.flushBeforeStage2 = flush;
       systemd.services.check-flush = {
         requiredBy = ["multi-user.target"];
-        before = ["network-pre.target" "multi-user.target"];
+        before = [ "network-pre.target" "multi-user.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         wants = ["network-pre.target"];
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";

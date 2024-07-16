@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "devialet";
-  version = "1.4.3";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,23 +18,17 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = "devialet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DVwf1zQXwPe8W2SzL9CnYE+gwLgPEnI+tQTfR+ijwF4=";
+    hash = "sha256-oGa5tRCJAWBg/877UmmXnX7fkFLoxhyuG6gpXmyhRKo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "devialet"
-  ];
+  pythonImportsCheck = [ "devialet" ];
 
   meta = with lib; {
     description = "Library to interact with the Devialet API";

@@ -10,7 +10,6 @@
 , libevdev
 , libtool
 , libxml2
-, xz
 , pkg-config
 , lib, stdenv
 , upower
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.5.4";
+  version = "2.5.7";
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "sha256-5UILKdv+HhilY+NsbMwqqvYjbM3mAeec/lX+CGY0CPE=";
+    sha256 = "sha256-FU9nPuyCWMEmx2i3YTT/Y3BYinYU0MBCOjH5Pm3LENA=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +44,6 @@ stdenv.mkDerivation rec {
     dbus-glib
     libevdev
     libxml2
-    xz
     upower
   ];
 

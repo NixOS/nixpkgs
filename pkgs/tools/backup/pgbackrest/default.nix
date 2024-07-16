@@ -1,32 +1,59 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, meson
+, ninja
+, python3
 , pkg-config
-, postgresql
-, openssl
-, lz4
+, libbacktrace
 , bzip2
+, lz4
+, postgresql
 , libxml2
-, zlib
-, zstd
 , libyaml
+, zlib
+, libssh2
+, zstd
 }:
+
 stdenv.mkDerivation rec {
   pname = "pgbackrest";
-  version = "2.49";
+  version = "2.52.1";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     rev = "release/${version}";
-    sha256 = "sha256-i1IcBNrobhgu+B/ezKFknTiqiZe6LktBxf9YU8JS2Wc=";
+    sha256 = "sha256-/HRn/QLpo70FUxx+5h9Os3TTqtVlJ7C4fyraGPvoato=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql openssl lz4 bzip2 libxml2 zlib zstd libyaml ];
+  strictDeps = true;
 
-  postUnpack = ''
-    sourceRoot+=/src
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    pkg-config
+  ];
+
+  buildInputs = [
+    libbacktrace
+    bzip2
+    lz4
+    postgresql
+    libxml2
+    libyaml
+    zlib
+    libssh2
+    zstd
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm555 -t "$out/bin" src/pgbackrest
+
+    runHook postInstall
   '';
 
   meta = with lib; {

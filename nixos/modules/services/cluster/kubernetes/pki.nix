@@ -41,16 +41,16 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption (lib.mdDoc "easyCert issuer service");
+    enable = mkEnableOption "easyCert issuer service";
 
     certs = mkOption {
-      description = lib.mdDoc "List of certificate specs to feed to cert generator.";
+      description = "List of certificate specs to feed to cert generator.";
       default = {};
       type = attrs;
     };
 
     genCfsslCACert = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to automatically generate cfssl CA certificate and key,
         if they don't exist.
       '';
@@ -59,7 +59,7 @@ in
     };
 
     genCfsslAPICerts = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to automatically generate cfssl API webserver TLS cert and key,
         if they don't exist.
       '';
@@ -68,7 +68,7 @@ in
     };
 
     cfsslAPIExtraSANs = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
       '';
       default = [];
@@ -77,7 +77,7 @@ in
     };
 
     genCfsslAPIToken = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to automatically generate cfssl API-token secret,
         if they doesn't exist.
       '';
@@ -86,13 +86,13 @@ in
     };
 
     pkiTrustOnBootstrap = mkOption {
-      description = lib.mdDoc "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
+      description = "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
       default = true;
       type = bool;
     };
 
     caCertPathPrefix = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Path-prefrix for the CA-certificate to be used for cfssl signing.
         Suffixes ".pem" and "-key.pem" will be automatically appended for
         the public and private keys respectively.
@@ -103,7 +103,7 @@ in
     };
 
     caSpec = mkOption {
-      description = lib.mdDoc "Certificate specification for the auto-generated CAcert.";
+      description = "Certificate specification for the auto-generated CAcert.";
       default = {
         CN = "kubernetes-cluster-ca";
         O = "NixOS";
@@ -114,7 +114,7 @@ in
     };
 
     etcClusterAdminKubeconfig = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
         (/etc/\<path\>).
       '';
@@ -174,9 +174,8 @@ in
       '')
       (optionalString cfg.genCfsslAPIToken ''
         if [ ! -f "${cfsslAPITokenPath}" ]; then
-          head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ' >"${cfsslAPITokenPath}"
+          install -o cfssl -m 400 <(head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ') "${cfsslAPITokenPath}"
         fi
-        chown cfssl "${cfsslAPITokenPath}" && chmod 400 "${cfsslAPITokenPath}"
       '')]);
 
     systemd.services.kube-certmgr-bootstrap = {
@@ -193,8 +192,9 @@ in
         mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
-        else
-          touch "${certmgrAPITokenPath}" && chmod 600 "${certmgrAPITokenPath}"
+        elif [ ! -f "${certmgrAPITokenPath}" ]; then
+          # Don't remove the token if it already exists
+          install -m 600 /dev/null "${certmgrAPITokenPath}"
         fi
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
@@ -212,7 +212,7 @@ in
 
     services.certmgr = {
       enable = true;
-      package = pkgs.certmgr-selfsigned;
+      package = pkgs.certmgr;
       svcManager = "command";
       specs =
         let
@@ -220,7 +220,6 @@ in
             inherit (cert) action;
             authority = {
               inherit remote;
-              file.path = cert.caCert;
               root_ca = cert.caCert;
               profile = "default";
               auth_key_file = certmgrAPITokenPath;
@@ -297,8 +296,7 @@ in
           exit 1
         fi
 
-        echo $token > ${certmgrAPITokenPath}
-        chmod 600 ${certmgrAPITokenPath}
+        install -m 0600 <(echo $token) ${certmgrAPITokenPath}
 
         echo "Restarting certmgr..." >&1
         systemctl restart certmgr

@@ -13,7 +13,7 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , glibcLocales
 , libiconv
 , Cocoa
@@ -48,7 +48,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-+LxvPJkyq/6gtcBQepZ5pVGXP1/h30zhCHVfUGPUzFE=";
+    hash = "sha256-uzev4x9jY6foop35z4dvUMIfjRtRqhNFDVFpagOosAc";
   };
 
   addonsSrc = "${src}/addons";
@@ -56,7 +56,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-3JFrVk78EiNVLLXkCFbuRnXwYHNfVv1pBPBS1yCHtPU=";
+    sha256 = "sha256-3JFrVk78EiNVLLXkCFbuRnXwYHNfVv1pBPBS1yCHtPU";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -66,7 +66,7 @@ let
     inherit version;
 
     nativeBuildInputs = [
-      prefetch-yarn-deps
+      fixup-yarn-lock
       nodejs
       yarn
     ];
@@ -113,10 +113,10 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-dtAyQq6fgxvr1RXPQHGiCQesvitsKpVkis4c50uolLc=";
-      "fb303_core-0.0.0" = "sha256-j+4zPXxewRxJsPQaAfvcpSkGNKw3d+inVL45Ibo7Q4E=";
-      "fbthrift-0.0.1+unstable" = "sha256-fsIL07PFu645eJFttIJU4sRSjIVuA4BMJ6kYAA0BpwY=";
-      "serde_bser-0.3.1" = "sha256-h50EJL6twJwK90sBXu40Oap4SfiT4kQAK1+bA8XKdHw=";
+      "cloned-0.1.0" = "sha256-mzAqjM8qovZAd4ZF0GDuD0Ns/UztAO1pAJhukuKc5a0=";
+      "fb303_core-0.0.0" = "sha256-x8I0Lty+sRclpkNMqTMc29J46z/vMsVwOUS3EX7Shes=";
+      "fbthrift-0.0.1+unstable" = "sha256-yTS1wkh8tETZ4K43V0G+TbkN5jgSlXT0endDPBHa1Ps=";
+      "serde_bser-0.3.1" = "sha256-vvMCa6mlcr+xazxZVl2bcF8/r+ufzZmiQ79KofZGWrA=";
     };
   };
   postPatch = ''
@@ -191,7 +191,7 @@ python3Packages.buildPythonApplication {
   passthru.isl = isl;
 
   meta = with lib; {
-    description = "A Scalable, User-Friendly Source Control System";
+    description = "Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pbar thoughtpolice ];

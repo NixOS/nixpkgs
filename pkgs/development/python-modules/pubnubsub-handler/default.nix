@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pubnub
-, pycryptodomex
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pubnub,
+  pycryptodomex,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256:1c44x19zi709sazgl060nkqa7vbaf3iyhwcnwdykhsbipvp6bscy";
+    hash = "sha256:1c44x19zi709sazgl060nkqa7vbaf3iyhwcnwdykhsbipvp6bscy";
   };
 
   propagatedBuildInputs = [

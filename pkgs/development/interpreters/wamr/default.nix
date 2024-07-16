@@ -6,16 +6,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
-  version = "1.3.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     rev = "WAMR-${finalAttrs.version}";
-    hash = "sha256-h+IwCdufimmkVk2XUAFtDcV+5dJWohRc1kmh3zgDKIg=";
+    hash = "sha256-2jZnvfW/f928DxVwd+z/BVPNPWfbyV8Rjek23NQhFz8=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
+  ];
 
   sourceRoot = let
     platform = if stdenv.isLinux then

@@ -20,6 +20,7 @@ mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
+    mainProgram = "cr3";
     license = licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;

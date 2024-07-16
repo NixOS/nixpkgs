@@ -11,19 +11,19 @@
 
 let
   pin = {
-
-    # See https://github.com/google-deepmind/mujoco/blob/3.0.0/cmake/MujocoDependencies.cmake#L17-L64
+    # TODO: Check the following file and ensure the dependencies are up-to-date
+    # See https://github.com/google-deepmind/mujoco/blob/<VERSION>/cmake/MujocoDependencies.cmake#L17-L64
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "fb3621f4f897824c0dbe0615fa94543df6192f30";
-      hash = "sha256-uNGrTNg5G5xFGtc+BSWE389x0tQ/KxJQLHfebNWas/k=";
+      rev = "d7aaad83b488fd62bd51c81ecf16cd938532cc0a";
+      hash = "sha256-eA2/dZpNOlex1O5PNa3XSZhpMB3AmaIoHzVDI9TD/cg=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "344117638c8ff7e239044fd0fa7085839fc03021";
-      hash = "sha256-gztnxui9Fe/FTieMjdvfJjWHjkImtlsHn6fM1FruyME=";
+      rev = "e45585a4b8e75c28479fa4107182c28172799640";
+      hash = "sha256-pgHvmRpPd99ePUVRsi7WXLVSZngZ5q6r1vWW4mdGvxY=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -34,8 +34,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "e8515f78ac098329ab9f8cab21c87caede090a3f";
-      hash = "sha256-HXKtFJsKGpug+wNPjYynTuyaG0igo3oG4rFQktveh1g=";
+      rev = "2a9055b50ed22101da7d77e999b90ed50956fe0b";
+      hash = "sha256-tx/XR7xJ7IMh5RMvL8wRo/g+dfD3xcjZkLPSY4D9HaY=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -70,8 +70,8 @@ let
     marchingcubecpp = fetchFromGitHub {
       owner = "aparis69";
       repo = "MarchingCubeCpp";
-      rev = "5b79e5d6bded086a0abe276a4b5a69fc17ae9bf1";
-      hash = "sha256-L0DH1GJZ/3vatQAU/KZj/2xTKE6Fwcw9eQYzLdqX2N4=";
+      rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
+      hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
 
     tmd = stdenv.mkDerivation rec {
@@ -96,8 +96,8 @@ let
       src = fetchFromGitHub {
         owner = "UPC-ViRVIG";
         repo = name;
-        rev = "7c49cfba9bbec763b5d0f7b90b26555f3dde8088";
-        hash = "sha256-5bnQ3rHH9Pw1jRVpZpamFnhIJHWnGm6krgZgIBqNtVg=";
+        rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
+        hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
       };
 
       patches = [ ./sdflib-system-deps.patch ];
@@ -129,13 +129,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.0.1";
+  version = "3.1.6";
 
+  # Bumping version? Make sure to look though the MuJoCo's commit
+  # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
-    repo = pname;
-    rev = version;
-    hash = "sha256-UXE+7KDti8RarpoJoo9Ei3TgW/Qdnj3ASRo8uTWhGrU=";
+    repo = "mujoco";
+    rev = "refs/tags/${version}";
+    hash = "sha256-64zUplr1E5WSb5RpTW9La1zKVT67a1VrftiUqc2SHlU=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -175,10 +177,16 @@ in stdenv.mkDerivation rec {
 
   passthru.pin = { inherit (pin) lodepng eigen3 abseil-cpp; };
 
-  meta = with lib; {
-    description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
+  meta = {
+    description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela tmplt ];
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+      tmplt
+    ];
+    broken = stdenv.isDarwin;
   };
 }

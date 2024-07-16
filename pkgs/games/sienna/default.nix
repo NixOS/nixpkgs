@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast-paced one button platformer";
+    mainProgram = "sienna";
     homepage = "https://tangramgames.dk/games/sienna";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

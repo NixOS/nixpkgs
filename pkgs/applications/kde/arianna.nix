@@ -16,6 +16,7 @@
 , kfilemetadata
 , ki18n
 , kirigami-addons
+, kitemmodels
 , kquickcharts
 , kwindowsystem
 , qqc2-desktop-style
@@ -44,13 +45,15 @@ mkDerivation {
     kfilemetadata
     ki18n
     kirigami-addons
+    kitemmodels
     kquickcharts
     kwindowsystem
     qqc2-desktop-style
   ];
 
   meta = with lib; {
-    description = "An Epub Reader for Plasma and Plasma Mobile";
+    description = "Epub Reader for Plasma and Plasma Mobile";
+    mainProgram = "arianna";
     homepage = "https://invent.kde.org/graphics/arianna";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

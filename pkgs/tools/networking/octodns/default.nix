@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , setuptools
-, wheel
 , pytestCheckHook
 , dnspython
 , fqdn
@@ -31,8 +30,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
-    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +39,10 @@ buildPythonPackage rec {
     natsort
     python-dateutil
     pyyaml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "octodns" ];
@@ -58,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns";
     changelog = "https://github.com/octodns/octodns/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
   };
 }

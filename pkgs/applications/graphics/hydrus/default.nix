@@ -6,31 +6,49 @@
 , enableSwftools ? false
 , swftools
 , python3Packages
+, pythonOlder
 , qtbase
 , qtcharts
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "554";
+  version = "581";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BNAEM9XFkdKLQUAWerM6IWts04FWdd8SSCJZaymmxGo=";
+    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
     python3Packages.mkdocs-material
+    copyDesktopItems
   ];
 
   buildInputs = [
     qtbase
     qtcharts
   ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "hydrus-client";
+      exec = "hydrus-client";
+      desktopName = "Hydrus Client";
+      icon = "hydrus-client";
+      comment = meta.description;
+      terminal = false;
+      type = "Application";
+      categories = [ "FileTools" "Utility" ];
+    })
+  ];
+
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
@@ -43,6 +61,7 @@ python3Packages.buildPythonPackage rec {
     lz4
     numpy
     opencv4
+    olefile
     pillow
     pillow-heif
     psutil
@@ -57,10 +76,14 @@ python3Packages.buildPythonPackage rec {
     pyyaml
     qtpy
     requests
+    show-in-file-manager
     send2trash
     service-identity
     twisted
   ];
+
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = with python3Packages; [
     nose
@@ -104,6 +127,8 @@ python3Packages.buildPythonPackage rec {
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
@@ -118,12 +143,18 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/bin
     install -m0755 hydrus_server.py $out/bin/hydrus-server
     install -m0755 hydrus_client.py $out/bin/hydrus-client
+
+    # desktop item
+    mkdir -p "$out/share/icons/hicolor/scalable/apps"
+    ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
   '' + lib.optionalString enableSwftools ''
     mkdir -p $out/${python3Packages.python.sitePackages}/bin
     # swfrender seems to have to be called sfwrender_linux
     # not sure if it can be loaded through PATH, but this is simpler
     # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
     ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
+  '' + ''
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;

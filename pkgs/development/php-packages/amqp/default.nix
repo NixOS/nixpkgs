@@ -1,8 +1,14 @@
-{ buildPecl, lib, rabbitmq-c, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  rabbitmq-c,
+  fetchFromGitHub,
+}:
 
 let
-  version = "2.1.1";
-in buildPecl {
+  version = "2.1.2";
+in
+buildPecl {
   inherit version;
   pname = "amqp";
 
@@ -10,7 +16,7 @@ in buildPecl {
     owner = "php-amqp";
     repo = "php-amqp";
     rev = "v${version}";
-    sha256 = "sha256-QHiQL3INd0zQpmCOcJx7HhN770m9ql0Cs63OTOLOrNQ=";
+    sha256 = "sha256-jVD5dq2kgFnprj190W9hnLG+9yPLWm19AjoGBBz6v8c=";
   };
 
   buildInputs = [ rabbitmq-c ];

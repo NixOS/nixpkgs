@@ -2,6 +2,7 @@
 , python3Packages
 , fetchFromGitHub
 , fetchpatch
+, installShellFiles
 , git
 , spdx-license-list-data
 , substituteAll
@@ -42,8 +43,16 @@ with python3Packages; buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    # Disable update checks at runtime
+    substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
+
+    # Remove filterwarnings which fails on new deprecations in Python 3.12 for 3.14
+    rm tox.ini
+  '';
+
   nativeBuildInputs = [
-    pythonRelaxDepsHook
+    installShellFiles
     setuptools
   ];
 
@@ -70,7 +79,8 @@ with python3Packages; buildPythonApplication rec {
     uvicorn
     wsproto
     zeroconf
-
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    chardet
   ];
 
   preCheck = ''
@@ -88,6 +98,16 @@ with python3Packages; buildPythonApplication rec {
   postInstall = ''
     mkdir -p $udev/lib/udev/rules.d
     cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+
+    installShellCompletion --cmd platformio \
+      --bash <(_PLATFORMIO_COMPLETE=bash_source $out/bin/platformio) \
+      --zsh <(_PLATFORMIO_COMPLETE=zsh_source $out/bin/platformio) \
+      --fish <(_PLATFORMIO_COMPLETE=fish_source $out/bin/platformio)
+
+    installShellCompletion --cmd pio \
+      --bash <(_PIO_COMPLETE=bash_source $out/bin/pio) \
+      --zsh <(_PIO_COMPLETE=zsh_source $out/bin/pio) \
+      --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
   '';
 
   disabledTestPaths = [
@@ -181,10 +201,11 @@ with python3Packages; buildPythonApplication rec {
 
   meta = with lib; {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
-    description = "An open source ecosystem for IoT development";
+    description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
+    mainProgram = "platformio";
   };
 }

@@ -12,6 +12,7 @@
 , openssl
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, uthash
 , fetchpatch
 , nixosTests
 }:
@@ -52,11 +53,6 @@ stdenv.mkDerivation rec {
       substituteInPlace man/$f.xsl \
         --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
     done
-
-    # the manpages are not generated when using cmake
-    pushd man
-    make
-    popd
   '';
 
   outputs = [ "out" "dev" "lib" ];
@@ -70,19 +66,25 @@ stdenv.mkDerivation rec {
     libuv
     libwebsockets'
     openssl
+    uthash
   ] ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
-    "-DWITH_THREADING=ON"
-    "-DWITH_WEBSOCKETS=ON"
-  ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
+    (lib.cmakeBool "WITH_BUNDLED_DEPS" false)
+    (lib.cmakeBool "WITH_WEBSOCKETS" true)
+    (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+  ];
+
+  postFixup = ''
+    sed -i "s|^prefix=.*|prefix=$lib|g" $dev/lib/pkgconfig/*.pc
+  '';
 
   passthru.tests = {
     inherit (nixosTests) mosquitto;
   };
 
   meta = with lib; {
-    description = "An open source MQTT v3.1/3.1.1/5.0 broker";
+    description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
     license = licenses.epl10;
     maintainers = with maintainers; [ peterhoeg ];

@@ -18,6 +18,7 @@ in {
   testScript = ''
     machine.wait_for_unit("typesense.service")
     machine.wait_for_open_port(${toString testPort})
-    assert machine.succeed("curl --fail http://localhost:${toString testPort}/health") == '{"ok":true}'
+    # After waiting for the port, typesense still hasn't initialized the database, so wait until we can connect successfully
+    assert machine.wait_until_succeeds("curl --fail http://localhost:${toString testPort}/health") == '{"ok":true}'
   '';
 })

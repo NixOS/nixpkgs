@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, garth
-, lxml
-, pythonOlder
-, requests
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  garth,
+  lxml,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "4.2.1";
+  version = "4.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,27 +20,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6igjUmgIA077/1SQMt10tRpnLVKxGFNJN1GeLhQLROg=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-nFYEtQob3x6APWDKCVP5p+qkKmgvXIcmegp/6ZRbDQA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     garth
     lxml
+    python-dotenv
     requests
   ];
 
-  pythonImportsCheck = [
-    "withings_sync"
-  ];
+  pythonImportsCheck = [ "withings_sync" ];
 
   meta = with lib; {
     description = "Synchronisation of Withings weight";
+    mainProgram = "withings-sync";
     homepage = "https://github.com/jaroslawhartman/withings-sync";
     changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/v${version}";
     license = licenses.mit;

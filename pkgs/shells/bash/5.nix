@@ -2,6 +2,7 @@
 , stdenv
 , buildPackages
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , bison
 , util-linux
 
@@ -22,11 +23,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${lib.optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
-  version = "5.2";
+  pname = "bash${lib.optionalString interactive "-interactive"}";
+  version = "5.2${patch_suffix}";
+  patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/bash-${version}.tar.gz";
+    url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
     sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
   };
 
@@ -78,6 +80,10 @@ stdenv.mkDerivation rec {
     "bash_cv_job_control_missing=nomissing"
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"
+    # This check cannot be performed when cross compiling. The "yes"
+    # default is fine for static linking on Linux (weak symbols?) but
+    # not with OpenBSD, when it does clash with the regular `getenv`.
+    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && isOpenBSD) then "yes" else "no"}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"
@@ -87,12 +93,16 @@ stdenv.mkDerivation rec {
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
     "--disable-nls"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # /dev/fd is optional on FreeBSD. we need it to work when built on a system
+    # with it and transferred to a system without it! This includes linux cross.
+    "bash_cv_dev_fd=absent"
   ];
 
   strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ]
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook bison ]
     ++ lib.optional withDocs texinfo
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 

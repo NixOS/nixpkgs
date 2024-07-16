@@ -8,7 +8,7 @@
 , keybinder3
 , pkg-config
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , xfce
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3Packages.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -33,7 +33,7 @@ bundlerApp rec {
   };
 
   meta = with lib; {
-    description = "A faster Asciidoc processor written in Ruby, with many extensions enabled";
+    description = "Faster Asciidoc processor written in Ruby, with many extensions enabled";
     homepage = "https://asciidoctor.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description =
       "CLI that provides on-demand secrets access for common DevOps tools";
+    mainProgram = "summon";
     homepage = "https://cyberark.github.io/summon";
     license = lib.licenses.mit;
     maintainers = with maintainers; [ quentini ];

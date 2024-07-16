@@ -17,16 +17,18 @@ import ../make-test-python.nix ({pkgs, ...}:
       services.postgresql = {
         enable = true;
         enableTCPIP = true;
+        ensureDatabases = [ "peertube_test" ];
+        ensureUsers = [
+          {
+            name = "peertube_test";
+            ensureDBOwnership = true;
+          }
+        ];
         authentication = ''
-          hostnossl peertube_local peertube_test 192.168.2.11/32 md5
+          hostnossl peertube_test peertube_test 192.168.2.11/32 md5
         '';
         initialScript = pkgs.writeText "postgresql_init.sql" ''
           CREATE ROLE peertube_test LOGIN PASSWORD '0gUN0C1mgST6czvjZ8T9';
-          CREATE DATABASE peertube_local TEMPLATE template0 ENCODING UTF8;
-          GRANT ALL PRIVILEGES ON DATABASE peertube_local TO peertube_test;
-          \connect peertube_local
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
-          CREATE EXTENSION IF NOT EXISTS unaccent;
         '';
       };
 
@@ -41,6 +43,9 @@ import ../make-test-python.nix ({pkgs, ...}:
     server = { pkgs, ... }: {
       environment = {
         etc = {
+          "peertube/password-init-root".text = ''
+            PT_INITIAL_ROOT_PASSWORD=zw4SqYVdcsXUfRX8aaFX
+          '';
           "peertube/secrets-peertube".text = ''
             063d9c60d519597acef26003d5ecc32729083965d09181ef3949200cbe5f09ee
           '';
@@ -70,13 +75,15 @@ import ../make-test-python.nix ({pkgs, ...}:
         localDomain = "peertube.local";
         enableWebHttps = false;
 
+        serviceEnvironmentFile = "/etc/peertube/password-init-root";
+
         secrets = {
           secretsFile = "/etc/peertube/secrets-peertube";
         };
 
         database = {
           host = "192.168.2.10";
-          name = "peertube_local";
+          name = "peertube_test";
           user = "peertube_test";
           passwordFile = "/etc/peertube/password-posgressql-db";
         };
@@ -99,7 +106,7 @@ import ../make-test-python.nix ({pkgs, ...}:
     };
 
     client = {
-      environment.systemPackages = [ pkgs.jq ];
+      environment.systemPackages = [ pkgs.jq pkgs.peertube.cli ];
       networking = {
        interfaces.eth1 = {
           ipv4.addresses = [
@@ -130,7 +137,10 @@ import ../make-test-python.nix ({pkgs, ...}:
     client.succeed("curl --fail http://peertube.local:9000/api/v1/config/about | jq -r '.instance.name' | grep 'PeerTube\ Test\ Server'")
 
     # Check PeerTube CLI version
-    assert "${pkgs.peertube.version}" in server.succeed('su - peertube -s /bin/sh -c "peertube --version"')
+    client.succeed('peertube-cli auth add -u "http://peertube.local:9000" -U "root" --password "zw4SqYVdcsXUfRX8aaFX"')
+    client.succeed('peertube-cli auth list | grep "http://peertube.local:9000"')
+    client.succeed('peertube-cli auth del "http://peertube.local:9000"')
+    client.fail('peertube-cli auth list | grep "http://peertube.local:9000"')
 
     client.shutdown()
     server.shutdown()

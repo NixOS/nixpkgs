@@ -6,6 +6,7 @@
 , glib
 , pkg-config
 , udev
+, libevdev
 , libgudev
 , python3
 , valgrind
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "2.8.0";
+  version = "2.12.2";
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    hash = "sha256-VjFZBlOIG1L4dXPJ8DWxrbfVqdQC+X7zVXFryo43FFc=";
+    hash = "sha256-dxnXh+O/8q8ShsPbpqvaBPNQR6lJBphBolYTmcJEF/0=";
   };
 
   postPatch = ''
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     udev
+    libevdev
     libgudev
   ];
 
@@ -52,11 +54,12 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     valgrind
-  ] ++ (with python3.pkgs; [
-    libevdev
-    pytest
-    pyudev
-  ]);
+    (python3.withPackages (ps: with ps; [
+      ps.libevdev
+      pytest
+      pyudev
+    ]))
+  ];
 
   meta = with lib; {
     platforms = platforms.linux;
@@ -64,6 +67,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/linuxwacom/libwacom/blob/${src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     maintainers = teams.freedesktop.members;
-    license = licenses.mit;
+    license = licenses.hpnd;
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -16,7 +15,7 @@
 , libgnomekbd
 , gnome
 , libtool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , pam
@@ -29,27 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-5hXhCPXC7b2SsmvNSLDe/WYQcufN7FfhnaAgTNtqg0I=";
+    hash = "sha256-hXgDTQnOlskzyOogvk7BQ9iJ3oXRtgUUX5bXtgD+gFo=";
   };
-
-  patches = [
-    # Fix broken theming with pygobject >= 3.46.0
-    # https://github.com/linuxmint/cinnamon-screensaver/issues/446
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon-screensaver/commit/37ab8ed18f35591f2bd99043f12c06d98b4527db.patch";
-      hash = "sha256-4YSithosyTLy8OFu6DEhLT4c+EGEg84EenTKAiBiWo4=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     intltool
     dbus # for meson.build
@@ -108,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
-    description = "The Cinnamon screen locker and screensaver program";
+    description = "Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

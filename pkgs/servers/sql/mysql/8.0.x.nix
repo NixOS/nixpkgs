@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.35";
+  version = "8.0.37";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kXxe04cE6ZIRGFzkviTjOowZyRJB7XOvQYGm840VdMI=";
+    hash = "sha256-4GOgkazZ7EC7BfLATfZPiZan5OJuiDu2UChJ1fa0pho=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
@@ -71,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.mysql.com/";
-    description = "The world's most popular open source database";
-    license = licenses.gpl2;
+    description = "World's most popular open source database";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };

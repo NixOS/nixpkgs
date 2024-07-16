@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for automated Web application testing";
+    mainProgram = "jaeles";
     homepage = "https://github.com/jaeles-project/jaeles";
     changelog = "https://github.com/jaeles-project/jaeles/releases/tag/beta-v${version}";
     license = licenses.mit;

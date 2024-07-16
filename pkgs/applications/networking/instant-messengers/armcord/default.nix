@@ -3,8 +3,8 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, makeWrapper
-, wrapGAppsHook
+, makeShellWrapper
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.5";
+  version = "3.2.7";
 
   src =
     let
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-6zlYm4xuYpG+Bgsq5S+B/Zt9TRB2GZnueKAg2ywYLE4=";
+          hash = "sha256-TFgO9ddz/Svi4QfugjTTejpV/m+xc1548cokzhVgwkw=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-HJu1lRa3zOTohsPMe23puHxg1VMWNR2aOjDQJqc4TqE=";
+          hash = "sha256-AJ4TSG3ry2P40vzK1fsaWgQ/O0z9r3z8+0uxSmddZKo=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeShellWrapper wrapGAppsHook3 ];
 
   dontWrapGApps = true;
 
@@ -113,8 +113,9 @@ stdenv.mkDerivation rec {
     cp -R "usr/share" "$out/share"
     chmod -R g-w "$out"
 
-    # Wrap the startup command
-    makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+    # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
+    # see https://github.com/NixOS/nixpkgs/issues/172583
+    makeShellWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
@@ -134,7 +135,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
-    maintainers = with maintainers; [ ludovicopiero wrmilling ];
+    maintainers = with maintainers; [ wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
   };

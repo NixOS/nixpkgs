@@ -1,24 +1,24 @@
 { stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
 , dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
-, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
+, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook3
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20230726175256.4464bfb32d";
+  versionSuffix = "20240101011938.ae7e4a1c15";
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "6.2.2"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "6.2.4"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    hash = "sha256-X3BJksdddTdxeUqVjzcq3cDRGRqmaYE7Z+eXtHoqbkg=";
+    hash = "sha256-XyGb9F83z8+OSjxOaO5k+h2qIY78ofS/ZfTXki54E5Q=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -108,7 +108,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
-    description = "The Keybase official GUI";
+    description = "Keybase official GUI";
+    mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

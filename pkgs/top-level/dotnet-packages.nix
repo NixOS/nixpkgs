@@ -70,6 +70,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "4.7.49.0";
     sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
     outputFiles = [ "tools/*" ];
+    meta.mainProgram = "stylecopsettingseditor";
   };
 
   StyleCopPlusMSBuild = fetchNuGet {
@@ -153,7 +154,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
-      description = "A generic framework for creating extensible applications";
+      description = "Generic framework for creating extensible applications";
       homepage = "https://www.mono-project.com/Mono.Addins";
       longDescription = ''
         A generic framework for creating extensible applications,

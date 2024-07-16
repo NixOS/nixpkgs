@@ -13,21 +13,23 @@
 , withRpm ? !stdenv.isDarwin
 , rpm
 , db
+, withConda ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.27";
+  version = "0.7.29";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = version;
-    sha256 = "sha256-kVExzCHfPU/o+C5TTAv1J9H7GmYwVWCsIpVkkts42js=";
+    hash = "sha256-867sCGFvKib1As9BCiCi6LYVrLUK0pjtM5Bw9Yuu0D8=";
   };
 
   cmakeFlags = [
     "-DENABLE_COMPLEX_DEPS=true"
+    (lib.cmakeBool "ENABLE_CONDA" withConda)
     "-DENABLE_LZMA_COMPRESSION=true"
     "-DENABLE_BZIP2_COMPRESSION=true"
     "-DENABLE_ZSTD_COMPRESSION=true"
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withRpm rpm;
 
   meta = with lib; {
-    description = "A free package dependency solver";
+    description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.47";
+  version = "0.0.54";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZbSqqjvYzee79nSeyfU4FPoOzsQwOjPHjltS9QrWcqw=";
+    hash = "sha256-VSuEjrRiHWA78DWQgbj0D+GFjhXrREUOHUcQpFqflcw=";
   };
 
   postPatch = ''
@@ -32,11 +32,11 @@ buildPythonPackage rec {
     sed -i '/"ruff>=/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     pygls
     lsprotocol
@@ -63,11 +63,12 @@ buildPythonPackage rec {
     "--unset PYTHONPATH"
   ];
 
-  meta = with lib; {
-    description = "A Language Server Protocol implementation for Ruff";
-    homepage = "https://github.com/astral-sh/ruff-lsp";
+  meta = {
     changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda kalekseev ];
+    description = "Language Server Protocol implementation for Ruff";
+    homepage = "https://github.com/astral-sh/ruff-lsp";
+    license = lib.licenses.mit;
+    mainProgram = "ruff-lsp";
+    maintainers = with lib.maintainers; [ figsoda kalekseev ];
   };
 }

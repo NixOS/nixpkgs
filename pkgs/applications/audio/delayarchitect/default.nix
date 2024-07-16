@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jpcima";
     repo = "DelayArchitect";
     rev = "5abf4dfb7f92ba604d591a2c388d2d69a9055fe3";
-    sha256 = "sha256-LoK2pYPLzyJF7tDJPRYer6gKHNYzvFvX/d99TuOPECo=";
+    hash = "sha256-LoK2pYPLzyJF7tDJPRYer6gKHNYzvFvX/d99TuOPECo=";
     fetchSubmodules = true;
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jpcima/DelayArchitect";
-    description = "A visual, musical editor for delay effects";
+    description = "Visual, musical editor for delay effects";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.all;
     license = licenses.gpl3Plus;

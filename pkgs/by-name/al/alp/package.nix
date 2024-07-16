@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , runCommand
@@ -47,7 +46,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A convenient authentication method that lets you use your android device as a key for your Linux machine";
+    description = "Convenient authentication method that lets you use your android device as a key for your Linux machine";
     homepage = "https://github.com/gernotfeichter/alp";
     license = licenses.gpl2Only;
     mainProgram = "alp";

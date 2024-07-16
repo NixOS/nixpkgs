@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gef";
-  version = "2023.08";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "hugsy";
     repo = "gef";
     rev = version;
-    sha256 = "sha256-MqpII3jhSc6aP/WQDktom2wxAvCkxCwfs1AFWij5J7A=";
+    sha256 = "sha256-fo8hC2T2WDcG0MQffPm2QBPR89EPiqctkUJC40PeyWg=";
   };
 
   dontBuild = true;
@@ -74,7 +74,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modern experience for GDB with advanced debugging features for exploit developers & reverse engineers";
+    description = "Modern experience for GDB with advanced debugging features for exploit developers & reverse engineers";
+    mainProgram = "gef";
     homepage = "https://github.com/hugsy/gef";
     license = licenses.mit;
     platforms = platforms.all;

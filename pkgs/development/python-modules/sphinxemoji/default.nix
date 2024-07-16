@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sphinx
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sphinx,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,10 @@ buildPythonPackage rec {
   version = "0.2.0";
   format = "pyproject";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
@@ -27,11 +31,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     sphinx
-   ];
-
-  pythonImportsCheck = [
-    "sphinxemoji"
+    # sphinxemoji.py imports pkg_resources directly
+    setuptools
   ];
+
+  pythonImportsCheck = [ "sphinxemoji" ];
 
   meta = with lib; {
     description = "Extension to use emoji codes in your Sphinx documentation";

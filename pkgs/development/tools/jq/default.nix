@@ -10,15 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version = "1.7";
+  version = "1.7.1";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    hash = "sha256-QCoNaXXZRub05ITRqEMgQUoP+Ots9J0sEdFE1NNE22I=";
+    hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
   };
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
+
+  # https://github.com/jqlang/jq/issues/2871
+  postPatch = lib.optionalString stdenv.isFreeBSD ''
+    substituteInPlace Makefile.am --replace-fail "tests/mantest" "" --replace-fail "tests/optionaltest" ""
+  '';
 
   # Upstream script that writes the version that's eventually compiled
   # and printed in `jq --help` relies on a .git directory which our src
@@ -73,7 +78,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit onigurumaSupport; };
 
   meta = with lib; {
-    description = "A lightweight and flexible command-line JSON processor";
+    description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin artturin ncfavier ];

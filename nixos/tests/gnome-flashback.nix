@@ -14,16 +14,17 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = user.name;
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = user.name;
       };
 
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
       services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
-      services.xserver.displayManager.defaultSession = "gnome-flashback-metacity";
+      services.displayManager.defaultSession = "gnome-flashback-metacity";
     };
 
   testScript = { nodes, ... }: let

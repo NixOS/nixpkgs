@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, buildPackages
+{ fetchurl, fetchpatch, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.42.0";
+  version = "2.45.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-MnghDp/SmUuEhN1+Pd2eqLlA71IXDNtgbaqU2IfJOw0=";
+    hash = "sha256-Ub/ofrHAL+0UhAUYdTZe6rIpgx0w0M7F2JoU+eQOmts=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -59,6 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./installCheck-path.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
+  ] ++ lib.optionals (guiSupport && stdenv.isDarwin) [
+    # Needed to workaround an issue in macOS where gitk shows a empty window
+    # https://github.com/Homebrew/homebrew-core/issues/68798
+    # https://github.com/git/git/pull/944
+    (fetchpatch {
+      name = "gitk_check_main_window_visibility_before_waiting_for_it_to_show.patch";
+      url = "https://github.com/git/git/commit/1db62e44b7ec93b6654271ef34065b31496cd02e.patch";
+      hash = "sha256-ntvnrYFFsJ1Ebzc6vM9/AMFLHMS1THts73PIOG5DkQo=";
+    })
   ];
 
   postPatch = ''
@@ -121,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
+  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent"
+  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -318,24 +328,19 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    # git-completion.bash: line 405: compgen: command not found:
-    disable_test t9902-completion 'option aliases are shown with GIT_COMPLETION_SHOW_ALL'
+    # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
+    disable_test t9902-completion
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
-
-    ${lib.optionalString (!sendEmailSupport) ''
-      # Disable sendmail tests
-      disable_test t9001-send-email
-    ''}
-
+  '' + lib.optionalString (!sendEmailSupport) ''
+    # Disable sendmail tests
+    disable_test t9001-send-email
+  '' + ''
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
     # Tested to fail: 2.18.0 and 2.19.0
     disable_test t1700-split-index "null sha1"
-
-    # Tested to fail: 2.18.0
-    disable_test t9902-completion "sourcing the completion script clears cached --options"
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
@@ -345,12 +350,11 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
 
-    ${lib.optionalString (!perlSupport) ''
-      # request-pull is a Bash script that invokes Perl, so it is not available
-      # when NO_PERL=1, and the test should be skipped, but the test suite does
-      # not check for the Perl prerequisite.
-      disable_test t5150-request-pull
-    ''}
+  '' + lib.optionalString (!perlSupport) ''
+    # request-pull is a Bash script that invokes Perl, so it is not available
+    # when NO_PERL=1, and the test should be skipped, but the test suite does
+    # not check for the Perl prerequisite.
+    disable_test t5150-request-pull
   '' + lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
@@ -358,8 +362,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fail (as of 2.33.0)
     #===(   18623;1208  8/?  224/?  2/? )= =fatal: Not a valid object name refs/tags/signed-empty
     disable_test t6300-for-each-ref
-    #===(   22665;1651  9/?  1/?  0/?  0/? )= =/private/tmp/nix-build-git-2.33.0.drv-2/git-2.33.0/t/../contrib/completion/git-completion.bash: line 405: compgen: command not found
-    disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -382,6 +384,7 @@ stdenv.mkDerivation (finalAttrs: {
       });
       buildbot-integration = nixosTests.buildbot;
     } // tests.fetchgit;
+    updateScript = ./update.sh;
   };
 
   meta = {

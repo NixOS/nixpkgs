@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.21";
+  version = "0.2.23";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,25 +22,20 @@ buildPythonPackage rec {
     owner = "Julius2342";
     repo = "pyvlx";
     rev = "refs/tags/${version}";
-    hash = "sha256-t6lbpP9IwNhXpoZ9+0n9vKCuZ+azWqP7w5v0BfqbMcs=";
+    hash = "sha256-J+oJQHsULrJQNdZqYsl2hufNubMwV1KtG10jZH0jbU4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyyaml
     typing-extensions
+    zeroconf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyvlx"
-  ];
+  pythonImportsCheck = [ "pyvlx" ];
 
   meta = with lib; {
     description = "Python client to work with Velux units";

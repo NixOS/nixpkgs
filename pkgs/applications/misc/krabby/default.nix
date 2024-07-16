@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-pqLk05hDPMvbrDG3xatAP0licaJszBSujo1fqsEtpRI=";
+    hash = "sha256-pqLk05hDPMvbrDG3xatAP0licaJszBSujo1fqsEtpRI=";
   };
 
   cargoHash = "sha256-/wXfdH9ObKGOw8EXHG/3Gvhm66v632lpDp/V3zFIzh4=";
@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/yannjor/krabby/releases/tag/v${version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ruby0b ];
+    mainProgram = "krabby";
   };
 }

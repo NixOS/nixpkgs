@@ -13,13 +13,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=deprecated-declarations"
+  ]);
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/dump-pe ../tests/assets/example.exe
   '';
 
   meta = with lib; {
-    description = "A principled, lightweight parser for Windows portable executable files";
+    description = "Principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
     changelog = "https://github.com/trailofbits/pe-parse/releases/tag/v${version}";
     license = licenses.mit;

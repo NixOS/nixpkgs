@@ -47,12 +47,12 @@
 
 in {
   options.services.mautrix-whatsapp = {
-    enable = lib.mkEnableOption (lib.mdDoc "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.");
+    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp";
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = defaultConfig;
-      description = lib.mdDoc ''
+      description = ''
         {file}`config.yaml` configuration as a Nix attribute set.
         Configuration options should match those described in
         [example-config.yaml](https://github.com/mautrix/whatsapp/blob/master/example-config.yaml).
@@ -91,7 +91,7 @@ in {
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing environment variables to be passed to the mautrix-whatsapp service,
         in which secret tokens can be specified securely by optionally defining a value for
         `MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET`.
@@ -104,7 +104,7 @@ in {
       defaultText = lib.literalExpression ''
         optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
       '';
-      description = lib.mdDoc ''
+      description = ''
         List of Systemd services to require and wait for when starting the application service.
       '';
     };

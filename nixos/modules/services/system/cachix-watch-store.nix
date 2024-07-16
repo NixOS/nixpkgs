@@ -9,41 +9,49 @@ in
   meta.maintainers = [ lib.maintainers.jfroche lib.maintainers.domenkozar ];
 
   options.services.cachix-watch-store = {
-    enable = mkEnableOption (lib.mdDoc "Cachix Watch Store: https://docs.cachix.org");
+    enable = mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
 
     cacheName = mkOption {
       type = types.str;
-      description = lib.mdDoc "Cachix binary cache name";
+      description = "Cachix binary cache name";
     };
 
     cachixTokenFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Required file that needs to contain the cachix auth token.
       '';
     };
 
+    signingKeyFile = mkOption {
+      type = types.nullOr types.path;
+      description = ''
+        Optional file containing a self-managed signing key to sign uploaded store paths.
+      '';
+      default = null;
+    };
+
     compressionLevel = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
+      description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
     jobs = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "Number of threads used for pushing store paths";
+      description = "Number of threads used for pushing store paths";
       default = null;
     };
 
     host = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Cachix host to connect to";
+      description = "Cachix host to connect to";
     };
 
     verbose = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Enable verbose output";
+      description = "Enable verbose output";
       default = false;
     };
 
@@ -53,6 +61,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.cachix-watch-store-agent = {
       description = "Cachix watch store Agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
@@ -69,7 +78,8 @@ in
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ];
+        ]
+        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
@@ -80,6 +90,7 @@ in
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"
+          ${lib.optionalString (cfg.signingKeyFile != null) ''export CACHIX_SIGNING_KEY="$(<"$CREDENTIALS_DIRECTORY/signing-key")"''}
           ${lib.escapeShellArgs command}
         '';
     };

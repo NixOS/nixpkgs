@@ -19,7 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mathaou/termdbms/";
-    description = "A TUI for viewing and editing database files";
+    description = "TUI for viewing and editing database files";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
     mainProgram = "sqlite3-viewer";

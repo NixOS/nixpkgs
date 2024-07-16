@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quictls";
-  version = "3.1.4-quic1";
+  version = "3.1.5-quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "openssl-${finalAttrs.version}";
-    hash = "sha256-WOWoY6rmAAUvuWWXPTWsllUkew5ZIULjL1CEg/RRPsE=";
+    rev = "cb6841b741544bfd8868c1641ce96a934985509e";
+    hash = "sha256-oR46jefarUGmBYjjpEvtKFzIOgSXSy58cLdX+P5ocA8=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
     then "./Configure BSD-x86_64"
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-    then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+    then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
     else if stdenv.hostPlatform.isBSD
     then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
     else if stdenv.hostPlatform.isMinGW

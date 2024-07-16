@@ -1,19 +1,20 @@
-{ lib
-, asn1crypto
-, azure-identity
-, azure-keyvault-keys
-, boto3
-, botocore
-, buildPythonPackage
-, cryptography
-, ed25519
-, fetchFromGitHub
-, google-cloud-kms
-, hatchling
-, pynacl
-, pyspx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  azure-identity,
+  azure-keyvault-keys,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cryptography,
+  ed25519,
+  fetchFromGitHub,
+  google-cloud-kms,
+  hatchling,
+  pynacl,
+  pyspx,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,14 +31,15 @@ buildPythonPackage rec {
     hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.18.0" "hatchling"
+  '';
+
+  nativeBuildInputs = [ hatchling ];
 
   passthru.optional-dependencies = {
-    PySPX = [
-      pyspx
-    ];
+    PySPX = [ pyspx ];
     awskms = [
       boto3
       botocore
@@ -48,9 +50,7 @@ buildPythonPackage rec {
       azure-keyvault-keys
       cryptography
     ];
-    crypto = [
-      cryptography
-    ];
+    crypto = [ cryptography ];
     gcpkms = [
       cryptography
       google-cloud-kms
@@ -58,11 +58,9 @@ buildPythonPackage rec {
     hsm = [
       asn1crypto
       cryptography
-    #   pykcs11
+      #   pykcs11
     ];
-    pynacl = [
-      pynacl
-    ];
+    pynacl = [ pynacl ];
     # Circular dependency
     # sigstore = [
     #   sigstore
@@ -74,9 +72,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "securesystemslib"
-  ];
+  pythonImportsCheck = [ "securesystemslib" ];
 
   disabledTestPaths = [
     # pykcs11 is not available
@@ -93,4 +89,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

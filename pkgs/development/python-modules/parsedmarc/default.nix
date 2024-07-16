@@ -1,34 +1,36 @@
-{ lib
-, azure-identity
-, azure-monitor-ingestion
-, boto3
-, buildPythonPackage
-, dateparser
-, dnspython
-, elasticsearch
-, elasticsearch-dsl
-, expiringdict
-, fetchPypi
-, fetchurl
-, geoip2
-, google-api-core
-, google-api-python-client
-, google-auth
-, google-auth-httplib2
-, google-auth-oauthlib
-, hatchling
-, imapclient
-, kafka-python
-, lxml
-, mailsuite
-, msgraph-core
-, nixosTests
-, publicsuffixlist
-, pythonOlder
-, requests
-, tqdm
-, urllib3
-, xmltodict
+{
+  lib,
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  buildPythonPackage,
+  dateparser,
+  dnspython,
+  elastic-transport,
+  elasticsearch,
+  elasticsearch-dsl,
+  expiringdict,
+  fetchPypi,
+  fetchurl,
+  geoip2,
+  google-api-core,
+  google-api-python-client,
+  google-auth,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  hatchling,
+  imapclient,
+  kafka-python-ng,
+  lxml,
+  mailsuite,
+  msgraph-core,
+  nixosTests,
+  opensearch-py,
+  publicsuffixlist,
+  pythonOlder,
+  requests,
+  tqdm,
+  xmltodict,
 }:
 
 let
@@ -39,23 +41,23 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.6.4";
+  version = "8.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
+    hash = "sha256-mscc3TRMYuaTqrrxGPCVVKa2fg5sXwK/BglpbvLXbLc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch"
-  '';
 
   nativeBuildInputs = [
     hatchling
+  ];
+
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
   ];
 
   propagatedBuildInputs = [
@@ -64,6 +66,7 @@ buildPythonPackage rec {
     boto3
     dateparser
     dnspython
+    elastic-transport
     elasticsearch
     elasticsearch-dsl
     expiringdict
@@ -74,15 +77,15 @@ buildPythonPackage rec {
     google-auth-httplib2
     google-auth-oauthlib
     imapclient
-    kafka-python
+    kafka-python-ng
     lxml
     mailsuite
     msgraph-core
     publicsuffixlist
     requests
     tqdm
-    urllib3
     xmltodict
+    opensearch-py
   ];
 
   # no tests on PyPI, no tags on GitHub
@@ -97,11 +100,15 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    mainProgram = "parsedmarc";
-    maintainers = with maintainers; [ talyz ];
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }";
     license = licenses.asl20;
+    maintainers = with maintainers; [ talyz ];
+    mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

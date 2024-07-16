@@ -5,6 +5,7 @@
 , libassuan
 , libgpg-error
 , libiconv
+, makeBinaryWrapper
 , texinfo
 , common-updater-scripts
 , writers
@@ -37,14 +38,17 @@ stdenv.mkDerivation rec {
     (allow process-exec (literal "/usr/libexec/PlistBuddy"))
   '';
 
-  nativeBuildInputs = [ autoreconfHook texinfo ];
+  nativeBuildInputs = [ autoreconfHook makeBinaryWrapper texinfo ];
   buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
 
   configureFlags = [ "--enable-maintainer-mode" "--disable-ncurses" ];
 
   installPhase = ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     mv macosx/pinentry-mac.app $out/Applications
+
+    # Compatibility with `lib.getExe`
+    makeWrapper $out/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac $out/bin/pinentry-mac
   '';
 
   enableParallelBuilding = true;
@@ -85,5 +89,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry-mac";
     platforms = lib.platforms.darwin;
+    mainProgram = "pinentry-mac";
   };
 }

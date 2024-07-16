@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, importlib-metadata
-, numpy
-, rpyc
-, scipy
-, appdirs
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  importlib-metadata,
+  numpy,
+  rpyc4,
+  scipy,
+  appdirs,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "linien-common";
-  version = "1.0.0";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linien-org";
     repo = "linien";
-    rev = "v${version}";
-    hash = "sha256-BMYFi1HsNKWHmYdrnX/mAehke7UxQZlruFmpaAvxWvQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TCQ1jLZpeQlG/ZyWY0qrHceMJ1TH7AYO7toYc74ZWq4=";
   };
 
-  sourceRoot = "source/linien-common";
+  sourceRoot = "${src.name}/linien-common";
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     importlib-metadata
     numpy
-    rpyc
+    rpyc4
     scipy
     appdirs
   ];
@@ -47,7 +48,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Shared components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-common";
+    changelog = "https://github.com/linien-org/linien/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fsagbuya doronbehar ];
+    maintainers = with maintainers; [
+      fsagbuya
+      doronbehar
+    ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libGL
-, libX11
-, glcontext
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libGL,
+  libX11,
+  glcontext,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.9.0";
+  version = "5.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R7yZYSwhSJuhL1Qcna4k526KSSgzBk6P7p6zuumlZJo=";
+    hash = "sha256-EZyNNk3ePNjRwJ8jftSRZhe6dZlUoZUt9GlOUe5PZRE=";
   };
 
   buildInputs = [
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     libX11
   ];
 
-  propagatedBuildInputs = [
-    glcontext
-  ];
+  propagatedBuildInputs = [ glcontext ];
 
   # Tests need a display to run.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "moderngl"
-  ];
+  pythonImportsCheck = [ "moderngl" ];
 
   meta = with lib; {
     description = "High performance rendering for Python";

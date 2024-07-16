@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchgit
+, fetchzip
 , pygobject3
 , pytestCheckHook
 , gdk-pixbuf
@@ -9,20 +9,19 @@
 , gtk3
 , python-linux-procfs
 , python-ethtool
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
   pname = "tuna";
   version = "0.15";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/${pname}/${pname}.git";
-    rev = "v${version}";
-    sha256 = "sha256-lRHlbdCQ0NcjcWgLvCze67kN8NsK0f5RmKfPbkHhk78=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git/snapshot/tuna-v${version}.tar.gz";
+    sha256 = "MwyLBwKz5ur1sBXHiCLq/Nq2u5aaiC+KzXqvGBmQii8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     mv tuna-cmd.py tuna/cmd.py
 
     substituteInPlace setup.py \
@@ -38,7 +37,7 @@ buildPythonApplication rec {
     glib.dev
     gobject-introspection
     gtk3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [ pygobject3 python-linux-procfs python-ethtool ];
@@ -54,9 +53,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
+    mainProgram = "tuna";
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

@@ -10,24 +10,13 @@
 let
   darling.src = fetchzip {
     url = "https://github.com/darlinghq/darling/archive/d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b.tar.gz";
-    sha256 = "11b51fw47nl505h63bgx5kqiyhf3glhp1q6jkpb6nqfislnzzkrf";
+    hash = "sha256-/YynrKJdi26Xj4lvp5wsN+TAhZjonOrNNHuk4L5tC7s=";
     postFetch = ''
-      # The archive contains both `src/opendirectory` and `src/OpenDirectory`,
-      # pre-create the directory to choose the canonical case on
-      # case-insensitive filesystems.
-      mkdir -p $out/src/OpenDirectory
-
-      cd $out
-      tar -xzf $downloadedFile --strip-components=1
-      rm -r $out/src/libm
-
-      # If `src/opendirectory` and `src/OpenDirectory` refer to different
-      # things, then combine them into `src/OpenDirectory` to match the result
-      # on case-insensitive filesystems.
-      if [ "$(stat -c %i src/opendirectory)" != "$(stat -c %i src/OpenDirectory)" ]; then
-        mv src/opendirectory/* src/OpenDirectory/
-        rmdir src/opendirectory
-      fi
+      # The archive contains both `src/opendirectory` and `src/OpenDirectory`.
+      # Since neither directory is used for anything, we just remove them to avoid
+      #  the potential issue where file systems with different case sensitivity produce
+      #  different hashes.
+      rm -rf $out/src/{OpenDirectory,opendirectory}
     '';
   };
 
@@ -70,7 +59,7 @@ appleDerivation' stdenv {
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+    (cd ${lib.getDev buildPackages.darwin.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
       ln -s "$out/include/pthread/$header" "$out/include/$header"
@@ -153,7 +142,7 @@ appleDerivation' stdenv {
       $out/lib
 
     substituteInPlace $out/lib/libSystem.B.tbd \
-      --replace "/usr/lib/system/" "$out/lib/system/"
+      --replace-fail "/usr/lib/system/" "$out/lib/system/"
     ln -s libSystem.B.tbd $out/lib/libSystem.tbd
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
@@ -178,9 +167,9 @@ appleDerivation' stdenv {
   appleHeaders = builtins.readFile ./headers.txt;
 
   meta = with lib; {
-    description = "The Mac OS libc/libSystem (tapi library with pure headers)";
+    description = "Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
     platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    license     = licenses.apple-psl20;
   };
 }

@@ -4,6 +4,7 @@
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
+, nixosTests
 }:
 
 with lib;
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://corosync.org/";
-    description = "A Group Communication System with features for implementing high availability within applications";
+    description = "Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ montag451 ryantm ];

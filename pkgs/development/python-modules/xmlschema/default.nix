@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, elementpath
-, jinja2
-, lxml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  elementpath,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "3.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,12 +21,12 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ETWD+i0VJbmfSHFvOsRkuzScKZdEyr6It3+U5Q7cQbQ=";
+    hash = "sha256-Sy70OQvKx0H8vxRFTEkg+QV9eVij5C9dlAwJ2HTFOi8=";
   };
 
-  propagatedBuildInputs = [
-    elementpath
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ elementpath ];
 
   nativeCheckInputs = [
     jinja2
@@ -32,15 +34,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xmlschema"
+  disabledTests = [
+    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    "test_normalize_url_slashes"
+    "test_normalize_url_with_base_unc_path"
   ];
 
+  pythonImportsCheck = [ "xmlschema" ];
+
   meta = with lib; {
-    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
+    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

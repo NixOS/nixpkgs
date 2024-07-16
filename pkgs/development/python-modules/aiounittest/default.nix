@@ -1,17 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, coverage
-, isPy27
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.2";
-  format = "setuptools";
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kwarunek";
@@ -20,18 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
   };
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    nose
-    coverage
-  ];
+  propagatedBuildInputs = [ wrapt ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aiounittest" ];
 

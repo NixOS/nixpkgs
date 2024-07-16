@@ -40,6 +40,7 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "msmtp";
   };
 
   binaries = stdenv.mkDerivation {

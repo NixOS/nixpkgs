@@ -1,15 +1,22 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, hare
-, scdoc
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  hareHook,
+  scdoc,
+  nix-update-script,
+  makeWrapper,
+  bash,
+  substituteAll,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
   version = "1.0.5";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~autumnull";
@@ -18,21 +25,33 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gpui5FVRw3NKyx0AB/4kqdolrl5vkDudPOgjHc/IE4U=";
   };
 
+  patches = [
+    # Use nix store's bash instead of sh. `@bash@/bin/sh` is used, since haredo expects a posix shell.
+    (substituteAll {
+      src = ./001-use-nix-store-sh.patch;
+      inherit bash;
+    })
+  ];
+
   nativeBuildInputs = [
-    hare
+    hareHook
+    makeWrapper
     scdoc
   ];
 
-  preBuild = ''
-    HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
-    export HARECACHE
-    export PREFIX=${builtins.placeholder "out"}
-  '';
+  enableParallelChecking = true;
+
+  env.PREFIX = builtins.placeholder "out";
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    ./bootstrap.sh
+    hare build -o bin/haredo ./src
+    scdoc <doc/haredo.1.scd >doc/haredo.1
 
     runHook postBuild
   '';
@@ -40,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/haredo test
+    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test
 
     runHook postCheck
   '';
@@ -48,24 +67,24 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./bootstrap.sh install
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+    cp ./bin/haredo $out/bin
+    cp ./doc/haredo.1 $out/share/man/man1
 
     runHook postInstall
   '';
-
-  dontConfigure = true;
-  doCheck = true;
 
   setupHook = ./setup-hook.sh;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A simple and unix-idiomatic build automator";
+    description = "Simple and unix-idiomatic build automator";
     homepage = "https://sr.ht/~autumnull/haredo/";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "haredo";
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })

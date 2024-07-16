@@ -1,96 +1,103 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  substituteAll,
 
-# build
-, setuptools
+  # build-system
+  setuptools,
 
-# patched in
-, geos
-, gdal
-, withGdal ? false
+  # patched in
+  geos,
+  gdal,
+  withGdal ? false,
 
-# propagates
-, asgiref
-, sqlparse
+  # dependencies
+  asgiref,
+  sqlparse,
 
-# extras
-, argon2-cffi
-, bcrypt
+  # optional-dependencies
+  argon2-cffi,
+  bcrypt,
 
-# tests
-, aiosmtpd
-, docutils
-, geoip2
-, jinja2
-, numpy
-, pillow
-, pylibmc
-, pymemcache
-, python
-, pywatchman
-, pyyaml
-, pytz
-, redis
-, selenium
-, tblib
-, tzdata
+  # tests
+  aiosmtpd,
+  docutils,
+  geoip2,
+  jinja2,
+  numpy,
+  pillow,
+  pylibmc,
+  pymemcache,
+  python,
+  pywatchman,
+  pyyaml,
+  pytz,
+  redis,
+  selenium,
+  tblib,
+  tzdata,
 }:
 
 buildPythonPackage rec {
-  pname = "Django";
-  version = "5.0";
+  pname = "django";
+  version = "5.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fSnhTfvBnLapWkvWae294R9dTGpx/apCwtQLaEboB/c=";
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = "django";
+    rev = "refs/tags/${version}";
+    hash = "sha256-g2Y8kcfYUjykZ7Y6JEsNW/jw6chMLLYpQlgdTFt7HmM=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./django_5_set_zoneinfo_dir.patch;
-      zoneinfo = tzdata + "/share/zoneinfo";
-    })
-    # prevent tests from messing with our pythonpath
-    ./django_5_tests_pythonpath.patch
-    # disable test that excpects timezone issues
-    ./django_5_disable_failing_tests.patch
-  ] ++ lib.optionals withGdal [
-    (substituteAll {
-      src = ./django_5_set_geos_gdal_lib.patch;
-      geos = geos;
-      gdal = gdal;
-      extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    })
-  ];
+  patches =
+    [
+      (substituteAll {
+        src = ./django_5_set_zoneinfo_dir.patch;
+        zoneinfo = tzdata + "/share/zoneinfo";
+      })
+      # prevent tests from messing with our pythonpath
+      ./django_5_tests_pythonpath.patch
+      # disable test that excpects timezone issues
+      ./django_5_disable_failing_tests.patch
+    ]
+    ++ lib.optionals withGdal [
+      (substituteAll {
+        src = ./django_5_set_geos_gdal_lib.patch;
+        geos = geos;
+        gdal = gdal;
+        extension = stdenv.hostPlatform.extensions.sharedLibrary;
+      })
+    ];
 
-  postPatch = ''
-    substituteInPlace tests/utils_tests/test_autoreload.py \
-      --replace "/usr/bin/python" "${python.interpreter}"
-  '';
+  postPatch =
+    ''
+      substituteInPlace tests/utils_tests/test_autoreload.py \
+        --replace "/usr/bin/python" "${python.interpreter}"
+    ''
+    + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
+      # Test regression after xz was reverted from 5.6.0 to 5.4.6
+      # https://hydra.nixos.org/build/254532197
+      substituteInPlace tests/view_tests/tests/test_debug.py \
+        --replace-fail "test_files" "dont_test_files"
+    '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
-    argon2 = [
-      argon2-cffi
-    ];
-    bcrypt = [
-      bcrypt
-    ];
+  optional-dependencies = {
+    argon2 = [ argon2-cffi ];
+    bcrypt = [ bcrypt ];
   };
 
   nativeCheckInputs = [
@@ -110,7 +117,7 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   doCheck = !stdenv.isDarwin;
 
@@ -136,7 +143,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
-    description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design.";
+    description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];

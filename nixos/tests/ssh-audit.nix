@@ -70,6 +70,7 @@ import ./make-test-python.nix (
       ${serverName}.succeed("${pkgs.ssh-audit}/bin/ssh-audit 127.0.0.1")
 
       # Wait for client to be able to connect to the server
+      ${clientName}.systemctl("start network-online.target")
       ${clientName}.wait_for_unit("network-online.target")
 
       # Set up trusted private key

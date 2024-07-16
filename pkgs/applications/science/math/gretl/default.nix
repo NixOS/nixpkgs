@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gretl";
-  version = "2023b";
+  version = "2024b";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/gretl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Hf025JjFxde43TN/1m9PeA1uHqxKTZMI8+1qf3XJLGs=";
+    hash = "sha256-mkmOmKO2tiAysZhwC8kNuCXNml8NdFPfaNFykdxYFAY=";
   };
 
   buildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = {
-    description = "A software package for econometric analysis";
+    description = "Software package for econometric analysis";
     homepage = "https://gretl.sourceforge.net";
     license = lib.licenses.gpl3;
     longDescription = ''

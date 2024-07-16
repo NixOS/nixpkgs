@@ -15,20 +15,21 @@
 , libadwaita
 , libpeas2
 , libportal-gtk4
+, pipewire
 , pulseaudio
 , sqlite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "unstable-2023-11-11";
+  version = "1.0.0.alpha.45";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "51bca834b1c52a1cc49b79fe79d45dfcd9113c02";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hOVWvk4U6VoWAvXNHK1vTm/am69EFqDmSb0NofWVQj8=";
     fetchSubmodules = true;
-    hash = "sha256-jmhio/vS+w37IW81XgV4xfb/6ralMgAlwi3zigr4t20=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libpeas2
     libportal-gtk4
+    pipewire
     pulseaudio
     sqlite
   ];
@@ -60,12 +62,30 @@ stdenv.mkDerivation rec {
     "-Dvapi=false"
   ];
 
-  meta = with lib; {
-    description = "An implementation of the KDE Connect protocol, built on GNOME platform libraries";
-    homepage = "https://github.com/andyholmes/valent/";
-    changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn aleksana ];
-    platforms = platforms.linux;
+  meta = {
+    description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
+    mainProgram = "valent";
+    longDescription = ''
+      Note that you have to open firewall ports for other devices
+      to connect to it. Use either:
+      ```nix
+      programs.kdeconnect = {
+        enable = true;
+        package = pkgs.valent;
+      }
+      ```
+      or open corresponding firewall ports directly:
+      ```nix
+      networking.firewall = rec {
+        allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+        allowedUDPPortRanges = allowedTCPPortRanges;
+      }
+      ```
+    '';
+    homepage = "https://valent.andyholmes.ca";
+    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
-}
+})

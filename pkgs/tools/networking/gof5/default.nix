@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/kayrus/gof5";
     license = licenses.asl20;
     maintainers = with maintainers; [ leixb ];
+    mainProgram = "gof5";
   };
 }

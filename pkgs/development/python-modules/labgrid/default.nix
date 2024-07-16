@@ -1,37 +1,39 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, wheel
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  packaging,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.4";
+  version = "23.0.6";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EEPQSIHKAmLPudv7LLm9ol3Kukgz8edYKfDi+wvERpk=";
+    hash = "sha256-UAfBzQZeFNs2UJSFb5fH5wHXQoVU/dOTFciR0/UB7vc=";
   };
 
   nativeBuildInputs = [
@@ -57,12 +59,23 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  pythonRelaxDeps = [
+    "attrs"
+    "autobahn"
+    "jinja2"
+    "packaging"
+    "pexpect"
+    "pytest"
+    "pyudev"
+    "requests"
+    "xmodem"
+  ];
+
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
 
   nativeCheckInputs = [
     mock
+    openssh
     psutil
     pytestCheckHook
     pytest-mock

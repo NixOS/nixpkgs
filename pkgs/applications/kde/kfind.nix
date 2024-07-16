@@ -9,6 +9,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kfind/";
     description = "Find files/folders";
+    mainProgram = "kfind";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.iblech ];
   };

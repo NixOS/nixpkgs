@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-core
-, proton-vpn-killswitch
-, proton-vpn-logger
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-core,
+  proton-vpn-killswitch,
+  proton-vpn-logger,
+  jinja2,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-connection";
-  version = "0.11.0-unstable-2023-09-05";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-connection";
-    rev = "747ccacb5350ad59f2a09953b8d20c5c161aab54";
-    hash = "sha256-WyMG0kmwBKoWc0mHnaop9E0upPAYHFwS/A9I1//WwlY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ze/te0G0tDzyZPGVVqvuJlZoHWJqJ36LnHO+Cy5nxx8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jinja2
@@ -34,14 +33,12 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.connection" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Permission denied: '/run'
@@ -66,6 +63,6 @@ buildPythonPackage {
     description = "Defines the interface that VPN connection backends should implement";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-connection";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

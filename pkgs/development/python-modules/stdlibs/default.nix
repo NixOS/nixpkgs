@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "stdlibs";
-  version = "2023.11.2";
-  format = "pyproject";
+  version = "2024.5.15";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = "stdlibs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-084px8p+pOHonSiOvi/BklaccudSlw9URtCaalWlI0o=";
+    hash = "sha256-DthHvL5x3HVwACLnxeyuoC0hb8OokabODircEY9eEhE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stdlibs"
-  ];
+  pythonImportsCheck = [ "stdlibs" ];
 
   meta = with lib; {
     description = "Overview of the Python stdlib";

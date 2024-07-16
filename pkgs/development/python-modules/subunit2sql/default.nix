@@ -1,12 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oslo-concurrency
-, oslo-db
-, pbr
-, python-dateutil
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  oslo-concurrency,
+  oslo-db,
+  pbr,
+  python-dateutil,
+  stestr,
+  testresources,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +32,8 @@ buildPythonPackage rec {
     mock
     oslo-concurrency
     stestr
+    testresources
+    testscenarios
   ];
 
   checkPhase = ''
@@ -52,5 +57,7 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/opendev/subunit2sql";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
+    # version 1.10.0 is incomptaible with oslo-db 14.0.0
+    broken = true;
   };
 }

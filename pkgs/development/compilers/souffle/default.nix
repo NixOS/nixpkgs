@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , bash-completion, perl, ncurses, zlib, sqlite, libffi
 , mcpp, cmake, bison, flex, doxygen, graphviz
 , makeWrapper, python3, callPackage
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
-    description = "A translator of declarative Datalog programs into the C++ language";
+    description = "Translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];

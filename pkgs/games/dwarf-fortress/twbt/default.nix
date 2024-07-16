@@ -5,9 +5,15 @@
 , dfVersion
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    getAttr
+    hasAttr
+    licenses
+    maintainers
+    platforms
+    ;
+
   twbt-releases = {
     "0.44.10" = {
       twbtRelease = "6.49";
@@ -75,8 +81,12 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
-  meta = with lib; {
-    description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
+  passthru = {
+    inherit dfVersion;
+  };
+
+  meta = {
+    description = "Plugin for Dwarf Fortress / DFHack that improves various aspects of the game interface";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, ziafont
-, pytestCheckHook
-, nbval
-, latex2mathml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  ziafont,
+  pytestCheckHook,
+  nbval,
+  latex2mathml,
 }:
 
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.8.1";
-  format = "pyproject";
+  version = "0.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,12 +21,12 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-Bbwq4Ods3P/724KO94jSmMLD1ubfaMHP/gTlOL/2pnE=";
+    hash = "sha256-Drssi+YySh4OhVYAOvgIwzeeu5dQbUUXuhwTedhUUt8=";
   };
 
-  propagatedBuildInputs = [
-    ziafont
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ziafont ];
 
   nativeCheckInputs = [
     pytestCheckHook

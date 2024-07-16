@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool that provides secure DNS resolution";
+    description = "Tool that provides secure DNS resolution";
 
     license = licenses.isc;
     homepage = "https://dnscrypt.info/";

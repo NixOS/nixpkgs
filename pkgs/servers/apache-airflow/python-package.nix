@@ -61,7 +61,6 @@
 , python-slugify
 , python3-openid
 , pythonOlder
-, pythonRelaxDepsHook
 , pyyaml
 , rich
 , rich-argparse
@@ -227,7 +226,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     airflow-frontend
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -265,7 +263,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
     # Needed for pythonImportsCheck below
     export HOME=$(mktemp -d)
   '';
@@ -332,5 +330,9 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple gbpdt ingenieroariel ];
+    knownVulnerabilities = [
+      "CVE-2023-50943"
+      "CVE-2023-50944"
+    ];
   };
 }

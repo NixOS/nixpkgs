@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , qtbase
 , qtcharts
@@ -18,17 +18,21 @@
 , indilib
 , libnova
 , qttools
+, exiv2
+, nlopt
+, testers
+, xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "23.3";
+  version = "24.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
-    rev = "v${version}";
-    hash = "sha256-bYvGmYu9jMHk2IUICz2kCVh56Ymz8JHqurdWV+xEdJY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tqyLwlf8hugixZSsFCZPTtchO3VXk3m/nX1kuDoLOAY=";
   };
 
   patches = [
@@ -50,7 +54,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qttools
   ];
@@ -66,12 +70,14 @@ stdenv.mkDerivation rec {
     qxlsx
     indilib
     libnova
+    exiv2
+    nlopt
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ];
 
   preConfigure = ''
-    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major version}0101 +%s)
+    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major finalAttrs.version}0101 +%s)
   '' + lib.optionalString stdenv.isDarwin ''
     export LC_ALL=en_US.UTF-8
   '';
@@ -89,11 +95,24 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
-    description = "Free open-source planetarium";
-    homepage = "https://stellarium.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kilianar ];
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = ''
+      # Create a temporary home directory because stellarium aborts with an
+      # error if it can't write some configuration files.
+      tmpdir=$(mktemp -d)
+
+      # stellarium can't be run in headless mode, therefore we need xvfb-run.
+      HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run stellarium --version
+    '';
   };
-}
+
+  meta =  {
+    description = "Free open-source planetarium";
+    mainProgram = "stellarium";
+    homepage = "https://stellarium.org/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kilianar ];
+  };
+})

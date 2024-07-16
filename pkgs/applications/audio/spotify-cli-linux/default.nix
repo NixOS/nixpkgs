@@ -1,11 +1,11 @@
 { lib, python3Packages, fetchPypi, dbus }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
-  version = "1.6.0";
+  version = "1.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0slyc3jfrj3rwq8rv6p5aqkw487aw7a87kmf1fb6n4vnvcf08v7w";
+    hash = "sha256-XJMkiQR1FoeIPfAuJT22kfYJdc/ABuxExELh0EEev8k=";
   };
 
   preBuild = ''
@@ -22,7 +22,8 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://pwittchen.github.io/spotify-cli-linux/";
     maintainers = [ maintainers.kmein ];
-    description = "A command line interface to Spotify on Linux.";
+    description = "Command line interface to Spotify on Linux";
+    mainProgram = "spotifycli";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

@@ -8,25 +8,27 @@
 , libgit2
 , oniguruma
 , libiconv
+, Foundation
 , Security
 , xorg
 , zlib
 , buildPackages
-, withClipboard ? false
+, withClipboard ? !stdenv.isDarwin
+, withTrash ? !stdenv.isDarwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.30.0";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2uHsmxD0pn39DvESdVzm0qHEvpmMpE2GD1R3p7XMJEI=";
+    hash = "sha256-cKCIKyXYtDfW3UTTr6QL7Gh/bfb9aZAFRptaP2zdcxc=";
   };
 
-  cargoHash = "sha256-3UW1zSklxi4Ot3h7N8sEevYJMQydkxW9lPcfUouDSy8=";
+  cargoHash = "sha256-JsMgToSzvf3JcVLz5a6kygtxhrU8YSYrHrwbMRhQ1uw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,12 +37,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
     libiconv
     Security
     zlib
   ];
 
-  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -86,7 +89,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
+    description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];

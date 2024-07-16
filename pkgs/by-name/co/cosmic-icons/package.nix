@@ -4,16 +4,17 @@
 , just
 , pop-icon-theme
 , hicolor-icon-theme
+, unstableGitUpdater
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "cosmic-icons";
-  version = "unstable-2023-08-30";
+  version = "0-unstable-2024-05-21";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "14d8e2048087be1ad444f9b3ebb75885509f72c6";
-    sha256 = "sha256-WbdgHmTn403x95x9wEYL0T9ksbN+YLzEB2yE0UrF9T0=";
+    rev = "9aad1ab6d5538938e69955b5f74576ac020be425";
+    sha256 = "sha256-ln2spVA8dlXi/B0ro/FIoWiIClPmwH9E9IqhrKPedys=";
   };
 
   nativeBuildInputs = [ just ];
@@ -30,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontDropIconThemeCache = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "System76 Cosmic icon theme for Linux";

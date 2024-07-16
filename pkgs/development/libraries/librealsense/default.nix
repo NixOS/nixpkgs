@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./py_pybind11_no_external_download.patch
     ./install-presets.patch
+    # https://github.com/IntelRealSense/librealsense/pull/11917
+    (fetchpatch {
+      name = "fix-gcc13-missing-cstdint.patch";
+      url = "https://github.com/IntelRealSense/librealsense/commit/b59b13671658910fc453a4a6bbd61f13ba6e83cc.patch";
+      hash = "sha256-zaW8HG8rfsApI5S/3x+x9Fx8xhyTIPNn/fJVFtkmlEA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -68,13 +74,13 @@ stdenv.mkDerivation rec {
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
-    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+    --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '' + lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
   meta = with lib; {
-    description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
+    description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn pbsds ];

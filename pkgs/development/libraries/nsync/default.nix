@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nsync";
-  version = "1.26.0";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = version;
-    hash = "sha256-pE9waDI+6LQwbyPJ4zROoF93Vt6+SETxxJ/UxeZE5WE=";
+    hash = "sha256-RAwrS8Vz5fZwZRvF4OQfn8Ls11S8OIV2TmJpNrBE4MI=";
   };
 
   nativeBuildInputs = [ cmake ];

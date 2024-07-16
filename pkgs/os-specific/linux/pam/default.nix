@@ -1,5 +1,4 @@
 { lib, stdenv, buildPackages, fetchurl
-, fetchpatch
 , flex, cracklib, db4, gettext, audit, libxcrypt
 , nixosTests
 , autoreconfHook269, pkg-config-unwrapped
@@ -7,23 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchurl {
-    url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
+    url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    hash = "sha256-+JI8dAFZBS1xnb/CovgZQtaN00/K9hxwagLJuA/u744=";
   };
 
   patches = [
     ./suid-wrapper-path.patch
-    # Pull support for localization on non-default --prefix:
-    #   https://github.com/NixOS/nixpkgs/issues/249010
-    #   https://github.com/linux-pam/linux-pam/pull/604
-    (fetchpatch {
-      name = "bind-locales.patch";
-      url = "https://github.com/linux-pam/linux-pam/commit/77bd338125cde583ecdfb9fd69619bcd2baf15c2.patch";
-      hash = "sha256-tlc9RcLZpEH315NFD4sdN9yOco8qhC6+bszl4OHm+AI=";
-    })
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
@@ -35,8 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  # autoreconfHook269 is needed for `suid-wrapper-path.patch` and
-  # `bind-locales.patch` above.
+  # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
   # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
   nativeBuildInputs = [ flex autoreconfHook269 pkg-config-unwrapped ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
@@ -57,6 +47,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--includedir=${placeholder "out"}/include/security"
     "--enable-sconfigdir=/etc/security"
+    # The module is deprecated. We re-enable it explicitly until NixOS
+    # module stops using it.
+    "--enable-lastlog"
   ];
 
   installFlags = [

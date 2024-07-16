@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }: let
+{ config, lib, ... }: let
+
+  pkgs = config.node.pkgs;
+
   commonConfig = ./common/acme/client;
 
   dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;
@@ -96,7 +99,14 @@
               serverAliases = [ "${server}-wildcard-alias.example.test" ];
               useACMEHost = "example.test";
             };
-          };
+          } // (lib.optionalAttrs (server == "nginx") {
+            # The nginx module supports using a different key than the hostname
+            different-key = vhostBaseData // {
+              serverName = "${server}-different-key.example.test";
+              serverAliases = [ "${server}-different-key-alias.example.test" ];
+              enableACME = true;
+            };
+          });
         };
 
         # Used to determine if service reload was triggered
@@ -189,6 +199,14 @@ in {
       specialisation = {
         # Tests HTTP-01 verification using Lego's built-in web server
         http01lego.configuration = simpleConfig;
+
+        # account hash generation with default server from <= 23.11
+        http01lego_legacyAccountHash.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            security.acme.defaults.server = lib.mkForce null;
+          }
+        ];
 
         renew.configuration = lib.mkMerge [
           simpleConfig
@@ -382,8 +400,6 @@ in {
   testScript = { nodes, ... }:
     let
       caDomain = nodes.acme.test-support.acme.caDomain;
-      newServerSystem = nodes.webserver.config.system.build.toplevel;
-      switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
     # this is because a oneshot goes from inactive => activating => inactive, and never
@@ -416,7 +432,7 @@ in {
       backoff = BackoffTracker()
 
 
-      def switch_to(node, name):
+      def switch_to(node, name, allow_fail=False):
           # On first switch, this will create a symlink to the current system so that we can
           # quickly switch between derivations
           root_specs = "/tmp/specialisation"
@@ -430,9 +446,14 @@ in {
           if rc > 0:
               switcher_path = f"/tmp/specialisation/{name}/bin/switch-to-configuration"
 
-          node.succeed(
-              f"{switcher_path} test"
-          )
+          if not allow_fail:
+            node.succeed(
+                f"{switcher_path} test"
+            )
+          else:
+            node.execute(
+                f"{switcher_path} test"
+            )
 
 
       # Ensures the issuer of our cert matches the chain
@@ -522,6 +543,7 @@ in {
           'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
+      acme.systemctl("start network-online.target")
       acme.wait_for_unit("network-online.target")
       acme.wait_for_unit("pebble.service")
 
@@ -533,6 +555,12 @@ in {
           webserver.wait_for_unit("acme-finished-http.example.test.target")
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
+
+      # Perform account hash test
+      with subtest("Assert that account hash didn't unexpectedly change"):
+          hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
+          print("Account hash: " + hash)
+          assert hash.strip() == "d590213ed52603e9128d"
 
       # Perform renewal test
       with subtest("Can renew certificates when they expire"):
@@ -649,20 +677,20 @@ in {
           webserver.succeed("systemctl restart caddy.service")
           check_connection_key_bits(client, "a.example.test", "384")
 
-      domains = ["http", "dns", "wildcard"]
-      for server, logsrc in [
-          ("nginx", "journalctl -n 30 -u nginx.service"),
-          ("httpd", "tail -n 30 /var/log/httpd/*.log"),
+      common_domains = ["http", "dns", "wildcard"]
+      for server, logsrc, domains in [
+          ("nginx", "journalctl -n 30 -u nginx.service", common_domains + ["different-key"]),
+          ("httpd", "tail -n 30 /var/log/httpd/*.log", common_domains),
       ]:
           wait_for_server = lambda: webserver.wait_for_unit(f"{server}.service")
           with subtest(f"Works with {server}"):
               try:
                   switch_to(webserver, server)
-                  # Skip wildcard domain for this check ([:-1])
-                  for domain in domains[:-1]:
-                      webserver.wait_for_unit(
-                          f"acme-finished-{server}-{domain}.example.test.target"
-                      )
+                  for domain in domains:
+                      if domain != "wildcard":
+                          webserver.wait_for_unit(
+                              f"acme-finished-{server}-{domain}.example.test.target"
+                          )
               except Exception as err:
                   _, output = webserver.execute(
                       f"{logsrc} && ls -al /var/lib/acme/acme-challenge"
@@ -672,8 +700,9 @@ in {
 
               wait_for_server()
 
-              for domain in domains[:-1]:
-                  check_issuer(webserver, f"{server}-{domain}.example.test", "pebble")
+              for domain in domains:
+                  if domain != "wildcard":
+                      check_issuer(webserver, f"{server}-{domain}.example.test", "pebble")
               for domain in domains:
                   check_connection(client, f"{server}-{domain}.example.test")
                   check_connection(client, f"{server}-{domain}-alias.example.test")
@@ -711,5 +740,23 @@ in {
               webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
+
+      # Perform http-01 w/ lego test again, but using the pre-24.05 account hashing
+      # (see https://github.com/NixOS/nixpkgs/pull/317257)
+      with subtest("Check account hashing compatibility with pre-24.05 settings"):
+          webserver.succeed("rm -rf /var/lib/acme/.lego/accounts/*")
+          switch_to(webserver, "http01lego_legacyAccountHash", allow_fail=True)
+          # unit is failed, but in a way that this throws no exception:
+          try:
+            webserver.wait_for_unit("acme-finished-http.example.test.target")
+          except Exception:
+            # The unit is allowed – or even expected – to fail due to not being able to
+            # reach the actual letsencrypt server. We only use it for serialising the
+            # test execution, such that the account check is done after the service run
+            # involving the account creation has been executed at least once.
+            pass
+          hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
+          print("Account hash: " + hash)
+          assert hash.strip() == "1ccf607d9aa280e9af00"
     '';
 }

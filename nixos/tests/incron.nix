@@ -13,9 +13,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       '';
 
       # ensure the directory to be monitored exists before incron is started
-      system.activationScripts.incronTest = ''
-        mkdir /test
-      '';
+      systemd.tmpfiles.settings.incron-test = {
+        "/test".d = { };
+      };
     };
 
   testScript = ''

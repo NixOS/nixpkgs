@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pegasus-frontend";
-  version = "unstable-2023-05-22";
+  version = "0-unstable-2023-12-05";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "6421d7a75d29a82ea06008e4a08ec14e074430d9";
+    rev = "86d3eed534ef8e79f412270b955dc2ffd4d172a3";
     fetchSubmodules = true;
-    sha256 = "sha256-mwJm+3zMP4alcis7OFQUcH3eXlRTZhoZYtxKrvCQGc8=";
+    hash = "sha256-lUoL63yFOVwTOcsGd8+pWqgcS5b3a6uuR8M4L6OvlXM=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A cross platform, customizable graphical frontend for launching emulators and managing your game collection.";
+    description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
+    mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tengkuizdihar ];

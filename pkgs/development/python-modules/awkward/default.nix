@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatchling
-, awkward-cpp
-, importlib-metadata
-, numpy
-, packaging
-, typing-extensions
-, fsspec
-, jax
-, jaxlib
-, numba
-, setuptools
-, numexpr
-, pandas
-, pyarrow
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  fsspec,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  awkward-cpp,
+  importlib-metadata,
+  numpy,
+  packaging,
+  typing-extensions,
+  jax,
+  jaxlib,
+  numba,
+  setuptools,
+  numexpr,
+  pandas,
+  pyarrow,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.4.10";
+  version = "2.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,54 +34,57 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D+bgKI6olK3smgnRdACvd0gYMWvS6ao6f7nQh3YExXw=";
+    hash = "sha256-5Jg+Ki1vJ4Rz22TbqTvVtb5YLvkvP8EOQ7cmTmI6gQU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    awkward-cpp
-    importlib-metadata
-    numpy
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      awkward-cpp
+      fsspec
+      importlib-metadata
+      numpy
+      packaging
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs = [
-    fsspec
-    numba
-    setuptools
-    numexpr
-    pandas
-    pyarrow
-    pytest-xdist
-    pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # no support for darwin
-    jax
-    jaxlib
-  ];
+  nativeCheckInputs =
+    [
+      fsspec
+      numba
+      setuptools
+      numexpr
+      pandas
+      pyarrow
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      # no support for darwin
+      jax
+      jaxlib
+    ];
 
   # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
     "tests-cuda"
-  ];
+    # Disable tests dependending on jax on darwin
+  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
     changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

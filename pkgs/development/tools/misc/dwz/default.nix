@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sourceware.org/dwz/";
     description = "DWARF optimization and duplicate removal tool";
+    mainProgram = "dwz";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jbcrail ];
     platforms = platforms.linux;

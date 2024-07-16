@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
-  version = "292";
+  version = "295";
 
   src = fetchurl {
     url = "https://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-tFqaQBCYur7b6U6SbthAGp0HVvIrfD63xMObzzI49Og=";
+    hash = "sha256-0HLrbO4v4gfk95w5SIXeQ/oNQMCMKBDkhtVJiVQtCYU=";
   };
 
   buildInputs = [ libffi ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://nongnu.org/txr";
-    description = "An Original, New Programming Language for Convenient Data Munging";
+    description = "Original, New Programming Language for Convenient Data Munging";
     longDescription = ''
       TXR is a general-purpose, multi-paradigm programming language. It
       comprises two languages integrated into a single tool: a text scanning and

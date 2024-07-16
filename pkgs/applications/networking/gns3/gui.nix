@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit hash;
     owner = "GNS3";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     psutil
     sentry-sdk
     setuptools
-    sip_4 (pyqt5.override { withWebSockets = true; })
+    sip4 (pyqt5.override { withWebSockets = true; })
     truststore
     qt5.qtwayland
   ] ++ lib.optionals (pythonOlder "3.9") [

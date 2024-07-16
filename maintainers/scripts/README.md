@@ -9,6 +9,10 @@ What follows is a (very incomplete) overview of available scripts.
 
 ## Metadata
 
+### `check-by-name.sh`
+
+An alias for `pkgs/test/check-by-name/run-local.sh`, see [documentation](../../pkgs/test/check-by-name/README.md).
+
 ### `get-maintainer.sh`
 
 `get-maintainer.sh [selector] value` returns a JSON object describing

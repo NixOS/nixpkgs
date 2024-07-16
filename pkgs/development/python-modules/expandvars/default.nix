@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "expandvars";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q7Qn9dMnqzYAY98mFR+Y0qbwj+GPKJWjKn9fDxF7W1I=";
+    hash = "sha256-fRrfpVcoz0tdgS7OPQh3A/rqlT4MChp4QV3p31Ak2EQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  # The PyPi package does not supply any tests
-  doCheck = false;
+  pythonImportsCheck = [ "expandvars" ];
 
-  pythonImportsCheck = [
-    "expandvars"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Expand system variables Unix style";

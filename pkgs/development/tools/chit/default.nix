@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Crate help in terminal: A tool for looking up details about rust crates without going to crates.io";
+    mainProgram = "chit";
     longDescription = ''
       Chit helps answer these questions:
 
@@ -50,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lilyball ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

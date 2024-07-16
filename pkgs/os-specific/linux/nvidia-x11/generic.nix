@@ -19,10 +19,12 @@
 , useFabricmanager ? false
 , ibtSupport ? false
 
-, prePatch ? ""
+, prePatch ? null
 , postPatch ? null
 , patchFlags ? null
 , patches ? [ ]
+, preInstall ? null
+, postInstall ? null
 , broken ? false
 , brokenOpen ? broken
 }@args:
@@ -63,7 +65,7 @@ assert versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
-assert useFabricmanager -> !(useSettings || usePersistenced);
+assert useFabricmanager -> !useSettings;
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
@@ -144,6 +146,7 @@ let
 
     patches = if libsOnly then null else patches;
     inherit prePatch postPatch patchFlags;
+    inherit preInstall postInstall;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -236,7 +239,7 @@ let
       platforms = [ "x86_64-linux" ]
         ++ optionals (sha256_32bit != null) [ "i686-linux" ]
         ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-      maintainers = with maintainers; [ jonringer kiskae edwtjo ];
+      maintainers = with maintainers; [ kiskae edwtjo ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

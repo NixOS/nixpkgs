@@ -1,11 +1,12 @@
-{ lib
-, argon2-cffi
-, buildPythonPackage
-, fetchPypi
-, keyring
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  argon2-cffi,
+  buildPythonPackage,
+  fetchPypi,
+  keyring,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  pythonImportsCheck = [
-    "keyrings.cryptfile"
-  ];
+  pythonImportsCheck = [ "keyrings.cryptfile" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/...
@@ -47,9 +44,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Encrypted file keyring backend";
+    mainProgram = "cryptfile-convert";
     homepage = "https://github.com/frispete/keyrings.cryptfile";
     changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = [ maintainers.lourkeur ];
+    maintainers = [ maintainers.bbjubjub ];
   };
 }

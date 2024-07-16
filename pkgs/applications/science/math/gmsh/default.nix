@@ -7,11 +7,11 @@ assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.11.1";
+  version = "4.13.1";
 
   src = fetchurl {
     url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "sha256-xf4bfL1AOIioFJKfL9D11p4nYAIioYx4bbW3boAFs2U=";
+    hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
   buildInputs = [
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./fix-python.patch ];
+  patches = [
+    ./fix-python.patch
+  ];
 
   postPatch = ''
     substituteInPlace api/gmsh.py --subst-var-by LIBPATH ${placeholder "out"}/lib/libgmsh.so
@@ -48,7 +50,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A three-dimensional finite element mesh generator";
+    description = "Three-dimensional finite element mesh generator";
+    mainProgram = "gmsh";
     homepage = "https://gmsh.info/";
     license = lib.licenses.gpl2Plus;
   };

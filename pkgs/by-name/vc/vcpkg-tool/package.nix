@@ -18,21 +18,24 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2023-10-18";
+  version = "2024-06-10";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-Hm+GSKov9A6tmN10BHOTVy8aWkLOJNBMOQJNm4HnWuI=";
+    hash = "sha256-TGRTzUd1FtErD+h/ksUsUm1Rhank9/yVy06JbAgEEw0=";
   };
 
   nativeBuildInputs = [
     cmake
-    cmakerc
-    fmt
     ninja
     makeWrapper
+  ];
+
+  buildInputs = [
+    cmakerc
+    fmt
   ];
 
   patches = [
@@ -65,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
+    mainProgram = "vcpkg";
     homepage = "https://github.com/microsoft/vcpkg-tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];

@@ -6,6 +6,7 @@
 , runCommand
 , stdenv
 , stdenvNoCC
+, rustPlatform
 
 , ant
 , cmake
@@ -23,12 +24,13 @@
 , ideaHash
 , androidHash
 , jpsHash
+, restarterHash
 , mvnDeps
 }:
 
 let
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-17;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -98,7 +100,7 @@ let
     sourceRoot = "source/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
-      cc -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
+      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
       runHook postBuild
     '';
     installPhase = ''
@@ -107,6 +109,14 @@ let
       mv fsnotifier $out/bin
       runHook postInstall
     '';
+  };
+
+  restarter = rustPlatform.buildRustPackage {
+    pname = "restarter";
+    version = buildVer;
+    inherit src;
+    sourceRoot = "source/native/restarter";
+    cargoHash = restarterHash;
   };
 
   jpsRepo = runCommand "jps-bootstrap-repository"
@@ -163,6 +173,7 @@ let
         "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public/${entry.url}"
         "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2/${entry.url}"
         "https://packages.jetbrains.team/maven/p/kpm/public/${entry.url}"
+        "https://packages.jetbrains.team/maven/p/ki/maven/${entry.url}"
         "https://packages.jetbrains.team/maven/p/dpgpv/maven/${entry.url}"
         "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository/${entry.url}"
       ];
@@ -176,11 +187,11 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "1.8.20";
+      version = "1.9.22";
     in
     fetchurl {
       url = repoUrl + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar";
-      hash = "sha256-w+vmEBSXGcyvxHB3byIOFjTeCIC7tkWh9rvOoP0//9A=";
+      hash = "sha256-ZPfEceGoIChDmjIAjjhDZpyMWQ7/DtP9Ll4YIrZN+PM=";
     };
 
     targetClass = if buildType == "pycharm" then "intellij.pycharm.community.build" else "intellij.idea.community.build";
@@ -197,10 +208,11 @@ stdenvNoCC.mkDerivation rec {
 
   patches = [
     ../patches/no-download.patch
-    ../patches/pycharm-build-fix.patch
+    ../patches/disable-sbom-generation.patch
   ];
 
   postPatch = ''
+    cp ${restarter}/bin/restarter bin/linux/amd64/restarter
     cp ${fsnotifier}/bin/fsnotifier bin/linux/amd64/fsnotifier
     cp ${libdbm}/lib/libdbm.so bin/linux/amd64/libdbm.so
 
@@ -218,14 +230,11 @@ stdenvNoCC.mkDerivation rec {
       -e 's|MAVEN_REPO_HERE|${mvnRepo}/.m2/repository/|' \
       -e 's|MAVEN_PATH_HERE|${maven}/maven|' \
       -i build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
-    echo '${buildVer}' > build.txt
+    echo '${buildVer}.SNAPSHOT' > build.txt
   '';
 
   configurePhase = ''
     runHook preConfigure
-
-    # Will need removing after update
-    cp plugins/devkit/devkit-core/src/run/OpenedPackages.txt platform/platform-impl/resources/META-INF/OpenedPackages.txt
 
     ln -s "$repo"/.m2 /build/.m2
     export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source

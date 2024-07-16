@@ -1,42 +1,38 @@
-{ lib
-, buildPythonPackage
-, ddt
-, fetchPypi
-, igraph
-, igraph-c
-, pythonOlder
-, setuptools-scm
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchFromGitHub,
+  igraph,
+  igraph-c,
+  libleidenalg,
+  pythonOlder,
+  setuptools-scm,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "leidenalg";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "0.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-flz+O2+A8yuQ9V81xo1KmQsEibEoLPP6usjNpJiJdfM=";
+  src = fetchFromGitHub {
+    owner = "vtraag";
+    repo = "leidenalg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oaTV+BIB/YQBWKrVXuiIEMH/1MxPxeHhjUzbmxt6hlw=";
   };
 
-  postPatch = ''
-    substituteInPlace ./setup.py \
-      --replace "[\"/usr/include/igraph\", \"/usr/local/include/igraph\"]" \
-                "[\"${igraph-c.dev}/include/igraph\"]"
+  nativeBuildInputs = [ setuptools-scm ];
 
-    rm -r vendor
-  '';
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    igraph
+  buildInputs = [
     igraph-c
+    libleidenalg
   ];
+
+  propagatedBuildInputs = [ igraph ];
 
   checkInputs = [
     ddt
@@ -46,8 +42,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "leidenalg" ];
 
   meta = with lib; {
+    changelog = "https://github.com/vtraag/leidenalg/blob/${version}/CHANGELOG";
     description = "Implementation of the Leiden algorithm for various quality functions to be used with igraph in Python";
-    homepage = "https://leidenalg.readthedocs.io";
+    homepage = "https://github.com/vtraag/leidenalg";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jboy ];
   };

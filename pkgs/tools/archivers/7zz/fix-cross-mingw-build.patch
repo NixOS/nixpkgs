@@ -1,14 +1,3 @@
---- a/C/7zVersion.rc
-+++ b/C/7zVersion.rc
-@@ -5,7 +5,7 @@
- #define MY_VFT_APP  0x00000001L
- #define MY_VFT_DLL  0x00000002L
- 
--// #include <WinVer.h>
-+// #include <winver.h>
- 
- #ifndef MY_VERSION
- #include "7zVersion.h"
 --- a/C/7zip_gcc_c.mak
 +++ b/C/7zip_gcc_c.mak
 @@ -106,7 +106,7 @@
@@ -20,9 +9,68 @@
  
  CFLAGS_EXTRA = -DUNICODE -D_UNICODE
  # -Wno-delete-non-virtual-dtor
+--- a/C/7zVersion.rc
++++ b/C/7zVersion.rc
+@@ -5,7 +5,7 @@
+ #define MY_VFT_APP  0x00000001L
+ #define MY_VFT_DLL  0x00000002L
+ 
+-// #include <WinVer.h>
++// #include <winver.h>
+ 
+ #ifndef MY_VERSION
+ #include "7zVersion.h"
+--- a/C/Util/7zipInstall/resource.rc
++++ b/C/Util/7zipInstall/resource.rc
+@@ -1,7 +1,7 @@
+ #include <windows.h>
+ // #include <winnt.h>
+ // #include <WinUser.h>
+-#include <CommCtrl.h>
++#include <commctrl.h>
+ 
+ #define USE_COPYRIGHT_CR
+ #include "../../7zVersion.rc"
+--- a/C/Util/7zipInstall/resource.rc.rej
++++ b/C/Util/7zipInstall/resource.rc.rej
+@@ -0,0 +1,10 @@
++--- C/Util/7zipInstall/resource.rc
+++++ C/Util/7zipInstall/resource.rc
++@@ -1,6 +1,6 @@
++ #include <winnt.h>
++ #include <WinUser.h>
++-#include <CommCtrl.h>
+++#include <commctrl.h>
++ 
++ #define USE_COPYRIGHT_CR
++ #include "../../7zVersion.rc"
+--- a/C/Util/7zipUninstall/resource.rc
++++ b/C/Util/7zipUninstall/resource.rc
+@@ -1,7 +1,7 @@
+ #include <windows.h>
+ // #include <winnt.h>
+ // #include <WinUser.h>
+-#include <CommCtrl.h>
++#include <commctrl.h>
+ 
+ #define USE_COPYRIGHT_CR
+ #include "../../7zVersion.rc"
+--- a/C/Util/7zipUninstall/resource.rc.rej
++++ b/C/Util/7zipUninstall/resource.rc.rej
+@@ -0,0 +1,10 @@
++--- C/Util/7zipUninstall/resource.rc
+++++ C/Util/7zipUninstall/resource.rc
++@@ -1,6 +1,6 @@
++ #include <winnt.h>
++ #include <WinUser.h>
++-#include <CommCtrl.h>
+++#include <commctrl.h>
++ 
++ #define USE_COPYRIGHT_CR
++ #include "../../7zVersion.rc"
 --- a/CPP/7zip/7zip_gcc.mak
 +++ b/CPP/7zip/7zip_gcc.mak
-@@ -124,8 +124,8 @@
+@@ -142,8 +142,8 @@
  DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
  endif
  
@@ -31,28 +79,8 @@
 +LIB2_GUI = -lole32 -lgdi32 -lcomctl32 -lcomdlg32 -lshell32 $(LIB_HTMLHELP)
 +LIB2 = -loleaut32 -luuid -ladvapi32 -luser32 $(LIB2_GUI)
  
- CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
- # -Wno-delete-non-virtual-dtor
---- a/C/Util/7zipInstall/resource.rc
-+++ b/C/Util/7zipInstall/resource.rc
-@@ -1,6 +1,6 @@
- #include <winnt.h>
- #include <WinUser.h>
--#include <CommCtrl.h>
-+#include <commctrl.h>
- 
- #define USE_COPYRIGHT_CR
- #include "../../7zVersion.rc"
---- a/C/Util/7zipUninstall/resource.rc
-+++ b/C/Util/7zipUninstall/resource.rc
-@@ -1,6 +1,6 @@
- #include <winnt.h>
- #include <WinUser.h>
--#include <CommCtrl.h>
-+#include <commctrl.h>
- 
- #define USE_COPYRIGHT_CR
- #include "../../7zVersion.rc"
+ # v24.00: -DUNICODE and -D_UNICODE are defined in precompilation header files
+ # CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
 --- a/CPP/7zip/Crypto/RandGen.cpp
 +++ b/CPP/7zip/Crypto/RandGen.cpp
 @@ -19,7 +19,7 @@
@@ -111,8 +139,8 @@
 --- a/CPP/Windows/Control/ImageList.h
 +++ b/CPP/Windows/Control/ImageList.h
 @@ -3,7 +3,7 @@
- #ifndef __WINDOWS_CONTROL_IMAGE_LIST_H
- #define __WINDOWS_CONTROL_IMAGE_LIST_H
+ #ifndef ZIP7_INC_WINDOWS_CONTROL_IMAGE_LIST_H
+ #define ZIP7_INC_WINDOWS_CONTROL_IMAGE_LIST_H
  
 -#include <CommCtrl.h>
 +#include <commctrl.h>
@@ -144,8 +172,8 @@
 --- a/CPP/Windows/SecurityUtils.h
 +++ b/CPP/Windows/SecurityUtils.h
 @@ -3,7 +3,7 @@
- #ifndef __WINDOWS_SECURITY_UTILS_H
- #define __WINDOWS_SECURITY_UTILS_H
+ #ifndef ZIP7_INC_WINDOWS_SECURITY_UTILS_H
+ #define ZIP7_INC_WINDOWS_SECURITY_UTILS_H
  
 -#include <NTSecAPI.h>
 +#include <ntsecapi.h>

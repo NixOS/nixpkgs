@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-ujson";
-  version = "5.8.0.1";
-  format = "setuptools";
+  version = "5.10.0.20240515";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KxQ4gkirTNH176jEZHYREll8zVfA2EI49zYxq+DiDP0=";
+    hash = "sha256-zq5xJ/Da/kr13Q7PmO4T6ddZUe+WO1xam36pLg1x8Nc=";
   };
 
+  build-system = [ setuptools ];
+
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ujson-stubs"
-  ];
+  pythonImportsCheck = [ "ujson-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for ujson";

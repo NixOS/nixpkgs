@@ -2,12 +2,24 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, cairo
+, expat
 , file
+, fribidi
+, hyprlang
+, libdatrie
 , libGL
 , libjpeg
-, mesa
+, libselinux
+, libsepol
+, libthai
+, libwebp
+, libXdmcp
 , pango
+, pcre
+, pcre2
 , pkg-config
+, util-linux
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -15,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = finalAttrs.pname;
+    repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tcHtiyDtLky3lBk5cTmpHRSSbo1IjqOwf+q6Lofz5qM=";
+    hash = "sha256-l13c8ALA7ZKDgluYA1C1OfkDGYD6e1/GR6LJnxCLRhA=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +43,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cairo
+    expat
     file
+    fribidi
+    hyprlang
+    libdatrie
     libGL
     libjpeg
-    mesa
+    libselinux
+    libsepol
+    libthai
+    libwebp
+    libXdmcp
     pango
+    pcre
+    pcre2
+    util-linux
     wayland
     wayland-protocols
   ];
@@ -45,21 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
-  preConfigure = ''
-    make protocols
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ./hyprpaper -t $out/bin
-
-    runHook postInstall
-  '';
-
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A blazing fast wayland wallpaper utility";
+    description = "Blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;

@@ -1,5 +1,6 @@
-{ lib, stdenv, runCommand, fetchFromSavannah, fetchpatch, flex, bison, python3, autoconf, automake, libtool, bash
-, rsync, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+{ lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
+, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+, fetchzip
 , buildPackages
 , nixosTests
 , fuse # only needed for grub-mount
@@ -49,26 +50,17 @@ let
 
   src = fetchFromSavannah {
     repo = "grub";
-    rev = "grub-2.12-rc1";
-    hash = "sha256-DrNFzi2o7ZUfL3bMdG63xivZIjcTgv8RODJz7hLJ3WY=";
+    rev = "grub-2.12";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
-  # HACK: the translations are stored on a different server,
-  # not versioned and not included in the git repo, so fetch them
-  # and hope they don't change often
-  locales = runCommand "grub-locales" {
-    nativeBuildInputs = [rsync];
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-XpQ4tu5eNRARdbg95LOjqp+2RCVRj1qZWe+Sc0O5zNg=";
-  }
-  ''
-    mkdir -p po
-    ${src}/linguas.sh
-
-    mv po $out
-  '';
+  # The locales are fetched from translationproject.org at build time,
+  # but those translations are not versioned/stable. For that reason
+  # we take them from the nearest release tarball instead:
+  locales = fetchzip {
+    url = "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz";
+    hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
+  };
 in (
 
 assert efiSupport -> canEfi;
@@ -77,46 +69,12 @@ assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "2.12-rc1";
+  version = "2.12";
   inherit src;
 
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
-
-    # Revert upstream commit that breaks reading XFS filesystems
-    # FIXME: remove when fixed upstream
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ef7850c757fb3dd2462a512cfa0ff19c89fcc0b1";
-      revert = true;
-      hash = "sha256-p8Kcv9d7ri4eJU6Fgqyzdj0hV5MHSe50AF02FPDJx2Y=";
-    })
-
-    # Fixes for NTFS bugs (CVE-2023-4692 and CVE-2023-4693)
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=43651027d24e62a7a463254165e1e46e42aecdea";
-      hash = "sha256-/oudbfL8Ph7ZsgsFUI0YIddji+7okFRG12E/rDsgvNM=";
-    })
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=0ed2458cc4eff6d9a9199527e2a0b6d445802f94";
-      hash = "sha256-6EhLzVapN2n62Lgo+PnB4SRvDkYWFkrKNinCvArRUXk=";
-    })
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7e5f031a6a6a3decc2360a7b0c71abbe598e7354";
-      hash = "sha256-R2vmVGidm1ZFxopt/71y2816z2i/vvPrthZE52oc4CI=";
-    })
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7a5a116739fa6d8a625da7d6b9272c9a2462f967";
-      hash = "sha256-T1LglEcUl9GXQjJ6Y4fKuFyFAujNRbcAb9KoNkl6jXs=";
-    })
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=1fe82c41e070385e273d7bb1cfb482627a3c28e8";
-      hash = "sha256-x/V7bmRaNxo8NNOUwVti59n9ST/2yTJ/blWjk3omdqE=";
-    })
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=e58b870ff926415e23fc386af41ff81b2f588763";
-      hash = "sha256-a0faNQafL+uRIglnILkLj64ROWxqmczQTQSu3VdklSk=";
-    })
   ];
 
   postPatch = if kbdcompSupport then ''
@@ -168,7 +126,7 @@ stdenv.mkDerivation rec {
         exit 1
       fi
 
-      cp -f --no-preserve=mode ${locales}/* po
+      cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
 
       ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
@@ -241,8 +199,8 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
 
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
   };
 })

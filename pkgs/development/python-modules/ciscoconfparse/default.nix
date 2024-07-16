@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, deprecat
-, dnspython
-, fetchFromGitHub
-, loguru
-, passlib
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, toml
+{
+  lib,
+  buildPythonPackage,
+  deprecat,
+  dnspython,
+  fetchFromGitHub,
+  loguru,
+  passlib,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 
-  pythonRelaxDeps = [
-    "loguru"
-  ];
+  pythonRelaxDeps = [ "loguru" ];
 
   postPatch = ''
     # The line below is in the [build-system] section, which is invalid and
@@ -44,7 +42,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -55,13 +52,9 @@ buildPythonPackage rec {
     toml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    "tests/parse_test.py"
-  ];
+  disabledTestPaths = [ "tests/parse_test.py" ];
 
   disabledTests = [
     # Tests require network access
@@ -71,9 +64,7 @@ buildPythonPackage rec {
     "testParse_valid_filepath"
   ];
 
-  pythonImportsCheck = [
-    "ciscoconfparse"
-  ];
+  pythonImportsCheck = [ "ciscoconfparse" ];
 
   meta = with lib; {
     description = "Module to parse, audit, query, build, and modify Cisco IOS-style configurations";

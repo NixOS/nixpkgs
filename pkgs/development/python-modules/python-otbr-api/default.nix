@@ -1,45 +1,32 @@
-{ lib
-, aiohttp
-, bitstruct
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, fetchpatch
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
-, wheel
+{
+  lib,
+  aiohttp,
+  bitstruct,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.5.0";
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "python-otbr-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-bPN2h60ypjlKpXs1xDS7bZcGRXvatA3EdlAX/HLxxTM=";
+    hash = "sha256-RMj4NdEbMIxh2PDzbhUWgmcdzRXY8RxcQNN/bbGOW5Q=";
   };
 
-  patches = [
-    # https://github.com/home-assistant-libs/python-otbr-api/pull/68
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/home-assistant-libs/python-otbr-api/commit/37eb19c12d17ac7d040ded035d8401def872fbda.patch";
-      hash = "sha256-JGsaLQNbUfz0uK/MeGnR2XTJDs4RnTOEg7BavfDPArg=";
-    })
-  ];
-
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -53,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "python_otbr_api"
-  ];
+  pythonImportsCheck = [ "python_otbr_api" ];
 
   meta = with lib; {
     description = "Library for the Open Thread Border Router";

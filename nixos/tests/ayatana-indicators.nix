@@ -4,7 +4,7 @@ in {
   name = "ayatana-indicators";
 
   meta = {
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = lib.teams.lomiri.members;
   };
 
   nodes.machine = { config, ... }: {
@@ -21,23 +21,68 @@ in {
     services.xserver = {
       enable = true;
       desktopManager.mate.enable = true;
-      displayManager.defaultSession = lib.mkForce "mate";
     };
+    services.displayManager.defaultSession = lib.mkForce "mate";
 
     services.ayatana-indicators = {
       enable = true;
       packages = with pkgs; [
+        ayatana-indicator-datetime
+        ayatana-indicator-display
         ayatana-indicator-messages
-      ];
+        ayatana-indicator-power
+        ayatana-indicator-session
+        ayatana-indicator-sound
+      ] ++ (with pkgs.lomiri; [
+        lomiri-indicator-network
+        telephony-service
+      ]);
     };
 
-    # Services needed by some indicators
+    # Setup needed by some indicators
+
     services.accounts-daemon.enable = true; # messages
+
+    hardware.pulseaudio.enable = true; # sound
+
+    # Lomiri-ish setup for Lomiri indicators
+    # TODO move into a Lomiri module, once the package set is far enough for the DE to start
+
+    networking.networkmanager.enable = true; # lomiri-network-indicator
+    # TODO potentially urfkill for lomiri-network-indicator?
+
+    services.dbus.packages = with pkgs.lomiri; [
+      libusermetrics
+    ];
+
+    environment.systemPackages = with pkgs.lomiri; [
+      lomiri-schemas
+    ];
+
+    services.telepathy.enable = true;
+
+    users.users.usermetrics = {
+      group = "usermetrics";
+      home = "/var/lib/usermetrics";
+      createHome = true;
+      isSystemUser = true;
+    };
+
+    users.groups.usermetrics = { };
   };
 
   # TODO session indicator starts up in a semi-broken state, but works fine after a restart. maybe being started before graphical session is truly up & ready?
   testScript = { nodes, ... }: let
-    runCommandPerIndicatorService = command: lib.strings.concatMapStringsSep "\n" command nodes.machine.systemd.user.targets."ayatana-indicators".wants;
+    runCommandOverServiceList = list: command:
+      lib.strings.concatMapStringsSep "\n" command list;
+
+    runCommandOverAyatanaIndicators = runCommandOverServiceList
+      (builtins.filter
+        (service: !(lib.strings.hasPrefix "lomiri" service || lib.strings.hasPrefix "telephony-service" service))
+        nodes.machine.systemd.user.targets."ayatana-indicators".wants);
+
+    runCommandOverAllIndicators = runCommandOverServiceList
+      nodes.machine.systemd.user.targets."ayatana-indicators".wants;
   in ''
     start_all()
     machine.wait_for_x()
@@ -50,8 +95,8 @@ in {
     machine.sleep(10)
 
     # Now check if all indicators were brought up successfully, and kill them for later
-  '' + (runCommandPerIndicatorService (service: let serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service; in ''
-    machine.succeed("pgrep -f ${serviceExec}")
+  '' + (runCommandOverAyatanaIndicators (service: let serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service; in ''
+    machine.wait_until_succeeds("pgrep -u ${user} -f ${serviceExec}")
     machine.succeed("pkill -f ${serviceExec}")
   '')) + ''
 
@@ -65,7 +110,7 @@ in {
     machine.sleep(10)
 
     # Now check if all indicator services were brought up successfully
-  '' + runCommandPerIndicatorService (service: ''
+  '' + runCommandOverAllIndicators (service: ''
     machine.wait_for_unit("${service}", "${user}")
   '');
 })

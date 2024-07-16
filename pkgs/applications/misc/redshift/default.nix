@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , autoconf, automake, gettext, intltool
-, libtool, pkg-config, wrapGAppsHook, wrapPython, gobject-introspection
+, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
@@ -24,6 +24,8 @@ let
         ./575.patch
       ];
 
+      strictDeps = true;
+
       nativeBuildInputs = [
         autoconf
         automake
@@ -31,9 +33,10 @@ let
         intltool
         libtool
         pkg-config
-        wrapGAppsHook
+        wrapGAppsHook3
         wrapPython
         gobject-introspection
+        python
       ];
 
       configureFlags = [
@@ -49,7 +52,6 @@ let
 
       buildInputs = [
         gtk3
-        python
       ] ++ lib.optional  withRandr        libxcb
         ++ lib.optional  withGeoclue      geoclue
         ++ lib.optional  withDrm          libdrm
@@ -130,7 +132,7 @@ rec {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
+      hash = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
     };
 
     meta = redshift.meta // {

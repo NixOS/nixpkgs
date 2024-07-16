@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A mass snmp scanner";
+    description = "Mass snmp scanner";
     homepage = "http://s-tech.elsat.net.pl";
     license = licenses.gpl2Only;
     platforms = platforms.unix;

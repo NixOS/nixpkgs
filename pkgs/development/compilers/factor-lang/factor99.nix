@@ -57,7 +57,7 @@ let
     # Defined in gdk-pixbuf setup hook
     findGdkPixbufLoaders "${librsvg}"
 
-    ${if to then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
+    ${if (builtins.isString to) then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --argv0 factor \
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
@@ -72,7 +72,7 @@ let
         passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
       }
       (wrapFactorScript {
-        from = "${interpreter}/lib/factor/.factor.wrapped";
+        from = "${interpreter}/lib/factor/.factor-wrapped";
         to = "$out/bin/factor";
         runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
       });
@@ -202,7 +202,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://factorcode.org/";
-    description = "A concatenative, stack-based programming language";
+    description = "Concatenative, stack-based programming language";
     longDescription = ''
       The Factor programming language is a concatenative, stack-based
       programming language with high-level features including dynamic types,
@@ -217,7 +217,7 @@ stdenv.mkDerivation {
       under a BSD license.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ vrthra spacefrogg ];
+    maintainers = with maintainers; [ spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
     mainProgram = "factor";
   };

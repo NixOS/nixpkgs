@@ -56,7 +56,7 @@ in
 , prepend ? []
 
 # Whether to wrap the initramfs in a u-boot image.
-, makeUInitrd ? stdenvNoCC.hostPlatform.linux-kernel.target == "uImage"
+, makeUInitrd ? stdenvNoCC.hostPlatform.linux-kernel.target or "dummy" == "uImage"
 
 # If generating a u-boot image, the architecture to use. The default
 # guess may not align with u-boot's nomenclature correctly, so it can
@@ -75,10 +75,8 @@ let
   toValidStoreName = x: with builtins;
     lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
-in stdenvNoCC.mkDerivation rec {
+in stdenvNoCC.mkDerivation (rec {
   inherit name makeUInitrd extension uInitrdArch prepend;
-
-  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   builder = ./make-initrd.sh;
 
@@ -110,4 +108,6 @@ in stdenvNoCC.mkDerivation rec {
       contents
       (lib.range 0 (lib.length contents - 1));
   pathsFromGraph = ./paths-from-graph.pl;
-}
+} // lib.optionalAttrs makeUInitrd {
+  uInitrdCompression = uInitrdCompression;
+})

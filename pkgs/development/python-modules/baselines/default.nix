@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, gym
-, scipy
-, tqdm
-, joblib
-, dill
-, progressbar2
-, cloudpickle
-, click
-, pyzmq
-, tensorflow
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  gym,
+  scipy,
+  tqdm,
+  joblib,
+  dill,
+  progressbar2,
+  cloudpickle,
+  click,
+  pyzmq,
+  tensorflow,
+  mpi4py,
 }:
 
 buildPythonPackage {
@@ -52,9 +53,7 @@ buildPythonPackage {
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "High-quality implementations of reinforcement learning algorithms";

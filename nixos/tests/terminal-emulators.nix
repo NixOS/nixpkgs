@@ -42,7 +42,7 @@ let tests = {
 
       germinal.pkg = p: p.germinal;
 
-      gnome-terminal.pkg = p: p.gnome.gnome-terminal;
+      gnome-terminal.pkg = p: p.gnome-terminal;
 
       guake.pkg = p: p.guake;
       guake.cmd = "SHELL=$command guake --show";
@@ -60,6 +60,8 @@ let tests = {
       kitty.cmd = "kitty $command";
 
       konsole.pkg = p: p.plasma5Packages.konsole;
+
+      lomiri-terminal-app.pkg = p: p.lomiri.lomiri-terminal-app;
 
       lxterminal.pkg = p: p.lxterminal;
 

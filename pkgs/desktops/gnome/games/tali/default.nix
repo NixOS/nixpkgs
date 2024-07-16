@@ -5,13 +5,14 @@
   pkg-config,
   gtk3,
   gnome,
+  adwaita-icon-theme,
   gdk-pixbuf,
   librsvg,
   libgnome-games-support,
   gettext,
   itstool,
   libxml2,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   meson,
   ninja,
   python3,
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
     python3
     desktop-file-utils
     pkg-config
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libxml2
     itstool
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,8 +61,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tali";
+    homepage = "https://gitlab.gnome.org/GNOME/tali";
     description = "Sort of poker with dice and less money";
+    mainProgram = "tali";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

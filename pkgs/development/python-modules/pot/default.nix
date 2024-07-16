@@ -1,26 +1,27 @@
-{ lib
-, autograd
-, buildPythonPackage
-, fetchFromGitHub
-, cupy
-, cvxopt
-, cython
-, oldest-supported-numpy
-, matplotlib
-, numpy
-, tensorflow
-, pymanopt
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, enableDimensionalityReduction ? false
-, enableGPU ? false
+{
+  lib,
+  autograd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cvxopt,
+  cython,
+  jax,
+  jaxlib,
+  matplotlib,
+  numpy,
+  pymanopt,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools,
+  tensorflow,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.1";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -28,39 +29,66 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    rev = version;
-    hash = "sha256-D61/dqO16VvcQx4FG1beKR4y1OQHndwCizaugNaUe4g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
-    oldest-supported-numpy
+    numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
-  ] ++ lib.optionals enableGPU [
-    cupy
-  ] ++ lib.optionals enableDimensionalityReduction [
-    autograd
-    pymanopt
   ];
 
-  nativeCheckInputs = [
-    cvxopt
-    matplotlib
-    numpy
-    tensorflow
-    scikit-learn
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    backend-numpy = [ ];
+    backend-jax = [
+      jax
+      jaxlib
+    ];
+    backend-cupy = [ ];
+    backend-tf = [ tensorflow ];
+    backend-torch = [ torch ];
+    cvxopt = [ cvxopt ];
+    dr = [
+      scikit-learn
+      pymanopt
+      autograd
+    ];
+    gnn = [
+      torch
+      # torch-geometric
+    ];
+    plot = [ matplotlib ];
+    all =
+      with optional-dependencies;
+      (
+        backend-numpy
+        ++ backend-jax
+        ++ backend-cupy
+        ++ backend-tf
+        ++ backend-torch
+        ++ optional-dependencies.cvxopt
+        ++ dr
+        ++ gnn
+        ++ plot
+      );
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0" "numpy"
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py
@@ -102,10 +130,6 @@ buildPythonPackage rec {
     "test_weak_ot_bakends"
     # TypeError: Only integers, slices...
     "test_emd1d_device_tf"
-  ];
-
-  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [
-    "test/test_dr.py"
   ];
 
   pythonImportsCheck = [

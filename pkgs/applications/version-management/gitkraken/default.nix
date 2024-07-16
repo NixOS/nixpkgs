@@ -1,45 +1,46 @@
 { lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, adwaita-icon-theme, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon
+, makeDesktopItem, openssl, wrapGAppsHook3, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
+, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon, git
+, libGL, zlib, cacert
 }:
 
 with lib;
 
 let
   pname = "gitkraken";
-  version = "9.9.2";
+  version = "10.1.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-UfzHkgqxEaSsoiDwFLsyIBW2min9AvSBrLPJ2MlKh3U=";
+      hash = "sha256-h10ovuzvZ/QwU8lugSdczUBcMEqe5BCJSUYHvHr9Jzo=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-ble0n+giM8xmuSewBVdj+RuT2093rW0taNzsyQLO92I=";
+      hash = "sha256-4pTBxgERiMuvQnPv4grIjs9my779G1qv2kgv43OspNY=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "sha256-QYhYzjqbCO0/pRDK7c5jYifj+/UY7SLpRqQUQ3LBFkE=";
+      hash = "sha256-iME0813ypZVM1F4TCR68iHrzd+yCKJxYfPPoMiQt6Mo=";
     };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
   meta = {
-    homepage = "https://www.gitkraken.com/";
-    description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
+    homepage = "https://www.gitkraken.com/git-client";
+    description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ xnwdd evanjs arkivm ];
+    maintainers = with maintainers; [ xnwdd evanjs arkivm nicolas-goudry ];
     mainProgram = "gitkraken";
   };
 
@@ -91,20 +92,25 @@ let
       mesa
       libxshmfence
       libxkbcommon
+      libGL
+      zlib
     ];
 
     desktopItems = [ (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = "GitKraken";
+      name = "GitKraken Desktop";
+      exec = "gitkraken";
+      icon = "gitkraken";
+      desktopName = "GitKraken Desktop";
       genericName = "Git Client";
       categories = [ "Development" ];
-      comment = "Graphical Git client from Axosoft";
+      comment = "Unleash your repo";
     }) ];
 
-    nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
-    buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+    nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
+    buildInputs = [ gtk3 adwaita-icon-theme ];
+
+    # avoid double-wrapping
+    dontWrapGApps = true;
 
     installPhase = ''
       runHook preInstall
@@ -112,38 +118,58 @@ let
       mkdir -p $out/share/${pname}/
       cp -R $src/* $out/share/${pname}
 
-      mkdir -p $out/bin
-      ln -s $out/share/${pname}/${pname} $out/bin/
-
       mkdir -p $out/share/pixmaps
-      cp ${pname}.png $out/share/pixmaps/${pname}.png
+      cp gitkraken.png $out/share/pixmaps/
 
       runHook postInstall
     '';
 
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+    '';
+
     postFixup = ''
       pushd $out/share/${pname}
-      for file in ${pname} chrome-sandbox chrome_crashpad_handler; do
+      for file in gitkraken chrome-sandbox chrome_crashpad_handler; do
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file
       done
 
-      for file in $(find . -type f \( -name \*.node -o -name ${pname} -o -name \*.so\* \) ); do
+      for file in $(find . -type f \( -name \*.node -o -name gitkraken -o -name git -o -name git-\* -o -name scalar -o -name \*.so\* \) ); do
         patchelf --set-rpath ${libPath}:$out/share/${pname} $file || true
       done
       popd
+
+      # SSL and permissions fix for bundled nodegit
+      pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
+      mv nodegit-ubuntu-18.node nodegit-ubuntu-18-ssl-1.1.1.node
+      mv nodegit-ubuntu-18-ssl-static.node nodegit-ubuntu-18.node
+      chmod 755 nodegit-ubuntu-18.node
+      popd
+
+      # Devendor bundled git
+      rm -rf $out/share/${pname}/resources/app.asar.unpacked/git
+      ln -s ${git} $out/share/${pname}/resources/app.asar.unpacked/git
+
+      # GitKraken expects the CA bundle to be located in the bundled git directory. Since we replace it with
+      # the one from nixpkgs, which doesn't provide a CA bundle, we need to explicitly set its location at runtime
+      makeWrapper $out/share/${pname}/gitkraken $out/bin/gitkraken \
+        --set GIT_SSL_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+        "''${gappsWrapperArgs[@]}"
     '';
   };
 
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip makeWrapper ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/GitKraken.app
+      mkdir -p $out/Applications/GitKraken.app $out/bin
       cp -R . $out/Applications/GitKraken.app
+
+      makeWrapper $out/Applications/GitKraken.app/Contents/MacOS/GitKraken $out/bin/gitkraken
 
       runHook postInstall
     '';

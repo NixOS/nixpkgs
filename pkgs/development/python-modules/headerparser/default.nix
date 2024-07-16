@@ -1,12 +1,13 @@
-{ lib
-, attrs
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-CWXha7BYVO5JFuhWP8OZ95fhUsZ3Jo0cgPAM+O5bfec=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "headerparser"
-  ];
+  pythonImportsCheck = [ "headerparser" ];
 
   meta = with lib; {
     description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";

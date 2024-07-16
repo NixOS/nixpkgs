@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_uuidv7";
-  version = "1.4.0";
+  version = "1.5.0";
 
   buildInputs = [ postgresql ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "fboulnois";
     repo = "pg_uuidv7";
     rev = "v${version}";
-    hash = "sha256-GwjaFEXlJI72V07ukWPB3LeRBWAL6STq866f/rRCVoo=";
+    hash = "sha256-oVyRtjl3KsD3j96qvQb8bFLMhoWO81OudOL4wVXrjzI=";
   };
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tiny Postgres extension to create version 7 UUIDs";
+    description = "Tiny Postgres extension to create version 7 UUIDs";
     homepage = "https://github.com/fboulnois/pg_uuidv7";
     changelog = "https://github.com/fboulnois/pg_uuidv7/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ gaelreyrol ];

@@ -19,7 +19,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,7 +27,7 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -180,7 +180,7 @@ in
       #dnsmasq = 141;# dynamically allocated as of 2021-09-03
       #uhub = 142; # unused
       yandexdisk = 143;
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145;# dynamically allocated as of 2021-09-03
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -313,7 +313,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       #monero = 287; # dynamically allocated as of 2021-05-08
@@ -503,7 +503,7 @@ in
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145; # unused
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -623,7 +623,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       # monero = 287; # dynamically allocated as of 2021-05-08

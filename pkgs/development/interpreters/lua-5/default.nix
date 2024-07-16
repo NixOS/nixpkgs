@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, makeBinaryWrapper }:
 
 
 let
@@ -71,7 +71,7 @@ let
         inherit executable luaversion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
 
-        tests = callPackage ./tests { inherit (luaPackages) wrapLua; };
+        tests = callPackage ./tests { lua = self; inherit (luaPackages) wrapLua; };
 
         inherit luaAttr;
   };

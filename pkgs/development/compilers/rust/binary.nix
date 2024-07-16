@@ -26,15 +26,17 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
-      ++ lib.optionals (!stdenv.isDarwin) [ gcc.cc.lib zlib ]
+      ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
+      ++ lib.optional (!stdenv.isDarwin) zlib
       ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
@@ -70,8 +72,9 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://doc.rust-lang.org/cargo/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
@@ -79,7 +82,7 @@ rec {
     nativeBuildInputs = [ makeWrapper ]
       ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
-      ++ lib.optional (!stdenv.isDarwin) gcc.cc.lib
+      ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
       ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''

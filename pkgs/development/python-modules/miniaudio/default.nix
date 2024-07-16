@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, miniaudio
-, cffi
-, pytestCheckHook
-, AudioToolbox
-, CoreAudio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  miniaudio,
+  cffi,
+  pytestCheckHook,
+  AudioToolbox,
+  CoreAudio,
 }:
 
 let
@@ -23,27 +24,26 @@ let
 in
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.59";
-
-  disabled = pythonOlder "3.6";
-
-  format = "setuptools";
+  version = "1.60";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tMQOGqEThtownW3cnNpCzWye0Uo/Es7E8abVySo1QnQ=";
+    hash = "sha256-Bw9zq98RJmfp6KoZ43SNsh7vVrhUe6GNzcM4flxPJ60=";
   };
 
   postPatch = ''
     rm -r miniaudio
     ln -s ${miniaudio'} miniaudio
     substituteInPlace build_ffi_module.py \
-      --replace "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
+      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
     substituteInPlace miniaudio.c \
-      --replace "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
+      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
   '';
+
+  build-system = [ setuptools ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AudioToolbox
@@ -51,15 +51,14 @@ buildPythonPackage rec {
   ];
 
   propagatedNativeBuildInputs = [ cffi ];
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "miniaudio" ];
 
   meta = with lib; {
+    changelog = "https://github.com/irmen/pyminiaudio/releases/tag/v${version}";
     description = "Python bindings for the miniaudio library and its decoders";
     homepage = "https://github.com/irmen/pyminiaudio";
     license = licenses.mit;

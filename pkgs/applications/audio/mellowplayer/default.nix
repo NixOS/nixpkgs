@@ -21,7 +21,7 @@ mkDerivation rec {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
     rev = version;
-    sha256 = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
+    hash = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -65,6 +65,7 @@ mkDerivation rec {
     broken = stdenv.isDarwin; # test build fails, but the project is not maintained anymore
 
     description = "Cloud music integration for your desktop";
+    mainProgram = "MellowPlayer";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kalbasit ];

@@ -1,6 +1,6 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook3
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , openssl, bzip2, bash, unzip, zip
 }:
@@ -40,7 +40,7 @@ in let
     dontStrip = true;
     dontPatchELF = true;
     buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook ];
+    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook3 ];
 
     # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''

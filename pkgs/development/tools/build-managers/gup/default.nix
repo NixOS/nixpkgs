@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub, nix-update-source, lib, python3
-, which, runtimeShell, pychecker ? null }:
+, which, runtimeShell, pylint }:
 stdenv.mkDerivation rec {
-  version = "0.8.4";
+  version = "0.9.1";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gup";
     rev = "version-${version}";
-    sha256 = "0b8q9mrr7b9silwc4mp733j1z18g4lp6ppdi8p2rxzgb2fb4bkvp";
+    sha256 = "1wfw46b647rkalwds6547ylzy353b3xlklhcl2xjgj2gihvi30mx";
   };
   pname = "gup";
-  nativeBuildInputs = [ python3 which pychecker ];
+  nativeBuildInputs = [ python3 which pylint ];
   buildInputs = [ python3 ];
   strictDeps = true;
-  SKIP_PYCHECKER = pychecker == null;
   buildPhase = "make python";
   installPhase = ''
     mkdir $out
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
   meta = {
     inherit (src.meta) homepage;
-    description = "A better make, inspired by djb's redo";
+    description = "Better make, inspired by djb's redo";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ lib.maintainers.timbertson ];
     platforms = lib.platforms.all;

@@ -1,44 +1,43 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cython_3
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.20.0";
-  format = "pyproject";
+  version = "2.22.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "dbus-fast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dvgexjzA/1/0p2xgjTWBQeaEKWEv/7XdhtSkyT/DN6I=";
+    hash = "sha256-WT32nkRcS+JFCJCZNXXFm38nzttYLsqU98tJD7YBn9w=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
   # python version. This ensures we fail if we build the wrong one.
   env.REQUIRE_CYTHON = 1;
 
-  nativeBuildInputs = [
-    cython_3
+  build-system = [
+    cython
     poetry-core
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  dependencies = [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -63,6 +62,7 @@ buildPythonPackage rec {
     "test_aio_properties"
     "test_aio_proxy_object"
     "test_bus_disconnect_before_reply"
+    "test_error_handling"
     "test_export_alias"
     "test_export_introspection"
     "test_export_unexport"

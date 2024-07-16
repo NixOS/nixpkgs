@@ -4,13 +4,12 @@
 , nixosTests
 , testers
 , sqlite3-to-mysql
-, fetchPypi
 , mysql80
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -19,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g3W6ts5Mk//l6E4Yg49rf9dmu+yzgH+mCjz+vPW9ZRQ=";
+    hash = "sha256-oav5HJdTmSAKk1b0wpzU2UOoY53zh5BrQ3Q0N360NeQ=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -42,6 +41,10 @@ python3Packages.buildPythonApplication rec {
     mysql80
   ];
 
+  pythonRelaxDeps = [
+    "mysql-connector-python"
+  ];
+
   # tests require a mysql server instance
   doCheck = false;
 
@@ -55,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A simple Python tool to transfer data from SQLite 3 to MySQL";
+    description = "Simple Python tool to transfer data from SQLite 3 to MySQL";
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

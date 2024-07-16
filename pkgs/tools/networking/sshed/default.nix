@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/trntv/sshed";
     license = licenses.asl20;
     maintainers = with maintainers; [ ocfox ];
+    mainProgram = "sshed";
   };
 }

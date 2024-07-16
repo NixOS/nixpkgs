@@ -74,12 +74,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
       --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
-      --add-flags $out/lib/${python3Packages.python.libPrefix}/site-packages/OneDriveGUI.py
+      --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
 
   meta = with lib; {
     homepage = "https://github.com/bpozdena/OneDriveGUI";
-    description = "A simple GUI for Linux OneDrive Client, with multi-account support";
+    description = "Simple GUI for Linux OneDrive Client, with multi-account support";
+    mainProgram = "onedrivegui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ chewblacka ];
     platforms = platforms.linux;

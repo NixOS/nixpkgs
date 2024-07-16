@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build
-, pytest
+  # build
+  pytest,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
   pname = "pytest-describe";
-  version = "2.1.0";
+  version = "2.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -19,16 +20,12 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BjDJWsSUKrjc2OdmI2+GQ2tJhIltsMBZ/CNP72b+lzI=";
+    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Describe-style plugin for the pytest framework";

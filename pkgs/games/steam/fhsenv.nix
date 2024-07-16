@@ -7,6 +7,11 @@
 , extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap (real default is at usage site)
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
+
+# steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
+# https://github.com/ValveSoftware/steam-for-linux/issues/9121
+, privateTmp ? true # Whether to separate steam's /tmp from the host system
+
 , withGameSpecificLibraries ? true # include game specific libraries
 }@args:
 
@@ -63,6 +68,10 @@ let
   envScript = ''
     # prevents various error messages
     unset GIO_EXTRA_MODULES
+
+    # This is needed for IME (e.g. iBus, fcitx5) to function correctly on non-CJK locales
+    # https://github.com/ValveSoftware/steam-for-linux/issues/781#issuecomment-2004757379
+    GTK_IM_MODULE='xim'
   '' + lib.toShellVars extraEnv;
 
 in buildFHSEnv rec {
@@ -74,7 +83,7 @@ in buildFHSEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steam
     # License agreement
-    gnome.zenity
+    zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -106,8 +115,7 @@ in buildFHSEnv rec {
     xorg.libXdamage
     xorg.libxshmfence
     xorg.libXxf86vm
-    libelf
-    (lib.getLib elfutils)
+    elfutils
 
     # Without these it silently fails
     xorg.libXinerama
@@ -154,7 +162,7 @@ in buildFHSEnv rec {
     gtk2
     bzip2
     flac
-    freeglut
+    libglut
     libjpeg
     libpng
     libpng12
@@ -182,11 +190,14 @@ in buildFHSEnv rec {
     libvdpau
 
     # required by coreutils stuff to run correctly
-    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # Steam ends up with LD_LIBRARY_PATH=/usr/lib:<bunch of runtime stuff>:<etc>
     # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
     # very old versions of stuff from the runtime.
     # FIXME: how do we even fix this correctly
     attr
+    # same thing, but for Xwayland (usually via gamescope), already in the closure
+    libkrb5
+    keyutils
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -269,7 +280,7 @@ in buildFHSEnv rec {
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
     {
-      hardware.opengl.driSupport32Bit = true;
+      hardware.graphics.enable32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
     **
@@ -285,9 +296,7 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  # steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
-  # https://github.com/ValveSoftware/steam-for-linux/issues/9121
-  privateTmp = true;
+  inherit privateTmp;
 
   extraPreBwrapCmds = ''
     install -m 1777 -d /tmp/dumps
@@ -302,11 +311,13 @@ in buildFHSEnv rec {
     then
       steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
         description = steam.meta.description + " (without game specific libraries)";
+        mainProgram = "steam";
       }
     else {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
+  passthru.steamargs = args;
   passthru.run = buildFHSEnv {
     name = "steam-run";
 

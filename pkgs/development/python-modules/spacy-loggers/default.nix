@@ -1,9 +1,10 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, wandb
-, wasabi
+{
+  lib,
+  callPackage,
+  fetchPypi,
+  buildPythonPackage,
+  wandb,
+  wasabi,
 }:
 
 buildPythonPackage rec {

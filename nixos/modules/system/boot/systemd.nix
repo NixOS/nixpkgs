@@ -47,6 +47,9 @@ let
       "rescue.target"
       "rescue.service"
 
+      # systemd-debug-generator
+      "debug-shell.service"
+
       # Udev.
       "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
@@ -97,6 +100,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -428,7 +432,13 @@ in
 
   config = {
 
-    warnings = concatLists (
+    warnings = let
+      mkOneNetOnlineWarn = typeStr: name: def: lib.optional
+        (lib.elem "network-online.target" def.after && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo)))
+        "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
+      mkNetOnlineWarns = typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
+      mkMountNetOnlineWarns = typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
+    in concatLists (
       mapAttrsToList
         (name: service:
           let
@@ -449,6 +459,29 @@ in
             ]
         )
         cfg.services
+    )
+    ++ (mkNetOnlineWarns "target" cfg.targets)
+    ++ (mkNetOnlineWarns "service" cfg.services)
+    ++ (mkNetOnlineWarns "socket" cfg.sockets)
+    ++ (mkNetOnlineWarns "timer" cfg.timers)
+    ++ (mkNetOnlineWarns "path" cfg.paths)
+    ++ (mkMountNetOnlineWarns "mount" cfg.mounts)
+    ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
+    ++ (mkNetOnlineWarns "slice" cfg.slices);
+
+    assertions = concatLists (
+      mapAttrsToList
+        (name: service:
+          map (message: {
+            assertion = false;
+            inherit message;
+          }) (concatLists [
+            (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
+              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
+            )
+          ])
+        )
+        cfg.services
     );
 
     system.build.units = cfg.units;
@@ -456,7 +489,7 @@ in
     system.nssModules = [ cfg.package.out ];
     system.nssDatabases = {
       hosts = (mkMerge [
-        (mkOrder 400 ["mymachines"]) # 400 to ensure it comes before resolve (which is mkBefore'd)
+        (mkOrder 400 ["mymachines"]) # 400 to ensure it comes before resolve (which is 501)
         (mkOrder 999 ["myhostname"]) # after files (which is 998), but before regular nss modules
       ]);
       passwd = (mkMerge [
@@ -470,8 +503,8 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
-      hooks = type: links: pkgs.runCommand "system-${type}" {
+      # generate contents for /etc/systemd/${dir} from attrset of links and packages
+      hooks = dir: links: pkgs.runCommand "${dir}" {
           preferLocalBuild = true;
           packages = cfg.packages;
       } ''
@@ -479,7 +512,7 @@ in
         mkdir -p $out
         for package in $packages
         do
-          for hook in $package/lib/systemd/system-${type}/*
+          for hook in $package/lib/systemd/${dir}/*
           do
             ln -s $hook $out/
           done
@@ -529,8 +562,9 @@ in
         ${cfg.sleep.extraConfig}
       '';
 
-      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
-      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
+      "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
+      "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
@@ -554,19 +588,25 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
+    # This target only exists so that services ordered before sysinit.target
+    # are restarted in the correct order, notably BEFORE the other services,
+    # when switching configurations.
+    systemd.targets.sysinit-reactivation = {
+      description = "Reactivate sysinit units";
+    };
+
     systemd.units =
-         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+      let
+        withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
+      in
+         mapAttrs' (_: withName pathToUnit) cfg.paths
+      // mapAttrs' (_: withName serviceToUnit) cfg.services
+      // mapAttrs' (_: withName sliceToUnit) cfg.slices
+      // mapAttrs' (_: withName socketToUnit) cfg.sockets
+      // mapAttrs' (_: withName targetToUnit) cfg.targets
+      // mapAttrs' (_: withName timerToUnit) cfg.timers
+      // listToAttrs (map (withName mountToUnit) cfg.mounts)
+      // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
       # Environment of PID 1
       systemd.managerEnvironment = {
@@ -631,7 +671,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

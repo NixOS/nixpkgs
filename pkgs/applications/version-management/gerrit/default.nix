@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
-  version = "3.8.3";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-EfXnJ7oyXsnAajUPJTmBQE/lUCW8Xm/hF4+N6BvX6fQ=";
+    hash = "sha256-mlaXCRQlqg2uwzm2/Vi15K5D6lmUUscfZQk/lW1YR+s=";
   };
 
   buildCommand = ''
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;
-    description = "A web based code review and repository management for the git version control system";
+    description = "Web based code review and repository management for the git version control system";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ flokli jammerful zimbatm ];
+    maintainers = with maintainers; [ flokli zimbatm ];
     platforms = platforms.unix;
   };
 }

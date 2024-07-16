@@ -1,75 +1,37 @@
-{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, gradle_7, openjdk17 }:
 let
   pname = "fastddsgen";
-  version = "2.5.1";
+  version = "3.3.0";
+
+  gradle = gradle_7;
+
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-3x99FfdxSfqa2+BNZ3lZQzRgjwGhbm5PKezoS6fs5Ts=";
+    hash = "sha256-oqbSIzsYUwD8bTqGKZ9he9d18EDq9mHZFoNUp0RK0qU=";
   };
-
-  gradle = gradle_7;
-
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version;
-    nativeBuildInputs = [ gradle openjdk17 perl ];
-
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d);
-      gradle --no-daemon -x submodulesUpdate assemble
-    '';
-
-    # perl code mavenizes paths (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-
-    dontStrip = true;
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-ZGWTK665wIX/Biz4JDrbaU4EZNqT7Q8o6DSpziUd/SM=";
-  };
-in
-stdenv.mkDerivation {
-  inherit pname src version;
 
   nativeBuildInputs = [ gradle openjdk17 ];
 
-  # use our offline deps
-  postPatch = ''
-    sed -ie '1i\
-    pluginManagement {\
-      repositories {\
-        maven { url "${deps}" }\
-      }\
-    }' thirdparty/idl-parser/settings.gradle
-    sed -ie "s#mavenCentral()#maven { url '${deps}' }#g" build.gradle
-    sed -ie "s#mavenCentral()#maven { url '${deps}' }#g" thirdparty/idl-parser/build.gradle
-  '';
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-  buildPhase = ''
-    runHook preBuild
+  __darwinAllowLocalNetworking = true;
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-
-    # Run gradle with daemon to make installPhase faster
-    gradle --offline -x submodulesUpdate assemble
-
-    runHook postBuild
-  '';
+  gradleFlags = [ "-x" "submodulesUpdate" ];
 
   installPhase = ''
     runHook preInstall
 
-    gradle --offline -x submodulesUpdate install --install_path=$out
+    gradle install --install_path=$out
 
     # Override the default start script to use absolute java path
     cat  <<EOF >$out/bin/fastddsgen
@@ -81,8 +43,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  postGradleUpdate = ''
+    cd thirdparty/idl-parser
+    # fix "Task 'submodulesUpdate' not found"
+    gradleFlags=
+    gradle nixDownloadDeps
+  '';
+
   meta = with lib; {
     description = "Fast-DDS IDL code generator tool";
+    mainProgram = "fastddsgen";
     homepage = "https://github.com/eProsima/Fast-DDS-Gen";
     license = licenses.asl20;
     longDescription = ''

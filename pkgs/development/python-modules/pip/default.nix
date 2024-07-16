@@ -1,32 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, installShellFiles
-, mock
-, scripttest
-, setuptools
-, virtualenv
-, wheel
-, pretend
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# docs
-, sphinx
+  # build-system
+  installShellFiles,
+  wheel,
+  setuptools,
 
-# coupled downsteam dependencies
-, pip-tools
+  # docs
+  sphinx,
+
+  # checks
+  freezegun,
+  git,
+  mock,
+  scripttest,
+  virtualenv,
+  pretend,
+  proxy-py,
+  pytestCheckHook,
+  tomli-w,
+  werkzeug,
+
+  # coupled downsteam dependencies
+  pip-tools,
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "pip";
-  version = "23.2.1";
+  version = "24.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mUlzfYmq1FE3X1/2o7sYJzMgwHRI4ib4EMhpg83VvrI=";
+    hash = "sha256-yojk2T5wuPkS1OKusilj253AT+xyKwXCWKBNUEH2Mgo=";
   };
 
   postPatch = ''
@@ -71,10 +81,20 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
-
-  # Pip wants pytest, but tests are not distributed
   doCheck = false;
+
+  nativeCheckInputs = [
+    freezegun
+    git
+    mock
+    scripttest
+    virtualenv
+    pretend
+    pytestCheckHook
+    proxy-py
+    tomli-w
+    werkzeug
+  ];
 
   postInstall = ''
     installManPage docs/build/man/*
@@ -85,12 +105,16 @@ buildPythonPackage rec {
       --zsh <($out/bin/pip completion --zsh --no-cache-dir)
   '';
 
-  passthru.tests = { inherit pip-tools; };
+  passthru.tests = {
+    inherit pip-tools;
+    pytest = self.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
-    description = "The PyPA recommended tool for installing Python packages";
+    description = "PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
     homepage = "https://pip.pypa.io/";
     changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
   };
-}
+};
+in self

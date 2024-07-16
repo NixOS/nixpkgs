@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, ftfy
-, regex
-, tqdm
-, torch
-, torchvision
+  # dependencies
+  ftfy,
+  regex,
+  tqdm,
+  torch,
+  torchvision,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "clip-anytorch";
-  version = "2.5.2";
+  version = "2.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = "CLIP";
-    rev = version;
-    hash = "sha256-EqVkpMQHawoCFHNupf49NrvLdGCq35wnYBpdP81Ztd4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4A8R9aEiOWC05uhMQslhVSkQ4hyjs6VsqkFi76miodY=";
   };
 
   propagatedBuildInputs = [
@@ -33,16 +34,12 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "clip"
-  ];
+  pythonImportsCheck = [ "clip" ];
 
   # all tests require network access
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

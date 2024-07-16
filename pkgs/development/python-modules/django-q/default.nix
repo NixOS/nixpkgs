@@ -1,21 +1,23 @@
-{ lib
-, stdenv
-, arrow
-, blessed
-, buildPythonPackage
-, croniter
-, django
-, django-picklefield
-, django-redis
-, fetchFromGitHub
-, future
-, pkgs
-, poetry-core
-, pytest-django
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
+{
+  lib,
+  stdenv,
+  arrow,
+  blessed,
+  buildPythonPackage,
+  croniter,
+  django,
+  django-picklefield,
+  django-redis,
+  fetchFromGitHub,
+  future,
+  pkgs,
+  poetry-core,
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +36,11 @@ buildPythonPackage rec {
 
   # fixes empty version string
   # analog to https://github.com/NixOS/nixpkgs/pull/171200
-  patches = [
-    ./pep-621.patch
-  ];
+  patches = [ ./pep-621.patch ];
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ django-redis.optional-dependencies.hiredis;
 
-  pythonImportsCheck = [
-    "django_q"
-  ];
+  pythonImportsCheck = [ "django_q" ];
 
   preCheck = ''
     ${pkgs.redis}/bin/redis-server &
@@ -80,7 +79,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A multiprocessing distributed task queue for Django";
+    description = "Multiprocessing distributed task queue for Django";
     homepage = "https://django-q.readthedocs.org";
     changelog = "https://github.com/Koed00/django-q/releases/tag/v${version}";
     license = licenses.mit;

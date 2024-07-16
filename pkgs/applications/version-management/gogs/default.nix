@@ -40,10 +40,17 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A painless self-hosted Git service";
+    description = "Painless self-hosted Git service";
     homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
     mainProgram = "gogs";
+    knownVulnerabilities = [ ''
+      Gogs has known unpatched vulnerabilities and upstream maintainers appears to be unresponsive.
+
+      More information can be found in forgejo's blogpost: https://forgejo.org/2023-11-release-v1-20-5-1/
+
+      You might want to consider migrating to Gitea or forgejo.
+    '' ];
   };
 }

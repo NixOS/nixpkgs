@@ -24,10 +24,10 @@ instantiateClean() {
 
 # get latest version
 NEW_VERSION=$(
-  curl -s -H \
+  curl -s -L -H \
     "Accept: application/vnd.github.v3+json" \
     ${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
-    https://api.github.com/repos/returntocorp/semgrep/releases/latest \
+    https://api.github.com/repos/semgrep/semgrep/releases/latest \
   | jq -r '.tag_name'
 )
 # trim v prefix
@@ -58,7 +58,7 @@ fetchPypi rec {
   version = \"$VERSION\";
   format = \"wheel\";
   dist = python;
-  python = \"cp37.cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311\";
+  python = \"cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311\";
   platform = \"$PLATFORM\";
 }
 "
@@ -95,13 +95,14 @@ update_core_platform() {
 }
 
 update_core_platform "x86_64-linux"
+update_core_platform "aarch64-linux"
 update_core_platform "x86_64-darwin"
 update_core_platform "aarch64-darwin"
 
 OLD_PWD=$PWD
 TMPDIR="$(mktemp -d)"
 # shallow clone to check submodule commits, don't actually need the submodules
-git clone https://github.com/returntocorp/semgrep "$TMPDIR/semgrep" --depth 1 --branch "v$NEW_VERSION"
+git clone https://github.com/semgrep/semgrep "$TMPDIR/semgrep" --depth 1 --branch "v$NEW_VERSION"
 
 get_submodule_commit() {
     OLD_PWD=$PWD

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-io";
-  version = "1.2.7";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://trunk.io/releases/launcher/${finalAttrs.version}/trunk";
-    hash = "sha256-i2m+6Y6gvkHYwzESJv0DkLcHkXqz+g4e43TV6u1UTj8=";
+    hash = "sha256-kiUcc7RFPo7UWzEe2aQ2nrbI3GZ/zfxOlOdWw7YFoAs=";
   };
 
   dontUnpack = true;

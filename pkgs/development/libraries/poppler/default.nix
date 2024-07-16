@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , cairo
 , cmake
 , boost
@@ -40,20 +41,29 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "e3cdc82782941a8d7b8112f83b4a81b3d334601a";
-    hash = "sha256-i/NjVWC/PXAXnv88qNaHFBQQNEjRgjdV224NgENaESo=";
+    rev = "400f3ff05b2b1c0ae17797a0bd50e75e35c1f1b1";
+    hash = "sha256-Y4aNOJLqo4g6tTW6TAb60jAWtBhRgT/JXsub12vi3aU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "23.11.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    hash = "sha256-+ZzKZ5nLnLbJL8Hg63hUe2EctzN1CrfLBHyw5sJGU5w=";
+    hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://access.redhat.com/security/cve/CVE-2024-6239
+      name = "CVE-2024-6239.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
+      hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -137,7 +147,8 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
-    description = "A PDF rendering library";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
+    description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.

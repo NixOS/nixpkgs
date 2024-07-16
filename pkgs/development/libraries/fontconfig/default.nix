@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , pkg-config
 , python3
 , freetype
@@ -11,28 +10,19 @@
 , dejavu_fonts
 , autoreconfHook
 , CoreFoundation
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.14.2";
+  version = "2.15.0";
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    hash = "sha256-26aVtXvOFQI9LO7e+CBiwrkl5R9dTMSu9zbPE/YKRos=";
+    url = with finalAttrs; "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
+    hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
   };
-
-  patches = [
-    # Provide 11-lcdfilter-none.conf for NixOS module
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/268
-    (fetchpatch2 {
-      name = "add-optional-11-lcdfilter-none-configuration.patch";
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/c2666a6d9a6ed18b1bfcef8176e25f62993e24db.patch";
-      hash = "sha256-UBzkxy3uxFO+g0aQtPnBZv7OncgQdinwzNwWS8ngjcE=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -88,11 +78,18 @@ stdenv.mkDerivation rec {
     rm -r $bin/share/man/man3
   '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
-    description = "A library for font customization and configuration";
+    description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = with maintainers; teams.freedesktop.members ++ [ ];
+    pkgConfigModules = [ "fontconfig" ];
   };
-}
+})

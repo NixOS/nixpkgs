@@ -17,7 +17,6 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [
     rich
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -37,6 +36,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/lagmoellertim/unsilence";
     description = "Console Interface and Library to remove silent parts of a media file";
+    mainProgram = "unsilence";
     license = licenses.mit;
     maintainers = with maintainers; [ esau79p ];
   };

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     sha256 = "0ns12q7vg9yand4dmdsps1917cavfbw67yl5q7bm6kb4ia5kkx13";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "gas" "man" ];
 
   nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
@@ -178,6 +178,12 @@ stdenv.mkDerivation {
     popd
   '';
 
+  postInstall = ''
+    # Move GNU as to its own output to prevent it from being used accidentally.
+    moveToOutput bin/gas "$gas"
+    moveToOutput libexec "$gas"
+  '';
+
   passthru = {
     inherit targetPrefix;
   };
@@ -186,7 +192,7 @@ stdenv.mkDerivation {
     broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
     homepage = "http://www.opensource.apple.com/source/cctools/";
     description = "MacOS Compiler Tools (cross-platform port)";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.apple-psl20;
     maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

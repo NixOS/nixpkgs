@@ -7,5 +7,5 @@ for p in "${params[@]}"; do
 done
 
 if $needsTarget; then
-    extraBefore+=(-target @defaultTarget@)
+    extraBefore+=(-target @defaultTarget@ @machineFlags@)
 fi

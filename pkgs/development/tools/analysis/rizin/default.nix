@@ -7,6 +7,7 @@
 , readline
 , libewf
 , perl
+, pcre2
 , zlib
 , openssl
 , file
@@ -21,15 +22,16 @@
 , ninja
 , capstone
 , tree-sitter
+, zstd
 }:
 
 let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.6.3";
+  version = "0.7.3";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-lfZMarnm2qnp+lY0OY649s206/LoFNouTLlp0x9FCcI=";
+    hash = "sha256-4O0lraa+QgmNONqczvS++9VJ5HfoD43/pcobj/n72nQ=";
   };
 
   mesonFlags = [
@@ -38,21 +40,28 @@ let rizin = stdenv.mkDerivation rec {
     "-Duse_sys_libzip=enabled"
     "-Duse_sys_zlib=enabled"
     "-Duse_sys_lz4=enabled"
+    "-Duse_sys_libzstd=enabled"
     "-Duse_sys_lzma=enabled"
     "-Duse_sys_xxhash=enabled"
     "-Duse_sys_openssl=enabled"
     "-Duse_sys_libmspack=enabled"
     "-Duse_sys_tree_sitter=enabled"
+    "-Duse_sys_pcre2=enabled"
     # this is needed for wrapping (adding plugins) to work
     "-Dportable=true"
   ];
 
-  # Normally, Rizin only looks for files in the install prefix. With
-  # portable=true, it instead looks for files in relation to the parent
-  # of the directory of the binary file specified in /proc/self/exe,
-  # caching it. This patch replaces the entire logic to only look at
-  # the env var NIX_RZ_PREFIX
-  patches = [ ./librz-wrapper-support.patch ];
+  patches = [
+    # Normally, Rizin only looks for files in the install prefix. With
+    # portable=true, it instead looks for files in relation to the parent
+    # of the directory of the binary file specified in /proc/self/exe,
+    # caching it. This patch replaces the entire logic to only look at
+    # the env var NIX_RZ_PREFIX
+    ./librz-wrapper-support.patch
+
+    ./0001-fix-compilation-with-clang.patch
+  ];
+
 
   nativeBuildInputs = [
     pkg-config
@@ -86,6 +95,7 @@ let rizin = stdenv.mkDerivation rec {
     readline
     libusb-compat-0_1
     libewf
+    pcre2
     perl
     zlib
     lz4
@@ -94,6 +104,7 @@ let rizin = stdenv.mkDerivation rec {
     tree-sitter
     xxHash
     xz
+    zstd
   ];
 
   postPatch = ''
@@ -124,7 +135,7 @@ let rizin = stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "UNIX-like reverse engineering framework and command-line toolset.";
+    description = "UNIX-like reverse engineering framework and command-line toolset";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rizin";

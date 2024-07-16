@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyasn1";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l7cpDKaOYqgyVY7Dl28Vy/kRv118cDnYuGHCoOzmn94=";
+    hash = "sha256-OjWrLEte+Y4X397IqwdARvvaduKBxacGzNgjKM/I9kw=";
   };
 
-  pythonImportsCheck = [
-    "pyasn1"
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  pythonImportsCheck = [ "pyasn1" ];
 
   meta = with lib; {
     description = "Generic ASN.1 library for Python";

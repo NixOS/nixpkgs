@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QBURvPfDBbhF+AhQ0SsHYnZzr5RN36Cqa2DrAQZW0gU=";
+    hash = "sha256-AjE+1MkSkZOtEUPKEPBKQ3n+aOB8cwsorBpL5skNskU=";
   };
 
   doCheck = false; # there are no tests
@@ -40,7 +40,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/npiv/chatblade/";
-    description = "A CLI Swiss Army Knife for ChatGPT";
+    description = "CLI Swiss Army Knife for ChatGPT";
+    mainProgram = "chatblade";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ deejayem ];
   };

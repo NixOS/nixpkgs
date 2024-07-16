@@ -10,16 +10,16 @@ in {
 
   options = {
     services.orangefs.client = {
-      enable = mkEnableOption (lib.mdDoc "OrangeFS client daemon");
+      enable = mkEnableOption "OrangeFS client daemon";
 
       extraOptions = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc "Extra command line options for pvfs2-client.";
+        description = "Extra command line options for pvfs2-client.";
       };
 
       fileSystems = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The orangefs file systems to be mounted.
           This option is preferred over using {option}`fileSystems` directly since
           the pvfs client service needs to be running for it to be mounted.
@@ -36,19 +36,19 @@ in {
             mountPoint = mkOption {
               type = types.str;
               default = "/orangefs";
-              description = lib.mdDoc "Mount point.";
+              description = "Mount point.";
             };
 
             options = mkOption {
               type = with types; listOf str;
               default = [];
-              description = lib.mdDoc "Mount options";
+              description = "Mount options";
             };
 
             target = mkOption {
               type = types.str;
               example = "tcp://server:3334/orangefs";
-              description = lib.mdDoc "Target URL";
+              description = "Target URL";
             };
           };
         }));

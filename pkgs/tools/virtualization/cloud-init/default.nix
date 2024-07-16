@@ -1,6 +1,5 @@
 { lib
 , nixosTests
-, buildPythonApplication
 , cloud-utils
 , dmidecode
 , fetchFromGitHub
@@ -17,14 +16,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.3.3";
+  version = "24.2";
+  pyproject = true;
+
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-49UvGrv40hyR3A2BndlQKwQqCC1ZaLm97IUKNW12sJo=";
+    hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
   };
 
   patches = [
@@ -53,6 +54,10 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     configobj
     jinja2
@@ -66,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper
@@ -88,8 +93,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_dhcp_client_failover"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
-    # fails to find cat
-    "test_subp_combined_stderr_stdout"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
     "TestRemoveDefaultCaCerts"
@@ -100,8 +103,6 @@ python3.pkgs.buildPythonApplication rec {
     "TestConsumeUserDataHttp"
     # Chef Omnibus
     "TestInstallChefOmnibus"
-    # https://github.com/canonical/cloud-init/pull/893
-    "TestGetPackageMirrorInfo"
     # Disable failing VMware and PuppetAio tests
     "test_get_data_iso9660_with_network_config"
     "test_get_data_vmware_guestinfo_with_network_config"
@@ -112,6 +113,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_install_with_default_arguments"
     "test_install_with_no_cleanup"
     "test_install_with_version"
+    # https://github.com/canonical/cloud-init/issues/5002
+    "test_found_via_userdata"
   ];
 
   preCheck = ''

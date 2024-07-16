@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Utility that provides an API and CLI to identify licenses and legal terms";
+    mainProgram = "license-scanner";
     homepage = "https://github.com/CycloneDX/license-scanner";
     changelog = "https://github.com/CycloneDX/license-scanner/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

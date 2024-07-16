@@ -6,16 +6,16 @@ in
 {
 options = {
     services.gateone = {
-      enable = mkEnableOption (lib.mdDoc "GateOne server");
+      enable = mkEnableOption "GateOne server";
       pidDir = mkOption {
         default = "/run/gateone";
         type = types.path;
-        description = lib.mdDoc "Path of pid files for GateOne.";
+        description = "Path of pid files for GateOne.";
       };
       settingsDir = mkOption {
         default = "/var/lib/gateone";
         type = types.path;
-        description = lib.mdDoc "Path of configuration files for GateOne.";
+        description = "Path of configuration files for GateOne.";
       };
     };
 };

@@ -19,19 +19,20 @@
 , libpng
 , libjxl
 , libexif
+, libavif
 , openexr_3
 , bash-completion
 , testers
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "1.12";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aKDt4lPh4w0AOucN7VrA7mo8SHI9eJqdrpJF+hG93gI=";
+    hash = "sha256-MAVxOUM1x6dkvbWPz/JS+sITi3BhCeaweKZZserkXz8=";
   };
 
   strictDeps = true;
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjxl
     libexif
+    libavif
     openexr_3
   ];
 
@@ -72,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
-    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
+    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;

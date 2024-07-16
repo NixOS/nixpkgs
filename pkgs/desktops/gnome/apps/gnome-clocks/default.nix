@@ -1,36 +1,36 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, wrapGAppsHook4
-, itstool
-, desktop-file-utils
-, vala
-, gobject-introspection
-, libxml2
-, gtk4
-, glib
-, sound-theme-freedesktop
-, gsettings-desktop-schemas
-, gnome-desktop
-, geocode-glib_2
-, gnome
-, gdk-pixbuf
-, geoclue2
-, libgweather
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  wrapGAppsHook4,
+  itstool,
+  desktop-file-utils,
+  vala,
+  libxml2,
+  gtk4,
+  glib,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  geocode-glib_2,
+  gnome,
+  gdk-pixbuf,
+  geoclue2,
+  gst_all_1,
+  libgweather,
+  libadwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-clocks";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/I60/ZUw8eZB3ADuIIbufTVKegCwoNFyLjBdXJqrkbU=";
+    url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major finalAttrs.version}/gnome-clocks-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6qPFeM3O+XVOZotWJnCbc/NSZxAjX0tyB20v9JpPmcc=";
   };
 
   nativeBuildInputs = [
@@ -43,27 +43,26 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     desktop-file-utils
     libxml2
-    gobject-introspection # for finding vapi files
   ];
 
-  buildInputs = [
-    gtk4
-    glib
-    gsettings-desktop-schemas
-    gdk-pixbuf
-    gnome-desktop
-    geocode-glib_2
-    geoclue2
-    libgweather
-    libadwaita
-  ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # Fallback sound theme
-      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
-    )
-  '';
+  buildInputs =
+    [
+      gtk4
+      glib
+      gsettings-desktop-schemas
+      gdk-pixbuf
+      gnome-desktop
+      geocode-glib_2
+      geoclue2
+      libgweather
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      # GStreamer plugins needed for Alarms
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
   doCheck = true;
 
@@ -74,11 +73,21 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Clocks";
-    description = "Clock application designed for GNOME 3";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+  meta = {
+    homepage = "https://apps.gnome.org/Clocks/";
+    description = "A simple and elegant clock application for GNOME";
+    longDescription = ''
+      A simple and elegant clock application. It includes world clocks, alarms,
+      a stopwatch, and timers.
+
+      - Show the time in different cities around the world
+      - Set alarms to wake you up
+      - Measure elapsed time with an accurate stopwatch
+      - Set timers to properly cook your food
+    '';
+    mainProgram = "gnome-clocks";
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

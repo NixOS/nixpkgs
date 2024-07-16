@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, django
-, redis
-, rq
-, sentry-sdk
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  django,
+  redis,
+  rq,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "django-rq";
-  version = "2.9.0";
+  version = "2.10.1";
   format = "setuptools";
   disabled = isPy27;
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qrAEBAMbw96TCS6J50RG/2fV9K2WhuXyAQevL4RSQhk=";
+    hash = "sha256-VE4OFFpNR9txCyhs6Ye36DBWb8DNlCT1BO436KwFMY8=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  pythonImportsCheck = [
-    "django_rq"
-  ];
+  pythonImportsCheck = [ "django_rq" ];
 
   doCheck = false; # require redis-server
 

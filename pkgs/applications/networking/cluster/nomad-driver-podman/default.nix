@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "nomad-driver-podman";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MYqsTuMLxbVNWLAWjQ8xQts5qJvhTylle7YLtGyswjY=";
+    sha256 = "sha256-cM/bu8d39mY85XtHJNIp9h0U3kzviSe87c2CQs9vVTA=";
   };
 
-  vendorHash = "sha256-wjJ+mq/m7IjbwypoBvBhjOyAT4v4HDSChHY5OE0xA2U=";
+  vendorHash = "sha256-BdCcFR5vWXbZ+yumRdpozfuB3fqzVifErRQ7RAfdco8=";
 
   subPackages = [ "." ];
 
@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.github.com/hashicorp/nomad-driver-podman";
     description = "Podman task driver for Nomad";
+    mainProgram = "nomad-driver-podman";
     platforms = platforms.linux;
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

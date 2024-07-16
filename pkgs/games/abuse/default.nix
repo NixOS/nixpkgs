@@ -1,20 +1,28 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, SDL, SDL_mixer, freepats }:
+{ lib, stdenv, fetchzip, fetchFromGitHub
+, makeDesktopItem, copyDesktopItems
+, cmake
+, SDL2, SDL2_mixer, freepats
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "abuse";
-  version = "0.8";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url    = "http://abuse.zoy.org/raw-attachment/wiki/download/${pname}-${version}.tar.gz";
-    sha256 = "0104db5fd2695c9518583783f7aaa7e5c0355e27c5a803840a05aef97f9d3488";
+  src = fetchFromGitHub {
+    owner = "Xenoveritas";
+    repo = "abuse";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eneu0HxEoM//Ju2XMHnDMZ/igeVMPSLg7IaxR2cnJrk=";
   };
 
-  configureFlags = [
-    "--with-x"
-    "--with-assetdir=$(out)/orig"
-    # The "--enable-debug" is to work around a segfault on start, see https://bugs.archlinux.org/task/52915.
-    "--enable-debug"
-  ];
+  data = fetchzip {
+    url  = "http://abuse.zoy.org/raw-attachment/wiki/download/abuse-0.8.tar.gz";
+    hash = "sha256-SOrtBNLWskN7Tqa0B3+KjlZlqPjC64Jp02Pk7to2hFg=";
+  };
+
+  preConfigure = ''
+    cp --reflink=auto -r ${finalAttrs.data}/data/sfx ${finalAttrs.data}/data/music data/
+  '';
 
   desktopItems = [ (makeDesktopItem {
     name = "abuse";
@@ -33,22 +41,24 @@ stdenv.mkDerivation rec {
     substituteAll "${./abuse.sh}" $out/bin/abuse
     chmod +x $out/bin/abuse
 
-    install -Dm644 doc/abuse.png $out/share/pixmaps/abuse.png
+    install -Dm644 ${finalAttrs.data}/doc/abuse.png $out/share/pixmaps/abuse.png
   '';
 
-  nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs       = [ SDL SDL_mixer freepats ];
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
 
-  meta = with lib; {
+  nativeBuildInputs = [ copyDesktopItems cmake ];
+  buildInputs       = [ SDL2 SDL2_mixer freepats ];
+
+  meta = {
     description = "Side-scroller action game that pits you against ruthless alien killers";
     homepage    = "http://abuse.zoy.org/";
-    license     = with licenses; [ unfree ];
+    license     = lib.licenses.unfree;
     # Most of abuse is free (public domain, GPL2+, WTFPL), however the creator
     # of its sfx and music only gave Debian permission to redistribute the
     # files. Our friends from Debian thought about it some more:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=648272
-    maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms   = lib.platforms.unix;
     broken      = stdenv.isDarwin;
   };
-}
+})

@@ -14,35 +14,36 @@ let
         "src/slic3r/GUI/Tab.cpp"
         "src/slic3r/Utils/Http.cpp"
       ];
-      sha256 = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
+      hash = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
     })
+    ./meshboolean-const.patch
   ];
 
   versions = {
     stable = {
       version = "2.3.57.12";
-      sha256 = "sha256-lePhDRHI++9zs54bTt2/Lu6ZQ7egjJCWb752aI0s7Mw==";
+      hash = "sha256-lePhDRHI++9zs54bTt2/Lu6ZQ7egjJCWb752aI0s7Mw==";
       patches = null;
     };
     latest = {
       version = "2.4.58.5";
-      sha256 = "sha256-UywxEGedXaBUTKojEkbkuejI6SdPSkPxTJMwUDNW6W0=";
+      hash = "sha256-UywxEGedXaBUTKojEkbkuejI6SdPSkPxTJMwUDNW6W0=";
       inherit patches;
     };
     beta = {
-      version = "2.5.59.3";
-      sha256 = "sha256-chHKEEMN0Dllebk7zQDg7mf2BU441RlSyXvXgiCmgA4=";
+      version = "2.5.59.6";
+      hash = "sha256-4ivhkcvVw5NlPsDz3J840aWc0qnp/XzCnTTCICwi3/c=";
       inherit patches;
     };
   };
 
-  override = { version, sha256, patches }: super: {
+  override = { version, hash, patches }: super: {
     inherit version pname patches;
 
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      inherit sha256;
+      inherit hash;
       rev = version;
       fetchSubmodules = true;
     };
@@ -81,7 +82,7 @@ let
     meta = with lib; {
       inherit description;
       homepage = "https://github.com/supermerill/SuperSlicer";
-      license = licenses.agpl3;
+      license = licenses.agpl3Plus;
       maintainers = with maintainers; [ cab404 moredread tmarkus ];
       mainProgram = "superslicer";
     };

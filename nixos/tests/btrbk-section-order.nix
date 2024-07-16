@@ -29,10 +29,12 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   };
 
   testScript = ''
+    import difflib
     machine.wait_for_unit("basic.target")
-    got = machine.succeed("cat /etc/btrbk/local.conf")
+    got = machine.succeed("cat /etc/btrbk/local.conf").strip()
     expect = """
     backend btrfs-progs-sudo
+    stream_compress no
     timestamp_format long
     target ssh://global-target/
      ssh_user root
@@ -46,6 +48,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
        ssh_user root
     """.strip()
     print(got)
+    if got != expect:
+      diff = difflib.unified_diff(expect.splitlines(keepends=True), got.splitlines(keepends=True), fromfile="expected", tofile="got")
+      print("".join(diff))
     assert got == expect
   '';
 })

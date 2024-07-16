@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mix2nix";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "ydlr";
     repo = "mix2nix";
     rev = version;
-    hash = "sha256-iWy5q6ERzg8hRZs+bFtR6drZ9yI8Qh1v+47q3q2fFTM=";
+    hash = "sha256-Wh3KFp1gNDOKOG/DZdftmgy/M+67ZGfdj6W3ETQpX/8=";
   };
 
   nativeBuildInputs = [ elixir ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   installPhase = "install -Dt $out/bin mix2nix";
 
   meta = with lib; {
-    description = "Generate nix expressions from mix.lock file.";
+    description = "Generate nix expressions from mix.lock file";
+    mainProgram = "mix2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ ydlr ] ++ teams.beam.members;
   };

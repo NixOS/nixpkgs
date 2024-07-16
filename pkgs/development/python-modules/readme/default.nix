@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, readme_renderer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  readme-renderer,
 }:
 
 buildPythonPackage rec {
@@ -15,20 +16,16 @@ buildPythonPackage rec {
     sha256 = "32fbe1538a437da160fa4e4477270bfdcd8876e2e364d0d12898302644496231";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    readme_renderer
-  ];
+  propagatedBuildInputs = [ readme-renderer ];
 
   checkPhase = ''
     pytest
   '';
 
   # tests are not included with pypi release
-  # package is not readme_renderer
+  # package is not readme-renderer
   doCheck = false;
 
   meta = with lib; {
@@ -37,5 +34,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = [ ];
   };
-
 }

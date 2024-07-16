@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
-, pkg-config, sphinx
+, buildPackages
+, pkg-config
 , zstd
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
@@ -9,17 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "6.6.2";
+  version = "6.9.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    hash = "sha256-tCZzbclOKwS2mD6ZjE3EJ9wWbWbd6iRsiQ7ZwqRQBE8=";
+    hash = "sha256-Q4ZbsnLcCrJYXeNgVDTYG6IXV48Il79wDNNsFKxAZSo=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ] ++ [
-    sphinx
+    (buildPackages.python3.withPackages (ps: with ps; [
+      sphinx
+      sphinx-rtd-theme
+    ]))
   ];
 
   buildInputs = [ acl attr e2fsprogs libuuid lzo udev zlib zstd ];

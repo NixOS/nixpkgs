@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, wxPython_4_2
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  wxpython,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0fv8gwlbcj000qq34inbwgxf0xgibs590dsyqnw0mmyb7f1iq210";
   };
 
-  propagatedBuildInputs = [ wxPython_4_2 ];
+  propagatedBuildInputs = [ wxpython ];
 
   checkPhase = ''
     runHook preCheck

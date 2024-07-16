@@ -2,24 +2,25 @@
 
 buildGoModule rec {
   pname = "gitlab-pages";
-  version = "16.5.3";
+  version = "17.1.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    hash = "sha256-eE+QuzqNm3zA0le8MWR3Kbc+/kQtKIrSd9sTmVYaNbQ=";
+    hash = "sha256-cwFqzKXDWuIESdDjuPYos73Ly+zd+J20aJJi0RiRdus=";
   };
 
-  vendorHash = "sha256-YG+ERETxp0BPh/V4820pMXTXu9YcodRhzme6qZJBC9Q=";
+  vendorHash = "sha256-uVpkCl5rSAtg6gDnL3d11AaOlGNpS2xaPtJrthUNbfE=";
   subPackages = [ "." ];
 
   meta = with lib; {
     description = "Daemon used to serve static websites for GitLab users";
+    mainProgram = "gitlab-pages";
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 das_j ] ++ teams.gitlab.members;
+    maintainers = teams.helsinki-systems.members ++ teams.gitlab.members;
   };
 }

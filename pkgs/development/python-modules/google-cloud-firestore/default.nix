@@ -1,31 +1,36 @@
-{ lib
-, aiounittest
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiounittest,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.13.1";
-  format = "setuptools";
+  version = "2.16.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vRTS65rjWNIQWM4JHBPeoRkX4m8cQ3OKUenOqLSbTzg=";
+    hash = "sha256-M4HrgpbtECjZtCGqQrkQDxmMWH+OM8AF0xplVnALda4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
     proto-plus
@@ -34,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiounittest
+    freezegun
     google-cloud-testutils
     mock
     pytest-asyncio
@@ -49,12 +55,12 @@ buildPythonPackage rec {
     # Tests are broken
     "tests/system/test_system.py"
     "tests/system/test_system_async.py"
-    # requires credentials
+    # Test requires credentials
     "tests/unit/v1/test_bulk_writer.py"
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_collections"
   ];
 

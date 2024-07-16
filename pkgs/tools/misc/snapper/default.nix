@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.10.7";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-ELhWVimZWKaHL/PK7HtALKCTmzjcZN2ScDS0yOX3lVs=";
+    sha256 = "sha256-gD5GsD36KNqoJHFHjNkAUq5M7UZS9Fi176OXgGfqjQ8=";
   };
 
   strictDeps = true;

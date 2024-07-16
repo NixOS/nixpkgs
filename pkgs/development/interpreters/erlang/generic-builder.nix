@@ -11,6 +11,7 @@
 , ncurses
 , openssl
 , perl
+, runtimeShell
 , autoconf
 , openjdk11 ? null # javacSupport
 , unixODBC ? null # odbcSupport
@@ -18,15 +19,18 @@
 , libGLU ? null
 , wxGTK ? null
 , xorg ? null
+, exdoc ? null
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
+, exdocSupport ? false
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts
 , coreutils
 , git
+, wrapGAppsHook3
 }:
 { baseName ? "erlang"
 , version
@@ -43,7 +47,7 @@
 , odbcSupport ? false
 , odbcPackages ? [ unixODBC ]
 , opensslPackage ? openssl
-, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
+, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 wrapGAppsHook3 ]
 , preUnpack ? ""
 , postUnpack ? ""
 , patches ? [ ]
@@ -76,6 +80,7 @@ else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
+assert exdocSupport -> exdoc != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
@@ -111,10 +116,16 @@ stdenv.mkDerivation ({
     patchShebangs make
 
     ${postPatch}
+  '' + optionalString (lib.versionOlder "25" version) ''
+    substituteInPlace lib/os_mon/src/disksup.erl \
+      --replace-fail '"sh ' '"${runtimeShell} '
   '';
 
+  # For OTP 27+ we need ex_doc to build the documentation
   preConfigure = ''
     ./otp_build autoconf
+  '' + optionalString exdocSupport ''
+    export EX_DOC=${exdoc}/bin/.ex_doc-wrapped
   '';
 
   configureFlags = [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]

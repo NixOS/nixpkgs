@@ -8,20 +8,20 @@
 }:
 let
   pname = "slskd";
-  version = "0.18.2";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-hWK6nbXAZTjxukx9EzkJkyEFlqXUkjanmv4VfHZxW24=";
+    sha256 = "sha256-ic631e4pyby6EibUkxIGc/uQnVuPY9RFZ9hWvw3u1zk=";
   };
 
   meta = with lib; {
-    description = "A modern client-server application for the Soulseek file sharing network";
+    description = "Modern client-server application for the Soulseek file sharing network";
     homepage = "https://github.com/slskd/slskd";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ ppom ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ ppom melvyn2 ];
     platforms = platforms.linux;
   };
 
@@ -32,7 +32,7 @@ let
     src = "${src}/src/web";
     npmFlags = [ "--legacy-peer-deps" ];
     nodejs = nodejs_18;
-    npmDepsHash = "sha256-+2g3pCaGFbzQjKwhjmD6viuzVE5pRg+qSOXMrCtLQkI=";
+    npmDepsHash = "sha256-06qQ1y870TrkXhkHYADjnWVhdyiLWEqdDt3qrJ1BBFo=";
     installPhase = ''
       cp -r build $out
     '';
@@ -43,8 +43,8 @@ in buildDotnetModule {
 
   runtimeDeps = [ mono ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   projectFile = "slskd.sln";
 

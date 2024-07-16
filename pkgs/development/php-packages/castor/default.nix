@@ -1,33 +1,43 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, php
-, nix-update-script
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  php,
+  nix-update-script,
+  testers,
 }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "castor";
-  version = "0.10.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/pUo3Lure5N6vsh8o8cQDqlWj8vgOC0ctenO/93K3zQ=";
+    hash = "sha256-sSIkXNW6RR1mx15dKouQLMaHBr5FEkTTc/0QIkWV8sg=";
   };
 
-  vendorHash = "sha256-l/paOQmJs8/7YN/XsY6wklojLE3z3GIV3jrgZvyQp/8=";
+  patches = [
+    # Upstream lock is invalid. https://github.com/jolicode/castor/issues/319
+    (fetchpatch {
+      name = "fix-invalid-lock.patch";
+      url = "https://github.com/jolicode/castor/commit/5ff0c3ecbdddad20146adbc2f055b83f5aadba0f.patch";
+      hash = "sha256-1a3Dpk/UXp92Ugw9zSoLPsbWOJEuP2FBWc/pQ/EKwaM=";
+    })
+  ];
+
+  vendorHash = "sha256-HfEjwlkozeuT4LDnYwiCu7T0spcf4GLhkd7Kc1VRnro=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # install shell completions
   postInstall = ''
-    echo "yes" | ${php}/bin/php $out/share/php/castor/bin/castor
     installShellCompletion --cmd castor \
-      --bash <(${php}/bin/php $out/share/php/castor/bin/castor completion bash) \
-      --fish <(${php}/bin/php $out/share/php/castor/bin/castor completion fish) \
-      --zsh <(${php}/bin/php $out/share/php/castor/bin/castor completion zsh)
+      --bash <($out/bin/castor completion bash) \
+      --fish <($out/bin/castor completion fish) \
+      --zsh <($out/bin/castor completion zsh)
   '';
 
   passthru = {

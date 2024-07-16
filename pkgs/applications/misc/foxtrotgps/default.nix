@@ -1,5 +1,5 @@
 { lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
-, curl, gnome2, gpsd, gtk2, wrapGAppsHook
+, curl, gnome2, gpsd, gtk2, wrapGAppsHook3
 , intltool, libexif, python3Packages, sqlite }:
 
 let
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config autoreconfHook texinfo help2man
-    imagemagick wrapGAppsHook intltool
+    imagemagick wrapGAppsHook3 intltool
   ];
 
   buildInputs = [

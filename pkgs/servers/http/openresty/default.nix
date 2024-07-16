@@ -10,12 +10,12 @@
 
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
-  nginxVersion = "1.21.4";
+  nginxVersion = "1.25.3";
   version = "${nginxVersion}.1";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-DFCTtk94IehQZcmeXU5swxggz9fze5oN7IQgnYeir5k=";
+    sha256 = "sha256-MuwaJTpaEyUDVaB1/mW31j7EXFYLviEzUPCZKlfNed8=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.
@@ -40,8 +40,9 @@ callPackage ../nginx/generic.nix args rec {
   configureFlags = [ "--with-http_postgres_module" ];
 
   postInstall = ''
-    ln -s $out/luajit/bin/luajit-2.1.0-beta3 $out/bin/luajit-openresty
-    ln -s $out/nginx/sbin/nginx $out/bin/nginx
+    ln -s $out/luajit/bin/luajit-2.1.ROLLING $out/bin/luajit-openresty
+    ln -sf $out/nginx/bin/nginx $out/bin/openresty
+    ln -s $out/nginx/bin/nginx $out/bin/nginx
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
   '';
@@ -51,10 +52,10 @@ callPackage ../nginx/generic.nix args rec {
   };
 
   meta = {
-    description = "A fast web application server built on Nginx";
+    description = "Fast web application server built on Nginx";
     homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ thoughtpolice lblasc emily ];
+    maintainers = with lib.maintainers; [ thoughtpolice lblasc ];
   };
 }

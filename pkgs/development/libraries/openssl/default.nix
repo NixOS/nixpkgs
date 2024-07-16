@@ -24,7 +24,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
       inherit hash;
     };
 
@@ -86,6 +86,7 @@ let
         aarch64-darwin = "./Configure darwin64-arm64-cc";
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+        powerpc64-linux = "./Configure linux-ppc64";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -93,7 +94,7 @@ let
         else if stdenv.hostPlatform.isBSD
           then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"
           else if stdenv.hostPlatform.isx86_32
-            then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+            then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
           else "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${lib.optionalString
@@ -142,6 +143,15 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+      # /dev/crypto support has been dropped in OpenBSD 5.7.
+      #
+      # OpenBSD's ports does this too,
+      # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+      #
+      # https://github.com/openssl/openssl/pull/10565 indicated the
+      # intent was that this would be configured properly automatically,
+      # but that doesn't appear to be the case.
+      ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
@@ -220,10 +230,10 @@ let
     meta = with lib; {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
-      description = "A cryptographic library that implements the SSL and TLS protocols";
+      description = "Cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ];
+      maintainers = with maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
@@ -234,10 +244,19 @@ let
   });
 
 in {
+  # intended version "policy":
+  # - 1.1 as long as some package exists, which does not build without it
+  #   (tracking issue: https://github.com/NixOS/nixpkgs/issues/269713)
+  #   try to remove in 24.05 for the first time, if possible then
+  # - latest 3.x LTS
+  # - latest 3.x non-LTS as preview/for development
+  #
+  # - other versions in between only when reasonable need is stated for some package
+  # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
   # If you do upgrade here, please update in pkgs/top-level/release.nix
   # the permitted insecure version to ensure it gets cached for our users
-  # and backport this to stable release (23.05).
+  # and backport this to stable release (at time of writing this 23.11).
   openssl_1_1 = common {
     version = "1.1.1w";
     hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
@@ -251,14 +270,14 @@ in {
     withDocs = true;
     extraMeta = {
       knownVulnerabilities = [
-        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.05 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
+        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.11 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
       ];
     };
   };
 
   openssl_3 = common {
-    version = "3.0.12";
-    hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+    version = "3.0.14";
+    hash = "sha256-7soDXU3U6E/CWEbZUtpil0hK+gZQpvhMaC453zpBI8o=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -279,9 +298,9 @@ in {
     };
   };
 
-  openssl_3_1 = common {
-    version = "3.1.4";
-    hash = "sha256-hAr1Nmq5tSK95SWCa+PvD7Cvgcap69hMqmAP6hcx7uM=";
+  openssl_3_2 = common {
+    version = "3.2.2";
+    hash = "sha256-GXFJwY2enyksQ/BACsq6EuX1LKz+BQ89GZJ36nOOwuc=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -291,8 +310,31 @@ in {
       ./3.0/openssl-disable-kernel-detection.patch
 
       (if stdenv.hostPlatform.isDarwin
-       then ./use-etc-ssl-certs-darwin.patch
-       else ./use-etc-ssl-certs.patch)
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
+
+  openssl_3_3 = common {
+    version = "3.3.1";
+    hash = "sha256-d3zVlihMiDN1oqehG/XSeG/FQTJV76sgxQ1v/m0CC34=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
     ];
 
     withDocs = true;

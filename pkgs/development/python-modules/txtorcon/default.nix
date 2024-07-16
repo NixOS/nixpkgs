@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, automat
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, geoip
-, idna
-, incremental
-, lsof
-, mock
-, pyopenssl
-, pytestCheckHook
-, python
-, pythonOlder
-, service-identity
-, twisted
-, zope_interface
+{
+  lib,
+  stdenv,
+  automat,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  geoip,
+  idna,
+  incremental,
+  lsof,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  service-identity,
+  twisted,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     incremental
     twisted
     automat
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
@@ -51,7 +52,10 @@ buildPythonPackage rec {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
     changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
-    maintainers = with maintainers; [ jluttine exarkun ];
+    maintainers = with maintainers; [
+      jluttine
+      exarkun
+    ];
     license = licenses.mit;
   };
 }

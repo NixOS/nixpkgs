@@ -1,5 +1,4 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
-, fetchpatch
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -8,19 +7,21 @@
 , enablePam ? false, linux-pam
 , enableSasl ? false, cyrus_sasl
 , enableWebDAV ? false, sqlite, libuuid
-, enableExtendedAttrs ? false, attr
+, enableExtendedAttrs ? false
 , perl
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.73";
+  version = "1.4.75";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gYgW0LMUsKqHKKcHZRNDX21esifzthMjRo4fENvoTKg=";
+    sha256 = "sha256-i3IcqTnTEq+qbvMdy9avtRYe04Wsgo5vzNTFt2vhidY=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests
@@ -77,5 +78,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor brecht ];
+    mainProgram = "lighttpd";
   };
 }

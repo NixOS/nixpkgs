@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , libxml2
 , libpeas
 , glib
@@ -13,29 +12,26 @@
 , python3
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , itstool
 }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.4";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-IpUBB7Viwc/nRfwzFllRiWoOmUxRZzS2BcxyM7W3oHI=";
+    sha256 = "sha256-EwBcgFHw6Mh+eS5hfTLoywH0dVt/TpNt4y6xQxe/x/Q=";
   };
 
   patches = [
-    # Fix missing include for libxml2 2.12
-    # https://github.com/linuxmint/xed/pull/611
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xed/commit/28cb2e8136c1bfe90faf5f2341bde66156990778.patch";
-      hash = "sha256-AqIb7Jj19SF3tIriPwn1JeB7niCmPbBsLE4ch2AX7fk=";
-    })
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
   ];
 
   nativeBuildInputs = [
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
     itstool
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

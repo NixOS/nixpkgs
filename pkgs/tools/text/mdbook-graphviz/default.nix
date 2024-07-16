@@ -2,26 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "dylanowen";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WkjkQll5oETVADYpA8/CIZOJCBnfenGSy49sZ5nAQ+c=";
+    hash = "sha256-myASia/nkZmAf00lZ357Sh3YV73pCBrZAIRhSzFkZa0=";
   };
 
-  cargoHash = "sha256-whBTPQGozPPTSdXuRx5wamc1yy/EC3wNShQGhRqdY9Y=";
+  cargoHash = "sha256-UB/l+rcVHkrHv/fybDy/UjrJbVksWgt9JRQC118/kGM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   nativeCheckInputs = [ graphviz ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook, rendering Graphviz graphs to HTML at build time.";
+    description = "Preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";
+    mainProgram = "mdbook-graphviz";
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
     changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
     license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
   };
 }

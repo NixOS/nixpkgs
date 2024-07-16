@@ -109,7 +109,7 @@ assert (builtins.elem shellSet [ "standard" "orca" ]);
 
 let
   pname = "libint";
-  version = "2.7.2";
+  version = "2.9.0";
 
   meta = with lib; {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -126,7 +126,7 @@ let
       owner = "evaleev";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-lX+DVnhdOb8d7MX9umf33y88CNiGb3TYYlMZtQXfx+8=";
+      hash = "sha256-y+Mo8J/UWDrkkNEDAoostb/k6jrhYYeU0u9Incrd2cE=";
     };
 
     # Replace hardcoded "/bin/rm" with normal "rm"
@@ -139,7 +139,7 @@ let
         tests/eri/Makefile \
         tests/hartree-fock/Makefile \
         tests/unit/Makefile; do
-          substituteInPlace $f --replace "/bin/rm" "rm"
+          substituteInPlace $f --replace-warn "/bin/rm" "rm"
       done
     '';
 
@@ -211,7 +211,7 @@ let
     buildInputs = [ boost eigen ];
 
     # Default is just "double", but SSE2 is available on all x86_64 CPUs.
-    # AVX support is advertised, but does not work in 2.6 (possibly in 2.7).
+    # AVX support is advertised, but does not work.
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
     cmakeFlags = [
       "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"

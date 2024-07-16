@@ -1,27 +1,27 @@
 { lib
 , buildPythonApplication
+, pythonOlder
 , fetchFromGitHub
+, pdm-backend
 , cmake-format
 , pygls
 , cmake
-, pdm-backend
 , pytest-datadir
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.8";
+  version = "0.1.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "regen100";
     repo = "cmake-language-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7AlF+FqhZR+6lLsR1dxAGHd/GU+mB3ojYLDXVm7Il4M=";
+    hash = "sha256-9fnyDJm8rUl+7g4FrdMykPpQOcww2M6IPWH/3qVeJX4=";
   };
 
   patches = [
@@ -64,7 +64,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "CMake LSP Implementation";
     homepage = "https://github.com/regen100/cmake-language-server";
+    changelog = "https://github.com/regen100/cmake-language-server/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
+    mainProgram = "cmake-language-server";
   };
 }

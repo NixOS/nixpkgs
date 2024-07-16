@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deadpixi/mtm";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "mtm";
   };
 }

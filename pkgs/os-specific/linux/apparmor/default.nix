@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
+, autoconf-archive
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -22,13 +23,13 @@
 }:
 
 let
-  apparmor-version = "3.1.6";
+  apparmor-version = "4.0.1";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
-    description = "A mandatory access control system - ${component}";
+    description = "Mandatory access control system - ${component}";
     license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ julm thoughtpolice ajs124 ];
+    maintainers = with maintainers; [ julm thoughtpolice ] ++ teams.helsinki-systems.members;
     platforms = platforms.linux;
   };
 
@@ -36,7 +37,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-VPgRmmQv+kgLduc6RTu9gotyjT6OImUXsPeatgG7m9E=";
+    hash = "sha256-0S/P62wi3/aPATvJL6afu+SebjoSHsTMu/WV9m7E1OE=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -56,7 +57,9 @@ let
       --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./0001-aa-remove-unknown_empty-ruleset.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -84,6 +87,7 @@ let
     strictDeps = false;
 
     nativeBuildInputs = [
+      autoconf-archive
       autoreconfHook
       bison
       flex

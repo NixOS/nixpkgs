@@ -1,16 +1,17 @@
-{ lib
-, cbc
-, amply
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  cbc,
+  amply,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "coin-or";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j0f6OiscJyTqPNyLp0qWRjCGLWuT3HdU1S/sxpnsiMo=";
+    hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
   };
 
   postPatch = ''
@@ -33,16 +34,13 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pulp"
-  ];
+  pythonImportsCheck = [ "pulp" ];
 
   meta = with lib; {
     description = "Module to generate MPS or LP files";
+    mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

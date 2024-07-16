@@ -1,6 +1,6 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
+  { pkgs, lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
   , perl
   , configFile ? "all"
@@ -234,8 +234,8 @@ let
 
       inherit maintainers;
       mainProgram = "zfs";
-      # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
-      # On NixOS set the option boot.zfs.enableUnstable.
+      # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
+      # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
       broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
     };
   };

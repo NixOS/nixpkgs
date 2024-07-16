@@ -1,22 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi
-, pythonOlder
-, setuptools
-, setuptools-changelog-shortener
-, requests
-, pytestCheckHook
-, lazy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-changelog-shortener,
+  requests,
+  tomli,
+  pytestCheckHook,
+  lazy,
 }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+OAbT23wgPYihMzljFuxzh6GmwwjSqx60TVgl0X8Fz0=";
+    pname = "devpi_common";
+    inherit version;
+    hash = "sha256-I1oKmkXJblTGC6a6L3fYVs+Q8aacG+6UmIfp7cA6Qcw=";
   };
 
   nativeBuildInputs = [
@@ -27,21 +32,21 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     lazy
+    tomli
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "devpi_common"
-  ];
+  pythonImportsCheck = [ "devpi_common" ];
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
     changelog = "https://github.com/devpi/devpi/blob/common-${version}/common/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [
+      lewo
+      makefu
+    ];
   };
 }

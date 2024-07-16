@@ -7,14 +7,16 @@
 , libappindicator-gtk3
 , libnotify
 , librsvg
-, python3
+, python3Packages
 , udisks2
-, wrapGAppsHook
+, wrapGAppsHook3
+, testers
+, udiskie
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.1";
+  version = "2.5.3";
 
   pyproject = true;
 
@@ -22,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-bmpofyW5IBRmVlzHP9YRlI/JNnnamKfF9jCG85G0wBc=";
+    hash = "sha256-asrVQR0d+5l76COsXp88srtGZQHU+AwbP3HwDiwRlnE=";
   };
 
   patches = [
@@ -37,8 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     asciidoc # Man page
     gobject-introspection
     installShellFiles
-    python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   dontWrapGApps = true;
@@ -51,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     udisks2
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     docopt
     keyutils
     pygobject3
@@ -74,9 +79,13 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = udiskie;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";

@@ -7,39 +7,31 @@
 , wrapQtAppsHook
 , exiv2
 , graphicsmagick
-, kimageformats
 , libarchive
 , libraw
 , mpv
 , poppler
 , pugixml
 , qtbase
+, qtcharts
 , qtdeclarative
-, qtgraphicaleffects
+, qtimageformats
+, qtlocation
 , qtmultimedia
-, qtquickcontrols
-, qtquickcontrols2
+, qtpositioning
+, qtsvg
+, zxing-cpp
+, qtwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "3.4";
+  version = "4.5";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-kVf9+zI9rtEMmS0N4qrN673T/1fnqfcV3hQPnMXMLas=";
+    hash = "sha256-QFziMNRhiM4LaNJ8RkJ0iCq/8J82wn0F594qJeSN3Lw=";
   };
-
-  postPatch = ''
-    # exiv2 0.28.1
-    substituteInPlace CMakeLists.txt \
-      --replace "exiv2lib" "exiv2"
-  ''
-  # error: no member named 'setlocale' in namespace 'std'; did you mean simply 'setlocale'?
-  + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cplusplus/main.cpp \
-      --replace "std::setlocale" "setlocale"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -51,29 +43,37 @@ stdenv.mkDerivation rec {
   buildInputs = [
     exiv2
     graphicsmagick
-    kimageformats
     libarchive
     libraw
     mpv
     poppler
     pugixml
     qtbase
+    qtcharts
     qtdeclarative
-    qtgraphicaleffects
+    qtimageformats
+    qtlocation
     qtmultimedia
-    qtquickcontrols
-    qtquickcontrols2
+    qtpositioning
+    qtsvg
+    zxing-cpp
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   cmakeFlags = [
-    "-DDEVIL=OFF"
-    "-DCHROMECAST=OFF"
-    "-DFREEIMAGE=OFF"
-    "-DIMAGEMAGICK=OFF"
+    (lib.cmakeBool "DEVIL" false)
+    (lib.cmakeBool "CHROMECAST" false)
+    (lib.cmakeBool "FREEIMAGE" false)
+    (lib.cmakeBool "IMAGEMAGICK" false)
   ];
 
-  preConfigure = ''
-    export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
+  env.MAGICK_LOCATION = "${graphicsmagick}/include/GraphicsMagick";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/photoqt.app $out/Applications
+    makeWrapper $out/{Applications/photoqt.app/Contents/MacOS,bin}/photoqt
   '';
 
   meta = {

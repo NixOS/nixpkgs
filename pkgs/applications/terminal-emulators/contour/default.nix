@@ -1,15 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
+, boxed-cpp
 , freetype
 , fontconfig
 , libunicode
 , libutempter
 , termbench-pro
 , qtmultimedia
+, qt5compat
 , wrapQtAppsHook
 , pcre
 , boost
@@ -28,19 +29,18 @@
 
 stdenv.mkDerivation (final: {
   pname = "contour";
-  version = "0.3.12.262";
+  version = "0.4.3.6442";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     rev = "v${final.version}";
-    hash = "sha256-4R0NyUtsyr3plYfVPom+EjJ5W0Cb/uuaSB5zyJ0yIB4=";
+    hash = "sha256-m3BEhGbyQm07+1/h2IRhooLPDewmSuhRHOMpWPDluiY=";
   };
 
-  outputs = [ "out" "terminfo" ];
+  patches = [ ./dont-fix-app-bundle.diff ];
 
-  # fix missing <QtMultimedia/QAudioSink> on Darwin and codesign the binary
-  patches = [ ./contour-cmakelists.diff ./macos-codesign.diff ];
+  outputs = [ "out" "terminfo" ];
 
   nativeBuildInputs = [
     cmake
@@ -52,11 +52,13 @@ stdenv.mkDerivation (final: {
   ] ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [
+    boxed-cpp
     fontconfig
     freetype
     libunicode
     termbench-pro
     qtmultimedia
+    qt5compat
     pcre
     boost
     catch2
@@ -69,11 +71,6 @@ stdenv.mkDerivation (final: {
   ++ lib.optionals stdenv.isDarwin [ utmp ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
-
-  preConfigure = ''
-    # Don't fix Darwin app bundle
-    sed -i '/fixup_bundle/d' src/contour/CMakeLists.txt
-  '';
 
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, autoPatchelfHook
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
@@ -17,7 +16,6 @@ buildDotnetModule rec {
     hash = "sha512-aUjjT5Qf64wrKRn1vkwJadMOBWMkvsXUjtZ7S3/ZWAh1CCDkQNO84mSbtbVc9ny0fKeJEqaDX2tJNwq7pYqAbA==";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
   projectFile = "inklecate/inklecate.csproj";
@@ -29,6 +27,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";
+    mainProgram = "inklecate";
     longDescription = ''
       Inklecate is a command-line compiler for ink, inkle's open source
       scripting language for writing interactive narrative

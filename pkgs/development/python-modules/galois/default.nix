@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, setuptools-scm
-, pythonOlder
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-xdist
-, numpy
-, numba
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  setuptools-scm,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-xdist,
+  numpy,
+  numba,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.7";
+  version = "0.3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,14 +22,11 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dWYnD+Byh0orRg20/nhu8ILooFBeHysxQ403boDVqYk=";
+    hash = "sha256-GHvLE6xTY37MCDlGOmvyqi42ORRk1W8UcQXqH3Ty/c4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -43,7 +40,10 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pythonRelaxDeps = [ "numpy" "numba" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "numba"
+  ];
 
   pythonImportsCheck = [ "galois" ];
 

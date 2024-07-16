@@ -17,6 +17,7 @@ buildNimPackage (finalAttrs: {
 
   meta = {
     description = "Terminal file manager written in Nim";
+    mainProgram = "nimmm";
     homepage = "https://github.com/joachimschmidt557/nimmm";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

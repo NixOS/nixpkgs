@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , options
+, ...
 }:
 
 let
@@ -15,7 +16,7 @@ in {
     telemetryPath = lib.mkOption {
       type = lib.types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
@@ -24,7 +25,7 @@ in {
       type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/root/prometheus-php-fpm-exporter.env";
-      description = lib.mdDoc ''
+      description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the

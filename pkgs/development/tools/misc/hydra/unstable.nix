@@ -124,25 +124,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-12-04";
+  version = "2024-03-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "4dc8fe0b08edc421c251270ccd4be3e5bf9d66b4";
-    hash = "sha256-FjyMb5ZbPa2GLrRuFMUP/foKb0KvXFKThvgc9faFIw8=";
+    rev = "8f56209bd6f3b9ec53d50a23812a800dee7a1969";
+    hash = "sha256-mhEj02VruXPmxz3jsKHMov2ERNXk9DwaTAunWEO1iIQ=";
   };
-
-  patches = [
-    # hydra-eval-jobs: don't use restrict-eval for Flakes
-    # https://github.com/NixOS/hydra/pull/1257
-    # should be removed when https://github.com/NixOS/nix/pull/9547
-    # lands in the nix version used by hydra
-    (fetchpatch2 {
-      url = "https://github.com/NixOS/hydra/commit/9370b0ef977bff7e84ac07a81a0e31e75989276b.patch";
-      hash = "sha256-BRenC0lpWPgzfx42MPJBQ9VBamh5hZXuuVe6TXYKkdE=";
-    })
-  ];
 
   buildInputs = [
     unzip
@@ -217,6 +206,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [
+    # https://github.com/NixOS/hydra/security/advisories/GHSA-2p75-6g9f-pqgx
+    (fetchpatch2 {
+      name = "CVE-2024-32657.patch";
+      url = "https://github.com/NixOS/hydra/commit/b72528be5074f3e62e9ae2c2ae8ef9c07a0b4dd3.patch";
+      hash = "sha256-+y27N8AIaHj13mj0LwW7dkpzfzZ4xfjN8Ld23c5mzuU=";
+    })
+  ];
+
   postPatch = ''
     # Change 5s timeout for init to 30s
     substituteInPlace t/lib/HydraTestContext.pm \
@@ -246,8 +244,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontStrip = true;
-
   doCheck = true;
 
   passthru = {
@@ -260,6 +256,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi das_j ];
+    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
   };
 }

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchhg
-, fetchpatch
 , runCommand
 
 , arpa2common
@@ -22,7 +21,7 @@
 , libuuid
 , libxml2
 , lmdb
-, luajit
+, luajit_openresty
 , msgpuck
 , openssl
 , opentracing-cpp
@@ -77,7 +76,7 @@ let self = {
     meta = with lib; {
       description = "Validates Akamai v2 query string tokens";
       homepage = "https://github.com/kaltura/nginx-akamai-token-validate-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };
@@ -231,14 +230,16 @@ let self = {
     };
   };
 
-  echo = {
+  echo = rec {
     name = "echo";
+    version = "0.63";
+
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v0.62";
-      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
+      rev = "v${version}";
+      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
     };
 
     meta = with lib; {
@@ -371,31 +372,26 @@ let self = {
 
   lua = rec {
     name = "lua";
+    version = "0.10.26";
+
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.22";
-      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
+      rev = "v${version}";
+      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
 
-    preConfigure = let
-      # fix compilation against nginx 1.23.0
-      nginx-1-23-patch = fetchpatch {
-        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
-        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
-      };
-    in ''
-      export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+    preConfigure = ''
+      export LUAJIT_LIB="${luajit_openresty}/lib"
+      export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src
       cp -r "${src}/" "$lua_src"
       chmod -R +w "$lua_src"
-      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
       export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
       unset lua_src
     '';
@@ -420,7 +416,7 @@ let self = {
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
     allowMemoryWriteExecute = true;
 
     meta = with lib; {
@@ -458,15 +454,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -681,7 +677,7 @@ let self = {
     meta = with lib; {
       description = "Generates CDN tokens, either as a cookie or as a query string parameter";
       homepage = "https://github.com/kaltura/nginx-secure-token-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };
@@ -782,8 +778,8 @@ let self = {
       name = "spnego-http-auth";
       owner = "stnoonan";
       repo = "spnego-http-auth-nginx-module";
-      rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
-      sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
+      rev = "3575542b3147bd03a6c68a750c3662b0d72ed94e";
+      hash = "sha256-s0m5h7m7dsPD5o2SvBb9L2kB57jwXZK5SkdkGuOmlgs=";
     };
 
     inputs = [ libkrb5 ];
@@ -792,7 +788,7 @@ let self = {
       description = "SPNEGO HTTP Authentication Module";
       homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -1000,7 +996,7 @@ let self = {
     meta = with lib; {
       description = "VOD packager";
       homepage = "https://github.com/kaltura/nginx-vod-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };
@@ -1029,8 +1025,8 @@ let self = {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "0.1.0";
-      hash = "sha256-8SBU9hJnKtNrwbpioy+Z/mfiVuqAx+U1t64m5tfEy6o=";
+      rev = "0.1.1";
+      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
     };
 
     inputs = [ zstd ];

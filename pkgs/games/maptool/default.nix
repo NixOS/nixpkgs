@@ -8,25 +8,26 @@
 , makeDesktopItem
 , openjfx
 , stdenvNoCC
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 let
   pname = "maptool";
-  version = "1.13.2";
+  version = "1.14.3";
   repoBase = "https://github.com/RPTools/maptool";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-Ntmro+t4qpP5BXW20t97ki0wt2NKaK5yQarsxDEKbb0=";
+    hash = "sha256-KjP6zugQw9r1hvdxqOgTrt4hYMYg+lgjkgkj3tfb38s=";
   };
 
   meta = with lib; {
     description = "Virtual Tabletop for playing roleplaying games with remote players or face to face";
+    mainProgram = "maptool";
     homepage = "https://www.rptools.net/toolbox/maptool/";
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };
@@ -81,7 +82,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     copyDesktopItems
     libarchive
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   desktopItems = [

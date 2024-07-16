@@ -1,38 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, installShellFiles
-, ansible
-, cryptography
-, importlib-resources
-, jinja2
-, junit-xml
-, lxml
-, ncclient
-, packaging
-, paramiko
-, ansible-pylibssh
-, passlib
-, pexpect
-, psutil
-, pycrypto
-, pyyaml
-, requests
-, resolvelib
-, scp
-, windowsSupport ? false, pywinrm
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  installShellFiles,
+  docutils,
+  ansible,
+  cryptography,
+  importlib-resources,
+  jinja2,
+  junit-xml,
+  lxml,
+  ncclient,
+  packaging,
+  paramiko,
+  ansible-pylibssh,
+  passlib,
+  pexpect,
+  psutil,
+  pycrypto,
+  pyyaml,
+  requests,
+  resolvelib,
+  scp,
+  windowsSupport ? false,
+  pywinrm,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.15.5";
+  version = "2.16.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jMU5y41DSa8//ZAccHIvenogOuZCfdrJX/31RqbkFgI=";
+    hash = "sha256-zdKbDsPyDDVlc1Wi9qnB0M8RMdqZzJpKNAGAGwqzbW0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -41,48 +43,48 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
+
+    patchShebangs --build packaging/cli-doc/build.py
   '';
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    pythonRelaxDepsHook
+    docutils
   ];
 
-  propagatedBuildInputs = [
-    # depend on ansible instead of the other way around
-    ansible
-    # from requirements.txt
-    cryptography
-    jinja2
-    packaging
-    passlib
-    pyyaml
-    resolvelib # This library is a PITA, since ansible requires a very old version of it
-    # optional dependencies
-    junit-xml
-    lxml
-    ncclient
-    paramiko
-    ansible-pylibssh
-    pexpect
-    psutil
-    pycrypto
-    requests
-    scp
-    xmltodict
-  ] ++ lib.optionals windowsSupport [
-    pywinrm
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      # depend on ansible instead of the other way around
+      ansible
+      # from requirements.txt
+      cryptography
+      jinja2
+      packaging
+      passlib
+      pyyaml
+      resolvelib
+      # optional dependencies
+      junit-xml
+      lxml
+      ncclient
+      paramiko
+      ansible-pylibssh
+      pexpect
+      psutil
+      pycrypto
+      requests
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals windowsSupport [ pywinrm ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ];
 
-  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
-    "importlib-resources"
-  ];
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies

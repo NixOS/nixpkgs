@@ -1,41 +1,45 @@
-{ lib
-, mkDerivation
-, fetchurl
-, autoPatchelfHook
-, pkg-config
-, curl
-, ffmpeg
-, openssl
-, qtbase
-, zlib
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  autoPatchelfHook,
+  pkg-config,
+  curl,
+  ffmpeg,
+  openssl,
+  qtbase,
+  zlib,
 
-, withJava ? true
-, jre_headless
+  withJava ? true,
+  jre_headless,
 }:
 
 let
-  version = "1.17.5";
+  version = "1.17.7";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "ywCcMfaWAeL2bjFZJaCa0XW60EHyfFCW17Bt1QBN8E8=";
+    hash = "sha256-jFvIMbyVKx+HPMhFDGTjktsLJHm2JtGA8P/JZWaJUdA=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "/C9LDcUxF6tJkn2aQV+nMILRpK5H3wxOMMxHEMTC/CI=";
+    hash = "sha256-di5VLUb57HWnxi3LfZfA/Z5qFRINDvb1oIDO4pHToO8=";
   };
-
-in mkDerivation {
+in
+mkDerivation {
   pname = "makemkv";
   inherit version;
 
-  srcs = [ src_bin src_oss ];
+  srcs = [
+    src_bin
+    src_oss
+  ];
 
   sourceRoot = "makemkv-oss-${version}";
 
@@ -43,18 +47,25 @@ in mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [
+    ffmpeg
+    openssl
+    qtbase
+    zlib
+  ];
 
   runtimeDependencies = [ (lib.getLib curl) ];
 
   qtWrapperArgs =
     let
       binPath = lib.makeBinPath [ jre_headless ];
-    in lib.optionals withJava [
-      "--prefix PATH : ${binPath}"
-    ];
+    in
+    lib.optionals withJava [ "--prefix PATH : ${binPath}" ];
 
   installPhase = ''
     runHook preInstall
@@ -84,9 +95,12 @@ in mkDerivation {
       expiration date.
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = [ licenses.unfree licenses.lgpl21 ];
+    license = [
+      licenses.unfree
+      licenses.lgpl21
+    ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ jchw ];
   };
 }

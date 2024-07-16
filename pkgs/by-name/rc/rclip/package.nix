@@ -4,14 +4,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
-  version = "1.7.6";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    rev = "v${version}";
-    hash = "sha256-lWaWq+dcAa/2pONka4xRpixqDuL6iYDF46vCyCmVWwE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-02ZbeUw+O7tBQwauklaPPcgNasG+mYrSnw9TGJqtJfk=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -29,11 +29,20 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
+  pythonRelaxDeps = [ "torch" "torchvision" ];
+
   pythonImportsCheck = [ "rclip" ];
 
   disabledTestPaths = [
     # requires network
     "tests/e2e/test_rclip.py"
+  ];
+
+  disabledTests = [
+    # requires network
+    "test_text_model_produces_the_same_vector_as_the_main_model"
+    "test_loads_text_model_when_text_processing_only_requested_and_checkpoint_exists"
+    "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
   ];
 
   meta = with lib; {

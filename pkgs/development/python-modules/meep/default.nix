@@ -1,31 +1,33 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, mpiCheckPhaseHook
-, gfortran
-, mpi
-, blas
-, lapack
-, fftw
-, hdf5-mpi
-, swig
-, gsl
-, harminv
-, libctl
-, libGDSII
-, openssh
-, guile
-, python
-, numpy
-, scipy
-, matplotlib
-, h5py-mpi
-, cython
-, autograd
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  autoreconfHook,
+  pkg-config,
+  mpiCheckPhaseHook,
+  gfortran,
+  mpi,
+  blas,
+  lapack,
+  fftw,
+  hdf5-mpi,
+  swig,
+  gsl,
+  harminv,
+  libctl,
+  libGDSII,
+  openssh,
+  guile,
+  python,
+  numpy,
+  scipy,
+  matplotlib,
+  h5py-mpi,
+  cython,
+  autograd,
+  mpi4py,
 }:
 
 assert !blas.isILP64;
@@ -33,16 +35,22 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.28.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-o/Xrd/Gn1RsbB+ZfggGH6/ugdsGtfTe2RgaHdpY5AyE=";
+    hash = "sha256-TB85obdk8pSWRaz3+3I6P6+dQtCHosWHRnKGck/wG9Q=";
   };
 
   format = "other";
+
+  # https://github.com/NanoComp/meep/issues/2819
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace configure.ac doc/docs/setup.py python/visualization.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
 
   # MPI is needed in nativeBuildInputs too, otherwise MPI libs will be missing
   # at runtime
@@ -67,16 +75,20 @@ buildPythonPackage rec {
     gsl
   ];
 
-  propagatedBuildInputs = [
-    mpi
-    numpy
-    scipy
-    matplotlib
-    h5py-mpi
-    cython
-    autograd
-    mpi4py
-  ];
+  propagatedBuildInputs =
+    [
+      mpi
+      numpy
+      scipy
+      matplotlib
+      h5py-mpi
+      cython
+      autograd
+      mpi4py
+    ]
+    ++ lib.optionals (!pythonOlder "3.12") [
+      setuptools # used in python/visualization.py
+    ];
 
   propagatedUserEnvPkgs = [ mpi ];
 
@@ -99,21 +111,26 @@ buildPythonPackage rec {
     "--enable-maintainer-mode"
   ];
 
-  passthru = { inherit mpi; };
+  passthru = {
+    inherit mpi;
+  };
 
   /*
-  This test is taken from the MEEP tutorial "Fields in a Waveguide" at
-  <https://meep.readthedocs.io/en/latest/Python_Tutorials/Basics/>.
-  It is important, that the test actually performs a calculation
-  (calls `sim.run()`), as only then MPI will be initialised and MPI linking
-  errors can be caught.
+    This test is taken from the MEEP tutorial "Fields in a Waveguide" at
+    <https://meep.readthedocs.io/en/latest/Python_Tutorials/Basics/>.
+    It is important, that the test actually performs a calculation
+    (calls `sim.run()`), as only then MPI will be initialised and MPI linking
+    errors can be caught.
   */
   doCheck = true;
-  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    openssh
+  ];
   checkPhase = ''
     runHook preCheck
 
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # Generate a python test script
     cat > test.py << EOF
@@ -145,6 +162,9 @@ buildPythonPackage rec {
     homepage = "https://meep.readthedocs.io/en/latest/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
   };
 }

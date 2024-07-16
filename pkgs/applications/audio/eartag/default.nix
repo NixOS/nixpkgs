@@ -15,11 +15,12 @@
 , gtk4
 , librsvg
 , python3Packages
+, blueprint-compiler
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.5.1";
+  version = "0.6.1";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-tHBEz4sZsWOxDkdUd/3zMta8vOhuzv4G01dtjKBX/D0=";
+    hash = "sha256-CAJz9p1PJxq3VDxzZEHD860xINCQF722bPaf7psNztY=";
   };
 
   postPatch = ''
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     gettext
     gobject-introspection
     wrapGAppsHook4
+    blueprint-compiler
   ] ++ lib.optional stdenv.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [
@@ -57,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
-    eyeD3
+    eyed3
     pillow
     mutagen
     pytaglib
@@ -77,6 +79,7 @@ python3Packages.buildPythonApplication rec {
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.
     license = licenses.mit;
+    mainProgram = "eartag";
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }

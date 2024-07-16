@@ -1,14 +1,14 @@
-{ lib, buildNpmPackage, fetchFromGitHub, jq }:
+{ lib, buildNpmPackage, fetchFromGitHub, jq, quicktype, testers }:
 
 buildNpmPackage rec {
   pname = "quicktype";
-  version = "23.0.80"; # version from https://npm.im/quicktype
+  version = "23.0.105"; # version from https://npm.im/quicktype
 
   src = fetchFromGitHub {
     owner = "glideapps";
     repo = "quicktype";
-    rev = "2a60269d431b392b658e671df2c1fb5479aec855"; # version not tagged
-    hash = "sha256-3VW/CyvgetS9sqLflJgOmQERn4e/0nLQsezRHb6km3s=";
+    rev = "0b5924db1d3858d6f4abe5923cce53b2f4e581aa"; # version not tagged
+    hash = "sha256-JqpTnIhxLxLECqW8DjG1Oig/HOs9PpwmjdfhwE8sJAA=";
   };
 
   postPatch = ''
@@ -21,11 +21,15 @@ buildNpmPackage rec {
     mv packages/ $out/lib/node_modules/quicktype/
   '';
 
+  passthru.tests = {
+    version = testers.testVersion { package = quicktype; };
+  };
+
   meta = with lib; {
     description = "Generate types and converters from JSON, Schema, and GraphQL";
     homepage = "https://quicktype.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "quicktype";
   };
 }

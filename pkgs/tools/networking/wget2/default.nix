@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
+    hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "successor of GNU Wget, a file and recursive website downloader.";
+    description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
       functions needed by a web client.
@@ -102,5 +102,6 @@ stdenv.mkDerivation rec {
     # wget2 GPLv3+; libwget LGPLv3+
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "wget2";
   };
 }

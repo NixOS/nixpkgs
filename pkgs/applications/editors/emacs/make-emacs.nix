@@ -45,6 +45,7 @@
 , libxml2
 , llvmPackages_14
 , m17n_lib
+, mailutils
 , makeWrapper
 , motif
 , ncurses
@@ -58,7 +59,7 @@
 , tree-sitter
 , texinfo
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -68,15 +69,18 @@
 , withAlsaLib ? false
 , withAthena ? false
 , withCsrc ? true
+, withDbus ? stdenv.isLinux
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGconf ? false
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+, withMailutils ? true
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
+, withSelinux ? stdenv.isLinux
 , withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
@@ -210,7 +214,7 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook3;
 
   buildInputs = [
     gettext
@@ -227,8 +231,9 @@ mkDerivation (finalAttrs: {
     alsa-lib
   ] ++ lib.optionals withGpm [
     gpm
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withDbus [
     dbus
+  ] ++ lib.optionals withSelinux [
     libselinux
   ] ++ lib.optionals (!stdenv.isDarwin && withGTK3) [
     gsettings-desktop-schemas
@@ -293,51 +298,62 @@ mkDerivation (finalAttrs: {
     OSAKit
     Quartz
     QuartzCore
-    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
     ImageCaptureCore
     ImageIO
+  ] ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
+    UniformTypeIdentifiers
+  ];
+
+  # Emacs needs to find movemail at run time, see info (emacs) Movemail
+  propagatedUserEnvPkgs = lib.optionals withMailutils [
+    mailutils
   ];
 
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--disable-build-details" # for a (more) reproducible build
-    "--with-modules"
+    (lib.enableFeature false "build-details") # for a (more) reproducible build
+    (lib.withFeature true "modules")
   ] ++ (if withNS then [
-    "--disable-ns-self-contained"
+    (lib.enableFeature false "ns-self-contained")
   ] else if withX then [
-    "--with-x-toolkit=${toolkit}"
-    "--with-xft"
-    "--with-cairo"
+    (lib.withFeatureAs true "x-toolkit" toolkit)
+    (lib.withFeature true "cairo")
+    (lib.withFeature true "xft")
   ] else if withPgtk then [
-    "--with-pgtk"
+    (lib.withFeature true "pgtk")
   ] else [
-    "--with-gif=no"
-    "--with-jpeg=no"
-    "--with-png=no"
-    "--with-tiff=no"
-    "--with-x=no"
-    "--with-xpm=no"
+    (lib.withFeature false "gif")
+    (lib.withFeature false "jpeg")
+    (lib.withFeature false "png")
+    (lib.withFeature false "tiff")
+    (lib.withFeature false "x")
+    (lib.withFeature false "xpm")
   ])
   ++ lib.optionals (variant == "macport") [
-    "--enable-mac-app=$$out/Applications"
-    "--with-gnutls=yes"
-    "--with-mac"
-    "--with-xml2=yes"
+    (lib.enableFeatureAs true "mac-app" "$$out/Applications")
+    (lib.withFeature true "gnutls")
+    (lib.withFeature true "mac")
+    (lib.withFeature true "xml2")
   ]
-  ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
+  ++ lib.optionals stdenv.isDarwin [
+    (lib.withFeature withNS "ns")
+  ]
   ++ [
     (lib.withFeature withCompressInstall "compress-install")
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
     (lib.withFeature withNativeCompilation "native-compilation")
     (lib.withFeature withImageMagick "imagemagick")
+    (lib.withFeature withMailutils "mailutils")
     (lib.withFeature withSmallJaDic "small-ja-dic")
     (lib.withFeature withTreeSitter "tree-sitter")
     (lib.withFeature withXinput2 "xinput2")
     (lib.withFeature withXwidgets "xwidgets")
+    (lib.withFeature withDbus "dbus")
+    (lib.withFeature withSelinux "selinux")
   ];
 
   env = lib.optionalAttrs withNativeCompilation {
