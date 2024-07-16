@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.icons.enable = mkOption {
-      type = types.bool;
+    xdg.icons.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to install files to support the
@@ -17,7 +16,7 @@ with lib;
     };
   };
 
-  config = mkIf config.xdg.icons.enable {
+  config = lib.mkIf config.xdg.icons.enable {
     environment.pathsToLink = [
       "/share/icons"
       "/share/pixmaps"
@@ -44,5 +43,4 @@ with lib;
       "/share/pixmaps"
     ];
   };
-
 }
