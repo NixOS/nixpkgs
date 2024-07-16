@@ -471,7 +471,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+        nameValuePair hostName {
           extraConfig = ''
             root * ${pkg hostName cfg}/share/dokuwiki
             file_server
