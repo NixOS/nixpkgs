@@ -29,8 +29,8 @@
 , python3
 , rpm
 , sqlite
-, testers
 , util-linux
+, versionCheckHook
 , vulkan-loader
 , wayland
 , xfce
@@ -118,6 +118,9 @@ stdenv'.mkDerivation (finalAttrs: {
     darwin.moltenvk
   ]);
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
     (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
@@ -152,11 +155,6 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "fastfetch -v | cut -d '(' -f 1";
-      version = "fastfetch ${finalAttrs.version}";
-    };
   };
 
   meta = {

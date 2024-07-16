@@ -3,10 +3,9 @@
 , installShellFiles
 , less
 , lib
-, offpunk
 , python3Packages
-, testers
 , timg
+, versionCheckHook
 , xdg-utils
 , xsel
 }:
@@ -51,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     installManPage man/*.1
   '';
 
-  passthru.tests.version = testers.testVersion { package = offpunk; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Command-line and offline-first smolnet browser/feed reader";

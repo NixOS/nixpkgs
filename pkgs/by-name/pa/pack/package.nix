@@ -3,8 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  testers,
-  pack,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -28,9 +27,11 @@ buildGoModule rec {
     "-X github.com/buildpacks/pack.Version=${version}"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = pack; };
   };
 
   meta = {

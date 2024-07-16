@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nezha-agent,
-  testers,
+  versionCheckHook,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
@@ -29,12 +28,11 @@ buildGoModule rec {
     rm ./pkg/monitor/myip_test.go
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = nezha-agent;
-      command = "${nezha-agent}/bin/agent -v";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/agent";
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Agent of Nezha Monitoring";

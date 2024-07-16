@@ -2,7 +2,7 @@
 , stdenvNoCC
 , fetchzip
 , rpmextract
-, testers
+, versionCheckHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,11 +40,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # Not needed because the binary is statically linked
   dontFixup = true;
 
-  passthru.tests = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "${finalAttrs.meta.mainProgram} -v";
-    version = "00${finalAttrs.version}00.0000";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     # Unfortunately there is no better page for this.

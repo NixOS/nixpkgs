@@ -2,8 +2,7 @@
 , python3Packages
 , fetchFromGitHub
 , nix-update-script
-, testers
-, icloudpd
+, versionCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -59,9 +58,11 @@ python3Packages.buildPythonApplication rec {
     "test_autodelete_invalid_creation_date"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = testers.testVersion { package = icloudpd; };
   };
 
   preBuild = ''

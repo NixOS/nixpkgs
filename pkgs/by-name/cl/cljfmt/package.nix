@@ -2,8 +2,7 @@
 , buildGraalvmNativeImage
 , fetchurl
 , nix-update-script
-, testers
-, cljfmt
+, versionCheckHook
 }:
 
 buildGraalvmNativeImage rec {
@@ -26,11 +25,8 @@ buildGraalvmNativeImage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = cljfmt;
-    command = "cljfmt --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     mainProgram = "cljfmt";

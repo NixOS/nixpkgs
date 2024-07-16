@@ -4,13 +4,13 @@
 , fetchFromGitHub
 , php
 , brotli
-, testers
 , frankenphp
 , darwin
 , libiconv
 , pkg-config
 , makeBinaryWrapper
 , runCommand
+, versionCheckHook
 , writeText
 }:
 
@@ -77,15 +77,15 @@ in buildGoModule rec {
 
   doCheck = false;
 
+  # TODO: real NixOS test with Symfony application
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru = {
     php = phpEmbedWithZts;
     tests = {
-      # TODO: real NixOS test with Symfony application
-      version = testers.testVersion {
-        inherit version;
-        package = frankenphp;
-        command = "frankenphp version";
-      };
       phpinfo = runCommand "php-cli-phpinfo" {
         phpScript = writeText "phpinfo.php" ''
           <?php phpinfo();

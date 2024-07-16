@@ -1,9 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
 , nix-update-script
-, go-critic
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -29,11 +28,13 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "gocritic";
+  versionCheckProgramArg = "version";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = go-critic;
-      command = "gocritic version";
-    };
     updateScript = nix-update-script { };
   };
 

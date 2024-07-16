@@ -2,8 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, testers
-, little_boxes
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,10 +29,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $extrasPath/_little_boxes
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = little_boxes;
-    command = "little_boxes --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Add boxes are input text";

@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, testers, lib, csvq }:
+{ buildGoModule, fetchFromGitHub, lib, versionCheckHook }:
 
 buildGoModule rec {
   pname = "csvq";
@@ -13,10 +13,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-byBYp+iNnnsAXR+T3XmdwaeeBG8oB1EgNkDabzgUC98=";
 
-  passthru.tests.version = testers.testVersion {
-    package = csvq;
-    version = "csvq version ${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "SQL-like query language for CSV";

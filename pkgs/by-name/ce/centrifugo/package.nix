@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , nixosTests
-, testers
-, centrifugo
+, versionCheckHook
 }:
 let
   # Inspect build flags with `go version -m centrifugo`.
@@ -37,15 +36,15 @@ buildGoModule rec {
     "./internal/gen/api"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   passthru = {
     updateScript = nix-update-script { };
     tests = {
       inherit (nixosTests) centrifugo;
-      version = testers.testVersion {
-        package = centrifugo;
-        command = "${pname} version";
-        version = "v${version}";
-      };
     };
   };
 

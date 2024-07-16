@@ -12,6 +12,7 @@ bundlerApp {
   exes = [ "puppet-lint" ];
 
   passthru = {
+    # TODO: use `versionCheckHook` when possible
     tests.version = testers.testVersion {
       package = puppet-lint;
       version = (import ./gemset.nix).puppet-lint.version;

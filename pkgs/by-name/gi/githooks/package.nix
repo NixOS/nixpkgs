@@ -3,9 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   git,
-  testers,
   makeWrapper,
-  githooks
+  versionCheckHook
 }:
 buildGoModule rec {
   pname = "githooks";
@@ -70,11 +69,10 @@ buildGoModule rec {
     wrapProgram "$out/bin/githooks-runner" --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = githooks;
-    command = "githooks-cli --version";
-    inherit version;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "githooks-cli";
 
   meta = with lib; {
     description = "Git hooks manager with per-repo and shared Git hooks including version control";

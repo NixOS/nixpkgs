@@ -4,8 +4,8 @@
 , pkgs
 , overrideSDK
 , darwin
-, testers
 , nix-update-script
+, versionCheckHook
 }:
 let
   stdenv = overrideSDK pkgs.stdenv "11.0";
@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "borders-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  versionCheckProgram = "${placeholder "out"}/bin/borders";
+
+  passthru = {
     updateScript = nix-update-script { };
   };
 

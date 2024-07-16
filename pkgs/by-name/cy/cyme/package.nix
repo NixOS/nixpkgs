@@ -7,8 +7,7 @@
 , darwin
 , libusb1
 , nix-update-script
-, testers
-, cyme
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_run"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = cyme;
-    };
   };
 
   meta = with lib; {

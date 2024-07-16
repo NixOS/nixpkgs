@@ -2,11 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  artalk,
   fetchurl,
   installShellFiles,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 buildGoModule rec {
   pname = "artalk";
@@ -41,6 +40,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   postInstall =
     ''
       # work around case insensitive file systems
@@ -53,10 +55,6 @@ buildGoModule rec {
         --fish <($out/bin/artalk completion fish) \
         --zsh <($out/bin/artalk completion zsh)
     '';
-
-  passthru.tests = {
-    version = testers.testVersion { package = artalk; };
-  };
 
   meta = {
     description = "Self-hosted comment system";

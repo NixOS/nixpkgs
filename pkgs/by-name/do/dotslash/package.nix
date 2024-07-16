@@ -1,5 +1,5 @@
 { lib, rustPlatform, fetchCrate
-, testers, nix-update-script, dotslash
+, nix-update-script, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-URZ6HfyfY2Fh4iVMoG4OkQFFuLIRV7s5hlZLUFzeUvA=";
   doCheck = false; # http tests
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = testers.testVersion {
-      package = dotslash;
-    };
   };
 
   meta = with lib; {

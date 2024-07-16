@@ -25,6 +25,7 @@ buildNpmPackage {
   passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
+    # TODO: maybe use `versionCheckHook`?
     version = testers.testVersion {
       package = xunit-viewer;
       version = "unknown"; # broken, but at least it runs

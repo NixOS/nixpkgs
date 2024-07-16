@@ -5,7 +5,7 @@
   lib,
   makeWrapper,
   stdenvNoCC,
-  testers,
+  versionCheckHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -29,11 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "${lib.getExe finalAttrs.finalPackage} --version";
-      package = finalAttrs.finalPackage;
-    };
     updateScript = gitUpdater {
       url = "https://github.com/wiremock/wiremock.git";
       ignoredVersions = "(alpha|beta|rc).*";

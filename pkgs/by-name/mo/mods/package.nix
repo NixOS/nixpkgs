@@ -4,8 +4,7 @@
   installShellFiles,
   fetchFromGitHub,
   gitUpdater,
-  testers,
-  mods,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -39,12 +38,15 @@ buildGoModule rec {
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
     };
-
-    tests.version = testers.testVersion {
-      package = mods;
-      command = "HOME=$(mktemp -d) mods -v";
-    };
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+  versionCheckProgramArg = "-v";
 
   postInstall = ''
     export HOME=$(mktemp -d)

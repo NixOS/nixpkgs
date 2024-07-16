@@ -7,8 +7,7 @@
 , fetchpatch
 , installShellFiles
 , nix-update-script
-, testers
-, awscli2
+, versionCheckHook
 }:
 
 let
@@ -121,6 +120,8 @@ py.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   postInstall = ''
     installShellCompletion --cmd aws \
       --bash <(echo "complete -C $out/bin/aws_completer aws") \
@@ -154,16 +155,13 @@ py.pkgs.buildPythonApplication rec {
     "awscli"
   ];
 
+  versionCheckProgram = "${placeholder "out"}/bin/aws";
+
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [ "--version-regex" "^(2\.(.*))" ];
-    };
-    tests.version = testers.testVersion {
-      package = awscli2;
-      command = "aws --version";
-      inherit version;
     };
   };
 

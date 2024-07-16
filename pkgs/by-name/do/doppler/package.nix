@@ -1,9 +1,8 @@
 { buildGoModule
-, doppler
 , fetchFromGitHub
 , installShellFiles
 , lib
-, testers
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -34,10 +33,8 @@ buildGoModule rec {
       --zsh <($out/bin/doppler completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = doppler;
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Official CLI for interacting with your Doppler Enclave secrets and configuration";

@@ -4,8 +4,8 @@
   stdenv,
   darwin,
   fetchFromGitHub,
-  testers,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -65,12 +65,10 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "sketchybar-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 

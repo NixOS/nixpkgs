@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub, testers }:
+{ lib, buildNimPackage, fetchFromGitHub, versionCheckHook }:
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
@@ -17,11 +17,8 @@ buildNimPackage (finalAttrs: {
     "-d:NimblePkgVersion=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Top-like system monitoring tool";

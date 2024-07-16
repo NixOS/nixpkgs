@@ -5,8 +5,7 @@
 , openssl
 , rustPlatform
 , darwin
-, testers
-, komac
+, versionCheckHook
 }:
 
 let
@@ -33,12 +32,8 @@ rustPlatform.buildRustPackage {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-
-    package = komac;
-    command = "komac --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Community Manifest Creator for WinGet";

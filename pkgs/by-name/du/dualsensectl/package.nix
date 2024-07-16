@@ -6,7 +6,7 @@
   dbus,
   hidapi,
   udev,
-  testers,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -35,8 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 

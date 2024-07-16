@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
-, otel-desktop-viewer
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -25,11 +24,8 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = otel-desktop-viewer;
-    command = "otel-desktop-viewer --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${version}";

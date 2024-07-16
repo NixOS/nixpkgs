@@ -2,8 +2,8 @@
 , stdenv
 , cmake
 , fetchFromGitHub
-, testers
 , texinfo
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,12 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
      install -Dt $info/share/info/ quickjs.info)
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "qjs --help || true";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "qjs";
 
   meta = with lib; {
     description = "Mighty JavaScript engine";

@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
+{ buildGoModule, fetchFromGitHub, installShellFiles, lib, versionCheckHook }:
 
 buildGoModule rec {
   pname = "tenv";
@@ -30,11 +30,12 @@ buildGoModule rec {
       --fish <($out/bin/tenv completion fish)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    command = "HOME=$TMPDIR tenv --version";
-    package = tenv;
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = {
     changelog = "https://github.com/tofuutils/tenv/releases/tag/v${version}";

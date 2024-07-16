@@ -12,6 +12,7 @@ bundlerApp {
   exes = [ "puppet" ];
 
   passthru = {
+    # TODO: use `versionCheckHook` when possible
     tests.version = testers.testVersion {
       package = puppet;
       command = "HOME=$(mktemp -d) puppet --version";

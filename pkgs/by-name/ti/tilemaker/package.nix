@@ -10,8 +10,8 @@
 , rapidjson
 , shapelib
 , sqlite
+, versionCheckHook
 , zlib
-, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,10 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../server/static $out/share/tilemaker
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "tilemaker --help";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Make OpenStreetMap vector tiles without the stack";

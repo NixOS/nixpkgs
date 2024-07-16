@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, testers, lint-staged }:
+{ lib, buildNpmPackage, fetchFromGitHub, versionCheckHook }:
 
 buildNpmPackage rec {
   pname = "lint-staged";
@@ -22,7 +22,8 @@ buildNpmPackage rec {
       '"version": "${version}"'
   '';
 
-  passthru.tests.version = testers.testVersion { package = lint-staged; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Run linters on git staged files";

@@ -17,7 +17,7 @@
   # env
   fetchurl,
 
-  testers,
+  versionCheckHook,
   mistral-rs,
 
   cudaPackages,
@@ -172,10 +172,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=sampler::tests::test_gumbel_speculative"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion { package = mistral-rs; };
-
       withMkl = mistral-rs.override { acceleration = "mkl"; };
       withCuda = mistral-rs.override { acceleration = "cuda"; };
       withMetal = mistral-rs.override { acceleration = "metal"; };

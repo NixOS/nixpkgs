@@ -2,8 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  dotenvx,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
@@ -21,13 +20,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = dotenvx;
-      # access to the home directory
-      command = "HOME=$TMPDIR dotenvx --version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = {
     description = "Better dotenv–from the creator of `dotenv";

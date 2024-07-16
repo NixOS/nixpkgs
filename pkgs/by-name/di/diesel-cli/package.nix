@@ -12,9 +12,8 @@
   pkg-config,
   postgresql,
   sqlite,
-  testers,
+  versionCheckHook,
   zlib,
-  diesel-cli,
   sqliteSupport ? true,
   postgresqlSupport ? true,
   mysqlSupport ? true,
@@ -53,6 +52,9 @@ rustPlatform.buildRustPackage rec {
       zlib
     ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   buildNoDefaultFeatures = true;
   buildFeatures =
     lib.optional sqliteSupport "sqlite"
@@ -87,8 +89,9 @@ rustPlatform.buildRustPackage rec {
   # DSO missing from command line" errors for libz and libssl.
   env.NIX_LDFLAGS = lib.optionalString mysqlSupport "-lz -lssl -lcrypto";
 
+  versionCheckProgram = "${placeholder "out"}/bin/diesel";
+
   passthru = {
-    tests.version = testers.testVersion { package = diesel-cli; };
     updateScript = nix-update-script { };
   };
 

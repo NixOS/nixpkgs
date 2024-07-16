@@ -2,8 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
-, testers
-, gofumpt
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -32,12 +31,11 @@ buildGoModule rec {
     "-skip=^TestScript/diagnose$"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = gofumpt;
-      version = "v${version}";
-    };
   };
 
   meta = with lib; {

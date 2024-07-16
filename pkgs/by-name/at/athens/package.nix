@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, testers
-, athens
+, versionCheckHook
 }:
 buildGoModule rec {
   pname = "athens";
@@ -26,11 +25,8 @@ buildGoModule rec {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = athens;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Go module datastore and proxy";

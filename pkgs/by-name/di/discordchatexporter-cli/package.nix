@@ -2,8 +2,7 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, testers
-, discordchatexporter-cli
+, versionCheckHook
 }:
 
 buildDotnetModule rec {
@@ -26,12 +25,11 @@ buildDotnetModule rec {
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = ./updater.sh;
-    tests.version = testers.testVersion {
-      package = discordchatexporter-cli;
-      version = "v${version}";
-    };
   };
 
   meta = with lib; {

@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests.version =
+    # TODO: Use `versionCheckHook`
     let
       tester = callPackage ./tests/001-version.nix {};
     in

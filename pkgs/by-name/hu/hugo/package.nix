@@ -4,8 +4,7 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
-, testers
-, hugo
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -42,11 +41,10 @@ buildGoModule rec {
       --zsh  <(${emulator} $out/bin/hugo completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = hugo;
-    command = "hugo version";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = {
     changelog = "https://github.com/gohugoio/hugo/releases/tag/v${version}";

@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, testers
-, wstunnel
+, versionCheckHook
 , nixosTests
 }:
 
@@ -28,8 +27,10 @@ rustPlatform.buildRustPackage {
     "--skip=tcp::tests::test_proxy_connection"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
-    version = testers.testVersion { package = wstunnel; };
     nixosTest = nixosTests.wstunnel;
   };
 

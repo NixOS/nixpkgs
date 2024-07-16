@@ -7,11 +7,10 @@
   overrideSDK,
   pnpm_9,
   python3,
-  renovate,
-  testers,
   xcbuild,
   nixosTests,
   nix-update-script,
+  versionCheckHook
 }:
 
 let
@@ -89,9 +88,11 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion { package = renovate; };
       vm-test = nixosTests.renovate;
     };
     updateScript = nix-update-script { };

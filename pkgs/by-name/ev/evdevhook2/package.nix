@@ -10,7 +10,7 @@
   libevdev,
   libgee,
   udev,
-  testers,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -56,12 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "Evdevhook ${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 

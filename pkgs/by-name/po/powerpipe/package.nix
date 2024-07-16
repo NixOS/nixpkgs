@@ -5,8 +5,7 @@
   lib,
   makeWrapper,
   nix-update-script,
-  powerpipe,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -51,12 +50,10 @@ buildGoModule rec {
       --set-default POWERPIPE_TELEMETRY none
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "${lib.getExe powerpipe} --version";
-      package = powerpipe;
-      version = "v${version}";
-    };
     updateScript = nix-update-script { };
   };
 

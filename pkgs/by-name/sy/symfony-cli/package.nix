@@ -2,10 +2,9 @@
 , fetchFromGitHub
 , lib
 , nix-update-script
-, testers
-, symfony-cli
 , nssTools
 , makeBinaryWrapper
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -49,13 +48,14 @@ buildGoModule rec {
   # Tests requires network access
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/symfony";
+  versionCheckProgramArg = "version --no-ansi";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      inherit version;
-      package = symfony-cli;
-      command = "symfony version --no-ansi";
-    };
   };
 
   meta = {

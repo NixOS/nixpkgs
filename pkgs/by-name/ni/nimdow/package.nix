@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub, nixosTests, testers }:
+{ lib, buildNimPackage, fetchFromGitHub, nixosTests, versionCheckHook }:
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
@@ -27,12 +27,11 @@ buildNimPackage (finalAttrs: {
     substituteInPlace src/nimdowpkg/config/configloader.nim --replace "/usr/share/nimdow" "$out/share/nimdow"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     nimdow = nixosTests.nimdow;
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = with lib;

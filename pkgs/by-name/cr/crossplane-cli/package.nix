@@ -2,8 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
-, testers
-, crossplane-cli
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -31,11 +30,11 @@ buildGoModule rec {
     mv $out/bin/crank $out/bin/crossplane
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = crossplane-cli;
-    command = "crossplane version || true";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/crossplane";
+  versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
 

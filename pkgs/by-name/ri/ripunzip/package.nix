@@ -8,6 +8,7 @@
 , testers
 , fetchzip
 , ripunzip
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,13 +30,13 @@ rustPlatform.buildRustPackage rec {
 
   setupHook = ./setup-hook.sh;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     fetchzipWithRipunzip = testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = ripunzip; }) {
       url = "https://github.com/google/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
       hash = "sha256-BoErC5VL3Vpvkx6xJq6J+eUJrBnjVEdTuSo7zh98Jy4=";
-    };
-    version = testers.testVersion {
-      package = ripunzip;
     };
   };
 

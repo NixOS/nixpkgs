@@ -25,7 +25,7 @@
   pugixml,
   rapidjson,
   stdenv,
-  testers,
+  versionCheckHook,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -144,13 +144,11 @@ in stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
-    };
   };
 
   meta = {

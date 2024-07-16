@@ -4,8 +4,7 @@
 , rustPlatform
 , cmake
 , installShellFiles
-, testers
-, yara-x
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,9 +29,10 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/yr completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = yara-x;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/yr";
 
   meta = {
     description = "Tool to do pattern matching for malware research";

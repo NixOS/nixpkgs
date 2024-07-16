@@ -2,9 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , zig_0_11
-, testers
-, tigerbeetle
 , nix-update-script
+, versionCheckHook
 }:
 let
   # Read [these comments](pkgs/development/compilers/zig/hook.nix#L12-L30) on the default Zig flags, and the associated links. tigerbeetle stopped exposing the `-Doptimize` build flag, so we can't use the default Nixpkgs zig hook as-is. tigerbeetle only exposes a boolean `-Drelease` flag which we'll add in the tigerbeetle derivation in this file.
@@ -32,11 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgit-commit=0000000000000000000000000000000000000000"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = tigerbeetle;
-      command = "tigerbeetle version";
-    };
     updateScript = nix-update-script { };
   };
 

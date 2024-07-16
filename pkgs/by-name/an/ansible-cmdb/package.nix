@@ -3,8 +3,7 @@
   fetchFromGitHub,
   substituteAll,
   python3Packages,
-  testers,
-  ansible-cmdb,
+  versionCheckHook,
 }:
 let
   inherit (python3Packages)
@@ -45,10 +44,7 @@ buildPythonApplication {
     jsonxs
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = ansible-cmdb;
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Generate host overview from ansible fact gathering output";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles, testers, sigi }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, versionCheckHook }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     installManPage sigi.1
   '';
 
-  passthru.tests.version = testers.testVersion { package = sigi; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Organizing CLI for people who don't love organizing";

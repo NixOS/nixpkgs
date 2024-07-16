@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, testers
-, pinact
+, versionCheckHook
 }:
 
 let
@@ -22,11 +21,8 @@ buildGoModule {
 
   doCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = pinact;
-    command = "pinact --version";
-    version = src.rev;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   ldflags = [
     "-s"

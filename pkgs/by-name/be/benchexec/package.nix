@@ -39,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests =
     let
+      # TODO: maybe allow `versionCheckHook` to support doing this?
       testVersion = result: testers.testVersion {
         command = "${result} --version";
         package = benchexec;

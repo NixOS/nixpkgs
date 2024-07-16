@@ -2,9 +2,8 @@
 , fetchFromGitHub
 , rustPlatform
 , libsixel
-, testers
-, presenterm
 , stdenv
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,10 +30,8 @@ rustPlatform.buildRustPackage rec {
   # Skip test that currently doesn't work
   checkFlags = [ "--skip=execute::test::shell_code_execution" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = presenterm;
-    command = "presenterm --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Terminal based slideshow tool";

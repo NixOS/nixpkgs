@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, vacuum-go }:
+{ lib, buildGoModule, fetchFromGitHub, versionCheckHook }:
 
 buildGoModule rec {
   pname = "vacuum-go";
@@ -23,13 +23,11 @@ buildGoModule rec {
 
   subPackages = [ "./vacuum.go" ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = vacuum-go;
-      command = "vacuum version";
-      version = "v${version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/vacuum";
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "The world's fastest OpenAPI & Swagger linter";

@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
-  testers,
-  mcdreforged,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,9 +34,8 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [ python3.pkgs.pytestCheckHook ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = mcdreforged; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Rewritten version of MCDaemon, a python tool to control your Minecraft server";

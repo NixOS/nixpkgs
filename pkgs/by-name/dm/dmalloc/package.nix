@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, testers
-, dmalloc
+, versionCheckHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +21,8 @@ stdenv.mkDerivation rec {
     "--enable-threads"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = dmalloc;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Debug Malloc memory allocation debugging C library";

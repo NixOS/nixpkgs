@@ -12,7 +12,7 @@
 , runCommand
 , rustPlatform
 , stdenv
-, testers
+, versionCheckHook
 , xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
@@ -64,12 +64,16 @@
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/rad";
+
   passthru.tests =
     let
       package = radicle-node;
     in
     {
-      version = testers.testVersion { inherit package; };
       basic = runCommand "${package.name}-basic-test"
         {
           nativeBuildInputs = [ jq openssh radicle-node ];

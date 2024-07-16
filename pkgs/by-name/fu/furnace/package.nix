@@ -1,8 +1,7 @@
 { stdenv
 , lib
-, testers
-, furnace
 , fetchFromGitHub
+, versionCheckHook
 , cmake
 , pkg-config
 , makeWrapper
@@ -109,11 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../demos $out/share/furnace/
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = furnace;
-    };
   };
 
   meta = {

@@ -2,10 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  mosdns,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -36,12 +35,8 @@ buildGoModule rec {
       --zsh <($out/bin/mosdns completion zsh)
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = mosdns;
-      command = "${lib.getExe mosdns} version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Modular, pluggable DNS forwarder";

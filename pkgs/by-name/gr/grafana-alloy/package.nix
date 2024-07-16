@@ -7,11 +7,10 @@
 , yarn
 , fixup-yarn-lock
 , nodejs
-, grafana-alloy
 , nixosTests
 , nix-update-script
 , installShellFiles
-, testers
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -102,13 +101,14 @@ buildGoModule rec {
       --zsh <($out/bin/alloy completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/alloy";
+
   passthru = {
     tests = {
       inherit (nixosTests) alloy;
-      version = testers.testVersion {
-        version = "v${version}";
-        package = grafana-alloy;
-      };
     };
     updateScript = nix-update-script { };
     # alias for nix-update to be able to find and update this attribute

@@ -5,9 +5,7 @@
 , makeWrapper
 , less
 , xdg-utils
-, testers
-, runCommand
-, stackit-cli
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -53,12 +51,10 @@ buildGoModule rec {
 
   nativeCheckInputs = [ less ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = stackit-cli;
-      command = "stackit --version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "stackit";
 
   meta = with lib; {
     description = "CLI to manage STACKIT cloud services";

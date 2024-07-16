@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
-, smassh
 , python3
-, testers
+, versionCheckHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -32,13 +31,14 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   # No tests available
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = smassh;
-    command = "HOME=$(mktemp -d) smassh --version";
-  };
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "TUI based typing test application inspired by MonkeyType";

@@ -5,10 +5,9 @@
 , pkg-config
 , openssl
 , rocksdb_8_3
-, testers
-, surrealdb
 , darwin
 , protobuf
+, versionCheckHook
 }:
 
 let
@@ -59,10 +58,11 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = surrealdb;
-    command = "surreal version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "surreal";
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
+{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, versionCheckHook, jq }:
 let
   pname = "roslyn-ls";
   # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
@@ -73,8 +73,12 @@ buildDotnetModule rec {
       runHook postInstall
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "Microsoft.CodeAnalysis.LanguageServer";
+
   passthru = {
-    tests.version = testers.testVersion { package = roslyn-ls; };
     updateScript = ./update.sh;
   };
 

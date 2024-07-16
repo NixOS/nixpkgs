@@ -4,6 +4,7 @@
   fetchFromGitHub,
   testers,
   runCommand,
+  versionCheckHook,
   writeText,
   uglify-js,
 }:
@@ -27,11 +28,14 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/uglifyjs";
+
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      version = testers.testVersion { package = uglify-js; };
-
       simple = testers.testEqualContents {
         assertion = "uglify-js minifies a basic js file";
         expected = writeText "expected" ''

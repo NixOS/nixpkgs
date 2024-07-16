@@ -7,6 +7,7 @@
   runCommand,
   blade-formatter,
   nodejs,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
@@ -26,14 +27,12 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-wEz0DTbg+Fdmsf0Qyeu9QS+I8gkPJeaJC/3HuP913og=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      version = testers.testVersion {
-        package = blade-formatter;
-        command = "blade-formatter --version";
-      };
-
       simple = testers.testEqualContents {
         assertion = "blade-formatter formats a basic blade file";
         expected = writeText "expected" ''

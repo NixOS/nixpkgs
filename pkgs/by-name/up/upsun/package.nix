@@ -2,8 +2,7 @@
   stdenvNoCC,
   lib,
   fetchurl,
-  testers,
-  upsun
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -44,12 +43,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-      package = upsun;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Unified tool for managing your Upsun services from the command line";

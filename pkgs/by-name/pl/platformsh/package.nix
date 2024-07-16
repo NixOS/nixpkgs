@@ -2,9 +2,8 @@
   stdenvNoCC,
   lib,
   fetchurl,
-  testers,
   installShellFiles,
-  platformsh
+  versionCheckHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -50,12 +49,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-      package = platformsh;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/platform";
 
   meta = {
     description = "Unified tool for managing your Platform.sh services from the command line";

@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   darwin,
-  testers,
   nix-update-script,
+  versionCheckHook
 }:
 
 let
@@ -37,8 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 

@@ -22,12 +22,6 @@ let
   inherit (self.lib) genModels;
 in
 {
-  version = testers.testVersion {
-    package = self;
-    version = "v" + self.version;
-    command = "local-ai --help";
-  };
-
   health = testers.runNixOSTest {
     name = self.name + "-health";
     nodes.machine = common-config;

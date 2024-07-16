@@ -1,9 +1,8 @@
 {
   fetchPypi,
   lib,
-  nb-cli,
   python3,
-  testers,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,14 +39,14 @@ python3.pkgs.buildPythonApplication rec {
     wcwidth
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   # no test
   doCheck = false;
 
   pythonImportsCheck = [ "nb_cli" ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = nb-cli; };
-  };
+  versionCheckProgram = "nb";
 
   meta = {
     description = "CLI for nonebot2";

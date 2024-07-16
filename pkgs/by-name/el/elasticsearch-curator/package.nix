@@ -1,10 +1,9 @@
 {
   lib,
-  elasticsearch-curator,
   fetchFromGitHub,
   nix-update-script,
   python3,
-  testers,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -68,11 +67,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_api_key_set"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/curator";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = elasticsearch-curator;
-      command = "${lib.getExe elasticsearch-curator} --version";
-    };
     updateScript = nix-update-script { };
   };
 

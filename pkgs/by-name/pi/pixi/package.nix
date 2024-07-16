@@ -7,8 +7,7 @@
 , openssl
 , installShellFiles
 , darwin
-, testers
-, pixi
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -87,9 +86,8 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pixi completion --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = pixi;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Package management made easy";

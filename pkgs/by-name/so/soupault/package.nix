@@ -2,9 +2,8 @@
 , darwin
 , fetchzip
 , ocamlPackages
-, soupault
 , stdenv
-, testers
+, versionCheckHook
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -45,10 +44,10 @@ ocamlPackages.buildDunePackage rec {
     yaml
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = soupault;
-    command = "soupault --version-number";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version-number";
 
   meta = {
     description = "Tool that helps you create and manage static websites";

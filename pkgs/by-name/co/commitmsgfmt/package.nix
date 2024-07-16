@@ -1,8 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, testers
-, commitmsgfmt
+, versionCheckHook
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitmsgfmt";
@@ -16,10 +15,10 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-jTRB9ogFQGVC4C9xpGxsJYV3cnWydAJLMcjhzUPULTE=";
 
-  passthru.tests.version = testers.testVersion {
-    package = commitmsgfmt;
-    command = "commitmsgfmt -V";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-V";
 
   meta = with lib; {
     homepage = "https://gitlab.com/mkjeldsen/commitmsgfmt";

@@ -4,8 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   stdenv,
-  violet,
-  testers,
+  versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = testers.testVersion { package = violet; };
   };
 
   meta = {

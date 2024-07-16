@@ -8,7 +8,7 @@
 , postgresql
 , readline
 , sqlite
-, testers
+, versionCheckHook
 , zlib
 }:
 
@@ -48,11 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Copy a Postgres database to a target Postgres server (pg_dump | pg_restore on steroids";

@@ -18,7 +18,7 @@
 , opencv
 , potrace
 , protozero
-, testers
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   cmakeFlags = [
     (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)
     (lib.cmakeBool "EXTERNAL_PROTOZERO" true)
@@ -65,10 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installFlags = [ "install-gen" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
 
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";

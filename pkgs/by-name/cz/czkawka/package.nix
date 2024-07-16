@@ -2,7 +2,6 @@
 , stdenv
 , atk
 , cairo
-, czkawka
 , darwin
 , fetchFromGitHub
 , gdk-pixbuf
@@ -13,7 +12,7 @@
 , overrideSDK
 , pkg-config
 , rustPlatform
-, testers
+, versionCheckHook
 , wrapGAppsHook4
 , xvfb-run
 }:
@@ -70,10 +69,10 @@ buildRustPackage' {
   doCheck = stdenv.hostPlatform.isLinux
           && (stdenv.hostPlatform == stdenv.buildPlatform);
 
-  passthru.tests.version = testers.testVersion {
-    package = czkawka;
-    command = "czkawka_cli --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "czkawka_cli";
 
   # Desktop items, icons and metainfo are not installed automatically
   postInstall = ''

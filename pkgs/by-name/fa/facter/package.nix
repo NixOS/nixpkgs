@@ -46,6 +46,7 @@ bundlerApp {
     '';
 
   passthru = {
+    # TODO: use `versionCheckHook`
     tests.version = testers.testVersion {
       command = "${lib.getExe facter} --version";
       package = facter;

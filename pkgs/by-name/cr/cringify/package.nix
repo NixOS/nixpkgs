@@ -2,8 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , python3
-, testers
-, cringify
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   # No tests are present in the repository
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion { package = cringify; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Annoy your friends with the cringified text";

@@ -14,7 +14,7 @@
 , pkg-config
 , pulseaudio
 , shaderc
-, testers
+, versionCheckHook
 , wayland
 , wlx-overlay-s
 , xorg
@@ -74,8 +74,10 @@ rustPlatform.buildRustPackage rec {
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.testVersion = testers.testVersion { package = wlx-overlay-s; };
 
     updateScript = nix-update-script { };
   };

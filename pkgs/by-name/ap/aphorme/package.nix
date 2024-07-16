@@ -5,9 +5,8 @@
 , libxkbcommon
 , libGL
 , stdenv
-, testers
-, aphorme
 , autoPatchelfHook
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,11 +34,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = aphorme;
-    command = "aphorme --version";
-    version = "aphorme ${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Program launcher for window managers, written in Rust";

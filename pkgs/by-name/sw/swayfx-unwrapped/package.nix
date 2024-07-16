@@ -23,10 +23,10 @@
   libevdev,
   scdoc,
   scenefx,
+  versionCheckHook,
   wayland-scanner,
   xcbutilwm,
   wlroots,
-  testers,
   nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
@@ -120,14 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       basic = nixosTests.swayfx;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "sway --version";
-        version = "swayfx version ${finalAttrs.version}";
-      };
     };
   };
 

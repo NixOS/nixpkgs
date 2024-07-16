@@ -1,9 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
-, crc
 , coreutils
+, versionCheckHook
 }:
 
 let
@@ -53,13 +52,14 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = crc;
-    command = ''
-      export HOME=$(mktemp -d)
-      crc version
-    '';
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+  versionCheckProgramArg = "version";
+
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {

@@ -5,8 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   btrfs-progs,
-  testers,
-  werf,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -84,11 +83,10 @@ buildGoModule rec {
       --zsh <($out/bin/werf completion --shell=zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = werf;
-    command = "werf version";
-    version = src.rev;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "GitOps delivery tool";

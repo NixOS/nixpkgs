@@ -3,9 +3,8 @@
 , fetchFromGitHub
 , curl
 , stdenv
-, testers
-, static-server
 , substituteAll
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -38,11 +37,8 @@ buildGoModule rec {
   # tests sometimes fail with SIGQUIT on darwin
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = static-server;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;
 

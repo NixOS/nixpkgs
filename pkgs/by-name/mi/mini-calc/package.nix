@@ -4,8 +4,7 @@
   fetchFromGitHub,
   gnuplot,
   makeWrapper,
-  testers,
-  mini-calc,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";
@@ -26,12 +25,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mini-calc;
-    # `mini-calc -v` does not output in the test env, fallback to pipe
-    command = "echo -v | mini-calc";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "echo -v | mini-calc";
+  versionCheckProgramArg = "";
 
   meta = {
     description = "Fully-featured minimalistic configurable calculator written in Rust";

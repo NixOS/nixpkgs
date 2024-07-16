@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , gitUpdater
-, testers
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,11 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=${finalAttrs.version}"
   ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  passthru = {
     updateScript = gitUpdater {
       url = "https://passt.top/passt";
     };

@@ -10,7 +10,7 @@
   makeDesktopItem,
   makeWrapper,
   stdenv,
-  testers,
+  versionCheckHook,
   vulkan-loader,
 }:
 
@@ -91,12 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "furmark --version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.geeks3d.com/furmark/v2/";

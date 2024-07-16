@@ -20,6 +20,7 @@ bundlerApp {
   '';
 
   passthru = {
+    # TODO: use `versionCheckHook` when possible
     tests.version = testers.testVersion {
       package = pdk;
       version = (import ./gemset.nix).pdk.version;

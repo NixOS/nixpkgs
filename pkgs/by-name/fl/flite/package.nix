@@ -5,7 +5,7 @@
   fetchpatch,
   alsa-lib,
   libpulseaudio,
-  testers,
+  versionCheckHook,
   audioBackend ? "pulseaudio",
 }:
 assert lib.assertOneOf "audioBackend" audioBackend [
@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     .${audioBackend} or (throw "${audioBackend} is not a supported backend!")
   );
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   configureFlags = [
     "--enable-shared"
   ] ++ lib.optionals stdenv.isLinux [ "--with-audio=${audioBackend}" ];
@@ -55,14 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   # main/Makefile creates and removes 'flite_voice_list.c' from multiple targets:
   # make[1]: *** No rule to make target 'flite_voice_list.c', needed by 'all'.  Stop
   enableParallelBuilding = false;
-
-  passthru = {
-    tests.version = testers.testVersion {
-      # `flite` does have a `--version` command, but it returns 1
-      command = "flite --help";
-      package = finalAttrs.finalPackage;
-    };
-  };
 
   meta = {
     description = "Small, fast run-time speech synthesis engine";

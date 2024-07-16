@@ -22,8 +22,7 @@
 , pango
 , xorgproto
 , librsvg
-, testers
-, dunst
+, versionCheckHook
 , withX11 ? true
 , withWayland ? true
 }:
@@ -89,7 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "jq" "${lib.getExe jq}"
   '';
 
-  passthru.tests.version = testers.testVersion { package = dunst; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";

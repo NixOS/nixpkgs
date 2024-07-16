@@ -4,8 +4,8 @@
   stdenv,
   darwin,
   fetchFromGitHub,
-  testers,
   nix-update-script,
+  versionCheckHook,
 }:
 let
   inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
@@ -38,12 +38,10 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "skhd-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 

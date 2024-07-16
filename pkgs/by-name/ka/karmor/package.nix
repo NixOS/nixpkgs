@@ -2,8 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, testers
-, karmor
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -39,12 +38,10 @@ buildGoModule rec {
       --zsh  <($out/bin/karmor completion zsh)
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = karmor;
-      command = "karmor version || true";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Client tool to help manage KubeArmor";

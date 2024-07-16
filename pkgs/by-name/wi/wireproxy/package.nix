@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
-, wireproxy
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -24,11 +23,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-DNTPzZSxcjkcv7RygTpOIgdYEQ8wBPkuJqfzZGt8ExI=";
 
-  passthru.tests.version = testers.testVersion {
-    package = wireproxy;
-    command = "wireproxy --version";
-    version = src.rev;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Wireguard client that exposes itself as a socks5 proxy";

@@ -3,10 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  oo7,
   openssl,
   pkg-config,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,9 +38,12 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "@bindir@" "$out/bin"
   '';
 
-  passthru = {
-    tests.testVersion = testers.testVersion { package = oo7; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
+  versionCheckProgram = "${placeholder "out"}/bin/oo7-cli";
+
+  passthru = {
     # TODO: re-enable this when upstream adds a Cargo.lock
     # updateScript = nix-update-script { };
   };

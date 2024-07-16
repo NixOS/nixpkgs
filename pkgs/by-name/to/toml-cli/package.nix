@@ -1,4 +1,4 @@
-{ lib, fetchCrate, rustPlatform, testers, toml-cli }:
+{ lib, fetchCrate, rustPlatform, versionCheckHook }:
 
 rustPlatform.buildRustPackage rec {
   pname = "toml-cli";
@@ -19,9 +19,8 @@ rustPlatform.buildRustPackage rec {
     # "--test=integration"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = toml-cli; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Simple CLI for editing and querying TOML files";

@@ -9,8 +9,7 @@
 , iptables
 , makeWrapper
 , protoc-gen-go-grpc
-, testers
-, opensnitch
+, versionCheckHook
 , nixosTests
 }:
 
@@ -80,13 +79,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) opensnitch;
-    version = testers.testVersion {
-      package = opensnitch;
-      command = "opensnitchd -version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/opensnitchd";
+  versionCheckProgramArg = "-version";
 
   meta = with lib; {
     description = "Application firewall";

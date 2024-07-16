@@ -29,6 +29,7 @@
   '';
 
   passthru = {
+    # TODO: use `versionCheckHook` when possible
     tests.version = testers.testVersion {
       package = puppet-bolt;
       version = (import ./gemset.nix).bolt.version;

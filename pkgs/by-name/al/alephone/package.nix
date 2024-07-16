@@ -26,10 +26,10 @@
   SDL2_ttf,
   speex,
   unzip,
+  versionCheckHook,
   zlib,
   zziplib,
   alephone,
-  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     zziplib
   ];
 
+  # test that the version is correct
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
   makeFlags = [ "AR:=$(AR)" ];
 
@@ -100,10 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
   '';
-
-  passthru.tests.version =
-    # test that the version is correct
-    testers.testVersion { package = alephone; };
 
   meta = {
     description = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";

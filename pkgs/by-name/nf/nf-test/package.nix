@@ -2,10 +2,9 @@
 , fetchurl
 , makeWrapper
 , nextflow
-, nf-test
 , openjdk11
 , stdenv
-, testers
+, versionCheckHook
 }:
 stdenv.mkDerivation rec {
 
@@ -41,10 +40,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = nf-test;
-    command = "nf-test version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Simple test framework for Nextflow pipelines";

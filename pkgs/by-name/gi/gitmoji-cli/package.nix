@@ -6,7 +6,7 @@
 , nodejs
 , fixup-yarn-lock
 , yarn
-, testers
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,11 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "gitmoji";
 
   meta = {
     description = "Gitmoji client for using emojis on commit messages";

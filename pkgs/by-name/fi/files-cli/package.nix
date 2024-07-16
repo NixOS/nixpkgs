@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, testers
-, files-cli
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -24,23 +23,10 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/files-cli --help
-
-    runHook postInstallCheck
-  '';
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = files-cli;
-      command = "files-cli -v";
-      version = "files-cli version ${version}";
-    };
-  };
+  versionCheckProgramArg = "-v";
 
   meta = with lib; {
     description = "Files.com Command Line App for Windows, Linux, and macOS";

@@ -1,10 +1,9 @@
 { lib
 , stdenv
-, testers
 , fetchFromGitHub
 , rustPlatform
 , darwin
-, numbat
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,9 +30,8 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/${pname}/modules $out/share/${pname}/
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = numbat;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "High precision scientific calculator with full support for physical units";

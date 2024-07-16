@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  wakatime-cli,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -47,10 +46,12 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = wakatime-cli;
-    command = "HOME=$(mktemp -d) wakatime-cli --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     homepage = "https://wakatime.com/";

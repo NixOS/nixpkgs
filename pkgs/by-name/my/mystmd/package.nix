@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, mystmd, testers, nix-update-script }:
+{ lib, buildNpmPackage, fetchFromGitHub, nix-update-script, versionCheckHook }:
 
 buildNpmPackage rec {
   pname = "mystmd";
@@ -23,11 +23,12 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  versionCheckProgram = "${placeholder "out"}/bin/myst";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = mystmd;
-      version = "v${version}";
-    };
     updateScript = nix-update-script { };
   };
 

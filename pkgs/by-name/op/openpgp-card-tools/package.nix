@@ -4,8 +4,7 @@
 , fetchFromGitea
 , pkg-config
 , pcsclite
-, testers
-, openpgp-card-tools
+, versionCheckHook
 , darwin
 }:
 
@@ -30,11 +29,8 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = openpgp-card-tools;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Tool for inspecting and configuring OpenPGP cards";

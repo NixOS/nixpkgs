@@ -10,9 +10,8 @@
   libgit2,
   libiconv,
   nasm,
-  testers,
+  versionCheckHook,
   zlib,
-  rav1e,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +40,9 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
   # and linking it with cctools ld64.
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
@@ -56,10 +58,6 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
-
-  passthru = {
-    tests.version = testers.testVersion { package = rav1e; };
-  };
 
   meta = {
     description = "Fastest and safest AV1 encoder";

@@ -18,9 +18,8 @@
   nlohmann_json,
   pkgsStatic,
 
-  mesonlsp,
   nix-update-script,
-  testers,
+  versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -147,12 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/libtypenamespace
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = mesonlsp;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = with lib; {

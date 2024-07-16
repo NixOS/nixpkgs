@@ -7,7 +7,7 @@
 , openal
 , SDL2
 , stdenv
-, testers
+, versionCheckHook
 , zlib
 }:
 
@@ -33,9 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNCINE_OVERRIDE_CONTENT_PATH=${jazz2-content}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Open-source Jazz Jackrabbit 2 reimplementation";

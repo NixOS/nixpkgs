@@ -6,8 +6,7 @@
   buildNpmPackage,
   python3,
   stdenvNoCC,
-  testers,
-  basedpyright,
+  versionCheckHook
 }:
 
 let
@@ -112,9 +111,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = basedpyright; };
   };
 
   meta = {

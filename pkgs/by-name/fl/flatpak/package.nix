@@ -45,8 +45,8 @@
   socat,
   substituteAll,
   systemd,
-  testers,
   valgrind,
+  versionCheckHook,
   which,
   wrapGAppsNoGuiHook,
   xdg-dbus-proxy,
@@ -170,6 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: some issues with temporary files
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   NIX_LDFLAGS = "-lpthread";
 
   enableParallelBuilding = true;
@@ -219,8 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
 
         grep format=svg "$out"
       '';
-
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
   };
 

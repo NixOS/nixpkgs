@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testers
-, patch2pr
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -23,11 +22,8 @@ buildGoModule rec {
     "-X main.commit=${src.rev}"
   ];
 
-  passthru.tests.patch2pr-version = testers.testVersion {
-    package = patch2pr;
-    command = "${patch2pr.meta.mainProgram} --version";
-    version = version;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Create pull requests from patches without cloning the repository";
