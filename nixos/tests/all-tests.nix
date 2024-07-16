@@ -296,6 +296,7 @@ in {
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-var = runTest ./activation/var.nix;
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
