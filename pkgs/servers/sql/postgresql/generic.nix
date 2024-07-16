@@ -2,7 +2,7 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper
+      { stdenv, lib, fetchurl, makeWrapper, writeScript, nukeReferences
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
@@ -23,7 +23,7 @@ let
 
       # JIT
       , jitSupport
-      , nukeReferences, patchelf, llvmPackages
+      , patchelf, llvmPackages
 
       # PL/Python
       , pythonSupport ? false
@@ -56,7 +56,9 @@ let
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
     outputs = [ "out" "lib" "doc" "man" ];
-    setOutputFlags = false; # $out retains configureFlags :-/
+    # We manually set configure flags and move files to the appropriate outputs
+    # to avoid references (mostly from pg_config to {man,doc}dir).
+    setOutputFlags = false;
 
     buildInputs = [
       zlib
@@ -78,8 +80,9 @@ let
     nativeBuildInputs = [
       makeWrapper
       pkg-config
+      nukeReferences
     ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
+      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev patchelf ];
 
     enableParallelBuilding = true;
 
@@ -96,7 +99,7 @@ let
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
+      "--libdir=${placeholder "lib"}/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString systemdSupport' "--with-systemd")
@@ -132,11 +135,35 @@ let
     postPatch = ''
       # Hardcode the path to pgxs so pg_config returns the path in $out
       substituteInPlace "src/common/config_info.c" --subst-var out
+
+      # Do not record CC and related build information.
+      substituteInPlace src/common/Makefile \
+        --replace-fail \
+        "override CPPFLAGS += -DVAL_" \
+        "# override CPPFLAGS += -DVAL_"
+
+      # Record arguments without store references.
+      substituteInPlace configure \
+        --replace-fail \
+        '#define CONFIGURE_ARGS "$ac_configure_args"' \
+        '#define CONFIGURE_ARGS "$fakeConfigureArgs"'
+      # PostgreSQL compares configure script timestamps.
+      touch -r configure.${if atLeast "14" then "ac" else "in"} configure
     '' + lib.optionalString jitSupport ''
         # Force lookup of jit stuff in $out instead of $lib
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+    '';
+
+    # Avoid implicit references in the recorded configure arguments.
+    configureScript = writeScript "postgresql-configure-wrapper" ''
+      printf %s "''${*@Q}" >fake-configure-args
+      nuke-refs fake-configure-args
+      fakeConfigureArgs=$(<fake-configure-args)
+      rm fake-configure-args
+      export fakeConfigureArgs
+      exec ./configure "$@"
     '';
 
     postInstall =
@@ -146,8 +173,8 @@ let
         moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
-        # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
+        # Prevent an unused retained dependencies on build inputs.
+        nuke-refs "$out/lib/pgxs/src/Makefile.global"
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
@@ -166,7 +193,6 @@ let
         moveToOutput "lib/llvmjit*" "$out"
 
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
 
         # Stop out depending on the default output of llvm
