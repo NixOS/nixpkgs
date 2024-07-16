@@ -14433,6 +14433,7 @@ with pkgs;
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
+  wkhtmltopdf = wkhtmltopdf-bin;
 
   wml = callPackage ../development/web/wml { };
 
