@@ -32117,8 +32117,6 @@ with pkgs;
 
   lls = callPackage ../applications/networking/lls { };
 
-  localsend = callPackage ../applications/networking/localsend { };
-
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
