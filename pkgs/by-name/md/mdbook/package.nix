@@ -1,17 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }:
-
-rustPlatform.buildRustPackage rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix,
+  rustPlatform,
+  darwin,
+  CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
+  installShellFiles,
+}:
+let
+  version = "0.4.40";
+in
+rustPlatform.buildRustPackage {
+  inherit version;
   pname = "mdbook";
-  version = "0.4.37";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-A8ZSqIG+rGKwggs9ogvbMIi9gClFKe8gS6D5W426ebc=";
+    sha256 = "sha256-GGQK2Mf3EK1rwBMzQkAzWAaK6Fh0Qqqf8dtDjZPxOMA=";
   };
 
-  cargoHash = "sha256-8GQM4pHiFbyoRkOx3SXuIV118ndzL+O+eA+Gd2jbsdI=";
+  cargoHash = "sha256-jriSQHn+Y+EWtwDJeMTAuCCHR7fEtWsErAxbG9a4pts=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,12 +41,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create books from MarkDown";
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ havvy Frostman matthiasbeyer ];
+    license = [ lib.licenses.mpl20 ];
+    maintainers = with lib.maintainers; [
+      havvy
+      Frostman
+      matthiasbeyer
+    ];
   };
 }
