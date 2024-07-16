@@ -59,7 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [ zlib ]
+    [
+      zlib
+      libevent
+      hwloc
+    ]
     ++ lib.optionals stdenv.isLinux [
       libnl
       numactl
@@ -68,10 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
       ucc
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ [
-      libevent
-      hwloc
-    ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [
       libpsm2
