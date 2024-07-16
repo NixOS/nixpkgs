@@ -163,6 +163,21 @@ let
     # Python 3.10-3.12 deprecation warning: asyncore
     # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
     test-patchbomb-tls.t
+
+    # Python 3.12 _lsprof module change, breaking profile test
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6846
+    test-profile.t
+
+    # Python 3.12 deprecation warning: multi-threaded fork in worker.py
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6892
+    test-clone-stream.t
+    test-clonebundles.t
+    test-fix-topology.t
+    test-fix.t
+    test-persistent-nodemap.t
+    test-profile.t
+    test-simple-update.t
+
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
