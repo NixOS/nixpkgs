@@ -6,7 +6,7 @@ let
   , configFile ? "all"
 
   # Userspace dependencies
-  , zlib, libuuid, python3, attr, openssl
+  , zlib, libuuid, python3, python3Packages, attr, openssl
   , libtirpc
   , nfs-utils, samba
   , gawk, gnugrep, gnused, systemd
@@ -103,6 +103,13 @@ let
       substituteInPlace ./config/zfs-build.m4 \
         --replace "bashcompletiondir=/etc/bash_completion.d" \
           "bashcompletiondir=$out/share/bash-completion/completions"
+
+      # The contrib/pyzfs module uses dlopen to load the ZFS library. Explicitly
+      # specify the search path, as the shared library is not copied into the
+      # Python package:
+      substituteInPlace ./contrib/pyzfs/libzfs_core/bindings/__init__.py \
+        --replace 'self._ffi.dlopen(self._libname' \
+          'self._ffi.dlopen("'$out'/lib/lib" + self._libname + ".so"'
     '';
 
     nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
@@ -111,7 +118,12 @@ let
     buildInputs = optionals buildUser [ zlib libuuid attr libtirpc pam ]
       ++ optional buildUser openssl
       ++ optional buildUser curl
-      ++ optional (buildUser && enablePython) python3;
+      ++ optionals (buildUser && enablePython) (let ps = python3Packages; in [
+        python3
+        ps.packaging
+        ps.setuptools
+      ]);
+    propagatedBuildInputs = optional (buildUser && enablePython) python3Packages.cffi;
 
     # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
     NIX_CFLAGS_LINK = "-lgcc_s";
@@ -134,6 +146,7 @@ let
       "--localstatedir=/var"
       "--enable-systemd"
       "--enable-pam"
+      (lib.optionalString enablePython "--enable-pyzfs")
     ] ++ optionals buildKernel ([
       "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -150,6 +163,11 @@ let
     ];
 
     preConfigure = ''
+      # Otherwise, the contrib/pyzfs Makefile will attempt to install into the
+      # site-packages in the Python interpreter's derivation:
+      export PYTHON_SITE_PKG="$out/${python3.sitePackages}"
+      mkdir -p "$PYTHON_SITE_PKG"
+
       # The kernel module builds some tests during the configurePhase, this envvar controls their parallelism
       export TEST_JOBS=$NIX_BUILD_CORES
       if [ -z "$enableParallelBuilding" ]; then
