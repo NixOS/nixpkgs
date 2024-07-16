@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       ucc
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
+    ++ lib.optionals (stdenv.isLinux || stdenv.isFreeBSD) [ rdma-core ]
     ++ lib.optionals fabricSupport [
       libpsm2
       libfabric
@@ -88,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags =
-    lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
+    lib.optionals (!cudaSupport) [ "--disable-mca-dso" ]
+    ++ lib.optionals (!fortranSupport) [ "--disable-mpi-fortran"]
     ++ lib.optionals stdenv.isLinux [
       "--with-libnl=${lib.getDev libnl}"
       "--with-pmix=${lib.getDev pmix}"
