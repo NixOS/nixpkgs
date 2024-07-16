@@ -38,9 +38,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-rmiirWNS5Eldq0NyOyYielTPDdKbhtRqRS7RnGZ7H3g=";
 
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
