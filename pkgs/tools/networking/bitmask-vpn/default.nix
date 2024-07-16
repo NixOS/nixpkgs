@@ -17,6 +17,7 @@
 , qtdeclarative
 , qtsvg
 , qttools
+, qtwayland
 , CoreFoundation
 , Security
 , provider ? "riseup"
@@ -28,8 +29,8 @@ let
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
-    rev = version;
-    sha256 = "sha256-crMGezOCHv4yUEvkTHcvUqGIpFSYhLUCjf19mgqYmiI=";
+    rev = "main";
+    sha256 = "sha256-DoEyGA8HoIBHKJfxn67Rkjjus3eDXZLK4FkgHXZfrg0=";
   };
 
   # bitmask-root is only used on GNU/Linux
@@ -80,7 +81,7 @@ buildGoModule rec {
     # Using $PROVIDER is not working,
     # thus replacing directly into the vendor.conf
     substituteInPlace providers/vendor.conf \
-      --replace "provider = riseup" "provider = ${provider}"
+      --replace "provider = bitmask" "provider = ${provider}"
 
     substituteInPlace branding/templates/debian/app.desktop-template \
       --replace "Icon=icon" "Icon=${pname}"
@@ -111,7 +112,10 @@ buildGoModule rec {
   buildInputs = [
     qtbase
     qtdeclarative
-  ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    qtsvg
+  ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ]
+  ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,
   # this should be fixable once darwin.apple_sdk >= 10.13
@@ -122,13 +126,8 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    make gen_providers_json
-    make generate
-    # Remove timestamps in comments
-    sed -i -e '/^\/\//d' pkg/config/version/version.go
-
-    # Not using -j$NIX_BUILD_CORES because the Makefile's rules
-    # are not thread-safe: lib/libgoshim.h is used before being built.
+    mkdir -p build/qt
+    cp ${./gui_gui_qmlcache.qrc} build/qt/gui_gui_qmlcache.qrc
     make build
 
     runHook postBuild
