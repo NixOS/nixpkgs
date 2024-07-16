@@ -305,6 +305,29 @@ def write_entry(profile: str | None,
         sort_key=bootspec.sortKey,
         default=current
     ).write(sorted_first)
+ 
+    devicetree = None
+    dtb_link = f"{system_dir(profile, generation, specialisation)}/dtb"
+    if os.path.exists(dtb_link):
+        dtb_path = os.path.realpath(dtb_link)
+        if os.path.exists(dtb_path):
+            devicetree = copy_from_file(dtb_path)
+
+     with open(tmp_path, 'w') as f:
+         f.write(BOOT_ENTRY.format(title=title,
+                     sort_key=bootspec.sortKey,
+                     generation=generation,
+                     kernel=kernel,
+                     initrd=initrd,
+                     kernel_params=kernel_params,
+                     description=f"{bootspec.label}, built on {build_date}"))
+         if machine_id is not None:
+             f.write("machine-id %s\n" % machine_id)
+        if devicetree is not None:
+            f.write("devicetree %s\n" % devicetree)
+         f.flush()
+         os.fsync(f.fileno())
+     os.rename(tmp_path, entry_file)
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     gen_list = run(
