@@ -94,7 +94,7 @@ let
 
       # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
       RCU_BOOST = no;
-      RCU_LAZY = no;
+      RCU_LAZY = lib.mkOverride 60 no;
 
       # Swap storage is compressed with LZ4 using zswap
       ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
