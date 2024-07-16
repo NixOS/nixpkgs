@@ -32,14 +32,14 @@
   fortranSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
   version = "4.1.6";
 
   src =
     with lib.versions;
     fetchurl {
-      url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
+      url = "https://www.open-mpi.org/software/ompi/v${major finalAttrs.version}.${minor finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
       sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
     };
 
@@ -180,4 +180,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})
