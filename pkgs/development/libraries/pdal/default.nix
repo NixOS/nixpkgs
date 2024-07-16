@@ -19,6 +19,7 @@
 , pkg-config
 , postgresql
 , proj
+, sqlite
 , tiledb
 , xercesc
 , zlib
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-JoHBxJ0hCWH7ZhmeJk4huT2k0AK5CzIV58NWCjWj5T0=";
+    sha256 = "sha256-ukBZLr/iyYQ68sv9JWrR4YP0ahHfGhytgcWKPzrF3Ps=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     openscenegraph
     postgresql
     proj
+    sqlite
     tiledb
     xercesc
     zlib
