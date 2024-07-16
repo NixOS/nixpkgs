@@ -6,7 +6,7 @@
   gobject-introspection,
   python3Packages,
   unstableGitUpdater,
-  fetchpatch,
+  fetchpatch2,
   extraLibs ? [ ],
 }:
 
@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/enkore/i3pystatus/issues/584
   version = "3.35-unstable-2024-06-13";
   pname = "i3pystatus";
+  pyproject = true;
+  build-system = [ python3Packages.setuptools ];
 
   src = fetchFromGitHub {
     owner = "enkore";
@@ -25,21 +27,21 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     # absolutifies the path to the test data in buds test so it can be run from anywhere
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/enkore/i3pystatus/pull/869.patch";
-      hash = "sha256-irrD+yQui9GV+tnsDD3Gr9zJNJxWtvMIw+Hm0cUt7og=";
+    (fetchpatch2 {
+      # https://github.com/enkore/i3pystatus/pull/869
+      url = "https://github.com/enkore/i3pystatus/commit/7a39c3527566411eb1b3e4f79191839ac4b0424e.patch";
+      hash = "sha256-kSf2Nrypw8CCHC7acDkQXI27178HA3NJlyRWkHyYOGs=";
     })
   ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    python3Packages.pytestCheckHook
-  ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   buildInputs = [
     libpulseaudio
     libnotify
   ];
+
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   checkInputs = [ python3Packages.requests ];
 
@@ -78,7 +80,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "i3pystatus";
     homepage = "https://github.com/enkore/i3pystatus";
     description = "A complete replacement for i3status";
@@ -86,11 +88,11 @@ python3Packages.buildPythonApplication rec {
       i3pystatus is a growing collection of python scripts for status output compatible
       to i3status / i3bar of the i3 window manager.
     '';
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [
-      maintainers.igsha
-      maintainers.lucasew
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      igsha
+      lucasew
     ];
   };
 }
