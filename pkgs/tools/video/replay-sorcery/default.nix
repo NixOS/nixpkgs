@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "replay-sorcery";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "matanui159";
     repo = "ReplaySorcery";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-HPkSOwfwcg4jLUzKfqdXgLu7mgD5H4wb9d2BrqWQeHc=";
+    hash = "sha256-MxsEoWA+NArkaOeMg2birOWxzrZaNNoxoSoNHRGT094=";
   };
 
   patches = [
