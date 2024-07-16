@@ -6,7 +6,6 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-
   pname = "realm-studio";
   version = "15.2.1";
 
