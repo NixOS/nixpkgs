@@ -58,6 +58,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     num2words
     ofxparse
