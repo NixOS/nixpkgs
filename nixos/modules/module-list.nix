@@ -1247,6 +1247,7 @@
   ./services/networking/xray.nix
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
+  ./services/networking/yggdrasil-jumper.nix
   ./services/networking/zerobin.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
