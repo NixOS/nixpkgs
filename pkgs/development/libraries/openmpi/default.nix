@@ -145,22 +145,30 @@ stdenv.mkDerivation (finalAttrs: {
       # compilers at build time
 
       echo "''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt"
-      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-        ''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt
+      substituteInPlace ''${!outputDev}/share/openmpi/mpicc-wrapper-data.txt \
+        --replace-fail \
+          compiler=gcc \
+          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
 
       echo "''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt"
-      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-         ''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt
+      substituteInPlace ''${!outputDev}/share/openmpi/ortecc-wrapper-data.txt \
+        --replace-fail \
+          compiler=gcc \
+          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
 
       echo "''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt"
-      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
-         ''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt
+      substituteInPlace ''${!outputDev}/share/openmpi/mpic++-wrapper-data.txt \
+        --replace-fail \
+          compiler=g++ \
+          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++
     ''
     + lib.optionalString fortranSupport ''
 
       echo "''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt"
-      sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
-         ''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt
+      substituteInPlace ''${!outputDev}/share/openmpi/mpifort-wrapper-data.txt \
+        --replace-fail \
+          compiler=gfortran \
+          compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran
 
     '';
 
