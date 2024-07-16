@@ -1,10 +1,11 @@
 { lib
-, trivialBuild
+, melpaBuild
 , fetchFromGitHub
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "sunrise-commander";
+  ename = "sunrise";
   version = "0-unstable-2021-09-27";
 
   src = fetchFromGitHub {
