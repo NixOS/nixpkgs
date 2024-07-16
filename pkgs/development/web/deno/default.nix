@@ -15,11 +15,12 @@ rustPlatform.buildRustPackage rec {
   pname = "deno";
   version = "1.44.4";
 
+  # That patch has already been accepted into deno and will be included in 1.45 🎉
   src = fetchFromGitHub {
-    owner = "denoland";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DQrN5x+UiY6lLY1h96sTWBhD0jrvNyCdTwHsyFo95VE=";
+    owner = "zebreus";
+    repo = "deno";
+    rev = "f67761055b6e3e4346629d06a7ac6028f9d90410";
+    sha256 = "sha256-mlLq6gyoyz+6mnrF86YZ0iBLWXFZ19Qh84MveXG2rfs=";
   };
 
   cargoHash = "sha256-QGBFDFZpOqPj/U1PhMaTZ3mI+d2jG6vYAkW6aNG4wyQ=";

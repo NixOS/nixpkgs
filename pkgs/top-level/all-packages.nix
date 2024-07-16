@@ -7127,6 +7127,9 @@ with pkgs;
 
   deno = callPackage ../development/web/deno { };
 
+  buildDenoApplication = callPackage ../build-support/deno/buildDenoApplication.nix { };
+  fetchDenoDeps = callPackage ../build-support/deno/fetchDenoDeps.nix { };
+
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
   detox = callPackage ../tools/misc/detox { };
