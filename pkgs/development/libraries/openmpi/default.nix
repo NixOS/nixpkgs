@@ -36,12 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
   version = "4.1.6";
 
-  src =
-    with lib.versions;
-    fetchurl {
-      url = "https://www.open-mpi.org/software/ompi/v${major finalAttrs.version}.${minor finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-      sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
-    };
+  src = fetchurl {
+    url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
+  };
 
   postPatch = ''
     patchShebangs ./
