@@ -1326,6 +1326,7 @@
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
   ./services/networking/zapret.nix
+  ./services/networking/yggdrasil-jumper.nix
   ./services/networking/zerobin.nix
   ./services/networking/zenohd.nix
   ./services/networking/zeronet.nix
