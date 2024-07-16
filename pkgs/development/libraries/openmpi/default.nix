@@ -87,28 +87,23 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
     ++ lib.optionals fortranSupport [ gfortran ];
 
-  configureFlags =
-    lib.optionals (!cudaSupport) [ "--disable-mca-dso" ]
-    ++ lib.optionals (!fortranSupport) [ "--disable-mpi-fortran"]
-    ++ lib.optionals stdenv.isLinux [
-      "--with-libnl=${lib.getDev libnl}"
-      "--with-pmix=${lib.getDev pmix}"
-      "--with-pmix-libdir=${pmix}/lib"
-      "--enable-mpi-cxx"
-    ]
-    ++ lib.optional enableSGE "--with-sge"
-    ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
+  configureFlags = [
+    (lib.enableFeature cudaSupport "mca-dso")
+    (lib.enableFeature fortranSupport "mpi-fortran")
+    (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
+    (lib.withFeatureAs stdenv.isLinux "pmix" (lib.getDev pmix))
+    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
+    (lib.enableFeature stdenv.isLinux "mpi-cxx")
+    (lib.withFeature enableSGE "sge")
+    (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    ++ lib.optionals cudaSupport [
-      "--with-cuda=${lib.getDev cudaPackages.cuda_cudart}"
-      "--enable-dlopen"
-    ]
-    ++ lib.optionals fabricSupport [
-      "--with-psm2=${lib.getDev libpsm2}"
-      "--with-libfabric=${lib.getDev libfabric}"
-    ];
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    (lib.enableFeature cudaSupport "dlopen")
+    (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
+    (lib.withFeatureAs fabricSupport "libfabric" (lib.getDev libfabric))
+  ];
 
   enableParallelBuilding = true;
 
