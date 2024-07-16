@@ -1,7 +1,9 @@
 {
-  lib,
   buildGoModule,
   fetchFromGitHub,
+  lib,
+  nixosTests,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "ddns-updater";
@@ -22,6 +24,13 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/updater" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) ddns-updater;
+    };
+    updateScript = nix-update-script { };
+  };
 
   postInstall = ''
     mv $out/bin/updater $out/bin/ddns-updater
