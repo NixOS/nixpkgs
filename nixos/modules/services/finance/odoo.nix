@@ -20,6 +20,8 @@ in
         description = "Odoo addons.";
       };
 
+      autoInit = mkEnableOption "automatically initialize the DB";
+
       settings = mkOption {
         type = format.type;
         default = {};
@@ -113,7 +115,9 @@ in
           "HOME=%S/odoo"
           "ODOO_RC=${cfgFile}"
         ];
-      };
+      } // (lib.optionalAttrs cfg.autoInit {
+        ExecStartPre = "${cfg.package}/bin/odoo --init=INIT --database=odoo --db_user=odoo --stop-after-init";
+      });
     };
 
     services.postgresql = {
