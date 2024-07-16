@@ -71874,50 +71874,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  grammarly-languageserver = nodeEnv.buildNodePackage {
-    name = "grammarly-languageserver";
-    packageName = "grammarly-languageserver";
-    version = "0.0.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/grammarly-languageserver/-/grammarly-languageserver-0.0.4.tgz";
-      sha512 = "+PbI/pMgAeoa0jbFI65JWRj3RjomHjvigrKZybXCYM3jlvTDKUyg7NWPug554ukKLaGIURQ1YGOptmfrYOMzQw==";
-    };
-    dependencies = [
-      sources."@grammarly/sdk-1.11.0"
-      sources."dom-serializer-2.0.0"
-      sources."domelementtype-2.3.0"
-      sources."domhandler-5.0.3"
-      sources."domutils-3.1.0"
-      sources."encoding-0.1.13"
-      sources."entities-4.5.0"
-      sources."grammarly-richtext-encoder-0.0.0"
-      sources."htmlparser2-8.0.2"
-      sources."iconv-lite-0.6.3"
-      sources."idb-keyval-6.2.1"
-      sources."inversify-6.0.2"
-      sources."node-fetch-2.7.0"
-      sources."reflect-metadata-0.1.14"
-      sources."safer-buffer-2.1.2"
-      sources."tr46-0.0.3"
-      sources."vscode-jsonrpc-6.0.0"
-      sources."vscode-languageserver-7.0.0"
-      sources."vscode-languageserver-protocol-3.16.0"
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.16.0"
-      sources."web-tree-sitter-0.20.5"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "LSP server implementation for Grammarly";
-      homepage = "https://github.com/znck/grammarly#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   graphql = nodeEnv.buildNodePackage {
     name = "graphql";
     packageName = "graphql";
