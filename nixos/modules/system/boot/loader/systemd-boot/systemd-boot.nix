@@ -10,19 +10,27 @@ let
   # We check the source code in a derivation that does not depend on the
   # system configuration so that most users don't have to redo the check and require
   # the necessary dependencies.
-  checkedSource = pkgs.runCommand "systemd-boot" {
+  checkedSource = pkgs.stdenv.mkDerivation {
+    name = "systemd-boot-builder";
+    phases = [ "installPhase" "checkPhase" ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -m755 -D ${./systemd-boot-builder.py} $out/bin/systemd-boot-builder
+    '';
+
+    checkPhase = ''
+      ${lib.getExe pkgs.buildPackages.mypy} \
+        --no-implicit-optional \
+        --disallow-untyped-calls \
+        --disallow-untyped-defs \
+        $out/bin/systemd-boot-builder
+    '';
     preferLocalBuild = true;
-  } ''
-    install -m755 -D ${./systemd-boot-builder.py} $out
-    ${lib.getExe pkgs.buildPackages.mypy} \
-      --no-implicit-optional \
-      --disallow-untyped-calls \
-      --disallow-untyped-defs \
-      $out
-  '';
+  };
 
   systemdBootBuilder = pkgs.substituteAll rec {
-    src = checkedSource;
+    src = "${checkedSource}/bin/systemd-boot-builder";
 
     isExecutable = true;
 
@@ -82,7 +90,7 @@ let
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${systemdBootBuilder} "$@"
+    ${systemdBootBuilder}/bin/systemd-boot-builder "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
