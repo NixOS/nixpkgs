@@ -110,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
+    # The main wrapper that all the rest of the commonly used binaries are
+    # symlinked to
+    moveToOutput "bin/opal_wrapper" "''${!outputDev}"
     for f in mpi shmem osh; do
       for i in f77 f90 CC c++ cxx cc fort; do
         moveToOutput "bin/$f$i" "''${!outputDev}"
@@ -118,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     done
 
-    for i in ortecc orte-info ompi_info oshmem_info opal_wrapper; do
+    for i in ortecc orte-info ompi_info oshmem_info; do
       moveToOutput "bin/$i" "''${!outputDev}"
     done
 
