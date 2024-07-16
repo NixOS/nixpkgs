@@ -5,24 +5,21 @@
   fetchzip,
   librandombytes,
   libcpucycles,
-  system ? builtins.currentSystem,
 }:
-stdenv.mkDerivation (prev: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
   version = "20240321";
 
   src = fetchzip {
-    url = "https://lib25519.cr.yp.to/lib25519-${prev.version}.tar.gz";
+    url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
     hash = "sha256-R10Q803vCjIZCS4Z/uErsx547RaXfAELGQm9NuNhw+I=";
   };
 
-  preConfigure = ''
+  patches = [ ./environment-variable-tools.patch ];
+
+  postPatch = ''
     patchShebangs configure
     patchShebangs scripts-build
-  '';
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/lib25519-test
   '';
 
   # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
@@ -30,17 +27,30 @@ stdenv.mkDerivation (prev: {
   # Pass the hostPlatform string
   configurePhase = ''
     runHook preConfigure
-    ./configure --host=${system} --prefix=$out
+    ./configure --host=${stdenv.buildPlatform.system} --prefix=$out
     runHook postConfigure
   '';
-
-  patches = [ ./environment-variable-tools.patch ];
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [
     librandombytes
     libcpucycles
   ];
+
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id "$out/lib/lib25519.1.dylib" "$out/lib/lib25519.1.dylib"
+    for f in $out/bin/*; do
+      install_name_tool -change "lib25519.1.dylib" "$out/lib/lib25519.1.dylib" "$f"
+    done
+  '';
+
+  # failure: crypto_pow does not handle p=q overlap
+  doInstallCheck = !stdenv.isDarwin;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/lib25519-test
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";
