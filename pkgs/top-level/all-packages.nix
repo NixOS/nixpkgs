@@ -25955,7 +25955,9 @@ with pkgs;
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix { };
 
-  net-snmp = callPackage ../servers/monitoring/net-snmp { };
+  net-snmp = callPackage ../servers/monitoring/net-snmp {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices DiskArbitration IOKit ApplicationServices;
+  };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
