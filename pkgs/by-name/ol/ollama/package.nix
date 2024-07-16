@@ -214,6 +214,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     };
   } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
+    service-cuda = nixosTests.ollama-cuda;
+    service-rocm = nixosTests.ollama-rocm;
   };
 
   meta = {
