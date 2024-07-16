@@ -3,7 +3,8 @@
 , glib, pcre, pcre2
 , libmysqlclient, libressl
 , zlib, zstd, nix-update-script, util-linux
-, libselinux, libsepol }:
+, libselinux, libsepol
+, testers, versionCheckHook, mydumper }:
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
@@ -21,6 +22,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ cmake pkg-config sphinx ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   buildInputs = [
     glib pcre pcre2
@@ -55,6 +59,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  # mydumper --version is checked in `versionCheckHook`
+  passthru.tests = testers.testVersion {
+    package = mydumper;
+    command = "myloader --version";
+    version = "myloader v${version}";
+  };
 
   meta = with lib; {
     description = "High-performance MySQL backup tool";
