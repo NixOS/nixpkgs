@@ -32,7 +32,10 @@ rustPlatform.buildRustPackage {
     description = "Simple oscilloscope/vectorscope/spectroscope for your terminal";
     homepage = "https://github.com/alemidev/scope-tui";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = with lib.maintainers; [
+      iynaix
+      aleksana
+    ];
     mainProgram = "scope-tui";
     platforms = lib.platforms.linux;
   };
