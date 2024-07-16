@@ -786,7 +786,6 @@ default-package-overrides:
   - cryptohash-sha512 ==0.11.102.0
   - crypton ==0.34
   - crypton-conduit ==0.2.3
-  - crypton-connection ==0.3.2
   - cryptonite ==0.30
   - cryptonite-conduit ==0.2.2
   - cryptonite-openssl ==0.7
