@@ -121,11 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
       done
     done
 
-    for i in ortecc orte-info ompi_info oshmem_info; do
+    # ortecc's files don't have c++ and fort companions so it is handled
+    # outside the for loops above
+    moveToOutput "bin/ortecc" "''${!outputDev}"
+    moveToOutput "share/openmpi/ortecc-wrapper-data.txt" "''${!outputDev}"
+
+    for i in orte-info ompi_info oshmem_info; do
       moveToOutput "bin/$i" "''${!outputDev}"
     done
-
-    moveToOutput "share/openmpi/ortecc-wrapper-data.txt" "''${!outputDev}"
   '';
 
   postFixup =
