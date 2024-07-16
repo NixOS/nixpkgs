@@ -12,30 +12,13 @@ in
 
 {
   imports = [
+    ./config.nix
     ./exchange.nix
     ./libeufin.nix
   ];
 
   options.services.taler = {
     enable = lib.mkEnableOption "the GNU Taler system";
-    settings = lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-        options = {
-          taler = {
-            currency = lib.mkOption {
-              # TODO upcase?
-              default = "KUDOS";
-            };
-            currency_round_unit = lib.mkOption {
-              # TODO: refactor
-              default = "KUDOS:0.01";
-            };
-          };
-        };
-      };
-      default = { };
-    };
     includes = lib.mkOption {
       type = with lib.types; listOf path;
       default = [ ];

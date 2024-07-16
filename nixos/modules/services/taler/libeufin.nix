@@ -18,33 +18,6 @@ in
   };
 
   config = lib.mkIf (talerEnabled && this.enable) {
-    services.taler.settings = {
-      libeufin-bank = rec {
-        CURRENCY = "KUDOS"; # TODO: lower case or upper?
-        SERVE = "tcp";
-        PORT = 8082;
-        BIND_TO = "libeufin.hephaistos.foo.bar"; # TODO: set a HOSTNAME to this as well?
-        WIRE_TYPE = "x-taler-bank";
-        #TODO: check WIRE_TYPE and set X_TALER_BANK_PAYTO_HOSTNAME and IBAN_PAYTO_BIC
-        # If WIRE_TYPE = x-taler-bank
-        X_TALER_BANK_PAYTO_HOSTNAME = "http://${BIND_TO}:${toString PORT}/";
-        #TODO:
-        # If WIRE_TYPE = iban
-        #IBAN_PAYTO_BIC = "SANDBOXX";
-        REGISTRATION_BONUS = "${CURRENCY}:100";
-        ALLOW_REGISTRATION = "yes";
-        ALLOW_ACCOUNT_DELETION = "yes";
-        #TODO: check SSL to determine http or https
-        SUGGESTED_WITHDRAWAL_EXCHANGE = "https://${talerSettings.exchange.HOSTNAME}:${toString talerSettings.exchange.PORT}/";
-      };
-      libeufin-bankdb-postgres = {
-        CONFIG = "postgresql:///${dbName}";
-      };
-      libeufin-nexusdb-postgres = {
-        CONFIG = "postgresql:///${dbName}";
-      };
-    };
-
     systemd.services = {
       libeufin = {
         script =
