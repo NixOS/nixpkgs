@@ -79,6 +79,19 @@ Don't generate
 or
 .Pa hardware-configuration.nix
 and print the hardware configuration to stdout only.
+.
+.It Fl -show-templates
+Shows list of templates available for generation, and their aliases.
+.
+.It Fl -template Ar template
+Uses given
+.Ar template
+for additinal files when generating configuration. Template will not be applied,
+when there are files present other than
+.Pa configuration.nix
+and
+.Pa hardware-configuration.nix Ns
+\&.
 .El
 .
 .
@@ -144,6 +157,13 @@ imports = [ ./hardware-configuration.nix ];
 .Ed
 .
 .Pp
+Using templates, you can generate a default.nix with attribute set of NixOS
+configuration, or a basic flake, by running one of:
+.Bd -literal -offset indent
+$ nixos-generate-config --template by-attribute
+$ nixos-generate-config --template flake
+.Ed
+.Pp
 After installation, if your hardware configuration changes, you can run:
 .Bd -literal -offset indent
 $ nixos-generate-config
@@ -154,7 +174,7 @@ to update
 .Pa /etc/nixos/hardware-configuration.nix Ns
 \&. Your
 .Pa /etc/nixos/configuration.nix
-will
+and other files will
 .Em not
 be overwritten.
 .
