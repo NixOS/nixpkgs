@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     pyinotify
     levenshtein
+    pyasyncore
     pyxdg
     pycairo
     requests
