@@ -6,7 +6,7 @@
   dill,
   mock,
   pytestCheckHook,
-  setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # the package is not included into the PyPI tarball
   src = fetchFromGitHub {
     owner = "mailgun";
-    repo = pname;
+    repo = "expiringdict";
     rev = "refs/tags/v${version}";
     hash = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "expiringdict" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mailgun/expiringdict/blob/${src.rev}/CHANGELOG.rst";
     description = "Dictionary with auto-expiring values for caching purposes";
     homepage = "https://github.com/mailgun/expiringdict";
     license = licenses.asl20;
