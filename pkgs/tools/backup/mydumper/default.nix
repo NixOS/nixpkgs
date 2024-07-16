@@ -12,6 +12,9 @@
   zlib,
   zstd,
   nix-update-script,
+  testers,
+  versionCheckHook,
+  mydumper,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +41,9 @@ stdenv.mkDerivation rec {
     pkg-config
     sphinx
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   buildInputs = [
     glib
@@ -70,6 +76,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  # mydumper --version is checked in `versionCheckHook`
+  passthru.tests = testers.testVersion {
+    package = mydumper;
+    command = "myloader --version";
+    version = "myloader v${version}";
+  };
 
   meta = with lib; {
     description = "High-performance MySQL backup tool";
