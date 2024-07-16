@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "ddns-updater";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "qdm12";
     repo = "ddns-updater";
     rev = "v${version}";
-    hash = "sha256-NU6KXVjggsXVCKImGqbB1AXcph+ycRfkk5S4JNq0cHg=";
+    hash = "sha256-U8Vw7dsj/efqvpooT3QQjNp41AuGYJ/Gz/pA8Em3diE=";
   };
 
-  vendorHash = "sha256-Ibrv0m3Tz/5JbkHYmiJ9Ijo37fjHc7TP100K7ZTwO8I=";
+  vendorHash = "sha256-M9Al3zl2Ltv4yWdyRB3+9zpTr3foliu5WweImHltz3M=";
 
   ldflags = [
     "-s"
