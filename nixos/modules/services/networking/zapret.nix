@@ -38,6 +38,9 @@ in {
       type = types.bool;
       # recommended by upstream
       default = true;
+      description = ''
+        Disable or enable usage of IpV6 by zapret
+      '';
     };
   };
 
