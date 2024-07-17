@@ -17,7 +17,7 @@ melpaBuild {
     hash = "sha256-CbcI1mmghc3HObg80bjScVDcJ1DHx9aX1WP2HlhAshs=";
   };
 
-  packageRequires = [ gzip ];
+  propagatedUserEnvPkgs = [ gzip ];
 
   files = ''(:defaults "msg")'';
 
