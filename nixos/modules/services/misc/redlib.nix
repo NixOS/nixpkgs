@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.libreddit;
+  cfg = config.services.redlib;
 
   args = concatStringsSep " " ([
     "--port ${toString cfg.port}"
@@ -11,11 +11,15 @@ let
   ]);
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "libreddit" ] [ "services" "redlib" ])
+  ];
+
   options = {
-    services.libreddit = {
+    services.redlib = {
       enable = mkEnableOption "Private front-end for Reddit";
 
-      package = mkPackageOption pkgs "libreddit" { };
+      package = mkPackageOption pkgs "redlib" { };
 
       address = mkOption {
         default = "0.0.0.0";
@@ -34,14 +38,14 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the libreddit web interface";
+        description = "Open ports in the firewall for the redlib web interface";
       };
 
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.services.libreddit = {
+    systemd.services.redlib = {
         description = "Private front-end for Reddit";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
