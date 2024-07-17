@@ -7,6 +7,8 @@ name: Check that Nix files are formatted
 
 on:
   pull_request_target:
+    # See the comment at the same location in ./check-by-name.yml
+    types: [opened, synchronize, reopened, edited]
 permissions:
   contents: read
 
@@ -15,18 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
-      - name: Get list of changed files from PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
-            | jq --raw-output '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
-            > "$HOME/changed_files"
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # pull_request_target checks out the base branch by default
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          # Fetches the merge commit and its parents
+          fetch-depth: 2
+      - name: Checking out base branch
+        run: |
+          base=$(mktemp -d)
+          baseRev=$(git rev-parse HEAD^1)
+          git worktree add "$base" "$baseRev"
+          echo "baseRev=$baseRev" >> "$GITHUB_ENV"
+          echo "base=$base" >> "$GITHUB_ENV"
       - name: Get Nixpkgs revision for nixfmt
         run: |
           # pin to a commit from nixpkgs-unstable to avoid e.g. building nixfmt
@@ -44,13 +47,32 @@ jobs:
       - name: Check that Nix files are formatted according to the RFC style
         run: |
           unformattedFiles=()
-          while IFS= read -r file; do
-            # TODO: Make this more parallel, perhaps using treefmt,
-            # but need to make sure that only changed files are checked!
-            if ! nixfmt --check "$file"; then
+
+          # TODO: Make this more parallel
+
+          # Loop through all Nix files touched by the PR
+          while readarray -d '' -n 2 entry && (( ${#entry[@]} != 0 )); do
+            type=${entry[0]}
+            file=${entry[1]}
+            case $type in
+              A*)
+                dest=$file
+                ;;
+              M*)
+                dest=$file
+                ;;
+              C*|R*)
+                read -r -d '' dest
+                ;;
+              *)
+                echo "Ignoring file $file with type $type"
+                continue
+            esac
+
+            if ! nixfmt --check "$dest"; then
               unformattedFiles+=("$file")
             fi
-          done < "$HOME/changed_files"
+          done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
 
           if (( "${#unformattedFiles[@]}" > 0 )); then
             echo "Some new/changed Nix files are not properly formatted"
