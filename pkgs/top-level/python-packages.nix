@@ -3978,8 +3978,6 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
-  etebase-server = callPackage ../servers/etebase { };
-
   eternalegypt = callPackage ../development/python-modules/eternalegypt { };
 
   etesync = callPackage ../development/python-modules/etesync { };

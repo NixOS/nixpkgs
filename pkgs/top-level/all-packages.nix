@@ -30189,7 +30189,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
-  etebase-server = with python3Packages; toPythonApplication etebase-server;
+  etebase-server = callPackage ../servers/etebase {};
 
   etesync-dav = callPackage ../applications/misc/etesync-dav { };
 
