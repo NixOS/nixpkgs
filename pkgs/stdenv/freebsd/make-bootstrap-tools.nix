@@ -1,28 +1,21 @@
-{ system }:
-((import <nixpkgs> { }).callPackage (
-  {
-    stdenv,
-    pkgsCross,
-    runCommand,
-    lib,
-    buildPackages,
-  }:
+{ pkgs ? import ../../.. {} }:
   let
-    pkgs = pkgsCross.${system};
+    inherit (pkgs) runCommand lib;
+    # splicing doesn't seem to work right here
+    inherit (pkgs.buildPackages) nix rsync;
     pack-all =
       packCmd: name: pkgs: fixups:
       (runCommand name {
         requiredSystemFeatures = [ "recursive-nix" ];
+        nativeBuildInputs = [ nix rsync ];
       } ''
-        nix_store=${lib.getBin buildPackages.nix}/bin/nix-store
-        rsync=${lib.getExe buildPackages.rsync}
         base=$PWD
-        requisites="$($nix_store --query --requisites ${lib.concatStringsSep " " pkgs} | tac)"
+        requisites="$(nix-store --query --requisites ${lib.concatStringsSep " " pkgs} | tac)"
 
         rm -f $base/nix-support/propagated-build-inputs
         for f in $requisites; do
           cd $f
-          $rsync --chmod="+w" -av . $base
+          rsync --chmod="+w" -av . $base
         done
         cd $base
 
@@ -42,18 +35,18 @@
         rm .nix-socket
         ${packCmd}
       '');
-    nar-all = pack-all "$nix_store --dump . | xz -9 -T $NIX_BUILD_CORES >$out";
-    tar-all = pack-all "XZ_OPT=\"-9 -T $NIX_BUILD_CORES\" tar cJf $out .";
+    nar-all = pack-all "nix-store --dump . | xz -9 -e -T $NIX_BUILD_CORES >$out";
+    tar-all = pack-all "XZ_OPT=\"-9 -e -T $NIX_BUILD_CORES\" tar cJf $out --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 .";
     coreutils-big = pkgs.coreutils.override { singleBinary = false; };
     mkdir = runCommand "mkdir" { coreutils = coreutils-big; } ''
       mkdir -p $out/bin
       cp $coreutils/bin/mkdir $out/bin
     '';
-  in {
-  bootstrap-files0 = nar-all "${system}-bootstrap-files0.nar.xz" (with pkgs; [bash mkdir xz gnutar]) ''
+  in rec {
+  unpack = nar-all "unpack.nar.xz" (with pkgs; [bash mkdir xz gnutar]) ''
     rm -rf include lib/*.a lib/i18n lib/bash share
   '';
-  bootstrap-files1 = tar-all "${system}-bootstrap-files1.tar.xz" (
+  bootstrap-tools = tar-all "bootstrap-tools.tar.xz" (
     with pkgs;
     [
       (runCommand "bsdcp" { } "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
@@ -97,9 +90,13 @@
     # - manually identify the point where files have no longer been accessed after the patching phase
     # - use your favorite text editor to snip out the time column, the /nix/store/###-bootstrap-archive/ prefix, and the files that have not been used during bootstrap
     # - turn off atime if it was off before since it will degrade performance
-    # - manually remove from the list the following; they are not marked as atime'd even though they are used
-    #   - bin/strings           # used only during bootstrap
+    # - manually remove bin/strings from the list, since it will be used only during bootstrap
+    # - manually remove all files under include and lib/clang/*/include from the list in order to improve forward compatibility (and since they are very small)
     # - plop it here
-  ) "xargs rm -f <${./bootstrap-files-spurious.txt}";
+  ) "xargs rm -f <${./bootstrap-tools-spurious.txt}";
+  build = runCommand "build" { } ''
+    mkdir -p $out/on-server
+    ln -s ${unpack} $out/on-server/unpack.nar.xz
+    ln -s ${bootstrap-tools} $out/on-server/bootstrap-tools.tar.xz
+  '';
 }
-) { })

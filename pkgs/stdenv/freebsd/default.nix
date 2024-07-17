@@ -7,28 +7,17 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  bootstrapFiles ?
+    let table = {
+      x86_64-freebsd = import ./bootstrap-files/x86_64-unknown-freebsd.nix;
+    };
+    files = table.${localSystem.system} or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
+    in files
 }:
 
 assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
-  bootstrap-urls-table = {
-    x86_64-freebsd = {
-      stage0 = {
-        url = "http://192.168.122.1:8000/stage0.nar.xz";
-        hash = "sha256-iGPBcwzDLJFroXwE/ADW+aUevywZCOher4mg9Ysx2j4=";
-        name = "bootstrap-files0";
-        unpack = true;
-      };
-      stage1 = {
-        url = "http://192.168.122.1:8000/stage1.tar.xz";
-        hash = "sha256-i0VBzbMPnSSmPjh5CYOQXTYCbSBbfa5omA0xZ2fjDlU=";
-        name = "bootstrap-files1.tar.xz";
-      };
-    };
-  };
-  fetchurlBoot = import <nix/fetchurl.nix>;
-  bootstrap-files = builtins.mapAttrs (k: fetchurlBoot) bootstrap-urls-table.${localSystem.system};
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
     mkdir "$rsrc"
@@ -49,11 +38,11 @@ let
       name = "bootstrap-archive";
       pname = "bootstrap-archive";
       version = "9.9.9";
-      builder = "${bootstrap-files.stage0}/libexec/ld-elf.so.1";
-      args = [ "${bootstrap-files.stage0}/bin/bash" ./unpack-bootstrap-files.sh ];
-      LD_LIBRARY_PATH = "${bootstrap-files.stage0}/lib";
-      src = bootstrap-files.stage0;
-      inherit (bootstrap-files) stage1;
+      builder = "${bootstrapFiles.unpack}/libexec/ld-elf.so.1";
+      args = [ "${bootstrapFiles.unpack}/bin/bash" ./unpack-bootstrap-files.sh ];
+      LD_LIBRARY_PATH = "${bootstrapFiles.unpack}/lib";
+      src = bootstrapFiles.unpack;
+      inherit (bootstrapFiles) bootstrapTools;
     }
   );
 
