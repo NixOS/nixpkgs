@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, lksctp-tools
-, pkg-config
-, libosmocore
-, libosmo-netif
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  lksctp-tools,
+  pkg-config,
+  libosmocore,
+  libosmo-netif,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,8 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://osmocom.org/projects/libosmo-sccp";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      markuskowa
-    ];
+    maintainers = with maintainers; [ markuskowa ];
   };
 }

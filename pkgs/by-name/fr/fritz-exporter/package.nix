@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,13 +21,9 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  pythonRelaxDeps = [
-    "defusedxml"
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
@@ -37,9 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/pdreker/fritz_exporter/blob/${src.rev}/CHANGELOG.md";

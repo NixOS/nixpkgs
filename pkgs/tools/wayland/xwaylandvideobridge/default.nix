@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qtbase
-, qtquickcontrols2
-, qtx11extras
-, kdelibs4support
-, kpipewire
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qtbase,
+  qtquickcontrols2,
+  qtx11extras,
+  kdelibs4support,
+  kpipewire,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";
     homepage = "https://invent.kde.org/system/xwaylandvideobridge";
-    license = with lib.licenses; [ bsd3 cc0 gpl2Plus ];
+    license = with lib.licenses; [
+      bsd3
+      cc0
+      gpl2Plus
+    ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
     mainProgram = "xwaylandvideobridge";

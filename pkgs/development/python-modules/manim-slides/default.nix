@@ -46,9 +46,7 @@ buildPythonPackage rec {
     hash = "sha256-egQYL4Qvs1fQcJ5WEM461TSYqs2XN39wbyfx9uEFeIs=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   pythonRemoveDeps = [ "opencv-python" ];
 

@@ -30,9 +30,7 @@ buildPythonPackage rec {
     "yt-dlp"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click

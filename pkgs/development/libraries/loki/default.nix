@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "loki";
@@ -14,9 +18,7 @@ stdenv.mkDerivation rec {
     make build-shared
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-std=c++11"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
 
   enableParallelBuilding = true;
 

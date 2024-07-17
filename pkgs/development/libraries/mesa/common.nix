@@ -26,6 +26,9 @@ rec {
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
     platforms = lib.platforms.mesaPlatforms;
-    maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
+    maintainers = with lib.maintainers; [
+      primeos
+      vcunat
+    ]; # Help is welcome :)
   };
 }

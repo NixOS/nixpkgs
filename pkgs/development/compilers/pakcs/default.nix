@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
-, curl, git, unzip, gnutar, coreutils, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  haskellPackages,
+  haskell,
+  which,
+  swiProlog,
+  rlwrap,
+  tk,
+  curl,
+  git,
+  unzip,
+  gnutar,
+  coreutils,
+  sqlite,
+}:
 
 let
   pname = "pakcs";
@@ -14,20 +28,25 @@ let
     hash = "sha256-1r6jEY3eEGESKcAepiziVbxpIvQLtCS6l0trBU3SGGo=";
   };
 
-  curry-frontend = (haskellPackages.override {
-    overrides = self: super: {
-      curry-frontend = haskell.lib.compose.overrideCabal (drv: {
-        inherit src;
-        postUnpack = "sourceRoot+=/frontend";
-      }) (super.callPackage ./curry-frontend.nix { });
-    };
-  }).curry-frontend;
+  curry-frontend =
+    (haskellPackages.override {
+      overrides = self: super: {
+        curry-frontend = haskell.lib.compose.overrideCabal (drv: {
+          inherit src;
+          postUnpack = "sourceRoot+=/frontend";
+        }) (super.callPackage ./curry-frontend.nix { });
+      };
+    }).curry-frontend;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [ swiProlog ];
-  nativeBuildInputs = [ which makeWrapper ];
+  nativeBuildInputs = [
+    which
+    makeWrapper
+  ];
 
   makeFlags = [
     "CURRYFRONTEND=${curry-frontend}/bin/curry-frontend"
@@ -45,7 +64,7 @@ in stdenv.mkDerivation {
                 scripts/compile-all-libs.sh; do
         substituteInPlace $file --replace "/bin/rm" "rm"
     done
-  '' ;
+  '';
 
   preBuild = ''
     mkdir -p $out/pakcs
@@ -67,7 +86,16 @@ in stdenv.mkDerivation {
 
     # List of dependencies from currytools/cpm/src/CPM/Main.curry
     wrapProgram $out/pakcs/bin/cypm \
-      --prefix PATH ":" "${lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          curl
+          git
+          unzip
+          gnutar
+          coreutils
+          sqlite
+        ]
+      }"
 
     runHook postInstall
   '';

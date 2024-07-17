@@ -1,4 +1,13 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, nix-update-script, k9s }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  k9s,
+}:
 
 buildGoModule rec {
   pname = "k9s";
@@ -59,6 +68,11 @@ buildGoModule rec {
     changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "k9s";
-    maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
+    maintainers = with maintainers; [
+      Gonzih
+      markus1189
+      bryanasdev000
+      qjoly
+    ];
   };
 }

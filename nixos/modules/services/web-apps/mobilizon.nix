@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -104,7 +109,16 @@ in
                     };
                     ip = mkOption {
                       type = elixirTypes.tuple;
-                      default = settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ];
+                      default = settingsFormat.lib.mkTuple [
+                        0
+                        0
+                        0
+                        0
+                        0
+                        0
+                        0
+                        1
+                      ];
                       description = ''
                         The IP address to listen on. Defaults to [::1] notated as a byte tuple.
                       '';
@@ -208,7 +222,20 @@ in
 
     assertions = [
       {
-        assertion = cfg.nginx.enable -> (cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ]);
+        assertion =
+          cfg.nginx.enable
+          -> (
+            cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [
+              0
+              0
+              0
+              0
+              0
+              0
+              0
+              1
+            ]
+          );
         message = "Setting the IP mobilizon listens on is only possible when the nginx config is not used, as it is hardcoded there.";
       }
     ];
@@ -218,12 +245,12 @@ in
         "Mobilizon.Web.Endpoint" = {
           server = true;
           url.host = mkDefault instanceSettings.hostname;
-          secret_key_base =
-            settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_INSTANCE_SECRET"; };
+          secret_key_base = settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_INSTANCE_SECRET"; };
         };
 
-        "Mobilizon.Web.Auth.Guardian".secret_key =
-          settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_AUTH_SECRET"; };
+        "Mobilizon.Web.Auth.Guardian".secret_key = settingsFormat.lib.mkGetEnv {
+          envVariable = "MOBILIZON_AUTH_SECRET";
+        };
 
         ":instance" = {
           registrations_open = mkDefault false;
@@ -299,9 +326,7 @@ in
           # Taken from here:
           # https://framagit.org/framasoft/mobilizon/-/blob/1.0.7/lib/mix/tasks/mobilizon/instance.ex#L132-133
           genSecret =
-            "IO.puts(:crypto.strong_rand_bytes(64)" +
-            "|> Base.encode64()" +
-            "|> binary_part(0, 64))";
+            "IO.puts(:crypto.strong_rand_bytes(64)" + "|> Base.encode64()" + "|> binary_part(0, 64))";
 
           # Taken from here:
           # https://github.com/elixir-lang/elixir/blob/v1.11.3/lib/mix/lib/mix/release.ex#L499
@@ -339,7 +364,10 @@ in
       description = "Mobilizon PostgreSQL setup";
 
       after = [ "postgresql.service" ];
-      before = [ "mobilizon.service" "mobilizon-setup-secrets.service" ];
+      before = [
+        "mobilizon.service"
+        "mobilizon-setup-secrets.service"
+      ];
       wantedBy = [ "mobilizon.service" ];
 
       path = [ postgresql ];
@@ -350,15 +378,14 @@ in
       # as PostgreSQL 15 changed their behaviors w.r.t. to privileges.
       # See https://github.com/NixOS/nixpkgs/issues/216989 to get rid
       # of that workaround.
-      script =
-        ''
-          psql "${repoSettings.database}" -c "\
-            CREATE EXTENSION IF NOT EXISTS postgis; \
-            CREATE EXTENSION IF NOT EXISTS pg_trgm; \
-            CREATE EXTENSION IF NOT EXISTS unaccent;"
-          psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
+      script = ''
+        psql "${repoSettings.database}" -c "\
+          CREATE EXTENSION IF NOT EXISTS postgis; \
+          CREATE EXTENSION IF NOT EXISTS pg_trgm; \
+          CREATE EXTENSION IF NOT EXISTS unaccent;"
+        psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
 
-        '';
+      '';
 
       serviceConfig = {
         Type = "oneshot";
@@ -390,8 +417,7 @@ in
     services.nginx =
       let
         inherit (cfg.settings.":mobilizon".":instance") hostname;
-        proxyPass = "http://[::1]:"
-          + toString cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.port;
+        proxyPass = "http://[::1]:" + toString cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.port;
       in
       lib.mkIf cfg.nginx.enable {
         enable = true;
@@ -444,5 +470,8 @@ in
     environment.systemPackages = [ launchers ];
   };
 
-  meta.maintainers = with lib.maintainers; [ minijackson erictapen ];
+  meta.maintainers = with lib.maintainers; [
+    minijackson
+    erictapen
+  ];
 }

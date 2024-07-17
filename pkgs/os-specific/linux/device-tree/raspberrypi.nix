@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, raspberrypifw }:
+{
+  lib,
+  stdenvNoCC,
+  raspberrypifw,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-dtbs";

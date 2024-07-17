@@ -1,49 +1,50 @@
-{ stdenv
+{
+  stdenv,
   # nix tooling and utilities
-, callPackage
-, lib
-, fetchurl
-, makeWrapper
-, writeTextFile
-, substituteAll
-, writeShellApplication
-, makeBinaryWrapper
+  callPackage,
+  lib,
+  fetchurl,
+  makeWrapper,
+  writeTextFile,
+  substituteAll,
+  writeShellApplication,
+  makeBinaryWrapper,
   # this package (through the fixpoint glass)
-, bazel_self
+  bazel_self,
   # native build inputs
-, runtimeShell
-, zip
-, unzip
-, bash
-, coreutils
-, which
-, gawk
-, gnused
-, gnutar
-, gnugrep
-, gzip
-, findutils
-, diffutils
-, gnupatch
-, file
-, installShellFiles
-, lndir
-, python3
+  runtimeShell,
+  zip,
+  unzip,
+  bash,
+  coreutils,
+  which,
+  gawk,
+  gnused,
+  gnutar,
+  gnugrep,
+  gzip,
+  findutils,
+  diffutils,
+  gnupatch,
+  file,
+  installShellFiles,
+  lndir,
+  python3,
   # Apple dependencies
-, cctools
-, libcxx
-, sigtool
-, CoreFoundation
-, CoreServices
-, Foundation
-, IOKit
+  cctools,
+  libcxx,
+  sigtool,
+  CoreFoundation,
+  CoreServices,
+  Foundation,
+  IOKit,
   # Allow to independently override the jdks used to build and run respectively
-, buildJdk
-, runJdk
+  buildJdk,
+  runJdk,
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
-, enableNixHacks ? false
-, version ? "7.1.2"
+  enableNixHacks ? false,
+  version ? "7.1.2",
 }:
 
 let
@@ -70,8 +71,8 @@ let
     # We use the release tarball that already has everything bundled so we
     # should not need any extra external deps. But our nonprebuilt java
     # toolchains hack needs just one non bundled dep.
-    requiredDepNamePredicate = name:
-      null != builtins.match "rules_java~.*~toolchains~remote_java_tools" name;
+    requiredDepNamePredicate =
+      name: null != builtins.match "rules_java~.*~toolchains~remote_java_tools" name;
   };
 
   defaultShellUtils =
@@ -174,87 +175,88 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit sourceRoot;
 
-  patches = [
-    # Remote java toolchains do not work on NixOS because they download binaries,
-    # so we need to use the @local_jdk//:jdk
-    # It could in theory be done by registering @local_jdk//:all toolchains,
-    # but these java toolchains still bundle binaries for ijar and stuff. So we
-    # need a nonprebult java toolchain (where ijar and stuff is built from
-    # sources).
-    # There is no such java toolchain, so we introduce one here.
-    # By providing no version information, the toolchain will set itself to the
-    # version of $JAVA_HOME/bin/java, just like the local_jdk does.
-    # To ensure this toolchain gets used, we can set
-    # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
-    # toolchain registered by default uses the local_jdk, making the selection
-    # unambiguous.
-    # This toolchain has the advantage that it can use any ambiant java jdk,
-    # not only a given, fixed version. It allows bazel to work correctly in any
-    # environment where JAVA_HOME is set to the right java version, like inside
-    # nix derivations.
-    # However, this patch breaks bazel hermeticity, by picking the ambiant java
-    # version instead of the more hermetic remote_jdk prebuilt binaries that
-    # rules_java provide by default. It also requires the user to have a
-    # JAVA_HOME set to the exact version required by the project.
-    # With more code, we could define java toolchains for all the java versions
-    # supported by the jdk as in rules_java's
-    # toolchains/local_java_repository.bzl, but this is not implemented here.
-    # To recover vanilla behavior, non NixOS users can set
-    # --{,tool_}java_runtime_version=remote_jdk, effectively reverting the
-    # effect of this patch and the fake system bazelrc.
-    ./java_toolchain.patch
+  patches =
+    [
+      # Remote java toolchains do not work on NixOS because they download binaries,
+      # so we need to use the @local_jdk//:jdk
+      # It could in theory be done by registering @local_jdk//:all toolchains,
+      # but these java toolchains still bundle binaries for ijar and stuff. So we
+      # need a nonprebult java toolchain (where ijar and stuff is built from
+      # sources).
+      # There is no such java toolchain, so we introduce one here.
+      # By providing no version information, the toolchain will set itself to the
+      # version of $JAVA_HOME/bin/java, just like the local_jdk does.
+      # To ensure this toolchain gets used, we can set
+      # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
+      # toolchain registered by default uses the local_jdk, making the selection
+      # unambiguous.
+      # This toolchain has the advantage that it can use any ambiant java jdk,
+      # not only a given, fixed version. It allows bazel to work correctly in any
+      # environment where JAVA_HOME is set to the right java version, like inside
+      # nix derivations.
+      # However, this patch breaks bazel hermeticity, by picking the ambiant java
+      # version instead of the more hermetic remote_jdk prebuilt binaries that
+      # rules_java provide by default. It also requires the user to have a
+      # JAVA_HOME set to the exact version required by the project.
+      # With more code, we could define java toolchains for all the java versions
+      # supported by the jdk as in rules_java's
+      # toolchains/local_java_repository.bzl, but this is not implemented here.
+      # To recover vanilla behavior, non NixOS users can set
+      # --{,tool_}java_runtime_version=remote_jdk, effectively reverting the
+      # effect of this patch and the fake system bazelrc.
+      ./java_toolchain.patch
 
-    # Bazel integrates with apple IOKit to inhibit and track system sleep.
-    # Inside the darwin sandbox, these API calls are blocked, and bazel
-    # crashes. It seems possible to allow these APIs inside the sandbox, but it
-    # feels simpler to patch bazel not to use it at all. So our bazel is
-    # incapable of preventing system sleep, which is a small price to pay to
-    # guarantee that it will always run in any nix context.
-    #
-    # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-    # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
-    # sandbox.
-    #
-    # If you want to investigate the sandbox profile path,
-    # IORegisterForSystemPower can be allowed with
-    #
-    #     propagatedSandboxProfile = ''
-    #       (allow iokit-open (iokit-user-client-class "RootDomainUserClient"))
-    #     '';
-    #
-    # I do not know yet how to allow IOPMAssertion{CreateWithName,Release}
-    ./darwin_sleep.patch
+      # Bazel integrates with apple IOKit to inhibit and track system sleep.
+      # Inside the darwin sandbox, these API calls are blocked, and bazel
+      # crashes. It seems possible to allow these APIs inside the sandbox, but it
+      # feels simpler to patch bazel not to use it at all. So our bazel is
+      # incapable of preventing system sleep, which is a small price to pay to
+      # guarantee that it will always run in any nix context.
+      #
+      # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
+      # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+      # sandbox.
+      #
+      # If you want to investigate the sandbox profile path,
+      # IORegisterForSystemPower can be allowed with
+      #
+      #     propagatedSandboxProfile = ''
+      #       (allow iokit-open (iokit-user-client-class "RootDomainUserClient"))
+      #     '';
+      #
+      # I do not know yet how to allow IOPMAssertion{CreateWithName,Release}
+      ./darwin_sleep.patch
 
-    # Fix DARWIN_XCODE_LOCATOR_COMPILE_COMMAND by removing multi-arch support.
-    # Nixpkgs toolcahins do not support that (yet?) and get confused.
-    # Also add an explicit /usr/bin prefix that will be patched below.
-    ./xcode_locator.patch
+      # Fix DARWIN_XCODE_LOCATOR_COMPILE_COMMAND by removing multi-arch support.
+      # Nixpkgs toolcahins do not support that (yet?) and get confused.
+      # Also add an explicit /usr/bin prefix that will be patched below.
+      ./xcode_locator.patch
 
-    # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
-    # This is breaking the build of any C target. This patch removes the last
-    # argument if it's found to be an empty string.
-    ../trim-last-argument-to-gcc-if-empty.patch
+      # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
+      # This is breaking the build of any C target. This patch removes the last
+      # argument if it's found to be an empty string.
+      ../trim-last-argument-to-gcc-if-empty.patch
 
-    # --experimental_strict_action_env (which may one day become the default
-    # see bazelbuild/bazel#2574) hardcodes the default
-    # action environment to a non hermetic value (e.g. "/usr/local/bin").
-    # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
-    # So we are replacing this bazel paths by defaultShellPath,
-    # improving hermeticity and making it work in nixos.
-    (substituteAll {
-      src = ../strict_action_env.patch;
-      strictActionEnvPatch = defaultShellPath;
-    })
+      # --experimental_strict_action_env (which may one day become the default
+      # see bazelbuild/bazel#2574) hardcodes the default
+      # action environment to a non hermetic value (e.g. "/usr/local/bin").
+      # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
+      # So we are replacing this bazel paths by defaultShellPath,
+      # improving hermeticity and making it work in nixos.
+      (substituteAll {
+        src = ../strict_action_env.patch;
+        strictActionEnvPatch = defaultShellPath;
+      })
 
-    # bazel reads its system bazelrc in /etc
-    # override this path to a builtin one
-    (substituteAll {
-      src = ../bazel_rc.patch;
-      bazelSystemBazelRCPath = bazelRC;
-    })
-  ]
-  # See enableNixHacks argument above.
-  ++ lib.optional enableNixHacks ./nix-hacks.patch;
+      # bazel reads its system bazelrc in /etc
+      # override this path to a builtin one
+      (substituteAll {
+        src = ../bazel_rc.patch;
+        bazelSystemBazelRCPath = bazelRC;
+      })
+    ]
+    # See enableNixHacks argument above.
+    ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   postPatch =
     let
@@ -407,25 +409,30 @@ stdenv.mkDerivation rec {
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  buildInputs = [ buildJdk bashWithDefaultShellUtils ] ++ defaultShellUtils;
+  buildInputs = [
+    buildJdk
+    bashWithDefaultShellUtils
+  ] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-    python3
-    unzip
-    which
-    zip
-    python3.pkgs.absl-py # Needed to build fish completion
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    cctools
-    libcxx
-    Foundation
-    CoreFoundation
-    CoreServices
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+      makeWrapper
+      python3
+      unzip
+      which
+      zip
+      python3.pkgs.absl-py # Needed to build fish completion
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      cctools
+      libcxx
+      Foundation
+      CoreFoundation
+      CoreServices
+    ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -554,16 +561,18 @@ stdenv.mkDerivation rec {
 
   # Save paths to hardcoded dependencies so Nix can detect them.
   # This is needed because the templates get tar’d up into a .jar.
-  postFixup = ''
-    mkdir -p $out/nix-support
-    echo "${defaultShellPath}" >> $out/nix-support/depends
-    # The string literal specifying the path to the bazel-rc file is sometimes
-    # stored non-contiguously in the binary due to gcc optimisations, which leads
-    # Nix to miss the hash when scanning for dependencies
-    echo "${bazelRC}" >> $out/nix-support/depends
-  '' + lib.optionalString stdenv.isDarwin ''
-    echo "${cctools}" >> $out/nix-support/depends
-  '';
+  postFixup =
+    ''
+      mkdir -p $out/nix-support
+      echo "${defaultShellPath}" >> $out/nix-support/depends
+      # The string literal specifying the path to the bazel-rc file is sometimes
+      # stored non-contiguously in the binary due to gcc optimisations, which leads
+      # Nix to miss the hash when scanning for dependencies
+      echo "${bazelRC}" >> $out/nix-support/depends
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      echo "${cctools}" >> $out/nix-support/depends
+    '';
 
   dontStrip = true;
   dontPatchELF = true;
@@ -575,7 +584,12 @@ stdenv.mkDerivation rec {
     #
     # in the nixpkgs checkout root to exercise them locally.
     tests = callPackage ./tests.nix {
-      inherit Foundation bazel_self lockfile repoCache;
+      inherit
+        Foundation
+        bazel_self
+        lockfile
+        repoCache
+        ;
     };
 
     # For ease of debugging

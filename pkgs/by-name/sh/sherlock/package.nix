@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, unstableGitUpdater
-, poetry
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  unstableGitUpdater,
+  poetry,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -67,18 +68,14 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "stem"
-  ];
+  pythonRelaxDeps = [ "stem" ];
 
   pytestFlagsArray = [
     "-m"
     "'not online'"
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = with lib; {
     homepage = "https://sherlock-project.github.io/";

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, libcap
-, ncurses
-, jansson
-, withGtk ? false
-, gtk3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libcap,
+  ncurses,
+  jansson,
+  withGtk ? false,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +23,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
   };
 
-  patches = [ (fetchpatch { # https://github.com/traviscross/mtr/pull/468
-                url = "https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch";
-                hash = "sha256-rTydtU8+Wc4nGEKh1GOkhcpgME4hwsACy82gKPaIe64=";
-              }) ];
+  patches = [
+    (fetchpatch {
+      # https://github.com/traviscross/mtr/pull/468
+      url = "https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch";
+      hash = "sha256-rTydtU8+Wc4nGEKh1GOkhcpgME4hwsACy82gKPaIe64=";
+    })
+  ];
 
   # we need this before autoreconfHook does its thing
   postPatch = ''
@@ -40,11 +44,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!withGtk) "--without-gtk";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ ncurses jansson ]
-    ++ lib.optional withGtk gtk3
-    ++ lib.optional stdenv.isLinux libcap;
+  buildInputs = [
+    ncurses
+    jansson
+  ] ++ lib.optional withGtk gtk3 ++ lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 
@@ -52,7 +60,12 @@ stdenv.mkDerivation rec {
     description = "Network diagnostics tool";
     homepage = "https://www.bitwizard.nl/mtr/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ koral orivej raskin globin ];
+    maintainers = with maintainers; [
+      koral
+      orivej
+      raskin
+      globin
+    ];
     mainProgram = "mtr";
     platforms = platforms.unix;
   };

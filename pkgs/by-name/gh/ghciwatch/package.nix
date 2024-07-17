@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     description = "Ghci-based file watching recompiler for Haskell development";
     homepage = "https://github.com/MercuryTechnologies/ghciwatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ mangoiv _9999years ];
+    maintainers = with maintainers; [
+      mangoiv
+      _9999years
+    ];
     mainProgram = "ghciwatch";
   };
 

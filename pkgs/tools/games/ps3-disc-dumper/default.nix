@@ -1,8 +1,9 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, zlib
-, openssl
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  zlib,
+  openssl,
 }:
 
 buildDotnetModule rec {

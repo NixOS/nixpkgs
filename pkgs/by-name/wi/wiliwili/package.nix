@@ -31,26 +31,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland-scanner
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ wayland-scanner ];
 
-  buildInputs = [
-    mpv-unwrapped
-    openssl
-    curl
-    libxkbcommon
-    dbus
-  ] ++ lib.optionals stdenv.isLinux [
-    libffi # needed for wayland
-    wayland
-    egl-wayland
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXi
-  ];
+  buildInputs =
+    [
+      mpv-unwrapped
+      openssl
+      curl
+      libxkbcommon
+      dbus
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libffi # needed for wayland
+      wayland
+      egl-wayland
+      xorg.libX11
+      xorg.libXrandr
+      xorg.libXinerama
+      xorg.libXcursor
+      xorg.libXi
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "PLATFORM_DESKTOP" true)

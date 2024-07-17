@@ -1,17 +1,18 @@
-{ stdenv
-, cargo
-, rustc
-, fetchFromGitHub
-, libadwaita
-, rustPlatform
-, pkg-config
-, lib
-, wrapGAppsHook4
-, meson
-, ninja
-, desktop-file-utils
-, blueprint-compiler
-, glib-networking
+{
+  stdenv,
+  cargo,
+  rustc,
+  fetchFromGitHub,
+  libadwaita,
+  rustPlatform,
+  pkg-config,
+  lib,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  desktop-file-utils,
+  blueprint-compiler,
+  glib-networking,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/ranfdev/Geopard";
     description = "Colorful, adaptive gemini browser";
-    maintainers = with lib.maintainers; [ jfvillablanca aleksana ];
+    maintainers = with lib.maintainers; [
+      jfvillablanca
+      aleksana
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "geopard";

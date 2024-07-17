@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ant, unzip, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  unzip,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
@@ -18,9 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ant ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/mysql/mysql-connector-j.git";
-  };
+  passthru.updateScript = gitUpdater { url = "https://github.com/mysql/mysql-connector-j.git"; };
 
   meta = with lib; {
     description = "MySQL Connector/J";

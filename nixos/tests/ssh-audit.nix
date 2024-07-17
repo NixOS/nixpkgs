@@ -1,24 +1,22 @@
 import ./make-test-python.nix (
-  {pkgs, ...}: let
+  { pkgs, ... }:
+  let
     sshKeys = import (pkgs.path + "/nixos/tests/ssh-keys.nix") pkgs;
     sshUsername = "any-user";
     serverName = "server";
     clientName = "client";
     sshAuditPort = 2222;
-  in {
+  in
+  {
     name = "ssh";
 
     nodes = {
       "${serverName}" = {
-        networking.firewall.allowedTCPPorts = [
-          sshAuditPort
-        ];
+        networking.firewall.allowedTCPPorts = [ sshAuditPort ];
         services.openssh.enable = true;
         users.users."${sshUsername}" = {
           isNormalUser = true;
-          openssh.authorizedKeys.keys = [
-            sshKeys.snakeOilPublicKey
-          ];
+          openssh.authorizedKeys.keys = [ sshKeys.snakeOilPublicKey ];
         };
       };
       "${clientName}" = {

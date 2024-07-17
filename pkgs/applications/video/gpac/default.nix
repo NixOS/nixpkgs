@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cctools, pkg-config, Carbon, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cctools,
+  pkg-config,
+  Carbon,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpac";
@@ -13,17 +21,9 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ cctools ];
 
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-  ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ Carbon ];
 
   enableParallelBuilding = true;
 
@@ -43,7 +43,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
+    maintainers = with maintainers; [
+      bluescreen303
+      mgdelacroix
+    ];
     platforms = platforms.unix;
   };
 }

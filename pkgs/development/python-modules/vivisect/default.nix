@@ -32,9 +32,7 @@ buildPythonPackage rec {
     "pyasn1-modules"
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     pyasn1

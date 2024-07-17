@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ea0YJuHT4G6Y9AE9sZEHTa/Ljtw2fATFha/j4VmukcA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     chardet
@@ -29,9 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ghauri"
-  ];
+  pythonImportsCheck = [ "ghauri" ];
 
   meta = with lib; {
     description = "Tool for detecting and exploiting SQL injection security flaws";

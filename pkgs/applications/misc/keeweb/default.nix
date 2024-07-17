@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, undmg
-, dpkg
-, autoPatchelfHook
-, wrapGAppsHook3
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, gdk-pixbuf
-, glibc
-, nss
-, udev
-, xorg
-, gnome-keyring
-, mesa
-, gtk3
-, libusb1
-, libsecret
-, libappindicator
-, xdotool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  undmg,
+  dpkg,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  makeWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  gdk-pixbuf,
+  glibc,
+  nss,
+  udev,
+  xorg,
+  gnome-keyring,
+  mesa,
+  gtk3,
+  libusb1,
+  libsecret,
+  libappindicator,
+  xdotool,
 }:
 let
   pname = "keeweb";
@@ -39,7 +40,8 @@ let
       hash = "sha256-bkhwsWYLkec16vMOfXUce7jfrmI9W2xHiZvU1asebK4=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   libraries = [
     alsa-lib
@@ -74,45 +76,56 @@ let
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin
-then stdenv.mkDerivation {
-  inherit pname version src meta;
+if stdenv.isDarwin then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-  nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg ];
 
-  sourceRoot = ".";
+    sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
-  '';
-}
-else stdenv.mkDerivation {
-  inherit pname version src meta;
+    installPhase = ''
+      mkdir -p $out/Applications
+      cp -r *.app $out/Applications
+    '';
+  }
+else
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook3
-    makeWrapper
-  ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      wrapGAppsHook3
+      makeWrapper
+    ];
 
-  buildInputs = libraries;
+    buildInputs = libraries;
 
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb --fsys-tarfile $src | tar --extract
-  '';
+    unpackPhase = ''
+      ${dpkg}/bin/dpkg-deb --fsys-tarfile $src | tar --extract
+    '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r usr/share $out/share
+      mkdir -p $out/bin
+      cp -r usr/share $out/share
 
-    makeWrapper $out/share/keeweb-desktop/keeweb $out/bin/keeweb \
-      --argv0 "keeweb" \
-      --add-flags "$out/share/keeweb-desktop/resources/app.asar" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libraries}"
+      makeWrapper $out/share/keeweb-desktop/keeweb $out/bin/keeweb \
+        --argv0 "keeweb" \
+        --add-flags "$out/share/keeweb-desktop/resources/app.asar" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libraries}"
 
-    runHook postInstall
-  '';
-}
+      runHook postInstall
+    '';
+  }

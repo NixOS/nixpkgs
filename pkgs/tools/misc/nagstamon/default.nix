@@ -1,4 +1,8 @@
-{ lib, fetchurl, pythonPackages }:
+{
+  lib,
+  fetchurl,
+  pythonPackages,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "nagstamon";
@@ -13,13 +17,27 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   build-system = with pythonPackages; [ setuptools ];
-  dependencies = with pythonPackages; [ configparser pyqt6 psutil requests
-     beautifulsoup4 keyring requests-kerberos lxml dbus-python python-dateutil pysocks ];
+  dependencies = with pythonPackages; [
+    configparser
+    pyqt6
+    psutil
+    requests
+    beautifulsoup4
+    keyring
+    requests-kerberos
+    lxml
+    dbus-python
+    python-dateutil
+    pysocks
+  ];
 
   meta = with lib; {
     description = "Status monitor for the desktop";
     homepage = "https://nagstamon.de/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub liberodark ];
+    maintainers = with maintainers; [
+      pSub
+      liberodark
+    ];
   };
 }

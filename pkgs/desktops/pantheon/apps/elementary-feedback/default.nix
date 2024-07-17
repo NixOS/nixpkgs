@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk4
-, glib
-, granite7
-, libadwaita
-, libgee
-, wrapGAppsHook4
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk4,
+  glib,
+  granite7,
+  libadwaita,
+  libgee,
+  wrapGAppsHook4,
+  appstream,
 }:
 
 stdenv.mkDerivation rec {

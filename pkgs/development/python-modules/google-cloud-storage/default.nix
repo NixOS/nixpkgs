@@ -28,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-STeKv/VO9la1Lcpe8PLrqaqD3CsscseHFLA6GpX+k4g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [ "google-auth" ];
 

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, lzip
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lzip,
+  ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,13 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
       "insert( 0U, 1U,"
   '';
 
-  nativeBuildInputs = [
-    lzip
-  ];
+  nativeBuildInputs = [ lzip ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   strictDeps = true;
 

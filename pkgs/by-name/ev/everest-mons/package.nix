@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, python3Packages
-} :
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "everest-mons";
@@ -30,9 +31,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "mons" ];
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   preCheck = ''
     export HOME=$TMPDIR
   '';

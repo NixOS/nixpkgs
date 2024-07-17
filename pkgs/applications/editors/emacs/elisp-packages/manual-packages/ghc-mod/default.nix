@@ -1,8 +1,9 @@
-{ lib
-, melpaBuild
-, haskell-mode
-, haskellPackages
-, writeText
+{
+  lib,
+  melpaBuild,
+  haskell-mode,
+  haskellPackages,
+  writeText,
 }:
 
 melpaBuild {

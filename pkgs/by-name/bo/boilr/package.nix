@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, clangStdenv
-, gtk3
-, xorg
-, perl
-, openssl
-, speechd
-, libxkbcommon
-, libGL
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  clangStdenv,
+  gtk3,
+  xorg,
+  perl,
+  openssl,
+  speechd,
+  libxkbcommon,
+  libGL,
+  wayland,
 }:
 let
   rpathLibs = [
@@ -57,10 +58,12 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   dontPatchELF = true;
 
   meta = {
-    description =
-      "Automatically adds (almost) all your games to your Steam library (including image art)";
+    description = "Automatically adds (almost) all your games to your Steam library (including image art)";
     homepage = "https://github.com/PhilipK/BoilR";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ foolnotion ];
     mainProgram = "boilr";

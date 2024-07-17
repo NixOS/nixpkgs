@@ -1,41 +1,59 @@
-{ stdenv
-, lib
-, bash
-, cmake
-, cfitsio
-, coreutils
-, libusb1
-, zlib
-, boost
-, libnova
-, curl
-, libjpeg
-, gsl
-, fftw
-, indilib
-, libgphoto2
-, libraw
-, libftdi1
-, libdc1394
-, gpsd
-, ffmpeg
-, version
-, src
-, autoPatchelfHook
+{
+  stdenv,
+  lib,
+  bash,
+  cmake,
+  cfitsio,
+  coreutils,
+  libusb1,
+  zlib,
+  boost,
+  libnova,
+  curl,
+  libjpeg,
+  gsl,
+  fftw,
+  indilib,
+  libgphoto2,
+  libraw,
+  libftdi1,
+  libdc1394,
+  gpsd,
+  ffmpeg,
+  version,
+  src,
+  autoPatchelfHook,
 }:
 let
-  libusb-with-fxload = libusb1.override { withExamples = true;};
+  libusb-with-fxload = libusb1.override { withExamples = true; };
 in
 stdenv.mkDerivation rec {
   pname = "indi-firmware";
 
   inherit version src;
 
-  nativeBuildInputs = [ cmake autoPatchelfHook ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchelfHook
+  ];
 
   buildInputs = [
-    indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+    indilib
+    libnova
+    curl
+    cfitsio
+    libusb1
+    zlib
+    boost
+    gsl
+    gpsd
+    libjpeg
+    libgphoto2
+    libraw
+    libftdi1
+    libdc1394
+    ffmpeg
+    fftw
   ];
 
   cmakeFlags = [
@@ -76,7 +94,10 @@ stdenv.mkDerivation rec {
     description = "Third party firmware for the INDI astronomical software suite";
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce ];
+    maintainers = with maintainers; [
+      hjones2199
+      sheepforce
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, hidapi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  hidapi,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,13 +25,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    hidapi
-  ];
+  buildInputs = [ hidapi ];
 
   meta = with lib; {
     description = "Sidetone and Battery status for Logitech G930, G533, G633, G933 SteelSeries Arctis 7/PRO 2019 and Corsair VOID (Pro)";

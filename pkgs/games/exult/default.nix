@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, autoconf
-, automake
-, libogg
-, libtool
-, libvorbis
-, pkg-config
-, zlib
-, enableTools ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  autoconf,
+  automake,
+  libogg,
+  libtool,
+  libvorbis,
+  pkg-config,
+  zlib,
+  enableTools ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +58,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://exult.info";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi eelco ];
+    maintainers = with maintainers; [
+      azahi
+      eelco
+    ];
   };
 }

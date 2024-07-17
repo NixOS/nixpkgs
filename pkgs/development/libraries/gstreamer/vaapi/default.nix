@@ -1,25 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gst-plugins-base
-, bzip2
-, libva
-, wayland
-, wayland-protocols
-, libdrm
-, udev
-, xorg
-, libGLU
-, libGL
-, gstreamer
-, gst-plugins-bad
-, nasm
-, libvpx
-, python3
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gst-plugins-base,
+  bzip2,
+  libva,
+  wayland,
+  wayland-protocols,
+  libdrm,
+  udev,
+  xorg,
+  libGLU,
+  libGL,
+  gstreamer,
+  gst-plugins-bad,
+  nasm,
+  libvpx,
+  python3,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,31 +46,31 @@ stdenv.mkDerivation rec {
     python3
     bzip2
     wayland
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  ] ++ lib.optionals enableDocumentation [ hotdoc ];
 
-  buildInputs = [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    libva
-    wayland
-    wayland-protocols
-    libdrm
-    udev
-    xorg.libX11
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
-    nasm
-    libvpx
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    libGL
-    libGLU
-  ];
+  buildInputs =
+    [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      libva
+      wayland
+      wayland-protocols
+      libdrm
+      udev
+      xorg.libX11
+      xorg.libXext
+      xorg.libXv
+      xorg.libXrandr
+      xorg.libSM
+      xorg.libICE
+      nasm
+      libvpx
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      libGL
+      libGLU
+    ];
 
   strictDeps = true;
 

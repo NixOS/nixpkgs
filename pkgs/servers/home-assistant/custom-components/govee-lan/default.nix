@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, govee-led-wez
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  govee-led-wez,
 }:
 
 buildHomeAssistantComponent {
@@ -18,9 +19,7 @@ buildHomeAssistantComponent {
 
   dontBuild = true;
 
-  propagatedBuildInputs = [
-    govee-led-wez
-  ];
+  propagatedBuildInputs = [ govee-led-wez ];
 
   # enable when pytest-homeassistant-custom-component is packaged
   doCheck = false;

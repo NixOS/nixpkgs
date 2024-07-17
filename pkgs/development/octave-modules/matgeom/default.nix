@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
@@ -14,7 +15,10 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/matgeom/index.html";
-    license = with licenses; [ bsd2 gpl3Plus ];
+    license = with licenses; [
+      bsd2
+      gpl3Plus
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Geometry toolbox for 2D/3D geometric computing";
   };

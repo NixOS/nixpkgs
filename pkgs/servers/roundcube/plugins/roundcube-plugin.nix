@@ -1,5 +1,9 @@
 { runCommand }:
-{ pname, version, src }:
+{
+  pname,
+  version,
+  src,
+}:
 
 runCommand "roundcube-plugin-${pname}-${version}" { } ''
   mkdir -p $out/plugins/

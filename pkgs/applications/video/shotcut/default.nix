@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, wrapQtAppsHook
-, substituteAll
-, SDL2
-, frei0r
-, ladspaPlugins
-, gettext
-, mlt
-, jack1
-, pkg-config
-, fftw
-, qtbase
-, qttools
-, qtmultimedia
-, qtcharts
-, cmake
-, Cocoa
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  wrapQtAppsHook,
+  substituteAll,
+  SDL2,
+  frei0r,
+  ladspaPlugins,
+  gettext,
+  mlt,
+  jack1,
+  pkg-config,
+  fftw,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtcharts,
+  cmake,
+  Cocoa,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
@@ -30,7 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9eQF3s4BAUK81/94z7cMkd2NWdNLVMraP08qsDmuAI8=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
     SDL2
     frei0r
@@ -42,23 +47,24 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     qtmultimedia
     qtcharts
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
-  cmakeFlags = [
-    "-DSHOTCUT_VERSION=${finalAttrs.version}"
-  ];
+  cmakeFlags = [ "-DSHOTCUT_VERSION=${finalAttrs.version}" ];
 
   patches = [
-    (substituteAll { inherit mlt; src = ./fix-mlt-ffmpeg-path.patch; })
+    (substituteAll {
+      inherit mlt;
+      src = ./fix-mlt-ffmpeg-path.patch;
+    })
   ];
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([SDL2] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [jack1])}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
+    }"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -67,9 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/Applications/Shotcut.app/Contents/MacOS/Shotcut $out/bin/shotcut
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Free, open source, cross-platform video editor";
@@ -84,7 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ goibhniu woffs peti ];
+    maintainers = with maintainers; [
+      goibhniu
+      woffs
+      peti
+    ];
     platforms = platforms.unix;
     mainProgram = "shotcut";
   };

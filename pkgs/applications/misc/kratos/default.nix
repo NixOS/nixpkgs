@@ -2,7 +2,7 @@
   fetchFromGitHub,
   buildGoModule,
   lib,
-  stdenv
+  stdenv,
 }:
 let
   pname = "kratos";
@@ -25,9 +25,7 @@ buildGoModule {
   tags = [ "sqlite" ];
 
   # Pass versioning information via ldflags
-  ldflags = [
-    "-X github.com/ory/kratos/driver/config.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/ory/kratos/driver/config.Version=${version}" ];
 
   doCheck = false;
 

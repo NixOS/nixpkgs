@@ -35,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # disable spotless because it tries to fetch files not in deps.json
   # and also because it slows down the build process
-  gradleFlags = [ "-x" "spotlessApply" ];
+  gradleFlags = [
+    "-x"
+    "spotlessApply"
+  ];
 
   doCheck = true;
 

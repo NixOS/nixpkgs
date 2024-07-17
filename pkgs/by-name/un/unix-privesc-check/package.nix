@@ -1,21 +1,22 @@
-{ lib
-, resholve
-, fetchurl
-, gawk
-, bash
-, binutils
-, coreutils
-, file
-, findutils
-, glibc
-, gnugrep
-, gnused
-, nettools
-, openssh
-, postgresql
-, ps
-, util-linux
-, which
+{
+  lib,
+  resholve,
+  fetchurl,
+  gawk,
+  bash,
+  binutils,
+  coreutils,
+  file,
+  findutils,
+  glibc,
+  gnugrep,
+  gnused,
+  nettools,
+  openssh,
+  postgresql,
+  ps,
+  util-linux,
+  which,
 }:
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`
@@ -44,7 +45,7 @@ resholve.mkDerivation rec {
         coreutils
         file
         findutils # for xargs command
-        glibc  # for ldd command
+        glibc # for ldd command
         gnugrep
         gnused
         nettools
@@ -56,9 +57,9 @@ resholve.mkDerivation rec {
       ];
       fake = {
         external = [
-            "lanscan" # lanscan exists only for HP-UX OS
-            "mount" # Getting same error described in https://github.com/abathur/resholve/issues/29
-            "passwd" # Getting same error described in https://github.com/abathur/resholve/issues/29
+          "lanscan" # lanscan exists only for HP-UX OS
+          "mount" # Getting same error described in https://github.com/abathur/resholve/issues/29
+          "passwd" # Getting same error described in https://github.com/abathur/resholve/issues/29
         ];
       };
       execer = [

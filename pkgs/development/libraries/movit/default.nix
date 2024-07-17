@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, SDL2
-, fftw
-, gtest
-, darwin
-, eigen
-, libepoxy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL2,
+  fftw,
+  gtest,
+  darwin,
+  eigen,
+  libepoxy,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,31 +20,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-szBztwXwzLasSULPURUVFUB7QLtOmi3QIowcLLH7wRo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   GTEST_DIR = "${gtest.src}/googletest";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    SDL2
-    fftw
-    gtest
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.OpenGL
-    darwin.libobjc
-  ];
+  buildInputs =
+    [
+      SDL2
+      fftw
+      gtest
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.OpenGL
+      darwin.libobjc
+    ];
 
   propagatedBuildInputs = [
     eigen
     libepoxy
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    NIX_LDFLAGS = "-framework OpenGL";
-  };
+  env = lib.optionalAttrs stdenv.isDarwin { NIX_LDFLAGS = "-framework OpenGL"; };
 
   enableParallelBuilding = true;
 

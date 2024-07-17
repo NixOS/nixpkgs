@@ -31,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-ZzQ92VBa8CApd0WkfPrUZsEZICK2fhwmt45P2sx2mK0=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
     "configparser"

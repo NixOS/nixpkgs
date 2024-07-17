@@ -1,4 +1,9 @@
-{ lib, fetchurl, tcl, openssl }:
+{
+  lib,
+  fetchurl,
+  tcl,
+  openssl,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tcltls";
@@ -11,9 +16,7 @@ tcl.mkTclDerivation rec {
 
   buildInputs = [ openssl ];
 
-  configureFlags = [
-    "--with-ssl-dir=${openssl.dev}"
-  ];
+  configureFlags = [ "--with-ssl-dir=${openssl.dev}" ];
 
   meta = {
     homepage = "https://core.tcl-lang.org/tcltls/index";

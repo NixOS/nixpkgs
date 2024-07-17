@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fp, reason, src }:
+{
+  lib,
+  buildDunePackage,
+  fp,
+  reason,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,13 +12,9 @@ buildDunePackage {
   pname = "fs";
   version = "0.0.2-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
-  propagatedBuildInputs = [
-    fp
-  ];
+  propagatedBuildInputs = [ fp ];
 
   meta = {
     description = "Reason Native file system API";
@@ -21,4 +23,3 @@ buildDunePackage {
     maintainers = with lib.maintainers; [ ];
   };
 }
-

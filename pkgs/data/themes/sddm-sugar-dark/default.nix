@@ -1,4 +1,9 @@
-{ pkgs, lib, stdenvNoCC, themeConfig ? null }:
+{
+  pkgs,
+  lib,
+  stdenvNoCC,
+  themeConfig ? null,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sddm-sugar-dark";
@@ -25,7 +30,8 @@ stdenvNoCC.mkDerivation rec {
     ''
       mkdir -p ${basePath}
       cp -r $src/* ${basePath}
-    '' + lib.optionalString (themeConfig != null) ''
+    ''
+    + lib.optionalString (themeConfig != null) ''
       ln -sf ${configFile} ${basePath}/theme.conf.user
     '';
 

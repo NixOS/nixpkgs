@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, expat
-, file
-, flex
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  expat,
+  file,
+  flex,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +28,7 @@ stdenv.mkDerivation rec {
     flex
     file
   ];
-  buildInputs = [
-    expat
-  ];
+  buildInputs = [ expat ];
 
   meta = with lib; {
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
@@ -43,7 +42,10 @@ stdenv.mkDerivation rec {
       converting values.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres pSub ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      pSub
+    ];
     platforms = platforms.all;
     mainProgram = "udunits2";
   };

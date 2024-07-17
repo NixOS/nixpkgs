@@ -36,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-
   dependencies = [
     dateparser
     importlib-metadata

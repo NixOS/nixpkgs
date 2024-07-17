@@ -1,4 +1,8 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
@@ -27,9 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

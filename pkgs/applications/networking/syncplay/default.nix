@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonApplication
-, pem
-, pyside6
-, twisted
-, certifi
-, qt6
-, appnope
-, enableGUI ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonApplication,
+  pem,
+  pyside6,
+  twisted,
+  certifi,
+  qt6,
+  appnope,
+  enableGUI ? true,
 }:
 
 buildPythonApplication rec {
@@ -24,18 +25,24 @@ buildPythonApplication rec {
     sha256 = "sha256-ipo027XyN4BpMkxzXznbnaufsaG/YkHxFJYo+XWzbyE=";
   };
 
-  patches = [
-    ./trusted_certificates.patch
-  ];
+  patches = [ ./trusted_certificates.patch ];
 
   buildInputs = lib.optionals enableGUI [ (if stdenv.isLinux then qt6.qtwayland else qt6.qtbase) ];
-  propagatedBuildInputs = [ certifi pem twisted ]
+  propagatedBuildInputs =
+    [
+      certifi
+      pem
+      twisted
+    ]
     ++ twisted.optional-dependencies.tls
     ++ lib.optional enableGUI pyside6
     ++ lib.optional (stdenv.isDarwin && enableGUI) appnope;
   nativeBuildInputs = lib.optionals enableGUI [ qt6.wrapQtAppsHook ];
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+  ];
 
   postFixup = lib.optionalString enableGUI ''
     wrapQtApp $out/bin/syncplay

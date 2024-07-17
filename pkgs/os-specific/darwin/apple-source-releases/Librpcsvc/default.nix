@@ -1,4 +1,8 @@
-{ lib, appleDerivation, developer_cmds }:
+{
+  lib,
+  appleDerivation,
+  developer_cmds,
+}:
 
 appleDerivation {
   buildInputs = [ developer_cmds ];
@@ -16,7 +20,7 @@ appleDerivation {
 
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
-    platforms   = platforms.darwin;
-    license     = licenses.apple-psl20;
+    platforms = platforms.darwin;
+    license = licenses.apple-psl20;
   };
 }

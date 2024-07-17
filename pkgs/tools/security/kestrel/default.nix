@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-R5TRF4yvjQalsj1UA2kiLBuTOhqIbbHW6lvf1ixvJG4=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage docs/man/kestrel.1

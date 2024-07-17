@@ -25,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-jJ+FFDU4w1vdCqErz6ksJDvjFcalSAwaH+G77BNI5/E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [ "websockets" ];
 

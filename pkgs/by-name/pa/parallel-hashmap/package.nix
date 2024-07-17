@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,18 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "include(cmake/DownloadGTest.cmake)" "add_subdirectory(${gtest.src} ./googletest-build EXCLUDE_FROM_ALL)"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DPHMAP_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
     "-DPHMAP_BUILD_EXAMPLES=OFF"
   ];
 
-  nativeCheckInputs = [
-    gtest
-  ];
+  nativeCheckInputs = [ gtest ];
 
   doCheck = true;
 

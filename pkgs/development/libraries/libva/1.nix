@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, libX11
-, pkg-config
-, libXext
-, libdrm
-, libXfixes
-, wayland
-, wayland-scanner
-, libffi
-, libGL
-, mesa
-, minimal ? false
-, libva1-minimal
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  libX11,
+  pkg-config,
+  libXext,
+  libdrm,
+  libXfixes,
+  wayland,
+  wayland-scanner,
+  libffi,
+  libGL,
+  mesa,
+  minimal ? false,
+  libva1-minimal,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,16 +29,35 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ur59cqdZqXIY2dDUSie9XsxyRomVBxIW2IVKAgWYC38=";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wayland-scanner
+  ];
 
-  buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva1-minimal libX11 libXext libXfixes wayland libffi libGL ];
+  buildInputs =
+    [ libdrm ]
+    ++ lib.optionals (!minimal) [
+      libva1-minimal
+      libX11
+      libXext
+      libXfixes
+      wayland
+      libffi
+      libGL
+    ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   # Add FHS paths for non-NixOS applications.
-  configureFlags = lib.optionals stdenv.isLinux [ "--with-drivers-path=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri" ]
+  configureFlags =
+    lib.optionals stdenv.isLinux [
+      "--with-drivers-path=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    ]
     ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];

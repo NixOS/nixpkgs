@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  installShellFiles,
+}:
 
 let
-  data = import ./data.nix {};
-in stdenv.mkDerivation {
+  data = import ./data.nix { };
+in
+stdenv.mkDerivation {
   pname = "pulumi";
   inherit (data) version;
 
@@ -12,18 +20,26 @@ in stdenv.mkDerivation {
 
   srcs = map fetchurl data.pulumiPkgs.${stdenv.hostPlatform.system};
 
-  installPhase = ''
-    install -D -t $out/bin/ *
-  '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
-  '' + ''
-    installShellCompletion --cmd pulumi \
-      --bash <($out/bin/pulumi completion bash) \
-      --fish <($out/bin/pulumi completion fish) \
-      --zsh  <($out/bin/pulumi completion zsh)
-  '';
+  installPhase =
+    ''
+      install -D -t $out/bin/ *
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+    ''
+    + ''
+      installShellCompletion --cmd pulumi \
+        --bash <($out/bin/pulumi completion bash) \
+        --fish <($out/bin/pulumi completion fish) \
+        --zsh  <($out/bin/pulumi completion zsh)
+    '';
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.isLinux [
+      autoPatchelfHook
+      makeWrapper
+    ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {

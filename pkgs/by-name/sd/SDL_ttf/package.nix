@@ -38,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  configureFlags = [
-    (lib.enableFeature enableSdltest "-sdltest")
-  ];
+  configureFlags = [ (lib.enableFeature enableSdltest "-sdltest") ];
 
   strictDeps = true;
 
@@ -48,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "SDL TrueType library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

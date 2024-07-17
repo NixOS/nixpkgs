@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -23,6 +24,9 @@ buildGoModule rec {
     mainProgram = "murex";
     homepage = "https://murex.rocks";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dit7ya kashw2 ];
+    maintainers = with maintainers; [
+      dit7ya
+      kashw2
+    ];
   };
 }

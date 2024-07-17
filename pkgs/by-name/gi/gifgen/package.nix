@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ffmpeg
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ni9RL4LyMejmu8vm5HC8WSTqAPQMBQNRDOZ4ZfvrkSU=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall

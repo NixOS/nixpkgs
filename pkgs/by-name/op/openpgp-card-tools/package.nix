@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitea
-, pkg-config
-, pcsclite
-, testers
-, openpgp-card-tools
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  pcsclite,
+  testers,
+  openpgp-card-tools,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,23 +24,29 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-I2ExtUUM0ZJyhtyzP+IsgiMPMUFVHqPiMHFlvuUMjRc=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
-
-  buildInputs = [ pcsclite ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.PCSC
-    darwin.apple_sdk.frameworks.Security
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
   ];
 
+  buildInputs =
+    [ pcsclite ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.PCSC
+      darwin.apple_sdk.frameworks.Security
+    ];
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = openpgp-card-tools;
-    };
+    tests.version = testers.testVersion { package = openpgp-card-tools; };
   };
 
   meta = with lib; {
     description = "Tool for inspecting and configuring OpenPGP cards";
     homepage = "https://codeberg.org/openpgp-card/openpgp-card-tools";
-    license = with licenses ;[ asl20 /* OR */ mit ];
+    license = with licenses; [
+      asl20 # OR
+      mit
+    ];
     maintainers = with maintainers; [ nickcao ];
     mainProgram = "oct";
   };

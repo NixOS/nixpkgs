@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchCrate, libbfd, libopcodes, libunwind, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  libbfd,
+  libopcodes,
+  libunwind,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
@@ -11,7 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-QLtf42Il+XHWeaUdh8jNNWU1sXaVe82sYOKiHLoXw2M=";
 
-  buildInputs = [ libbfd libopcodes libunwind ];
+  buildInputs = [
+    libbfd
+    libopcodes
+    libunwind
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

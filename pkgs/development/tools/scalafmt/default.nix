@@ -1,4 +1,11 @@
-{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
+{
+  lib,
+  stdenv,
+  jre,
+  coursier,
+  makeWrapper,
+  setJavaClassPath,
+}:
 
 let
   baseName = "scalafmt";
@@ -19,7 +26,10 @@ stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  nativeBuildInputs = [
+    makeWrapper
+    setJavaClassPath
+  ];
   buildInputs = [ deps ];
 
   dontUnpack = true;

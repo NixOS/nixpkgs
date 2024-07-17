@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,8 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-3+1ssFyU7SKFJgDYBQY0kVjmTHOD71D2AjnH+4bfLXo=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-  ];
+  nativeBuildInputs = with python3.pkgs; [ ];
 
   propagatedBuildInputs = with python3.pkgs; [
     blessed
@@ -39,9 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -53,9 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     "crysp"
   ];
 
-  pythonImportsCheck = [
-    "amoco"
-  ];
+  pythonImportsCheck = [ "amoco" ];
 
   disabledTests = [
     # AttributeError: 'str' object has no attribute '__dict__'

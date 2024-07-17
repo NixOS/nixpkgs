@@ -1,6 +1,11 @@
 # Tracker Miners daemons.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 

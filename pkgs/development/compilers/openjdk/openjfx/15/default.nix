@@ -1,8 +1,26 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, writeText, openjdk11_headless, gradle_6
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby
-, withMedia ? true
-, withWebKit ? false
+{
+  stdenv,
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  writeText,
+  openjdk11_headless,
+  gradle_6,
+  pkg-config,
+  perl,
+  cmake,
+  gperf,
+  gtk2,
+  gtk3,
+  libXtst,
+  libXxf86vm,
+  glib,
+  alsa-lib,
+  ffmpeg_4-headless,
+  python3,
+  ruby,
+  withMedia ? true,
+  withWebKit ? false,
 }:
 
 let
@@ -14,7 +32,8 @@ let
   jdk = openjdk11_headless;
   gradle = gradle_6;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   version = "${major}${update}${build}";
 
@@ -25,8 +44,24 @@ in stdenv.mkDerivation {
     sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
   };
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
-  nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
+  buildInputs = [
+    gtk2
+    gtk3
+    libXtst
+    libXxf86vm
+    glib
+    alsa-lib
+    ffmpeg_4-headless
+  ];
+  nativeBuildInputs = [
+    gradle
+    perl
+    pkg-config
+    cmake
+    gperf
+    python3
+    ruby
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -79,16 +114,17 @@ in stdenv.mkDerivation {
     done
   '';
 
-  disallowedReferences = [ jdk gradle.jdk ];
+  disallowedReferences = [
+    jdk
+    gradle.jdk
+  ];
 
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
     description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
-    knownVulnerabilities = [
-      "This OpenJFX version has reached its end of life."
-    ];
+    knownVulnerabilities = [ "This OpenJFX version has reached its end of life." ];
     platforms = [ "x86_64-linux" ];
   };
 }

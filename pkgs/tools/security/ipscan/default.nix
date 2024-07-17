@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, jdk
-, jre
-, swt
-, makeWrapper
-, xorg
-, dpkg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  jre,
+  swt,
+  makeWrapper,
+  xorg,
+  dpkg,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,12 @@ stdenv.mkDerivation rec {
     cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${
+        lib.makeLibraryPath [
+          swt
+          xorg.libXtst
+        ]
+      }" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
@@ -50,6 +56,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kylesferrazza totoroot ];
+    maintainers = with maintainers; [
+      kylesferrazza
+      totoroot
+    ];
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitLab
+{
+  lib,
+  python3,
+  fetchFromGitLab,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,9 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    rich
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ rich ];
 
   meta = with lib; {
     description = "️Git Annex-backed Time Tracking";
@@ -32,4 +31,3 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

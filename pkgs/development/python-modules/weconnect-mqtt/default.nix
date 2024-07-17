@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     paho-mqtt
     python-dateutil

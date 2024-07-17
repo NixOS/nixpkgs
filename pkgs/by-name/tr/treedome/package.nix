@@ -1,23 +1,24 @@
-{ lib
-, cargo-tauri
-, cmake
-, dbus
-, fetchgit
-, fetchYarnDeps
-, freetype
-, gsettings-desktop-schemas
-, gtk3
-, libsoup
-, stdenv
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk
-, wrapGAppsHook3
-, sqlite
+{
+  lib,
+  cargo-tauri,
+  cmake,
+  dbus,
+  fetchgit,
+  fetchYarnDeps,
+  freetype,
+  gsettings-desktop-schemas,
+  gtk3,
+  libsoup,
+  stdenv,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk,
+  wrapGAppsHook3,
+  sqlite,
 }:
 
 let

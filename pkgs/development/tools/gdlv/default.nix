@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, Foundation
-, CoreGraphics
-, Metal
-, AppKit
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  Foundation,
+  CoreGraphics,
+  Metal,
+  AppKit,
 }:
 
 buildGoModule rec {
@@ -19,15 +20,22 @@ buildGoModule rec {
     hash = "sha256-OPsQOFwV6jIX4ZOVwJmpTeQUr/zkfkqCr86HmPhYarI=";
   };
 
-  preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
-    export MACOSX_DEPLOYMENT_TARGET=10.15
-  '';
+  preBuild =
+    lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
+      ''
+        export MACOSX_DEPLOYMENT_TARGET=10.15
+      '';
 
   vendorHash = null;
 
   subPackages = ".";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Foundation CoreGraphics Metal AppKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Foundation
+    CoreGraphics
+    Metal
+    AppKit
+  ];
 
   meta = with lib; {
     description = "GUI frontend for Delve";

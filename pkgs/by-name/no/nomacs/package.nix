@@ -1,13 +1,14 @@
-{ lib
-, cmake
-, exiv2
-, fetchFromGitHub
-, libraw
-, libsForQt5
-, libtiff
-, opencv4
-, pkg-config
-, stdenv
+{
+  lib,
+  cmake,
+  exiv2,
+  fetchFromGitHub,
+  libraw,
+  libsForQt5,
+  libtiff,
+  opencv4,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lpmM2GfMDlIp1vnbHMaOdicFcKH6LwEoKSETMt7C1NY=";
   };
 
-  outputs = [ "out" ]
+  outputs =
+    [ "out" ]
     # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
     ++ lib.optionals (!stdenv.isDarwin) [ "man" ];
 
@@ -34,21 +36,23 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    exiv2
-    libraw
-    libtiff
-    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
-    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
-    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
-    (lib.getOutput "cxxdev" opencv4)
-  ] ++ (with libsForQt5; [
-    qtbase
-    qtimageformats
-    qtsvg
-    qttools
-    quazip
-  ]);
+  buildInputs =
+    [
+      exiv2
+      libraw
+      libtiff
+      # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+      # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+      # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+      (lib.getOutput "cxxdev" opencv4)
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qtimageformats
+      qtsvg
+      qttools
+      quazip
+    ]);
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -87,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      mindavi
+    ];
     inherit (libsForQt5.qtbase.meta) platforms;
   };
 })

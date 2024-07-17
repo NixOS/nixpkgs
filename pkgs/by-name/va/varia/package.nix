@@ -1,14 +1,15 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, aria2
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  aria2,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -37,9 +38,7 @@ python3Packages.buildPythonApplication rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3

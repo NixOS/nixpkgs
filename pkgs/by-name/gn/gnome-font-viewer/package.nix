@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, meson
-, ninja
-, gettext
-, fetchurl
-, pkg-config
-, gtk4
-, glib
-, libxml2
-, gnome-desktop
-, libadwaita
-, fribidi
-, wrapGAppsHook4
-, gnome
-, harfbuzz
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  pkg-config,
+  gtk4,
+  glib,
+  libxml2,
+  gnome-desktop,
+  libadwaita,
+  fribidi,
+  wrapGAppsHook4,
+  gnome,
+  harfbuzz,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,9 +51,7 @@ stdenv.mkDerivation rec {
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-font-viewer";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-font-viewer"; };
   };
 
   meta = with lib; {

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,18 +17,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-6j/Lwq68qyfEAo5MRibgdomrCO4KEd/DlAEwB+Z52Hc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cryptography
     impacket
   ];
 
-  pythonImportsCheck = [
-    "certilib"
-  ];
+  pythonImportsCheck = [ "certilib" ];
 
   meta = with lib; {
     description = "ADCS abuser";

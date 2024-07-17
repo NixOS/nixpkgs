@@ -1,16 +1,17 @@
-{ fetchFromGitHub
-, fetchurl
-, lib
-, stdenv
-, cmake
-, git
-, pkg-config
-, glib
-, gnutls
-, perl
-, heimdal
-, popt
-, libunistring
+{
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  git,
+  pkg-config,
+  glib,
+  gnutls,
+  perl,
+  heimdal,
+  popt,
+  libunistring,
 }:
 let
   heimdalConfigHeader = fetchurl {

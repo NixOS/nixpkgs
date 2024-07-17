@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "openldap_exporter";
@@ -19,7 +23,6 @@ buildGoModule rec {
     "-X github.com/tomcz/openldap_exporter.tag=v${version}"
     "-X github.com/tomcz/openldap_exporter.commit=unknown"
   ];
-
 
   meta = with lib; {
     homepage = "https://github.com/tomcz/openldap_exporter";

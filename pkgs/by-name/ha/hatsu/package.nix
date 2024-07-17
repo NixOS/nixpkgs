@@ -1,10 +1,11 @@
-{ cmake
-, fetchFromGitHub
-, gitUpdater
-, lib
-, openssl
-, pkg-config
-, rustPlatform
+{
+  cmake,
+  fetchFromGitHub,
+  gitUpdater,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hatsu";
@@ -19,10 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LkGkifmHy7cEGrPg0WCf1nCGfcW60AGWQSB0Zb01mk0=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ openssl ];
 
-  env = { OPENSSL_NO_VENDOR = true; };
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

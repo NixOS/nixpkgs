@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, meson
-, ninja
-, libmpdclient
-, yaml-cpp
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  meson,
+  ninja,
+  libmpdclient,
+  yaml-cpp,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,16 @@ stdenv.mkDerivation rec {
   };
 
   dontUseCmakeConfigure = true;
-  nativeBuildInputs = [ cmake pkg-config meson ninja ];
-  buildInputs = [ libmpdclient yaml-cpp ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    meson
+    ninja
+  ];
+  buildInputs = [
+    libmpdclient
+    yaml-cpp
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
 
   mesonFlags = [ "-Dunsupported_use_system_yamlcpp=true" ];
 

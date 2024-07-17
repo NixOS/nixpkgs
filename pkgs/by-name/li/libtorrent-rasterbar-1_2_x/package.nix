@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python311, libiconv, ncurses, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  automake,
+  autoconf,
+  zlib,
+  boost,
+  openssl,
+  libtool,
+  python311,
+  libiconv,
+  ncurses,
+  darwin,
 }:
 
 let
@@ -7,9 +20,13 @@ let
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost.override { enablePython = true; python = python311; };
+  boostPython = boost.override {
+    enablePython = true;
+    python = python311;
+  };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 
@@ -22,10 +39,21 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+    pkg-config
+  ];
 
-  buildInputs = [ boostPython openssl zlib python311 libiconv ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    boostPython
+    openssl
+    zlib
+    python311
+    libiconv
+    ncurses
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preConfigure = "./autotool.sh";
 
@@ -34,7 +62,11 @@ in stdenv.mkDerivation {
     moveToOutput "lib/${python311.libPrefix}" "$python"
   '';
 
-  outputs = [ "out" "dev" "python" ];
+  outputs = [
+    "out"
+    "dev"
+    "python"
+  ];
 
   configureFlags = [
     "--enable-python-binding"

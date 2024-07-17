@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, stdenvNoCC, wget }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  wget,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "junest";
@@ -30,4 +35,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 }
-

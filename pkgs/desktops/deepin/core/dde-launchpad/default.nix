@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6Packages
-, qt6integration
-, qt6platform-plugins
-, dtk6declarative
-, dde-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  qt6integration,
+  qt6platform-plugins,
+  dtk6declarative,
+  dde-shell,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,21 +29,21 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qt6integration
-    qt6platform-plugins
-    dtk6declarative
-    dde-shell
-  ] ++ (with qt6Packages; [
-    qtbase
-    qtsvg
-    qtwayland
-    appstream-qt
-  ]);
+  buildInputs =
+    [
+      qt6integration
+      qt6platform-plugins
+      dtk6declarative
+      dde-shell
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtsvg
+      qtwayland
+      appstream-qt
+    ]);
 
-  cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
+  cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
   meta = with lib; {
     description = "'launcher' or 'start menu' component for DDE";

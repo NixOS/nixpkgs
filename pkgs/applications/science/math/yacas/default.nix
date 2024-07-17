@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, perl
-, enableGui ? false
-, qtbase
-, wrapQtAppsHook
-, qtwebengine
-, enableJupyter ? true
-, boost
-, jsoncpp
-, openssl
-, zmqpp
-, enableJava ? false
-, openjdk
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  perl,
+  enableGui ? false,
+  qtbase,
+  wrapQtAppsHook,
+  qtwebengine,
+  enableJupyter ? true,
+  boost,
+  jsoncpp,
+  openssl,
+  zmqpp,
+  enableJava ? false,
+  openjdk,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,29 +53,27 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../tests/test-yacas
   '';
-  nativeCheckInputs = [
-    gtest
-  ];
+  nativeCheckInputs = [ gtest ];
   doCheck = true;
 
   nativeBuildInputs = [
     cmake
     # Perl is only for the documentation
     perl
-  ] ++ lib.optionals enableJava [
-    openjdk
-  ];
-  buildInputs = [
-  ] ++ lib.optionals enableGui [
-    qtbase
-    wrapQtAppsHook
-    qtwebengine
-  ] ++ lib.optionals enableJupyter [
-    boost
-    jsoncpp
-    openssl
-    zmqpp
-  ];
+  ] ++ lib.optionals enableJava [ openjdk ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals enableGui [
+      qtbase
+      wrapQtAppsHook
+      qtwebengine
+    ]
+    ++ lib.optionals enableJupyter [
+      boost
+      jsoncpp
+      openssl
+      zmqpp
+    ];
 
   meta = {
     description = "Easy to use, general purpose Computer Algebra System${lib.optionalString enableGui ", built with GUI."}";

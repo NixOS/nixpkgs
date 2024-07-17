@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, gitUpdater
-, resvg
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  gitUpdater,
+  resvg,
 }:
 
 let
@@ -44,15 +45,14 @@ let
       platforms = platforms.linux;
     };
   };
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   inherit version src;
   pname = "gerbolyze";
 
   format = "setuptools";
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-  ];
+  nativeBuildInputs = [ python3Packages.setuptools ];
 
   propagatedBuildInputs = [
     python3Packages.beautifulsoup4
@@ -80,11 +80,13 @@ in python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gerbolyze" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook resvg svg-flatten ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    resvg
+    svg-flatten
+  ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Directly render SVG overlays into Gerber and Excellon files";

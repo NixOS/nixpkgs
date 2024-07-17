@@ -1,6 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null
-, ssreflect
-, deriving
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+  ssreflect,
+  deriving,
 }:
 
 (mkCoqDerivation {
@@ -8,12 +12,44 @@
   owner = "arthuraa";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [coq.coq-version ssreflect.version] [
-    { cases = [(range "8.17" "8.20") (isGe "2.0.0")  ]; out = "0.4.0"; }
-    { cases = [(range "8.11" "8.20") (range "1.12.0" "1.19.0") ]; out = "0.3.1"; }
-    { cases = [(range "8.11" "8.14") (isLe "1.12.0") ]; out = "0.3.0"; }
-    { cases = [(range "8.10" "8.12") (isLe "1.12.0") ]; out = "0.2.2"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [
+        coq.coq-version
+        ssreflect.version
+      ]
+      [
+        {
+          cases = [
+            (range "8.17" "8.20")
+            (isGe "2.0.0")
+          ];
+          out = "0.4.0";
+        }
+        {
+          cases = [
+            (range "8.11" "8.20")
+            (range "1.12.0" "1.19.0")
+          ];
+          out = "0.3.1";
+        }
+        {
+          cases = [
+            (range "8.11" "8.14")
+            (isLe "1.12.0")
+          ];
+          out = "0.3.0";
+        }
+        {
+          cases = [
+            (range "8.10" "8.12")
+            (isLe "1.12.0")
+          ];
+          out = "0.2.2";
+        }
+      ]
+      null;
 
   releaseRev = v: "v${v}";
 
@@ -30,7 +66,9 @@
     maintainers = [ maintainers.vbgl ];
   };
 
-}).overrideAttrs (o: {
-  propagatedBuildInputs = o.propagatedBuildInputs
-  ++ lib.optional (lib.versionAtLeast o.version "0.3.0") deriving;
-})
+}).overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versionAtLeast o.version "0.3.0") deriving;
+  })

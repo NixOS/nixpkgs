@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, stdenv
-, lib
-, ncurses
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y2yVr/BuOah5yMvF5EvM7frEUY8r+Hf4bNIKVkHgvQs=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   installPhase = ''
     runHook preInstall

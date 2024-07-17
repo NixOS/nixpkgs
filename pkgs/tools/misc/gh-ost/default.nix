@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gh-ost }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gh-ost,
+}:
 
 buildGoModule rec {
   pname = "gh-ost";
@@ -19,9 +25,7 @@ buildGoModule rec {
     "-X main.AppVersion=${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gh-ost;
-  };
+  passthru.tests.version = testers.testVersion { package = gh-ost; };
 
   meta = with lib; {
     description = "Triggerless online schema migration solution for MySQL";

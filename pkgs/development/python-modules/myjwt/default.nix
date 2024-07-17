@@ -43,9 +43,7 @@ buildPythonPackage rec {
     "questionary"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     click

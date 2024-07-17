@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, perl
-, sysfsutils, dmidecode, kmod }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  sysfsutils,
+  dmidecode,
+  kmod,
+}:
 
 stdenv.mkDerivation {
   pname = "edac-utils";
@@ -30,11 +37,12 @@ stdenv.mkDerivation {
   # fixupPhase to update the hash bang line.
   strictDeps = true;
   nativeBuildInputs = [ perl ];
-  buildInputs = [ perl sysfsutils ];
-
-  installFlags = [
-    "sbindir=${placeholder "out"}/bin"
+  buildInputs = [
+    perl
+    sysfsutils
   ];
+
+  installFlags = [ "sbindir=${placeholder "out"}/bin" ];
 
   # SysV init script is not relevant.
   postInstall = ''

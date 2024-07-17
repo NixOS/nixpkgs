@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchgit
-, pkg-config, wrapGAppsHook3
-, glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
-, xorg, dmenu, findutils, gnused, coreutils, gst_all_1
-, patches ? null
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  gcr,
+  glib-networking,
+  gsettings-desktop-schemas,
+  gtk,
+  libsoup,
+  webkitgtk,
+  xorg,
+  dmenu,
+  findutils,
+  gnused,
+  coreutils,
+  gst_all_1,
+  patches ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,22 +31,27 @@ stdenv.mkDerivation rec {
     sha256 = "1v926hiayddylq79n8l7dy51bm0dsa9n18nx9bkhg666cx973x4z";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
-  buildInputs = [
-    glib
-    gcr
-    glib-networking
-    gsettings-desktop-schemas
-    gtk
-    libsoup
-    webkitgtk
-  ] ++ (with gst_all_1; [
-    # Audio & video support for webkitgtk WebView
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs =
+    [
+      glib
+      gcr
+      glib-networking
+      gsettings-desktop-schemas
+      gtk
+      libsoup
+      webkitgtk
+    ]
+    ++ (with gst_all_1; [
+      # Audio & video support for webkitgtk WebView
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   inherit patches;
 
@@ -39,13 +59,21 @@ stdenv.mkDerivation rec {
 
   # Add run-time dependencies to PATH. Append them to PATH so the user can
   # override the dependencies with their own PATH.
-  preFixup = let
-    depsPath = lib.makeBinPath [ xorg.xprop dmenu findutils gnused coreutils ];
-  in ''
-    gappsWrapperArgs+=(
-      --suffix PATH : ${depsPath}
-    )
-  '';
+  preFixup =
+    let
+      depsPath = lib.makeBinPath [
+        xorg.xprop
+        dmenu
+        findutils
+        gnused
+        coreutils
+      ];
+    in
+    ''
+      gappsWrapperArgs+=(
+        --suffix PATH : ${depsPath}
+      )
+    '';
 
   meta = with lib; {
     description = "Simple web browser based on WebKitGTK";

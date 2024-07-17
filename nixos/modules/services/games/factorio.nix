@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -64,7 +69,7 @@ in
 
       admins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "username" ];
         description = ''
           List of player names which will be admin.
@@ -144,7 +149,7 @@ in
       };
       mods = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           Mods the server should install and activate.
 
@@ -179,8 +184,10 @@ in
       };
       extraSettings = mkOption {
         type = types.attrs;
-        default = {};
-        example = { admins = [ "username" ];};
+        default = { };
+        example = {
+          admins = [ "username" ];
+        };
         description = ''
           Extra game configuration that will go into server-settings.json
         '';
@@ -208,9 +215,7 @@ in
           This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      package = mkPackageOption pkgs "factorio-headless" {
-        example = "factorio-headless-experimental";
-      };
+      package = mkPackageOption pkgs "factorio-headless" { example = "factorio-headless-experimental"; };
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -265,9 +270,9 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.factorio = {
-      description   = "Factorio headless server";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Factorio headless server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart =
         (toString [
@@ -276,11 +281,13 @@ in
           "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
-          (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (optionalString (cfg.mods != [ ]) "--mod-directory=${modDir}")
         ])
-        + (optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
+        + (optionalString (cfg.extraSettingsFile != null) (
+          "\necho ${lib.strings.escapeShellArg serverSettingsString}"
           + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
-          + " > ${stateDir}/server-settings.json"));
+          + " > ${stateDir}/server-settings.json"
+        ));
 
       serviceConfig = {
         Restart = "always";
@@ -295,13 +302,11 @@ in
           "--bind=${cfg.bind}"
           (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${
-            if (cfg.extraSettingsFile != null)
-            then "${stateDir}/server-settings.json"
-            else serverSettingsFile
+            if (cfg.extraSettingsFile != null) then "${stateDir}/server-settings.json" else serverSettingsFile
           }"
           (optionalString cfg.loadLatestSave "--start-server-load-latest")
-          (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-          (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
+          (optionalString (cfg.mods != [ ]) "--mod-directory=${modDir}")
+          (optionalString (cfg.admins != [ ]) "--server-adminlist=${serverAdminsFile}")
         ];
 
         # Sandboxing
@@ -313,7 +318,12 @@ in
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;

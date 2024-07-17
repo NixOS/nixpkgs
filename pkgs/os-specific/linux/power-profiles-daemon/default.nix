@@ -1,35 +1,39 @@
-{ stdenv
-, lib
-, bash-completion
-, pkg-config
-, meson
-, mesonEmulatorHook
-, ninja
-, fetchFromGitLab
-, libgudev
-, glib
-, polkit
-, dbus
-, gobject-introspection
-, wrapGAppsNoGuiHook
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, libxml2
-, libxslt
-, upower
-, umockdev
-, systemd
-, python3
-, nixosTests
+{
+  stdenv,
+  lib,
+  bash-completion,
+  pkg-config,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  fetchFromGitLab,
+  libgudev,
+  glib,
+  polkit,
+  dbus,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+  gettext,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  libxml2,
+  libxslt,
+  upower,
+  umockdev,
+  systemd,
+  python3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
   version = "0.21";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -52,16 +56,16 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsNoGuiHook
     # checkInput but cheked for during the configuring
-    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
-      pygobject3
-      dbus-python
-      python-dbusmock
-      argparse-manpage
-      shtab
-    ]))
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+    (python3.pythonOnBuildForHost.withPackages (
+      ps: with ps; [
+        pygobject3
+        dbus-python
+        python-dbusmock
+        argparse-manpage
+        shtab
+      ]
+    ))
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     bash-completion
@@ -71,16 +75,12 @@ stdenv.mkDerivation rec {
     glib
     polkit
     # for cli tool
-    (python3.withPackages (ps: [
-      ps.pygobject3
-    ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ]))
   ];
 
   strictDeps = true;
 
-  checkInputs = [
-    umockdev
-  ];
+  checkInputs = [ umockdev ];
 
   nativeCheckInputs = [
     umockdev
@@ -127,6 +127,10 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz picnoir lyndeno ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      picnoir
+      lyndeno
+    ];
   };
 }

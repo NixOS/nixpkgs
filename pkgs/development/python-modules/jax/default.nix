@@ -127,14 +127,15 @@ buildPythonPackage rec {
       "testQdwhWithOnRankDeficientInput5"
     ];
 
-  disabledTestPaths = [
-    # Segmentation fault. See https://gist.github.com/zimbatm/e9b61891f3bcf5e4aaefd13f94344fba
-    "tests/linalg_test.py"
-  ]
-  ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # RuntimeWarning: invalid value encountered in cast
-    "tests/lax_test.py"
-  ];
+  disabledTestPaths =
+    [
+      # Segmentation fault. See https://gist.github.com/zimbatm/e9b61891f3bcf5e4aaefd13f94344fba
+      "tests/linalg_test.py"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # RuntimeWarning: invalid value encountered in cast
+      "tests/lax_test.py"
+    ];
 
   pythonImportsCheck = [ "jax" ];
 

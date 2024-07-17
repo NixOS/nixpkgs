@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
   runDir = "/run/longview";
   configsDir = "${runDir}/longview.d";
 
-in {
+in
+{
   options = {
 
     services.longview = {
@@ -104,57 +110,78 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.longview =
-      { description = "Longview Metrics Collection";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig.Type = "forking";
-        serviceConfig.ExecStop = "-${pkgs.coreutils}/bin/kill -TERM $MAINPID";
-        serviceConfig.ExecReload = "-${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        serviceConfig.PIDFile = "${runDir}/longview.pid";
-        serviceConfig.ExecStart = "${pkgs.longview}/bin/longview";
-        preStart = ''
+    systemd.services.longview = {
+      description = "Longview Metrics Collection";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      serviceConfig.ExecStop = "-${pkgs.coreutils}/bin/kill -TERM $MAINPID";
+      serviceConfig.ExecReload = "-${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig.PIDFile = "${runDir}/longview.pid";
+      serviceConfig.ExecStart = "${pkgs.longview}/bin/longview";
+      preStart =
+        ''
           umask 077
           mkdir -p ${configsDir}
-        '' + (optionalString (cfg.apiKeyFile != null) ''
+        ''
+        + (optionalString (cfg.apiKeyFile != null) ''
           cp --no-preserve=all "${cfg.apiKeyFile}" ${runDir}/longview.key
-        '') + (optionalString (cfg.apacheStatusUrl != "") ''
+        '')
+        + (optionalString (cfg.apacheStatusUrl != "") ''
           cat > ${configsDir}/Apache.conf <<EOF
           location ${cfg.apacheStatusUrl}?auto
           EOF
-        '') + (optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
+        '')
+        + (optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
           cat > ${configsDir}/MySQL.conf <<EOF
           username ${cfg.mysqlUser}
           password `head -n1 "${cfg.mysqlPasswordFile}"`
           EOF
-        '') + (optionalString (cfg.nginxStatusUrl != "") ''
+        '')
+        + (optionalString (cfg.nginxStatusUrl != "") ''
           cat > ${configsDir}/Nginx.conf <<EOF
           location ${cfg.nginxStatusUrl}
           EOF
         '');
-      };
+    };
 
-    warnings = let warn = k: optional (cfg.${k} != "")
-                 "config.services.longview.${k} is insecure. Use ${k}File instead.";
-               in concatMap warn [ "apiKey" "mysqlPassword" ];
+    warnings =
+      let
+        warn =
+          k: optional (cfg.${k} != "") "config.services.longview.${k} is insecure. Use ${k}File instead.";
+      in
+      concatMap warn [
+        "apiKey"
+        "mysqlPassword"
+      ];
 
     assertions = [
-      { assertion = cfg.apiKeyFile != null;
+      {
+        assertion = cfg.apiKeyFile != null;
         message = "Longview needs an API key configured";
       }
     ];
 
     # Create API key file if not configured.
-    services.longview.apiKeyFile = mkIf (cfg.apiKey != "")
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "longview.key";
-        text = cfg.apiKey;
-      })));
+    services.longview.apiKeyFile = mkIf (cfg.apiKey != "") (
+      mkDefault (
+        toString (
+          pkgs.writeTextFile {
+            name = "longview.key";
+            text = cfg.apiKey;
+          }
+        )
+      )
+    );
 
     # Create MySQL password file if not configured.
-    services.longview.mysqlPasswordFile = mkDefault (toString (pkgs.writeTextFile {
-      name = "mysql-password-file";
-      text = cfg.mysqlPassword;
-    }));
+    services.longview.mysqlPasswordFile = mkDefault (
+      toString (
+        pkgs.writeTextFile {
+          name = "mysql-password-file";
+          text = cfg.mysqlPassword;
+        }
+      )
+    );
   };
 }

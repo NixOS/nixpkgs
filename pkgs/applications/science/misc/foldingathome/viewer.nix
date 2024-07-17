@@ -1,13 +1,15 @@
-{ lib, stdenv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, libglut
-, gcc-unwrapped
-, libGL
-, libGLU
-, makeWrapper
-, zlib
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  libglut,
+  gcc-unwrapped,
+  libGL,
+  libGLU,
+  makeWrapper,
+  zlib,
 }:
 let
   majMin = lib.versions.majorMinor version;

@@ -1,14 +1,10 @@
-{ faust
-, csound
-}:
+{ faust, csound }:
 
 faust.wrapWithBuildEnv {
 
   baseName = "faust2csound";
 
-  propagatedBuildInputs = [
-    csound
-  ];
+  propagatedBuildInputs = [ csound ];
 
   # faust2csound generated .cpp files have
   #   #include "csdl.h"

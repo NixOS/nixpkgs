@@ -57,7 +57,6 @@ buildPythonPackage rec {
     hash = "sha256-rIyRY1FolbdoaI4OgFG7D2/mot8NiRHalgittPzledw=";
   };
 
-
   pythonRelaxDeps = [
     "aioquic"
     "cryptography"

@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wafHook
-, buildPackages
-, python3
-, readline
-, libxslt
-, libxcrypt
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wafHook,
+  buildPackages,
+  python3,
+  readline,
+  libxslt,
+  libxcrypt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,17 +46,21 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
-    "--bundled-libraries=NONE"
-    "--builtin-libraries=replace"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-  ];
+  wafConfigureFlags =
+    [
+      "--bundled-libraries=NONE"
+      "--builtin-libraries=replace"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-compile"
+      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+    ];
 
-  postFixup = if stdenv.isDarwin
-    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
-    else null;
+  postFixup =
+    if stdenv.isDarwin then
+      ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+    else
+      null;
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig

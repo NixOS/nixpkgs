@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, updateAutotoolsGnuConfigScriptsHook
-# for passthru.tests
-, python3
-, perlPackages
-, haskellPackages
-, luaPackages
-, ocamlPackages
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  # for passthru.tests
+  python3,
+  perlPackages,
+  haskellPackages,
+  luaPackages,
+  ocamlPackages,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -18,21 +19,26 @@
 
 let
   version = "2.6.2";
-  tag = "R_${lib.replaceStrings ["."] ["_"] version}";
+  tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
   inherit version;
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
     hash = "sha256-7hS0xdiQixvsN62TdgfqsYPU2YBqCK3uRyw8MSHSc2Q=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  outputs = [ "out" "dev" ]; # TODO: fix referrers
+  outputs = [
+    "out"
+    "dev"
+  ]; # TODO: fix referrers
   outputBin = "dev";
 
   enableParallelBuilding = true;
@@ -61,9 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (perlPackages) XMLSAXExpat XMLParser;
     inherit (luaPackages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, boost
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  boost,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
   ];
   patchFlags = [ "-p3" ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
   buildInputs = [ boost ];
 
   preConfigure = ''

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,34 +16,29 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-6/7oCKBMEcQeJ8PaFP15Xef9sQRYCpigtzINv2M6GUY=";
   };
 
-  build-system = with python3.pkgs; [
-    wheel
-  ];
+  build-system = with python3.pkgs; [ wheel ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    grequests
-    cjkwrap
-    pytz
-    beautifulsoup4
-    lxml
-    mpv
-    python-vlc
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      requests
+      grequests
+      cjkwrap
+      pytz
+      beautifulsoup4
+      lxml
+      mpv
+      python-vlc
+    ]
+    ++ requests.optional-dependencies.socks;
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [ "test_datafile_download" ];
 
-  pythonImportsCheck = [
-    "castero"
-  ];
+  pythonImportsCheck = [ "castero" ];
 
   # Resolve configuration tests, which access $HOME
   preCheck = ''

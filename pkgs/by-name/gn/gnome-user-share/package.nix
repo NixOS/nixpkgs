@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, gettext
-, meson
-, ninja
-, fetchurl
-, apacheHttpdPackages
-, pkg-config
-, glib
-, libxml2
-, systemd
-, wrapGAppsNoGuiHook
-, itstool
-, gnome
+{
+  stdenv,
+  lib,
+  gettext,
+  meson,
+  ninja,
+  fetchurl,
+  apacheHttpdPackages,
+  pkg-config,
+  glib,
+  libxml2,
+  systemd,
+  wrapGAppsNoGuiHook,
+  itstool,
+  gnome,
 }:
 
 let
@@ -57,9 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-user-share";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-user-share"; };
   };
 
   meta = with lib; {

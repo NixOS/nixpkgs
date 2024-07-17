@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, openssl, readline, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  readline,
+  fetchurl,
+}:
 
 let
 
@@ -7,19 +15,23 @@ let
     sha256 = "sha256-huFWygMEylBKBMLV16UE6xLWP6Aw1FGYk5h1q5CErUs=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ipmitool";
   version = "1.8.19";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "IPMITOOL_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "IPMITOOL_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-VVYvuldRIHhaIUibed9cLX8Avfy760fdBLNO8MoUKCk=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl readline ];
+  buildInputs = [
+    openssl
+    readline
+  ];
 
   postPatch = ''
     substituteInPlace configure.ac \

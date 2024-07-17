@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL
-, SDL_mixer
-, autoreconfHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL,
+  SDL_mixer,
+  autoreconfHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "hheretic-";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "hheretic-"; };
 
   meta = {
     description = "Linux port of Raven Game's Heretic";

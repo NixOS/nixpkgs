@@ -1,8 +1,9 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, ffmpeg
-, ffmpeg-progress-yield
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  ffmpeg,
+  ffmpeg-progress-yield,
 }:
 
 buildPythonApplication rec {
@@ -14,7 +15,10 @@ buildPythonApplication rec {
     hash = "sha256-OwREpfWaP0tdAjMGjGpVIAQn8rlTTjSfT+0t5g/2yjQ=";
   };
 
-  propagatedBuildInputs = [ ffmpeg ffmpeg-progress-yield ];
+  propagatedBuildInputs = [
+    ffmpeg
+    ffmpeg-progress-yield
+  ];
 
   checkPhase = ''
     $out/bin/ffmpeg-normalize --help > /dev/null

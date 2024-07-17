@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  substituteAll,
+  requests,
+  dmenu,
+}:
 
 buildPythonApplication rec {
   pname = "dmensamenu";
@@ -18,9 +25,7 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # No tests implemented
   doCheck = false;

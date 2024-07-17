@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchurl
-, nasmSupport ? true, nasm # Assembly optimizations
-, cpmlSupport ? true # Compaq's fast math library
-#, efenceSupport ? false, libefence # Use ElectricFence for malloc debugging
-, sndfileFileIOSupport ? false, libsndfile # Use libsndfile, instead of lame's internal routines
-, analyzerHooksSupport ? true # Use analyzer hooks
-, decoderSupport ? true # mpg123 decoder
-, frontendSupport ? true # Build the lame executable
-#, mp3xSupport ? false, gtk1 # Build GTK frame analyzer
-, mp3rtpSupport ? false # Build mp3rtp
-, debugSupport ? false # Debugging (disables optimizations)
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nasmSupport ? true,
+  nasm, # Assembly optimizations
+  cpmlSupport ? true, # Compaq's fast math library
+  #, efenceSupport ? false, libefence # Use ElectricFence for malloc debugging
+  sndfileFileIOSupport ? false,
+  libsndfile, # Use libsndfile, instead of lame's internal routines
+  analyzerHooksSupport ? true, # Use analyzer hooks
+  decoderSupport ? true, # mpg123 decoder
+  frontendSupport ? true, # Build the lame executable
+  #, mp3xSupport ? false, gtk1 # Build GTK frame analyzer
+  mp3rtpSupport ? false, # Build mp3rtp
+  debugSupport ? false, # Debugging (disables optimizations)
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +25,17 @@ stdenv.mkDerivation rec {
     sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
   };
 
-  outputs = [ "out" "lib" "doc" ]; # a small single header
+  outputs = [
+    "out"
+    "lib"
+    "doc"
+  ]; # a small single header
   outputMan = "out";
 
-  nativeBuildInputs = [ ]
-    ++ lib.optional nasmSupport nasm;
+  nativeBuildInputs = [ ] ++ lib.optional nasmSupport nasm;
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     #++ optional efenceSupport libefence
     #++ optional mp3xSupport gtk1
     ++ lib.optional sndfileFileIOSupport libsndfile;
@@ -53,10 +62,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High quality MPEG Audio Layer III (MP3) encoder";
-    homepage    = "http://lame.sourceforge.net";
-    license     = licenses.lgpl2;
+    homepage = "http://lame.sourceforge.net";
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     mainProgram = "lame";
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, ppxlib
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ppxlib,
 }:
 
 buildDunePackage rec {

@@ -1,4 +1,14 @@
-{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, which, makeDesktopItem }:
+{
+  lib,
+  fetchurl,
+  tcl,
+  tk,
+  libX11,
+  zlib,
+  makeWrapper,
+  which,
+  makeDesktopItem,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
@@ -15,8 +25,15 @@ tcl.mkTclDerivation rec {
       --replace "which fc-cache" "false"
   '';
 
-  nativeBuildInputs = [ makeWrapper which ];
-  buildInputs = [ tk libX11 zlib ];
+  nativeBuildInputs = [
+    makeWrapper
+    which
+  ];
+  buildInputs = [
+    tk
+    libX11
+    zlib
+  ];
 
   configureFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -37,7 +54,10 @@ tcl.mkTclDerivation rec {
     comment = meta.description;
     icon = "scid";
     exec = "scid";
-    categories = [ "Game" "BoardGame" ];
+    categories = [
+      "Game"
+      "BoardGame"
+    ];
   };
 
   meta = with lib; {

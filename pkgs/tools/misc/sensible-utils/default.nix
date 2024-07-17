@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitLab, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sensible-utils";
@@ -25,10 +30,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of utilities used by programs to sensibly select and spawn an appropriate browser, editor, or pager";
     longDescription = ''
-       The specific utilities included are:
-       - sensible-browser
-       - sensible-editor
-       - sensible-pager
+      The specific utilities included are:
+      - sensible-browser
+      - sensible-editor
+      - sensible-pager
     '';
     homepage = "https://salsa.debian.org/debian/sensible-utils";
     changelog = "https://salsa.debian.org/debian/sensible-utils/-/tags";
@@ -37,4 +42,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

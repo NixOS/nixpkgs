@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeShellWrapper
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, glib
-, gtk3
-, libsecret
-, mesa
-, nss
-, pango
-, udev
-, xdg-utils
-, xorg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeShellWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  gtk3,
+  libsecret,
+  mesa,
+  nss,
+  pango,
+  udev,
+  xdg-utils,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -97,7 +98,10 @@ stdenv.mkDerivation rec {
     homepage = "https://getpublii.com";
     changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom sebtm ];
+    maintainers = with lib.maintainers; [
+      urandom
+      sebtm
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

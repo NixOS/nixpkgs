@@ -28,7 +28,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ poetry-core ];
 
-
   dependencies = with python3Packages; [
     aiohttp
     aiosql

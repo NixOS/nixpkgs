@@ -1,12 +1,14 @@
-{ lib, buildDunePackage, ringo }:
+{
+  lib,
+  buildDunePackage,
+  ringo,
+}:
 
 buildDunePackage {
   pname = "aches";
   inherit (ringo) src version;
 
-  propagatedBuildInputs = [
-    ringo
-  ];
+  propagatedBuildInputs = [ ringo ];
 
   meta = {
     description = "Caches (bounded-size stores) for in-memory values and for resources";

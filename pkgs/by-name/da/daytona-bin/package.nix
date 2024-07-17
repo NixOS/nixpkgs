@@ -1,7 +1,8 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -33,9 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall

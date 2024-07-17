@@ -20,9 +20,7 @@ buildPythonPackage rec {
   # reverse the dependency
   pythonRemoveDeps = [ "molecule" ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   passthru.optional-dependencies = {
     docker = [ docker ];

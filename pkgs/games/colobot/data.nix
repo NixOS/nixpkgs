@@ -1,6 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake
-, gettext, vorbis-tools
-, xmlstarlet, doxygen, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  vorbis-tools,
+  xmlstarlet,
+  doxygen,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "colobot-data";
@@ -13,7 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
   };
 
-  nativeBuildInputs = [ cmake vorbis-tools xmlstarlet doxygen python3 ];
+  nativeBuildInputs = [
+    cmake
+    vorbis-tools
+    xmlstarlet
+    doxygen
+    python3
+  ];
   buildInputs = [ gettext ];
 
   enableParallelBuilding = false;

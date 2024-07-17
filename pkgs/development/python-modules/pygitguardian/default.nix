@@ -33,9 +33,7 @@ buildPythonPackage rec {
     "setuptools"
   ];
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     marshmallow

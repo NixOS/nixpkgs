@@ -31,13 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     freetype
     harfbuzz
-  ]
-  ++ lib.optionals (!stdenv.isDarwin) [
-    libGL
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ libGL ] ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
 
   configureFlags = [
     (lib.enableFeature false "harfbuzz-builtin")
@@ -48,17 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 
   meta = {
     homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "Support for TrueType (.ttf) font files with Simple Directmedia Layer";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL2.meta) platforms;
     pkgConfigModules = [ "SDL2_ttf" ];
   };

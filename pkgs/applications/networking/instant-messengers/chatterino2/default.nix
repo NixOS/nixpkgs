@@ -1,4 +1,14 @@
-{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qt6, boost, openssl, libsecret }:
+{
+  stdenv,
+  lib,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  qt6,
+  boost,
+  openssl,
+  libsecret,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
@@ -10,7 +20,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
@@ -20,17 +34,17 @@ stdenv.mkDerivation rec {
     boost
     openssl
     libsecret
-  ] ++ lib.optionals stdenv.isLinux [
-    qt6.qtwayland
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
   cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p "$out/Applications"
-    mv bin/chatterino.app "$out/Applications/"
-  '' + ''
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-    cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
-  '';
+  postInstall =
+    lib.optionalString stdenv.isDarwin ''
+      mkdir -p "$out/Applications"
+      mv bin/chatterino.app "$out/Applications/"
+    ''
+    + ''
+      mkdir -p $out/share/icons/hicolor/256x256/apps
+      cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
+    '';
   meta = with lib; {
     description = "Chat client for Twitch chat";
     mainProgram = "chatterino";
@@ -44,6 +58,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim supa ];
+    maintainers = with maintainers; [
+      rexim
+      supa
+    ];
   };
 }

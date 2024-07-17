@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python310Packages
-, testers
-, stig
+{
+  lib,
+  fetchFromGitHub,
+  python310Packages,
+  testers,
+  stig,
 }:
 
 python310Packages.buildPythonApplication rec {
@@ -64,6 +65,6 @@ python310Packages.buildPythonApplication rec {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }

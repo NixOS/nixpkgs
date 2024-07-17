@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
-, alsa-lib
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  alsa-lib,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {

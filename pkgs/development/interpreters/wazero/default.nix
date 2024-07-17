@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, wazero
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  wazero,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages = [
-    "cmd/wazero"
-  ];
+  subPackages = [ "cmd/wazero" ];
 
   ldflags = [
     "-s"

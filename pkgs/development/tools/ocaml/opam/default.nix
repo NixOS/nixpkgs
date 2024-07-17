@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, bubblewrap, Foundation
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  getconf,
+  ocaml,
+  unzip,
+  ncurses,
+  curl,
+  bubblewrap,
+  Foundation,
 }:
 
 assert lib.versionAtLeast ocaml.version "4.08.0";
@@ -15,10 +25,16 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
-  buildInputs = [ ncurses getconf ]
-    ++ lib.optionals stdenv.isLinux [ bubblewrap ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    ocaml
+    curl
+  ];
+  buildInputs = [
+    ncurses
+    getconf
+  ] ++ lib.optionals stdenv.isLinux [ bubblewrap ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   patches = [ ./opam-shebangs.patch ];
 
@@ -26,12 +42,18 @@ stdenv.mkDerivation {
     patchShebangs src/state/shellscripts
   '';
 
-  configureFlags = [ "--with-vendored-deps" "--with-mccs" ];
+  configureFlags = [
+    "--with-vendored-deps"
+    "--with-mccs"
+  ];
 
   # Dirty, but apparently ocp-build requires a TERM
-  makeFlags = ["TERM=screen"];
+  makeFlags = [ "TERM=screen" ];
 
-  outputs = [ "out" "installer" ];
+  outputs = [
+    "out"
+    "installer"
+  ];
   setOutputFlags = false;
 
   # change argv0 to "opam" as a workaround for

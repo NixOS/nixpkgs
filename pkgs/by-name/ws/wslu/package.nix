@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {

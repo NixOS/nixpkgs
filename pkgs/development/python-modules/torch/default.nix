@@ -204,7 +204,8 @@ let
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
-    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" = rocmSupport;
+    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
+      rocmSupport;
   };
 in
 buildPythonPackage rec {
@@ -464,9 +465,7 @@ buildPythonPackage rec {
         libcusolver
         libcusparse
       ]
-      ++ lists.optionals (cudaPackages ? cudnn) [
-        cudnn
-      ]
+      ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
       ++ lists.optionals useSystemNccl [
         # Some platforms do not support NCCL (i.e., Jetson)
         nccl # Provides nccl.h AND a static copy of NCCL!

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,9 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "00ZYdpJktqUXdzPcouHyZcOQyFm7jdFNVuDqsufOviE=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setupmeta
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setupmeta ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -25,13 +24,9 @@ python3.pkgs.buildPythonApplication rec {
     yara-python
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "stacs"
-  ];
+  pythonImportsCheck = [ "stacs" ];
 
   meta = with lib; {
     description = "Static token and credential scanner";

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
     description = "Implementation of BLAKE3 verified streaming";
     homepage = "https://github.com/oconnor663/bao";
     maintainers = with lib.maintainers; [ amarshall ];
-    license = with lib.licenses; [ cc0 asl20 ];
+    license = with lib.licenses; [
+      cc0
+      asl20
+    ];
     mainProgram = "bao";
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildNpmPackage, fetchFromGitLab }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitLab,
+}:
 
 buildNpmPackage rec {
   pname = "antora";

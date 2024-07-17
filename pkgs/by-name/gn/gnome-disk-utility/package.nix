@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, udisks2
-, libhandy
-, libsecret
-, libdvdread
-, meson
-, ninja
-, gtk3
-, glib
-, wrapGAppsHook3
-, libnotify
-, itstool
-, gnome
-, adwaita-icon-theme
-, libxml2
-, gsettings-desktop-schemas
-, libcanberra-gtk3
-, libxslt
-, docbook-xsl-nons
-, desktop-file-utils
-, libpwquality
-, systemd
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  udisks2,
+  libhandy,
+  libsecret,
+  libdvdread,
+  meson,
+  ninja,
+  gtk3,
+  glib,
+  wrapGAppsHook3,
+  libnotify,
+  itstool,
+  gnome,
+  adwaita-icon-theme,
+  libxml2,
+  gsettings-desktop-schemas,
+  libcanberra-gtk3,
+  libxslt,
+  docbook-xsl-nons,
+  desktop-file-utils,
+  libpwquality,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -65,9 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-disk-utility";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-disk-utility"; };
   };
 
   meta = with lib; {

@@ -1,7 +1,8 @@
-{ callPackage
-, fetchFromGitHub
-, gradle_6
-, substitute
+{
+  callPackage,
+  fetchFromGitHub,
+  gradle_6,
+  substitute,
 }:
 
 callPackage ../generic.nix rec {
@@ -16,10 +17,16 @@ callPackage ../generic.nix rec {
     hash = "sha256-VQcWkbGe/0qyt3M5WWgTxczwC5mE3lRHbYidOwRoukI=";
   };
 
-  patches = [(substitute {
-    src = ./disable-git-version.patch;
-    substitutions = [ "--subst-var-by" "version" version ];
-  })];
+  patches = [
+    (substitute {
+      src = ./disable-git-version.patch;
+      substitutions = [
+        "--subst-var-by"
+        "version"
+        version
+      ];
+    })
+  ];
 
   desktopName = "Summoning Pixel Dungeon";
 

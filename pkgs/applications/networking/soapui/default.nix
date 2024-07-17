@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pT0ZANVC7Sv7zxMDPY86aclIUGZeazOZadiVVsmEjtw=";
   };
 
-  nativeBuildInputs = [makeWrapper];
-  buildInputs = [jdk];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     runHook preInstall
@@ -53,14 +53,16 @@ stdenv.mkDerivation rec {
     '')
   ];
 
-  passthru.tests = {inherit (nixosTests) soapui;};
+  passthru.tests = {
+    inherit (nixosTests) soapui;
+  };
 
   meta = with lib; {
     description = "Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
-    sourceProvenance = with sourceTypes; [binaryBytecode];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = "SoapUI End User License Agreement";
-    maintainers = with maintainers; [gerschtli];
+    maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.linux; # we don't fetch the dmg yet
     mainProgram = "soapui";
   };

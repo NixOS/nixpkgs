@@ -1,9 +1,10 @@
-{ buildDunePackage
-, dune-configurator
-, lib
-, fetchurl
-, ppx_expect
-, ppx_optcomp
+{
+  buildDunePackage,
+  dune-configurator,
+  lib,
+  fetchurl,
+  ppx_expect,
+  ppx_optcomp,
 }:
 
 buildDunePackage rec {
@@ -22,9 +23,7 @@ buildDunePackage rec {
     ppx_optcomp
   ];
 
-  checkInputs = [
-    ppx_expect
-  ];
+  checkInputs = [ ppx_expect ];
 
   doCheck = true;
 
@@ -36,4 +35,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

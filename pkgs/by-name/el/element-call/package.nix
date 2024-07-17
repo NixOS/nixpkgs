@@ -1,22 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, npmHooks
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  npmHooks,
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
-  offlineCacheHash = {
-    x86_64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    aarch64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    x86_64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
-    aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
-  }.${system} or throwSystem;
+  offlineCacheHash =
+    {
+      x86_64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
+      aarch64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
+      x86_64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
+      aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
+    }
+    .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";

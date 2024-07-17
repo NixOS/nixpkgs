@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,16 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-KbYbsV3+xhGFgcKrdLMiQ5+1meePjXYMD9PltlO+QMA=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -41,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/matze/wastebin";
     changelog = "https://github.com/matze/wastebin/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ pinpox matthiasbeyer ];
+    maintainers = with maintainers; [
+      pinpox
+      matthiasbeyer
+    ];
     mainProgram = "wastebin";
   };
 }

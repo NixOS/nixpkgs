@@ -1,17 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, click
-, semantic-version
-, requests
-, colorama
-, pyserial
-, wheel
-, scons
-, setuptools
-, tinyprog
-, flit-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  click,
+  semantic-version,
+  requests,
+  colorama,
+  pyserial,
+  wheel,
+  scons,
+  setuptools,
+  tinyprog,
+  flit-core,
+  pytestCheckHook,
 }:
 
 buildPythonApplication rec {
@@ -49,9 +50,7 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click
@@ -66,9 +65,7 @@ buildPythonApplication rec {
     tinyprog # needed for upload to TinyFPGA
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # This test fails and is also not executed in upstream's CI

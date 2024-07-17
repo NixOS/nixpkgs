@@ -83,7 +83,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-
   dependencies =
     [
       appdirs

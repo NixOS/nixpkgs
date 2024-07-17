@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, openssl
-, stdenv
-, darwin
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  openssl,
+  stdenv,
+  darwin,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,18 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ahzm23AStSwDSgks9j/J15/zo+EH/NgbfCBc3xBcTwQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ] ++ lib.optionals stdenv.isLinux [
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ]
+    ++ lib.optionals stdenv.isLinux [
+      libxkbcommon
+      wayland
+    ];
 
   # requires internet access
   doCheck = false;

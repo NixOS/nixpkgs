@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 stdenv.mkDerivation rec {
   pname = "bento4";
@@ -20,9 +23,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_ARCHITECTURES="
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     runHook preInstall

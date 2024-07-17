@@ -35,15 +35,11 @@ let
       yarl
     ];
 
-    nativeCheckInputs = with python3Packages; [
-      pytest
-    ];
+    nativeCheckInputs = with python3Packages; [ pytest ];
 
     passthru = {
       updateScript = gitUpdater { };
-      tests.version = testers.testVersion {
-        package = self;
-      };
+      tests.version = testers.testVersion { package = self; };
     };
 
     meta = {

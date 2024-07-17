@@ -1,4 +1,16 @@
-{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook3, pcre-cpp, adwaita-icon-theme }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  smartmontools,
+  autoreconfHook,
+  gettext,
+  gtkmm3,
+  pkg-config,
+  wrapGAppsHook3,
+  pcre-cpp,
+  adwaita-icon-theme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsmartcontrol";
@@ -9,16 +21,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/ECfK4qEzEC7ED1sgkAbnUwBgtWjsiPJOVnHrWYZGEc=";
   };
 
-  patches = [
-    ./fix-paths.patch
-  ];
+  patches = [ ./fix-paths.patch ];
 
   postPatch = ''
     substituteInPlace data/org.gsmartcontrol.policy --replace "/usr/sbin" $out/bin
   '';
 
-  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook3 ];
-  buildInputs = [ gtkmm3 pcre-cpp adwaita-icon-theme ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    gtkmm3
+    pcre-cpp
+    adwaita-icon-theme
+  ];
 
   enableParallelBuilding = true;
 
@@ -41,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gsmartcontrol.shaduri.dev/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [qknight];
+    maintainers = with lib.maintainers; [ qknight ];
     platforms = with lib.platforms; linux;
   };
 }

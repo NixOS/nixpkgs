@@ -28,7 +28,6 @@ buildPythonPackage rec {
     "pyasn1"
   ];
 
-
   build-system = [ poetry-core ];
 
   dependencies = [

@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-readme";
@@ -15,14 +19,21 @@ rustPlatform.buildRustPackage rec {
 
   # disable doc tests
   cargoTestFlags = [
-    "--bins" "--lib"
+    "--bins"
+    "--lib"
   ];
 
   meta = with lib; {
     description = "Generate README.md from docstrings";
     mainProgram = "cargo-readme";
     homepage = "https://github.com/livioribeiro/cargo-readme";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ baloo matthiasbeyer ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      baloo
+      matthiasbeyer
+    ];
   };
 }

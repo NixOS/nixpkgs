@@ -1,4 +1,8 @@
-{ lib, fetchFromGitLab, python3Packages }:
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+}:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -19,15 +23,32 @@ buildPythonApplication rec {
     py.test
   '';
 
-  nativeCheckInputs = [ coverage coveralls docopt mock pylint pytest vcrpy ];
+  nativeCheckInputs = [
+    coverage
+    coveralls
+    docopt
+    mock
+    pylint
+    pytest
+    vcrpy
+  ];
 
-  propagatedBuildInputs = [ beautifulsoup4 decorator kitchen requests six ];
+  propagatedBuildInputs = [
+    beautifulsoup4
+    decorator
+    kitchen
+    requests
+    six
+  ];
 
   meta = with lib; {
     description = "Browse Reddit from your Terminal (fork of rtv)";
     mainProgram = "tuir";
     homepage = "https://gitlab.com/ajak/tuir/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne matthiasbeyer ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      matthiasbeyer
+    ];
   };
 }

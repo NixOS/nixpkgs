@@ -1,50 +1,51 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, nixosTests
-, pkg-config
-, file
-, linuxHeaders
-, openssl
-, pcre
-, perlPackages
-, python3
-, xz
-, zlib
-, catch2
-# recommended dependencies
-, withHwloc ? true
-, hwloc
-, withCurl ? true
-, curl
-, withCurses ? true
-, ncurses
-, withCap ? stdenv.isLinux
-, libcap
-, withUnwind ? stdenv.isLinux
-, libunwind
-# optional dependencies
-, withBrotli ? false
-, brotli
-, withCjose ? false
-, cjose
-, withGeoIP ? false
-, geoip
-, withHiredis ? false
-, hiredis
-, withImageMagick ? false
-, imagemagick
-, withJansson ? false
-, jansson
-, withKyotoCabinet ? false
-, kyotocabinet
-, withLuaJIT ? false
-, luajit
-, withMaxmindDB ? false
-, libmaxminddb
-# optional features
-, enableWCCP ? false
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  file,
+  linuxHeaders,
+  openssl,
+  pcre,
+  perlPackages,
+  python3,
+  xz,
+  zlib,
+  catch2,
+  # recommended dependencies
+  withHwloc ? true,
+  hwloc,
+  withCurl ? true,
+  curl,
+  withCurses ? true,
+  ncurses,
+  withCap ? stdenv.isLinux,
+  libcap,
+  withUnwind ? stdenv.isLinux,
+  libunwind,
+  # optional dependencies
+  withBrotli ? false,
+  brotli,
+  withCjose ? false,
+  cjose,
+  withGeoIP ? false,
+  geoip,
+  withHiredis ? false,
+  hiredis,
+  withImageMagick ? false,
+  imagemagick,
+  withJansson ? false,
+  jansson,
+  withKyotoCabinet ? false,
+  kyotocabinet,
+  withLuaJIT ? false,
+  luajit,
+  withMaxmindDB ? false,
+  libmaxminddb,
+  # optional features
+  enableWCCP ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,47 +65,64 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
-    ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
+  nativeBuildInputs =
+    [
+      makeWrapper
+      pkg-config
+      file
+      python3
+    ]
+    ++ (with perlPackages; [
+      perl
+      ExtUtilsMakeMaker
+    ])
     ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
 
-  buildInputs = [
-    openssl
-    pcre
-    perlPackages.perl
-  ] ++ lib.optional withBrotli brotli
-  ++ lib.optional withCap libcap
-  ++ lib.optional withCjose cjose
-  ++ lib.optional withCurl curl
-  ++ lib.optional withGeoIP geoip
-  ++ lib.optional withHiredis hiredis
-  ++ lib.optional withHwloc hwloc
-  ++ lib.optional withImageMagick imagemagick
-  ++ lib.optional withJansson jansson
-  ++ lib.optional withKyotoCabinet kyotocabinet
-  ++ lib.optional withCurses ncurses
-  ++ lib.optional withLuaJIT luajit
-  ++ lib.optional withUnwind libunwind
-  ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs =
+    [
+      openssl
+      pcre
+      perlPackages.perl
+    ]
+    ++ lib.optional withBrotli brotli
+    ++ lib.optional withCap libcap
+    ++ lib.optional withCjose cjose
+    ++ lib.optional withCurl curl
+    ++ lib.optional withGeoIP geoip
+    ++ lib.optional withHiredis hiredis
+    ++ lib.optional withHwloc hwloc
+    ++ lib.optional withImageMagick imagemagick
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withKyotoCabinet kyotocabinet
+    ++ lib.optional withCurses ncurses
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional withUnwind libunwind
+    ++ lib.optional withMaxmindDB libmaxminddb;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  postPatch = ''
-    patchShebangs \
-      iocore/aio/test_AIO.sample \
-      src/traffic_via/test_traffic_via \
-      src/traffic_logstats/tests \
-      tools/check-unused-dependencies
+  postPatch =
+    ''
+      patchShebangs \
+        iocore/aio/test_AIO.sample \
+        src/traffic_via/test_traffic_via \
+        src/traffic_logstats/tests \
+        tools/check-unused-dependencies
 
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
-  '' + lib.optionalString stdenv.isDarwin ''
-    # 'xcrun leaks' probably requires non-free XCode
-    substituteInPlace iocore/net/test_certlookup.cc \
-      --replace 'xcrun leaks' 'true'
-  '';
+      substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace configure \
+        --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # 'xcrun leaks' probably requires non-free XCode
+      substituteInPlace iocore/net/test_certlookup.cc \
+        --replace 'xcrun leaks' 'true'
+    '';
 
   configureFlags = [
     "--enable-layout=NixOS"
@@ -138,35 +156,39 @@ stdenv.mkDerivation rec {
     rmdir $out/.install-trafficserver
   '';
 
-  installCheckPhase = let
-    expected = ''
-      Via header is [uScMsEf p eC:t cCMp sF], Length is 22
-      Via Header Details:
-      Request headers received from client                   :simple request (not conditional)
-      Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
-      Response information received from origin server       :error in response
-      Result of document write-to-cache:                     :no cache write performed
-      Proxy operation result                                 :unknown
-      Error codes (if any)                                   :connection to server failed
-      Tunnel info                                            :no tunneling
-      Cache Type                                             :cache
-      Cache Lookup Result                                    :cache miss (url not in cache)
-      Parent proxy connection status                         :no parent proxy or unknown
-      Origin server connection status                        :connection open failed
+  installCheckPhase =
+    let
+      expected = ''
+        Via header is [uScMsEf p eC:t cCMp sF], Length is 22
+        Via Header Details:
+        Request headers received from client                   :simple request (not conditional)
+        Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
+        Response information received from origin server       :error in response
+        Result of document write-to-cache:                     :no cache write performed
+        Proxy operation result                                 :unknown
+        Error codes (if any)                                   :connection to server failed
+        Tunnel info                                            :no tunneling
+        Cache Type                                             :cache
+        Cache Lookup Result                                    :cache miss (url not in cache)
+        Parent proxy connection status                         :no parent proxy or unknown
+        Origin server connection status                        :connection open failed
+      '';
+    in
+    ''
+      runHook preInstallCheck
+      diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
+      ${lib.removeSuffix "\n" expected}
+      EOF
+      runHook postInstallCheck
     '';
-  in ''
-    runHook preInstallCheck
-    diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
-    ${lib.removeSuffix "\n" expected}
-    EOF
-    runHook postInstallCheck
-  '';
 
   doCheck = true;
   doInstallCheck = true;
   enableParallelBuilding = true;
 
-  passthru.tests = { inherit (nixosTests) trafficserver; };
+  passthru.tests = {
+    inherit (nixosTests) trafficserver;
+  };
 
   meta = with lib; {
     homepage = "https://trafficserver.apache.org";

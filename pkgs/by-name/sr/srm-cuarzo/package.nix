@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libdisplay-info
-, libdrm
-, libGL
-, libinput
-, mesa
-, seatd
-, udev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libdisplay-info,
+  libdrm,
+  libGL,
+  libinput,
+  mesa,
+  seatd,
+  udev,
 }:
 stdenv.mkDerivation (self: {
   pname = "srm-cuarzo";
@@ -40,7 +41,10 @@ stdenv.mkDerivation (self: {
     udev
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   preConfigure = ''
     # The root meson.build file is in src/

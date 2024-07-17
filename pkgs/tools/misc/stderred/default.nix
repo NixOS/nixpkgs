@@ -1,7 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-k/EA327AsRHgUYu7QqSF5yzOyO6h5XcE9Uv4l1VcIPI=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   sourceRoot = "${src.name}/src";
 

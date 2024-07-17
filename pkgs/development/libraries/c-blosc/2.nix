@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
 
-, static ? stdenv.hostPlatform.isStatic
+  static ? stdenv.hostPlatform.isStatic,
 
-, lz4
-, zlib-ng
-, zstd
+  lz4,
+  zlib-ng,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast, compressed, persistent binary data store library for C";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${finalAttrs.version}";
-    pkgConfigModules = [
-      "blosc2"
-    ];
+    pkgConfigModules = [ "blosc2" ];
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];

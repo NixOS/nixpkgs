@@ -1,4 +1,11 @@
-{ lib, python3Packages, fetchPypi, pkgs, testers, afew }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  pkgs,
+  testers,
+  afew,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
@@ -28,16 +35,14 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pkgs.notmuch
-  ] ++ (with python3Packages; [
-    freezegun
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [ pkgs.notmuch ]
+    ++ (with python3Packages; [
+      freezegun
+      pytestCheckHook
+    ]);
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${pkgs.notmuch}/bin"''
-  ];
+  makeWrapperArgs = [ ''--prefix PATH ':' "${pkgs.notmuch}/bin"'' ];
 
   outputs = [
     "out"
@@ -46,9 +51,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = afew;
-    };
+    version = testers.testVersion { package = afew; };
   };
 
   meta = with lib; {

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, tetex
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  tetex,
+  makeWrapper,
 }:
 buildGoModule rec {
   pname = "reporter";

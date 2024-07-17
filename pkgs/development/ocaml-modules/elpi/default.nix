@@ -1,21 +1,38 @@
-{ lib
-, buildDunePackage, camlp5
-, ocaml
-, menhir, menhirLib
-, atdgen
-, stdlib-shims
-, re, perl, ncurses
-, ppxlib, ppx_deriving
-, ppxlib_0_15, ppx_deriving_0_15
-, coqPackages
-, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.18.1"
-    else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
+{
+  lib,
+  buildDunePackage,
+  camlp5,
+  ocaml,
+  menhir,
+  menhirLib,
+  atdgen,
+  stdlib-shims,
+  re,
+  perl,
+  ncurses,
+  ppxlib,
+  ppx_deriving,
+  ppxlib_0_15,
+  ppx_deriving_0_15,
+  coqPackages,
+  version ?
+    if lib.versionAtLeast ocaml.version "4.08" then
+      "1.18.1"
+    else if lib.versionAtLeast ocaml.version "4.07" then
+      "1.15.2"
+    else
+      "1.14.1",
 }:
 
-let p5 = camlp5; in
-let camlp5 = p5.override { legacy = true; }; in
+let
+  p5 = camlp5;
+in
+let
+  camlp5 = p5.override { legacy = true; };
+in
 
-let fetched = coqPackages.metaFetch ({
+let
+  fetched = coqPackages.metaFetch ({
     release."1.19.2".sha256 = "sha256-7VTUbsFVoNT6srLwcAn5WNSsWC7cVUdphKRWBHHiH5M=";
     release."1.18.1".sha256 = "sha256-zgBJefQDe3JyCGbC0wvMcx/9iMVbftBJ43NPogkNeHY=";
     release."1.17.0".sha256 = "sha256-DTxE8CvYl0et20pxueydI+WzraI6UPHMNvxyp2gU/+w=";
@@ -30,35 +47,49 @@ let fetched = coqPackages.metaFetch ({
     release."1.12.0".sha256 = "1agisdnaq9wrw3r73xz14yrq3wx742i6j8i5icjagqk0ypmly2is";
     release."1.11.4".sha256 = "1m0jk9swcs3jcrw5yyw5343v8mgax238cjb03s8gc4wipw1fn9f5";
     releaseRev = v: "v${v}";
-    location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
+    location = {
+      domain = "github.com";
+      owner = "LPCIC";
+      repo = "elpi";
+    };
   }) version;
 in
 buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  patches = lib.optional (version == "1.16.5")
-    ./atd_2_10.patch;
+  patches = lib.optional (version == "1.16.5") ./atd_2_10.patch;
 
   minimalOCamlVersion = "4.04";
   duneVersion = "3";
 
   # atdgen is both a library and executable
-  nativeBuildInputs = [ perl ]
-  ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
-  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
-  buildInputs = [ ncurses ]
-  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  nativeBuildInputs =
+    [ perl ]
+    ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
+    ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  buildInputs = [
+    ncurses
+  ] ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
 
-  propagatedBuildInputs = [ re stdlib-shims ]
-  ++ (if lib.versionAtLeast version "1.15" || version == "dev"
-     then [ menhirLib ]
-     else [ camlp5 ]
-  )
-  ++ (if lib.versionAtLeast version "1.13" || version == "dev"
-     then [ ppxlib ppx_deriving ]
-     else [ ppxlib_0_15 ppx_deriving_0_15 ]
-  );
+  propagatedBuildInputs =
+    [
+      re
+      stdlib-shims
+    ]
+    ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
+    ++ (
+      if lib.versionAtLeast version "1.13" || version == "dev" then
+        [
+          ppxlib
+          ppx_deriving
+        ]
+      else
+        [
+          ppxlib_0_15
+          ppx_deriving_0_15
+        ]
+    );
 
   meta = with lib; {
     description = "Embeddable λProlog Interpreter";

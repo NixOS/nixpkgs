@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, autoreconfHook
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  wrapGAppsHook3,
 
-, boost
-, cairo
-, gettext
-, glibmm
-, gtk3
-, gtkmm3
-, libjack2
-, libsigcxx
-, libxmlxx
-, mlt
-, pango
-, imagemagick
-, intltool
-, adwaita-icon-theme
-, harfbuzz
-, freetype
-, fribidi
-, openexr
-, fftw
+  boost,
+  cairo,
+  gettext,
+  glibmm,
+  gtk3,
+  gtkmm3,
+  libjack2,
+  libsigcxx,
+  libxmlxx,
+  mlt,
+  pango,
+  imagemagick,
+  intltool,
+  adwaita-icon-theme,
+  harfbuzz,
+  freetype,
+  fribidi,
+  openexr,
+  fftw,
 }:
 
 let
@@ -46,9 +47,7 @@ let
       pkg-config
       autoreconfHook
     ];
-    buildInputs = [
-      glibmm
-    ];
+    buildInputs = [ glibmm ];
   };
 
   synfig = stdenv.mkDerivation {

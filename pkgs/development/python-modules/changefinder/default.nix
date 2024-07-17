@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, nose
-, numpy
-, scipy
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  nose,
+  numpy,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage {
@@ -20,9 +21,7 @@ buildPythonPackage {
     hash = "sha256-1If0gIsMU8673fKSSHVMvDgR1UnYgM/4HiyvZJ9T6VM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     nose # not actually required during runtime, but specified as required in `setup.py`

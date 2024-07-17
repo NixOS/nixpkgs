@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, bzip2
-, xz
-, zstd
-, stdenv
-, darwin
-, git
-, rustup
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  bzip2,
+  xz,
+  zstd,
+  stdenv,
+  darwin,
+  git,
+  rustup,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,17 +26,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GvzYoCbpn/q+jXyIfNgZ7j0cyCiJk7ipICAeGgMfkyw=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2
     xz
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   nativeCheckInputs = [
     git
@@ -58,7 +55,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer mistydemeo ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+      mistydemeo
+    ];
   };
 }

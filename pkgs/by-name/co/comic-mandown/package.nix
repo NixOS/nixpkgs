@@ -1,15 +1,19 @@
-{ lib
-, python3Packages
+{
+  lib,
+  python3Packages,
 
-, withGUI ? true
+  withGUI ? true,
 }:
 let
   mandown' = python3Packages.mandown.overrideAttrs (prev: {
-    propagatedBuildInputs = prev.propagatedBuildInputs ++ lib.optionals withGUI prev.passthru.optional-dependencies.gui;
+    propagatedBuildInputs =
+      prev.propagatedBuildInputs
+      ++ lib.optionals withGUI prev.passthru.optional-dependencies.gui;
   });
   mandownApp = python3Packages.toPythonApplication mandown';
 in
-mandownApp // {
+mandownApp
+// {
   meta = mandownApp.meta // {
     mainProgram = "mandown";
   };

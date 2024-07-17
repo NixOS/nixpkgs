@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, mandown
-, protobuf
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  mandown,
+  protobuf,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,14 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-v8djyU+MvBmg929oFVPZlRPtj7zK8eZg3/KmCsFNWpw=";
 
-  nativeBuildInputs = [ installShellFiles mandown protobuf ];
+  nativeBuildInputs = [
+    installShellFiles
+    mandown
+    protobuf
+  ];
 
   postBuild = ''
     make -C docs netavark.1
     installManPage docs/netavark.1
   '';
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = {
+    inherit (nixosTests) podman;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/containers/netavark/releases/tag/${src.rev}";

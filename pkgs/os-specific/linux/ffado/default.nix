@@ -95,9 +95,7 @@ mkDerivation rec {
     libraw1394
     libxmlxx3
     python
-  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-    argp-standalone
-  ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ argp-standalone ];
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
 

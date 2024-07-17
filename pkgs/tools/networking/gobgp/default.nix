@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "gobgp";
@@ -18,7 +22,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-extldflags '-static'"
+    "-s"
+    "-w"
+    "-extldflags '-static'"
   ];
 
   subPackages = [ "cmd/gobgp" ];

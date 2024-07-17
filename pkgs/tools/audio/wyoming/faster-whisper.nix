@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-zWa872YkPh8B7dE//leth+ixIa1wHSRcjkvH2lXzolc=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "faster-whisper"
@@ -29,9 +28,7 @@ python3Packages.buildPythonApplication rec {
     wyoming
   ];
 
-  pythonImportsCheck = [
-    "wyoming_faster_whisper"
-  ];
+  pythonImportsCheck = [ "wyoming_faster_whisper" ];
 
   # no tests
   doCheck = false;

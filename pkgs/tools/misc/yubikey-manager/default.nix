@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, installShellFiles
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  installShellFiles,
+  procps,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -36,9 +37,7 @@ python3Packages.buildPythonPackage rec {
     keyring
   ];
 
-  pythonRelaxDeps = [
-    "keyring"
-  ];
+  pythonRelaxDeps = [ "keyring" ];
 
   postInstall = ''
     installManPage man/ykman.1
@@ -61,7 +60,12 @@ python3Packages.buildPythonPackage rec {
 
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ benley lassulus pinpox nickcao ];
+    maintainers = with lib.maintainers; [
+      benley
+      lassulus
+      pinpox
+      nickcao
+    ];
     mainProgram = "ykman";
   };
 }

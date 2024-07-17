@@ -1,8 +1,26 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby
-, openjdk11-bootstrap
-, withMedia ? true
-, withWebKit ? false
+{
+  stdenv,
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  writeText,
+  gradle_7,
+  pkg-config,
+  perl,
+  cmake,
+  gperf,
+  gtk2,
+  gtk3,
+  libXtst,
+  libXxf86vm,
+  glib,
+  alsa-lib,
+  ffmpeg_4-headless,
+  python3,
+  ruby,
+  openjdk11-bootstrap,
+  withMedia ? true,
+  withWebKit ? false,
 }:
 
 let
@@ -14,7 +32,8 @@ let
   jdk = openjdk11-bootstrap;
   gradle = gradle_7;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   version = "${major}${update}-${build}";
 
@@ -25,8 +44,24 @@ in stdenv.mkDerivation {
     sha256 = "sha256-BbBP2DiPZTSn1SBYMCgyiNdF9GD+NqR6YjeVNOQHHn4=";
   };
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
-  nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
+  buildInputs = [
+    gtk2
+    gtk3
+    libXtst
+    libXxf86vm
+    glib
+    alsa-lib
+    ffmpeg_4-headless
+  ];
+  nativeBuildInputs = [
+    gradle
+    perl
+    pkg-config
+    cmake
+    gperf
+    python3
+    ruby
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -83,7 +118,10 @@ in stdenv.mkDerivation {
     rm -rf $out/modules_legal/*
   '';
 
-  disallowedReferences = [ jdk gradle.jdk ];
+  disallowedReferences = [
+    jdk
+    gradle.jdk
+  ];
 
   # Uses a lot of RAM, OOMs otherwise
   requiredSystemFeatures = [ "big-parallel" ];

@@ -1,9 +1,10 @@
-{ fetchgit
-, pkg-config
-, stdenv
-, lib
-# Package dependencies
-, qt5
+{
+  fetchgit,
+  pkg-config,
+  stdenv,
+  lib,
+  # Package dependencies
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qt5.qttools
   ];
-  buildInputs = [
-    qt5.qtwebsockets
-  ];
+  buildInputs = [ qt5.qtwebsockets ];
 
   configurePhase = ''
     runHook preConfigure
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Qt-based remote canvas application for FlightGear";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     mainProgram = "fgqcanvas";
   };
 }

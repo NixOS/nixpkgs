@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, rustPlatform, pkg-config, openssl
-, installShellFiles
-, Security, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  Security,
+  AppKit,
 
-, x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
-, xclip ? null, xsel ? null
-, preferXsel ? false # if true and xsel is non-null, use it instead of xclip
+  x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD,
+  xclip ? null,
+  xsel ? null,
+  preferXsel ? false, # if true and xsel is non-null, use it instead of xclip
 }:
 
 let
@@ -57,18 +66,25 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs =
-    if stdenv.isDarwin then [ Security AppKit ]
-    else [ openssl ];
+    if stdenv.isDarwin then
+      [
+        Security
+        AppKit
+      ]
+    else
+      [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (
-    if preferXsel && xsel != null then ''
-      export XSEL_PATH="${xsel}/bin/xsel"
-    '' else ''
-      export XCLIP_PATH="${xclip}/bin/xclip"
-    ''
+    if preferXsel && xsel != null then
+      ''
+        export XSEL_PATH="${xsel}/bin/xsel"
+      ''
+    else
+      ''
+        export XCLIP_PATH="${xclip}/bin/xclip"
+      ''
   );
 
   postInstall = ''

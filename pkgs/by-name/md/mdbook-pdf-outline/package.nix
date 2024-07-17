@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -13,9 +14,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-STi+54iT+5+Xi0IzGXv2dxVS91+T6fjg3xmbJjekpPE=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-  ];
+  nativeBuildInputs = [ python3Packages.setuptools ];
 
   propagatedBuildInputs = [
     python3Packages.lxml

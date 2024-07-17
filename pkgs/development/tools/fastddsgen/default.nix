@@ -1,4 +1,11 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, gradle_7, openjdk17 }:
+{
+  lib,
+  stdenv,
+  runtimeShell,
+  fetchFromGitHub,
+  gradle_7,
+  openjdk17,
+}:
 let
   pname = "fastddsgen";
   version = "3.3.0";
@@ -17,7 +24,10 @@ stdenv.mkDerivation {
     hash = "sha256-oqbSIzsYUwD8bTqGKZ9he9d18EDq9mHZFoNUp0RK0qU=";
   };
 
-  nativeBuildInputs = [ gradle openjdk17 ];
+  nativeBuildInputs = [
+    gradle
+    openjdk17
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -26,7 +36,10 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
-  gradleFlags = [ "-x" "submodulesUpdate" ];
+  gradleFlags = [
+    "-x"
+    "submodulesUpdate"
+  ];
 
   installPhase = ''
     runHook preInstall

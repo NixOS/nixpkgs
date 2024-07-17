@@ -1,4 +1,13 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, phonon, knewstuff }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  phonon,
+  knewstuff,
+}:
 
 mkDerivation {
   pname = "klettres";
@@ -10,9 +19,7 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     phonon
     knewstuff

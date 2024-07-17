@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, freetype, juce, libX11, libXcursor, libXext, libXinerama, libXrandr, libglvnd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  freetype,
+  juce,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libglvnd,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +38,10 @@ stdenv.mkDerivation rec {
     ln -s ${dr_libs} thirdparty/dr_libs
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     freetype

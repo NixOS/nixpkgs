@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchzip
-, jdk
-, ant
-, gettext
-, which
-, dbip-country-lite
-, java-service-wrapper
-, makeWrapper
-, gmp
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  ant,
+  gettext,
+  which,
+  dbip-country-lite,
+  java-service-wrapper,
+  makeWrapper,
+  gmp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,13 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.5.2";
 
   src = fetchzip {
-    urls = [
-      "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz"
-    ] ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
-      "https://download.i2p2.de/releases/"
-      "https://files.i2p-projekt.de/"
-      "https://download.i2p2.no/releases/"
-    ]);
+    urls =
+      [ "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz" ]
+      ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
+        "https://download.i2p2.de/releases/"
+        "https://files.i2p-projekt.de/"
+        "https://download.i2p2.no/releases/"
+      ]);
     hash = "sha256-0ftTLdU/tf1xTUSuqHvveSS33h1XLGPkrXcGpIe8f0U=";
   };
 
@@ -116,7 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       publicDomain
     ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [ linsui ];
     mainProgram = "i2prouter-plain";
   };

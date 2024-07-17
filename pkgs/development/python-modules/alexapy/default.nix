@@ -33,9 +33,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "aiofiles" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiofiles

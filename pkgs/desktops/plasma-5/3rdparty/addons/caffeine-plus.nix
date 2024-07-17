@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
-, kwindowsystem
-, plasma-framework
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  kwindowsystem,
+  plasma-framework,
 }:
 
 mkDerivation rec {
@@ -24,9 +25,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  cmakeFlags = [
-    "-Wno-dev"
-  ];
+  cmakeFlags = [ "-Wno-dev" ];
 
   meta = with lib; {
     description = "Disable screensaver and auto suspend";

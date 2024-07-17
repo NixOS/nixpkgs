@@ -1,16 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, ffmpeg
-, libopus
-, makeBinaryWrapper
-, unstableGitUpdater
-, openssl
-, pkg-config
-, stdenv
-, yt-dlp
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  ffmpeg,
+  libopus,
+  makeBinaryWrapper,
+  unstableGitUpdater,
+  openssl,
+  pkg-config,
+  stdenv,
+  yt-dlp,
+  Security,
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";
@@ -25,19 +26,28 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-3G7NwSZaiocjgfdtmJVWfMZOHCNhC08NgolPa9AvPfE=";
 
-  nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ libopus openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    libopus
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg yt-dlp ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          yt-dlp
+        ]
+      }
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Hassle-free Discord music bot";

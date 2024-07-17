@@ -36,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-
   dependencies = [
     certifi
     click

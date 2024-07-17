@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-unwrapped-2 }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  srcOnly,
+  nim-unwrapped-2,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nimlsp";
@@ -31,7 +37,12 @@ buildNimPackage (finalAttrs: {
     "-d:tempDir=/tmp"
   ];
 
-  nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+  nimDefines = [
+    "nimcore"
+    "nimsuggest"
+    "debugCommunication"
+    "debugLogging"
+  ];
 
   doCheck = false;
 

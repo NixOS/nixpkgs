@@ -1,14 +1,15 @@
-{ fetchurl
-, lib
-, stdenv
-, meson
-, ninja
-, gettext
-, pkg-config
-, pulseaudioFull
-, glibmm
-, gtkmm3
-, wrapGAppsHook3
+{
+  fetchurl,
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  pulseaudioFull,
+  glibmm,
+  gtkmm3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

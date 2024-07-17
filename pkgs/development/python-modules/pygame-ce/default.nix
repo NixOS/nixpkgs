@@ -98,10 +98,7 @@ buildPythonPackage rec {
     SDL2_ttf
   ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
-  nativeCheckInputs = [
-    numpy
-  ];
-
+  nativeCheckInputs = [ numpy ];
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py

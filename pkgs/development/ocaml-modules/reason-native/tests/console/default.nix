@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, reason, console, ppxlib }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  console,
+  ppxlib,
+}:
 
 buildDunePackage {
   pname = "console_test";
@@ -16,9 +22,7 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   buildInputs = [
     reason

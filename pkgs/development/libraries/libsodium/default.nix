@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,18 +15,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-67Ze9spDkzPCu0GgwZkFhyiNoH9sf9B8s6GMwY0wzhk=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;
-  hardeningDisable = lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) "stackprotector";
+  hardeningDisable = lib.optional (
+    stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32
+  ) "stackprotector";
 
   # FIXME: the hardeingDisable attr above does not seems effective, so
   # the need to disable stackprotector via configureFlags
-  configureFlags = lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) "--disable-ssp";
+  configureFlags = lib.optional (
+    stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32
+  ) "--disable-ssp";
 
   doCheck = true;
 

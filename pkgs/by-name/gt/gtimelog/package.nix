@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook3
-, glibcLocales, gobject-introspection, gtk3, libsoup_3, libsecret
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  libsoup_3,
+  libsecret,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -14,14 +22,18 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-+iBHfbUJtAtI/vcHj0Y8f9OxAp1SnhQyMqedVzSYPZQ=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [ glibcLocales gtk3 libsoup_3 libsecret ];
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
   ];
-  checkInputs = with python3Packages; [
-    freezegun
+  buildInputs = [
+    glibcLocales
+    gtk3
+    libsoup_3
+    libsecret
   ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 ];
+  checkInputs = with python3Packages; [ freezegun ];
 
   checkPhase = ''
     patchShebangs ./runtests

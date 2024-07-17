@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,13 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-yO3k2kT043/KkiCjDnNUlqxX86kQqMZ+CghD+yon3r4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    yara-python
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ yara-python ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   preBuild = ''
     # Prepare the YARA rules
@@ -34,9 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "yara-python-dex>=1.0.1" "yara-python"
   '';
 
-  pythonImportsCheck = [
-    "apkid"
-  ];
+  pythonImportsCheck = [ "apkid" ];
 
   meta = with lib; {
     description = "Android Application Identifier";

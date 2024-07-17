@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, v4l-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  v4l-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,15 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-P0yJgbOkgpBms5arwNonDlx+Z0tdGQ6SUyoGlRoH6Y4=";
   };
 
-  nativeBuildInputs = [
-    v4l-utils
-  ];
+  nativeBuildInputs = [ v4l-utils ];
 
   sourceRoot = "usr/share/dvb";
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   allowedReferences = [ ];
 
@@ -33,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     # but sometimes they lag behind several weeks or even months.
     description = "Digital TV (DVB) channel/transponder scan tables";
     homepage = "https://www.linuxtv.org/wiki/index.php/Dtv-scan-tables";
-    license = with lib.licenses; [ gpl2Only lgpl21Only ];
+    license = with lib.licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     longDescription = ''
       When scanning for dvb channels,
       most applications require an initial set of

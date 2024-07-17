@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, beets, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication {
   pname = "beets-extrafiles";

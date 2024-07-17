@@ -80,9 +80,7 @@ buildPythonPackage rec {
       --replace '--cov' ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [ "home-assistant-chip-clusters" ];
 

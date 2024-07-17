@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, intltool
-, pkg-config
-, libwnck
-, libxfce4ui
-, xfce4-panel
-, xfconf
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  intltool,
+  pkg-config,
+  libwnck,
+  libxfce4ui,
+  xfce4-panel,
+  xfconf,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

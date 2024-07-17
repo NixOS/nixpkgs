@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, libxml2
-, json-glib
-, glib
-, gettext
-, libsoup_3
-, gi-docgen
-, gobject-introspection
-, python3
-, tzdata
-, geocode-glib_2
-, vala
-, gnome
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  json-glib,
+  glib,
+  gettext,
+  libsoup_3,
+  gi-docgen,
+  gobject-introspection,
+  python3,
+  tzdata,
+  geocode-glib_2,
+  vala,
+  gnome,
+  withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
   version = "4.4.2";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,22 +41,22 @@ stdenv.mkDerivation rec {
     ./fix-pkgconfig.patch
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     glib
@@ -65,9 +69,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
     (lib.mesonBool "introspection" withIntrospection)
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-Dc_args=-D_DARWIN_C_SOURCE"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-Dc_args=-D_DARWIN_C_SOURCE" ];
 
   postPatch = ''
     patchShebangs build-aux/meson/gen_locations_variant.py

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  pytz,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-OWpOYNVzowdn0iZfJwhdMrAYeqDpNJvSwHpsJX9fDk4=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-  ];
+  propagatedBuildInputs = [ pytz ];
 
   dontBuild = true;
 

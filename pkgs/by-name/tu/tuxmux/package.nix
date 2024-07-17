@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, pkg-config
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  pkg-config,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ceXeYa8MGGc0I8Q/r4GVsR71St/hlNc75a20BN0Haas=";
 
   buildInputs = [ libiconv ];
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   postInstall = ''
     installShellCompletion $releaseDir/../completions/tux.{bash,fish}

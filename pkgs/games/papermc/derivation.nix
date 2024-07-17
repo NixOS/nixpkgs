@@ -1,4 +1,13 @@
-{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre, version, hash, udev }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre,
+  version,
+  hash,
+  udev,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papermc";
@@ -27,9 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontUnpack = true;
   preferLocalBuild = true;
@@ -45,7 +52,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ aaronjanse neonfuz MayNiklas ];
+    maintainers = with lib.maintainers; [
+      aaronjanse
+      neonfuz
+      MayNiklas
+    ];
     mainProgram = "minecraft-server";
   };
 })

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,9 +14,9 @@ in
 {
   options = {
     services.hdapsd.enable = mkEnableOption ''
-        Hard Drive Active Protection System Daemon,
-        devices are detected and managed automatically by udev and systemd
-      '';
+      Hard Drive Active Protection System Daemon,
+      devices are detected and managed automatically by udev and systemd
+    '';
   };
 
   config = mkIf cfg.enable {

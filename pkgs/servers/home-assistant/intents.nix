@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# codegen
-, hassil
-, python
-, pyyaml
-, voluptuous
-, regex
-, jinja2
+  # codegen
+  hassil,
+  python,
+  pyyaml,
+  voluptuous,
+  regex,
+  jinja2,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "intents/tests"
-  ];
+  pytestFlagsArray = [ "intents/tests" ];
 
   meta = with lib; {
     description = "Intents to be used with Home Assistant";

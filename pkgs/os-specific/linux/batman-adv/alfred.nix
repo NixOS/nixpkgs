@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gpsd, libcap, libnl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gpsd,
+  libcap,
+  libnl,
+}:
 
-let cfg = import ./version.nix; in
+let
+  cfg = import ./version.nix;
+in
 
 stdenv.mkDerivation rec {
   pname = "alfred";
@@ -12,7 +22,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gpsd libcap libnl ];
+  buildInputs = [
+    gpsd
+    libcap
+    libnl
+  ];
 
   preBuild = ''
     makeFlags="PREFIX=$out"

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, runCommand
-, ncurses
-, gettext
-, pkg-config
-, cscope
-, ruby_3_2
-, tcl
-, perl536
-, luajit
-, darwin
-, libiconv
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  ncurses,
+  gettext,
+  pkg-config,
+  cscope,
+  ruby_3_2,
+  tcl,
+  perl536,
+  luajit,
+  darwin,
+  libiconv,
+  python3,
 }:
 
 # Try to match MacVim's documented script interface compatibility
@@ -28,7 +29,7 @@ let
   # Some of these we could patch into the relevant source files (such as xcodebuild and
   # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.
   # Symlinking them in this way is better than just putting all of /usr/bin in there.
-  buildSymlinks = runCommand "macvim-build-symlinks" {} ''
+  buildSymlinks = runCommand "macvim-build-symlinks" { } ''
     mkdir -p $out/bin
     ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
   '';
@@ -48,9 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config buildSymlinks ];
+  nativeBuildInputs = [
+    pkg-config
+    buildSymlinks
+  ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python3
+    gettext
+    ncurses
+    cscope
+    luajit
+    ruby
+    tcl
+    perl
+    python3
   ];
 
   patches = [ ./macvim.patch ];
@@ -124,8 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
         XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
         --with-xcodecfg="Release"
       )
-    ''
-  ;
+    '';
 
   # Because we're building with system clang, this means we're building against Xcode's SDK and
   # linking against system libraries. The configure script is picking up Nix Libsystem (via ruby)
@@ -207,6 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.vim;
     maintainers = with maintainers; [ ];
     platforms = platforms.darwin;
-    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
+    hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 })

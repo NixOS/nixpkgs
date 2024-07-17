@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "shiori";
@@ -30,6 +37,9 @@ buildGoModule rec {
     mainProgram = "shiori";
     homepage = "https://github.com/go-shiori/shiori";
     license = licenses.mit;
-    maintainers = with maintainers; [ minijackson CaptainJawZ ];
+    maintainers = with maintainers; [
+      minijackson
+      CaptainJawZ
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, elkhound
-, ocaml-ng
-, perl
-, which
-, gnumake42
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  elkhound,
+  ocaml-ng,
+  perl,
+  which,
+  gnumake42,
 }:
 
 let
@@ -37,9 +38,19 @@ stdenv.mkDerivation rec {
     sed -i "20,21d;s/old_hash_param/hash_param/" hashtbl-4.03.0/myhashtbl.ml
   '';
 
-  nativeBuildInputs = [ elkhound ocaml' perl which gnumake42 ];
+  nativeBuildInputs = [
+    elkhound
+    ocaml'
+    perl
+    which
+    gnumake42
+  ];
 
-  buildFlags = [ "weidu" "weinstall" "tolower" ];
+  buildFlags = [
+    "weidu"
+    "weinstall"
+    "tolower"
+  ];
 
   installPhase = ''
     runHook preInstall

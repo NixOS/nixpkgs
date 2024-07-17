@@ -29,9 +29,7 @@ buildPythonPackage rec {
     "oss2"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiooss2

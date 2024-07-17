@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, xorg
-, pkg-config
-, wrapGAppsHook3
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  pkg-config,
+  wrapGAppsHook3,
+  go,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,19 +25,14 @@ stdenv.mkDerivation rec {
     go
   ];
 
-  buildInputs = [
-    xorg.libXtst
-  ];
+  buildInputs = [ xorg.libXtst ];
 
   preConfigure = ''
     export GOCACHE="$TMPDIR/go-cache"
     sed -i "s,/usr,$out," data/bamboo.xml
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
-
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     isIbusEngine = true;

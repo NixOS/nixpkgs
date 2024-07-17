@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wBnLNHJhm0CxU7o2pKuFkZgCmIdcSqE2bgrSXzCDMIc=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild

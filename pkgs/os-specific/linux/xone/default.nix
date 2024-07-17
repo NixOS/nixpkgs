@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
@@ -35,5 +40,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rhysmdnz ];
     platforms = platforms.linux;
   };
-}
-)
+})

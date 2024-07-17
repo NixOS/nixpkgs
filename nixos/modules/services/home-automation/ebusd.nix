@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -41,7 +46,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-         Only read from device, never write to it
+        Only read from device, never write to it
       '';
     };
 
@@ -63,18 +68,38 @@ in
       '';
     };
 
-    logs = let
-      # "all" must come first so it can be overridden by more specific areas
-      areas = [ "all" "main" "network" "bus" "update" "other" ];
-      levels = [ "none" "error" "notice" "info" "debug" ];
-    in listToAttrs (map (area: nameValuePair area (mkOption {
-      type = types.enum levels;
-      default = "notice";
-      example = "debug";
-      description = ''
-        Only write log for matching `AREA`s (${concatStringsSep "|" areas}) below or equal to `LEVEL` (${concatStringsSep "|" levels})
-      '';
-    })) areas);
+    logs =
+      let
+        # "all" must come first so it can be overridden by more specific areas
+        areas = [
+          "all"
+          "main"
+          "network"
+          "bus"
+          "update"
+          "other"
+        ];
+        levels = [
+          "none"
+          "error"
+          "notice"
+          "info"
+          "debug"
+        ];
+      in
+      listToAttrs (
+        map (
+          area:
+          nameValuePair area (mkOption {
+            type = types.enum levels;
+            default = "notice";
+            example = "debug";
+            description = ''
+              Only write log for matching `AREA`s (${concatStringsSep "|" areas}) below or equal to `LEVEL` (${concatStringsSep "|" levels})
+            '';
+          })
+        ) areas
+      );
 
     mqtt = {
       enable = mkEnableOption "support for MQTT";
@@ -122,82 +147,94 @@ in
 
     extraArguments = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to the ebus daemon
       '';
     };
   };
 
-  config = let
-    usesDev = hasPrefix "/" cfg.device;
-  in mkIf cfg.enable {
-    systemd.services.ebusd = {
-      description = "EBUSd Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig = {
-        ExecStart = let
-          args = cli.toGNUCommandLineShell { optionValueSeparator = "="; } (foldr (a: b: a // b) { } [
-            {
-              inherit (cfg) device port configpath scanconfig readonly;
-              foreground = true;
-              updatecheck = "off";
-              log = mapAttrsToList (name: value: "${name}:${value}") cfg.logs;
-              mqttretain = cfg.mqtt.retain;
-            }
-            (optionalAttrs cfg.mqtt.enable {
-              mqtthost  = cfg.mqtt.host;
-              mqttport  = cfg.mqtt.port;
-              mqttuser  = cfg.mqtt.user;
-              mqttpass  = cfg.mqtt.password;
-            })
-            (optionalAttrs cfg.mqtt.home-assistant {
-              mqttint = "${cfg.package}/etc/ebusd/mqtt-hassio.cfg";
-              mqttjson = true;
-            })
-          ]);
-        in "${cfg.package}/bin/ebusd ${args} ${escapeShellArgs cfg.extraArguments}";
+  config =
+    let
+      usesDev = hasPrefix "/" cfg.device;
+    in
+    mkIf cfg.enable {
+      systemd.services.ebusd = {
+        description = "EBUSd Service";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig = {
+          ExecStart =
+            let
+              args = cli.toGNUCommandLineShell { optionValueSeparator = "="; } (
+                foldr (a: b: a // b) { } [
+                  {
+                    inherit (cfg)
+                      device
+                      port
+                      configpath
+                      scanconfig
+                      readonly
+                      ;
+                    foreground = true;
+                    updatecheck = "off";
+                    log = mapAttrsToList (name: value: "${name}:${value}") cfg.logs;
+                    mqttretain = cfg.mqtt.retain;
+                  }
+                  (optionalAttrs cfg.mqtt.enable {
+                    mqtthost = cfg.mqtt.host;
+                    mqttport = cfg.mqtt.port;
+                    mqttuser = cfg.mqtt.user;
+                    mqttpass = cfg.mqtt.password;
+                  })
+                  (optionalAttrs cfg.mqtt.home-assistant {
+                    mqttint = "${cfg.package}/etc/ebusd/mqtt-hassio.cfg";
+                    mqttjson = true;
+                  })
+                ]
+              );
+            in
+            "${cfg.package}/bin/ebusd ${args} ${escapeShellArgs cfg.extraArguments}";
 
-        DynamicUser = true;
-        Restart = "on-failure";
+          DynamicUser = true;
+          Restart = "on-failure";
 
-        # Hardening
-        CapabilityBoundingSet = "";
-        DeviceAllow = optionals usesDev [ cfg.device ];
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = false;
-        NoNewPrivileges = true;
-        PrivateDevices = usesDev;
-        PrivateUsers = true;
-        PrivateTmp = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProcSubset = "pid";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SupplementaryGroups = [ "dialout" ];
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service @pkey"
-          "~@privileged @resources"
-        ];
-        UMask = "0077";
+          # Hardening
+          CapabilityBoundingSet = "";
+          DeviceAllow = optionals usesDev [ cfg.device ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = false;
+          NoNewPrivileges = true;
+          PrivateDevices = usesDev;
+          PrivateUsers = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SupplementaryGroups = [ "dialout" ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service @pkey"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
+        };
       };
     };
-  };
 }

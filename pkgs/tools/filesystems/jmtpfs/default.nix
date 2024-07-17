@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, file, fuse, libmtp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  file,
+  fuse,
+  libmtp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jmtpfs";
@@ -20,7 +29,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ file fuse libmtp ];
+  buildInputs = [
+    file
+    fuse
+    libmtp
+  ];
 
   meta = with lib; {
     description = "FUSE filesystem for MTP devices like Android phones";

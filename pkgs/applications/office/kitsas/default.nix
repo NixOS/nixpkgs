@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtsvg,
+  poppler,
+  libzip,
+  pkg-config,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
@@ -16,9 +27,17 @@ stdenv.mkDerivation rec {
       --replace "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtsvg poppler libzip ];
+  buildInputs = [
+    qtsvg
+    poppler
+    libzip
+  ];
 
   # We use a separate build-dir as otherwise ld seems to get confused between
   # directory and executable name on buildPhase.
@@ -28,15 +47,17 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "../kitsas/kitsas.pro" ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv kitsas.app $out/Applications
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    install -Dm755 kitsas -t $out/bin
-    install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
-    install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
-    install -Dm644 ../kitsas.desktop -t $out/share/applications
-  '';
+  installPhase =
+    lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      mv kitsas.app $out/Applications
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      install -Dm755 kitsas -t $out/bin
+      install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
+      install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
+      install -Dm644 ../kitsas.desktop -t $out/share/applications
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/artoh/kitupiikki";

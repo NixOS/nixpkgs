@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-NffNQXKJ+b1w7Ar2M6UDev/AxruDEf8IGQ+mNdvU6e4=";
 
-  cargoPatches = [
-    ./Cargo.lock.patch
-  ];
+  cargoPatches = [ ./Cargo.lock.patch ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

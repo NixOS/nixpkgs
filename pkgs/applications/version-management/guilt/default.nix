@@ -1,16 +1,17 @@
-{ asciidoc
-, docbook_xml_dtd_45
-, docbook_xsl
-, fetchFromGitHub
-, gawk
-, git
-, gnused
-, lib
-, makeWrapper
-, openssl
-, perl
-, stdenv
-, xmlto
+{
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchFromGitHub,
+  gawk,
+  git,
+  gnused,
+  lib,
+  makeWrapper,
+  openssl,
+  perl,
+  stdenv,
+  xmlto,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
     git
     gnused
   ] ++ lib.optionals stdenv.isDarwin [ openssl ];
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postBuild = ''
     make -j $NIX_BUILD_CORES doc

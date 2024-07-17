@@ -1,7 +1,23 @@
-{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_3
-, ncurses
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
-, dune-build-info
+{
+  lib,
+  callPackage,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  ocaml,
+  findlib,
+  dune_3,
+  ncurses,
+  fix,
+  menhir,
+  menhirLib,
+  menhirSdk,
+  merlin-extend,
+  ppxlib,
+  utop,
+  cppo,
+  ppx_derivers,
+  dune-build-info,
 }:
 
 stdenv.mkDerivation rec {

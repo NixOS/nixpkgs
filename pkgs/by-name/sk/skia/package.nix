@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchgit
-, expat
-, fontconfig
-, freetype
-, harfbuzzFull
-, icu
-, gn
-, libGL
-, libjpeg
-, libwebp
-, libX11
-, ninja
-, python3
-, testers
-, vulkan-headers
-, vulkan-memory-allocator
-, xcbuild
+{
+  lib,
+  stdenv,
+  fetchgit,
+  expat,
+  fontconfig,
+  freetype,
+  harfbuzzFull,
+  icu,
+  gn,
+  libGL,
+  libjpeg,
+  libwebp,
+  libX11,
+  ninja,
+  python3,
+  testers,
+  vulkan-headers,
+  vulkan-memory-allocator,
+  xcbuild,
 
-, enableVulkan ? !stdenv.isDarwin
+  enableVulkan ? !stdenv.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,40 +48,46 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
-  buildInputs = [
-    expat
-    fontconfig
-    freetype
-    harfbuzzFull
-    icu
-    libGL
-    libjpeg
-    libwebp
-    libX11
-  ] ++ lib.optionals enableVulkan [
-    vulkan-headers
-    vulkan-memory-allocator
-  ];
+  buildInputs =
+    [
+      expat
+      fontconfig
+      freetype
+      harfbuzzFull
+      icu
+      libGL
+      libjpeg
+      libwebp
+      libX11
+    ]
+    ++ lib.optionals enableVulkan [
+      vulkan-headers
+      vulkan-memory-allocator
+    ];
 
   configurePhase = ''
     runHook preConfigure
-    gn gen build --args='${toString ([
-      # Build in release mode
-      "is_official_build=true"
-      "is_component_build=true"
-      # Don't use missing tools
-      "skia_use_dng_sdk=false"
-      "skia_use_wuffs=false"
-      # Use system dependencies
-      "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
-    ] ++ map (lib: "skia_use_system_${lib}=true") [
-      "zlib"
-      "harfbuzz"
-      "libpng"
-      "libwebp"
-    ] ++ lib.optionals enableVulkan [
-      "skia_use_vulkan=true"
-    ])}'
+    gn gen build --args='${
+      toString (
+        [
+          # Build in release mode
+          "is_official_build=true"
+          "is_component_build=true"
+          # Don't use missing tools
+          "skia_use_dng_sdk=false"
+          "skia_use_wuffs=false"
+          # Use system dependencies
+          "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+        ]
+        ++ map (lib: "skia_use_system_${lib}=true") [
+          "zlib"
+          "harfbuzz"
+          "libpng"
+          "libwebp"
+        ]
+        ++ lib.optionals enableVulkan [ "skia_use_vulkan=true" ]
+      )
+    }'
     cd build
     runHook postConfigure
   '';

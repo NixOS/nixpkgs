@@ -10,12 +10,10 @@ with lib;
 let
   cfg = config.services.mqtt2influxdb;
   filterNull = filterAttrsRecursive (n: v: v != null);
-  configFile = (pkgs.formats.yaml {}).generate "mqtt2influxdb.config.yaml" (
-    filterNull {
-      inherit (cfg) mqtt influxdb;
-      points = map filterNull cfg.points;
-    }
-  );
+  configFile = (pkgs.formats.yaml { }).generate "mqtt2influxdb.config.yaml" (filterNull {
+    inherit (cfg) mqtt influxdb;
+    points = map filterNull cfg.points;
+  });
 
   pointType = types.submodule {
     options = {
@@ -46,7 +44,7 @@ let
       };
       tags = mkOption {
         type = with types; attrsOf str;
-        default = {};
+        default = { };
         description = "Tags applied";
       };
     };
@@ -121,14 +119,18 @@ let
       };
     }
   ];
-in {
+in
+{
   options = {
     services.mqtt2influxdb = {
       enable = mkEnableOption "BigClown MQTT to InfluxDB bridge";
-      package = mkPackageOption pkgs ["python3Packages" "mqtt2influxdb"] {};
+      package = mkPackageOption pkgs [
+        "python3Packages"
+        "mqtt2influxdb"
+      ] { };
       environmentFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = [ "/run/keys/mqtt2influxdb.env" ];
         description = ''
           File to load as environment file. Environment variables from this file
@@ -209,7 +211,7 @@ in {
             It is highly suggested to use here replacement through
             environmentFiles as otherwise the password is put world readable to
             the store.
-            '';
+          '';
         };
         ssl = mkOption {
           type = types.bool;
@@ -231,24 +233,24 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.bigclown-mqtt2influxdb = let
-      envConfig = cfg.environmentFiles != [];
-      finalConfig = if envConfig
-        then "$RUNTIME_DIRECTORY/mqtt2influxdb.config.yaml"
-        else configFile;
-    in {
-      description = "BigClown MQTT to InfluxDB bridge";
-      wantedBy = ["multi-user.target"];
-      wants = mkIf config.services.mosquitto.enable ["mosquitto.service"];
-      preStart = ''
-        umask 077
-        ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
-      '';
-      serviceConfig = {
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
-        RuntimeDirectory = "mqtt2influxdb";
+    systemd.services.bigclown-mqtt2influxdb =
+      let
+        envConfig = cfg.environmentFiles != [ ];
+        finalConfig = if envConfig then "$RUNTIME_DIRECTORY/mqtt2influxdb.config.yaml" else configFile;
+      in
+      {
+        description = "BigClown MQTT to InfluxDB bridge";
+        wantedBy = [ "multi-user.target" ];
+        wants = mkIf config.services.mosquitto.enable [ "mosquitto.service" ];
+        preStart = ''
+          umask 077
+          ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
+        '';
+        serviceConfig = {
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
+          RuntimeDirectory = "mqtt2influxdb";
+        };
       };
-    };
   };
 }

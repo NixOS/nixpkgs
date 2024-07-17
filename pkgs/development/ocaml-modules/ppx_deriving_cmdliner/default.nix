@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, alcotest
-, cmdliner
-, ppx_deriving
-, ppxlib
-, gitUpdater
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  alcotest,
+  cmdliner,
+  ppx_deriving,
+  ppxlib,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
@@ -39,9 +40,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

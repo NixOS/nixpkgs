@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk-engine-murrine }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "andromeda-gtk-theme";
@@ -24,9 +29,7 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = ".";
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall
@@ -56,6 +59,9 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/EliverLara/Andromeda-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jakedevs romildo ];
+    maintainers = with maintainers; [
+      jakedevs
+      romildo
+    ];
   };
 }

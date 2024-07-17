@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.gdk-pixbuf;
@@ -10,7 +15,17 @@ in
 
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "xserver" "gdk-pixbuf" ] [ "programs" "gdk-pixbuf" ])
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "xserver"
+        "gdk-pixbuf"
+      ]
+      [
+        "programs"
+        "gdk-pixbuf"
+      ]
+    )
   ];
 
   options = {
@@ -24,7 +39,7 @@ in
   # If there is any package configured in modulePackages, we generate the
   # loaders.cache based on that and set the environment variable
   # GDK_PIXBUF_MODULE_FILE to point to it.
-  config = lib.mkIf (cfg.modulePackages != []) {
+  config = lib.mkIf (cfg.modulePackages != [ ]) {
     environment.sessionVariables = {
       GDK_PIXBUF_MODULE_FILE = loadersCache;
     };

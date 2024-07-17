@@ -1,17 +1,18 @@
-{ buildGoModule
-, fetchFromGitHub
-, protobuf
-, go-protobuf
-, pkg-config
-, libnetfilter_queue
-, libnfnetlink
-, lib
-, iptables
-, makeWrapper
-, protoc-gen-go-grpc
-, testers
-, opensnitch
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf,
+  go-protobuf,
+  pkg-config,
+  libnetfilter_queue,
+  libnfnetlink,
+  lib,
+  iptables,
+  makeWrapper,
+  protoc-gen-go-grpc,
+  testers,
+  opensnitch,
+  nixosTests,
 }:
 
 buildGoModule rec {

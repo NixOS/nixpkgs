@@ -28,7 +28,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [

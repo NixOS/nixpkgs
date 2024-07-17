@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -62,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

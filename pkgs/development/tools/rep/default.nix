@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, asciidoc-full }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoc-full,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rep";
@@ -11,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "pqmISVm3rYGxRuwKieVpRwXE8ufWnBHEA6h2hrob51s=";
   };
 
-  nativeBuildInputs = [
-    asciidoc-full
-  ];
+  nativeBuildInputs = [ asciidoc-full ];
 
   postPatch = ''
     substituteInPlace rc/rep.kak --replace '$(rep' '$('"$out/bin/rep"

@@ -1,8 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config, autoreconfHook
-, openssl, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +26,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl ];
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,13 +11,15 @@ let
 
   cfg = config.services.crowd;
 
-  pkg = cfg.package.override {
-    home = cfg.home;
-    port = cfg.listenPort;
-    openidPassword = cfg.openidPassword;
-  } // (optionalAttrs cfg.proxy.enable {
-    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
-  });
+  pkg =
+    cfg.package.override {
+      home = cfg.home;
+      port = cfg.listenPort;
+      openidPassword = cfg.openidPassword;
+    }
+    // (optionalAttrs cfg.proxy.enable {
+      proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+    });
 
   crowdPropertiesFile = pkgs.writeText "crowd.properties" ''
     application.name                        crowd-openid-server
@@ -80,8 +87,11 @@ in
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" ];
+        default = [ ];
+        example = [
+          "-Xms1024m"
+          "-Xmx2048m"
+        ];
         description = "Java options to pass to catalina/tomcat.";
       };
 
@@ -119,9 +129,9 @@ in
 
       jrePackage = mkPackageOption pkgs "oraclejre8" {
         extraDescription = ''
-        ::: {.note }
-        Atlassian only supports the Oracle JRE (JRASERVER-46152).
-        :::
+          ::: {.note }
+          Atlassian only supports the Oracle JRE (JRASERVER-46152).
+          :::
         '';
       };
     };
@@ -133,7 +143,7 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.home}' - ${cfg.user} ${cfg.group} - -"
@@ -161,24 +171,27 @@ in
         JAVA_OPTS = mkIf (cfg.openidPasswordFile != null) "-Dcrowd.properties=${cfg.home}/crowd.properties";
       };
 
-      preStart = ''
-        rm -rf ${cfg.home}/work
-        mkdir -p ${cfg.home}/{logs,database,work}
+      preStart =
+        ''
+          rm -rf ${cfg.home}/work
+          mkdir -p ${cfg.home}/{logs,database,work}
 
-        sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
+          sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
+        ''
+        + (lib.optionalString cfg.proxy.enable ''
           -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${boolToString cfg.proxy.secure}",' \
-        '') + ''
-          ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
+        '')
+        + ''
+            ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
 
-        ${optionalString (cfg.openidPasswordFile != null) ''
-          install -m660 ${crowdPropertiesFile} ${cfg.home}/crowd.properties
-          ${pkgs.replace-secret}/bin/replace-secret \
-            '@NIXOS_CROWD_OPENID_PW@' \
-            ${cfg.openidPasswordFile} \
-            ${cfg.home}/crowd.properties
-        ''}
-      '';
+          ${optionalString (cfg.openidPasswordFile != null) ''
+            install -m660 ${crowdPropertiesFile} ${cfg.home}/crowd.properties
+            ${pkgs.replace-secret}/bin/replace-secret \
+              '@NIXOS_CROWD_OPENID_PW@' \
+              ${cfg.openidPasswordFile} \
+              ${cfg.home}/crowd.properties
+          ''}
+        '';
 
       serviceConfig = {
         User = cfg.user;

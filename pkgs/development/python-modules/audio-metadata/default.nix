@@ -43,7 +43,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     attrs
     bidict

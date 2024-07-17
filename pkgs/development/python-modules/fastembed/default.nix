@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     huggingface-hub
     loguru

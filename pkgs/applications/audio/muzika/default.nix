@@ -1,24 +1,25 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, gjs
-, glib-networking
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
-, yarn
-, nodejs
-, blueprint-compiler
-, libsecret
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  gjs,
+  glib-networking,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
+  yarn,
+  nodejs,
+  blueprint-compiler,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
@@ -75,9 +76,7 @@ stdenv.mkDerivation rec {
     fixup-yarn-lock yarn.lock
   '';
 
-  mesonFlags = [
-    "-Dyarnrc=../.yarnrc"
-  ];
+  mesonFlags = [ "-Dyarnrc=../.yarnrc" ];
 
   postFixup = ''
     sed -i "1 a imports.package._findEffectiveEntryPointName = () => 'com.vixalien.muzika';" $out/bin/.com.vixalien.muzika-wrapped

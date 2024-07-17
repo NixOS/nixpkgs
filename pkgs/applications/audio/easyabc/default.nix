@@ -1,4 +1,16 @@
-{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook3, abcmidi, abcm2ps, ghostscript }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchPypi,
+  substituteAll,
+  python39,
+  fluidsynth,
+  soundfont-fluid,
+  wrapGAppsHook3,
+  abcmidi,
+  abcm2ps,
+  ghostscript,
+}:
 
 let
   # requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
@@ -17,7 +29,8 @@ let
       });
     };
   };
-in python.pkgs.buildPythonApplication {
+in
+python.pkgs.buildPythonApplication {
   pname = "easyabc";
   version = "1.3.8.6";
 

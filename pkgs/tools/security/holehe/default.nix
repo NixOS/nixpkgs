@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,9 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "holehe"
-  ];
+  pythonImportsCheck = [ "holehe" ];
 
   meta = with lib; {
     description = "CLI to check if the mail is used on different sites";

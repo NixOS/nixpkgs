@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, cython
-, tree-sitter0_21
-, pytestCheckHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  cython,
+  tree-sitter0_21,
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,7 @@ buildPythonPackage rec {
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} build.py
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # Without cd $out, tests fail to import the compiled cython extensions.
   # Without copying the ./tests/ directory to $out, pytest won't detect the
   # tests and run them. See also:

@@ -31,7 +31,10 @@ mkKdeDerivation {
     chmod -x $out/libexec/plasma-sourceenv.sh
   '';
 
-  extraNativeBuildInputs = [pkg-config spirv-tools];
+  extraNativeBuildInputs = [
+    pkg-config
+    spirv-tools
+  ];
   extraBuildInputs = [
     qtsvg
     qtwayland
@@ -50,5 +53,8 @@ mkKdeDerivation {
     gpsd
   ];
 
-  passthru.providedSessions = ["plasma" "plasmax11"];
+  passthru.providedSessions = [
+    "plasma"
+    "plasmax11"
+  ];
 }

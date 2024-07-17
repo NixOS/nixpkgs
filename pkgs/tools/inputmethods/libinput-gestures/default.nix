@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper,
-  libinput, wmctrl, python3,
-  coreutils, xdotool ? null,
-  extraUtilsPath ? lib.optional (xdotool != null) xdotool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  libinput,
+  wmctrl,
+  python3,
+  coreutils,
+  xdotool ? null,
+  extraUtilsPath ? lib.optional (xdotool != null) xdotool,
 }:
 stdenv.mkDerivation rec {
   pname = "libinput-gestures";
@@ -21,29 +28,28 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
 
-  postPatch =
-    ''
-      substituteInPlace libinput-gestures-setup --replace /usr/ /
+  postPatch = ''
+    substituteInPlace libinput-gestures-setup --replace /usr/ /
 
-      substituteInPlace libinput-gestures \
-        --replace      /etc     "$out/etc" \
-        --subst-var-by libinput "${libinput}/bin/libinput" \
-        --subst-var-by wmctrl   "${wmctrl}/bin/wmctrl"
-    '';
-  installPhase =
-    ''
-      runHook preInstall
-      ${stdenv.shell} libinput-gestures-setup -d "$out" install
-      runHook postInstall
-    '';
-  postFixup =
-    ''
-      rm "$out/bin/libinput-gestures-setup"
-      substituteInPlace "$out/share/systemd/user/libinput-gestures.service" --replace "/usr" "$out"
-      substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace "/usr" "$out"
-      chmod +x "$out/share/applications/libinput-gestures.desktop"
-      wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"
-    '';
+    substituteInPlace libinput-gestures \
+      --replace      /etc     "$out/etc" \
+      --subst-var-by libinput "${libinput}/bin/libinput" \
+      --subst-var-by wmctrl   "${wmctrl}/bin/wmctrl"
+  '';
+  installPhase = ''
+    runHook preInstall
+    ${stdenv.shell} libinput-gestures-setup -d "$out" install
+    runHook postInstall
+  '';
+  postFixup = ''
+    rm "$out/bin/libinput-gestures-setup"
+    substituteInPlace "$out/share/systemd/user/libinput-gestures.service" --replace "/usr" "$out"
+    substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace "/usr" "$out"
+    chmod +x "$out/share/applications/libinput-gestures.desktop"
+    wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${
+      lib.makeBinPath ([ coreutils ] ++ extraUtilsPath)
+    }"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/bulletmark/libinput-gestures";

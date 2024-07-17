@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -24,16 +25,10 @@ in
     boot.kernelModules = [ "i2c_dev" ];
 
     # Give users access to the "gddccontrol" tool
-    environment.systemPackages = [
-      pkgs.ddccontrol
-    ];
+    environment.systemPackages = [ pkgs.ddccontrol ];
 
-    services.dbus.packages = [
-      pkgs.ddccontrol
-    ];
+    services.dbus.packages = [ pkgs.ddccontrol ];
 
-    systemd.packages = [
-      pkgs.ddccontrol
-    ];
+    systemd.packages = [ pkgs.ddccontrol ];
   };
 }

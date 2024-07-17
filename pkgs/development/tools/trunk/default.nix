@@ -1,13 +1,14 @@
-{ lib,
-stdenv,
-rustPlatform,
-fetchFromGitHub,
-pkg-config,
-openssl,
-jq,
-moreutils,
-CoreServices,
-SystemConfiguration
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  jq,
+  moreutils,
+  CoreServices,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = if stdenv.isDarwin
-    then [ CoreServices SystemConfiguration ]
-    else [ openssl ];
+  buildInputs =
+    if stdenv.isDarwin then
+      [
+        CoreServices
+        SystemConfiguration
+      ]
+    else
+      [ openssl ];
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
@@ -34,7 +40,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk";
-    maintainers = with maintainers; [ freezeboy ctron ];
+    maintainers = with maintainers; [
+      freezeboy
+      ctron
+    ];
     license = with licenses; [ asl20 ];
   };
 }

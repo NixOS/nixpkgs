@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, crystal
-, wrapGAppsHook4
-, desktopToDarwinBundle
-, gobject-introspection
-, nautilus-python
-, python3
-, libadwaita
-, openssl
-, libxml2
-, pkg-config
-, gitUpdater
-, _experimental-update-script-combinators
-, runCommand
-, crystal2nix
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  crystal,
+  wrapGAppsHook4,
+  desktopToDarwinBundle,
+  gobject-introspection,
+  nautilus-python,
+  python3,
+  libadwaita,
+  openssl,
+  libxml2,
+  pkg-config,
+  gitUpdater,
+  _experimental-update-script-combinators,
+  runCommand,
+  crystal2nix,
+  writeShellScript,
 }:
 
 crystal.buildCrystalPackage rec {
@@ -47,8 +48,11 @@ crystal.buildCrystalPackage rec {
   # There is an explanation for this https://danilafe.com/blog/crystal_nix_revisited/
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
 
-  nativeBuildInputs = [ wrapGAppsHook4 pkg-config gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    wrapGAppsHook4
+    pkg-config
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     libadwaita
@@ -58,23 +62,41 @@ crystal.buildCrystalPackage rec {
     python3.pkgs.pygobject3
   ];
 
-  buildTargets = ["bindings" "build"];
+  buildTargets = [
+    "bindings"
+    "build"
+  ];
 
   doCheck = false;
   doInstallCheck = false;
 
-  installTargets = ["desktop" "install"];
+  installTargets = [
+    "desktop"
+    "install"
+  ];
 
   postInstall = ''
-      install -Dm555 ./nautilus-extension/collision-extension.py -t $out/share/nautilus-python/extensions
+    install -Dm555 ./nautilus-extension/collision-extension.py -t $out/share/nautilus-python/extensions
   '';
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "collision.shardLock" ./shard.lock)
-      { command = [ (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}") ./. ]; supportedFeatures = [ "silent" ]; }
-      { command = [ "rm" ./shard.lock ]; supportedFeatures = [ "silent" ]; }
+      {
+        command = [
+          (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}")
+          ./.
+        ];
+        supportedFeatures = [ "silent" ];
+      }
+      {
+        command = [
+          "rm"
+          ./shard.lock
+        ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
     shardLock = runCommand "shard.lock" { inherit src; } ''
       cp $src/shard.lock $out

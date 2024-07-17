@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, SDL
-, alsa-lib
-, fetchurl
-, gcc-unwrapped
-, libICE
-, libSM
-, libX11
-, libXext
+{
+  lib,
+  stdenv,
+  SDL,
+  alsa-lib,
+  fetchurl,
+  gcc-unwrapped,
+  libICE,
+  libSM,
+  libX11,
+  libXext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

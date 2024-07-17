@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
     repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-Gcl0i3K2ncrxMSLHCPWBleRGdVIVkUo7vcp+tDNpkOw=";
-  } ;
+  };
 
   vendorHash = "sha256-urPMLEaisgndbHmS1sGQ07c+VRBdxIz0wseLoSLVWQo=";
 
@@ -21,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/oapi-codegen" ];
 
-  ldflags = [ "-X main.noVCSVersionOverride=${version}" ] ;
+  ldflags = [ "-X main.noVCSVersionOverride=${version}" ];
 
   meta = with lib; {
     description = "Go client and server OpenAPI 3 generator";

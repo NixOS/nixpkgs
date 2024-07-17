@@ -30,7 +30,6 @@ let
 
     sourceRoot = "${src.name}/opentelemetry-api";
 
-
     build-system = [ hatchling ];
 
     dependencies = [

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  cmake
+  cmake,
 }:
 
 stdenv.mkDerivation {
@@ -16,9 +16,7 @@ stdenv.mkDerivation {
     hash = "sha256-jSB79qOtnW/cjApIDcLRqGabnzCIwS7saA+aF1TcyV0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   enableParallelBuilding = true;
 

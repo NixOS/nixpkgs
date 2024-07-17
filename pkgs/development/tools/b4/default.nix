@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, patatt }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  patatt,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
@@ -13,9 +18,7 @@ python3Packages.buildPythonApplication rec {
   # tests make dns requests and fails
   doCheck = false;
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     requests
@@ -30,6 +33,10 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2Only;
     description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
-    maintainers = with maintainers; [ jb55 qyliss mfrw ];
+    maintainers = with maintainers; [
+      jb55
+      qyliss
+      mfrw
+    ];
   };
 }

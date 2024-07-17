@@ -1,13 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, pari
-, ntl
-, gmp
-# "FLINT is optional and only used for one part of sparse matrix reduction,
-# which is used in the modular symbol code but not mwrank or other elliptic
-# curve programs." -- https://github.com/JohnCremona/eclib/blob/master/README
-, withFlint ? false, flint ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pari,
+  ntl,
+  gmp,
+  # "FLINT is optional and only used for one part of sparse matrix reduction,
+  # which is used in the modular symbol code but not mwrank or other elliptic
+  # curve programs." -- https://github.com/JohnCremona/eclib/blob/master/README
+  withFlint ? false,
+  flint ? null,
 }:
 
 assert withFlint -> flint != null;
@@ -35,12 +38,8 @@ stdenv.mkDerivation rec {
     pari
     ntl
     gmp
-  ] ++ lib.optionals withFlint [
-    flint
-  ];
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  ] ++ lib.optionals withFlint [ flint ];
+  nativeBuildInputs = [ autoreconfHook ];
   doCheck = true;
   meta = with lib; {
     description = "Elliptic curve tools";

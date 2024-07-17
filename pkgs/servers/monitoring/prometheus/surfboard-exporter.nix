@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "surfboard_exporter";
@@ -17,7 +22,9 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) surfboard; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) surfboard;
+  };
 
   meta = with lib; {
     description = "Arris Surfboard signal metrics exporter";

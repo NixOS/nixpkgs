@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, dosfstools, libseccomp, makeWrapper, mtools, parted
-, pkg-config, qemu_test, syslinux, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dosfstools,
+  libseccomp,
+  makeWrapper,
+  mtools,
+  parted,
+  pkg-config,
+  qemu_test,
+  syslinux,
+  util-linux,
+}:
 
 let
   version = "0.8.1";
@@ -12,11 +24,15 @@ let
     "virtio"
     "xen"
   ];
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux) libseccomp;
 
   src = fetchurl {
@@ -35,7 +51,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   separateDebugInfo = true;
-    # debugging requires information for both the unikernel and the tender
+  # debugging requires information for both the unikernel and the tender
 
   installPhase = ''
     runHook preInstall
@@ -49,13 +65,23 @@ in stdenv.mkDerivation {
       --replace "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
 
     runHook postInstall
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
-  nativeCheckInputs = [ util-linux qemu_test ];
+  nativeCheckInputs = [
+    util-linux
+    qemu_test
+  ];
   checkPhase = ''
     runHook preCheck
     patchShebangs tests
@@ -71,8 +97,16 @@ in stdenv.mkDerivation {
     license = licenses.isc;
     maintainers = [ maintainers.ehmry ];
     platforms = mapCartesianProduct ({ arch, os }: "${arch}-${os}") {
-      arch = [ "aarch64" "x86_64" ];
-      os = [ "freebsd" "genode" "linux" "openbsd" ];
+      arch = [
+        "aarch64"
+        "x86_64"
+      ];
+      os = [
+        "freebsd"
+        "genode"
+        "linux"
+        "openbsd"
+      ];
     };
   };
 

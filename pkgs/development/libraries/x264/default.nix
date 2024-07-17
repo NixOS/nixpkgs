@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, nasm
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  nasm,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,18 +30,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isx86 ''
-    # `AS' is set to the binutils assembler, but we need nasm
-    unset AS
-  '' + lib.optionalString stdenv.hostPlatform.isAarch ''
-    export AS=$CC
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isx86 ''
+      # `AS' is set to the binutils assembler, but we need nasm
+      unset AS
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch ''
+      export AS=$CC
+    '';
 
-  configureFlags = lib.optional enableShared "--enable-shared"
+  configureFlags =
+    lib.optional enableShared "--enable-shared"
     ++ lib.optional (!stdenv.isi686) "--enable-pic"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
+    ++ lib.optional (
+      stdenv.buildPlatform != stdenv.hostPlatform
+    ) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
   makeFlags = [
     "BASHCOMPLETIONSDIR=$(out)/share/bash-completion/completions"

@@ -39,7 +39,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/openllm-core";
 
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "hatch-vcs==" "hatch-vcs>=" \

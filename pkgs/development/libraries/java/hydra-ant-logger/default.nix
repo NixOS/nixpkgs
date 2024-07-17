@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation {

@@ -1,7 +1,14 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
-let cfg = config.services.owncast;
-in {
+let
+  cfg = config.services.owncast;
+in
+{
 
   options.services.owncast = {
 
@@ -74,9 +81,7 @@ in {
           ExecStart = "${pkgs.owncast}/bin/owncast -webserverport ${toString cfg.port} -rtmpport ${toString cfg.rtmp-port} -webserverip ${cfg.listen}";
           Restart = "on-failure";
         }
-        (mkIf (cfg.dataDir == "/var/lib/owncast") {
-          StateDirectory = "owncast";
-        })
+        (mkIf (cfg.dataDir == "/var/lib/owncast") { StateDirectory = "owncast"; })
       ];
     };
 
@@ -90,9 +95,12 @@ in {
 
     users.groups = mkIf (cfg.group == "owncast") { owncast = { }; };
 
-    networking.firewall =
-      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.rtmp-port ] ++ optional (cfg.listen != "127.0.0.1") cfg.port; };
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.rtmp-port ] ++ optional (cfg.listen != "127.0.0.1") cfg.port;
+    };
 
   };
-  meta = { maintainers = with lib.maintainers; [ MayNiklas ]; };
+  meta = {
+    maintainers = with lib.maintainers; [ MayNiklas ];
+  };
 }

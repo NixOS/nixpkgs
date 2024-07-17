@@ -1,19 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, hidapi
-, tcl
-, jimtcl
-, libjaylink
-, libusb1
-, libgpiod_1
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  hidapi,
+  tcl,
+  jimtcl,
+  libjaylink,
+  libusb1,
+  libgpiod_1,
 
-, enableFtdi ? true, libftdi1
+  enableFtdi ? true,
+  libftdi1,
 
-# Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
-, extraHardwareSupport ? []
-}: let
+  # Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
+  extraHardwareSupport ? [ ],
+}:
+let
 
   isWindows = stdenv.hostPlatform.isWindows;
   notWindows = !isWindows;
@@ -27,13 +30,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
-  nativeBuildInputs = [ pkg-config tcl ];
+  nativeBuildInputs = [
+    pkg-config
+    tcl
+  ];
 
-  buildInputs = [ libusb1 ]
-    ++ lib.optionals notWindows [ hidapi jimtcl libftdi1 libjaylink ]
+  buildInputs =
+    [ libusb1 ]
+    ++ lib.optionals notWindows [
+      hidapi
+      jimtcl
+      libftdi1
+      libjaylink
+    ]
     ++
-    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
-    lib.optional stdenv.isLinux libgpiod_1;
+      # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+      lib.optional stdenv.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"
@@ -45,16 +57,16 @@ stdenv.mkDerivation rec {
     (lib.enableFeature stdenv.isLinux "sysfsgpio")
     (lib.enableFeature isWindows "internal-jimtcl")
     (lib.enableFeature isWindows "internal-libjaylink")
-  ] ++
-    map (hardware: "--enable-${hardware}") extraHardwareSupport
-  ;
+  ] ++ map (hardware: "--enable-${hardware}") extraHardwareSupport;
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=cpp"
-    "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=cpp"
+      "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
+    ]
+  );
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
@@ -80,7 +92,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://openocd.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bjornfor prusnak ];
+    maintainers = with maintainers; [
+      bjornfor
+      prusnak
+    ];
     platforms = platforms.unix ++ platforms.windows;
   };
 }

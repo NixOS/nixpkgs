@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, file }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmodplug";
@@ -14,19 +19,22 @@ stdenv.mkDerivation rec {
   # not allowed in C++17 and is an error in clang 16.
   prePatch = "substituteInPlace src/fastmix.cpp --replace 'register ' ''";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   preConfigure = ''
-     substituteInPlace configure \
-        --replace ' -mmacosx-version-min=10.5' "" \
-        --replace /usr/bin/file ${file}/bin/file
+    substituteInPlace configure \
+       --replace ' -mmacosx-version-min=10.5' "" \
+       --replace /usr/bin/file ${file}/bin/file
   '';
 
   meta = with lib; {
     description = "MOD playing library";
-    homepage    = "https://modplug-xmms.sourceforge.net/";
-    license     = licenses.publicDomain;
-    platforms   = platforms.unix;
+    homepage = "https://modplug-xmms.sourceforge.net/";
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ raskin ];
   };
 }

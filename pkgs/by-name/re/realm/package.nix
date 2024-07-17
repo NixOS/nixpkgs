@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
-, nix-update-script
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +21,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EvXafTujqTdQwfK4NXgT7lGKGnrpyP9ouplD6DmJUKU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   env.RUSTC_BOOTSTRAP = 1;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) realm; };
+    tests = {
+      inherit (nixosTests) realm;
+    };
   };
-
 
   meta = with lib; {
     description = "A simple, high performance relay server written in rust";

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libunwind
-, perl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libunwind,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,20 +31,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM dynamically linked linux
-  buildInputs = [ perl ]
-             ++ lib.optional (stdenv.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic )) libunwind;
+  buildInputs =
+    [ perl ]
+    ++ lib.optional (
+      stdenv.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
+    ) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
-  configureFlags = lib.optional stdenv.hostPlatform.isAarch
-    "--disable-general-dynamic-tls";
+  configureFlags = lib.optional stdenv.hostPlatform.isAarch "--disable-general-dynamic-tls";
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
-    "-D_XOPEN_SOURCE";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools

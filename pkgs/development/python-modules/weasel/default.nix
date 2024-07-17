@@ -36,9 +36,7 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cloudpathlib

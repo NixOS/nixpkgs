@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "scheme-manpages";

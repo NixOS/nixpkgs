@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, nix-update-script
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  nix-update-script,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,16 +19,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iqexxlBFM4ffxDsOdKMRJs/ufhKV0jvzqgZ3tH9S/k0=";
   };
 
-  postPatch = ''
-    substituteInPlace janet.1 \
-      --replace /usr/local/ $out/
-  '' + lib.optionalString stdenv.isDarwin ''
-    # error: Socket is not connected
-    substituteInPlace meson.build \
-      --replace "'test/suite-ev.janet'," ""
-  '';
+  postPatch =
+    ''
+      substituteInPlace janet.1 \
+        --replace /usr/local/ $out/
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # error: Socket is not connected
+      substituteInPlace meson.build \
+        --replace "'test/suite-ev.janet'," ""
+    '';
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   mesonBuildType = "release";
   mesonFlags = [ "-Dgit_hash=release" ];
@@ -41,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.run = runCommand "janet-test-run" {
-      nativeBuildInputs = [finalAttrs.finalPackage];
-    } ''
+    tests.run = runCommand "janet-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
       echo "(+ 1 2 3)" | janet | tail -n 1 > arithmeticTest.txt;
       diff -U3 --color=auto <(cat arithmeticTest.txt) <(echo "6");
 
@@ -52,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       touch $out;
     '';
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -60,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "janet";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrewchambers peterhoeg ];
+    maintainers = with maintainers; [
+      andrewchambers
+      peterhoeg
+    ];
     platforms = platforms.all;
   };
 })

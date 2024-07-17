@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, autoPatchelfHook
-, SDL2
-, practiceMod ? false
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  autoPatchelfHook,
+  SDL2,
+  practiceMod ? false,
 }:
 
 let
@@ -22,9 +23,7 @@ stdenvNoCC.mkDerivation {
     extension = "zip";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [ SDL2 ];
 

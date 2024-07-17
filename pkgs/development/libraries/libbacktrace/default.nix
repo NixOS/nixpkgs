@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-, unstableGitUpdater
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  unstableGitUpdater,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation {
@@ -32,9 +33,7 @@ stdenv.mkDerivation {
     ./0004-libbacktrace-Support-NIX_DEBUG_INFO_DIRS-environment.patch
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     (lib.enableFeature enableStatic "static")

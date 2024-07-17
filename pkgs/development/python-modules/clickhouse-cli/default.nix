@@ -20,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-gkgLAedUtzGv/4P+D56M2Pb5YecyqyVYp06ST62sjdY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [ "sqlparse" ];
 

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, valgrind, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  valgrind,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,19 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YiMCD3vvrG+oxBUghSrCmP2LAfAGZrEaKz0YoaQJhpI=";
   };
 
-  nativeBuildInputs = [
-    cmake
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
+
+  outputs = [
+    "dev"
+    "lib"
+    "man"
+    "out"
   ];
 
-  buildInputs = lib.optionals finalAttrs.doCheck [
-    valgrind
-  ];
-
-  outputs = [ "dev" "lib" "man" "out" ];
-
-  patches = [
-    ./0001-Create-a-unified-lz4-target.patch
-  ];
+  patches = [ ./0001-Create-a-unified-lz4-target.patch ];
 
   cmakeDir = "../build/cmake";
   cmakeBuildDir = "build-dist";
@@ -54,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
       multi-core systems.
     '';
     homepage = "https://lz4.github.io/lz4/";
-    license = with licenses; [ bsd2 gpl2Plus ];
+    license = with licenses; [
+      bsd2
+      gpl2Plus
+    ];
     platforms = platforms.all;
     mainProgram = "lz4";
     maintainers = [ maintainers.tobim ];

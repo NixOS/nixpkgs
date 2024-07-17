@@ -1,6 +1,4 @@
-{ lib
-, buildDotnetGlobalTool
-}:
+{ lib, buildDotnetGlobalTool }:
 
 buildDotnetGlobalTool rec {
   pname = "dotnet-gitversion";

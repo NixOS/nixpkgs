@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, iconnamingutils, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  iconnamingutils,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-icon-theme";
@@ -9,9 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fjh9qmmgj34zlgxb09231ld7khys562qxbpsjlaplq2j85p57im";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     intltool

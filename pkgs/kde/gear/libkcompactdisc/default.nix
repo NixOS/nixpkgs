@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  alsa-lib,
-}:
+{ mkKdeDerivation, alsa-lib }:
 mkKdeDerivation {
   pname = "libkcompactdisc";
 
-  extraBuildInputs = [alsa-lib];
+  extraBuildInputs = [ alsa-lib ];
 }

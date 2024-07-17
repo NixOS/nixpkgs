@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -14,7 +19,8 @@ let
     "streamOptimized"
   ];
 
-in {
+in
+{
   options = {
     vmware = {
       baseImageSize = mkOption {

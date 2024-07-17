@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, openpam
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  openpam,
 }:
 
 buildGoModule {
@@ -38,16 +39,20 @@ buildGoModule {
     cp -r webapp/web $out/share/scion-webapp
   '';
 
-  buildInputs = [
-    openpam
-  ];
+  buildInputs = [ openpam ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Public repository for SCION applications";
     homepage = "https://github.com/netsec-ethz/scion-apps";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan sarcasticadmin ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      sarcasticadmin
+    ];
   };
 }

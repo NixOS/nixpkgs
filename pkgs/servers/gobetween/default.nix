@@ -1,5 +1,9 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 buildGoModule rec {
@@ -13,9 +17,7 @@ buildGoModule rec {
     sha256 = "0bxf89l53sqan9qq23rwawjkcanv9p61sw56zjqhyx78f0bh0zbc";
   };
 
-  patches = [
-    ./gomod.patch
-  ];
+  patches = [ ./gomod.patch ];
 
   buildPhase = ''
     make -e build${lib.optionalString enableStatic "-static"}

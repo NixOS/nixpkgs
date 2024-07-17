@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, subversion
-, apr
-, aprutil
-, python3
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  subversion,
+  apr,
+  aprutil,
+  python3,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
       --replace "[3.0.*]" "[3.*]"
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     wxGTK32
@@ -36,9 +35,7 @@ stdenv.mkDerivation rec {
     apr
     aprutil
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   configureFlags = [
     "--with-svn-include=${subversion.dev}/include"

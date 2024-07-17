@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, nestopia }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  nestopia,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-nestopia";
@@ -12,14 +19,10 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-DmBO+HcfIBcz7p16dND09iwXWeObtU/doo/mJ0IZGGg=";
   };
 
-  extraCMakeFlags = [
-    "-DNESTOPIA_LIB=${nestopia}/lib/retroarch/cores/nestopia_libretro.so"
-  ];
+  extraCMakeFlags = [ "-DNESTOPIA_LIB=${nestopia}/lib/retroarch/cores/nestopia_libretro.so" ];
 
   extraBuildInputs = [ nestopia ];
-  propagatedBuildInputs = [
-    libretro
-  ];
+  propagatedBuildInputs = [ libretro ];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-game/game.libretro.nestopia";

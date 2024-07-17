@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  jre,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swingsane";
@@ -13,35 +21,37 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  installPhase = let
+  installPhase =
+    let
 
-    execWrapper = ''
-      #!${runtimeShell}
-      exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
+      execWrapper = ''
+        #!${runtimeShell}
+        exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
+      '';
+
+      desktopItem = makeDesktopItem {
+        name = "swingsane";
+        exec = "swingsane";
+        icon = "swingsane";
+        desktopName = "SwingSane";
+        genericName = "Scan from local or remote SANE servers";
+        comment = meta.description;
+        categories = [ "Office" ];
+      };
+
+    in
+    ''
+      install -v -m 755    -d $out/share/java/swingsane/
+      install -v -m 644 *.jar $out/share/java/swingsane/
+
+      echo "${execWrapper}" > swingsane
+      install -v -D -m 755 swingsane $out/bin/swingsane
+
+      unzip -j swingsane-${version}.jar "com/swingsane/images/*.png"
+      install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
+
+      cp -v -r ${desktopItem}/share/applications $out/share
     '';
-
-    desktopItem = makeDesktopItem {
-      name = "swingsane";
-      exec = "swingsane";
-      icon = "swingsane";
-      desktopName = "SwingSane";
-      genericName = "Scan from local or remote SANE servers";
-      comment = meta.description;
-      categories = [ "Office" ];
-    };
-
-  in ''
-    install -v -m 755    -d $out/share/java/swingsane/
-    install -v -m 644 *.jar $out/share/java/swingsane/
-
-    echo "${execWrapper}" > swingsane
-    install -v -D -m 755 swingsane $out/bin/swingsane
-
-    unzip -j swingsane-${version}.jar "com/swingsane/images/*.png"
-    install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
-
-    cp -v -r ${desktopItem}/share/applications $out/share
-  '';
 
   meta = with lib; {
     description = "Java GUI for SANE scanner servers (saned)";

@@ -28,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-PUPk92wugtIZWXP8vq8bJNxqTDhDENKdNhW1kNEcL3E=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonRelaxDeps = [ "cffsubr" ];
 

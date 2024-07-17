@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
-, updateAutotoolsGnuConfigScriptsHook
-, sslSupport ? true, openssl
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  findutils,
+  fixDarwinDylibNames,
+  updateAutotoolsGnuConfigScriptsHook,
+  sslSupport ? true,
+  openssl,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,19 +35,18 @@ stdenv.mkDerivation rec {
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.
-  outputs = [ "out" "dev" ]
-    ++ lib.optional sslSupport "openssl"
-    ;
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional sslSupport "openssl";
   outputBin = "dev";
-  propagatedBuildOutputs = [ "out" ]
-    ++ lib.optional sslSupport "openssl"
-    ;
+  propagatedBuildOutputs = [ "out" ] ++ lib.optional sslSupport "openssl";
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optional sslSupport openssl
-    ++ lib.optional stdenv.isCygwin findutils;
+  buildInputs = lib.optional sslSupport openssl ++ lib.optional stdenv.isCygwin findutils;
 
   doCheck = false; # needs the net
 

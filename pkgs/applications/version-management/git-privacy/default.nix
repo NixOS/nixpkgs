@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, git
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,9 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     "TestGitPrivacy"
   ];
 
-  pythonImportsCheck = [
-    "gitprivacy"
-  ];
+  pythonImportsCheck = [ "gitprivacy" ];
 
   meta = with lib; {
     description = "Tool to redact Git author and committer dates";

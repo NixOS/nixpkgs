@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, gawk
-, git
-, gnugrep
-, ncurses
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  gawk,
+  git,
+  gnugrep,
+  ncurses,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  installFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   postInstall =
     let

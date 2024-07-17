@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtwayland
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pynitrokey
@@ -37,16 +36,17 @@ python3.pkgs.buildPythonApplication rec {
     qt-material
   ];
 
-  pythonImportsCheck = [
-    "nitrokeyapp"
-  ];
+  pythonImportsCheck = [ "nitrokeyapp" ];
 
   meta = with lib; {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle panicgh ];
+    maintainers = with maintainers; [
+      _999eagle
+      panicgh
+    ];
     mainProgram = "nitrokeyapp";
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, guile
-, libffi
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  guile,
+  libffi,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,18 +17,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     guile
     libffi
     ncurses
   ];
 
-  configureFlags = [
-    "--with-gnu-filesystem-hierarchy"
-  ];
+  configureFlags = [ "--with-gnu-filesystem-hierarchy" ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  installFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  installFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://github.com/cktan/tomlc99";

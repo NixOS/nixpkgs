@@ -1,6 +1,7 @@
-{ stdenv
-, fetchFromGitHub
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,22 +23,29 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  preBuild = ''
-    makeFlagsArray=(
-      CC="gcc"
-      RM="rm"
-      SHELL="sh"
-      "all"
-    )
-    '' + (if stdenv.isx86_64 then ''
-    makeFlagsArray+=(
-      CFLAGS="-fcommon -O -DFOUR -m64"
+  preBuild =
+    ''
+      makeFlagsArray=(
+        CC="gcc"
+        RM="rm"
+        SHELL="sh"
+        "all"
+      )
+    ''
+    + (
+      if stdenv.isx86_64 then
+        ''
+          makeFlagsArray+=(
+            CFLAGS="-fcommon -O -DFOUR -m64"
+          );
+        ''
+      else
+        ''
+            makeFlagsArray+=(
+              CFLAGS="-fcommon -O -DFOUR"
+          );
+        ''
     );
-    '' else ''
-      makeFlagsArray+=(
-        CFLAGS="-fcommon -O -DFOUR"
-    );
-  '');
 
   installPhase = ''
     mkdir -p $out/bin
@@ -51,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multipole-accelerated inductance analysis program";
     longDescription = ''
-       Fasthenry is an inductance extraction program based on a
-       multipole-accelerated algorithm.'';
+      Fasthenry is an inductance extraction program based on a
+      multipole-accelerated algorithm.'';
     homepage = "https://www.fastfieldsolvers.com/fasthenry2.htm";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fbeffa ];

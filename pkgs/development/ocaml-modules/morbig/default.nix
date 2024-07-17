@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, menhir, menhirLib, ppx_deriving_yojson, visitors, yojson
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  menhirLib,
+  ppx_deriving_yojson,
+  visitors,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -15,9 +22,7 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  nativeBuildInputs = [
-    menhir
-  ];
+  nativeBuildInputs = [ menhir ];
 
   propagatedBuildInputs = [
     menhirLib

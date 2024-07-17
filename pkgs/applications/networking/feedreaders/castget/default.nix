@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, ronn
-, curl
-, id3lib
-, libxml2
-, glibcLocales
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  ronn,
+  curl,
+  id3lib,
+  libxml2,
+  glibcLocales,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

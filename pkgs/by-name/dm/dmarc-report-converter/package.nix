@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, dmarc-report-converter
-, fetchFromGitHub
-, runCommand
+{
+  lib,
+  buildGoModule,
+  dmarc-report-converter,
+  fetchFromGitHub,
+  runCommand,
 }:
 
 buildGoModule rec {

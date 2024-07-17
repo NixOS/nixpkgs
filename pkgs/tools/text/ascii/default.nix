@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, gitUpdater, asciidoctor }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  asciidoctor,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ascii";
@@ -11,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TE9YR5Va9tXaf2ZyNxz7d8lZRTgnD4Lz7FyqRDl1HNY=";
   };
 
-  nativeBuildInputs = [
-    asciidoctor
-  ];
+  nativeBuildInputs = [ asciidoctor ];
 
   prePatch = ''
     sed -i -e "s|^PREFIX = .*|PREFIX = $out|" Makefile

@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule, git, openssh }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  git,
+  openssh,
+}:
 
 buildGoModule rec {
   pname = "gittuf";
@@ -15,8 +21,14 @@ buildGoModule rec {
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 
-  nativeCheckInputs = [ git openssh ];
-  checkFlags = [ "-skip=TestLoadRepository" "-skip=TestSSH" ];
+  nativeCheckInputs = [
+    git
+    openssh
+  ];
+  checkFlags = [
+    "-skip=TestLoadRepository"
+    "-skip=TestSSH"
+  ];
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 

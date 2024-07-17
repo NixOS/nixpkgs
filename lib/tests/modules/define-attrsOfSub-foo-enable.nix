@@ -1,3 +1,1 @@
-{
-  attrsOfSub.foo.enable = true;
-}
+{ attrsOfSub.foo.enable = true; }

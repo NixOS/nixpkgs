@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, validatePkgConfig, postgresql, sqlite, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  validatePkgConfig,
+  postgresql,
+  sqlite,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "virtualpg";
@@ -11,16 +19,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     validatePkgConfig
-    postgresql  # for pg_config
+    postgresql # for pg_config
   ];
 
-  buildInputs = [ postgresql sqlite ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
+  buildInputs = [
+    postgresql
+    sqlite
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
 
   meta = with lib; {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";
     homepage = "https://www.gaia-gis.it/fossil/virtualpg";
-    license = with licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      mpl11
+      gpl2Plus
+      lgpl21Plus
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
   };

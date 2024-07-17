@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.cri-o;
 
   crioPackage = pkgs.cri-o.override {
-    extraPackages = cfg.extraPackages
+    extraPackages =
+      cfg.extraPackages
       ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
   };
 
@@ -22,13 +28,27 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "aufs" "btrfs" "devmapper" "overlay" "vfs" "zfs" ];
+      type = types.enum [
+        "aufs"
+        "btrfs"
+        "devmapper"
+        "overlay"
+        "vfs"
+        "zfs"
+      ];
       default = "overlay";
       description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
+      type = types.enum [
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+        "fatal"
+      ];
       default = "info";
       description = "Log level to be used";
     };
@@ -94,7 +114,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.cri-tools
+    ];
 
     environment.etc."crictl.yaml".source = "${cfg.package}/etc/crictl.yaml";
 
@@ -116,14 +139,10 @@ in
         log_level = cfg.logLevel;
         manage_ns_lifecycle = true;
         pinns_path = "${cfg.package}/bin/pinns";
-        hooks_dir =
-          optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
-            config.boot.kernelPackages.oci-seccomp-bpf-hook;
+        hooks_dir = optional (config.virtualisation.containers.ociSeccompBpfHook.enable) config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
         default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
-        runtimes = mkIf (cfg.runtime != null) {
-          "${cfg.runtime}" = { };
-        };
+        runtimes = mkIf (cfg.runtime != null) { "${cfg.runtime}" = { }; };
       };
     };
 

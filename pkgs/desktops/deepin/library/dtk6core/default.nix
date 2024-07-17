@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, lshw
-, libuchardet
-, spdlog
-, dtkcommon
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  lshw,
+  libuchardet,
+  spdlog,
+  dtkcommon,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,8 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     lshw
     libuchardet
     spdlog
-  ]
-  ++ lib.optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
   propagatedBuildInputs = [ dtkcommon ];
 
@@ -77,7 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DCore/bin/*; do

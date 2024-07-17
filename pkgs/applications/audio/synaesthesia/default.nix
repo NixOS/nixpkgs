@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchzip
-, SDL
-, pkg-config
-, libSM
+{
+  stdenv,
+  lib,
+  fetchzip,
+  SDL,
+  pkg-config,
+  libSM,
 }:
 stdenv.mkDerivation rec {
   pname = "synaesthesia";
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nzsdxbah0shm2vlziaaw3ilzlizd3d35rridkpg40nfxmq84qnx";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     SDL

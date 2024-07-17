@@ -40,9 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-QH+H1UubDDv2SZa/razs+JYu4BbZzWHh7DLWfZEWCes=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = true;
 

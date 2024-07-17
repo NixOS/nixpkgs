@@ -19,7 +19,12 @@ buildDotnetModule rec {
   projectFile = "main/GarnetServer/GarnetServer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_6_0
+      sdk_8_0
+    ];
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetBuildFlags = [

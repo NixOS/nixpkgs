@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "plasma-firewall";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "plasma-firewall"; }

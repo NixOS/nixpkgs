@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, perl
-, ps
-, python3Packages
-, bashInteractive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  perl,
+  ps,
+  python3Packages,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {

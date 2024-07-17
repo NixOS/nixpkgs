@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, libpng
-, libzip
-, openal
-, pkg-config
-, yaml-cpp
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  libpng,
+  libzip,
+  openal,
+  pkg-config,
+  yaml-cpp,
+  fmt,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
 
-  cmakeFlags = [
-    "-DOPENLOCO_BUILD_TESTS=NO"
-  ];
+  cmakeFlags = [ "-DOPENLOCO_BUILD_TESTS=NO" ];
 
   nativeBuildInputs = [
     cmake

@@ -292,9 +292,7 @@ buildGoModule rec {
     "Test_sendError"
   ];
 
-  checkFlags = [
-    "-skip ${lib.strings.concatStringsSep "|" disabledTests}"
-  ];
+  checkFlags = [ "-skip ${lib.strings.concatStringsSep "|" disabledTests}" ];
 
   postInstall = ''
     for i in $($out/bin/boulder --list); do

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ncurses, ocaml, writeText }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  ocaml,
+  writeText,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-findlib";
@@ -12,20 +19,30 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml ];
   buildInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
-  patches = [ ./ldconf.patch ./install_topfind.patch ];
-
-  dontAddPrefix=true;
-  dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
-
-  configureFlags = [
-      "-bindir" "${placeholder "out"}/bin"
-      "-mandir" "${placeholder "out"}/share/man"
-      "-sitelib" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
-      "-config" "${placeholder "out"}/etc/findlib.conf"
+  patches = [
+    ./ldconf.patch
+    ./install_topfind.patch
   ];
 
-  buildFlags = [ "all" "opt" ];
+  dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [ ];
+
+  configureFlags = [
+    "-bindir"
+    "${placeholder "out"}/bin"
+    "-mandir"
+    "${placeholder "out"}/share/man"
+    "-sitelib"
+    "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
+    "-config"
+    "${placeholder "out"}/etc/findlib.conf"
+  ];
+
+  buildFlags = [
+    "all"
+    "opt"
+  ];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
@@ -71,10 +88,11 @@ stdenv.mkDerivation rec {
     description = "O'Caml library manager";
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maggesi vbmithr ];
+    maintainers = with lib.maintainers; [
+      maggesi
+      vbmithr
+    ];
     mainProgram = "ocamlfind";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }
-
-

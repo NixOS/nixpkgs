@@ -1,4 +1,10 @@
-{ stdenv, pkgs, lib, runtimeShell, cores ? [ ] }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  runtimeShell,
+  cores ? [ ],
+}:
 
 let
 
@@ -8,8 +14,11 @@ let
     # https://forum.kodi.tv/showthread.php?tid=185074&pid=1622750#pid1622750
     nohup sh -c "sleep 10 && ${exec} '$@' -f;pkill -SIGCONT kodi"
   '';
-  scriptSh = exec: pkgs.writeScript ("kodi-"+exec.name) (script exec.path);
-  execs = map (core: rec { name = core.core; path = core+"/bin/retroarch-"+name;}) cores;
+  scriptSh = exec: pkgs.writeScript ("kodi-" + exec.name) (script exec.path);
+  execs = map (core: rec {
+    name = core.core;
+    path = core + "/bin/retroarch-" + name;
+  }) cores;
 
 in
 

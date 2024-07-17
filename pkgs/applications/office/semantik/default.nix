@@ -1,25 +1,26 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, wafHook
-, pkg-config
-, cmake
-, qtbase
-, python3
-, qtwebengine
-, qtsvg
-, ncurses6
-, kio
-, kauth
-, kiconthemes
-, kconfigwidgets
-, kxmlgui
-, kcoreaddons
-, kconfig
-, kwidgetsaddons
-, ki18n
-, sonnet
-, kdelibs4support
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  wafHook,
+  pkg-config,
+  cmake,
+  qtbase,
+  python3,
+  qtwebengine,
+  qtsvg,
+  ncurses6,
+  kio,
+  kauth,
+  kiconthemes,
+  kconfigwidgets,
+  kxmlgui,
+  kcoreaddons,
+  kconfig,
+  kwidgetsaddons,
+  ki18n,
+  sonnet,
+  kdelibs4support,
 }:
 
 mkDerivation rec {
@@ -33,9 +34,7 @@ mkDerivation rec {
     hash = "sha256-qJ6MGxnxXcibF2qXZ2w7Ey/aBIEIx8Gg0dM2PnCl09Y=";
   };
 
-  patches = [
-    ./qt5.patch
-  ];
+  patches = [ ./qt5.patch ];
 
   postPatch = ''
     echo "${lib.getDev qtwebengine}"
@@ -58,7 +57,14 @@ mkDerivation rec {
       --replace /usr/include/KF5/KDELibs4Support "${lib.getDev kdelibs4support}/include/KF5/KDELibs4Support"
   '';
 
-  nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
+  nativeBuildInputs = [
+    (lib.getDev qtsvg)
+    (lib.getLib qtsvg)
+    python3
+    pkg-config
+    wafHook
+    cmake
+  ];
 
   buildInputs = [
     qtbase
@@ -78,9 +84,7 @@ mkDerivation rec {
     kdelibs4support
   ];
 
-  wafConfigureFlags = [
-    "--qtlibs=${lib.getLib qtbase}/lib"
-  ];
+  wafConfigureFlags = [ "--qtlibs=${lib.getLib qtbase}/lib" ];
 
   meta = with lib; {
     description = "Mind-mapping application for KDE";

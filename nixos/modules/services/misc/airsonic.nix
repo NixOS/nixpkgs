@@ -1,11 +1,18 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.airsonic;
   opt = options.services.airsonic;
-in {
+in
+{
   options = {
 
     services.airsonic = {
@@ -107,8 +114,7 @@ in {
           Useful for sending jukebox output to non-default alsa
           devices.
         '';
-        default = [
-        ];
+        default = [ ];
         type = types.listOf types.str;
         example = [
           "-Djavax.sound.sampled.Clip='#CODEC [plughw:1,0]'"
@@ -143,8 +149,7 @@ in {
           -Dserver.port=${toString cfg.port} \
           -Dairsonic.contextPath=${cfg.contextPath} \
           -Djava.awt.headless=true \
-          ${optionalString (cfg.virtualHost != null)
-            "-Dserver.use-forward-headers=true"} \
+          ${optionalString (cfg.virtualHost != null) "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${cfg.war}
@@ -171,6 +176,6 @@ in {
       createHome = true;
       isSystemUser = true;
     };
-    users.groups.airsonic = {};
+    users.groups.airsonic = { };
   };
 }

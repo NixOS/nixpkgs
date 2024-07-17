@@ -14,8 +14,8 @@ mkKdeDerivation rec {
     hash = "sha256-9eRNen19/YZsUpuwBPcgQBNgmhbJdXCR/NssbFvgD/M=";
   };
 
-  extraBuildInputs = [qtdeclarative];
-  extraPropagatedBuildInputs = [qt5compat];
+  extraBuildInputs = [ qtdeclarative ];
+  extraPropagatedBuildInputs = [ qt5compat ];
 
   meta.license = with lib.licenses; [
     bsd2

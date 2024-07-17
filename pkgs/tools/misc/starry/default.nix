@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,15 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-L6s1LkWnjht2VLwq1GOFiIosnZjFN9tDSLpPtokmj9o=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "Current stars history tells only half the story";

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, desktop-file-utils, libpng
-, pkg-config, SDL, freetype, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  libpng,
+  pkg-config,
+  SDL,
+  freetype,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -16,8 +25,16 @@ stdenv.mkDerivation rec {
     sha256 = "0hng5krwgc1h9bz1xlkp2hwnvas965nd7sb3z9mb2m6x9ghxlacz";
   };
 
-  nativeBuildInputs = [ desktop-file-utils pkg-config ];
-  buildInputs = [ libpng SDL freetype zlib ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    pkg-config
+  ];
+  buildInputs = [
+    libpng
+    SDL
+    freetype
+    zlib
+  ];
 
   patches = [ ./string.patch ];
 

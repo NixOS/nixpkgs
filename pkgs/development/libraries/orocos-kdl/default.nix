@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "orocos-kdl";

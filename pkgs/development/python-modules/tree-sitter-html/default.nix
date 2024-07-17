@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, tree-sitter
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tree-sitter,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-sHy3fVWemJod18HCQ8zBC/LpeCCPH0nzhI1wrkCg8nw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
-    core = [
-      tree-sitter
-    ];
+    core = [ tree-sitter ];
   };
 
   # There are no tests

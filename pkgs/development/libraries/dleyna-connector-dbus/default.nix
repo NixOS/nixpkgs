@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, pkg-config
-, fetchFromGitHub
-, fetchpatch
-, dleyna-core
-, glib
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  dleyna-core,
+  glib,
 }:
 
 stdenv.mkDerivation rec {

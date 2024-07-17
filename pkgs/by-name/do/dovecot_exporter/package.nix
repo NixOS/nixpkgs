@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "dovecot_exporter";
@@ -26,13 +27,18 @@ buildGoModule rec {
     })
   ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) dovecot; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) dovecot;
+  };
 
   meta = {
     inherit (src.meta) homepage;
     description = "Prometheus metrics exporter for Dovecot";
     mainProgram = "dovecot_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ willibutz globin ];
+    maintainers = with lib.maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

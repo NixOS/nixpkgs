@@ -1,17 +1,19 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchurl
-, glib
-, gobject-introspection
-, gtk-doc
-, libtool
-, libxml2
-, libxslt
-, openssl
-, pkg-config
-, python3
-, xmlsec
-, zlib
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  libtool,
+  libxml2,
+  libxslt,
+  openssl,
+  pkg-config,
+  python3,
+  xmlsec,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

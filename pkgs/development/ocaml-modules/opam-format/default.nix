@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, unzip, opam-core, opam-file-format }:
+{
+  lib,
+  buildDunePackage,
+  unzip,
+  opam-core,
+  opam-file-format,
+}:
 
 buildDunePackage rec {
   pname = "opam-format";
@@ -14,7 +20,10 @@ buildDunePackage rec {
   configureFlags = [ "--disable-checks" ];
 
   nativeBuildInputs = [ unzip ];
-  propagatedBuildInputs = [ opam-core opam-file-format ];
+  propagatedBuildInputs = [
+    opam-core
+    opam-file-format
+  ];
 
   meta = opam-core.meta // {
     description = "Definition of opam datastructures and its file interface";

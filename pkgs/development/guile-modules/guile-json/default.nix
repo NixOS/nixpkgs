@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, texinfo
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  texinfo,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +18,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    guile pkg-config texinfo
-  ];
-  buildInputs = [
     guile
+    pkg-config
+    texinfo
   ];
+  buildInputs = [ guile ];
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 

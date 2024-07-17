@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, libogg, libvorbis, libao, pkg-config, curl, libiconv
-, speex, flac
-, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libogg,
+  libvorbis,
+  libao,
+  pkg-config,
+  curl,
+  libiconv,
+  speex,
+  flac,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vorbis-tools";
@@ -20,9 +32,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libogg libvorbis libao curl speex flac ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libogg
+    libvorbis
+    libao
+    curl
+    speex
+    flac
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "Extra tools for Ogg-Vorbis audio codec";
@@ -35,4 +56,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

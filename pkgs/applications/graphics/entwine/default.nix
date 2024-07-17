@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pdal
-, curl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pdal,
+  curl,
+  openssl,
 }:
 
 stdenv.mkDerivation {
@@ -24,9 +25,7 @@ stdenv.mkDerivation {
     curl
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Point cloud organization for massive datasets";

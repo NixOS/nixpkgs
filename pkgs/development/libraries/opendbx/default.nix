@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, readline, libmysqlclient, postgresql, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  libmysqlclient,
+  postgresql,
+  sqlite,
+}:
 
-let inherit (lib) getDev; in
+let
+  inherit (lib) getDev;
+in
 
 stdenv.mkDerivation rec {
   pname = "opendbx";
@@ -17,7 +27,12 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
-  buildInputs = [ readline libmysqlclient postgresql sqlite ];
+  buildInputs = [
+    readline
+    libmysqlclient
+    postgresql
+    sqlite
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12

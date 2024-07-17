@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, kwindowsystem
-, libXScrnSaver
-, libXcursor
-, libXdmcp
-, libkscreen
-, liblxqt
-, libpthreadstubs
-, libqtxdg
-, libxcb
-, lxqt-build-tools
-, lxqt-menu-data
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, xf86inputlibinput
-, xkeyboard_config
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  kwindowsystem,
+  libXScrnSaver,
+  libXcursor,
+  libXdmcp,
+  libkscreen,
+  liblxqt,
+  libpthreadstubs,
+  libqtxdg,
+  libxcb,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  xf86inputlibinput,
+  xkeyboard_config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

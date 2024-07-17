@@ -32,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-wvy1L21AnQ4JP5seAh6DWksQU2OcbYTXKcixpFryH4w=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   pythonRelaxDeps = [
     "pydantic"

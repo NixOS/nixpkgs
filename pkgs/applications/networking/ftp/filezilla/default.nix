@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, dbus
-, gettext
-, gnutls
-, libfilezilla
-, libidn
-, nettle
-, pkg-config
-, pugixml
-, sqlite
-, tinyxml
-, boost
-, wrapGAppsHook3
-, wxGTK32
-, gtk3
-, xdg-utils
-, CoreServices
-, Security
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  dbus,
+  gettext,
+  gnutls,
+  libfilezilla,
+  libidn,
+  nettle,
+  pkg-config,
+  pugixml,
+  sqlite,
+  tinyxml,
+  boost,
+  wrapGAppsHook3,
+  wxGTK32,
+  gtk3,
+  xdg-utils,
+  CoreServices,
+  Security,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,23 +36,32 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [
-    boost
-    dbus
-    gettext
-    gnutls
-    libfilezilla
-    libidn
-    nettle
-    pugixml
-    sqlite
-    tinyxml
-    wxGTK32
-    gtk3
-    xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs =
+    [
+      boost
+      dbus
+      gettext
+      gnutls
+      libfilezilla
+      libidn
+      nettle
+      pugixml
+      sqlite
+      tinyxml
+      wxGTK32
+      gtk3
+      xdg-utils
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+    ];
 
   preBuild = lib.optionalString (stdenv.isDarwin) ''
     export MACOSX_DEPLOYMENT_TARGET=11.0

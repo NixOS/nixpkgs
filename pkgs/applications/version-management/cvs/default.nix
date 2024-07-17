@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  nano,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cvs";
@@ -19,7 +25,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "fortify" "format" ];
+  hardeningDisable = [
+    "fortify"
+    "format"
+  ];
 
   preConfigure = ''
     # Apply the Debian patches.
@@ -36,9 +45,7 @@ stdenv.mkDerivation rec {
     "cvs_cv_func_printf_ptr=yes"
   ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   env = lib.optionalAttrs (stdenv.isDarwin && stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";

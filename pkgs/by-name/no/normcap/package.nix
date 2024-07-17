@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, tesseract4
-, leptonica
-, wl-clipboard
-, libnotify
-, xorg
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  tesseract4,
+  leptonica,
+  wl-clipboard,
+  libnotify,
+  xorg,
 }:
 
 let
@@ -17,9 +18,7 @@ let
     leptonica
     tesseract4
     libnotify
-  ] ++ lib.optionals stdenv.isLinux [
-    wl-clipboard
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ wl-clipboard ];
 
 in
 
@@ -43,13 +42,9 @@ ps.buildPythonApplication rec {
       --replace-fail "addopts = [" "addopts_ = ["
   '';
 
-  pythonRemoveDeps = [
-    "pyside6-essentials"
-  ];
+  pythonRemoveDeps = [ "pyside6-essentials" ];
 
-  pythonRelaxDeps = [
-    "shiboken6"
-  ];
+  pythonRelaxDeps = [ "shiboken6" ];
 
   nativeBuildInputs = [
     ps.hatchling
@@ -69,23 +64,28 @@ ps.buildPythonApplication rec {
     )
   '';
 
-  nativeCheckInputs = wrapperDeps ++ [
-    ps.pytestCheckHook
-    ps.pytest-qt
-    ps.toml
-  ] ++ lib.optionals stdenv.isLinux [
-    ps.pytest-xvfb
-    xorg.xvfb
-  ];
+  nativeCheckInputs =
+    wrapperDeps
+    ++ [
+      ps.pytestCheckHook
+      ps.pytest-qt
+      ps.toml
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      ps.pytest-xvfb
+      xorg.xvfb
+    ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '' + lib.optionalString stdenv.isLinux ''
-    # setup a virtual x11 display
-    export DISPLAY=:$((2000 + $RANDOM % 1000))
-    Xvfb $DISPLAY -screen 5 1024x768x8 &
-    xvfb_pid=$!
-  '';
+  preCheck =
+    ''
+      export HOME=$(mktemp -d)
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      # setup a virtual x11 display
+      export DISPLAY=:$((2000 + $RANDOM % 1000))
+      Xvfb $DISPLAY -screen 5 1024x768x8 &
+      xvfb_pid=$!
+    '';
 
   postCheck = lib.optionalString stdenv.isLinux ''
     # cleanup the virtual x11 display
@@ -93,54 +93,61 @@ ps.buildPythonApplication rec {
     kill $xvfb_pid
   '';
 
-  disabledTests = [
-    # requires a wayland session (no xclip support)
-    "test_wl_copy"
-    # RuntimeError: Please destroy the QApplication singleton before creating a new QApplication instance
-    "test_get_application"
-    # times out, unknown why
-    "test_update_checker_triggers_checked_signal"
-    # touches network
-    "test_urls_reachable"
-    # requires xdg
-    "test_synchronized_capture"
-    # flaky
-    "test_normcap_ocr_testcases"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # requires impure pbcopy
-    "test_get_copy_func_with_pbcopy"
-    "test_get_copy_func_without_pbcopy"
-    "test_perform_pbcopy"
-    # NSXPCSharedListener endpointForReply:withListenerName:replyErrorCode:
-    # while obtaining endpoint 'ClientCallsAuxiliary': Connection interrupted
-    # since v5.0.0
-    "test_introduction_initialize_checkbox_state"
-    "test_introduction_checkbox_sets_return_code"
-    "test_introduction_toggle_checkbox_changes_return_code"
-    "test_show_introduction"
-  ];
+  disabledTests =
+    [
+      # requires a wayland session (no xclip support)
+      "test_wl_copy"
+      # RuntimeError: Please destroy the QApplication singleton before creating a new QApplication instance
+      "test_get_application"
+      # times out, unknown why
+      "test_update_checker_triggers_checked_signal"
+      # touches network
+      "test_urls_reachable"
+      # requires xdg
+      "test_synchronized_capture"
+      # flaky
+      "test_normcap_ocr_testcases"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # requires impure pbcopy
+      "test_get_copy_func_with_pbcopy"
+      "test_get_copy_func_without_pbcopy"
+      "test_perform_pbcopy"
+      # NSXPCSharedListener endpointForReply:withListenerName:replyErrorCode:
+      # while obtaining endpoint 'ClientCallsAuxiliary': Connection interrupted
+      # since v5.0.0
+      "test_introduction_initialize_checkbox_state"
+      "test_introduction_checkbox_sets_return_code"
+      "test_introduction_toggle_checkbox_changes_return_code"
+      "test_show_introduction"
+    ];
 
-  disabledTestPaths = [
-    # touches network
-    "tests/tests_gui/test_downloader.py"
-    # fails to import, causes pytest to freeze
-    "tests/tests_gui/test_language_manager.py"
-    # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
-    # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
-    "tests/tests_gui/test_loading_indicator.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # requires a display
-    "tests/integration/test_normcap.py"
-    "tests/integration/test_tray_menu.py"
-    # failure unknown, crashes in first test with `.show()`
-    "tests/tests_gui/test_loading_indicator.py"
-  ];
+  disabledTestPaths =
+    [
+      # touches network
+      "tests/tests_gui/test_downloader.py"
+      # fails to import, causes pytest to freeze
+      "tests/tests_gui/test_language_manager.py"
+      # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
+      # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
+      "tests/tests_gui/test_loading_indicator.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # requires a display
+      "tests/integration/test_normcap.py"
+      "tests/integration/test_tray_menu.py"
+      # failure unknown, crashes in first test with `.show()`
+      "tests/tests_gui/test_loading_indicator.py"
+    ];
 
   meta = with lib; {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cafkafk pbsds ];
+    maintainers = with maintainers; [
+      cafkafk
+      pbsds
+    ];
     mainProgram = "normcap";
     broken = stdenv.isDarwin;
   };

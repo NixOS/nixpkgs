@@ -25,7 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [ z3-solver ];
 
   # Tests have multiple issues, ImportError, TypeError, etc.

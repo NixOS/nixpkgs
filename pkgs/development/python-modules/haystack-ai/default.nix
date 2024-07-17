@@ -101,9 +101,7 @@ buildPythonPackage rec {
     hash = "sha256-vaZ8bn36Eezf3/SnJ6ao0CvFZaHrpgbX+nM0IOqG2oo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.

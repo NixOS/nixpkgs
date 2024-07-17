@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cl-launch";
   version = "4.1.4.1";

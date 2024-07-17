@@ -1,37 +1,38 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, qttools
-, kcmutils
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kdeclarative
-, ki18n
-, kiconthemes
-, kio
-, kirigami2
-, kpackage
-, kservice
-, kwayland
-, kwidgetsaddons
-, kxmlgui
-, solid
-, systemsettings
-, dmidecode
-, fwupd
-, libraw1394
-, libusb1
-, libGLU
-, pciutils
-, smartmontools
-, util-linux
-, vulkan-tools
-, wayland-utils
-, xdpyinfo
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  qttools,
+  kcmutils,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kdbusaddons,
+  kdeclarative,
+  ki18n,
+  kiconthemes,
+  kio,
+  kirigami2,
+  kpackage,
+  kservice,
+  kwayland,
+  kwidgetsaddons,
+  kxmlgui,
+  solid,
+  systemsettings,
+  dmidecode,
+  fwupd,
+  libraw1394,
+  libusb1,
+  libGLU,
+  pciutils,
+  smartmontools,
+  util-linux,
+  vulkan-tools,
+  wayland-utils,
+  xdpyinfo,
 }:
 
 let
@@ -43,7 +44,10 @@ in
 mkDerivation {
   pname = "kinfocenter";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
 
   buildInputs = [
     kcmutils
@@ -78,9 +82,7 @@ mkDerivation {
     xdpyinfo
   ];
 
-  patches = [
-    ./0001-tool-paths.patch
-  ];
+  patches = [ ./0001-tool-paths.patch ];
 
   postPatch = ''
     for f in Modules/kwinsupportinfo/{kcm_kwinsupportinfo.json.in,main.cpp}; do

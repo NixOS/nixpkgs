@@ -1,15 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "assimp";
   version = "5.4.2";
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "assimp";
@@ -19,7 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost zlib ];
+  buildInputs = [
+    boost
+    zlib
+  ];
 
   cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
 

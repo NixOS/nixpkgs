@@ -15,26 +15,30 @@
       system.extraDependencies = [ pkgs.emptyFile ];
 
       # check that extra-allowed-users is effective for harmonia
-      nix.settings.allowed-users = [];
+      nix.settings.allowed-users = [ ];
     };
 
     client01 = {
       nix.settings = {
         substituters = lib.mkForce [ "http://harmonia:5000" ];
-        trusted-public-keys = lib.mkForce [ "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo=" ];
+        trusted-public-keys = lib.mkForce [
+          "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
+        ];
       };
     };
   };
 
-  testScript = { nodes, ... }: ''
-    start_all()
+  testScript =
+    { nodes, ... }:
+    ''
+      start_all()
 
-    harmonia.wait_for_unit("harmonia.service")
+      harmonia.wait_for_unit("harmonia.service")
 
-    client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info | grep '${toString nodes.harmonia.services.harmonia.settings.priority}' >&2")
-    client01.succeed("curl -f http://harmonia:5000/version | grep '${nodes.harmonia.services.harmonia.package.version}' >&2")
+      client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info | grep '${toString nodes.harmonia.services.harmonia.settings.priority}' >&2")
+      client01.succeed("curl -f http://harmonia:5000/version | grep '${nodes.harmonia.services.harmonia.package.version}' >&2")
 
-    client01.succeed("cat /etc/nix/nix.conf >&2")
-    client01.succeed("nix-store --realise ${pkgs.emptyFile} --store /root/other-store")
-  '';
+      client01.succeed("cat /etc/nix/nix.conf >&2")
+      client01.succeed("nix-store --realise ${pkgs.emptyFile} --store /root/other-store")
+    '';
 }

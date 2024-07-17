@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, copyDesktopItems
-, stdenv
-, rustc
-, rustPlatform
-, cargo
-, cargo-tauri
-, openssl
-, libayatana-appindicator
-, webkitgtk
-, pkg-config
-, makeDesktopItem
-, pnpm
-, nodejs
+{
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  stdenv,
+  rustc,
+  rustPlatform,
+  cargo,
+  cargo-tauri,
+  openssl,
+  libayatana-appindicator,
+  webkitgtk,
+  pkg-config,
+  makeDesktopItem,
+  pnpm,
+  nodejs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "kiwi-talk";
       desktopName = "KiwiTalk";
       comment = "An UNOFFICIAL cross-platform KakaoTalk client";
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       terminal = false;
     })
   ];

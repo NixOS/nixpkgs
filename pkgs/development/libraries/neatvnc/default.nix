@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, aml
-, ffmpeg
-, gnutls
-, libjpeg_turbo
-, mesa
-, pixman
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  aml,
+  ffmpeg,
+  gnutls,
+  libjpeg_turbo,
+  mesa,
+  pixman,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,9 +43,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "tests" true)
-  ];
+  mesonFlags = [ (lib.mesonBool "tests" true) ];
 
   doCheck = true;
 

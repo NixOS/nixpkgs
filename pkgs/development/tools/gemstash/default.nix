@@ -1,4 +1,9 @@
-{ lib, bundlerApp, bundlerUpdateScript, nixosTests }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  nixosTests,
+}:
 
 bundlerApp rec {
   pname = "gemstash";
@@ -7,13 +12,15 @@ bundlerApp rec {
 
   passthru = {
     updateScript = bundlerUpdateScript pname;
-    tests = { inherit (nixosTests) gemstash; };
+    tests = {
+      inherit (nixosTests) gemstash;
+    };
   };
 
   meta = with lib; {
     description = "Cache for RubyGems.org and a private gem server";
-    homepage    = "https://github.com/rubygems/gemstash";
-    license     = licenses.mit;
+    homepage = "https://github.com/rubygems/gemstash";
+    license = licenses.mit;
     maintainers = [ maintainers.viraptor ];
   };
 }

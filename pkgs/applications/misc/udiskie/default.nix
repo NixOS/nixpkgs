@@ -1,17 +1,18 @@
-{ lib
-, asciidoc
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, installShellFiles
-, libappindicator-gtk3
-, libnotify
-, librsvg
-, python3Packages
-, udisks2
-, wrapGAppsHook3
-, testers
-, udiskie
+{
+  lib,
+  asciidoc,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  installShellFiles,
+  libappindicator-gtk3,
+  libnotify,
+  librsvg,
+  python3Packages,
+  udisks2,
+  wrapGAppsHook3,
+  testers,
+  udiskie,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,9 +28,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-asrVQR0d+5l76COsXp88srtGZQHU+AwbP3HwDiwRlnE=";
   };
 
-  patches = [
-    ./locale-path.patch
-  ];
+  patches = [ ./locale-path.patch ];
 
   postPatch = ''
     substituteInPlace udiskie/locale.py --subst-var out
@@ -42,9 +41,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dontWrapGApps = true;
 
@@ -79,13 +76,9 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  passthru.tests.version = testers.testVersion {
-    package = udiskie;
-  };
+  passthru.tests.version = testers.testVersion { package = udiskie; };
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";
@@ -106,6 +99,9 @@ python3Packages.buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      dotlambda
+    ];
   };
 }

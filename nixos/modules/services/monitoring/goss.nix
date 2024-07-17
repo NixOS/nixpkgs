@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.goss;
@@ -6,7 +11,8 @@ let
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "goss.yaml" cfg.settings;
 
-in {
+in
+{
   meta = {
     doc = ./goss.md;
     maintainers = [ lib.maintainers.anthonyroussel ];

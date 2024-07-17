@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python311 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python311,
+}:
 
 stdenv.mkDerivation rec {
   pname = "py3c";
@@ -18,15 +23,11 @@ stdenv.mkDerivation rec {
       --replace "'-Werror', " ""
   '';
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   doCheck = true;
 
-  nativeCheckInputs = [
-    python311
-  ];
+  nativeCheckInputs = [ python311 ];
 
   checkTarget = "test-python";
 

@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.pinnwand;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   configFile = format.generate "pinnwand.toml" cfg.settings;
 in
 {
@@ -19,7 +24,7 @@ in
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       description = ''
         Your {file}`pinnwand.toml` as a Nix attribute set. Look up
         possible options in the [documentation](https://pinnwand.readthedocs.io/en/v${pkgs.pinnwand.version}/configuration.html).
@@ -50,7 +55,7 @@ in
             type = types.str;
             default = ''
               <p>Welcome to pinnwand, this site is a pastebin. It allows you to share code with others. If you write code in the text area below and press the paste button you will be given a link you can share with others so they can view your code as well.</p><p>People with the link can view your pasted code, only you can remove your paste and it expires automatically. Note that anyone could guess the URI to your paste so don't rely on it being private.</p>
-              '';
+            '';
             description = ''
               Raw HTML help text shown in the header area.
             '';
@@ -85,7 +90,7 @@ in
         StateDirectory = "pinnwand";
         StateDirectoryMode = "0700";
 
-        AmbientCapabilities = [];
+        AmbientCapabilities = [ ];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;

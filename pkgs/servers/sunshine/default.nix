@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, autoAddDriverRunpath
-, makeWrapper
-, buildNpmPackage
-, nixosTests
-, cmake
-, avahi
-, libevdev
-, libpulseaudio
-, xorg
-, libxcb
-, openssl
-, libopus
-, boost
-, pkg-config
-, libdrm
-, wayland
-, libffi
-, libcap
-, mesa
-, curl
-, pcre
-, pcre2
-, python3
-, libuuid
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, libepoxy
-, libva
-, libvdpau
-, libglvnd
-, numactl
-, amf-headers
-, intel-media-sdk
-, svt-av1
-, vulkan-loader
-, libappindicator
-, libnotify
-, miniupnpc
-, config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  autoAddDriverRunpath,
+  makeWrapper,
+  buildNpmPackage,
+  nixosTests,
+  cmake,
+  avahi,
+  libevdev,
+  libpulseaudio,
+  xorg,
+  libxcb,
+  openssl,
+  libopus,
+  boost,
+  pkg-config,
+  libdrm,
+  wayland,
+  libffi,
+  libcap,
+  mesa,
+  curl,
+  pcre,
+  pcre2,
+  python3,
+  libuuid,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  libva,
+  libvdpau,
+  libglvnd,
+  numactl,
+  amf-headers,
+  intel-media-sdk,
+  svt-av1,
+  vulkan-loader,
+  libappindicator,
+  libnotify,
+  miniupnpc,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
 }:
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
@@ -92,54 +93,51 @@ stdenv'.mkDerivation rec {
     makeWrapper
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
-  ] ++ lib.optionals cudaSupport [
-    autoAddDriverRunpath
-  ];
+  ] ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
-  buildInputs = [
-    avahi
-    libevdev
-    libpulseaudio
-    xorg.libX11
-    libxcb
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.libXi
-    openssl
-    libopus
-    boost
-    libdrm
-    wayland
-    libffi
-    libevdev
-    libcap
-    libdrm
-    curl
-    pcre
-    pcre2
-    libuuid
-    libselinux
-    libsepol
-    libthai
-    libdatrie
-    xorg.libXdmcp
-    libxkbcommon
-    libepoxy
-    libva
-    libvdpau
-    numactl
-    mesa
-    amf-headers
-    svt-av1
-    libappindicator
-    libnotify
-    miniupnpc
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
-  ] ++ lib.optionals stdenv.isx86_64 [
-    intel-media-sdk
-  ];
+  buildInputs =
+    [
+      avahi
+      libevdev
+      libpulseaudio
+      xorg.libX11
+      libxcb
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libXtst
+      xorg.libXi
+      openssl
+      libopus
+      boost
+      libdrm
+      wayland
+      libffi
+      libevdev
+      libcap
+      libdrm
+      curl
+      pcre
+      pcre2
+      libuuid
+      libselinux
+      libsepol
+      libthai
+      libdatrie
+      xorg.libXdmcp
+      libxkbcommon
+      libepoxy
+      libva
+      libvdpau
+      numactl
+      mesa
+      amf-headers
+      svt-av1
+      libappindicator
+      libnotify
+      miniupnpc
+    ]
+    ++ lib.optionals cudaSupport [ cudaPackages.cudatoolkit ]
+    ++ lib.optionals stdenv.isx86_64 [ intel-media-sdk ];
 
   runtimeDependencies = [
     avahi
@@ -177,9 +175,7 @@ stdenv'.mkDerivation rec {
     cp -r ${ui}/build ../
   '';
 
-  buildFlags = [
-    "sunshine"
-  ];
+  buildFlags = [ "sunshine" ];
 
   # allow Sunshine to find libvulkan
   postFixup = lib.optionalString cudaSupport ''

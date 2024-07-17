@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +18,7 @@ stdenv.mkDerivation rec {
   # So patch the "missing include" bug ourselves.
   patches = [ ./include-sysmacros.patch ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install --target $out/bin -D cramfsck mkcramfs

@@ -4,7 +4,7 @@
   writeShellScript,
   fetchFromGitHub,
   pcre,
-  unstableGitUpdater
+  unstableGitUpdater,
 }:
 picom.overrideAttrs (previousAttrs: {
   pname = "picom-pijulius";
@@ -35,7 +35,7 @@ picom.overrideAttrs (previousAttrs: {
   passthru.updateScript = unstableGitUpdater {
     tagFormat = "v([A-Z]+)([a-z]+)|v([1-9]).([1-9])|v([1-9])-rc([1-9])";
     tagConverter = writeShellScript "picom-pijulius-tag-converter.sh" ''
-sed -e 's/v//g' -e 's/([A-Z])([a-z])+/8.2/g' -e 's/-rc([1-9])|-rc//g' -e 's/0/8.2/g'
-'';
+      sed -e 's/v//g' -e 's/([A-Z])([a-z])+/8.2/g' -e 's/-rc([1-9])|-rc//g' -e 's/0/8.2/g'
+    '';
   };
 })

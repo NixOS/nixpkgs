@@ -1,16 +1,17 @@
-{ symlinkJoin
-, lib
-, makeWrapper
-, nemo
-, nemoExtensions
-, python3
-, extensions ? [ ]
-, useDefaultExtensions ? true
+{
+  symlinkJoin,
+  lib,
+  makeWrapper,
+  nemo,
+  nemoExtensions,
+  python3,
+  extensions ? [ ],
+  useDefaultExtensions ? true,
 }:
 
 let
   selectedExtensions = extensions ++ (lib.optionals useDefaultExtensions nemoExtensions);
-  nemoPythonExtensionsDeps = lib.concatMap (x: x.nemoPythonExtensionDeps or []) selectedExtensions;
+  nemoPythonExtensionsDeps = lib.concatMap (x: x.nemoPythonExtensionDeps or [ ]) selectedExtensions;
 in
 symlinkJoin {
   name = "nemo-with-extensions-${nemo.version}";

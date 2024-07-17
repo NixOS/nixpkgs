@@ -25,7 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-MntVdZ6LazdFCm+h5FaTxvzEwCtoJjrW/EJPTt2fdnU=";
   };
 
-
   pythonRelaxDeps = [ "ipywidgets" ];
 
   build-system = [ setuptools ];

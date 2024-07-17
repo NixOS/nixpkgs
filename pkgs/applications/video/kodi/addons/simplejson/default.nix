@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "simplejson";
@@ -12,9 +18,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.simplejson";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.simplejson"; };
   };
 
   meta = with lib; {

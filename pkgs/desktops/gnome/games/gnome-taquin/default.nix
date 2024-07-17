@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, librsvg
-, gsound
-, gettext
-, itstool
-, libxml2
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {

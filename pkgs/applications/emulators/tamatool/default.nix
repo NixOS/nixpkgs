@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zip
-, copyDesktopItems
-, libpng
-, SDL2
-, SDL2_image
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zip,
+  copyDesktopItems,
+  libpng,
+  SDL2,
+  SDL2_image,
+  darwin,
 
-# Optionally bundle a ROM file
-, rom ? null
+  # Optionally bundle a ROM file
+  rom ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     SDL2
     SDL2_image
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
 
   makeFlags = [
     "-Clinux"

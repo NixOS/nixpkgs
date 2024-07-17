@@ -1,19 +1,46 @@
-{ lib, bash, autoconf, automake,
-  mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  bash,
+  autoconf,
+  automake,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "flocq";
   owner = "flocq";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.14" "8.19"; out = "4.1.4"; }
-    { case = range "8.14" "8.18"; out = "4.1.3"; }
-    { case = range "8.14" "8.17"; out = "4.1.1"; }
-    { case = range "8.14" "8.16"; out = "4.1.0"; }
-    { case = range "8.7" "8.15"; out = "3.4.3"; }
-    { case = range "8.5" "8.8"; out = "2.6.1"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.14" "8.19";
+        out = "4.1.4";
+      }
+      {
+        case = range "8.14" "8.18";
+        out = "4.1.3";
+      }
+      {
+        case = range "8.14" "8.17";
+        out = "4.1.1";
+      }
+      {
+        case = range "8.14" "8.16";
+        out = "4.1.0";
+      }
+      {
+        case = range "8.7" "8.15";
+        out = "3.4.3";
+      }
+      {
+        case = range "8.5" "8.8";
+        out = "2.6.1";
+      }
+    ] null;
   release."4.1.4".sha256 = "sha256-Use6Mlx79yef1CkCPyGoOItsD69B9KR+mQArCtmre4s=";
   release."4.1.3".sha256 = "sha256-os3cI885xNpxI+1p5rb8fSNnxKr7SFxqh83+3AM3t4I=";
   release."4.1.1".sha256 = "sha256-FbClxlV0ZaxITe7s9SlNbpeMNDJli+Dfh2TMrjaMtHo=";
@@ -24,7 +51,10 @@ mkCoqDerivation {
   release."2.6.1".sha256 = "0q5a038ww5dn72yvwn5298d3ridkcngb1dik8hdyr3xh7gr5qibj";
   releaseRev = v: "flocq-${v}";
 
-  nativeBuildInputs = [ bash autoconf ];
+  nativeBuildInputs = [
+    bash
+    autoconf
+  ];
   mlPlugin = true;
   useMelquiondRemake.logpath = "Flocq";
 

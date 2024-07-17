@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, rust-jemalloc-sys
-, zlib
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  rust-jemalloc-sys,
+  zlib,
+  stdenv,
+  darwin,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,24 +24,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xCA1kxt70lrCrPygMe98eF8RC/l47EnJPjLaXBccBRE=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libgit2
     rust-jemalloc-sys
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = cargoBuildFlags ++
+  cargoTestFlags =
+    cargoBuildFlags
+    ++
     # skip a broken test from v1.7.3 release
     # this will be removed on the next version
     [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];

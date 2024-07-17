@@ -22,7 +22,8 @@ stdenv.mkDerivation (attrs: {
 
   patches = [
     # This should be in next release, remember to remove fetchpatch
-    (fetchpatch { # https://github.com/sbmlteam/libsbml/pull/358
+    (fetchpatch {
+      # https://github.com/sbmlteam/libsbml/pull/358
       name = "fix-xmlerror-conversion.patch";
       url = "https://github.com/sbmlteam/libsbml/commit/de2f77ee6766fe933a1472200f5e08e7c5ba6f8c.patch";
       hash = "sha256-uirG6XJ+w0hqBUEAGDnzhHoVtJVRdN1eqBYeneKMBao=";
@@ -52,7 +53,7 @@ stdenv.mkDerivation (attrs: {
     description = "Library for manipulating Systems Biology Markup Language (SBML)";
     homepage = "https://github.com/sbmlteam/libsbml";
     license = licenses.lgpl21Only;
-    maintainers = [maintainers.kupac];
+    maintainers = [ maintainers.kupac ];
     platforms = platforms.all;
   };
 })

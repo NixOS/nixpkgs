@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, libpng
-, libjpeg
-, libGL
-, libX11
-, libXi
-, libXext
-, Cocoa
-, Kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  libpng,
+  libjpeg,
+  libGL,
+  libX11,
+  libXi,
+  libXext,
+  Cocoa,
+  Kernel,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "irrlichtmt";
@@ -23,25 +24,33 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BlQd7zbpvQnxqLv3IaHWrXzJ1pJFbQQ3DNWDAj14/YY=";
   };
 
-  nativeBuildInputs = [
-    cmake
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs =
+    [
+      zlib
+      libpng
+      libjpeg
+      libGL
+    ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        [
+          Cocoa
+          Kernel
+        ]
+      else
+        [
+          libX11
+          libXi
+          libXext
+        ]
+    );
+
+  outputs = [
+    "out"
+    "dev"
   ];
-
-  buildInputs = [
-    zlib
-    libpng
-    libjpeg
-    libGL
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    Cocoa
-    Kernel
-  ] else [
-    libX11
-    libXi
-    libXext
-  ]);
-
-  outputs = [ "out" "dev" ];
 
   meta = {
     homepage = "https://github.com/minetest/irrlicht";

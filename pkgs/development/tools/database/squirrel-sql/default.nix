@@ -1,8 +1,14 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
-, jre
-, drivers ? []
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jre,
+  drivers ? [ ],
 }:
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
@@ -13,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y7eG2otbLjtXvs3mRXWL8jJywuhBQ9i/MfWJXvkxnuU=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
   buildInputs = [ jre ];
 
   unpackPhase = ''

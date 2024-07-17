@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner  = "jakcron";
-    repo   = "Project_CTR";
-    rev    = "ctrtool-v${version}";
+    owner = "jakcron";
+    repo = "Project_CTR";
+    rev = "ctrtool-v${version}";
     sha256 = "wjU/DJHrAHE3MSB7vy+swUDVPzw0Jrv4ymOjhfr0BBk=";
   };
 
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-  make -j $NIX_BUILD_CORES deps
+    make -j $NIX_BUILD_CORES deps
   '';
 
   # workaround for https://github.com/3DSGuy/Project_CTR/issues/145

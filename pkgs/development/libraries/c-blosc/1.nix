@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
 
-, static ? stdenv.hostPlatform.isStatic
+  static ? stdenv.hostPlatform.isStatic,
 
-, lz4
-, zlib
-, zstd
+  lz4,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,9 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
-    pkgConfigModules = [
-      "blosc"
-    ];
+    pkgConfigModules = [ "blosc" ];
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];

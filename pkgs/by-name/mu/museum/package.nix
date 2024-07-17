@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, libsodium
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsodium,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -38,11 +39,12 @@ buildGoModule rec {
     description = "API server for ente.io";
     homepage = "https://github.com/ente-io/ente/tree/main/server";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ surfaceflinger pinpox ];
+    maintainers = with maintainers; [
+      surfaceflinger
+      pinpox
+    ];
     mainProgram = "museum";
     platforms = platforms.linux;
   };
   vendorHash = "sha256-Vo3KhWWxO0k/d5qUFRfX44oTZBXtJeUlz6qaUvXLDag=";
 }
-
-

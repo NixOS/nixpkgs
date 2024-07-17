@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, resvg
-, pngquant
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  resvg,
+  pngquant,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanoemoji";
@@ -29,7 +30,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # these two packages are just prebuilt wheels containing the respective binaries
-  pythonRemoveDeps = [ "pngquant-cli" "resvg-cli" ];
+  pythonRemoveDeps = [
+    "pngquant-cli"
+    "resvg-cli"
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     absl-py
@@ -54,7 +58,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ pngquant resvg ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        pngquant
+        resvg
+      ]
+    }"
   ];
 
   preCheck = ''

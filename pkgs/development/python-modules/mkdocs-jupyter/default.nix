@@ -34,9 +34,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "nbconvert" ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     ipykernel

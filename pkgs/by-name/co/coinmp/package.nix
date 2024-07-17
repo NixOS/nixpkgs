@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coinmp";
@@ -27,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    CXXFLAGS = "-std=c++14";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++14"; };
 
   hardeningDisable = [ "format" ];
 

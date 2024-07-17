@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, libxcrypt }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pies";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcrypt ];
 
-  configureFlags = ["--sysconfdir=/etc"];
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   hardeningDisable = [ "format" ];
 
@@ -20,26 +25,26 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Program invocation and execution supervisor";
 
-    longDescription =
-      '' The name Pies (pronounced "p-yes") stands for Program Invocation and
-         Execution Supervisor.  This utility starts and controls execution of
-         external programs, called components.  Each component is a
-         stand-alone program, which is executed in the foreground.  Upon
-         startup, pies reads the list of components from its configuration
-         file, starts them, and remains in the background, controlling their
-         execution.  If any of the components terminates, the default action
-         of Pies is to restart it.  However, it can also be programmed to
-         perform a variety of another actions such as, e.g., sending mail
-         notifications to the system administrator, invoking another external
-         program, etc.
+    longDescription = ''
+      The name Pies (pronounced "p-yes") stands for Program Invocation and
+              Execution Supervisor.  This utility starts and controls execution of
+              external programs, called components.  Each component is a
+              stand-alone program, which is executed in the foreground.  Upon
+              startup, pies reads the list of components from its configuration
+              file, starts them, and remains in the background, controlling their
+              execution.  If any of the components terminates, the default action
+              of Pies is to restart it.  However, it can also be programmed to
+              perform a variety of another actions such as, e.g., sending mail
+              notifications to the system administrator, invoking another external
+              program, etc.
 
-         Pies can be used for a wide variety of tasks.  Its most obious use
-         is to put in backgound a program which normally cannot detach itself
-         from the controlling terminal, such as, e.g., minicom.  It can
-         launch and control components of some complex system, such as
-         Jabberd or MeTA1 (and it offers much more control over them than the
-         native utilities).  Finally, it can replace the inetd utility!
-      '';
+              Pies can be used for a wide variety of tasks.  Its most obious use
+              is to put in backgound a program which normally cannot detach itself
+              from the controlling terminal, such as, e.g., minicom.  It can
+              launch and control components of some complex system, such as
+              Jabberd or MeTA1 (and it offers much more control over them than the
+              native utilities).  Finally, it can replace the inetd utility!
+    '';
 
     license = lib.licenses.gpl3Plus;
 

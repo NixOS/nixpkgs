@@ -26,7 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
   };
 
-
   pythonRemoveDeps = [
     # The `dataclasses` packages is a python2-only backport, unnecessary in
     # python3.

@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,21 +16,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-aI1CWtSpSPX1aK4UR/lsCQZQwNs7qOLKfatlSomJx1Q=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "wyoming"
-  ];
+  pythonRelaxDeps = [ "wyoming" ];
 
-  propagatedBuildInputs = with python3Packages; [
-    wyoming
-  ];
+  propagatedBuildInputs = with python3Packages; [ wyoming ];
 
-  pythonImportsCheck = [
-    "wyoming_piper"
-  ];
+  pythonImportsCheck = [ "wyoming_piper" ];
 
   doCheck = false;
 

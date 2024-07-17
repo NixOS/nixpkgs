@@ -1,17 +1,18 @@
-{ bzip2
-, fetchurl
-, glib
-, gperf
-, gtk3
-, gtk-mac-integration
-, judy
-, lib
-, pkg-config
-, stdenv
-, tcl
-, tk
-, wrapGAppsHook3
-, xz
+{
+  bzip2,
+  fetchurl,
+  glib,
+  gperf,
+  gtk3,
+  gtk-mac-integration,
+  judy,
+  lib,
+  pkg-config,
+  stdenv,
+  tcl,
+  tk,
+  wrapGAppsHook3,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XalIY/suXYjMAZ4r/cZ2AiOYETiUtYXYZOEcqDQbJNg=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
-  buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
-    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    bzip2
+    glib
+    gperf
+    gtk3
+    judy
+    tcl
+    tk
+    xz
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   # fix compilation under Darwin
   # remove these patches upon next release
@@ -46,7 +58,11 @@ stdenv.mkDerivation rec {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage = "https://gtkwave.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ thoughtpolice jiegec jleightcap ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      jiegec
+      jleightcap
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

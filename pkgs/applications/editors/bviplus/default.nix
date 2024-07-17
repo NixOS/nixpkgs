@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bviplus";
@@ -21,9 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

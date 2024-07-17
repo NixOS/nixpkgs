@@ -1,30 +1,31 @@
-{ afl-persistent
-, alcotest
-, angstrom
-, base64
-, bigarray-compat
-, bigarray-overlap
-, bigstringaf
-, buildDunePackage
-, cmdliner
-, emile
-, fetchzip
-, fmt
-, fpath
-, hxd
-, ipaddr
-, jsonm
-, ke
-, lib
-, mirage-crypto-rng
-, ocaml
-, pecu
-, prettym
-, ptime
-, rosetta
-, rresult
-, unstrctrd
-, uutf
+{
+  afl-persistent,
+  alcotest,
+  angstrom,
+  base64,
+  bigarray-compat,
+  bigarray-overlap,
+  bigstringaf,
+  buildDunePackage,
+  cmdliner,
+  emile,
+  fetchzip,
+  fmt,
+  fpath,
+  hxd,
+  ipaddr,
+  jsonm,
+  ke,
+  lib,
+  mirage-crypto-rng,
+  ocaml,
+  pecu,
+  prettym,
+  ptime,
+  rosetta,
+  rresult,
+  unstrctrd,
+  uutf,
 }:
 
 buildDunePackage rec {
@@ -38,7 +39,10 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  buildInputs = [ cmdliner hxd ];
+  buildInputs = [
+    cmdliner
+    hxd
+  ];
 
   propagatedBuildInputs = [
     angstrom

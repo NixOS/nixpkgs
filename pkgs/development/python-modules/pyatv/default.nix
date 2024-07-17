@@ -62,9 +62,7 @@ buildPythonPackage rec {
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp

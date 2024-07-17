@@ -1,49 +1,50 @@
-{ alsa-lib
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, gtk4
-, lib
-, libX11
-, libxcb
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, stdenv
-, systemd
-, at-spi2-atk
-, at-spi2-core
-, autoPatchelfHook
-, wrapGAppsHook3
-, qt6
-, proprietaryCodecs ? false
-, vivaldi-ffmpeg-codecs
+{
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  gtk4,
+  lib,
+  libX11,
+  libxcb,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  stdenv,
+  systemd,
+  at-spi2-atk,
+  at-spi2-core,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  qt6,
+  proprietaryCodecs ? false,
+  vivaldi-ffmpeg-codecs,
 }:
 
 let
@@ -119,9 +120,7 @@ stdenv.mkDerivation rec {
     # "Illegal instruction (core dumped)"
     gtk3
     gtk4
-  ] ++ lib.optionals proprietaryCodecs [
-    vivaldi-ffmpeg-codecs
-  ];
+  ] ++ lib.optionals proprietaryCodecs [ vivaldi-ffmpeg-codecs ];
 
   dontWrapQtApps = true;
 

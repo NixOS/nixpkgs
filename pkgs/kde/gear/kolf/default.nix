@@ -1,11 +1,8 @@
-{
-  mkKdeDerivation,
-  _7zz,
-}:
+{ mkKdeDerivation, _7zz }:
 mkKdeDerivation {
   pname = "kolf";
 
-  extraNativeBuildInputs = [_7zz];
+  extraNativeBuildInputs = [ _7zz ];
 
   meta.mainProgram = "kolf";
 }

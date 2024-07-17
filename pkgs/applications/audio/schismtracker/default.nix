@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, alsa-lib
-, python3
-, SDL2
-, libXext
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  alsa-lib,
+  python3,
+  SDL2,
+  libXext,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +21,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hoP/14lbqsuQ37oJDErPoQWWk04UshImmApCFrf5wno=";
   };
 
-  configureFlags = [ "--enable-dependency-tracking" ]
-    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    "--enable-dependency-tracking"
+  ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    python3
+  ];
 
-  buildInputs = [ SDL2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libXext ]
+  buildInputs =
+    [ SDL2 ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      libXext
+    ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   enableParallelBuilding = true;

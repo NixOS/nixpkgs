@@ -42,7 +42,10 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  nativeCheckInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    freezegun
+  ];
 
   disabledTestPaths = [
     # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()

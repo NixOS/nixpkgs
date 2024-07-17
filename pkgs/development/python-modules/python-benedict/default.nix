@@ -39,9 +39,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "boto3" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     python-fsutil

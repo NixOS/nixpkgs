@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, catch2
-, cmake
-, expected-lite
-, fmt
-, gsl-lite
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  catch2,
+  cmake,
+  expected-lite,
+  fmt,
+  gsl-lite,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {

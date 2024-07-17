@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, glibc
-, libsoup
-, cairo
-, gtk3
-, webkitgtk
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  glibc,
+  libsoup,
+  cairo,
+  gtk3,
+  webkitgtk,
+  darwin,
 }:
 
 let
@@ -32,15 +33,33 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xcytn3cV1Tw6O9glihbyCvERuUBA1yioR4PIbL1T53Q=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isLinux [
+      glibc
+      libsoup
+      cairo
+      gtk3
+      webkitgtk
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     mainProgram = "cargo-tauri";
     homepage = "https://tauri.app/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dit7ya happysalada ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      dit7ya
+      happysalada
+    ];
   };
 }

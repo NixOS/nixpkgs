@@ -33,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-zOooibXkk0iA6IYJViz+SIMgHwG0fr4WR3ZjhgIeUjE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     certifi

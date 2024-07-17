@@ -36,7 +36,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "acme" ];
 
-
   build-system = [ setuptools ];
 
   dependencies = [

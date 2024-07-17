@@ -1,37 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, protobuf
-, rdkafka
-, oniguruma
-, zstd
-, rust-jemalloc-sys
-, rust-jemalloc-sys-unprefixed
-, Security
-, libiconv
-, coreutils
-, CoreServices
-, SystemConfiguration
-, tzdata
-, cmake
-, perl
-, git
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  protobuf,
+  rdkafka,
+  oniguruma,
+  zstd,
+  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
+  Security,
+  libiconv,
+  coreutils,
+  CoreServices,
+  SystemConfiguration,
+  tzdata,
+  cmake,
+  perl,
+  git,
   # nix has a problem with the `?` in the feature list
   # enabling kafka will produce a vector with no features at all
-, enableKafka ? false
+  enableKafka ? false,
   # TODO investigate adding various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "component-validation-runner" ]
+  features ? (
+    [
+      "api"
+      "api-client"
+      "enrichment-tables"
+      "sinks"
+      "sources"
+      "sources-dnstap"
+      "transforms"
+      "component-validation-runner"
+    ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
-, nixosTests
-, nix-update-script
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix"
+  ),
+  nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -61,11 +73,30 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    perl
+    git
+    rustPlatform.bindgenHook
+  ];
   buildInputs =
-    [ oniguruma openssl protobuf rdkafka zstd ]
+    [
+      oniguruma
+      openssl
+      protobuf
+      rdkafka
+      zstd
+    ]
     ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [
+      rust-jemalloc-sys
+      Security
+      libiconv
+      coreutils
+      CoreServices
+      SystemConfiguration
+    ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -75,7 +106,7 @@ rustPlatform.buildRustPackage {
   TZDIR = "${tzdata}/share/zoneinfo";
 
   # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING=1;
+  CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
@@ -120,7 +151,9 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     inherit features;
-    tests = { inherit (nixosTests) vector; };
+    tests = {
+      inherit (nixosTests) vector;
+    };
     updateScript = nix-update-script { };
   };
 
@@ -128,7 +161,10 @@ rustPlatform.buildRustPackage {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ thoughtpolice happysalada ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      happysalada
+    ];
     platforms = with platforms; all;
     mainProgram = "vector";
   };

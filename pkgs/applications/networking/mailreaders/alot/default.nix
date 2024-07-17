@@ -1,23 +1,21 @@
-{ lib
-, python311
-, fetchFromGitHub
-, file
-, gnupg
-, gawk
-, notmuch
-, procps
-, withManpage ? false
+{
+  lib,
+  python311,
+  fetchFromGitHub,
+  file,
+  gnupg,
+  gawk,
+  notmuch,
+  procps,
+  withManpage ? false,
 }:
 
-with python311.pkgs; buildPythonApplication rec {
+with python311.pkgs;
+buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals withManpage [
-    "man"
-  ];
+  outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
 
   disabled = !isPy3k;
 
@@ -56,9 +54,7 @@ with python311.pkgs; buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postBuild = lib.optionalString withManpage [
-    "make -C docs man"
-  ];
+  postBuild = lib.optionalString withManpage [ "make -C docs man" ];
 
   disabledTests = [
     # Some twisted tests need internet access

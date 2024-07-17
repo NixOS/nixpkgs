@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  testers,
 
-# for passthru.tests
-, gtk3
-, gtk4
-, sassc
+  # for passthru.tests
+  gtk3,
+  gtk4,
+  sassc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = licenses.mit;
-    maintainers = with maintainers; [ codyopel offline ];
+    maintainers = with maintainers; [
+      codyopel
+      offline
+    ];
     pkgConfigModules = [ "libsass" ];
     platforms = platforms.unix;
   };

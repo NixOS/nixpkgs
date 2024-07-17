@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, ninja
-, pkg-config
-, meson
-, libevent
-, curl
-, spdlog
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  ninja,
+  pkg-config,
+  meson,
+  libevent,
+  curl,
+  spdlog,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,17 @@ stdenv.mkDerivation rec {
     substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
   '';
 
-  nativeBuildInputs = [ ninja pkg-config meson ];
+  nativeBuildInputs = [
+    ninja
+    pkg-config
+    meson
+  ];
 
-  buildInputs = [ libevent curl spdlog ];
+  buildInputs = [
+    libevent
+    curl
+    spdlog
+  ];
 
   meta = with lib; {
     description = "Simple async wrapper around CURL for C++";

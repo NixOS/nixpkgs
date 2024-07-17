@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3Packages
-, gettext
-, git
-, qt5
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gettext,
+  git,
+  qt5,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-sm/a790PiSqGYbftxvLiLMifKbMyi3a5Rvlhr9plyrU=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    qt5.qtwayland
-  ];
+  buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
 
   propagatedBuildInputs = with python3Packages; [
     setuptools
@@ -47,17 +46,13 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "cola/inotify.py"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "cola/inotify.py" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";

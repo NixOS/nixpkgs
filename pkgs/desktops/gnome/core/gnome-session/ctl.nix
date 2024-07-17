@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, glib
-, systemd
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

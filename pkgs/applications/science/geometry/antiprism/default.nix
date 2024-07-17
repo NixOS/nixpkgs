@@ -1,10 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libX11
-, libGL
-, libGLU
-, libglut }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libX11,
+  libGL,
+  libGLU,
+  libglut,
+}:
 
 stdenv.mkDerivation rec {
   pname = "antiprism";
@@ -18,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libX11 libGLU libGL libglut ];
+  buildInputs = [
+    libX11
+    libGLU
+    libGL
+    libglut
+  ];
 
   meta = with lib; {
     homepage = "https://www.antiprism.com";

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, meson
-, ninja
-, pkg-config
-, cairo
-, glib
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  cairo,
+  glib,
 }:
 
 stdenv.mkDerivation rec {

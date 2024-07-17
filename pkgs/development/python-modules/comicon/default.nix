@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-VP4n2pWXHge2gJ67O2nErJ30gI0vaAMn0VOpX8sLkfs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   pythonRelaxDeps = [ "pypdf" ];
 

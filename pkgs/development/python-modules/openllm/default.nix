@@ -53,7 +53,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/openllm-python";
 
-
   pythonRemoveDeps = [
     # remove cuda-python as it has an unfree license
     "cuda-python"

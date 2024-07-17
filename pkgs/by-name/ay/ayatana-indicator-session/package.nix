@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, cmake
-, dbus
-, glib
-, gnome
-, gsettings-desktop-schemas
-, gtest
-, intltool
-, libayatana-common
-, librda
-, lomiri
-, mate
-, pkg-config
-, systemd
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  dbus,
+  glib,
+  gnome,
+  gsettings-desktop-schemas,
+  gtest,
+  intltool,
+  libayatana-common,
+  librda,
+  lomiri,
+  mate,
+  pkg-config,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,13 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     mate.mate-settings-daemon
   ];
 
-  nativeCheckInputs = [
-    dbus
-  ];
+  nativeCheckInputs = [ dbus ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)

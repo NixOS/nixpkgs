@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,26 +16,18 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "wyoming"
-  ];
+  pythonRelaxDeps = [ "wyoming" ];
 
-  pythonRemoveDeps = [
-    "tflite-runtime-nightly"
-  ];
+  pythonRemoveDeps = [ "tflite-runtime-nightly" ];
 
   propagatedBuildInputs = with python3Packages; [
     tensorflow
     wyoming
   ];
 
-  pythonImportsCheck = [
-    "wyoming_openwakeword"
-  ];
+  pythonImportsCheck = [ "wyoming_openwakeword" ];
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${version}/CHANGELOG.md";

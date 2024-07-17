@@ -1,12 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex
-, asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
-, libmnl, libnftnl, libpcap
-, gmp, jansson
-, autoreconfHook
-, withDebugSymbols ? false
-, withCli ? true, libedit
-, withXtables ? true, iptables
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bison,
+  flex,
+  asciidoc,
+  libxslt,
+  findXMLCatalogs,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libmnl,
+  libnftnl,
+  libpcap,
+  gmp,
+  jansson,
+  autoreconfHook,
+  withDebugSymbols ? false,
+  withCli ? true,
+  libedit,
+  withXtables ? true,
+  iptables,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,26 +35,37 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config bison flex
-    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
+    pkg-config
+    bison
+    flex
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    findXMLCatalogs
+    libxslt
   ];
 
   buildInputs = [
-    libmnl libnftnl libpcap
-    gmp jansson
-  ] ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables;
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+  ] ++ lib.optional withCli libedit ++ lib.optional withXtables iptables;
 
-  configureFlags = [
-    "--with-json"
-    (lib.withFeatureAs withCli "cli" "editline")
-  ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional withXtables "--with-xtables";
+  configureFlags =
+    [
+      "--with-json"
+      (lib.withFeatureAs withCli "cli" "editline")
+    ]
+    ++ lib.optional (!withDebugSymbols) "--disable-debug" ++ lib.optional withXtables "--with-xtables";
 
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
     lxd-nftables = nixosTests.lxd.nftables;
-    nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
+    nat = {
+      inherit (nixosTests.nat.nftables) firewall standalone;
+    };
   };
 
   meta = with lib; {

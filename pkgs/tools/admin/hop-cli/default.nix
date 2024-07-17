@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,15 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-yZKTVF810v27CnjwocEE2KYtrXggdEFPbKH5/4MMMhQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices Security SystemConfiguration
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 

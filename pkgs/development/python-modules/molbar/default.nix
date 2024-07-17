@@ -1,22 +1,23 @@
-{ buildPythonPackage
-, python
-, lib
-, gfortran
-, fetchgit
-, cmake
-, ninja
-, networkx
-, numpy
-, pandas
-, scipy
-, tqdm
-, joblib
-, numba
-, ase
-, scikit-build
-, dscribe
-, pyyaml
-, pytestCheckHook
+{
+  buildPythonPackage,
+  python,
+  lib,
+  gfortran,
+  fetchgit,
+  cmake,
+  ninja,
+  networkx,
+  numpy,
+  pandas,
+  scipy,
+  tqdm,
+  joblib,
+  numba,
+  ase,
+  scikit-build,
+  dscribe,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  nativeBuildInputs = [
-    gfortran
-  ];
+  nativeBuildInputs = [ gfortran ];
 
   pythonRelaxDeps = [ "networkx" ];
 

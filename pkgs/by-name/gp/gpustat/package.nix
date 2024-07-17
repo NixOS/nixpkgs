@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, fontconfig
-, libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, cmake
-, libxkbcommon
-, wayland
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  fontconfig,
+  libGL,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  cmake,
+  libxkbcommon,
+  wayland,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {

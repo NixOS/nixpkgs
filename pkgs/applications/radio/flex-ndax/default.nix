@@ -1,4 +1,10 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, libpulseaudio }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpulseaudio,
+}:
 
 buildGoModule rec {
   pname = "flex-ndax";

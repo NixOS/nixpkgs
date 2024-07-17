@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, installShellFiles
-, scdoc
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  installShellFiles,
+  scdoc,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,9 +18,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ixkIDJbysa3TOJiNmAG2SuJwCv5MaX6nCtUnS4901rg=";
   };
 
-  pythonRelaxDeps = [
-    "m3u8"
-  ];
+  pythonRelaxDeps = [ "m3u8" ];
 
   nativeBuildInputs = [
     python3Packages.setuptools
@@ -34,9 +33,7 @@ python3Packages.buildPythonApplication rec {
     m3u8
   ];
 
-  nativeCheckInputs = [
-    python3Packages.pytestCheckHook
-  ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   disabledTestPaths = [
     # Requires network access

@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, perlPackages
-, perl
-, installShellFiles
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  perlPackages,
+  perl,
+  installShellFiles,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenvNoCC.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    perlPackages.XMLTokeParser
-  ];
+  buildInputs = [ perlPackages.XMLTokeParser ];
 
   dontBuild = true;
 

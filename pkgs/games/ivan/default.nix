@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib, libpng
-, pcre, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  alsa-lib,
+  libpng,
+  pcre,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -13,14 +24,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5Ijy28LLx1TGnZE6ZNQXPYfvW2KprF+91fKx2MzLEms=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ SDL2 SDL2_mixer alsa-lib libpng pcre ];
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    alsa-lib
+    libpng
+    pcre
+  ];
 
-  hardeningDisable = ["all"];
+  hardeningDisable = [ "all" ];
 
   # Enable wizard mode
-  cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];
+  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DWIZARD" ];
 
   # Help CMake find SDL_mixer.h
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_mixer}/include/SDL2";
@@ -32,7 +52,11 @@ stdenv.mkDerivation rec {
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;
-    categories = [ "Game" "AdventureGame" "RolePlaying" ];
+    categories = [
+      "Game"
+      "AdventureGame"
+      "RolePlaying"
+    ];
     comment = meta.description;
   };
 
@@ -64,7 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     mainProgram = "ivan";
   };
 }

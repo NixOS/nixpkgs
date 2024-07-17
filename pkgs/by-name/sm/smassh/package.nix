@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, smassh
-, python3
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  smassh,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,13 +18,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-QE7TFf/5hdd2W2EsVbn3gV/FundhJNxHqv0JWV5dYDc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "textual"
-  ];
+  pythonRelaxDeps = [ "textual" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     textual

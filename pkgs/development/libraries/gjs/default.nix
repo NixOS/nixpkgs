@@ -1,40 +1,50 @@
-{ fetchurl
-, lib
-, stdenv
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, atk
-, gobject-introspection
-, spidermonkey_115
-, pango
-, cairo
-, readline
-, libsysprof-capture
-, glib
-, libxml2
-, dbus
-, gdk-pixbuf
-, harfbuzz
-, makeWrapper
-, which
-, xvfb-run
-, nixosTests
-, installTests ? true
+{
+  fetchurl,
+  lib,
+  stdenv,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gnome,
+  gtk3,
+  atk,
+  gobject-introspection,
+  spidermonkey_115,
+  pango,
+  cairo,
+  readline,
+  libsysprof-capture,
+  glib,
+  libxml2,
+  dbus,
+  gdk-pixbuf,
+  harfbuzz,
+  makeWrapper,
+  which,
+  xvfb-run,
+  nixosTests,
+  installTests ? true,
 }:
 
 let
   testDeps = [
-    gtk3 atk pango.out gdk-pixbuf harfbuzz
+    gtk3
+    atk
+    pango.out
+    gdk-pixbuf
+    harfbuzz
   ];
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
   version = "1.80.2";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
@@ -62,9 +72,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libxml2 # for xml-stripblanks
     dbus # for dbus-run-session
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     cairo
@@ -73,29 +81,25 @@ in stdenv.mkDerivation (finalAttrs: {
     spidermonkey_115
   ];
 
-  nativeCheckInputs = [
-    xvfb-run
-  ] ++ testDeps;
+  nativeCheckInputs = [ xvfb-run ] ++ testDeps;
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
-    "-Dprofiler=disabled"
-  ];
+  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [ "-Dprofiler=disabled" ];
 
   doCheck = !stdenv.isDarwin;
 
-  postPatch = ''
-    patchShebangs build/choose-tests-locale.sh
-    substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace installed-tests/js/meson.build \
-      --replace "'Encoding'," "#'Encoding',"
-  '';
+  postPatch =
+    ''
+      patchShebangs build/choose-tests-locale.sh
+      substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace installed-tests/js/meson.build \
+        --replace "'Encoding'," "#'Encoding',"
+    '';
 
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute

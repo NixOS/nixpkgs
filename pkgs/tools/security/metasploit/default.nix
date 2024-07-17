@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, ruby
-, bundlerEnv
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ruby,
+  bundlerEnv,
+  python3,
 }:
 
 let
@@ -13,7 +14,8 @@ let
     name = "metasploit-bundler-env";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "metasploit-framework";
   version = "6.4.17";
 
@@ -24,13 +26,9 @@ in stdenv.mkDerivation rec {
     hash = "sha256-OpEG6HICBFOyCH6Bfz5OfH3YjKtLRPyFlgRI29lmuDo=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    (python3.withPackages (ps: [ ps.requests ]))
-  ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
 
   dontPatchELF = true; # stay away from exploit executables
 
@@ -64,7 +62,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://docs.metasploit.com/";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab makefu ];
+    maintainers = with maintainers; [
+      fab
+      makefu
+    ];
     mainProgram = "msfconsole";
   };
 }

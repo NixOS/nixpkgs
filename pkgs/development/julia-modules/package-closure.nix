@@ -1,12 +1,13 @@
-{ lib
-, julia
-, python3
-, runCommand
+{
+  lib,
+  julia,
+  python3,
+  runCommand,
 
-, augmentedRegistry
-, packageNames
-, packageOverrides
-, packageImplications
+  augmentedRegistry,
+  packageNames,
+  packageOverrides,
+  packageImplications,
 }:
 
 let
@@ -38,7 +39,7 @@ let
     foreach(pkg -> ctx.env.project.deps[pkg.name] = pkg.uuid, pkgs)
 
     pkgs, deps_map = _resolve(ctx, pkgs, PRESERVE_NONE)
-'';
+  '';
 
   resolveCode1_8 = ''
     import Pkg.API: handle_package_input!
@@ -49,7 +50,11 @@ let
     foreach(handle_package_input!, pkgs)
 
     # The handle_package_input! call above clears pkg.path, so we have to apply package overrides after
-    overrides = Dict{String, String}(${builtins.concatStringsSep ", " (lib.mapAttrsToList (name: path: ''"${name}" => "${path}"'') packageOverrides)})
+    overrides = Dict{String, String}(${
+      builtins.concatStringsSep ", " (
+        lib.mapAttrsToList (name: path: ''"${name}" => "${path}"'') packageOverrides
+      )
+    })
     println("Package overrides: ")
     println(overrides)
     for pkg in pkgs
@@ -141,7 +146,7 @@ let
 
     import Pkg.Types: Context, PackageSpec
 
-    input = ${lib.generators.toJSON {} packageNames}
+    input = ${lib.generators.toJSON { } packageNames}
 
     if isfile("extra_package_names.txt")
       append!(input, readlines("extra_package_names.txt"))
@@ -173,25 +178,34 @@ let
   '';
 in
 
-runCommand "julia-package-closure.yml" { buildInputs = [julia (python3.withPackages (ps: with ps; [pyyaml]))]; } ''
-  mkdir home
-  export HOME=$(pwd)/home
+runCommand "julia-package-closure.yml"
+  {
+    buildInputs = [
+      julia
+      (python3.withPackages (ps: with ps; [ pyyaml ]))
+    ];
+  }
+  ''
+    mkdir home
+    export HOME=$(pwd)/home
 
-  echo "Resolving Julia packages with the following inputs"
-  echo "Julia: ${julia}"
-  echo "Registry: ${augmentedRegistry}"
+    echo "Resolving Julia packages with the following inputs"
+    echo "Julia: ${julia}"
+    echo "Registry: ${augmentedRegistry}"
 
-  # Prevent a warning where Julia tries to download package server info
-  export JULIA_PKG_SERVER=""
+    # Prevent a warning where Julia tries to download package server info
+    export JULIA_PKG_SERVER=""
 
-  julia -e '${juliaExpression packageNames}';
-
-  # See if we need to add any extra package names based on the closure
-  # and the packageImplications
-  python ${./python}/find_package_implications.py "$out" '${lib.generators.toJSON {} packageImplications}' extra_package_names.txt
-
-  if [ -f extra_package_names.txt ]; then
-    echo "Re-resolving with additional package names"
     julia -e '${juliaExpression packageNames}';
-  fi
-''
+
+    # See if we need to add any extra package names based on the closure
+    # and the packageImplications
+    python ${./python}/find_package_implications.py "$out" '${
+      lib.generators.toJSON { } packageImplications
+    }' extra_package_names.txt
+
+    if [ -f extra_package_names.txt ]; then
+      echo "Re-resolving with additional package names"
+      julia -e '${juliaExpression packageNames}';
+    fi
+  ''

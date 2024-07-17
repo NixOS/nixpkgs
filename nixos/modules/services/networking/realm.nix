@@ -1,14 +1,21 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.realm;
   configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "config.json" cfg.config;
   inherit (lib)
-    mkEnableOption mkPackageOption mkOption mkIf types getExe;
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkIf
+    types
+    getExe
+    ;
 in
 {
 
@@ -19,9 +26,7 @@ in
       enable = mkEnableOption "A simple, high performance relay server written in rust";
       package = mkPackageOption pkgs "realm" { };
       config = mkOption {
-        type = types.submodule {
-          freeformType = configFormat.type;
-        };
+        type = types.submodule { freeformType = configFormat.type; };
         default = { };
         description = ''
           The realm configuration, see <https://github.com/zhboner/realm#overview> for documentation.
@@ -42,7 +47,10 @@ in
         ProtectProc = "invisible";
         ProtectKernelTunables = true;
         ExecStart = "${getExe cfg.package} --config ${configFile}";
-        AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_BIND_SERVICE"
+        ];
       };
       wantedBy = [ "multi-user.target" ];
     };

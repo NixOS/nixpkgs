@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,9 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XaPtMW9INv/wzMXvlyXgE3VfFJCY/5R/HFGhV3ZKvGs=";
   };
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

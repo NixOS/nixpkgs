@@ -21,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-fRsEDsBkgPBc/2tF6nqT4JyJQt+GT7DQHd62fDI8+ow=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   pythonRelaxDeps = [ "dparse" ];
 

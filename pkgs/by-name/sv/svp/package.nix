@@ -1,25 +1,26 @@
-{ stdenv
-, buildFHSEnv
-, writeShellScriptBin
-, fetchurl
-, callPackage
-, makeDesktopItem
-, copyDesktopItems
-, ffmpeg
-, glibc
-, jq
-, lib
-, libmediainfo
-, libsForQt5
-, libusb1
-, ocl-icd
-, p7zip
-, patchelf
-, socat
-, vapoursynth
-, xdg-utils
-, xorg
-, zenity
+{
+  stdenv,
+  buildFHSEnv,
+  writeShellScriptBin,
+  fetchurl,
+  callPackage,
+  makeDesktopItem,
+  copyDesktopItems,
+  ffmpeg,
+  glibc,
+  jq,
+  lib,
+  libmediainfo,
+  libsForQt5,
+  libusb1,
+  ocl-icd,
+  p7zip,
+  patchelf,
+  socat,
+  vapoursynth,
+  xdg-utils,
+  xorg,
+  zenity,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -66,7 +67,10 @@ let
       hash = "sha256-dY9uQ9jzTHiN2XSnOrXtHD11IIJW6t9BUzGGQFfZ+yg=";
     };
 
-    nativeBuildInputs = [ p7zip patchelf ];
+    nativeBuildInputs = [
+      p7zip
+      patchelf
+    ];
     dontFixup = true;
 
     unpackPhase = ''
@@ -129,8 +133,18 @@ stdenv.mkDerivation {
       desktopName = "SVP 4 Linux";
       genericName = "Real time frame interpolation";
       icon = "svp-manager4";
-      categories = [ "AudioVideo" "Player" "Video" ];
-      mimeTypes = [ "video/x-msvideo" "video/x-matroska" "video/webm" "video/mpeg" "video/mp4" ];
+      categories = [
+        "AudioVideo"
+        "Player"
+        "Video"
+      ];
+      mimeTypes = [
+        "video/x-msvideo"
+        "video/x-matroska"
+        "video/webm"
+        "video/mpeg"
+        "video/mp4"
+      ];
       terminal = false;
       startupNotify = true;
     })

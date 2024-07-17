@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, substituteAll
-, cargo
-, desktop-file-utils
-, git
-, itstool
-, meson
-, ninja
-, pkg-config
-, python3
-, rustc
-, wrapGAppsHook4
-, borgbackup
-, gtk4
-, libadwaita
-, libsecret
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  substituteAll,
+  cargo,
+  desktop-file-utils,
+  git,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustc,
+  wrapGAppsHook4,
+  borgbackup,
+  gtk4,
+  libadwaita,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {

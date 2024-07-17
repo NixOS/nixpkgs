@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
@@ -10,9 +14,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ZmQnyZx9YlIIxMMdZ0U2zb+QANfcwrtG7iR1LpgzmBQ=";
   };
 
-  build-system = with python3Packages; [
-    cython
-  ];
+  build-system = with python3Packages; [ cython ];
 
   propagatedBuildInputs = with python3Packages; [
     aenum

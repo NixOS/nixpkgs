@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook3
-, desktop-file-utils
-, discount
-, glib
-, gtk3
-, gtksourceview4
-, gtkspell3
-, json-glib
-, libarchive
-, libgee
-, libhandy
-, libsecret
-, libxml2
-, link-grammar
-, webkitgtk_4_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  discount,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  json-glib,
+  libarchive,
+  libgee,
+  libhandy,
+  libsecret,
+  libxml2,
+  link-grammar,
+  webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation rec {

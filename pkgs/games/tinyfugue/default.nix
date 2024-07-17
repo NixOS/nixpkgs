@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "12fra2fdwqj6ilv9wdkc33rkj343rdcf5jyff4yiwywlrwaa2l1p";
   };
 
-  patches = [
-    ./001-darwin-fixes.patch
-  ];
+  patches = [ ./001-darwin-fixes.patch ];
 
   configureFlags = optional (!sslSupport) "--disable-ssl";
 

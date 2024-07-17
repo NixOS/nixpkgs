@@ -1,19 +1,34 @@
-{ lib, stdenv, rpmextract, ncurses5, patchelf, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  rpmextract,
+  ncurses5,
+  patchelf,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "megacli";
   version = "8.07.14";
 
   src = fetchurl {
-    url = "https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/${builtins.replaceStrings ["."] ["-"] version}_MegaCLI.zip";
+    url = "https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }_MegaCLI.zip";
     sha256 = "1sdn58fbmd3fj4nzbajq3gcyw71ilgdh45r5p4sa6xmb7np55cfr";
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [rpmextract ncurses5];
-  libPath =
-    lib.makeLibraryPath
-       [ stdenv.cc.cc stdenv.cc.libc ncurses5 ];
+  buildInputs = [
+    rpmextract
+    ncurses5
+  ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    ncurses5
+  ];
 
   buildCommand = ''
     unzip ${src}

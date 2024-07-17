@@ -1,13 +1,14 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeBinaryWrapper
-, makeDesktopItem
-, copyDesktopItems
-, nodejs_18
-, electron
-, python3
-, nix-update-script
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nodejs_18,
+  electron,
+  python3,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -35,9 +36,7 @@ buildNpmPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    python3.pkgs.python-rtmidi
-  ];
+  buildInputs = [ python3.pkgs.python-rtmidi ];
 
   doInstallCheck = true;
 
@@ -77,7 +76,12 @@ buildNpmPackage rec {
       icon = "open-stage-control";
       desktopName = "Open Stage Control";
       comment = meta.description;
-      categories = [ "Network" "Audio" "AudioVideo" "Midi" ];
+      categories = [
+        "Network"
+        "Audio"
+        "AudioVideo"
+        "Midi"
+      ];
       startupWMClass = "open-stage-control";
     })
   ];

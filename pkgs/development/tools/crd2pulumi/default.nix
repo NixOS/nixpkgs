@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "crd2pulumi";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-k6YJhYY2P/D8Vbsp5PExKrcGXBv2GsIkqb3m6KeYm6g=";
 
-  ldflags = [ "-s" "-w" "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}"
+  ];
 
   subPackages = [ "." ];
 

@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, callPackage
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,12 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E+BOlsCJtOScr3B5GSv1WM6rFv6cFYvm/iJ893fsmXM=";
   };
 
-  propagatedBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   passthru = {
-    hook = callPackage ./hook.nix {
-      teensy-cmake-macros = finalAttrs.finalPackage;
-    };
+    hook = callPackage ./hook.nix { teensy-cmake-macros = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

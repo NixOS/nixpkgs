@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, boost, nixosTests
-, openssl, systemd, lua, luajit, protobuf
-, libsodium
-, curl
-, rustPlatform, cargo, rustc
-, enableProtoBuf ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  boost,
+  nixosTests,
+  openssl,
+  systemd,
+  lua,
+  luajit,
+  protobuf,
+  libsodium,
+  curl,
+  rustPlatform,
+  cargo,
+  rustc,
+  enableProtoBuf ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,8 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    boost openssl systemd
-    lua luajit
+    boost
+    openssl
+    systemd
+    lua
+    luajit
     libsodium
     curl
   ] ++ lib.optional enableProtoBuf protobuf;
@@ -57,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     badPlatforms = [
-      "i686-linux"  # a 64-bit time_t is needed
+      "i686-linux" # a 64-bit time_t is needed
     ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ rnhmjoj ];

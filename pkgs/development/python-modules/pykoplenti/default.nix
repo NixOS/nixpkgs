@@ -27,9 +27,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "pydantic" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -1,4 +1,11 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+}:
 
 stdenv.mkDerivation rec {
   pname = "super-productivity";
@@ -10,9 +17,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.AppImage";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
   dontUnpack = true;
   dontConfigure = true;

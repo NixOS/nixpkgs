@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, nixosTests
-, testers
-, cmake
-, cmake-extras
-, coreutils
-, dbus
-, doxygen
-, gettext
-, glib
-, gmenuharness
-, gtest
-, intltool
-, libsecret
-, libqofono
-, libqtdbusmock
-, libqtdbustest
-, lomiri-api
-, lomiri-url-dispatcher
-, networkmanager
-, ofono
-, pkg-config
-, python3
-, qtdeclarative
-, qtbase
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  testers,
+  cmake,
+  cmake-extras,
+  coreutils,
+  dbus,
+  doxygen,
+  gettext,
+  glib,
+  gmenuharness,
+  gtest,
+  intltool,
+  libsecret,
+  libqofono,
+  libqtdbusmock,
+  libqtdbustest,
+  lomiri-api,
+  lomiri-url-dispatcher,
+  networkmanager,
+  ofono,
+  pkg-config,
+  python3,
+  qtdeclarative,
+  qtbase,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,11 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
   ];
 
-  nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
-  ];
+  nativeCheckInputs = [ (python3.withPackages (ps: with ps; [ python-dbusmock ])) ];
 
   checkInputs = [
     gmenuharness
@@ -109,9 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [
-      "lomiri-indicator-network"
-    ];
+    ayatana-indicators = [ "lomiri-indicator-network" ];
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
@@ -126,8 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "lomiri-connectivity-qt1"
-    ];
+    pkgConfigModules = [ "lomiri-connectivity-qt1" ];
   };
 })

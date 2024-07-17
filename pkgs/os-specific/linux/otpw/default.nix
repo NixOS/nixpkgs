@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, coreutils
-, fetchurl
-, libxcrypt
-, pam
-, procps
-, unixtools
-, util-linux
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchurl,
+  libxcrypt,
+  pam,
+  procps,
+  unixtools,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,7 @@ stdenv.mkDerivation rec {
     cp *.8 $out/share/man/man8
   '';
 
-  hardeningDisable = [
-    "stackprotector"
-  ];
+  hardeningDisable = [ "stackprotector" ];
 
   meta = with lib; {
     description = "One-time password login package";

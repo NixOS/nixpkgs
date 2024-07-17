@@ -15,5 +15,5 @@ mkKdeDerivation {
     })
   ];
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, ninja
-, cairo
-, fribidi
-, libGL
-, libdatrie
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libxkbcommon
-, pango
-, pcre
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libXdmcp
-, debug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  ninja,
+  cairo,
+  fribidi,
+  libGL,
+  libdatrie,
+  libjpeg,
+  libselinux,
+  libsepol,
+  libthai,
+  libxkbcommon,
+  pango,
+  pcre,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libXdmcp,
+  debug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";

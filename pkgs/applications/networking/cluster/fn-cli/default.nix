@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  docker,
+}:
 
 buildGoModule rec {
   pname = "fn";
@@ -13,11 +18,9 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages = ["."];
+  subPackages = [ "." ];
 
-  buildInputs = [
-    docker
-  ];
+  buildInputs = [ docker ];
 
   preBuild = ''
     export HOME=$TMPDIR

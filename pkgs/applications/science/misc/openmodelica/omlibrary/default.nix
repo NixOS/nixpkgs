@@ -1,12 +1,20 @@
-{ lib
-, stdenv
-, fetchgit
-, bash
-, openmodelica
-, mkOpenModelicaDerivation
+{
+  lib,
+  stdenv,
+  fetchgit,
+  bash,
+  openmodelica,
+  mkOpenModelicaDerivation,
 }:
 let
-  fakegit = import ./fakegit.nix { inherit lib stdenv fetchgit bash; };
+  fakegit = import ./fakegit.nix {
+    inherit
+      lib
+      stdenv
+      fetchgit
+      bash
+      ;
+  };
 in
 mkOpenModelicaDerivation {
   pname = "omlibrary";
@@ -28,7 +36,10 @@ mkOpenModelicaDerivation {
 including Modelica Standard Library";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ balodja smironov ];
+    maintainers = with maintainers; [
+      balodja
+      smironov
+    ];
     platforms = platforms.linux;
   };
 }

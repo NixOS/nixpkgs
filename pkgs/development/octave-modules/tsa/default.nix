@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, nan # > 3.0.0
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  nan, # > 3.0.0
 }:
 
 buildOctavePackage rec {
@@ -13,9 +14,7 @@ buildOctavePackage rec {
     sha256 = "1pbxq77xc7pn0ki6rpijlq9v7inn0hn2adkx1skgwffl7pivrwsl";
   };
 
-  requiredOctavePackages = [
-    nan
-  ];
+  requiredOctavePackages = [ nan ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/tsa/index.html";

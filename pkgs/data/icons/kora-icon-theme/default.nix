@@ -1,27 +1,26 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, adwaita-icon-theme
-, breeze-icons
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  adwaita-icon-theme,
+  breeze-icons,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec {
   pname = "kora-icon-theme";
   version = "1.6.1";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
     sha256 = "sha256-cWfQiJeyH/bkvASoe2nl4efHQdMpYFh587d5yycs31k=";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     adwaita-icon-theme
@@ -45,9 +44,7 @@ stdenvNoCC.mkDerivation rec  {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "SVG icon theme in four variants";

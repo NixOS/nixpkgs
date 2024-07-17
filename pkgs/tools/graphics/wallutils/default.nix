@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libX11
-, libXcursor
-, libXmu
-, libXpm
-, libheif
-, pkg-config
-, wayland
-, xbitmaps
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libX11,
+  libXcursor,
+  libXmu,
+  libXpm,
+  libheif,
+  pkg-config,
+  wayland,
+  xbitmaps,
 }:
 
 buildGoModule rec {
@@ -24,17 +25,13 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  patches = [
-    ./000-add-nixos-dirs-to-default-wallpapers.patch
-  ];
+  patches = [ ./000-add-nixos-dirs-to-default-wallpapers.patch ];
 
   excludedPackages = [
     "./pkg/event/cmd" # Development tools
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libX11
@@ -46,7 +43,10 @@ buildGoModule rec {
     xbitmaps
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)

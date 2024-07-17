@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitMinimal
-, cacert
-, yarn
-, makeBinaryWrapper
-, nodejs
-, python311
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitMinimal,
+  cacert,
+  yarn,
+  makeBinaryWrapper,
+  nodejs,
+  python311,
+  nixosTests,
 }:
 
 let
@@ -45,7 +46,8 @@ let
     outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hedgedoc";
   inherit version src;
 
@@ -55,9 +57,7 @@ in stdenv.mkDerivation {
     python311 # needed for sqlite node-gyp
   ];
 
-  buildInputs = [
-    nodejs
-  ];
+  buildInputs = [ nodejs ];
 
   dontConfigure = true;
 
@@ -107,7 +107,9 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit offlineCache;
-    tests = { inherit (nixosTests) hedgedoc; };
+    tests = {
+      inherit (nixosTests) hedgedoc;
+    };
   };
 
   meta = {

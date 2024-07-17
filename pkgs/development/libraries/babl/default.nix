@@ -1,20 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gi-docgen
-, gobject-introspection
-, lcms2
-, vala
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gi-docgen,
+  gobject-introspection,
+  lcms2,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
   version = "0.1.108";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
@@ -35,13 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     vala
   ];
 
-  buildInputs = [
-    lcms2
-  ];
+  buildInputs = [ lcms2 ];
 
-  mesonFlags = [
-    "-Dprefix-dev=${placeholder "dev"}"
-  ];
+  mesonFlags = [ "-Dprefix-dev=${placeholder "dev"}" ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -52,7 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
-    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${lib.replaceStrings [ "." ] [ "_" ] version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/NEWS";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

@@ -1,4 +1,9 @@
-{ buildGoModule, lib, fetchFromGitHub, nixosTests }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "frp";
@@ -15,7 +20,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/frpc" "cmd/frps" ];
+  subPackages = [
+    "cmd/frpc"
+    "cmd/frps"
+  ];
 
   passthru.tests = {
     frp = nixosTests.frp;

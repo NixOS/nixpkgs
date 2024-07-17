@@ -1,15 +1,16 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, tinycc
-, gnumake
-, gnupatch
-, gnused
-, gnugrep
-, gnutar
-, gzip
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  tinycc,
+  gnumake,
+  gnupatch,
+  gnused,
+  gnugrep,
+  gnutar,
+  gzip,
 }:
 
 let
@@ -66,51 +67,53 @@ let
     })
   ];
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version meta;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-    gnused
-    gnugrep
-    gnutar
-    gzip
-  ];
-} ''
-  # Unpack
-  tar xzf ${src}
-  cd musl-${version}
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+      gnused
+      gnugrep
+      gnutar
+      gzip
+    ];
+  }
+  ''
+    # Unpack
+    tar xzf ${src}
+    cd musl-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-  # tcc does not support complex types
-  rm -rf src/complex
-  # Configure fails without this
-  mkdir -p /dev
-  # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
-  sed -i 's|/bin/sh|${bash}/bin/bash|' \
-    tools/*.sh
-  chmod 755 tools/*.sh
-  # patch popen/system to search in PATH instead of hardcoding /bin/sh
-  sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
-    src/stdio/popen.c src/process/system.c
-  sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
-    src/misc/wordexp.c
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    # tcc does not support complex types
+    rm -rf src/complex
+    # Configure fails without this
+    mkdir -p /dev
+    # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
+    sed -i 's|/bin/sh|${bash}/bin/bash|' \
+      tools/*.sh
+    chmod 755 tools/*.sh
+    # patch popen/system to search in PATH instead of hardcoding /bin/sh
+    sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
+      src/stdio/popen.c src/process/system.c
+    sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
+      src/misc/wordexp.c
 
-  # Configure
-  bash ./configure \
-    --prefix=$out \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --disable-shared \
-    CC=tcc
+    # Configure
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --disable-shared \
+      CC=tcc
 
-  # Build
-  make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
+    # Build
+    make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
 
-  # Install
-  make install
-  cp ${tinycc.libs}/lib/libtcc1.a $out/lib
-''
+    # Install
+    make install
+    cp ${tinycc.libs}/lib/libtcc1.a $out/lib
+  ''

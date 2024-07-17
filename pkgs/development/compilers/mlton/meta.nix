@@ -11,5 +11,9 @@
 
   homepage = "http://mlton.org/";
   license = "bsd";
-  platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin"];
+  platforms = [
+    "i686-linux"
+    "x86_64-linux"
+    "x86_64-darwin"
+  ];
 }

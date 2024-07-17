@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, fuzzel
-, additionalPrograms ? [ ]
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  fuzzel,
+  additionalPrograms ? [ ],
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-DS56H2XjEgdXC9TKLjwyfLpFHB9dUThhr8pNFEJuAZE=";
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postFixup = ''
     wrapProgram $out/bin/raffi \

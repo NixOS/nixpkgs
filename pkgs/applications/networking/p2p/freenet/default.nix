@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, jdk, jre, gradle, bash, coreutils
-, substituteAll, nixosTests, fetchpatch, writeText }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  jdk,
+  jre,
+  gradle,
+  bash,
+  coreutils,
+  substituteAll,
+  nixosTests,
+  fetchpatch,
+  writeText,
+}:
 
 let
   version = "01497";
@@ -23,7 +36,8 @@ let
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freenet";
   inherit version patches;
 
@@ -38,11 +52,19 @@ in stdenv.mkDerivation rec {
     rm gradle/verification-{keyring.keys,metadata.xml}
   '';
 
-  nativeBuildInputs = [ gradle jdk ];
+  nativeBuildInputs = [
+    gradle
+    jdk
+  ];
 
   wrapper = substituteAll {
     src = ./freenetWrapper;
-    inherit bash coreutils jre seednodes;
+    inherit
+      bash
+      coreutils
+      jre
+      seednodes
+      ;
   };
 
   mitmCache = gradle.fetchDeps {
@@ -68,7 +90,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) freenet; };
+  passthru.tests = {
+    inherit (nixosTests) freenet;
+  };
 
   meta = {
     description = "Decentralised and censorship-resistant network";

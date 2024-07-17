@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, angstrom }:
+{
+  lib,
+  buildDunePackage,
+  angstrom,
+}:
 
 buildDunePackage rec {
   pname = "angstrom-unix";

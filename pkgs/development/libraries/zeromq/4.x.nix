@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, asciidoc
-, pkg-config
-, libsodium
-, enableDrafts ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asciidoc,
+  pkg-config,
+  libsodium,
+  enableDrafts ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
   };
 
-  nativeBuildInputs = [ cmake asciidoc pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    asciidoc
+    pkg-config
+  ];
   buildInputs = [ libsodium ];
 
   doCheck = false; # fails all the tests (ctest)

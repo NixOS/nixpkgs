@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, autoPatchelfHook, fetchzip }:
+{
+  stdenvNoCC,
+  lib,
+  autoPatchelfHook,
+  fetchzip,
+}:
 let
 
   version = "1.1.0";
@@ -34,9 +39,15 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "A LLVM-based toolchain for Linux designed to build a portable osquery";
     homepage = "https://github.com/osquery/osquery-toolchain";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ gpl2Only asl20 ];
+    license = with licenses; [
+      gpl2Only
+      asl20
+    ];
     maintainers = with maintainers; [ squalus ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, re, reason, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  re,
+  reason,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,16 +13,14 @@ buildDunePackage {
   pname = "cli";
   version = "0.0.1-alpha-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   buildInputs = [
     re
     pastel
   ];
 
- meta = {
+  meta = {
     downloadPage = "https://github.com/reasonml/reason-native";
     homepage = "https://reason-native.com/";
     license = lib.licenses.mit;

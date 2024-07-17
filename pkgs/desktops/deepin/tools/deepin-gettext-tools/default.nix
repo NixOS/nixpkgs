@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gettext
-, python3Packages
-, perlPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  python3Packages,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     perlPackages.XMLLibXML
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postFixup = ''
     wrapPythonPrograms

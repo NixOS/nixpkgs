@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, lwt }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
+}:
 
 buildDunePackage rec {
   pname = "lwt-canceler";
@@ -12,9 +17,7 @@ buildDunePackage rec {
   };
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    lwt
-  ];
+  propagatedBuildInputs = [ lwt ];
 
   doCheck = true;
 

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, adwaita-qt6
-, appstream-glib
-, cmake
-, fetchFromGitHub
-, qt6
-, udisks2
-, xz
+{
+  lib,
+  stdenv,
+  adwaita-qt6,
+  appstream-glib,
+  cmake,
+  fetchFromGitHub,
+  qt6,
+  udisks2,
+  xz,
 }:
 
 stdenv.mkDerivation rec {

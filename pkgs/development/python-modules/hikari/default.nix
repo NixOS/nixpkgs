@@ -36,7 +36,6 @@ buildPythonPackage rec {
     '';
   };
 
-
   propagatedBuildInputs = [
     aiohttp
     attrs

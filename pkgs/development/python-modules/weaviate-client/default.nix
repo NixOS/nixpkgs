@@ -35,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-
   dependencies = [
     authlib
     grpcio

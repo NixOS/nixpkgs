@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qtbase ];
-
-  cmakeFlags = [
-    "-DBUILD_OUT_OF_TREE=On"
+  buildInputs = [
+    obs-studio
+    qtbase
   ];
+
+  cmakeFlags = [ "-DBUILD_OUT_OF_TREE=On" ];
 
   dontWrapQtApps = true;
 
@@ -36,6 +38,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-shaderfilter";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

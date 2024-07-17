@@ -3,8 +3,9 @@
   mkYarnPackage,
   fetchYarnDeps,
   fetchFromGitHub,
-  nodejs_22
-}: mkYarnPackage rec {
+  nodejs_22,
+}:
+mkYarnPackage rec {
   pname = "get-graphql-schema";
   version = "2.1.1";
 

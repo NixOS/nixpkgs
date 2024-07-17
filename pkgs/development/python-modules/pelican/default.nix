@@ -58,9 +58,7 @@ buildPythonPackage rec {
       --replace "'git'" "'${git}/bin/git'"
   '';
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   pythonRelaxDeps = [ "unidecode" ];
 

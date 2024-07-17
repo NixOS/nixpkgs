@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, gettext, installShellFiles }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gettext,
+  installShellFiles,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
@@ -15,9 +21,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     installShellFiles
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  ] ++ (with python3Packages; [ setuptools ]);
 
   propagatedBuildInputs = with python3Packages; [
     yt-dlp
@@ -25,9 +29,7 @@ python3Packages.buildPythonApplication rec {
     wcwidth
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [

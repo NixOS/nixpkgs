@@ -3,8 +3,9 @@
   mkYarnPackage,
   fetchYarnDeps,
   fetchFromGitHub,
-  nix-update-script
-}: mkYarnPackage rec {
+  nix-update-script,
+}:
+mkYarnPackage rec {
   pname = "diagnostic-languageserver";
   version = "1.15.0";
 

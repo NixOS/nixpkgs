@@ -1,16 +1,16 @@
 {
-  lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, udev
-, stdenv
-, CoreServices
-, Security
-, nix-update-script
-, openssl
-, SystemConfiguration
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  udev,
+  stdenv,
+  CoreServices,
+  Security,
+  nix-update-script,
+  openssl,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,13 +32,14 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
-    udev
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
 
   cargoHash = "sha256-kn79kNS+vres7rhHMANAofqFv0k8Bg4HVEWBJvz7CSY=";
 
@@ -56,7 +57,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/esp-rs/espflash";
     changelog = "https://github.com/esp-rs/espflash/blob/v${version}/CHANGELOG.md";
     mainProgram = "espflash";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

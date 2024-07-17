@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, mpi, python3Packages, autoconf, automake } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpi,
+  python3Packages,
+  autoconf,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hp2p";
@@ -12,9 +20,18 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoconf automake python3Packages.wrapPython ];
-  buildInputs = [ mpi ] ++ (with python3Packages; [ python plotly ]) ;
-  pythonPath = (with python3Packages; [ plotly ]) ;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    python3Packages.wrapPython
+  ];
+  buildInputs =
+    [ mpi ]
+    ++ (with python3Packages; [
+      python
+      plotly
+    ]);
+  pythonPath = (with python3Packages; [ plotly ]);
 
   preConfigure = ''
     patchShebangs autogen.sh

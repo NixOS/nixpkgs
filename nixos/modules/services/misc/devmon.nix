@@ -1,11 +1,17 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.devmon;
 
-in {
+in
+{
   options = {
     services.devmon = {
       enable = mkEnableOption "devmon, an automatic device mounting daemon";
@@ -16,7 +22,12 @@ in {
     systemd.user.services.devmon = {
       description = "devmon automatic device mounting daemon";
       wantedBy = [ "default.target" ];
-      path = [ pkgs.udevil pkgs.procps pkgs.udisks2 pkgs.which ];
+      path = [
+        pkgs.udevil
+        pkgs.procps
+        pkgs.udisks2
+        pkgs.which
+      ];
       serviceConfig.ExecStart = "${pkgs.udevil}/bin/devmon";
     };
 

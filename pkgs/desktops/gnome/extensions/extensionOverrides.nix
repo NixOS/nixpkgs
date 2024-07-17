@@ -1,33 +1,34 @@
-{ lib
-, ddcutil
-, easyeffects
-, gjs
-, glib
-, nautilus
-, gobject-introspection
-, gsound
-, hddtemp
-, libgda
-, libgtop
-, libhandy
-, liquidctl
-, lm_sensors
-, netcat-gnu
-, nvme-cli
-, procps
-, smartmontools
-, substituteAll
-, touchegg
-, util-linux
-, vte
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  ddcutil,
+  easyeffects,
+  gjs,
+  glib,
+  nautilus,
+  gobject-introspection,
+  gsound,
+  hddtemp,
+  libgda,
+  libgtop,
+  libhandy,
+  liquidctl,
+  lm_sensors,
+  netcat-gnu,
+  nvme-cli,
+  procps,
+  smartmontools,
+  substituteAll,
+  touchegg,
+  util-linux,
+  vte,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 let
   # Helper method to reduce redundancy
-  patchExtension = name: override: super: (super // {
-    ${name} = super.${name}.overrideAttrs override;
-  });
+  patchExtension =
+    name: override: super:
+    (super // { ${name} = super.${name}.overrideAttrs override; });
 in
 # A set of overrides for automatically packaged extensions that require some small fixes.
 # The input must be an attribute set with the extensions' UUIDs as keys and the extension
@@ -35,7 +36,8 @@ in
 #
 # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
 # the upstream repository's sources.
-super: lib.trivial.pipe super [
+super:
+lib.trivial.pipe super [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
@@ -45,8 +47,15 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
-    nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
-    buildInputs = [ vte libhandy gjs ];
+    nativeBuildInputs = [
+      gobject-introspection
+      wrapGAppsHook3
+    ];
+    buildInputs = [
+      vte
+      libhandy
+      gjs
+    ];
     postFixup = ''
       patchShebangs "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
@@ -82,7 +91,13 @@ super: lib.trivial.pipe super [
     patches = [
       (substituteAll {
         src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
-        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        inherit
+          hddtemp
+          liquidctl
+          lm_sensors
+          procps
+          smartmontools
+          ;
         netcat = netcat-gnu;
         nvmecli = nvme-cli;
       })

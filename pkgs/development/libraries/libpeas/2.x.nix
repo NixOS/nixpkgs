@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, pkg-config
-, gi-docgen
-, gobject-introspection
-, meson
-, ninja
-, gjs
-, glib
-, lua5_1
-, python3
-, spidermonkey_115
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  pkg-config,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  gjs,
+  glib,
+  lua5_1,
+  python3,
+  spidermonkey_115,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "2.0.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -36,9 +41,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     gi-docgen
@@ -63,9 +66,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   postPatch = ''
     # Checks lua51 and lua5.1 executable but we have non of them.

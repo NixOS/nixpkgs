@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "age";
@@ -14,7 +20,9 @@ buildGoModule rec {
   vendorHash = "sha256-5We4OYoexzzSF1AkxuGCUwuYJ3Wra+T6mCcT4XYgzhU=";
 
   ldflags = [
-    "-s" "-w" "-X main.Version=${version}"
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -35,7 +43,8 @@ buildGoModule rec {
 
   # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517
   checkFlags = [
-    "-skip" "TestScript/plugin"
+    "-skip"
+    "TestScript/plugin"
   ];
 
   meta = with lib; {

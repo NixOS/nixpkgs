@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, which, gnome, autoconf, automake }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  gnome,
+  autoconf,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-common";
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-common"; };
   };
 
-  propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome-common tends to require which
+  propagatedBuildInputs = [
+    which
+    autoconf
+    automake
+  ]; # autogen.sh which is using gnome-common tends to require which
 
   meta = with lib; {
     maintainers = teams.gnome.members;

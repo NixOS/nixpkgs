@@ -21,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-nMEmzQVz1LR4omHyxhvrjBXDQQE23S62T0wxZeMnXhg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     docopt

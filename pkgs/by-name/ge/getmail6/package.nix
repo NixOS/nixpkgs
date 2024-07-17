@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-BBsQ3u8CL3Aom+hqjeOErOBtWB8imU2PGgzP8+dq4mM=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   # needs a Docker setup
   doCheck = false;
@@ -36,6 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://getmail6.org";
     changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbe dotlambda ];
+    maintainers = with maintainers; [
+      abbe
+      dotlambda
+    ];
   };
 }

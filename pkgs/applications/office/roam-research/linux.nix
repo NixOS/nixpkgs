@@ -1,8 +1,39 @@
-{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, dbus, dpkg, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, libdrm
-, libpulseaudio, libxcb, libxkbcommon, libxshmfence, mesa, nspr, nss, pango
-, udev, }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  dpkg,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libdrm,
+  libpulseaudio,
+  libxcb,
+  libxkbcommon,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  udev,
+}:
 
 let
   common = import ./common.nix { inherit fetchurl; };
@@ -40,7 +71,8 @@ let
     libpulseaudio
     udev
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit (common) pname version;
   src = common.sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 

@@ -1,9 +1,10 @@
-{ bctoolbox
-, belr
-, cmake
-, fetchFromGitLab
-, lib
-, stdenv
+{
+  bctoolbox,
+  belr,
+  cmake,
+  fetchFromGitLab,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pRNJ1bDS2v0Cn+6cxMeFa0JQ27UZR6kCI9P6gQ5W2GA=";
   };
 
-  buildInputs = [ bctoolbox belr ];
+  buildInputs = [
+    bctoolbox
+    belr
+  ];
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

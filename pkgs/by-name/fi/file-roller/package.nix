@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, desktop-file-utils
-, gettext
-, glibcLocales
-, itstool
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, cpio
-, glib
-, gnome
-, gtk4
-, libadwaita
-, libhandy
-, json-glib
-, libarchive
-, libportal-gtk4
-, nautilus
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  gettext,
+  glibcLocales,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  cpio,
+  glib,
+  gnome,
+  gtk4,
+  libadwaita,
+  libhandy,
+  json-glib,
+  libarchive,
+  libportal-gtk4,
+  nautilus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,9 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "file-roller";
-    };
+    updateScript = gnome.updateScript { packageName = "file-roller"; };
   };
 
   meta = with lib; {

@@ -162,9 +162,7 @@ clangStdenv.mkDerivation (finalAttrs: {
                 - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
                 - Onion skinning.
     '';
-    maintainers = with lib.maintainers; [
-      orivej
-    ];
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = lib.platforms.linux;
   };
 })

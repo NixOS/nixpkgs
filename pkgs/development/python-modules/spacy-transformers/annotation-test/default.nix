@@ -10,9 +10,7 @@ stdenv.mkDerivation {
 
   src = lib.fileset.toSource {
     root = ./.;
-    fileset = lib.fileset.unions [
-      ./annotate.py
-    ];
+    fileset = lib.fileset.unions [ ./annotate.py ];
   };
 
   dontConfigure = true;

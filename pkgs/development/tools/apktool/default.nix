@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jdk_headless
-, aapt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk_headless,
+  aapt,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,14 +25,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  installPhase =
-    ''
-      install -D ${src} "$out/libexec/apktool/apktool.jar"
-      mkdir -p "$out/bin"
-      makeWrapper "${jdk_headless}/bin/java" "$out/bin/apktool" \
-          --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-          --prefix PATH : ${lib.getBin aapt}
-    '';
+  installPhase = ''
+    install -D ${src} "$out/libexec/apktool/apktool.jar"
+    mkdir -p "$out/bin"
+    makeWrapper "${jdk_headless}/bin/java" "$out/bin/apktool" \
+        --add-flags "-jar $out/libexec/apktool/apktool.jar" \
+        --prefix PATH : ${lib.getBin aapt}
+  '';
 
   meta = with lib; {
     description = "Tool for reverse engineering Android apk files";

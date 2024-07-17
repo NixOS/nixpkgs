@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, meson, pkg-config, ninja, cairo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  ninja,
+  cairo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pscircle";
@@ -17,9 +25,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    cairo
-  ];
+  buildInputs = [ cairo ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/mildlyparallel/pscircle";

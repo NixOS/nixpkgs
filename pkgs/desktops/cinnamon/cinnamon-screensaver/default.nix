@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, glib
-, dbus
-, gettext
-, cinnamon-desktop
-, cinnamon-common
-, intltool
-, libxslt
-, gtk3
-, libgnomekbd
-, gnome
-, libtool
-, wrapGAppsHook3
-, gobject-introspection
-, python3
-, pam
-, cairo
-, xapp
-, xdotool
-, xorg
-, iso-flags-png-320x420
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  glib,
+  dbus,
+  gettext,
+  cinnamon-desktop,
+  cinnamon-common,
+  intltool,
+  libxslt,
+  gtk3,
+  libgnomekbd,
+  gnome,
+  libtool,
+  wrapGAppsHook3,
+  gobject-introspection,
+  python3,
+  pam,
+  cairo,
+  xapp,
+  xdotool,
+  xorg,
+  iso-flags-png-320x420,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,12 +61,14 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXrandr
 
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-      setproctitle
-      python3.pkgs.xapp # The scope prefix is required
-      pycairo
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+        setproctitle
+        python3.pkgs.xapp # The scope prefix is required
+        pycairo
+      ]
+    ))
     xapp
     xdotool
     pam
@@ -99,7 +102,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "Cinnamon screen locker and screensaver program";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

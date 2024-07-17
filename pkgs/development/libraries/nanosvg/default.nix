@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation {
   pname = "nanosvg";
@@ -20,4 +25,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

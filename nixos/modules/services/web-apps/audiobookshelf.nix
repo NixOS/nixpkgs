@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -77,13 +82,9 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "audiobookshelf") {
-      audiobookshelf = { };
-    };
+    users.groups = mkIf (cfg.group == "audiobookshelf") { audiobookshelf = { }; };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 
   meta.maintainers = with maintainers; [ wietsedv ];

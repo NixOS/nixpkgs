@@ -30,9 +30,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "setuptools" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dependencies = [
     watchdog

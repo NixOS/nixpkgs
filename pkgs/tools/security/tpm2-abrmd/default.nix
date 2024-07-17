@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, autoconf-archive, makeWrapper, which
-, tpm2-tss, glib, dbus
-, cmocka
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  autoconf-archive,
+  makeWrapper,
+  which,
+  tpm2-tss,
+  glib,
+  dbus,
+  cmocka,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +32,11 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
-  buildInputs = [ tpm2-tss glib dbus ];
+  buildInputs = [
+    tpm2-tss
+    glib
+    dbus
+  ];
   nativeCheckInputs = [ cmocka ];
 
   enableParallelBuilding = true;

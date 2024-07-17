@@ -1,4 +1,10 @@
-{stdenv, lib, fetchFromGitHub, autoreconfHook, ApplicationServices}:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  ApplicationServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "duti";
@@ -10,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
   };
 
-  nativeBuildInputs = [autoreconfHook];
-  buildInputs = [ApplicationServices];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ApplicationServices ];
   configureFlags = [
     "--with-macosx-sdk=/homeless-shelter"
 
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
       a Microsoft Word document has a UTI of com.microsoft.word.doc. Using duti, the
       user can change which application acts as the default handler for a given UTI.
     '';
-    maintainers = with maintainers; [matthewbauer];
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.darwin;
     license = licenses.publicDomain;
     homepage = "https://github.com/moretension/duti/";

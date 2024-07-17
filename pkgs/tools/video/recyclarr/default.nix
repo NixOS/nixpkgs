@@ -1,41 +1,54 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, fixDarwinDylibNames
-, darwin
-, recyclarr
-, git
-, icu
-, testers
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  fixDarwinDylibNames,
+  darwin,
+  recyclarr,
+  git,
+  icu,
+  testers,
+  zlib,
 }:
 let
-  os =
-    if stdenv.isDarwin
-    then "osx"
-    else "linux";
+  os = if stdenv.isDarwin then "osx" else "linux";
 
-  arch = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-    aarch64-darwin = "arm64";
-  }."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arch =
+    {
+      x86_64-linux = "x64";
+      aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
+      aarch64-darwin = "arm64";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  hash = {
-    x64-linux_hash = "sha256-LMAY1UIwvB+ne4rpwLKaYO6QGTwdiS3YBndr73zIzvQ=";
-    arm64-linux_hash = "sha256-by3PSYdN7TPjA0Cx4pfzIbpZ/YVU1agfcuvuZh6mbfU=";
-    x64-osx_hash = "sha256-/YqdlVktgbBUNdm+mAD053pf6wCMXYt6gQP+iTQdKqw=";
-    arm64-osx_hash = "sha256-2RRQGNTztK14KDFRqgpagNCWTizHVNY67psaxFfyDZ4=";
-  }."${arch}-${os}_hash";
+  hash =
+    {
+      x64-linux_hash = "sha256-LMAY1UIwvB+ne4rpwLKaYO6QGTwdiS3YBndr73zIzvQ=";
+      arm64-linux_hash = "sha256-by3PSYdN7TPjA0Cx4pfzIbpZ/YVU1agfcuvuZh6mbfU=";
+      x64-osx_hash = "sha256-/YqdlVktgbBUNdm+mAD053pf6wCMXYt6gQP+iTQdKqw=";
+      arm64-osx_hash = "sha256-2RRQGNTztK14KDFRqgpagNCWTizHVNY67psaxFfyDZ4=";
+    }
+    ."${arch}-${os}_hash";
 
-  libPath = {
-    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
-    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}";
-  }."${os}";
+  libPath =
+    {
+      osx = "DYLD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          darwin.ICU
+          zlib
+        ]
+      }";
+      linux = "LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          icu
+          zlib
+        ]
+      }";
+    }
+    ."${os}";
 
 in
 stdenv.mkDerivation rec {
@@ -49,10 +62,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = [ icu zlib ];
+  nativeBuildInputs =
+    [ makeWrapper ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    icu
+    zlib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -64,7 +80,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/recyclarr \
-      --prefix PATH : ${lib.makeBinPath [git]} \
+      --prefix PATH : ${lib.makeBinPath [ git ]} \
       --prefix ${libPath}
   '';
 
@@ -72,9 +88,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = recyclarr;
-    };
+    tests.version = testers.testVersion { package = recyclarr; };
   };
 
   meta = with lib; {
@@ -84,6 +98,11 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ josephst ];
     mainProgram = "recyclarr";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

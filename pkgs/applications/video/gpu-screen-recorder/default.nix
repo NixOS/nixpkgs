@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, libXcomposite
-, libpulseaudio
-, ffmpeg
-, wayland
-, libdrm
-, libva
-, libglvnd
-, libXdamage
-, libXi
-, libXrandr
-, libXfixes
-, wrapperDir ? "/run/wrappers/bin"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  libXcomposite,
+  libpulseaudio,
+  ffmpeg,
+  wayland,
+  libdrm,
+  libva,
+  libglvnd,
+  libXdamage,
+  libXi,
+  libXrandr,
+  libXfixes,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation {
@@ -51,9 +52,7 @@ stdenv.mkDerivation {
     libXfixes
   ];
 
-  patches = [
-    ./0001-Don-t-install-systemd-unit-files-using-absolute-path.patch
-  ];
+  patches = [ ./0001-Don-t-install-systemd-unit-files-using-absolute-path.patch ];
 
   mesonFlags = [
     "-Dsystemd=true"

@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -15,14 +16,13 @@ let
           hash = "sha256-WaNCnbU8ULXGvMigf4hIywDX3IvbQxpKtBkg0gHUdW4=";
         };
         meta = old.meta // {
-          knownVulnerabilities = [
-            "CVE-2022-34749"
-          ];
+          knownVulnerabilities = [ "CVE-2022-34749" ];
         };
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "mrkd";
   version = "0.2.0";
 

@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, bzip2
-, openssl
-, zstd
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  bzip2,
+  openssl,
+  zstd,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,25 +33,37 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UIUXayJwTrWbLm1UKnIXy1Df8a7ZoBzdNm/uZ1+H+SQ=";
 
-  cargoBuildFlags = [ "--package" "boa_cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "boa_cli"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    [ bzip2 openssl zstd ]
+    [
+      bzip2
+      openssl
+      zstd
+    ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
     ];
 
-  env = { ZSTD_SYS_USE_PKG_CONFIG = true; };
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Embeddable and experimental Javascript engine written in Rust";
     mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ unlicense ];
+    license = with licenses; [
+      mit # or
+      unlicense
+    ];
     maintainers = with maintainers; [ dit7ya ];
   };
 }

@@ -1,5 +1,9 @@
-
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,10 +11,12 @@ let
 
   cfg = config.services.uvcvideo;
 
-  uvcdynctrl-udev-rules = packages: pkgs.callPackage ./uvcdynctrl-udev-rules.nix {
-    drivers = packages;
-    udevDebug = false;
-  };
+  uvcdynctrl-udev-rules =
+    packages:
+    pkgs.callPackage ./uvcdynctrl-udev-rules.nix {
+      drivers = packages;
+      udevDebug = false;
+    };
 
 in
 
@@ -52,13 +58,9 @@ in
 
   config = mkIf cfg.dynctrl.enable {
 
-    services.udev.packages = [
-      (uvcdynctrl-udev-rules cfg.dynctrl.packages)
-    ];
+    services.udev.packages = [ (uvcdynctrl-udev-rules cfg.dynctrl.packages) ];
 
-    environment.systemPackages = [
-      pkgs.libwebcam
-    ];
+    environment.systemPackages = [ pkgs.libwebcam ];
 
   };
 }

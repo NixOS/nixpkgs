@@ -1,37 +1,42 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gettext
-, glib
-, pkg-config
-, polkit
-, python3
-, sqlite
-, gobject-introspection
-, vala
-, gtk-doc
-, boost
-, meson
-, ninja
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, libxml2
-, gst_all_1
-, gtk3
-, enableCommandNotFound ? false
-, enableBashCompletion ? false
-, bash-completion ? null
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, nixosTests
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gettext,
+  glib,
+  pkg-config,
+  polkit,
+  python3,
+  sqlite,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  boost,
+  meson,
+  ninja,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  libxml2,
+  gst_all_1,
+  gtk3,
+  enableCommandNotFound ? false,
+  enableBashCompletion ? false,
+  bash-completion ? null,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
   version = "1.2.8";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
@@ -49,8 +54,7 @@ stdenv.mkDerivation rec {
     gtk3
     sqlite
     boost
-  ] ++ lib.optional enableSystemd systemd
-  ++ lib.optional enableBashCompletion bash-completion;
+  ] ++ lib.optional enableSystemd systemd ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
     glib
@@ -66,22 +70,23 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  mesonFlags = [
-    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
-    # often fails to build with nix updates
-    # and remounts /nix/store as rw
-    # https://github.com/NixOS/nixpkgs/issues/177946
-    #"-Dpackaging_backend=nix"
-    "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "-Dcron=false"
-    "-Dgtk_doc=true"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ]
-  ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
-  ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
+  mesonFlags =
+    [
+      (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+      # often fails to build with nix updates
+      # and remounts /nix/store as rw
+      # https://github.com/NixOS/nixpkgs/issues/177946
+      #"-Dpackaging_backend=nix"
+      "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
+      "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
+      "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "-Dcron=false"
+      "-Dgtk_doc=true"
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+    ]
+    ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
+    ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
 
   postPatch = ''
     # HACK: we want packagekit to look in /etc for configs but install

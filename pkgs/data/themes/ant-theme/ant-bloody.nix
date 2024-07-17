@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk-engine-murrine,
+}:
 
 let
   themeName = "Ant-Bloody";
@@ -12,9 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rrz50kmzjmqj17hvrw67pbaclwxv85i5m08s7842iky6dnn5z8s";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall

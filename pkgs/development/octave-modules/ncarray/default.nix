@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
-, statistics
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  netcdf,
+  statistics,
 }:
 
 buildOctavePackage rec {
@@ -14,13 +15,9 @@ buildOctavePackage rec {
     sha256 = "sha256-HhQWLUA/6wqYi6TP3PC+N2zgi4UojDxbG9pgQzFaQ8c=";
   };
 
-  buildInputs = [
-    netcdf
-  ];
+  buildInputs = [ netcdf ];
 
-  requiredOctavePackages = [
-    statistics
-  ];
+  requiredOctavePackages = [ statistics ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/ncarray/index.html";

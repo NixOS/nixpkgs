@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mp9Oz08qTyhj3P6F1d81SX96vamUY/JWpD2DTYR+v04=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Fastest JSON library in C";

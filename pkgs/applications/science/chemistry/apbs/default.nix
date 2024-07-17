@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, blas
-, superlu
-, suitesparse
-, python3
-, libintl
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  superlu,
+  suitesparse,
+  python3,
+  libintl,
+  libiconv,
 }:
 let
   # this is a fork version of fetk (http://www.fetk.org/)
@@ -23,9 +24,7 @@ let
       hash = "sha256-uFA1JRR05cNcUGaJj9IyGNONB2hU9IOBPzOj/HucNH4=";
     };
 
-    nativeBuildInputs = [
-      cmake
-    ];
+    nativeBuildInputs = [ cmake ];
 
     cmakeFlags = [
       "-DBLAS_LIBRARIES=${blas}/lib"
@@ -33,9 +32,7 @@ let
       "-DBUILD_SUPERLU=OFF"
     ];
 
-    env = lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-    };
+    env = lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int"; };
 
     buildInputs = [
       blas
@@ -75,19 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '"rU"' '"r"'
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    fetk
-    suitesparse
-    blas
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    libintl
-    libiconv
-  ];
+  buildInputs =
+    [
+      fetk
+      suitesparse
+      blas
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libintl
+      libiconv
+    ];
 
   cmakeFlags = [
     "-DPYTHON_VERSION=${python3.version}"

@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
-, nix-update-script
-, testers
-, tinymist
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  stdenv,
+  darwin,
+  nix-update-script,
+  testers,
+  tinymist,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,24 +35,22 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.CoreServices
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.frameworks.CoreServices
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
+    ];
 
-  checkFlags = [
-    "--skip=e2e"
-  ];
+  checkFlags = [ "--skip=e2e" ];
 
   passthru = {
     updateScript = nix-update-script { };

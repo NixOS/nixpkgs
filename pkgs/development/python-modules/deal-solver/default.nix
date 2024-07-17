@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
   pythonRemoveDeps = [ "z3-solver" ];

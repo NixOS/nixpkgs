@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, anthy
-, ibus
-, glib
-, gobject-introspection
-, gtk3
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  anthy,
+  ibus,
+  glib,
+  gobject-introspection,
+  gtk3,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +40,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  configureFlags = [
-    "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t"
-  ];
+  configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
 
   postFixup = ''
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fujiwarat/ibus-anthy";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes ];
+    maintainers = with maintainers; [
+      gebner
+      ericsagnes
+    ];
   };
 }

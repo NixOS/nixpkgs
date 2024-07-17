@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation {
@@ -22,9 +23,7 @@ stdenv.mkDerivation {
     cmake
     makeWrapper
   ];
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 

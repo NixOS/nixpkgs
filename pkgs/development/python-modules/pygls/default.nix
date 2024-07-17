@@ -31,9 +31,7 @@ buildPythonPackage rec {
     "lsprotocol"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     lsprotocol

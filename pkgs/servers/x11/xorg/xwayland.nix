@@ -1,50 +1,52 @@
-{ egl-wayland
-, bash
-, libepoxy
-, fetchurl
-, fontutil
-, lib
-, libdecor
-, libei
-, libGL
-, libGLU
-, libX11
-, libXau
-, libXaw
-, libXdmcp
-, libXext
-, libXfixes
-, libXfont2
-, libXmu
-, libXpm
-, libXrender
-, libXres
-, libXt
-, libdrm
-, libtirpc
-, withLibunwind ? true, libunwind
-, libxcb
-, libxkbfile
-, libxshmfence
-, libxcvt
-, mesa
-, meson
-, ninja
-, openssl
-, pkg-config
-, pixman
-, stdenv
-, systemd
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, zlib
-, defaultFontPath ? ""
-, gitUpdater
+{
+  egl-wayland,
+  bash,
+  libepoxy,
+  fetchurl,
+  fontutil,
+  lib,
+  libdecor,
+  libei,
+  libGL,
+  libGLU,
+  libX11,
+  libXau,
+  libXaw,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXfont2,
+  libXmu,
+  libXpm,
+  libXrender,
+  libXres,
+  libXt,
+  libdrm,
+  libtirpc,
+  withLibunwind ? true,
+  libunwind,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  libxcvt,
+  mesa,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  pixman,
+  stdenv,
+  systemd,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  zlib,
+  defaultFontPath ? "",
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,9 +63,7 @@ stdenv.mkDerivation rec {
       --replace-fail '/bin/sh' '${lib.getExe' bash "sh"}'
   '';
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     pkg-config
     meson
@@ -106,9 +106,7 @@ stdenv.mkDerivation rec {
     xorgproto
     xtrans
     zlib
-  ] ++ lib.optionals withLibunwind [
-    libunwind
-  ];
+  ] ++ lib.optionals withLibunwind [ libunwind ];
   mesonFlags = [
     (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
@@ -129,7 +127,10 @@ stdenv.mkDerivation rec {
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     mainProgram = "Xwayland";
-    maintainers = with maintainers; [ emantor k900 ];
+    maintainers = with maintainers; [
+      emantor
+      k900
+    ];
     platforms = platforms.linux;
   };
 }

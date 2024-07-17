@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, openssl
-, c-ares
-, readline
-, icu
-, git
-, gbenchmark
-, nghttp2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  openssl,
+  c-ares,
+  readline,
+  icu,
+  git,
+  gbenchmark,
+  nghttp2,
 }:
 
 stdenv.mkDerivation rec {

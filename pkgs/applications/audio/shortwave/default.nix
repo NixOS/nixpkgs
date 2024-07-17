@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cargo
-, dbus
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, gitMinimal
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, meson
-, ninja
-, openssl
-, pkg-config
-, rustPlatform
-, rustc
-, sqlite
-, wrapGAppsHook4
-, cmake
-, libshumate
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  gitMinimal,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  sqlite,
+  wrapGAppsHook4,
+  cmake,
+  libshumate,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,21 +57,23 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = [
-    dbus
-    gdk-pixbuf
-    glib
-    gtk4
-    libadwaita
-    openssl
-    sqlite
-    libshumate
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      dbus
+      gdk-pixbuf
+      glib
+      gtk4
+      libadwaita
+      openssl
+      sqlite
+      libshumate
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Shortwave";

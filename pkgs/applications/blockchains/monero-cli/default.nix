@@ -1,9 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch2, cmake, ninja, pkg-config
-, boost, miniupnpc, openssl, unbound
-, zeromq, pcsclite, readline, libsodium, hidapi
-, randomx, rapidjson
-, CoreData, IOKit, PCSC
-, trezorSupport ? true, libusb1, protobuf, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  miniupnpc,
+  openssl,
+  unbound,
+  zeromq,
+  pcsclite,
+  readline,
+  libsodium,
+  hidapi,
+  randomx,
+  rapidjson,
+  CoreData,
+  IOKit,
+  PCSC,
+  trezorSupport ? true,
+  libusb1,
+  protobuf,
+  python3,
 }:
 
 let
@@ -69,15 +89,37 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [
-    boost miniupnpc openssl unbound
-    zeromq pcsclite readline
-    libsodium hidapi randomx rapidjson
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
-    ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
+  buildInputs =
+    [
+      boost
+      miniupnpc
+      openssl
+      unbound
+      zeromq
+      pcsclite
+      readline
+      libsodium
+      hidapi
+      randomx
+      rapidjson
+      protobuf
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      IOKit
+      CoreData
+      PCSC
+    ]
+    ++ lib.optionals trezorSupport [
+      libusb1
+      protobuf
+      python3
+    ];
 
   cmakeFlags = [
     "-DUSE_DEVICE_TREZOR=ON"
@@ -86,13 +128,16 @@ stdenv.mkDerivation rec {
     "-DRandomX_ROOT_DIR=${randomx}"
   ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 
-  outputs = [ "out" "source" ];
+  outputs = [
+    "out"
+    "source"
+  ];
 
   meta = with lib; {
     description = "Private, secure, untraceable currency";
-    homepage    = "https://getmonero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://getmonero.org/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
     mainProgram = "monero-wallet-cli";
   };

@@ -1,20 +1,21 @@
-{ lib
-, fetchurl
-, gettext
-, itstool
-, python3
-, meson
-, ninja
-, wrapGAppsHook3
-, libxml2
-, pkg-config
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
+{
+  lib,
+  fetchurl,
+  gettext,
+  itstool,
+  python3,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  libxml2,
+  pkg-config,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -69,7 +70,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://meld.app/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ jtojnar mimame ];
+    maintainers = with maintainers; [
+      jtojnar
+      mimame
+    ];
     mainProgram = "meld";
   };
 }

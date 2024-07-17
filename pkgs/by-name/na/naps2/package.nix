@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, gtk3
-, gdk-pixbuf
-, glib
-, sane-backends
-, libnotify
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  gtk3,
+  gdk-pixbuf,
+  glib,
+  sane-backends,
+  libnotify,
 }:
 
 buildDotnetModule rec {
@@ -26,7 +27,12 @@ buildDotnetModule rec {
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_6_0
+      sdk_8_0
+    ];
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   selfContainedBuild = true;
   runtimeDeps = [
@@ -55,7 +61,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
-    broken = stdenv.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
+    broken = stdenv.isAarch64; # Google.Protobuf.Tools dependency fails to build.
   };
 
 }

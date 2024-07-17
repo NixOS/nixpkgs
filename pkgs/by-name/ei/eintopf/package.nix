@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, callPackage
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  callPackage,
+  nixosTests,
 }:
 
 let
@@ -54,4 +55,3 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
-

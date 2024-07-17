@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, deepin-gettext-tools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtbase
-, qtsvg
-, qtx11extras
-, dde-qt-dbus-factory
-, dde-dock
-, gsettings-qt
-, procps
-, libpcap
-, libnl
-, util-linux
-, systemd
-, polkit
-, wayland
-, dwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  deepin-gettext-tools,
+  wrapQtAppsHook,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qtbase,
+  qtsvg,
+  qtx11extras,
+  dde-qt-dbus-factory,
+  dde-dock,
+  gsettings-qt,
+  procps,
+  libpcap,
+  libnl,
+  util-linux,
+  systemd,
+  polkit,
+  wayland,
+  dwayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -80,9 +81,7 @@ stdenv.mkDerivation rec {
     dwayland
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
 

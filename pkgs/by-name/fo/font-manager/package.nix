@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, python3
-, pkg-config
-, libxml2
-, json-glib
-, sqlite
-, itstool
-, yelp-tools
-, vala
-, gsettings-desktop-schemas
-, gtk4
-, adwaita-icon-theme
-, desktop-file-utils
-, nix-update-script
-, wrapGAppsHook4
-, gobject-introspection
-# withWebkit enables the "webkit" feature, also known as Google Fonts
-, withWebkit ? true, glib-networking, libsoup, webkitgtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  pkg-config,
+  libxml2,
+  json-glib,
+  sqlite,
+  itstool,
+  yelp-tools,
+  vala,
+  gsettings-desktop-schemas,
+  gtk4,
+  adwaita-icon-theme,
+  desktop-file-utils,
+  nix-update-script,
+  wrapGAppsHook4,
+  gobject-introspection,
+  # withWebkit enables the "webkit" feature, also known as Google Fonts
+  withWebkit ? true,
+  glib-networking,
+  libsoup,
+  webkitgtk,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,18 +53,20 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libxml2
-    json-glib
-    sqlite
-    gsettings-desktop-schemas # for font settings
-    gtk4
-    adwaita-icon-theme
-  ] ++ lib.optionals withWebkit [
-    glib-networking # for SSL so that Google Fonts can load
-    libsoup
-    webkitgtk
-  ];
+  buildInputs =
+    [
+      libxml2
+      json-glib
+      sqlite
+      gsettings-desktop-schemas # for font settings
+      gtk4
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals withWebkit [
+      glib-networking # for SSL so that Google Fonts can load
+      libsoup
+      webkitgtk
+    ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…

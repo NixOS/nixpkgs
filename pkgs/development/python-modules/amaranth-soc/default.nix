@@ -12,10 +12,12 @@ buildPythonPackage rec {
   version = "0.1a-unstable-2024-06-10";
   pyproject = true;
   # from `pdm show`
-  realVersion = let
-     tag = builtins.elemAt (lib.splitString "-" version) 0;
-     rev = lib.substring 0 7 src.rev;
-    in "${tag}1.dev1+g${rev}";
+  realVersion =
+    let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in
+    "${tag}1.dev1+g${rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";

@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,9 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PT451WnkRnfEsXkSm95hTGV5jis+YlMWAjnR/W6uTXk=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";

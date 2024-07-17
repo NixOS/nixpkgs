@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchurl
-, sqlite
-, installShellFiles
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  sqlite,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,9 @@ buildGoModule rec {
   };
   vendorHash = null;
 
-  buildInputs = [
-    sqlite
-  ];
+  buildInputs = [ sqlite ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "." ];
 

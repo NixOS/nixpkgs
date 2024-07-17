@@ -1,5 +1,19 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_4, freetype, libGLU
-, libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  ffmpeg_4,
+  freetype,
+  libGLU,
+  libjack2,
+  liblo,
+  libX11,
+  libXv,
+  pkg-config,
+  portmidi,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
@@ -12,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GTg0W3D0BRSxsmeVsB4On3MfwncScEGFJGVJK7wflCM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     ffmpeg_4

@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, stdenv, lib, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "fly";
@@ -16,7 +22,9 @@ buildGoModule rec {
   subPackages = [ "fly" ];
 
   ldflags = [
-    "-s" "-w" "-X github.com/concourse/concourse.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/concourse/concourse.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -35,6 +43,9 @@ buildGoModule rec {
     mainProgram = "fly";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivanbrennan SuperSandro2000 ];
+    maintainers = with maintainers; [
+      ivanbrennan
+      SuperSandro2000
+    ];
   };
 }

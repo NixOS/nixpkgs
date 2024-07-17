@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, aacSupport ? true
-, alsa-lib
-, autoreconfHook
-, bluez
-, dbus
-, fdk_aac
-, fetchFromGitHub
-, gitUpdater
-, glib
-, libbsd
-, ncurses
-, pkg-config
-, readline
-, sbc
+{
+  lib,
+  stdenv,
+  aacSupport ? true,
+  alsa-lib,
+  autoreconfHook,
+  bluez,
+  dbus,
+  fdk_aac,
+  fetchFromGitHub,
+  gitUpdater,
+  glib,
+  libbsd,
+  ncurses,
+  pkg-config,
+  readline,
+  sbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     libbsd
     ncurses
-  ] ++ lib.optionals aacSupport [
-    fdk_aac
-  ];
+  ] ++ lib.optionals aacSupport [ fdk_aac ];
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")
@@ -79,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ mit ];
     mainProgram = "bluealsa";
-    maintainers = with lib.maintainers; [ AndersonTorres oxij ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      oxij
+    ];
     platforms = lib.platforms.linux;
   };
 })

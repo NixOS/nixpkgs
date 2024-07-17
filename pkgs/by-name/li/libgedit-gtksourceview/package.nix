@@ -1,24 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, libxml2
-, glib
-, gtk3
-, shared-mime-info
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  glib,
+  gtk3,
+  shared-mime-info,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
   version = "299.2.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "gedit-technology";
@@ -43,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    libxml2
-  ];
+  buildInputs = [ libxml2 ];
 
   propagatedBuildInputs = [
     # Required by libgedit-gtksourceview-300.pc
@@ -55,9 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  passthru.updateScript = gitUpdater {
-    odd-unstable = true;
-  };
+  passthru.updateScript = gitUpdater { odd-unstable = true; };
 
   meta = with lib; {
     description = "Source code editing widget for GTK";

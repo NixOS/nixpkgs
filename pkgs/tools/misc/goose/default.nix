@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -23,9 +24,7 @@ buildGoModule rec {
     rm -r tests/gomigrations
   '';
 
-  subPackages = [
-    "cmd/goose"
-  ];
+  subPackages = [ "cmd/goose" ];
 
   ldflags = [
     "-s"

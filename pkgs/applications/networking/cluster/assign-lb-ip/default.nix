@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "assign-lb-ip";
@@ -16,8 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Assigns loadBalancerIP address to a Kubernetes service for testing purposes";
     mainProgram = "assign-lb-ip";
-    homepage    = "https://github.com/Nordix/assign-lb-ip";
-    license     = licenses.asl20;
+    homepage = "https://github.com/Nordix/assign-lb-ip";
+    license = licenses.asl20;
     maintainers = [ maintainers.starcraft66 ];
   };
 }

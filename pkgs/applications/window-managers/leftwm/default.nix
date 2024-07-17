@@ -1,12 +1,16 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libX11
-, libXinerama
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libX11,
+  libXinerama,
 }:
 
 let
-  rpathLibs = [ libXinerama libX11 ];
+  rpathLibs = [
+    libXinerama
+    libX11
+  ];
 in
 
 rustPlatform.buildRustPackage rec {

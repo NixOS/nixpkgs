@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, cmake
-, gettext
-, maxima
-, wxGTK
-, adwaita-icon-theme
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  adwaita-icon-theme,
+  glib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
   version = "24.05.0";
 
@@ -36,9 +37,7 @@ stdenv.mkDerivation (finalAttrs:{
     gettext
   ];
 
-  cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
-  ];
+  cmakeFlags = [ "-DwxWidgets_LIBRARIES=${wxGTK}/lib" ];
 
   preConfigure = ''
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)

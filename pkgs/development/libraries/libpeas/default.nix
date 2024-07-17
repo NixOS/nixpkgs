@@ -1,26 +1,31 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gettext
-, gi-docgen
-, gnome
-, glib
-, gtk3
-, gobject-introspection
-, python3
-, ncurses
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gi-docgen,
+  gnome,
+  glib,
+  gtk3,
+  gobject-introspection,
+  python3,
+  ncurses,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "1.36.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,9 +42,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -64,9 +67,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

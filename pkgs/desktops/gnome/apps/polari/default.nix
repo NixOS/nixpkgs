@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, itstool
-, fetchurl
-, gdk-pixbuf
-, telepathy-glib
-, gjs
-, meson
-, ninja
-, gettext
-, telepathy-idle
-, libxml2
-, desktop-file-utils
-, pkg-config
-, gtk4
-, tracker
-, libadwaita
-, gtk3
-, glib
-, libsecret
-, libsoup_3
-, webkitgtk_4_1
-, gobject-introspection
-, gnome
-, wrapGAppsHook4
-, gspell
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  itstool,
+  fetchurl,
+  gdk-pixbuf,
+  telepathy-glib,
+  gjs,
+  meson,
+  ninja,
+  gettext,
+  telepathy-idle,
+  libxml2,
+  desktop-file-utils,
+  pkg-config,
+  gtk4,
+  tracker,
+  libadwaita,
+  gtk3,
+  glib,
+  libsecret,
+  libsoup_3,
+  webkitgtk_4_1,
+  gobject-introspection,
+  gnome,
+  wrapGAppsHook4,
+  gspell,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
     ./make-thumbnailer-wrappable.patch
   ];
 
-  propagatedUserEnvPkgs = [
-    telepathy-idle
-  ];
+  propagatedUserEnvPkgs = [ telepathy-idle ];
 
   nativeBuildInputs = [
     meson

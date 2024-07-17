@@ -30,9 +30,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   pythonRelaxDeps = [ "referencing" ];
 

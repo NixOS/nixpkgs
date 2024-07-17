@@ -1,5 +1,7 @@
-{ lib, stdenv
-, binutils-unwrapped-all-targets
+{
+  lib,
+  stdenv,
+  binutils-unwrapped-all-targets,
 }:
 
 stdenv.mkDerivation {

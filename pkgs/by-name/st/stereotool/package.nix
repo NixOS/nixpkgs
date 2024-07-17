@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, libX11
-, libXpm
-, alsa-lib
-, bzip2
-, zlib
-, libsForQt5
-, libgcc
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  libX11,
+  libXpm,
+  alsa-lib,
+  bzip2,
+  zlib,
+  libsForQt5,
+  libgcc,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
         url = "https://download.thimeo.com/stereo_tool_icon_${versionNoPoint}.png";
         hash = "sha256-dcivH6Cc7pdQ99m80vS4E5mp/SHtTlNu1EHc+0ALIGM=";
       })
-    ] ++ (
+    ]
+    ++ (
       {
         # Alsa version for 64bits.
         x86_64-linux = [
@@ -105,7 +107,9 @@ stdenv.mkDerivation rec {
             hash = "sha256-b6v0TJaCaJKZP6uwJmmHek4y51YsK8NoslysljYHcF0=";
           })
         ];
-      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}"));
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+    );
 
   unpackPhase = ''
     for srcFile in $srcs; do
@@ -126,7 +130,11 @@ stdenv.mkDerivation rec {
       exec = "stereo_tool_gui";
       icon = "stereo-tool-icon";
       comment = "Broadcast Audio Processing";
-      categories = [ "AudioVideo" "Audio" "AudioVideoEditing" ];
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "AudioVideoEditing"
+      ];
     })
     (makeDesktopItem {
       name = "stereotool-jack";
@@ -134,7 +142,11 @@ stdenv.mkDerivation rec {
       exec = "stereo_tool_gui_jack";
       icon = "stereo-tool-icon";
       comment = "Broadcast Audio Processing";
-      categories = [ "AudioVideo" "Audio" "AudioVideoEditing" ];
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "AudioVideoEditing"
+      ];
     })
   ];
 
@@ -164,7 +176,12 @@ stdenv.mkDerivation rec {
     description = "Stereo Tool is a software-based audio processor which offers outstanding audio quality and comes with many unique features";
     license = licenses.unfree;
     mainProgram = "stereo_tool_gui";
-    platforms = [ "aarch64-linux" "aarch32-linux" "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "aarch32-linux"
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ RudiOnTheAir ];
   };
 

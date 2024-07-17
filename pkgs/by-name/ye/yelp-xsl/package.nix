@@ -1,11 +1,13 @@
-{ lib, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, itstool
-, libxml2
-, libxslt
-, gnome
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  itstool,
+  libxml2,
+  libxslt,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

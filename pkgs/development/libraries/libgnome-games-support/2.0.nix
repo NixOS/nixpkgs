@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, gtk4
-, libgee
-, gettext
-, vala
-, gnome
-, libintl
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gtk4,
+  libgee,
+  gettext,
+  vala,
+  gnome,
+  libintl,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    libintl
-  ];
+  buildInputs = [ libintl ];
 
   propagatedBuildInputs = [
     # Required by libgnome-games-support-2.pc

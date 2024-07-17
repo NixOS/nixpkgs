@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, libxml2
-, gitUpdater
-, nautilus
-, glib
-, gtk4
-, gtk3
-, libhandy
-, gsettings-desktop-schemas
-, vte
-, gettext
-, which
-, libuuid
-, vala
-, desktop-file-utils
-, itstool
-, wrapGAppsHook3
-, pcre2
-, libxslt
-, docbook-xsl-nons
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libxml2,
+  gitUpdater,
+  nautilus,
+  glib,
+  gtk4,
+  gtk3,
+  libhandy,
+  gsettings-desktop-schemas,
+  vte,
+  gettext,
+  which,
+  libuuid,
+  vala,
+  desktop-file-utils,
+  itstool,
+  wrapGAppsHook3,
+  pcre2,
+  libxslt,
+  docbook-xsl-nons,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,9 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      odd-unstable = true;
-    };
+    updateScript = gitUpdater { odd-unstable = true; };
 
     tests = {
       test = nixosTests.terminal-emulators.gnome-terminal;

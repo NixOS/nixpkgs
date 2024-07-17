@@ -1,44 +1,53 @@
-{ buildGoModule
-, cairo
-, cargo
-, cargo-tauri
-, esbuild
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, lib
-, libsoup
-, makeBinaryWrapper
-, nodejs
-, openssl
-, pango
-, pkg-config
-, pnpm
-, rustc
-, rustPlatform
-, stdenv
-, stdenvNoCC
-, webkitgtk
+{
+  buildGoModule,
+  cairo,
+  cargo,
+  cargo-tauri,
+  esbuild,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  lib,
+  libsoup,
+  makeBinaryWrapper,
+  nodejs,
+  openssl,
+  pango,
+  pkg-config,
+  pnpm,
+  rustc,
+  rustPlatform,
+  stdenv,
+  stdenvNoCC,
+  webkitgtk,
 }:
 
 let
 
-  esbuild-20-2 = let version = "0.20.2";
-  in esbuild.override {
-    buildGoModule = args:
-      buildGoModule (args // {
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "evanw";
-          repo = "esbuild";
-          rev = "v${version}";
-          hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-        };
-        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-      });
-  };
+  esbuild-20-2 =
+    let
+      version = "0.20.2";
+    in
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    };
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
   version = "2.0.6";
 
@@ -62,7 +71,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     ESBUILD_BINARY_PATH = "${lib.getExe esbuild-20-2}";
 
-    nativeBuildInputs = [ nodejs pnpm.configHook ];
+    nativeBuildInputs = [
+      nodejs
+      pnpm.configHook
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -96,8 +108,15 @@ in stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [ cairo gdk-pixbuf gobject-introspection libsoup openssl pango webkitgtk ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    gobject-introspection
+    libsoup
+    openssl
+    pango
+    webkitgtk
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;

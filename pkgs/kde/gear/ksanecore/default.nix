@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  sane-backends,
-}:
+{ mkKdeDerivation, sane-backends }:
 mkKdeDerivation {
   pname = "ksanecore";
 
-  extraBuildInputs = [sane-backends];
+  extraBuildInputs = [ sane-backends ];
 }

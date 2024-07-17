@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, trousers, openssl, opencryptoki, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  trousers,
+  openssl,
+  opencryptoki,
+  perl,
+}:
 
 let
   version = "1.3.9.1";
@@ -22,7 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ trousers openssl opencryptoki ];
+  buildInputs = [
+    trousers
+    openssl
+    opencryptoki
+  ];
 
   meta = with lib; {
     description = "Management tools for TPM hardware";
@@ -31,10 +43,9 @@ stdenv.mkDerivation rec {
       application enablement of Trusted Computing using a Trusted Platform
       Module (TPM), similar to a smart card environment.
     '';
-    homepage    = "https://sourceforge.net/projects/trousers/files/tpm-tools/";
-    license     = licenses.cpl10;
+    homepage = "https://sourceforge.net/projects/trousers/files/tpm-tools/";
+    license = licenses.cpl10;
     maintainers = [ maintainers.ak ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }
-

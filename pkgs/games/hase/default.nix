@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, sparrow3d
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  sparrow3d,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -19,9 +20,7 @@ stdenv.mkDerivation {
 
   patches = [ ./prefer-dynamic.patch ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     sparrow3d

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   config = lib.mkMerge [
@@ -17,16 +22,16 @@
       '';
 
       boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          # Hacky!!! fuse hard-codes the path to mount
-          mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-          ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-          ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-        '';
+        # Hacky!!! fuse hard-codes the path to mount
+        mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
+        ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
+        ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
+      '';
 
       boot.initrd.systemd.extraBin = {
         "mount.fuse" = "${pkgs.fuse}/bin/mount.fuse";
         "unionfs" = "${pkgs.unionfs-fuse}/bin/unionfs";
-        "mount.unionfs-fuse" = pkgs.runCommand "mount.unionfs-fuse" {} ''
+        "mount.unionfs-fuse" = pkgs.runCommand "mount.unionfs-fuse" { } ''
           substitute ${pkgs.unionfs-fuse}/sbin/mount.unionfs-fuse $out \
             --replace '${pkgs.bash}/bin/bash' /bin/sh \
             --replace '${pkgs.fuse}/sbin' /bin \

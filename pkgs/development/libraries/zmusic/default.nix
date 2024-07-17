@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, alsa-lib
-, cmake
-, fluidsynth
-, libsndfile
-, mpg123
-, ninja
-, pkg-config
-, soundfont-fluid
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  alsa-lib,
+  cmake,
+  fluidsynth,
+  libsndfile,
+  mpg123,
+  ninja,
+  pkg-config,
+  soundfont-fluid,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rvvMS5KciHEvoY4hSfgAEyWJiDMqBto4o09oIpQIGTQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     (fetchpatch {
@@ -64,6 +68,9 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ azahi lassulus ];
+    maintainers = with maintainers; [
+      azahi
+      lassulus
+    ];
   };
 }

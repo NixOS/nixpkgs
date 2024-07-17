@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -19,9 +20,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"

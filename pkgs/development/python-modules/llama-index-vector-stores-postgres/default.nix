@@ -25,9 +25,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "psycopg2-binary" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     asyncpg

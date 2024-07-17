@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, roboto
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  roboto,
 }:
 
 buildGoModule rec {
@@ -20,9 +21,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"

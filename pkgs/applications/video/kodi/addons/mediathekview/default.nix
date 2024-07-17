@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, myconnpy }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  myconnpy,
+}:
 
 buildKodiAddon rec {
   pname = "mediathekview";
@@ -12,9 +17,7 @@ buildKodiAddon rec {
     hash = "sha256-XYyocXFTiYO7Ar0TtxjpCAy2Ywtnwb8BTxdKxwDWm4Y=";
   };
 
-  propagatedBuildInputs = [
-    myconnpy
-  ];
+  propagatedBuildInputs = [ myconnpy ];
 
   meta = with lib; {
     homepage = "https://github.com/mediathekview/plugin.video.mediathekview";

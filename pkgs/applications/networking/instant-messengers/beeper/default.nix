@@ -1,12 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, appimageTools
-, makeWrapper
-, writeShellApplication
-, curl
-, yq
-, common-updater-scripts
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  writeShellApplication,
+  curl,
+  yq,
+  common-updater-scripts,
 }:
 let
   pname = "beeper";
@@ -19,9 +20,7 @@ let
     inherit version pname src;
     extraPkgs = pkgs: [ pkgs.libsecret ];
   };
-  appimageContents = appimageTools.extractType2 {
-    inherit version pname src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
 stdenvNoCC.mkDerivation rec {
   inherit pname version;
@@ -53,7 +52,11 @@ stdenvNoCC.mkDerivation rec {
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
       name = "update-beeper";
-      runtimeInputs = [ curl yq common-updater-scripts ];
+      runtimeInputs = [
+        curl
+        yq
+        common-updater-scripts
+      ];
       text = ''
         set -o errexit
         latestLinux="$(curl -s https://download.todesktop.com/2003241lzgn20jd/latest-linux.yml)"
@@ -73,7 +76,11 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://beeper.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll mjm edmundmiller ];
+    maintainers = with maintainers; [
+      jshcmpbll
+      mjm
+      edmundmiller
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

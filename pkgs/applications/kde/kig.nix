@@ -1,7 +1,15 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  boost, karchive, kcrash, kiconthemes, kparts, ktexteditor, qtsvg,
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  boost,
+  karchive,
+  kcrash,
+  kiconthemes,
+  kparts,
+  ktexteditor,
+  qtsvg,
   qtxmlpatterns,
 }:
 
@@ -13,8 +21,18 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ raskin ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
-    boost karchive kcrash kiconthemes kparts ktexteditor qtsvg qtxmlpatterns
+    boost
+    karchive
+    kcrash
+    kiconthemes
+    kparts
+    ktexteditor
+    qtsvg
+    qtxmlpatterns
   ];
 }

@@ -1,10 +1,11 @@
-{ lib
-, apksigner
-, bash
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, python3
+{
+  lib,
+  apksigner,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    click
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ click ];
 
   makeWrapperArgs = [
     "--prefix"

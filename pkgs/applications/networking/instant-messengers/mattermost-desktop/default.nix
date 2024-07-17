@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, electron
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  electron,
+  makeWrapper,
 }:
 
 let
@@ -66,7 +67,10 @@ stdenv.mkDerivation {
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.joko ];
   };
 }

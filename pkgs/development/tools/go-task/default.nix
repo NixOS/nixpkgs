@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, testers
-, go-task
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  testers,
+  go-task,
 }:
 
 buildGoModule rec {
@@ -49,9 +50,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = go-task;
-    };
+    version = testers.testVersion { package = go-task; };
   };
 
   meta = with lib; {

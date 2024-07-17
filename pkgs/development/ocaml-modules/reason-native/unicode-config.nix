@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, reason, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,9 +11,7 @@ buildDunePackage {
   pname = "unicode-config";
   version = "0.0.0-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   meta = {
     description = "Configuration used to generate the @reason-native/unicode library";

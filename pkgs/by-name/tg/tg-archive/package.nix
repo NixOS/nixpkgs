@@ -1,13 +1,15 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
   pname = "tg-archive";
   version = "1.1.3";
 
-in python3.pkgs.buildPythonApplication {
+in
+python3.pkgs.buildPythonApplication {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -32,9 +34,7 @@ in python3.pkgs.buildPythonApplication {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "tgarchive"
-  ];
+  pythonImportsCheck = [ "tgarchive" ];
 
   meta = {
     description = "A tool for exporting Telegram group chats into static websites like mailing list archives";

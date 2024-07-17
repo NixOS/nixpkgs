@@ -36,7 +36,6 @@ buildPythonPackage {
     hash = "sha256-WfB+OY61IPprT6OCVHl8VA60p7lLVkRGuyYX+nm7bbA=";
   };
 
-
   build-system = [
     setuptools
     wheel

@@ -1,10 +1,11 @@
-{ lib
-, btrfs-progs
-, buildGoModule
-, fetchFromGitHub
-, lvm2
-, pkg-config
-, stdenv
+{
+  lib,
+  btrfs-progs,
+  buildGoModule,
+  fetchFromGitHub,
+  lvm2,
+  pkg-config,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -22,9 +23,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs

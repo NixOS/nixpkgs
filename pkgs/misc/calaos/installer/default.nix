@@ -1,4 +1,12 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, qmake, qttools, qtbase }:
+{
+  mkDerivation,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  qtbase,
+}:
 
 mkDerivation rec {
   pname = "calaos_installer";
@@ -11,18 +19,25 @@ mkDerivation rec {
     sha256 = "sha256-e/f58VtGmKukdv4rIrGljXhA9d/xUycM5V6I1FT5qeY=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
   buildInputs = [ qtbase ];
 
   qmakeFlags = [ "REVISION=${version}" ];
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -a calaos_installer.app $out/Applications
-  '' else ''
-    mkdir -p $out/bin
-    cp -a calaos_installer $out/bin
-  '';
+  installPhase =
+    if stdenv.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        cp -a calaos_installer.app $out/Applications
+      ''
+    else
+      ''
+        mkdir -p $out/bin
+        cp -a calaos_installer $out/bin
+      '';
 
   meta = with lib; {
     description = "Calaos Installer, a tool to create calaos configuration";

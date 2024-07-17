@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -15,9 +20,7 @@ let
 
   useBbswitch = cfg.pmMethod == "bbswitch" || cfg.pmMethod == "auto" && useNvidia;
 
-  primus = pkgs.primus.override {
-    inherit useNvidia;
-  };
+  primus = pkgs.primus.override { inherit useNvidia; };
 
 in
 
@@ -57,7 +60,10 @@ in
 
       driver = mkOption {
         default = "nvidia";
-        type = types.enum [ "nvidia" "nouveau" ];
+        type = types.enum [
+          "nvidia"
+          "nouveau"
+        ];
         description = ''
           Set driver used by bumblebeed. Supported are nouveau and nvidia.
         '';
@@ -65,7 +71,12 @@ in
 
       pmMethod = mkOption {
         default = "auto";
-        type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
+        type = types.enum [
+          "auto"
+          "bbswitch"
+          "switcheroo"
+          "none"
+        ];
         description = ''
           Set preferred power management method for unused card.
         '';
@@ -75,11 +86,20 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
+    boot.blacklistedKernelModules = [
+      "nvidia-drm"
+      "nvidia"
+      "nouveau"
+    ];
     boot.kernelModules = optional useBbswitch "bbswitch";
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
+    boot.extraModulePackages =
+      optional useBbswitch kernel.bbswitch
+      ++ optional useNvidia kernel.nvidia_x11.bin;
 
-    environment.systemPackages = [ bumblebee primus ];
+    environment.systemPackages = [
+      bumblebee
+      primus
+    ];
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";

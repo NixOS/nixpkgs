@@ -50,9 +50,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "capstone" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     ailment

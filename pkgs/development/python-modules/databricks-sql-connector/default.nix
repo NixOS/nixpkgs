@@ -35,9 +35,7 @@ buildPythonPackage rec {
     "thrift"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     alembic

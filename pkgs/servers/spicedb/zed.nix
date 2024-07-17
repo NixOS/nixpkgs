@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-l3wu3IimmPQL4z7WOx+u9dO/AUKPV+lQkWMzphj2bbA=";
 
-  ldflags = [
-    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
-  ];
+  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'" ];
 
   meta = with lib; {
     description = "Command line for managing SpiceDB";

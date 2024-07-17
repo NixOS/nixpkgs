@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitLab
-, nix
-, subversion
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  nix,
+  subversion,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -20,13 +21,16 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/wp4nix \
-      --prefix PATH : ${lib.makeBinPath [ nix subversion ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nix
+          subversion
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -38,4 +42,3 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
-

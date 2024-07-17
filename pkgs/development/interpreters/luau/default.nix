@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gitUpdater, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gitUpdater,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "luau";

@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, mrustc
-, mrustc-minicargo
-, llvm_12
-, llvmPackages_12
-, libffi
-, cmake
-, python3
-, zlib
-, libxml2
-, openssl
-, pkg-config
-, curl
-, which
-, time
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mrustc,
+  mrustc-minicargo,
+  llvm_12,
+  llvmPackages_12,
+  libffi,
+  cmake,
+  python3,
+  zlib,
+  libxml2,
+  openssl,
+  pkg-config,
+  curl,
+  which,
+  time,
 }:
 
 let
@@ -37,9 +39,7 @@ stdenv.mkDerivation rec {
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
 
-  patches = [
-    ./patches/0001-dont-download-rustc.patch
-  ];
+  patches = [ ./patches/0001-dont-download-rustc.patch ];
 
   postPatch = ''
     echo "applying patch ./rustc-${rustcVersion}-src.patch"
@@ -62,7 +62,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    llvm_12 libffi zlib libxml2
+    llvm_12
+    libffi
+    zlib
+    libxml2
     # for cargo
     openssl
     (curl.override { inherit openssl; })
@@ -140,8 +143,14 @@ stdenv.mkDerivation rec {
       This is useful for bootstrapping the main Rust compiler without
       an initial binary toolchain download.
     '';
-    maintainers = with maintainers; [ progval r-burns ];
-    license = with licenses; [ mit asl20 ];
+    maintainers = with maintainers; [
+      progval
+      r-burns
+    ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

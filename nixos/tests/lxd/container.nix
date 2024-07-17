@@ -1,132 +1,137 @@
-import ../make-test-python.nix ({ pkgs, lib, ... } :
+import ../make-test-python.nix (
+  { pkgs, lib, ... }:
 
-let
-  releases = import ../../release.nix {
-    configuration = {
-      # Building documentation makes the test unnecessarily take a longer time:
-      documentation.enable = lib.mkForce false;
+  let
+    releases = import ../../release.nix {
+      configuration = {
+        # Building documentation makes the test unnecessarily take a longer time:
+        documentation.enable = lib.mkForce false;
 
-      # Our tests require `grep` & friends:
-      environment.systemPackages = with pkgs; [ busybox ];
+        # Our tests require `grep` & friends:
+        environment.systemPackages = with pkgs; [ busybox ];
+      };
     };
-  };
 
-  lxd-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-  lxd-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
-  lxd-image-rootfs-squashfs = releases.lxdContainerImageSquashfs.${pkgs.stdenv.hostPlatform.system};
+    lxd-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
+    lxd-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+    lxd-image-rootfs-squashfs = releases.lxdContainerImageSquashfs.${pkgs.stdenv.hostPlatform.system};
 
-in {
-  name = "lxd-container";
+  in
+  {
+    name = "lxd-container";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
-  nodes.machine = { lib, ... }: {
-    virtualisation = {
-      diskSize = 6144;
-
-      # Since we're testing `limits.cpu`, we've gotta have a known number of
-      # cores to lean on
-      cores = 2;
-
-      # Ditto, for `limits.memory`
-      memorySize = 512;
-
-      lxc.lxcfs.enable = true;
-      lxd.enable = true;
+    meta = {
+      maintainers = lib.teams.lxc.members;
     };
-  };
 
-  testScript = ''
-    def instance_is_up(_) -> bool:
-      status, _ = machine.execute("lxc exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
-      return status == 0
+    nodes.machine =
+      { lib, ... }:
+      {
+        virtualisation = {
+          diskSize = 6144;
 
-    machine.wait_for_unit("sockets.target")
-    machine.wait_for_unit("lxd.service")
-    machine.wait_for_file("/var/lib/lxd/unix.socket")
+          # Since we're testing `limits.cpu`, we've gotta have a known number of
+          # cores to lean on
+          cores = 2;
 
-    # Wait for lxd to settle
-    machine.succeed("lxd waitready")
+          # Ditto, for `limits.memory`
+          memorySize = 512;
 
-    # no preseed should mean no service
-    machine.fail("systemctl status lxd-preseed.service")
+          lxc.lxcfs.enable = true;
+          lxd.enable = true;
+        };
+      };
 
-    machine.succeed("lxd init --minimal")
+    testScript = ''
+      def instance_is_up(_) -> bool:
+        status, _ = machine.execute("lxc exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+        return status == 0
 
-    machine.succeed(
-        "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
-    )
+      machine.wait_for_unit("sockets.target")
+      machine.wait_for_unit("lxd.service")
+      machine.wait_for_file("/var/lib/lxd/unix.socket")
 
-    with subtest("Container can be managed"):
-        machine.succeed("lxc launch nixos container")
-        with machine.nested("Waiting for instance to start and be usable"):
-          retry(instance_is_up)
-        machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
-        machine.succeed("lxc delete -f container")
+      # Wait for lxd to settle
+      machine.succeed("lxd waitready")
 
-    with subtest("Squashfs image is functional"):
-        machine.succeed(
-            "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs-squashfs} --alias nixos-squashfs"
-        )
-        machine.succeed("lxc launch nixos-squashfs container")
-        with machine.nested("Waiting for instance to start and be usable"):
-          retry(instance_is_up)
-        machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
-        machine.succeed("lxc delete -f container")
+      # no preseed should mean no service
+      machine.fail("systemctl status lxd-preseed.service")
 
-    with subtest("Container is mounted with lxcfs inside"):
-        machine.succeed("lxc launch nixos container")
-        with machine.nested("Waiting for instance to start and be usable"):
+      machine.succeed("lxd init --minimal")
+
+      machine.succeed(
+          "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
+      )
+
+      with subtest("Container can be managed"):
+          machine.succeed("lxc launch nixos container")
+          with machine.nested("Waiting for instance to start and be usable"):
             retry(instance_is_up)
+          machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
+          machine.succeed("lxc delete -f container")
 
-        ## ---------- ##
-        ## limits.cpu ##
-
-        machine.succeed("lxc config set container limits.cpu 1")
-        machine.succeed("lxc restart container")
-        with machine.nested("Waiting for instance to start and be usable"):
+      with subtest("Squashfs image is functional"):
+          machine.succeed(
+              "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs-squashfs} --alias nixos-squashfs"
+          )
+          machine.succeed("lxc launch nixos-squashfs container")
+          with machine.nested("Waiting for instance to start and be usable"):
             retry(instance_is_up)
+          machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
+          machine.succeed("lxc delete -f container")
 
-        assert (
-            "1"
-            == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
-        )
+      with subtest("Container is mounted with lxcfs inside"):
+          machine.succeed("lxc launch nixos container")
+          with machine.nested("Waiting for instance to start and be usable"):
+              retry(instance_is_up)
 
-        machine.succeed("lxc config set container limits.cpu 2")
-        machine.succeed("lxc restart container")
-        with machine.nested("Waiting for instance to start and be usable"):
-            retry(instance_is_up)
+          ## ---------- ##
+          ## limits.cpu ##
 
-        assert (
-            "2"
-            == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
-        )
+          machine.succeed("lxc config set container limits.cpu 1")
+          machine.succeed("lxc restart container")
+          with machine.nested("Waiting for instance to start and be usable"):
+              retry(instance_is_up)
 
-        ## ------------- ##
-        ## limits.memory ##
+          assert (
+              "1"
+              == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
+          )
 
-        machine.succeed("lxc config set container limits.memory 64MB")
-        machine.succeed("lxc restart container")
-        with machine.nested("Waiting for instance to start and be usable"):
-            retry(instance_is_up)
+          machine.succeed("lxc config set container limits.cpu 2")
+          machine.succeed("lxc restart container")
+          with machine.nested("Waiting for instance to start and be usable"):
+              retry(instance_is_up)
 
-        assert (
-            "MemTotal:          62500 kB"
-            == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
-        )
+          assert (
+              "2"
+              == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
+          )
 
-        machine.succeed("lxc config set container limits.memory 128MB")
-        machine.succeed("lxc restart container")
-        with machine.nested("Waiting for instance to start and be usable"):
-            retry(instance_is_up)
+          ## ------------- ##
+          ## limits.memory ##
 
-        assert (
-            "MemTotal:         125000 kB"
-            == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
-        )
+          machine.succeed("lxc config set container limits.memory 64MB")
+          machine.succeed("lxc restart container")
+          with machine.nested("Waiting for instance to start and be usable"):
+              retry(instance_is_up)
 
-        machine.succeed("lxc delete -f container")
-  '';
-})
+          assert (
+              "MemTotal:          62500 kB"
+              == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
+          )
+
+          machine.succeed("lxc config set container limits.memory 128MB")
+          machine.succeed("lxc restart container")
+          with machine.nested("Waiting for instance to start and be usable"):
+              retry(instance_is_up)
+
+          assert (
+              "MemTotal:         125000 kB"
+              == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
+          )
+
+          machine.succeed("lxc delete -f container")
+    '';
+  }
+)

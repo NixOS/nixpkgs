@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liblo";
@@ -15,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight library to handle the sending and receiving of messages according to the Open Sound Control (OSC) protocol";
     homepage = "https://sourceforge.net/projects/liblo";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

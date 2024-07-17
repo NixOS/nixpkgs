@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, libpulseaudio, pkg-config, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpulseaudio,
+  pkg-config,
+  gtk3,
+  glibc,
+  autoconf,
+  automake,
+  libnotify,
+  libX11,
+  xf86inputevdev,
+}:
 
 stdenv.mkDerivation {
   pname = "pa-applet";
@@ -11,9 +24,18 @@ stdenv.mkDerivation {
     sha256 = "sha256-ihvZFXHgr5YeqMKmVY/GB86segUkQ9BYqJYfE3PTgog=";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
   buildInputs = [
-    gtk3 libpulseaudio glibc libnotify libX11 xf86inputevdev
+    gtk3
+    libpulseaudio
+    glibc
+    libnotify
+    libX11
+    xf86inputevdev
   ];
 
   preConfigure = ''

@@ -21,5 +21,10 @@ mkKdeDerivation {
     })
   ];
 
-  extraBuildInputs = [qt5compat qttools acl attr];
+  extraBuildInputs = [
+    qt5compat
+    qttools
+    acl
+    attr
+  ];
 }

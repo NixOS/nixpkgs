@@ -1,8 +1,9 @@
-{ mkDerivation
-, fetchurl
-, lib
-, extra-cmake-modules
-, qtbase
+{
+  mkDerivation,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  qtbase,
 }:
 
 mkDerivation rec {

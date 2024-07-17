@@ -102,27 +102,24 @@ buildPythonPackage rec {
     websockets = [ websockets ];
   };
 
-  nativeCheckInputs =
-    [
-      flaky
-      matplotlib
-      numpy
-      pandas
-      pytestCheckHook
-    ]
-    ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [
+    flaky
+    matplotlib
+    numpy
+    pandas
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
 
-  disabledTests =
-    [
-      # Don't run lint tests
-      "test_pydocstyle"
-      # https://github.com/python-lsp/python-lsp-server/issues/243
-      "test_numpy_completions"
-      "test_workspace_loads_pycodestyle_config"
-      "test_autoimport_code_actions_and_completions_for_notebook_document"
-      # avoid dependencies on many Qt things just to run one singular test
-      "test_pyqt_completion"
-    ];
+  disabledTests = [
+    # Don't run lint tests
+    "test_pydocstyle"
+    # https://github.com/python-lsp/python-lsp-server/issues/243
+    "test_numpy_completions"
+    "test_workspace_loads_pycodestyle_config"
+    "test_autoimport_code_actions_and_completions_for_notebook_document"
+    # avoid dependencies on many Qt things just to run one singular test
+    "test_pyqt_completion"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);

@@ -40,9 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-+82zQtC20Q2u3/ujnt8UfmK4oYCpH6Eo2TTlk2g3z+s=";
   };
 
-  pythonRelaxDeps = [
-    "scipy"
-  ];
+  pythonRelaxDeps = [ "scipy" ];
 
   build-system = [
     cython

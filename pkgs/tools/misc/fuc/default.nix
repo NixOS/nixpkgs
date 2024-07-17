@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, clippy
-, rustfmt
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  clippy,
+  rustfmt,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,9 +21,16 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoBuildFlags = [ "--workspace" "--bin cpz" "--bin rmz" ];
+  cargoBuildFlags = [
+    "--workspace"
+    "--bin cpz"
+    "--bin rmz"
+  ];
 
-  nativeCheckInputs = [ clippy rustfmt ];
+  nativeCheckInputs = [
+    clippy
+    rustfmt
+  ];
 
   meta = with lib; {
     description = "Modern, performance focused unix commands";

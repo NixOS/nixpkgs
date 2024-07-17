@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, go-md2man
-, pkg-config
-, libcap
-, libseccomp
-, python3
-, systemd
-, yajl
-, nixosTests
-, criu
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  go-md2man,
+  pkg-config,
+  libcap,
+  libseccomp,
+  python3,
+  systemd,
+  yajl,
+  nixosTests,
+  criu,
 }:
 
 let
@@ -49,9 +50,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    go-md2man
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ criu libcap libseccomp systemd yajl ];
+  buildInputs = [
+    criu
+    libcap
+    libseccomp
+    systemd
+    yajl
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -64,14 +76,16 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
     echo '#define GIT_VERSION "${src.rev}"' > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+    ${lib.concatMapStringsSep "\n" (
+      e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
     ) disabledTests}
   '';
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = {
+    inherit (nixosTests) podman;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/containers/crun/releases/tag/${version}";

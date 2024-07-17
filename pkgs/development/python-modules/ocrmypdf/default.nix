@@ -99,9 +99,7 @@ buildPythonPackage rec {
       mpl20
       mit
     ];
-    maintainers = with maintainers; [
-      dotlambda
-    ];
+    maintainers = with maintainers; [ dotlambda ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
     mainProgram = "ocrmypdf";
   };

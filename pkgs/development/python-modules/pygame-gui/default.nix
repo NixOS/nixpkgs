@@ -58,7 +58,10 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v_(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v_(.*)"
+    ];
   };
 
   meta = with lib; {

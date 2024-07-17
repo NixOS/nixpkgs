@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitLab, pkg-config, dbus }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  dbus,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ear2ctl";

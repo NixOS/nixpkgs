@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, CoreFoundation
-, Security
-, libsecret
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  CoreFoundation,
+  Security,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,16 +29,19 @@ stdenv.mkDerivation rec {
     "-DQT_TRANSLATIONS_DIR=share/qt/translations"
   ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ [ qtbase qttools ]
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ [
+      qtbase
+      qttools
+    ]
     ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-  ];
+      CoreFoundation
+      Security
+    ];
 
   doInstallCheck = true;
 

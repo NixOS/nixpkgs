@@ -1,4 +1,10 @@
-{ fetchzip, lib, rustPlatform, git, installShellFiles }:
+{
+  fetchzip,
+  lib,
+  rustPlatform,
+  git,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
@@ -14,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Y8zqdS8vl2koXmgFY0hZWWP1ZAO8JgwkoPTYPVpkWsA=";
 
-  nativeBuildInputs = [ git installShellFiles ];
+  nativeBuildInputs = [
+    git
+    installShellFiles
+  ];
 
   env.HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
 
@@ -35,6 +44,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with maintainers; [ danth yusdacra zowoq ];
+    maintainers = with maintainers; [
+      danth
+      yusdacra
+      zowoq
+    ];
   };
 }

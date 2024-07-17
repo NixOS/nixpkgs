@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, cstruct
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
 }:
 
 buildDunePackage rec {
@@ -15,9 +16,7 @@ buildDunePackage rec {
     hash = "sha256-SsiDz53b9bMIT9Q3IwDdB3WKy98WSd9fiieU41qZpeE=";
   };
 
-  propagatedBuildInputs = [
-    cstruct
-  ];
+  propagatedBuildInputs = [ cstruct ];
 
   meta = {
     description = "Ergonomic, composable, efficient read/write streams";
@@ -27,4 +26,3 @@ buildDunePackage rec {
     maintainers = [ ];
   };
 }
-

@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+}:
 
 buildKodiAddon rec {
   pname = "formula1";
@@ -10,14 +17,10 @@ buildKodiAddon rec {
     sha256 = "sha256-aClAgkJKvixeKzrwgEsfDhPXiFv9+ULLmb8c9QTaUgM=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   passthru = {
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.formula1";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.formula1"; };
   };
 
   meta = with lib; {
