@@ -537,7 +537,7 @@
     ];
     "brother" = ps: with ps; [
       brother
-      pysnmp-lextudio
+      pysnmp
     ];
     "brottsplatskartan" = ps: with ps; [
       brottsplatskartan
@@ -4152,7 +4152,7 @@
       paho-mqtt_1
     ];
     "snmp" = ps: with ps; [
-      pysnmp-lextudio
+      pysnmp
     ];
     "snooz" = ps: with ps; [
       aioesphomeapi
