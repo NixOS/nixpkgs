@@ -951,6 +951,12 @@ with lib.maintainers;
     shortName = "StridTech";
   };
 
+  swift = {
+    members = [ ];
+    scope = "Maintain Swift compiler suite for NixOS.";
+    shortName = "Swift";
+  };
+
   systemd = {
     members = [ ];
     githubTeams = [ "systemd" ];
