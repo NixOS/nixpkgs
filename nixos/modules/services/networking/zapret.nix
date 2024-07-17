@@ -28,7 +28,7 @@ in {
 
     firewallType = mkOption {
       type = types.enum [ "iptables" "nftables" ];
-      default = if config.networking.nftables.enable then "nftables" else "iptables";
+      default = "nftables";
       description = ''
         Which firewall zapret should use
       '';
