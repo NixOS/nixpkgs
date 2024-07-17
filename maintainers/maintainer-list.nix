@@ -9303,6 +9303,12 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jemand771 = {
+    email = "willy@jemand771.net";
+    github = "jemand771";
+    githubId = 19669567;
+    name = "Willy";
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
