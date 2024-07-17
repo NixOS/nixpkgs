@@ -924,8 +924,12 @@ rec {
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
       assert
-      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin)
-        "cannot use enableFakechroot on Darwin. You can work around this by just using `fakeRootCommands` or cross-compiling/using a VM. There is no alternative for the package proot on darwin. See #327311");
+      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin) ''
+        cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
+              - use `fakeRootCommands` with the restricted `fakeroot` environment
+              - cross-compile your packages
+              - run your packages in a virtual machine
+              Discussion: https://github.com/NixOS/nixpkgs/issues/327311'');
       let
         baseName = baseNameOf name;
 
