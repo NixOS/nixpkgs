@@ -1,26 +1,27 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, gnugrep
-, gnused
-, curl
-, mpv
-, aria2
-, ffmpeg
-, fzf
-, openssl
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  gnugrep,
+  gnused,
+  curl,
+  mpv,
+  aria2,
+  ffmpeg,
+  fzf,
+  openssl,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "dra-cla";
-  version = "unstable-2024-02-07";
+  version = "0-unstable-2024-06-07";
 
   src = fetchFromGitHub {
     owner = "CoolnsX";
     repo = "dra-cla";
-    rev = "cf8a90c0c68338404e8a1434af0a6e65fc5d0a08";
-    hash = "sha256-3cz1VeDM0NHdYMiCDVnIq6Y/7rFSijhNrnxC36Yixxc=";
+    rev = "24d7eaa5d433bc2cbbba4f23552cd812506fefee";
+    hash = "sha256-BmBQSkLSq+BaxkzXEy3hlI3qNq2NCIoGKDKt7gyDz+s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +32,18 @@ stdenvNoCC.mkDerivation {
     install -Dm755 dra-cla $out/bin/dra-cla
 
     wrapProgram $out/bin/dra-cla \
-      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl mpv aria2 ffmpeg fzf openssl ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gnugrep
+          gnused
+          curl
+          mpv
+          aria2
+          ffmpeg
+          fzf
+          openssl
+        ]
+      }
 
     runHook postInstall
   '';
