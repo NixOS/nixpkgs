@@ -1,8 +1,15 @@
-{ fetchFromGitHub, melpaBuild, pkgs, lib, substituteAll }:
+{
+  fetchFromGitHub,
+  melpaBuild,
+  pkgs,
+  lib,
+  substituteAll,
+}:
 
 melpaBuild {
   pname = "codeium";
   version = "1.6.13";
+
   src = fetchFromGitHub {
     owner = "Exafunction";
     repo = "codeium.el";
