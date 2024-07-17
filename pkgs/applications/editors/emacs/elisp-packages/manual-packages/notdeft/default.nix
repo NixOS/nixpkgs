@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, melpaBuild
-, fetchFromGitHub
-, hydra
-, ivy
-, pkg-config
-, tclap
-, xapian
+{
+  lib,
+  stdenv,
+  melpaBuild,
+  fetchFromGitHub,
+  hydra,
+  ivy,
+  pkg-config,
+  tclap,
+  xapian,
   # Include pre-configured hydras
-, withHydra ? false
+  withHydra ? false,
   # Include Ivy integration
-, withIvy ? false
+  withIvy ? false,
 }:
 
 let
@@ -31,7 +32,11 @@ let
 
     sourceRoot = "${src.name}/xapian";
 
-    nativeBuildInputs = [ pkg-config tclap xapian ];
+    nativeBuildInputs = [
+      pkg-config
+      tclap
+      xapian
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -45,8 +50,8 @@ let
 in
 melpaBuild {
   inherit pname version src;
-  packageRequires = lib.optional withHydra hydra
-    ++ lib.optional withIvy ivy;
+
+  packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
 
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
