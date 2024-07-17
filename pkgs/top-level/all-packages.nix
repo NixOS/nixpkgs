@@ -25659,8 +25659,6 @@ with pkgs;
 
   nats-streaming-server = callPackage ../servers/nats-streaming-server { };
 
-  neard = callPackage ../servers/neard { };
-
   networkaudiod = callPackage ../servers/networkaudiod { };
 
   unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
