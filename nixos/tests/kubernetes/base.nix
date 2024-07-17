@@ -59,6 +59,10 @@ let
                   securePort = 443;
                   advertiseAddress = master.ip;
                 };
+                # NOTE: what featureGates are useful for testing might change in
+                # the future, see link below to find new ones
+                # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+                featureGates = {CPUManager = true; AppArmor= false;};
                 masterAddress = "${masterName}.${config.networking.domain}";
               };
             }
