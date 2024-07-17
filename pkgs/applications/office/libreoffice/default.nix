@@ -562,6 +562,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit srcs;
     jdk = jre';
+    python = python311; # for unoconv
     updateScript = [
       ./update.sh
       # Pass it this file name as argument

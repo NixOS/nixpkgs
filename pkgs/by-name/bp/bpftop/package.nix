@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
 
   nativeBuildInputs = [ pkg-config ];
 
+  hardeningDisable = [
+    "zerocallusedregs"
+  ];
+
   meta = {
     description = "Dynamic real-time view of running eBPF programs";
     homepage = "https://github.com/Netflix/bpftop";
