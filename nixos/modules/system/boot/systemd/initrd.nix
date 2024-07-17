@@ -72,7 +72,12 @@ let
     "timers.target"
     "umount.target"
     "systemd-bsod.service"
-  ] ++ cfg.additionalUpstreamUnits;
+  ] ++ cfg.additionalUpstreamUnits
+  ++ lib.optional (cfg.root == "verity") [
+    "veritysetup-pre.target"
+    "veritysetup.target"
+    "remote-veritysetup.target"
+  ];
 
   upstreamWants = [
     "sysinit.target.wants"
@@ -211,7 +216,7 @@ in {
     };
 
     root = lib.mkOption {
-      type = lib.types.enum [ "fstab" "gpt-auto" ];
+      type = lib.types.enum [ "fstab" "gpt-auto" "verity" ];
       default = "fstab";
       example = "gpt-auto";
       description = ''
@@ -220,6 +225,25 @@ in {
         allow specifying the root file system itself this
         way. Instead, the `fstab` value is used in order to interpret
         the root file system specified with the `fileSystems` option.
+      '';
+    };
+
+    verityRootHash = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      example = "6ed332bcfa615381511d4d5ba44a293bb476f368f7e9e304f0dff50230d1a85b";
+      description = ''
+        The root hash of the verity-protected root file system.
+
+        If set, the root file system will be mounted via DM-verity through
+        {manpage}`systemd-veritysetup-generator(8)` and no other root file
+        system mount option such as `fileSystems."/"` should be supplied.
+
+        Note that currently, for NixOS activation to succeed, certain parts of the root
+        file system must be writable, so writable (overlay) mounts need to be put in place
+        for activation to succeed. Furthermore, for dm-verity to work, the required udev rules
+        need to be put in place, which can conveniently be done by enabling the
+        {option}`boot.initrd.services.lvm.enable` option.
       '';
     };
 
@@ -237,7 +261,7 @@ in {
 
     initrdBin = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
@@ -356,7 +380,15 @@ in {
     assertions = [
       {
         assertion = cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
-        message = "The ‘fileSystems’ option does not specify your root file system.";
+        message = "The `fileSystems` option does not specify your root file system.";
+      }
+      {
+        assertion = cfg.root == "verity" -> cfg.verityRootHash != "";
+        message = "The `verityRootHash` option must be set when `root` is set to `verity`.";
+      }
+      {
+        assertion = cfg.root == "verity" -> !(builtins.hasAttr "/" config.fileSystems);
+        message = "The `fileSystems.\"/\"` option should not be set when `root` is set to `verity`.";
       }
     ] ++ map (name: {
       assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
@@ -388,14 +420,19 @@ in {
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
-    ++ lib.optional cfg.package.withEfi "efivarfs";
+    ++ lib.optional cfg.package.withEfi "efivarfs"
+    ++ lib.optional (cfg.root == "verity") "dm-verity";
 
-    boot.kernelParams = [
-      "root=${config.boot.initrd.systemd.root}"
-    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+    boot.kernelParams =
+      lib.optional (cfg.root != "verity") "root=${config.boot.initrd.systemd.root}"
+      ++ lib.optional (cfg.root == "verity") "systemd.verity=yes"
+      ++ lib.optional (cfg.root == "verity") "roothash=${cfg.verityRootHash}"
+      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
       # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
-      # For NixOS activation to succeed, we need to have root writable in initrd.
-      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
+      # For NixOS activation to succeed, we need to have root writable in initrd. So unless root
+      # is verity-protected (and thus read-only), where the user will have to take care of putting
+      # overlay mounts in place, let's add "rw" to the kernel command line.
+      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto" && cfg.root != "verity") "rw";
 
     boot.initrd.systemd = {
       # bashInteractive is easier to use and also required by debug-shell.service
@@ -486,6 +523,9 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
+      ] ++ optionals (cfg.root == "verity") [
+        "${cfg.package}/lib/systemd/systemd-veritysetup"
+        "${cfg.package}/lib/systemd/system-generators/systemd-veritysetup-generator"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
