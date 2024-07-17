@@ -159,6 +159,7 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+    nccl
   ]);
 
   nativeCheckInputs = [
