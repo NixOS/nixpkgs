@@ -1773,6 +1773,10 @@ self: super: with self; {
 
   bracex = callPackage ../development/python-modules/bracex { };
 
+  brainflow = callPackage ../development/python-modules/brainflow {
+    inherit (pkgs) brainflow;
+  };
+
   braintree = callPackage ../development/python-modules/braintree { };
 
   branca = callPackage ../development/python-modules/branca { };
