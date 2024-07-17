@@ -1,0 +1,26 @@
+diff --git a/tests/components/snmp/test_integer_sensor.py b/tests/components/snmp/test_integer_sensor.py
+index dab2b080c9..8e7e0f166e 100644
+--- a/tests/components/snmp/test_integer_sensor.py
++++ b/tests/components/snmp/test_integer_sensor.py
+@@ -2,7 +2,7 @@
+ 
+ from unittest.mock import patch
+ 
+-from pysnmp.hlapi import Integer32
++from pysnmp.proto.rfc1902 import Integer32
+ import pytest
+ 
+ from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+diff --git a/tests/components/snmp/test_negative_sensor.py b/tests/components/snmp/test_negative_sensor.py
+index dba09ea75b..66a111b68d 100644
+--- a/tests/components/snmp/test_negative_sensor.py
++++ b/tests/components/snmp/test_negative_sensor.py
+@@ -2,7 +2,7 @@
+ 
+ from unittest.mock import patch
+ 
+-from pysnmp.hlapi import Integer32
++from pysnmp.proto.rfc1902 import Integer32
+ import pytest
+ 
+ from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
