@@ -4607,6 +4607,8 @@ self: super: with self; {
 
   fpdf2 = callPackage ../development/python-modules/fpdf2 { };
 
+  fpsample = callPackage ../development/python-modules/fpsample { };
+
   fpylll = callPackage ../development/python-modules/fpylll { };
 
   fpyutils = callPackage ../development/python-modules/fpyutils { };
@@ -5298,6 +5300,8 @@ self: super: with self; {
   gsd = callPackage ../development/python-modules/gsd { };
 
   gsm0338 = callPackage ../development/python-modules/gsm0338 { };
+
+  gsplat = callPackage ../development/python-modules/gsplat { };
 
   gspread = callPackage ../development/python-modules/gspread { };
 
@@ -8895,6 +8899,10 @@ self: super: with self; {
 
   neoteroi-mkdocs = callPackage ../development/python-modules/neoteroi-mkdocs { };
 
+  nerfacc = callPackage ../development/python-modules/nerfacc { };
+
+  nerfstudio = callPackage ../development/python-modules/nerfstudio { };
+
   nessclient = callPackage ../development/python-modules/nessclient { };
 
   nest = toPythonModule(pkgs.nest-mpi.override { withPython = true; python3 = python; });
@@ -8944,6 +8952,8 @@ self: super: with self; {
   newversion = callPackage ../development/python-modules/newversion { };
 
   newick = callPackage ../development/python-modules/newick { };
+
+  newrawpy = callPackage ../development/python-modules/newrawpy { };
 
   nexia = callPackage ../development/python-modules/nexia { };
 
@@ -9150,6 +9160,8 @@ self: super: with self; {
   numpyro = callPackage ../development/python-modules/numpyro { };
 
   nunavut = callPackage ../development/python-modules/nunavut { };
+
+  nuscenes-devkit = callPackages ../development/python-modules/nuscenes-devkit { };
 
   nutils = callPackage ../development/python-modules/nutils { };
 
