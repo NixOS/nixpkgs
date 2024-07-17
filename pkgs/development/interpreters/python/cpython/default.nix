@@ -367,10 +367,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     };
   in [
     "${mingw-patch}/*.patch"
-  ]) ++ optionals (pythonAtLeast "3.12" && (stdenv.hostPlatform != stdenv.buildPlatform) && (
-    stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV
-  )) [
-    # backport fix for various platforms; armv7l, riscv64
+  ]) ++ optionals (pythonAtLeast "3.12") [
+    # backport fix for various platforms; armv7l, riscv64, s390
     # https://github.com/python/cpython/pull/121178
     (
       if (pythonAtLeast "3.13") then
