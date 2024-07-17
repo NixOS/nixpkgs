@@ -1,44 +1,43 @@
-{ lib
-, python3
-, melpaBuild
-, fetchFromGitHub
-, substituteAll
-, acm
-, markdown-mode
-, git
-, go
-, gopls
-, pyright
-, ruff
-, tempel
-, writeScript
-, writeText
+{
+  lib,
+  python3,
+  melpaBuild,
+  fetchFromGitHub,
+  substituteAll,
+  acm,
+  markdown-mode,
+  git,
+  go,
+  gopls,
+  pyright,
+  ruff,
+  tempel,
+  unstableGitUpdater,
 }:
 
 let
-  rev = "9e88e660d717ba597d9fe9366cf4278674734410";
-  python = python3.withPackages (ps: with ps; [
-    epc
-    orjson
-    paramiko
-    rapidfuzz
-    setuptools
-    sexpdata
-    six
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      epc
+      orjson
+      paramiko
+      rapidfuzz
+      setuptools
+      sexpdata
+      six
+    ]
+  );
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20240629.1404";
+  version = "0-unstable-2024-06-29";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    inherit rev;
+    rev = "9e88e660d717ba597d9fe9366cf4278674734410";
     hash = "sha256-qpetTKZDQjoofp8ggothYALQBpwLjuNxCq46Pe4oZZA=";
   };
-
-  commit = rev;
 
   patches = [
     # Hardcode the python dependencies needed for lsp-bridge, so users
@@ -64,17 +63,13 @@ melpaBuild {
     tempel
   ];
 
-  recipe = writeText "recipe" ''
-    (lsp-bridge
-      :repo "manateelazycat/lsp-bridge"
-      :fetcher github
-      :files
-      ("*.el"
-       "lsp_bridge.py"
-       "core"
-       "langserver"
-       "multiserver"
-       "resources"))
+  files = ''
+    ("*.el"
+     "lsp_bridge.py"
+     "core"
+     "langserver"
+     "multiserver"
+     "resources")
   '';
 
   doCheck = true;
@@ -91,27 +86,15 @@ melpaBuild {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts coreutils git gnused
-    set -eu -o pipefail
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-    tmpdir="$(mktemp -d)"
-    git clone --depth=1 https://github.com/manateelazycat/lsp-bridge.git "$tmpdir"
-
-    pushd "$tmpdir"
-    commit=$(git show -s --pretty='format:%H')
-    # Based on: https://github.com/melpa/melpa/blob/2d8716906a0c9e18d6c979d8450bf1d15dd785eb/package-build/package-build.el#L523-L533
-    version=$(TZ=UTC git show -s --pretty='format:%cd' --date='format-local:%Y%m%d.%H%M' | sed 's|\.0*|.|')
-    popd
-
-    update-source-version emacsPackages.lsp-bridge $version --rev="$commit"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast LSP client for Emacs";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fxttr kira-bruneau ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fxttr
+      kira-bruneau
+    ];
   };
 }

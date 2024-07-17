@@ -33,19 +33,13 @@ in
 
   emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
 
-  ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
-
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/ghc-mod { };
-
   git-undo = callPackage ./manual-packages/git-undo { };
 
   grid = callPackage ./manual-packages/grid { };
-
-  haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
@@ -121,4 +115,10 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+}
+### Aliases
+// lib.optionalAttrs pkgs.config.allowAliases {
+  ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
+  ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
+  haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
 }
