@@ -127,4 +127,5 @@ in
 ### Aliases
 // lib.optionalAttrs pkgs.config.allowAliases {
   ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
+  ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
 }
