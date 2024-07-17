@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper
-, cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, nspr, nss, pango
-, libxcb, libXi, libXrender, libXext, dbus
+{ lib, stdenv, fetchurl, unzip, autoPatchelfHook
+, glib, nspr, nss, libxcb
 , testers, chromedriver
 }:
 
@@ -26,16 +24,6 @@ let
 
   spec = allSpecs.${stdenv.hostPlatform.system}
     or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
-
-  libs = lib.makeLibraryPath [
-    stdenv.cc.cc.lib
-    cairo fontconfig freetype
-    gdk-pixbuf glib gtk2
-    libX11 nspr nss pango libXrender
-    libxcb libXext libXi
-    dbus
-  ];
-
 in stdenv.mkDerivation rec {
   pname = "chromedriver";
   version = upstream-info.version;
@@ -45,15 +33,13 @@ in stdenv.mkDerivation rec {
     hash = spec.hash;
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
-
-  unpackPhase = "unzip $src";
+  nativeBuildInputs = [ unzip autoPatchelfHook ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [
+    glib nspr nss libxcb
+  ];
 
   installPhase = ''
-    install -m755 -D "chromedriver-${spec.system}/chromedriver" $out/bin/chromedriver
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
-    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
+    install -m555 -D "chromedriver" $out/bin/chromedriver
   '';
 
   passthru.tests.version = testers.testVersion { package = chromedriver; };
