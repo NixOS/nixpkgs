@@ -952,7 +952,12 @@ with lib.maintainers;
   };
 
   swift = {
-    members = [ ];
+    members = [
+      dduan
+      stephank
+      trepetti
+      trundle
+    ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
   };
