@@ -1825,7 +1825,6 @@ broken-packages:
   - franz # failure in job https://hydra.nixos.org/build/252725109 at 2024-03-16
   - fraxl # failure in job https://hydra.nixos.org/build/233219345 at 2023-09-02
   - freddy # failure in job https://hydra.nixos.org/build/233208999 at 2023-09-02
-  - free-algebras # failure in job https://hydra.nixos.org/build/252728477 at 2024-03-16
   - free-applicative-t # failure in job https://hydra.nixos.org/build/252715728 at 2024-03-16
   - free-concurrent # failure in job https://hydra.nixos.org/build/233257070 at 2023-09-02
   - free-foil # failure in job https://hydra.nixos.org/build/265268910 at 2024-07-14

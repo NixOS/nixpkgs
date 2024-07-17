@@ -1415,7 +1415,6 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - free-category
  - free-functors
  - free-game
  - free-theorems-seq-webui
