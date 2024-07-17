@@ -63,15 +63,14 @@ buildGoModule {
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
-
+    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/tailscale"
     installShellCompletion --cmd tailscale \
       --bash <($out/bin/tailscale completion bash) \
       --fish <($out/bin/tailscale completion fish) \
       --zsh <($out/bin/tailscale completion zsh)
-
-    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
-    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   passthru.tests = {
