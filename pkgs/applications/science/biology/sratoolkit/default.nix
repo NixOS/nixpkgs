@@ -2,31 +2,18 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, libidn
+, libidn2
 , zlib
 , bzip2
 }:
 
-
-let
-  libidn11 = libidn.overrideAttrs (old: {
-    pname = "libidn";
-    version = "1.34";
-    src = fetchurl {
-      url = "mirror://gnu/libidn/libidn-1.34.tar.gz";
-      sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
-    };
-  });
-
-in
-
 stdenv.mkDerivation rec {
   pname = "sratoolkit";
-  version = "2.11.3";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/${version}/sratoolkit.${version}-ubuntu64.tar.gz";
-    sha256 = "1590lc4cplxr3lhjqci8fjncy67imn2h14qd2l87chmhjh243qvx";
+    sha256 = "sha256-tmjb+i6TBBdG0cMTaRJyrqS56lKykdevt51G3AU2dog=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libidn11
+    libidn2
     zlib
     bzip2
     stdenv.cc.cc.lib
