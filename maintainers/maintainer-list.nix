@@ -159,6 +159,12 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+  _21CSM = {
+    name = "21CSM";
+    email = "21CSM@tutanota.com";
+    github = "21CSM";
+    githubId = 81891917;
+  };
   _21eleven = {
     name = "Noah Lidell";
     email = "noahlidell@gmail.com";
