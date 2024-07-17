@@ -104,13 +104,6 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
-  nextcloudOlderThan = versionOlder cfg.package.version;
-
-  # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = nextcloudGreaterOrEqualThan "27.1.2"
-    || (nextcloudOlderThan "27.0.0" && nextcloudGreaterOrEqualThan "26.0.8");
-
   overrideConfig = let
     c = cfg.config;
     requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
@@ -205,30 +198,6 @@ in {
     (mkRenamedOptionModule
       [ "services" "nextcloud" "cron" "memoryLimit" ]
       [ "services" "nextcloud" "cli" "memoryLimit" ])
-    (mkRemovedOptionModule [ "services" "nextcloud" "enableBrokenCiphersForSSE" ] ''
-      This option has no effect since there's no supported Nextcloud version packaged here
-      using OpenSSL for RC4 SSE.
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
-      Add port to services.nextcloud.config.dbhost instead.
-    '')
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "settings" "loglevel" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "logType" ] [ "services" "nextcloud" "settings" "log_type" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "settings" "default_phone_region" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "settings" "overwriteprotocol" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "settings" "skeletondirectory" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "settings" "profile.enabled" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "settings" "trusted_domains" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "settings" "trusted_proxies" ])
-    (mkRenamedOptionModule ["services" "nextcloud" "extraOptions" ] [ "services" "nextcloud" "settings" ])
   ];
 
   options.services.nextcloud = {
@@ -836,22 +805,8 @@ in {
             `services.nextcloud.package`.
           '';
 
-      in (optional (cfg.poolConfig != null) ''
-          Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
-          Please migrate your configuration to config.services.nextcloud.poolSettings.
-        '')
-        ++ (optional (cfg.config.dbtableprefix != null) ''
-          Using `services.nextcloud.config.dbtableprefix` is deprecated. Fresh installations with this
-          option set are not allowed anymore since v20.
-
-          If you have an existing installation with a custom table prefix, make sure it is
-          set correctly in `config.php` and remove the option from your NixOS config.
-        '')
-        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
-        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
+      in optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05")
+        ++ optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11");
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -861,7 +816,7 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "24.05" then nextcloud27
+          else if versionOlder stateVersion "24.05" then nextcloud28
           else nextcloud29
         );
 
@@ -1019,9 +974,7 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
-          # an automatic creation of the database user.
-          environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
+          environment.NC_setup_create_db_user = "false";
         };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
@@ -1176,7 +1129,7 @@ in {
             priority = 500;
             extraConfig = ''
               # legacy support (i.e. static files and directories in cfg.package)
-              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"}]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1203,7 +1156,7 @@ in {
               default_type application/wasm;
             }
           '';
-          "~ ^\\/(?:updater|ocs-provider${optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"})(?:$|\\/)".extraConfig = ''
+          "~ ^\\/(?:updater|ocs-provider)(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';

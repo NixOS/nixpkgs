@@ -43,7 +43,6 @@ in
       "dbuser"
       "dbpassFile"
       "dbhost"
-      "dbport"
       "dbtableprefix"
     ] (
       opt: options.services.nextcloud.config.${opt} // {
