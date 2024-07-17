@@ -150,16 +150,6 @@ let
         ];
       });
 
-      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
-        pname = "ha-av";
-        version = "10.1.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
-      });
-
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
         src = fetchFromGitHub {
