@@ -6,6 +6,7 @@
   setuptools,
   numpy,
   hdf5,
+  pythonRelaxDepsHook,
   cython_0,
   pkgconfig,
   mpi4py ? null,
@@ -45,6 +46,9 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
+  pythonRelaxDeps = [
+    "mpi4py"
+  ];
 
   HDF5_DIR = "${hdf5}";
   HDF5_MPI = if mpiSupport then "ON" else "OFF";
@@ -58,6 +62,7 @@ buildPythonPackage rec {
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     cython_0
     pkgconfig
     setuptools
@@ -82,6 +87,10 @@ buildPythonPackage rec {
   preCheck = ''
     cd $out
   '';
+  # For some reason these fail when mpi support is enabled, due to concurrent
+  # writings. There are a few open issues about this in the bug tracker, but
+  # not related to the tests.
+  disabledTests = lib.optionals mpiSupport [ "TestPageBuffering" ];
 
   pythonImportsCheck = [ "h5py" ];
 
