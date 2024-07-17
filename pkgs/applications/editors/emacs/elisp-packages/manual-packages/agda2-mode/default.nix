@@ -1,6 +1,4 @@
-{ melpaBuild
-, haskellPackages
-}:
+{ melpaBuild, haskellPackages }:
 let
   Agda = haskellPackages.Agda;
 in
@@ -15,4 +13,3 @@ melpaBuild {
     description = "Agda2-mode for Emacs extracted from Agda package";
   };
 }
-
