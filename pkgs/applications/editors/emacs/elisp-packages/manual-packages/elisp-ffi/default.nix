@@ -3,22 +3,17 @@
 , fetchFromGitHub
 , pkg-config
 , libffi
-, writeText
 }:
 
-let
-  rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
-in melpaBuild {
+melpaBuild {
   pname = "elisp-ffi";
-  version = "20170518.0";
-
-  commit = rev;
+  version = "1.0.0-unstable-2017-05-18";
 
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "elisp-ffi";
-    inherit rev;
-    sha256 = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
+    rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
+    hash = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,10 +25,6 @@ in melpaBuild {
     make
  '';
 
-  recipe = writeText "recipe" ''
-   (elisp-ffi :repo "skeeto/elisp-ffi" :fetcher github)
-  '';
-
   meta = {
     description = "Emacs Lisp Foreign Function Interface";
     longDescription = ''
@@ -42,6 +33,6 @@ in melpaBuild {
         driving a subprocess to do the heavy lifting, passing result
         values on to Emacs.
       '';
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.unlicense;
   };
 }
