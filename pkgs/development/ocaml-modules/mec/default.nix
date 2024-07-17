@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildDunePackage, ocaml
+{ lib, fetchzip, buildDunePackage
 , zarith, eqaf, bigarray-compat, hex, ff-sig, ff
 , alcotest, bisect_ppx
 }:

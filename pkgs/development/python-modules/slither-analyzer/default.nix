@@ -1,5 +1,6 @@
 {
   lib,
+  nix-update-script,
   buildPythonPackage,
   crytic-compile,
   fetchFromGitHub,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-KmbmljtmMtrJxgSMJjQ8fdk6RpEXcAVBuo24EsyMV8k=";
+    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +83,8 @@ buildPythonPackage rec {
     command = "HOME=$TMPDIR slither --version";
     version = "${version}";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";

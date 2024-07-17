@@ -6,7 +6,6 @@
   protobuf,
   pycryptodomex,
   pyogg,
-  pytestCheckHook,
   requests,
   websocket-client,
   zeroconf,

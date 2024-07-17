@@ -6,7 +6,6 @@
   fetchFromGitHub,
   fetchpatch,
   setuptools,
-  pytestCheckHook,
   cmake,
   ninja,
   pybind11,

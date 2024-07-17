@@ -1257,6 +1257,12 @@
     githubId = 24651767;
     name = "Felix Andreas";
   };
+  andreasvoss = {
+    name = "andreasvoss";
+    email = "andreas@anvo.dk";
+    github = "andreasuvoss";
+    githubId = 25469495;
+  };
   andres = {
     email = "ksnixos@andres-loeh.de";
     github = "kosmikus";
@@ -3985,6 +3991,12 @@
     github = "con-f-use";
     githubId = 11145016;
     name = "J.C.";
+  };
+  confusedalex = {
+    email = "alex@confusedalex.dev";
+    github = "ConfusedAlex";
+    githubId = 29258035;
+    name = "Alexander Loll";
   };
   congee = {
     email = "changshengwu@pm.me";
@@ -7358,6 +7370,14 @@
     github = "Gigahawk";
     githubId = 10356230;
   };
+  giggio = {
+    email = "giggio@giggio.net";
+    github = "giggio";
+    githubId = 334958;
+    matrix = "@giggio:matrix.org";
+    name = "Giovanni Bassi";
+    keys = [ { fingerprint = "275F 6749 AFD2 379D 1033  548C 1237 AB12 2E6F 4761"; } ];
+  };
   gigglesquid = {
     email = "jack.connors@protonmail.com";
     github = "gigglesquid";
@@ -9536,6 +9556,12 @@
     github = "magnusjonsson";
     githubId = 8900;
     name = "Johan Magnus Jonsson";
+  };
+  JManch = {
+    email = "jmanch@protonmail.com";
+    github = "JManch";
+    githubId = 61563764;
+    name = "Joshua Manchester";
   };
   jmarmstrong1207 = {
     name = "James Armstrong";
