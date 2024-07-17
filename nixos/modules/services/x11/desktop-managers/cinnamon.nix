@@ -70,9 +70,9 @@ in
           name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.cinnamon.mint-y-icons;
+          package = mkDefault pkgs.mint-y-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";

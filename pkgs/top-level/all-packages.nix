@@ -37070,7 +37070,6 @@ with pkgs;
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
-  inherit (cinnamon) mint-y-icons;
 
   deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
 

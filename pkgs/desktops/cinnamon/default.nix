@@ -40,7 +40,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-l-icons = callPackage ./mint-l-icons { };
   mint-l-theme = callPackage ./mint-l-theme { };
   mint-themes = callPackage ./mint-themes { };
-  mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
   xapp = callPackage ./xapp { };
 }) // lib.optionalAttrs config.allowAliases {
@@ -50,6 +49,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-artwork = lib.warn "cinnamon.mint-artwork was moved to top-level. Please use pkgs.mint-artwork directly." pkgs.mint-artwork; # Added on 2024-07-14
   mint-cursor-themes = lib.warn "cinnamon.mint-cursor-themes was moved to top-level. Please use pkgs.mint-cursor-themes directly." pkgs.mint-cursor-themes; # Added on 2024-07-14
   mint-x-icons = lib.warn "cinnamon.mint-x-icons was moved to top-level. Please use pkgs.mint-x-icons directly." pkgs.mint-x-icons; # Added on 2024-07-14
+  mint-y-icons = lib.warn "cinnamon.mint-y-icons was moved to top-level. Please use pkgs.mint-y-icons directly." pkgs.mint-y-icons; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
   xapps = pkgs.cinnamon.xapp; # added 2022-07-27
