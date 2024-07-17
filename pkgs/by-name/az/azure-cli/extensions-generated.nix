@@ -561,6 +561,13 @@
     sha256 = "0680948362e12138c9582e68e471533482749bd660bfe3c8c2a4d856e90927b0";
     description = "Microsoft Azure Command-Line Tools StorageImportExport Extension";
   };
+  informatica = mkAzExtension rec {
+    pname = "informatica";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/informatica-${version}-py3-none-any.whl";
+    sha256 = "6166ae91c78e74c01af3bd1ead2d62832707e176ea0f7d5d30a5dd485f482462";
+    description = "Microsoft Azure Command-Line Tools Informatica Extension";
+  };
   init = mkAzExtension rec {
     pname = "init";
     version = "0.1.0";
