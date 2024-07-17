@@ -1257,6 +1257,12 @@
     githubId = 24651767;
     name = "Felix Andreas";
   };
+  andreasvoss = {
+    name = "andreasvoss";
+    email = "andreas@anvo.dk";
+    github = "andreasuvoss";
+    githubId = 25469495;
+  };
   andres = {
     email = "ksnixos@andres-loeh.de";
     github = "kosmikus";
