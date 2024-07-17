@@ -2,8 +2,8 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkRenamedOptionModule mkForce mkIf mkMerge mkOption types;
+  inherit (lib) literalExpression mapAttrs optionalString optionals versionAtLeast;
 
   cfg = config.services.zabbixWeb;
   opt = options.services.zabbixWeb;
@@ -36,6 +36,10 @@ let
 
 in
 {
+  imports = [
+  (mkRenamedOptionModule
+      [ "services" "zabbixWeb" "virtualHost" ] [ "services" "zabbixWeb" "httpd" "virtualHost" ])
+  ];
   # interface
 
   options.services = {
@@ -116,7 +120,17 @@ in
         };
       };
 
-      virtualHost = mkOption {
+      frontend = mkOption {
+        type = types.enum [
+          "nginx"
+          "httpd"
+        ];
+        example = "nginx";
+        default = "httpd";
+        description = "Frontend server to use.";
+      };
+
+      httpd.virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
@@ -126,9 +140,32 @@ in
             enableACME = true;
           }
         '';
+        default = { };
         description = ''
           Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
           See [](#opt-services.httpd.virtualHosts) for further information.
+        '';
+      };
+
+      hostname = mkOption {
+          type = types.str;
+          default = "zabbix.local";
+          description = "Hostname for either nginx or httpd.";
+      };
+
+      nginx.virtualHost = mkOption {
+        type = types.submodule (import ../web-servers/nginx/vhost-options.nix);
+        example = literalExpression ''
+          {
+            forceSSL = true;
+            sslCertificateKey = "/etc/ssl/zabbix.key";
+            sslCertificate = "/etc/ssl/zabbix.crt";
+          }
+        '';
+        default = { };
+        description = ''
+          Nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
         '';
       };
 
@@ -167,56 +204,79 @@ in
     '';
 
     systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
+      "d '${stateDir}' 0750 ${user} ${group} - -" ] ++ optionals (cfg.frontend == "httpd") [
       "d '${stateDir}/session' 0750 ${user} ${config.services.httpd.group} - -"
+    ] ++ optionals (cfg.frontend == "nginx") [
+      "d '${stateDir}/session' 0750 ${user} ${config.services.nginx.group} - -"
     ];
 
     services.phpfpm.pools.zabbix = {
       inherit user;
-      group = config.services.httpd.group;
-      phpOptions = ''
-        # https://www.zabbix.com/documentation/current/manual/installation/install
-        memory_limit = 128M
-        post_max_size = 16M
-        upload_max_filesize = 2M
-        max_execution_time = 300
-        max_input_time = 300
-        session.auto_start = 0
-        mbstring.func_overload = 0
-        always_populate_raw_post_data = -1
-        # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
-        session.save_path = ${stateDir}/session
-      '' + optionalString (config.time.timeZone != null) ''
-        date.timezone = "${config.time.timeZone}"
-      '' + optionalString (cfg.database.type == "oracle") ''
-        extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
-      '';
+      group = config.services.${cfg.frontend}.group;
+      phpOptions =
+        ''
+          # https://www.zabbix.com/documentation/current/manual/installation/install
+          memory_limit = 128M
+          post_max_size = 16M
+          upload_max_filesize = 2M
+          max_execution_time = 300
+          max_input_time = 300
+          session.auto_start = 0
+          mbstring.func_overload = 0
+          always_populate_raw_post_data = -1
+          # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
+          session.save_path = ${stateDir}/session
+        '' + optionalString (config.time.timeZone != null) ''
+          date.timezone = "${config.time.timeZone}"
+        '' + optionalString (cfg.database.type == "oracle") ''
+          extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
+        '';
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
       settings = {
-        "listen.owner" = config.services.httpd.user;
-        "listen.group" = config.services.httpd.group;
+        "listen.owner" = if cfg.frontend == "httpd" then config.services.httpd.user else config.services.nginx.user;
+        "listen.group" = if cfg.frontend == "httpd" then config.services.httpd.group else config.services.nginx.group;
       } // cfg.poolConfig;
     };
 
-    services.httpd = {
+    services.httpd = mkIf (cfg.frontend == "httpd") {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
+      adminAddr = mkDefault cfg.httpd.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/zabbix";
-        extraConfig = ''
-          <Directory "${cfg.package}/share/zabbix">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
-            AllowOverride all
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
+      virtualHosts.${cfg.hostname} = mkMerge [
+        cfg.httpd.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/zabbix";
+          extraConfig = ''
+            <Directory "${cfg.package}/share/zabbix">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
+              AllowOverride all
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
       } ];
+    };
+
+    services.nginx = mkIf (cfg.frontend == "nginx") {
+      enable = true;
+      virtualHosts.${cfg.hostname} = mkMerge [
+        cfg.nginx.virtualHost
+        {
+              root = mkForce "${cfg.package}/share/zabbix";
+              locations."/" = {
+                index = "index.html index.htm index.php";
+                tryFiles = "$uri $uri/ =404";
+              };
+              locations."~ \.php$".extraConfig = ''
+                fastcgi_pass  unix:${fpm.socket};
+                fastcgi_index index.php;
+              '';
+            }
+        ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {
