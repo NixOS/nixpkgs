@@ -803,6 +803,7 @@
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
+  ./services/misc/radicle.nix
   ./services/misc/readarr.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
