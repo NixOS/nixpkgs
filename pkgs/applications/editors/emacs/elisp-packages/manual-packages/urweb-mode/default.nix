@@ -1,11 +1,11 @@
 { lib
-, trivialBuild
+, melpaBuild
 , urweb
 , cl-lib
 , flycheck
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "urweb-mode";
 
   inherit (urweb) src version;
@@ -15,9 +15,9 @@ trivialBuild {
     flycheck
   ];
 
-  postUnpack = ''
-    sourceRoot=$sourceRoot/src/elisp
-  '';
+  files = ''("src/elisp/*.el")'';
+
+  dontConfigure = true;
 
   meta = {
     description = "Major mode for editing Ur/Web";
