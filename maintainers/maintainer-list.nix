@@ -7364,6 +7364,14 @@
     github = "Gigahawk";
     githubId = 10356230;
   };
+  giggio = {
+    email = "giggio@giggio.net";
+    github = "giggio";
+    githubId = 334958;
+    matrix = "@giggio:matrix.org";
+    name = "Giovanni Bassi";
+    keys = [ { fingerprint = "275F 6749 AFD2 379D 1033  548C 1237 AB12 2E6F 4761"; } ];
+  };
   gigglesquid = {
     email = "jack.connors@protonmail.com";
     github = "gigglesquid";
