@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , makeWrapper
-, jre_headless
 , jre_minimal
 , maven
 , writeScript
@@ -15,7 +14,6 @@ let
       "java.logging"
       "java.xml"
     ];
-    jdk = jre_headless;
   };
 in
 maven.buildMavenPackage rec {
