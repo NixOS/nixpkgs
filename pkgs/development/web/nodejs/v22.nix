@@ -16,6 +16,7 @@ buildNodejs {
   sha256 = "sha256-ZfyFf1qoJWqvyQCzRMARXJrq4loCVB/Vzg29Tf0cX7k=";
   patches = [
     ./configure-emulator.patch
+    ./configure-armv6-vfpv2.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch

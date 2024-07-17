@@ -75,6 +75,7 @@ let
     if platform.isAarch32 && platform ? gcc.fpu then
       lib.throwIfNot (builtins.elem platform.gcc.fpu [
         "vfp"
+        "vfpv2"
         "vfpv3"
         "vfpv3-d16"
         "neon"

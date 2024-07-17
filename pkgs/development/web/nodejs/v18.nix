@@ -27,6 +27,7 @@ buildNodejs {
   sha256 = "sha256-p2x+oblq62ljoViAYmDICUtiRNZKaWUp0CBUe5qVyio=";
   patches = [
     ./configure-emulator-node18.patch
+    ./configure-armv6-vfpv2.patch
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
     ./revert-arm64-pointer-auth.patch
