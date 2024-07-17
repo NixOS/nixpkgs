@@ -37,7 +37,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
   nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
-  mint-l-icons = callPackage ./mint-l-icons { };
   mint-l-theme = callPackage ./mint-l-theme { };
   mint-themes = callPackage ./mint-themes { };
   muffin = callPackage ./muffin { };
@@ -48,6 +47,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
   mint-artwork = lib.warn "cinnamon.mint-artwork was moved to top-level. Please use pkgs.mint-artwork directly." pkgs.mint-artwork; # Added on 2024-07-14
   mint-cursor-themes = lib.warn "cinnamon.mint-cursor-themes was moved to top-level. Please use pkgs.mint-cursor-themes directly." pkgs.mint-cursor-themes; # Added on 2024-07-14
+  mint-l-icons = lib.warn "cinnamon.mint-l-icons was moved to top-level. Please use pkgs.mint-l-icons directly." pkgs.mint-l-icons; # Added on 2024-07-14
   mint-x-icons = lib.warn "cinnamon.mint-x-icons was moved to top-level. Please use pkgs.mint-x-icons directly." pkgs.mint-x-icons; # Added on 2024-07-14
   mint-y-icons = lib.warn "cinnamon.mint-y-icons was moved to top-level. Please use pkgs.mint-y-icons directly." pkgs.mint-y-icons; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
