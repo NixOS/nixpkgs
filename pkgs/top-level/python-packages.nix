@@ -3978,8 +3978,6 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
-  etebase-server = callPackage ../servers/etebase { };
-
   eternalegypt = callPackage ../development/python-modules/eternalegypt { };
 
   etesync = callPackage ../development/python-modules/etesync { };
@@ -10309,6 +10307,8 @@ self: super: with self; {
   python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
+
+  python-ffmpeg = callPackage ../development/python-modules/python-ffmpeg { };
 
   python-flirt = callPackage ../development/python-modules/python-flirt { };
 

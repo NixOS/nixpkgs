@@ -14,7 +14,6 @@
 , re
 , stdune
 , chrome-trace
-, dune_3
 , csexp
 , result
 , pp

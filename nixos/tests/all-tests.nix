@@ -381,6 +381,7 @@ in {
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   goss = handleTest ./goss.nix {};
+  gotenberg = handleTest ./gotenberg.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
@@ -812,6 +813,7 @@ in {
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
+  radicle = runTest ./radicle.nix;
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
   readarr = handleTest ./readarr.nix {};
