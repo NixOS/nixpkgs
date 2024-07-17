@@ -14,7 +14,6 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   setuptools,
   sortedcollections,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiosasl

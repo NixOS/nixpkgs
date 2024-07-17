@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  pythonRelaxDepsHook,
   requests,
   pydantic,
   aiohttp,
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

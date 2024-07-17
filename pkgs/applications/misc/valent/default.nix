@@ -15,20 +15,21 @@
 , libadwaita
 , libpeas2
 , libportal-gtk4
+, pipewire
 , pulseaudio
 , sqlite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "0-unstable-2024-02-12";
+  version = "1.0.0.alpha.45";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "70ef1aa42eb2df5e9c3aa4faa014c8d539450018";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hOVWvk4U6VoWAvXNHK1vTm/am69EFqDmSb0NofWVQj8=";
     fetchSubmodules = true;
-    hash = "sha256-JdrkAtn21NoX+SI6PNWMdE8HLKhLc3HKFhwKydENkvg=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libpeas2
     libportal-gtk4
+    pipewire
     pulseaudio
     sqlite
   ];
@@ -81,9 +83,9 @@ stdenv.mkDerivation rec {
       ```
     '';
     homepage = "https://valent.andyholmes.ca";
-    changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

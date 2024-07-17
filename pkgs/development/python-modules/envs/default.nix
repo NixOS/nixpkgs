@@ -5,7 +5,7 @@
   fetchPypi,
   jinja2,
   mock,
-  pynose,
+  nose,
   poetry-core,
   pythonOlder,
   terminaltables,
@@ -31,9 +31,12 @@ buildPythonPackage rec {
     terminaltables
   ];
 
+  # test rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     mock
-    pynose
+    nose
   ];
 
   checkPhase = ''

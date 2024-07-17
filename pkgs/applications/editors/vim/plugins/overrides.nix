@@ -87,6 +87,7 @@
   glib
 , gobject-introspection
 , wrapGAppsHook3
+, writeText
 , # sniprun dependencies
   bashInteractive
 , coreutils
@@ -334,12 +335,12 @@
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.8.25";
+    codeiumVersion = "1.8.80";
     codeiumHashes = {
-      x86_64-linux = "sha256-6sIYDI6+1/p54Af+E/GmRAFlfDYJVwxhn0qF47ZH+Zg=";
-      aarch64-linux = "sha256-1ImcjAqCZm5KZZYHWhG1eO7ipAdrP4Qjj2eBxTst++s=";
-      x86_64-darwin = "sha256-yHthItxZYFejJlwJJ7BrM2csnLsZXjy/IbzF1iaCCyI=";
-      aarch64-darwin = "sha256-GIx0yABISj/rH/yVkkx6NBs5qF0P8nhpMyvnzXJ92mA=";
+      x86_64-linux = "sha256-ULHO7NrbW0DDlOYiSHGXwJ+NOa68Ma+HMHgq2WyAKBA=";
+      aarch64-linux = "sha256-WVqPV/D9jPADkxt5XmydqXjSG8461URPsk1+W/kyZV0=";
+      x86_64-darwin = "sha256-0P/eYZp0Wieza0btOA+yxqKtoIYlUN6MhN0dI6R8GEg=";
+      aarch64-darwin = "sha256-2Cv22+Ii+otKLDQ404l9R/x42PkKTEzPB72/gc9wfig=";
     };
 
     codeium' = codeium.overrideAttrs rec {
@@ -408,12 +409,12 @@
 
   codesnap-nvim =
     let
-      version = "1.4.0";
+      version = "1.5.2";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-fBeojxvi++3ShqxvFQ5/sv8WbpVrN7+XRPZWWrbpEL4=";
+        hash = "sha256-r6/2pbojfzBdMoZHphE6BX5cEiCAmOWurPBptI6jjcw=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -421,7 +422,7 @@
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-lDy+FUph4CognY0oN7qhFsbnoC3gxguwq5YVtsiP1lo=";
+        cargoHash = "sha256-E8EywpyRSoknXSebnvqP178ZgAIahJeD5siD46KM/Mc=";
 
         nativeBuildInputs = [
           pkg-config
@@ -453,7 +454,10 @@
       doInstallCheck = true;
       nvimRequireCheck = "codesnap";
 
-      meta.homepage = "https://github.com/mistricky/codesnap.nvim/";
+      meta = {
+        homepage = "https://github.com/mistricky/codesnap.nvim/";
+        changelog = "https://github.com/mistricky/codesnap.nvim/releases/tag/v${version}";
+      };
     };
 
   command-t = super.command-t.overrideAttrs {
@@ -1164,11 +1168,16 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-ZBlxJjkHb2buvXK6VGP6FMnSFk8RUX7IgHjNofnGDAs=";
+        cargoHash = "sha256-J9L9j8iyeZQRMjiVqdI7V7BOAkZaiLGOtKDpgq2wyi0=";
 
         preCheck = ''
           mkdir tests/tmp/
         '';
+
+        checkFlags = [
+          # Flaky test (https://github.com/nvim-pack/nvim-spectre/issues/244)
+          "--skip=tests::test_replace_simple"
+        ];
       };
     in
     {
@@ -1474,12 +1483,19 @@
           install -Dt $out/bin ftplugin/evinceSync.py
         '';
       };
+      # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
+      pythonWrapper = writeText "evinceSync-wrapper.py" /* python */ ''
+        #!${python3}/bin/python3
+        import os
+        import sys
+        os.execv("${svedbackend}/bin/evinceSync.py", sys.argv)
+      '';
     in
     super.sved.overrideAttrs {
       preferLocalBuild = true;
       postPatch = ''
         rm ftplugin/evinceSync.py
-        ln -s ${svedbackend}/bin/evinceSync.py ftplugin/evinceSync.py
+        install -m 544 ${pythonWrapper} ftplugin/evinceSync.py
       '';
       meta = {
         description = "synctex support between vim/neovim and evince";
@@ -2015,6 +2031,7 @@
     '';
   };
   LeaderF = super.LeaderF.overrideAttrs {
+    nativeBuildInputs = [ python3.pkgs.setuptools ];
     buildInputs = [ python3 ];
     # rm */build/ to prevent dependencies on gcc
     # strip the *.so to keep files small

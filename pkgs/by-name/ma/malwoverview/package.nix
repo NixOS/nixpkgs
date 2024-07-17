@@ -19,10 +19,6 @@ python3.pkgs.buildPythonApplication rec {
     "pathlib"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   build-system  = with python3.pkgs; [
     setuptools
   ];

@@ -1,29 +1,34 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   testers,
   wakatime-cli,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.90.0";
+  version = "1.93.0";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    hash = "sha256-A2YrDrXmMR4BJUOYuo3h3Pa5HqyYSoDr/qdH54INU3w=";
+    hash = "sha256-S4AvAGpaxp5lKi9RnLLaN8qLURYsLWIzhtXKRgQPuGc=";
   };
 
-  vendorHash = "sha256-pejrUFcv9c4ZAE3Cuw7uytc1T2pr7SOZNJ/Wr8K+fas=";
+  vendorHash = "sha256-+9zdEIaKQlLcBwFaY5Fe5mpHWQDqfV+j1TPmDkdRjyk=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
   ];
+
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.22.4" "go 1.22.3"
+  '';
 
   checkFlags =
     let

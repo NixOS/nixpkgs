@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.9";
+  version = "5.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iwT7P1KNQVrLzgKgoVO4G5wwg3f86D6/0I0FP8xD0rk=";
+    hash = "sha256-2cTa6AaN4BMJuzLhU9G4e0yl1kqyxblLWsSaIOHYS+o=";
   };
 
   build-system = [
@@ -94,9 +94,6 @@ buildPythonPackage rec {
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0088_read_with_http.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
-
-    # FileNotFoundError: uproot-issue-1043.root
-    "tests/test_1043_const_std_string.py"
   ];
 
   pythonImportsCheck = [ "uproot" ];

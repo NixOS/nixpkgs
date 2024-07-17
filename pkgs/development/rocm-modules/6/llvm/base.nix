@@ -86,7 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     git
-    python3Packages.python
+    (python3Packages.python.withPackages (p: [ p.setuptools ]))
   ] ++ lib.optionals (buildDocs || buildMan) [
     doxygen
     sphinx

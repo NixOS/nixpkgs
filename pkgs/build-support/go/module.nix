@@ -84,6 +84,7 @@ let
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
+    setSourceRoot = args.setSourceRoot or "";
     env = args.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
@@ -218,8 +219,7 @@ let
       buildGoDir() {
         local cmd="$1" dir="$2"
 
-        . $TMPDIR/buildFlagsArray
-
+        declare -ga buildFlagsArray
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=''${tags// /,}})
@@ -258,11 +258,6 @@ let
         buildFlagsArray+=(-x)
       fi
 
-      if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
-        declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
-      else
-        touch $TMPDIR/buildFlagsArray
-      fi
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi

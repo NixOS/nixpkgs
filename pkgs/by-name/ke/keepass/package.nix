@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     xbuild /p:Configuration=Release
 
-    runHook postBuld
+    runHook postBuild
   '';
 
   outputFiles = [

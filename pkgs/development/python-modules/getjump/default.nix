@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.2";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WSLfhVCqP+N+2Rs2PUXOknnlNx3UtWdFYrK1lTW1fqQ=";
+    hash = "sha256-3VxsKum6aB35XYjz9ZKkUBdPuofOWzG+ttkX9pnzu7U=";
   };
 
   nativeBuildInputs = [ poetry-core ];

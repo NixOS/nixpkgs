@@ -6,7 +6,6 @@
 
   # build-system
   poetry-core,
-  pythonRelaxDepsHook,
 
   # dependencies
   bitarray,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "crc" ];
 
   dependencies = [

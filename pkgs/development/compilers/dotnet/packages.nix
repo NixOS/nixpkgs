@@ -37,6 +37,8 @@ in {
 
     passthru = {
       inherit (vmr) icu targetRid;
+      # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
+      hasILCompiler = false;
     };
 
     meta = vmr.meta // {

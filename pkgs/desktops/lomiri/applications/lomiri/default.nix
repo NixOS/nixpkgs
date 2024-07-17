@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-settings-components
     lomiri-thumbnailer
     qtmultimedia
-    # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
+    telephony-service
   ];
 
   nativeCheckInputs = [

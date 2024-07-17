@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.5.1";
+  version = "2024.6.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZMOZ4eFtIaIcBPGT6bgAV+47LEGWAAnF/ml68j0fXws=";
+    hash = "sha256-BV3zwb74ZnwTWUgKt5K6lZLASdO6/UQ8Ke3gBsLhy2M=";
   };
 
   build-system = [ setuptools ];

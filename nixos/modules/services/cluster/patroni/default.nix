@@ -10,6 +10,15 @@ let
   configFile = format.generate configFileName cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "patroni" "raft" ] ''
+      Raft has been deprecated by upstream.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "patroni" "raftPort" ] ''
+      Raft has been deprecated by upstream.
+    '')
+  ];
+
   options.services.patroni = {
 
     enable = mkEnableOption "Patroni";
@@ -68,7 +77,7 @@ in
       type = types.path;
       default = "/var/lib/patroni";
       description = ''
-        Folder where Patroni data will be written, used by Raft as well if enabled.
+        Folder where Patroni data will be written, this is where the pgpass password file will be written.
       '';
     };
 
@@ -120,22 +129,6 @@ in
       '';
     };
 
-    raft = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        This will configure Patroni to use its own RAFT implementation instead of using a dedicated DCS.
-      '';
-    };
-
-    raftPort = mkOption {
-      type = types.port;
-      default = 5010;
-      description = ''
-        The port on which RAFT listens.
-      '';
-    };
-
     softwareWatchdog = mkOption {
       type = types.bool;
       default = false;
@@ -176,12 +169,6 @@ in
       restapi = {
         listen = "${cfg.nodeIp}:${toString cfg.restApiPort}";
         connect_address = "${cfg.nodeIp}:${toString cfg.restApiPort}";
-      };
-
-      raft = mkIf cfg.raft {
-        data_dir = "${cfg.dataDir}/raft";
-        self_addr = "${cfg.nodeIp}:5010";
-        partner_addrs = map (ip: ip + ":5010") cfg.otherNodesIps;
       };
 
       postgresql = {
@@ -235,7 +222,7 @@ in
             KillMode = "process";
           }
           (mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni patroni/raft postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+            StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
             StateDirectoryMode = "0750";
           })
         ];
@@ -251,7 +238,6 @@ in
     environment.systemPackages = [
       pkgs.patroni
       cfg.postgresqlPackage
-      (mkIf cfg.raft pkgs.python310Packages.pysyncobj)
     ];
 
     environment.etc."${configFileName}".source = configFile;

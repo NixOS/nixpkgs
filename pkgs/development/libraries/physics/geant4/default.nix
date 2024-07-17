@@ -3,8 +3,8 @@
 , enableQT             ? false # deprecated name
 , enableQt             ? enableQT
 , enableXM             ? false
-, mesa
-, enableOpenGLX11      ? !mesa.meta.broken
+, libGLX
+, enableOpenGLX11      ? !libGLX.meta.broken
 , enablePython         ? false
 , enableRaytracerX11   ? false
 
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
   ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
-    "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
-    "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
+    "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
   ] ++ lib.optionals enableInventor [

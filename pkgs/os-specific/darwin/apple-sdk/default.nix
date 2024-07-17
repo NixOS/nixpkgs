@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
+{ stdenv, stdenvNoCC, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -262,6 +262,15 @@ in rec {
         cp "${darwin-stubs}/usr/lib/libsandbox.1.tbd" $out/lib
         ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
       '';
+    };
+
+    simd = stdenvNoCC.mkDerivation {
+      name = "apple-lib-simd";
+
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+
+      buildCommand = "echo 'simd library not available in the 10.12 SDK'; exit 1";
     };
   };
 

@@ -119,6 +119,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
     "zerocallusedregs"
@@ -262,7 +263,9 @@ let
   defaultHardeningFlags =
     (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
       # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
+      (if with stdenv.hostPlatform; isOpenBSD && isStatic
+       then knownHardeningFlags # Need pie, in fact
+       else remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []

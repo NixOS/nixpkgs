@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "g4music";
-  version = "3.6.2";
+  version = "3.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yNKDTcLunTLhAtOBrjuycw0rrdCSwmhhVyBg3AfMUCQ=";
+    hash = "sha256-fG8OBAzdCdr3Yo8Vei93HlNa2TIL5gxWG+0jFYjSDZ8=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,9 @@ let
   localPython = python3.override {
     self = localPython;
     packageOverrides = self: super: {
-      cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
+      cement =
+        changeVersion super.cement.overridePythonAttrs "2.10.14"
+          "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
     };
   };
 
@@ -35,7 +37,6 @@ localPython.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with localPython.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [

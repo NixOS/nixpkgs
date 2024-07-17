@@ -162,7 +162,7 @@ rec {
       vulkan-loader
 
       flac
-      freeglut
+      libglut
       libjpeg
       libpng12
       libpulseaudio

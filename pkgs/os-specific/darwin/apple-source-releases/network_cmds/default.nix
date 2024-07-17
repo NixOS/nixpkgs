@@ -1,4 +1,4 @@
-{ lib, appleDerivation, xcbuildHook, stdenv
+{ lib, appleDerivation, xcbuildHook
 , Librpcsvc, xnu, libpcap, developer_cmds }:
 
 appleDerivation {

@@ -7,7 +7,6 @@
   backports-zoneinfo,
   boto3,
   buildPythonPackage,
-  case,
   confluent-kafka,
   fetchPypi,
   hypothesis,
@@ -16,7 +15,7 @@
   pycurl,
   pymongo,
   #, pyro4
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   pyyaml,
   redis,
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ]
     ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
     redis = [ redis ];
@@ -71,10 +70,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     hypothesis
-    pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "kombu" ];
 

@@ -6,7 +6,7 @@
 , cmake
 , pkg-config
 , glew
-, freeglut
+, libglut
 , opencl-headers
 , ocl-icd
 }:
@@ -26,7 +26,7 @@ let
 
     nativeBuildInputs = [ cmake pkg-config ];
 
-    buildInputs = [ glew freeglut opencl-headers ocl-icd ];
+    buildInputs = [ glew libglut opencl-headers ocl-icd ];
 
     installPhase = ''
       runHook preInstall

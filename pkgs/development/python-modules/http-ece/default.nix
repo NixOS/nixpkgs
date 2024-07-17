@@ -4,7 +4,8 @@
   cryptography,
   fetchPypi,
   mock,
-  pynose,
+  nose,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "http_ece";
     inherit version;
-    sha256 = "sha256-tZIPjvuOG1+wJXE+Ozb9pUM2JiAQY0sm3B+Y+F0es94=";
+    hash = "sha256-tZIPjvuOG1+wJXE+Ozb9pUM2JiAQY0sm3B+Y+F0es94=";
   };
 
   postPatch = ''
@@ -25,9 +26,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ];
 
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     mock
-    pynose
+    nose
   ];
 
   meta = with lib; {

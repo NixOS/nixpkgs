@@ -22,7 +22,6 @@
   pytestCheckHook,
   python,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   spacy-legacy,
@@ -42,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.4";
+  version = "3.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ul8s7S5AdhViyMrOk+9qHm6MSD8nvVZLwbFfYI776Fs=";
+    hash = "sha256-pkjGy/Ksx6Vaae6ef6TyK99pqoKKWHobxc//CM88LdM=";
   };
 
   pythonRelaxDeps = [
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython_0
   ];
 

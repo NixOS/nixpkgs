@@ -7,7 +7,6 @@
   fetchpatch,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   cmake,
   ninja,
   pybind11,
@@ -28,7 +27,7 @@
 }:
 
 let
-  ptxas = "${cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+  ptxas = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
 in
 buildPythonPackage rec {
   pname = "triton";
@@ -49,9 +48,12 @@ buildPythonPackage rec {
         url = "https://github.com/openai/triton/commit/52c146f66b79b6079bcd28c55312fc6ea1852519.patch";
         hash = "sha256-098/TCQrzvrBAbQiaVGCMaF3o5Yc3yWDxzwSkzIuAtY=";
       })
+
+      # Upstream startded pinning CUDA version and falling back to downloading from Conda
+      # in https://github.com/triton-lang/triton/pull/1574/files#diff-eb8b42d9346d0a5d371facf21a8bfa2d16fb49e213ae7c21f03863accebe0fcfR120-R123
+      ./0000-dont-download-ptxas.patch
     ]
     ++ lib.optionals (!cudaSupport) [
-      ./0000-dont-download-ptxas.patch
       # openai-triton wants to get ptxas version even if ptxas is not
       # used, resulting in ptxas not found error.
       ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
@@ -91,8 +93,7 @@ buildPythonPackage rec {
         --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
         --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
 
-      cat << \EOF > python/triton/common/build.py
-
+      cat << \EOF >> python/triton/common/build.py
       def libcuda_dirs():
           return [ "${addDriverRunpath.driverLink}/lib" ]
       EOF
@@ -105,7 +106,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
     ninja
@@ -131,6 +131,12 @@ buildPythonPackage rec {
     # openai-triton uses setuptools at runtime:
     # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
     setuptools
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals cudaSupport [
+    # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
+    # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
+    "-Wno-stringop-overread"
   ];
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages

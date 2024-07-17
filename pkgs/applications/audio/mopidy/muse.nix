@@ -7,7 +7,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Muse";
-    sha256 = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
+    hash = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
   };
 
   propagatedBuildInputs = [

@@ -2,6 +2,7 @@
   lib,
   crossLibcStdenv,
   mkDerivation,
+  fetchpatch,
   bsdSetupHook,
   openbsdSetupHook,
   makeMinimal,
@@ -9,13 +10,11 @@
   flex,
   byacc,
   gencat,
+  lorder,
+  tsort,
   rpcgen,
   csu,
   include,
-  ctags,
-  tsort,
-  llvmPackages,
-  fetchpatch,
 }:
 
 mkDerivation {
@@ -35,9 +34,11 @@ mkDerivation {
   patches = [
     ./netbsd-make-to-lower.patch
     ./disable-librebuild.patch
+    # Do not produce ctags, can do that separately.
     (fetchpatch {
+      name = "skip-tags.patch";
       url = "https://marc.info/?l=openbsd-tech&m=171575286706032&q=raw";
-      sha256 = "sha256-2fqabJZLUvXUIWe5WZ4NrTOwgQCXqH49Wo0hAPu5lu0=";
+      hash = "sha256-2fqabJZLUvXUIWe5WZ4NrTOwgQCXqH49Wo0hAPu5lu0=";
     })
   ];
 
@@ -47,6 +48,7 @@ mkDerivation {
     makeMinimal
     install
     tsort
+    lorder
     gencat
   ];
 

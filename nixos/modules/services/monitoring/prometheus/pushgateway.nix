@@ -147,12 +147,52 @@ in {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
       serviceConfig = {
-        Restart  = "always";
-        DynamicUser = true;
         ExecStart = "${cfg.package}/bin/pushgateway" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
             concatStringsSep " \\\n  " cmdlineArgs);
+
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DynamicUser = true;
+        NoNewPrivileges = true;
+
+        MemoryDenyWriteExecute = true;
+
+        LockPersonality = true;
+
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ProtectHome = "tmpfs";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+
+        ProcSubset = "pid";
+
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+
+        Restart  = "always";
+
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
         StateDirectory = if cfg.persistMetrics then cfg.stateDir else null;
+        SystemCallFilter = [
+          "@system-service"
+          "~@cpu-emulation"
+          "~@privileged"
+          "~@reboot"
+          "~@setuid"
+          "~@swap"
+        ];
       };
     };
   };

@@ -121,7 +121,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.gpuChecks.cudaAvailable = callPackage ./test-cuda.nix { torch = torch-bin; };
+  passthru.tests = callPackage ./tests.nix {
+    torchWithCuda = torch-bin;
+    torchWithRocm = torch-bin;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

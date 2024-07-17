@@ -95,7 +95,10 @@ with lib.maintainers;
   };
 
   budgie = {
-    members = [ bobby285271 ];
+    members = [
+      bobby285271
+      getchoo
+    ];
     scope = "Maintain Budgie desktop environment";
     shortName = "Budgie";
   };
@@ -359,6 +362,7 @@ with lib.maintainers;
 
   geospatial = {
     members = [
+      autra
       imincik
       l0b0
       nh2
@@ -494,6 +498,21 @@ with lib.maintainers;
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
+  };
+
+  k3s = {
+    githubTeams = [ "k3s" ];
+    members = [
+      euank
+      marcusramberg
+      mic92
+      rorosen
+      superherointj
+      wrmilling
+      yajo
+    ];
+    scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
+    shortName = "K3s";
   };
 
   kubernetes = {
@@ -920,6 +939,16 @@ with lib.maintainers;
     ];
     scope = "Maintain steam module and packages";
     shortName = "Steam";
+  };
+
+  stridtech = {
+    # Verify additions by approval of an already existing member of the team
+    members = [
+      superherointj
+      ulrikstrid
+    ];
+    scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
+    shortName = "StridTech";
   };
 
   systemd = {

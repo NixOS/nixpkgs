@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${src.rev}/ChangeLog";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = licenses.mit;

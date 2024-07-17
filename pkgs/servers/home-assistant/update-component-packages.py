@@ -41,7 +41,10 @@ PKG_SET = "home-assistant.python.pkgs"
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
+    "numpy": "numpy_1",
     "ollama-hass": "ollama",
+    "paho-mqtt": "paho-mqtt_1",
+    "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
     "tensorflow": "tensorflow",

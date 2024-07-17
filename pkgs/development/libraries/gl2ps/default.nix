@@ -6,7 +6,7 @@
 , libpng
 , libGL
 , libGLU
-, freeglut
+, libglut
 , darwin
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
     libGLU
-    freeglut
+    libglut
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.OpenGL
   ];

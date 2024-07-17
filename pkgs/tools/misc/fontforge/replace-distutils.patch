@@ -1,0 +1,13 @@
+diff --git a/pyhook/CMakeLists.txt b/pyhook/CMakeLists.txt
+index dd48054aa..710728f26 100644
+--- a/pyhook/CMakeLists.txt
++++ b/pyhook/CMakeLists.txt
+@@ -21,7 +21,7 @@ target_link_libraries(psMat_pyhook PRIVATE Python3::Module)
+ # So do it ourselves, getting the prefix-relative path instead
+ if(NOT DEFINED PYHOOK_INSTALL_DIR)
+   execute_process(
+-    COMMAND "${Python3_EXECUTABLE}" -c "import distutils.sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True,standard_lib=False))"
++    COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('platlib', sysconfig.get_preferred_scheme('user'), vars={'userbase': '.'}))"
+     RESULT_VARIABLE _pyhook_install_dir_result
+     OUTPUT_VARIABLE PYHOOK_INSTALL_DIR
+     OUTPUT_STRIP_TRAILING_WHITESPACE)

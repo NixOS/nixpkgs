@@ -79,7 +79,8 @@ in {
         lib.nameValuePair ename (
           self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
-            inherit pname ename commit;
+            inherit pname ename;
+            inherit (sourceArgs) commit;
             version = lib.optionalString (version != null)
               (lib.concatStringsSep "." (map toString
                 # Hack: Melpa archives contains versions with parse errors such as [ 4 4 -4 413 ] which should be 4.4-413

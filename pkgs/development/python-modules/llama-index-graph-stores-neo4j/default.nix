@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neo4j";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";
     inherit version;
-    hash = "sha256-xv/Z/HLFUEfLqjE4052bc8aBJq3bvreYD/XZw1vijQQ=";
+    hash = "sha256-SMdEeJ3kZPbiIU1PW3PWBKBI/B5fRwC/wqEZnkLekHY=";
   };
 
   build-system = [ poetry-core ];

@@ -29,7 +29,7 @@
 , postgresql
 , proj
 , protobuf
-, python3
+, python311
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,7 +48,7 @@
 }:
 
 let
-  py = python3.override {
+  py = python311.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;

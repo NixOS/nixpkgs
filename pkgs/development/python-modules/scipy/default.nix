@@ -5,8 +5,8 @@
   fetchpatch,
   fetchurl,
   writeText,
+  xcbuild,
   python,
-  pythonOlder,
   buildPythonPackage,
   cython,
   gfortran,
@@ -22,8 +22,11 @@
   numpy,
   pybind11,
   pooch,
-  libxcrypt,
   xsimd,
+  # Upstream has support for using Darwin's Accelerate package. However this
+  # requires a Darwin user to work on a nice way to do that via an override.
+  # See:
+  # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L194-L211
   blas,
   lapack,
 
@@ -38,8 +41,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.13.1";
-  srcHash = "sha256-KpTvBJhiJ/IBjIFQhvS+NhRP3tbyXU5gQnAiFv47sKU=";
+  version = "1.14.0";
+  srcHash = "sha256-rNplvbDExmMfcPuvhs+y9j5/9G6QR1GdMgQLty6oi2c=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -100,6 +103,12 @@ buildPythonPackage {
     pkg-config
     wheel
     setuptools
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Minimal version required according to:
+    # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
+    (xcbuild.override {
+      sdkVer = "13.3";
+    })
   ];
 
   buildInputs = [
@@ -108,7 +117,7 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
-  ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  ];
 
   propagatedBuildInputs = [ numpy ];
 

@@ -403,13 +403,13 @@ let
     stdenv.override (
       old:
       {
-        buildPlatform = mkPlatform newVersion old.buildPlatform;
-        hostPlatform = mkPlatform newVersion old.hostPlatform;
-        targetPlatform = mkPlatform newVersion old.targetPlatform;
+        buildPlatform = mkPlatform newVersion stdenv.buildPlatform;
+        hostPlatform = mkPlatform newVersion stdenv.hostPlatform;
+        targetPlatform = mkPlatform newVersion stdenv.targetPlatform;
       }
       # Only perform replacements if the SDK version has changed. Changing only the
       # deployment target does not require replacing the libc or SDK dependencies.
-      // lib.optionalAttrs (old.hostPlatform.darwinSdkVersion != darwinSdkVersion) {
+      // lib.optionalAttrs (stdenv.hostPlatform.darwinSdkVersion != darwinSdkVersion) {
         allowedRequisites = null;
 
         mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [

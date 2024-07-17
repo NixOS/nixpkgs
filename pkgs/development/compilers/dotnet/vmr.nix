@@ -41,7 +41,7 @@ let
     isDarwin
     buildPlatform
     targetPlatform;
-  inherit (darwin) cctools;
+  inherit (darwin) cctools-llvm;
   inherit (swiftPackages) apple_sdk swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -59,7 +59,7 @@ let
     dontUnpack = true;
     installPhase = ''
       mkdir -p "$out/bin"
-      ln -s "${cctools}/bin/dwarfdump" "$out/bin"
+      ln -s "${cctools-llvm}/bin/dwarfdump" "$out/bin"
     '';
   };
 
@@ -144,14 +144,6 @@ in stdenv.mkDerivation rec {
 
   patches = lib.optionals (lib.versionOlder version "9") [
     ./fix-aspnetcore-portable-build.patch
-  ]
-  ++ lib.optionals isDarwin [
-    # stop passing -sdk without a path
-    # stop using xcrun
-    # add -module-cache-path to fix swift errors, see sandboxProfile
-    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
-    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
-    ./stop-passing-bare-sdk-arg-to-swiftc.patch
   ];
 
   postPatch = ''
@@ -306,6 +298,16 @@ in stdenv.mkDerivation rec {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n SkipInstallerBuild -v true \
       src/runtime/Directory.Build.props
+
+    # stop passing -sdk without a path
+    # stop using xcrun
+    # add -module-cache-path to fix swift errors, see sandboxProfile
+    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
+    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
+    substituteInPlace \
+      src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
+      --replace-fail ' -sdk ''${CMAKE_OSX_SYSROOT}' "" \
+      --replace-fail 'xcrun swiftc' 'swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
   ''
   + lib.optionalString (lib.versionAtLeast version "9") ''
     # fix: strip: error: unknown argument '-n'

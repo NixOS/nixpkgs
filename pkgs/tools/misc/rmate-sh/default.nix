@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
         'echo "${hostname}/bin/hostname"'
     patsh -f rmate -s ${builtins.storeDir}
 
-    runHook preBuild
+    runHook postBuild
   '';
 
   installPhase = ''

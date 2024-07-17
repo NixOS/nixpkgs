@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.42.0";
+  version = "0.43.0";
   pyproject = true;
 
   disabled = isPyPy || pythonAtLeast "3.13";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vN2npyAyN6C340l69YSRtRJrAe4EHSqh4SCgWfeSQaQ=";
+    hash = "sha256-5QBSRDb28Bui9IOhGofj+c7Rk7J5fNv5nPksEPY/O5o=";
   };
 
   nativeBuildInputs = [

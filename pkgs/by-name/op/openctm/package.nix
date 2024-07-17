@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  freeglut,
+  libglut,
   gtk2,
   libGLU,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    freeglut
+    libglut
     gtk2
     libGLU
   ];

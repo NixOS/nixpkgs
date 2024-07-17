@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "email_validator";
     inherit version;
-    hash = "sha256-IApwaAugiQS+bR7vcpIFzA1odjQ5mlkk2EJTPvuCS4Q=";
+    hash = "sha256-FMDz00PEvto3QAQhs5+kEbvjOnXfIIJd9zrVPgap8Ew=";
   };
 
   propagatedBuildInputs = [

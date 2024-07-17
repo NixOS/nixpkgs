@@ -11,25 +11,25 @@
 let
   gnat_version = lib.versions.major gnat.version;
 
-  fetchSpark2014 = { rev, sha256 } : fetchFromGitHub {
+  fetchSpark2014 = { rev, hash } : fetchFromGitHub {
     owner = "AdaCore";
     repo = "spark2014";
     fetchSubmodules = true;
-    inherit rev sha256;
+    inherit rev hash;
   };
 
   spark2014 = {
     "12" = {
       src = fetchSpark2014 {
         rev = "ab34e07080a769b63beacc141707b5885c49d375"; # branch fsf-12
-        sha256 = "sha256-7pe3eWitpxmqzjW6qEIEuN0qr2IR+kJ7Ssc9pTBcCD8=";
+        hash = "sha256-7pe3eWitpxmqzjW6qEIEuN0qr2IR+kJ7Ssc9pTBcCD8=";
       };
       commit_date = "2022-05-25";
     };
     "13" = {
       src = fetchSpark2014 {
         rev = "12db22e854defa9d1c993ef904af1e72330a68ca"; # branch fsf-13
-        sha256 = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
+        hash = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
       };
       commit_date = "2023-01-05";
     };

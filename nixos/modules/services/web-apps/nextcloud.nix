@@ -91,10 +91,10 @@ let
     cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
     fi
-    export NEXTCLOUD_CONFIG_DIR="${datadir}/config"
-    $sudo \
+    $sudo ${pkgs.coreutils}/bin/env \
+      NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
       ${phpCli} \
       occ "$@"
   '';

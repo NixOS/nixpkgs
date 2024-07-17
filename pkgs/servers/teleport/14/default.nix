@@ -10,8 +10,4 @@ import ../generic.nix (args // {
       "rdp-rs-0.1.0" = "sha256-U52FVuqo2DH/7f0cQ1qcb1GbFZ97yxExVFMX5cs0zw4=";
     };
   };
-  extPatches = [
-    # https://github.com/NixOS/nixpkgs/issues/120738
-    ../tsh_14.patch
-  ];
 })

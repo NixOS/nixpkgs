@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
         # its Scheme libraries.
         wrapProgram "$f" \
           --set GUILE_AUTO_COMPILE 0 \
-          --set PATH "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
+          --prefix PATH : "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
           --argv0 "$f"
     done
   '';
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-documentation"
      # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
+    "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
 

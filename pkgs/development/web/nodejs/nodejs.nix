@@ -7,6 +7,7 @@
 , gnupg
 , darwin, xcbuild
 , procps, icu
+, installShellFiles
 }:
 
 { enableNpm ? true, version, sha256, patches ? [] } @args:
@@ -69,7 +70,7 @@ let
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
 
-    nativeBuildInputs = [ which pkg-config python ]
+    nativeBuildInputs = [ installShellFiles pkg-config python which ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
     outputs = [ "out" "libv8" ];
@@ -132,18 +133,31 @@ let
     # Some dependencies required for tools/doc/node_modules (and therefore
     # test-addons, jstest and others) target are not included in the tarball.
     # Run test targets that do not require network access.
-    checkTarget = lib.concatStringsSep " " [
+    checkTarget = lib.concatStringsSep " " ([
       "build-js-native-api-tests"
       "build-node-api-tests"
       "tooltest"
       "cctest"
-    ];
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      # TODO: JS test suite is too flaky on Darwin; revisit at a later date.
+      "test-ci-js"
+    ]);
 
-    # Do not create __pycache__ when running tests.
-    checkFlags = [ "PYTHONDONTWRITEBYTECODE=1" ];
+    checkFlags = [
+      # Do not create __pycache__ when running tests.
+      "PYTHONDONTWRITEBYTECODE=1"
+      "FLAKY_TESTS=skip"
+      # Skip some tests that are not passing in this context
+      "CI_SKIP_TESTS=test-setproctitle,test-tls-cli-max-version-1.3,test-tls-client-auth,test-child-process-exec-env,test-fs-write-stream-eagain,test-tls-sni-option,test-https-foafssl,test-child-process-uid-gid,test-process-euid-egid,test-process-initgroups,test-process-uid-gid,test-process-setgroups"
+    ];
 
     postInstall = ''
       HOST_PATH=$out/bin patchShebangs --host $out
+
+      ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        $out/bin/${self.meta.mainProgram} --completion-bash > ${self.meta.mainProgram}.bash
+        installShellCompletion ${self.meta.mainProgram}.bash
+      ''}
 
       ${lib.optionalString (enableNpm) ''
         mkdir -p $out/share/bash-completion/completions
@@ -206,7 +220,7 @@ let
       homepage = "https://nodejs.org";
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu cko aduh95 ];
+      maintainers = with maintainers; [ goibhniu aduh95 ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";

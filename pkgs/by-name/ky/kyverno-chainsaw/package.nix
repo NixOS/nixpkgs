@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-XkHXjRPthWPFr1t66DGeM5rQHqQEObEO5MhveClBmxg=";
+    hash = "sha256-UnLsy+htNG7DWU1Qw9HJZOPshq4L7YCtXSkh4jZe/XA=";
   };
 
-  vendorHash = "sha256-/W9tLNomE5sQb4NqZ4XCrNY+w6GbKblOhd9MilqLY50=";
+  vendorHash = "sha256-UQCn5GKhhfHsHIOqYYVkKP76e2NTRtwjw2VvCwRPUB4=";
 
   ldflags = [
     "-s" "-w"

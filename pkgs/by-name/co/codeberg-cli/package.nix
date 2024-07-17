@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "RobWalt";
+    owner = "Aviac";
     repo = "codeberg-cli";
     rev = "v${version}";
     hash = "sha256-SUKV7tH7tvSPtlMcRlOgjvAEqPoBi4J41Ak5k4h4Qj0=";
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CLI Tool for Codeberg similar to gh and glab";
-    homepage = "https://codeberg.org/RobWalt/codeberg-cli";
+    homepage = "https://codeberg.org/Aviac/codeberg-cli";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ robwalt ];
     mainProgram = "berg";

@@ -6,7 +6,6 @@
   packaging,
   poetry-core,
   pydantic,
-  pythonRelaxDepsHook,
   redis,
   structlog,
 }:
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

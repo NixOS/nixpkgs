@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   typeguard,
   cloudpickle,
   equinox,
@@ -19,7 +18,7 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.31";
+    version = "0.2.33";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -28,12 +27,11 @@ let
       owner = "google";
       repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-kuGFzp8sDLq6J/qq8ap3lD3n1pABHurXcbRUtDQyWwE=";
+      hash = "sha256-CL1EONbjjT3SCAn2o1x+1cgfuYWMEgQwbX9j34t+HGs=";
     };
 
     build-system = [
       hatchling
-      pythonRelaxDepsHook
     ];
 
     dependencies = [

@@ -2,25 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ipy";
   version = "1.01";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "IPy";
     inherit version;
-    sha256 = "edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a";
+    hash = "sha256-7eynQd6i1UrKVo+iN0AojD/obA8+pwA0RXHp7xSnzBo=";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    nosetests -e fuzz
-  '';
+  pythonImportsCheck = [ "IPy" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Class and tools for handling of IPv4 and IPv6 addresses and networks";

@@ -21,6 +21,7 @@ in
 
     meta = with lib; {
       homepage = "https://github.com/9999years/git-upstream";
+      changelog = "https://github.com/9999years/git-upstream/releases/tag/v${version}";
       description = "Shortcut for `git push --set-upstream`";
       license = [licenses.mit];
       maintainers = [maintainers._9999years];

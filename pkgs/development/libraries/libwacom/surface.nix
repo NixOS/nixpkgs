@@ -7,8 +7,8 @@ let
   libwacom-surface = fetchFromGitHub {
     owner = "linux-surface";
     repo = "libwacom-surface";
-    rev = "v2.10.0-1";
-    hash = "sha256-5/9X20veXazXEdSDGY5aMGQixulqMlC5Av0NGOF9m98=";
+    rev = "v2.12.0-1";
+    hash = "sha256-z/qNXbe89/0GIDj0BDQY6xdjHKA9chAPpviHPtBLjFM=";
   };
 in libwacom.overrideAttrs (old: {
   pname = "libwacom-surface";

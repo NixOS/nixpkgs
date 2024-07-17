@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pynose,
+  nose,
   mock,
 }:
 
@@ -24,8 +24,11 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
-    pynose
+    nose
     mock
   ];
 

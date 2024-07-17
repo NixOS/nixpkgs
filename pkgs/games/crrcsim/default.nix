@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     mainProgram = "crrcsim";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

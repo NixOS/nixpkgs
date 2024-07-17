@@ -3,21 +3,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
-  installShellFiles,
-  attrs,
   click,
   construct,
   construct-classes,
   ecdsa,
-  hidapi,
   libusb1,
   mnemonic,
-  pillow,
-  protobuf,
   requests,
-  shamir-mnemonic,
-  simple-rlp,
+  setuptools,
   typing-extensions,
   trezor-udev-rules,
   pytestCheckHook,
@@ -26,31 +19,23 @@
 buildPythonPackage rec {
   pname = "trezor";
   version = "0.13.9";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lFC9e7nSPl4zo8nljhjwWLRMnZw0ymZLSYGnlaqfse8=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     click
     construct
     construct-classes
     ecdsa
-    hidapi
     libusb1
     mnemonic
-    pillow
-    protobuf
     requests
-    shamir-mnemonic
-    simple-rlp
     typing-extensions
   ] ++ lib.optionals stdenv.isLinux [ trezor-udev-rules ];
 
@@ -67,22 +52,12 @@ buildPythonPackage rec {
     $out/bin/trezorctl --version
   '';
 
-  postFixup = ''
-    mkdir completions
-    _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
-    _TREZORCTL_COMPLETE=source_zsh $out/bin/trezorctl > completions/_trezorctl || true
-    _TREZORCTL_COMPLETE=source_fish $out/bin/trezorctl > completions/trezorctl.fish || true
-    installShellCompletion --bash completions/trezorctl
-    installShellCompletion --zsh completions/_trezorctl
-    installShellCompletion --fish completions/trezorctl.fish
-  '';
-
   meta = with lib; {
     description = "Python library for communicating with Trezor Hardware Wallet";
     mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     changelog = "https://github.com/trezor/trezor-firmware/blob/python/v${version}/python/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [
       np
       prusnak

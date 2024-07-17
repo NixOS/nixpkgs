@@ -7,7 +7,7 @@
 
 telegram-desktop.overrideAttrs (old: rec {
   pname = "64gram";
-  version = "1.1.29";
+  version = "1.1.30";
 
   src = fetchFromGitHub {
     owner = "TDesktop-x64";
@@ -15,7 +15,7 @@ telegram-desktop.overrideAttrs (old: rec {
     rev = "v${version}";
 
     fetchSubmodules = true;
-    hash = "sha256-OJiVmmDIsijK/IHGEdsCoAwvc9JlSth+76r9O1aJbd0=";
+    hash = "sha256-TcgQcIv88oBViTyk47r9jstNTYWnql+oXHfZePKgMHU=";
   };
 
   passthru.updateScript = nix-update-script {};

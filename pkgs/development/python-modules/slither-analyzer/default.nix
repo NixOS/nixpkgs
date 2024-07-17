@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   crytic-compile,
   fetchFromGitHub,

@@ -13,7 +13,7 @@ let
     downloadPage = "https://app.byndid.com/downloads";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ klden ];
+    maintainers = with maintainers; [ klden hornwall ];
     platforms = [ "x86_64-linux" ];
   };
 

@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
     wrapProgram "$out/bin/panoply" --prefix PATH : "${jre}/bin"
 
-    runHook postHook
+    runHook postInstall
   '';
 
   meta = with lib; {

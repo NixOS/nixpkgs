@@ -96,4 +96,16 @@
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.13.0"; sha256 = "1r5lc8x3iq795l7vnyzs3shvpqz92fldkayvkqmrfjxnqmy0w3kg"; })
   (fetchNuGet { pname = "Tmds.DBus.SourceGenerator"; version = "0.0.2"; sha256 = "03q0fja30216npb3hd39iapr9psriz2k35lymaf4921195y40fiq"; })
   (fetchNuGet { pname = "XamlNameReferenceGenerator"; version = "1.6.1"; sha256 = "0348gj9g5rl0pj2frx4vscj6602gfyn9ba3i1rmfcrxh9jwwa09m"; })
+
+  # HACK: I've manually added these because they are needed to build with sdk 7,
+  # but this package fails to build if all dependencies are updated.
+  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Ref"; version = "6.0.31"; hash = "sha256-rVxnpwa8B1weEzkJIxm+todHXrSdIT3KY38D09MncUI="; })
+  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-arm64"; version = "6.0.31"; hash = "sha256-z6HNgiyLyXN5+QlktIZmOQh9D4KRHWd6yonmKChEji4="; })
+  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "6.0.31"; hash = "sha256-Rq97wUeAD2bZhe0XRLB9Ffq1MBU/u4Yq45KwRLz7DRQ="; })
+  (fetchNuGet { pname = "Microsoft.CSharp"; version = "4.7.0"; hash = "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Host.linux-arm64"; version = "6.0.31"; hash = "sha256-mjS1IKBwxDFT2UmcyC5ZMIQ3mWSADw887CIV0pZhQRc="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Host.linux-x64"; version = "6.0.31"; hash = "sha256-VifKEirDStL5vpjnEe0hGsODssK20XBX/Mm6j8G4QIM="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Ref"; version = "6.0.31"; hash = "sha256-p/KpNGwJfvoWNRn057o4t8u8La2LvsmOjF0i2W1URKU="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Runtime.linux-arm64"; version = "6.0.31"; hash = "sha256-N3xRbF5nQo9Okixqg1mN86L7VB72bpDR0C6wlfzntPI="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Runtime.linux-x64"; version = "6.0.31"; hash = "sha256-TE1DmzoBKO9qKoATBWZPRKXBRoRzs6AafKuubeSwgl8="; })
 ]

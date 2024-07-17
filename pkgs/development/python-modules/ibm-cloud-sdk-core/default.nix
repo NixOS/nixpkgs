@@ -7,6 +7,7 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
+  pythonRelaxDepsHook,
   requests,
   responses,
   setuptools,
@@ -14,17 +15,21 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.20.0";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CqbZcEP1ianvRRpx527KBjQTjvGBzlSmoKY1Pe5MXRA=";
+    hash = "sha256-nE1JIlYlJ5O3L7FQD5L+JvLnVs7nq4Ff6dmHvgXjj0M=";
   };
 
+  pythonRelaxDeps = [ "requests" ];
+
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     pyjwt

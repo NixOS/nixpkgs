@@ -6,7 +6,6 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "python-dateutil" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ python-dateutil ];
 

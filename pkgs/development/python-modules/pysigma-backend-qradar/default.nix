@@ -7,7 +7,6 @@
   pysigma-pipeline-sysmon,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
 }:
 
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [ pysigma ];

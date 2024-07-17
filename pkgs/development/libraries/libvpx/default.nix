@@ -36,6 +36,10 @@
 , experimentalSpatialSvcSupport ? false # Spatial scalable video coding
 , experimentalFpMbStatsSupport ? false
 , experimentalEmulateHardwareSupport ? false
+
+# for passthru.tests
+, ffmpeg
+, gst_all_1
 }:
 
 let
@@ -68,7 +72,8 @@ let
 
   isGeneric =
     /**/ (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
-    || stdenv.hostPlatform.parsed.cpu.name == "armv6l";
+    || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isRiscV;
 
   target =
     /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
@@ -89,13 +94,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-duU1exUg7JiKCtZfNxyb/y40hxsXeTIMShf9YounTWA=";
+    hash = "sha256-Pfg7g4y/dqn2VKDQU1LnTJQSj1Tont9/8Je6ShDb2GQ=";
   };
 
   postPatch = ''
@@ -197,6 +202,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''moveToOutput bin "$bin" '';
+
+  passthru.tests = {
+    inherit (gst_all_1) gst-plugins-good;
+    ffmpeg = ffmpeg.override { withVpx = true; };
+  };
 
   meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";

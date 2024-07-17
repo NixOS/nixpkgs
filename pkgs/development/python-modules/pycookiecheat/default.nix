@@ -7,7 +7,6 @@
   keyring,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   playwright,
   setuptools,
   setuptools-scm,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cryptography

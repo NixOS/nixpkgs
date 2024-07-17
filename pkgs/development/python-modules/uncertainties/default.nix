@@ -1,32 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  setuptools-scm,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # optional-dependencies
   numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     rev = "refs/tags/${version}";
-    hash = "sha256-AaFazHeq7t4DnG2s9GvmAJ3ni62PWHR//mNPL+WyGSI=";
+    hash = "sha256-cm0FeJCxyBLN0GCKPnscBCx9p9qCDQdwRfhBRgQIhAo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
+  optional-dependencies.arrays = [ numpy ];
+
   nativeCheckInputs = [
     pytestCheckHook
-    numpy
-  ];
+  ]
+  ++ optional-dependencies.arrays;
+
+  pythonImportsCheck = [ "uncertainties" ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/uncertainties/";

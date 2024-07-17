@@ -11,7 +11,6 @@
   pytest-doctestplus,
   pytest-filter-subpackage,
   pytest-mock,
-  pytest-openfiles,
   pytest-remotedata,
   setuptools,
   setuptools-scm,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock
-    pytest-openfiles
     pytest-remotedata
   ];
 

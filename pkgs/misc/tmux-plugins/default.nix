@@ -496,12 +496,18 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2024-05-12";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "16bbde801378a70512059541d104c5ae35be32b9";
+      hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
+    };
+    meta = with lib; {
+      description = "Tmux powerline theme";
+      homepage = "https://github.com/wfxr/tmux-power";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -668,6 +674,25 @@ in rec {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
+  tokyo-night-tmux = mkTmuxPlugin {
+    pluginName = "tokyo-night-tmux";
+    rtpFilePath = "tokyo-night.tmux";
+    version = "1.5.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "janoamaral";
+      repo = "tokyo-night-tmux";
+      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
+      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/janoamaral/tokyo-night-tmux";
+      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ redyf ];
     };
   };
 

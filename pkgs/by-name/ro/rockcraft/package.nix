@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, dpkg
-, nix-update-script
-, python3
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  dpkg,
+  nix-update-script,
+  python3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,6 +21,9 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace rockcraft/__init__.py \
       --replace-fail "dev" "${version}"
+
+    substituteInPlace rockcraft/utils.py \
+      --replace-fail "distutils.util" "setuptools.dist"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -28,14 +32,16 @@ python3Packages.buildPythonApplication rec {
     spdx-lookup
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ] ++ [
-    dpkg
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      setuptools
+    ]
+    ++ [ dpkg ];
 
   preCheck = ''
     mkdir -p check-phase

@@ -20,10 +20,12 @@
   pkg-config,
   procps,
   python3,
+  tcpdump,
   sphinxHook,
   util-linux,
   which,
   writeScript,
+  makeWrapper,
 }:
 
 let
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     sphinxHook
+    makeWrapper
   ];
 
   sphinxBuilders = [ "man" ];
@@ -96,6 +99,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
     installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
+
+    wrapProgram $out/bin/ovs-l3ping \
+      --prefix PYTHONPATH : $out/share/openvswitch/python
+
+    wrapProgram $out/bin/ovs-tcpdump \
+      --prefix PATH : ${lib.makeBinPath [tcpdump]} \
+      --prefix PYTHONPATH : $out/share/openvswitch/python
   '';
 
   doCheck = true;

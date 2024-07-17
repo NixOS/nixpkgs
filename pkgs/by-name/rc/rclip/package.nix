@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook pythonRelaxDepsHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonRelaxDeps = [ "torch" "torchvision" ];
 

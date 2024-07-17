@@ -4,7 +4,8 @@
   fetchPypi,
   setuptools,
   pbr,
-  pynose,
+  nose,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ pynose ];
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck

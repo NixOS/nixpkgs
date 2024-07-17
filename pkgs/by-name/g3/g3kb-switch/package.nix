@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lyokha/g3kb-switch";
+    changelog = "https://github.com/lyokha/g3kb-switch/releases/tag/${src.rev}";
     description = "CLI keyboard layout switcher for GNOME Shell";
     mainProgram = "g3kb-switch";
     license = licenses.bsd2;

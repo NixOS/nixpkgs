@@ -8,7 +8,6 @@
   psycopg2,
   python,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   setuptools-scm,
   tablib,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     diff-match-patch

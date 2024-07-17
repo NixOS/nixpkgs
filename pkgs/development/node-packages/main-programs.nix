@@ -14,7 +14,6 @@
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
   "@uppy/companion" = "companion";
-  "@vue/cli" = "vue";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
@@ -51,8 +50,6 @@
   pscid = "pscid";
   remod-cli = "remod";
   teck-programmer = "teck-firmware-upgrade";
-  typescript-language-server = "typescript-language-server";
-  undollar = "$";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

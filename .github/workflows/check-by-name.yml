@@ -58,7 +58,7 @@ jobs:
 
             if [[ "$mergeable" == "null" ]]; then
               if (( retryCount == 0 )); then
-                echo "Not retrying anymore, probably GitHub is having internal issues"
+                echo "Not retrying anymore. It's likely that GitHub is having internal issues: check https://www.githubstatus.com/"
                 exit 1
               else
                 (( retryCount -= 1 )) || true

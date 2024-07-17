@@ -158,6 +158,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libopenshot = callPackage ../development/libraries/libopenshot {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    python3 = pkgs.python311;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };

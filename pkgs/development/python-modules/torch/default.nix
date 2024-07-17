@@ -34,7 +34,6 @@
   which,
   pybind11,
   removeReferencesTo,
-  pythonRelaxDepsHook,
 
   # Build inputs
   numactl,
@@ -433,7 +432,6 @@ buildPythonPackage rec {
       which
       ninja
       pybind11
-      pythonRelaxDepsHook
       removeReferencesTo
     ]
     ++ lib.optionals cudaSupport (

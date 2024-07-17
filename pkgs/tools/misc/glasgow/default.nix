@@ -5,40 +5,49 @@
 , yosys
 , icestorm
 , nextpnr
+, unstableGitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "unstable-2023-09-20";
-  # python -m setuptools_scm
-  realVersion = "0.1.dev1798+g${lib.substring 0 7 src.rev}";
+  version = "0-unstable-2024-06-27";
+  # from `pdm show`
+  realVersion = let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in "${tag}.1.dev2085+g${rev}";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "e9a9801d5be3dcba0ee188dd8a6e9115e337795d";
-    sha256 = "sha256-ztB3I/jrDSm1gKB1e5igivUVloq+YYhkshDlWg75NMA=";
+    rev = "a599e3caa64c2e445358894fd050e16917f2ee42";
+    sha256 = "sha256-5qg0/j1MgwHMOjySBY5cKuQqlqltV5cXcR/Ap6J9vys=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
+    python3.pkgs.pdm-backend
     sdcc
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
+    typing-extensions
     amaranth
-    appdirs
-    bitarray
-    crc
+    packaging
+    platformdirs
     fx2
     libusb1
-    packaging
     pyvcd
-    setuptools
+    aiohttp
   ];
 
-  nativeCheckInputs = [ yosys icestorm nextpnr ];
+  nativeCheckInputs = [
+    python3.pkgs.unittestCheckHook
+    yosys
+    icestorm
+    nextpnr
+  ];
 
   enableParallelBuilding = true;
 
@@ -46,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
     cd software
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
   # installCheck tries to build_ext again
@@ -54,16 +63,16 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
-    cp $src/config/99-glasgow.rules $out/etc/udev/rules.d
+    cp $src/config/*.rules $out/etc/udev/rules.d
   '';
 
-  checkPhase = ''
+  preCheck = ''
+    export PYTHONWARNINGS="ignore::DeprecationWarning"
     # tests attempt to cache bitstreams
     # for linux:
     export XDG_CACHE_HOME=$TMPDIR
     # for darwin:
     export HOME=$TMPDIR
-    ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
 
   makeWrapperArgs = [
@@ -71,6 +80,10 @@ python3.pkgs.buildPythonApplication rec {
     "--set" "ICEPACK" "${icestorm}/bin/icepack"
     "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
   ];
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";

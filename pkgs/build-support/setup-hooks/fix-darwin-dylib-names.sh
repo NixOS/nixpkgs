@@ -23,10 +23,13 @@ fixDarwinDylibNames() {
     for fn in "$@"; do
         if [ -L "$fn" ]; then continue; fi
         echo "$fn: fixing dylib"
+        set +e
         int_out=$(@targetPrefix@install_name_tool -id "$fn" "${flags[@]}" "$fn" 2>&1)
         result=$?
+        set -e
         if [ "$result" -ne 0 ] &&
-            ! grep "shared library stub file and can't be changed" <<< "$out"
+            ! grep -q -e "shared library stub file and can't be changed" \
+                      -e "is not a Mach-O file" <<< "$int_out"
         then
             echo "$int_out" >&2
             exit "$result"

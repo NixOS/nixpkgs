@@ -671,20 +671,29 @@ let
     };
 
     security = {
+      # Report BUG() conditions and kill the offending process.
+      BUG = yes;
+      BUG_ON_DATA_CORRUPTION = yes;
+
       FORTIFY_SOURCE                   = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
+
       HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
+      STRICT_KERNEL_RWX                = yes;
+      STRICT_MODULE_RWX                = yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
+
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
       # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK                = whenAtLeast "5.13" yes;
+
       DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
@@ -719,6 +728,10 @@ let
 
       # Enable support for page poisoning. Still needs to be enabled on the command line to actually work.
       PAGE_POISONING                   = yes;
+      # Randomize page allocator when page_alloc.shuffle=1
+      SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
+
+      INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
 
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
@@ -743,6 +756,10 @@ let
       # Mitigate straight line speculation at the cost of some file size
       SLS = whenBetween "5.17" "6.9" yes;
       MITIGATION_SLS = whenAtLeast "6.9" yes;
+
+      DEFAULT_MMAP_MIN_ADDR = freeform "65536";
+    } // optionalAttrs stdenv.hostPlatform.isAarch64 {
+      DEFAULT_MMAP_MIN_ADDR = freeform "32768";
     };
 
     microcode = {

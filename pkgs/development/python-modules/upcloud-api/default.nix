@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
   pytestCheckHook,
   responses,
@@ -9,17 +10,19 @@
 
 buildPythonPackage rec {
   pname = "upcloud-api";
-  version = "2.5.1";
-  format = "setuptools";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fMsI0aZ8jA08rrNPm8HmfYz/a3HLUExvvXIeDGPh2e8=";
+    hash = "sha256-RDGRue9hejNPKIP61GtJHMG5rG3CKvJdsYxVrp6I5W0=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook

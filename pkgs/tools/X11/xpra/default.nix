@@ -29,11 +29,13 @@
 , pango
 , pulseaudio
 , python3
+, stdenv
 , util-linux
 , which
 , x264
 , x265
 , xauth
+, xdg-utils
 , xorg
 , xorgserver
 }:
@@ -83,6 +85,12 @@ in buildPythonApplication rec {
     ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
+
+  # Note: xposix is renamed to posix in v5.
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace xpra/platform/xposix/features.py \
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+  '';
 
   INCLUDE_DIRS = "${pam}/include";
 

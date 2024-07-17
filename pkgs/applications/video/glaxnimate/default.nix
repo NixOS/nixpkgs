@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "mattbas";
     repo = "${pname}";
     rev = version;
-    sha256 = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
+    hash = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };
 

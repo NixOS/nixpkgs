@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-F/tMRD+nWn/fRPX7cTan371zlOTxh7oR98wREmokULo=";
   };
 
-  mvnHash = "sha256-b0nkp23gv4kejac/xrvm3xWo3Z8if7zveNUHBg7ZBm4=";
+  mvnHash = "sha256-6EX+y7/lGdB5LgW9MIER+KgvtPjvMCDjgq89f1g2GlY=";
   mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,7 +20,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/{bin,lib}
-    cp /build/source/target/gol-tool-${version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
+    cp target/gol-tool-${version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
 
     makeWrapper ${jre}/bin/java $out/bin/gol \
       --add-flags "-cp $out/lib/gol-tool.jar" \

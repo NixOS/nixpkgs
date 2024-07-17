@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python311 }:
 
 let
-  python = python3.override {
+  python = python311.override {
     packageOverrides = self: super: {
       pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";

@@ -1,40 +1,28 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , extra-cmake-modules
 , qtbase
 , qtquickcontrols2
 , SDL
 , python3
-, catch2
+, catch2_3
 , callPackage
 , nixosTests
 }:
 
 mkDerivation rec {
   pname = "sfxr-qt";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "agateau";
     repo = "sfxr-qt";
     rev = version;
-    sha256 = "sha256-Ce5NJe1f+C4pPmtenHYvtkxste+nPuxJoB+N7K2nyRo=";
+    hash = "sha256-JAWDk7mGkPtQ5yaA6UT9hlAy770MHrTBhBP9G8UqFKg=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp 3rdparty/catch2/single_include/catch2/catch.hpp
-  '';
-
-  # Remove on next release
-  patches = [(fetchpatch {
-    name = "sfxr-qr-missing-qpainterpath-include";
-    url = "https://github.com/agateau/sfxr-qt/commit/ef051f473654052112b647df987eb263e38faf47.patch";
-    sha256 = "sha256-bqMnxHUzdS5oG/2hfr5MvkpwrtZW+GTN5fS2WpV2W2c=";
-  })];
 
   nativeBuildInputs = [
     cmake
@@ -46,6 +34,14 @@ mkDerivation rec {
     qtbase
     qtquickcontrols2
     SDL
+  ];
+
+  checkInputs = [
+    catch2_3
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_CATCH2" true)
   ];
 
   doCheck = true;

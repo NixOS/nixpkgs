@@ -20,6 +20,8 @@
 , qttools
 , exiv2
 , nlopt
+, testers
+, xvfb-run
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -92,6 +94,18 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = ''
+      # Create a temporary home directory because stellarium aborts with an
+      # error if it can't write some configuration files.
+      tmpdir=$(mktemp -d)
+
+      # stellarium can't be run in headless mode, therefore we need xvfb-run.
+      HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run stellarium --version
+    '';
+  };
 
   meta =  {
     description = "Free open-source planetarium";

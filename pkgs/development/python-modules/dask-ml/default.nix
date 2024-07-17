@@ -66,12 +66,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # AttributeError: 'csr_matrix' object has no attribute 'A'
+    # Fixed in https://github.com/dask/dask-ml/pull/996
+    "tests/test_svd.py"
+  ];
+
+  disabledTests = [
+    # Flaky: `Arrays are not almost equal to 3 decimals` (although values do actually match)
+    "test_whitening"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scalable Machine Learn with Dask";
     homepage = "https://github.com/dask/dask-ml";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

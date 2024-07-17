@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://rectangleapp.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ Enzime Intuinewin wegank ];
+    maintainers = with maintainers; [ Intuinewin wegank ];
     license = licenses.mit;
   };
 }

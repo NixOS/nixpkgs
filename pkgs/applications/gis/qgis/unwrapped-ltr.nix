@@ -29,7 +29,7 @@
 , postgresql
 , proj
 , protobuf
-, python3
+, python311
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,7 +48,7 @@
 }:
 
 let
-  py = python3.override {
+  py = python311.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
@@ -139,7 +139,7 @@ in mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+      src = ./set-pyqt-package-dirs-ltr.patch;
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })

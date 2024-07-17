@@ -11,6 +11,7 @@
   testers,
   xcbuild,
   nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -20,13 +21,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "37.393.0";
+  version = "37.424.3";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-YgxcGNMgmwrausdR7kvG1NiyQPn0FcCq/isf9qUDCFY=";
+    hash = "sha256-OOanxZte0H27U5L1MGrNUxYDWQ7ctAoNVVUukbE7v7s=";
   };
 
   postPatch = ''
@@ -43,7 +44,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Zbe561q6xDKDIN+E/2eyQMz2GtpPvJEv2pAauMa+8pE=";
+    hash = "sha256-tOe0CqRVkN5Uu7S0o9sCV7Tdtkp3JDrupyx0r0AJfs4=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -88,14 +89,18 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = renovate; };
-    vm-test = nixosTests.renovate;
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = renovate; };
+      vm-test = nixosTests.renovate;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Cross-platform Dependency Automation by Mend.io";
     homepage = "https://github.com/renovatebot/renovate";
+    changelog = "https://github.com/renovatebot/renovate/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       marie

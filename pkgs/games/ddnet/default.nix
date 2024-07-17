@@ -36,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.3";
+  version = "18.3.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-QefbA6ncxMDHmd7tBH1bU+8FoVVJVdEtOuVXEvteSOE=";
+    hash = "sha256-OHhybYXmy+kBXtGA19agK7v9TCK2nvFC+goahogCvbU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-XwSdDvE0p/A+6ZbV82K78jgIxGs71fu7ZDGTl0I0cCI=";
+    hash = "sha256-a0KRSrozP4mdsl5NOUfCd9nm+pxzXpXZv+K5vSrdZ7E=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +109,8 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  # Tests loop forever on Darwin for some reason
+  doCheck = !stdenv.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''

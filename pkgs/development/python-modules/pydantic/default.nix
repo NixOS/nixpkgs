@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.6.3";
+  version = "2.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,17 +38,8 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
+    hash = "sha256-S4FZUnOsKC8J0xyTeXhMmCACCma+VfCSmrE6sYAnpok=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/pydantic/pydantic/pull/8678
-      name = "fix-pytest8-compatibility.patch";
-      url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
-      hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
-    })
-  ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
@@ -81,10 +72,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     substituteInPlace pyproject.toml \
-      --replace "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace "'--benchmark-group-by', 'group'," "" \
-      --replace "'--benchmark-warmup', 'on'," "" \
-      --replace "'--benchmark-disable'," ""
+      --replace-fail "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
+      --replace-fail "'--benchmark-group-by', 'group'," "" \
+      --replace-fail "'--benchmark-warmup', 'on'," "" \
+      --replace-fail "'--benchmark-disable'," ""
   '';
 
   pytestFlagsArray = [

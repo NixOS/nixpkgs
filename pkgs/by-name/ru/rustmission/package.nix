@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustmission";
-  version = "0.3.3";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "intuis";
     repo = "rustmission";
     rev = "v${version}";
-    hash = "sha256-OOewobyfJYnspeXFYzTP7SLrNQRnDl0jv81TJjQAdUE=";
+    hash = "sha256-Vjbz3Yfcn14oVJ5+lRMYO09Zcim3xqpjWepkkRBD454=";
   };
 
-  cargoHash = "sha256-dLddB+YA1uC8CVMVI1aVo1oMufxRupW26hGkb8796Ek=";
+  cargoHash = "sha256-KHLf6Ime76NoEQDLRFFaCvhfqpL9T3h37SwqVv/T/5Q=";
 
   nativeBuildInputs = [ pkg-config ];
 

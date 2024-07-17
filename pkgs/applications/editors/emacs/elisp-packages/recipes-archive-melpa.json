@@ -91627,11 +91627,11 @@
   "repo": "ksqsf/org-xlatex",
   "unstable": {
    "version": [
-    20230820,
-    2133
+    20240707,
+    1343
    ],
-   "commit": "f3cac5ea904e78ae2b47723fdce96e8e87edbe7c",
-   "sha256": "06y7lapsp4s9h07hdsd8wigmy6r5l36qiqwmz7j1n8zp3r8xg0pw"
+   "commit": "8f25ba5e4784b3f12f5ac5c69b1a1d0695c53b8e",
+   "sha256": "1cg11gqisigpa9prkm05z7wlajffzmhjiymg7frbibhrskhfhrp0"
   }
  },
  {

@@ -40,17 +40,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "7.0.4";
+  version = "7.0.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-WtJJdqPbx5k9U+u3ZpI3q/dm3eidxdkFgc8IskaJg88=";
+    hash = "sha256-Y/Ita5dr3COACffAIAjcqHHcdKiUWWEb/f/MPzMG200=";
   };
 
-  vendorHash = "sha256-TYVWou9fIVL4od2o1uOb/MRBpf2lIg/9Tem9w+ihYzU=";
+  vendorHash = "sha256-hfbNyCQMQzDzJxFc2MPAR4+v/qNcnORiQNbwbbIA4Nw=";
 
   subPackages = [ "." "contrib/environment-to-ini" ];
 
@@ -65,12 +65,6 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
-    # Fix TestAddRecursiveExclude go test.
-    # This will be part of the upcoming v7.0.5 release at which point this needs to be removed again.
-    (fetchpatch {
-      url = "https://codeberg.org/forgejo/forgejo/commit/f01dc4b271f54201e60a7c795d784813eac3f7ce.patch";
-      sha256  = "sha256-1lPLVHBad+Fmk+6EFXKuMnmDUl5BkEYJuMkTPfdrCgU=";
-    })
   ];
 
   postPatch = ''

@@ -96,4 +96,17 @@ in
 
       touch $out
     '');
+
+
+    /*
+    Check that a lua package's propagatedBuildInputs end up in LUA_PATH
+    */
+    checkPropagatedBuildInputs = pkgs.runCommandLocal "test-${lua.name}-setup-hook" ({
+      # lua-curl is a propagatedBuildInput of rest-nvim has
+      buildInputs = [ lua.pkgs.rest-nvim ];
+    }) (''
+      ${lua}/bin/lua -e "require'cURL'"
+      touch $out
+    '');
+
 })

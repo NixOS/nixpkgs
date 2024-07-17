@@ -323,6 +323,7 @@ let
             os =
               /**/ if rust ? platform then rust.platform.os or "none"
               else if final.isDarwin then "macos"
+              else if final.isWasm && !final.isWasi then "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
               else final.parsed.kernel.name;
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family

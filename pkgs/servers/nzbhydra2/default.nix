@@ -9,15 +9,19 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "4.7.6";
+  version = "7.2.3";
 
   src = fetchzip {
-    url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
-    hash = "sha512-vc+VInEnh00bASxcEwSjJcsa0QJHmtRzSz30uW60wGmA24tlaJYSk42N5KpGFbkQkOkb2ijHmKGxPogSa4izRQ==";
+    url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-generic.zip";
+    hash = "sha256-gGTEOqqnVSgsKvEjd6b5aG8EM2M8u0FdpIebYNQFP50=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [jre makeWrapper unzip];
+  nativeBuildInputs = [
+    jre
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
     license = licenses.asl20;
-    maintainers = with maintainers; [jamiemagee];
+    maintainers = with maintainers; [ matteopacini ];
     platforms = with platforms; linux;
     mainProgram = "nzbhydra2";
   };

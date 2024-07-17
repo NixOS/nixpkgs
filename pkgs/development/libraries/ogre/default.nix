@@ -12,7 +12,7 @@
 , pugixml
 , zziplib
   # linux
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libICE
@@ -75,7 +75,7 @@ let
       pugixml
       zziplib
     ] ++ lib.optionals stdenv.isLinux [
-      freeglut
+      libglut
       libGL
       libGLU
       libICE

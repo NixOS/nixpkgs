@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libX11
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 
-  buildInputs = [ freeglut libGLU libGL libXmu libXext libX11 libXi ];
+  buildInputs = [ libglut libGLU libGL libXmu libXext libX11 libXi ];
 
   installPhase = ''
     mkdir -p "$out"/{bin,lib,share/glui/doc,include}

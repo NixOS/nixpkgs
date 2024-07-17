@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.thrysoee.dk/editline/";
+    changelog = "https://www.thrysoee.dk/editline/#changelog";
     description = "Port of the NetBSD Editline library (libedit)";
     longDescription = ''
        This is an autotool- and libtoolized port of the NetBSD Editline library

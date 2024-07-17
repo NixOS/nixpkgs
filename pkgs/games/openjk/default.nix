@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tgunnoe ];
   };

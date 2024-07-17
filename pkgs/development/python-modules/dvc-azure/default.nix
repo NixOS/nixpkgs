@@ -6,7 +6,6 @@
   dvc-objects,
   fetchPypi,
   knack,
-  pythonRelaxDepsHook,
   setuptools-scm,
 }:
 
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

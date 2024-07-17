@@ -20,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
   build-system = [
     python3.pkgs.setuptools
     python3.pkgs.wheel
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   dependencies = with python3.pkgs; [

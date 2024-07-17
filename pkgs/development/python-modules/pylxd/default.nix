@@ -10,7 +10,6 @@
   pythonOlder,
   requests,
   urllib3,
-  pythonRelaxDepsHook,
   requests-toolbelt,
   requests-unixsocket,
   setuptools,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "urllib3" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

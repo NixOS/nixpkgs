@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.52.2";
+  version = "3.52.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-oAakTtyzjSb/scYuHV0KMdHy5ZB1Vl4mx5ou4BxFp+U=";
+    hash = "sha256-6fbIDBQgM7GAG8yqYiHEU9406tTqCJsghrGQhvmpwuQ=";
   };
 
   patches = [
@@ -129,7 +129,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_UOA=OFF"
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"

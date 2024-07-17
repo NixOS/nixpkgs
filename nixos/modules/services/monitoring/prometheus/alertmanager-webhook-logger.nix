@@ -32,8 +32,14 @@ in
           ${escapeShellArgs cfg.extraFlags}
         '';
 
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
         DynamicUser = true;
         NoNewPrivileges = true;
+
+        MemoryDenyWriteExecute = true;
+
+        LockPersonality = true;
 
         ProtectProc = "invisible";
         ProtectSystem = "strict";
@@ -43,6 +49,8 @@ in
         PrivateDevices = true;
         PrivateIPC = true;
 
+        ProcSubset = "pid";
+
         ProtectHostname = true;
         ProtectClock = true;
         ProtectKernelTunables = true;
@@ -50,7 +58,10 @@ in
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
+        Restart  = "on-failure";
+
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 

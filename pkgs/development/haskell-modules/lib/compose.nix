@@ -292,7 +292,7 @@ rec {
    */
  justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
     postFixup = drv.postFixup or "" + ''

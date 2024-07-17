@@ -6,18 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "phraze";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "sts10";
     repo = "phraze";
     rev = "v${version}";
-    hash = "sha256-1tvFVwTvtjAXVfCObdL3tGq50q4zouchNAuMo7euZ3g=";
+    hash = "sha256-lW7oYivIDGYg78MgcLFFNyxciVk+wKU/OBzWYx3KwPI=";
   };
 
   doCheck = true;
 
-  cargoHash = "sha256-q3nkNBEiisGp+ElSXZnT4x6P0Sm5sM2R9cpzpaJ/UU4=";
+  cargoHash = "sha256-kFk04YKDYiABWtild6aaP9H8gt/TuckOWRJE69dAXGU=";
 
   meta = {
     description = "Generate random passphrases";

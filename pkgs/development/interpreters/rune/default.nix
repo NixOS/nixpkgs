@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rune";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchCrate {
     pname = "rune-cli";
     inherit version;
-    hash = "sha256-Xk4gUBxDdnW2AIEvMaEjzVsqCQFK9B/Wyg7RpJ/hbrA=";
+    hash = "sha256-nrHduxHSX31nwqcBbgPT4WH64LXTruScocpqex4zxf4=";
   };
 
-  cargoHash = "sha256-hpJ++mzP2QFE/iHZQvcjT03xPnyPYw7EgsL8NwxrZVQ=";
+  cargoHash = "sha256-EjUzXb2r6lKV1fBL7KdseC9vmW2L0AjpowYo4j8Xpv8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices

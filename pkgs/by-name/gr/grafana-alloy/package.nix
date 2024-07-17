@@ -16,17 +16,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "alloy";
-    hash = "sha256-0AR7JE79QHA6nO6Wu3ebousH2pyeDiP4+9DnUL/OSYI=";
+    hash = "sha256-RwTwwWz5nEk5eeCK/cZivd3r6WmoIqKjNtEQ0RVk1pw=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-Pnf/oiwldRIjvVa85igwQ/AoT/iups7LQ46T2iGAIlM=";
+  vendorHash = "sha256-UYFZmrE0Pm5bdhloaR9zSEvlPWV/uWo85zjmIuN8Jvc=";
 
   nativeBuildInputs = [ fixup-yarn-lock yarn nodejs installShellFiles ];
 
@@ -120,7 +120,8 @@ buildGoModule rec {
     mainProgram = "alloy";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
+    changelog = "https://github.com/grafana/alloy/blob/${src.rev}/CHANGELOG.md";
     maintainers = with maintainers; [ azahi flokli emilylange hbjydev ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

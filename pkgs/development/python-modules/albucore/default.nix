@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,15 +22,12 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albucore";
     rev = "refs/tags/${version}";
-    hash = "sha256-ahW1dRbAFfJQ0B0Nfb+Lco03Ymd/IL6hLGvVox3S8/c=";
+    hash = "sha256-TJTIIshMUcHTGSo0lRA3hVkqMqKsfj0EuiV+SSsP5Q4=";
   };
 
   pythonRemoveDeps = [ "opencv-python" ];
 
-  build-system = [
-    setuptools
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy

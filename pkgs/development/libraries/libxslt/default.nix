@@ -15,16 +15,16 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
-  version = "1.1.39";
+  version = "1.1.41";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-KiCtYhFIM5sHWcTU6WcZNi3uZMmgltu6YlugU4RjSfA=";
+    url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
+    hash = "sha256-OtOSr5ERW3dA97UNIozBxfwTr8HafxbLAhORejf3G9o=";
   };
 
   strictDeps = true;
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxslt";
       versionPolicy = "none";
     };
   };
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ eelco jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
-}
+})

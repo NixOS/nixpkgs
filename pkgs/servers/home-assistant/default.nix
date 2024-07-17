@@ -93,18 +93,6 @@ let
         '';
       });
 
-      aiowithings = super.aiowithings.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src)
-            owner
-            repo
-          ;
-          rev = "refs/tags/${version}";
-          hash = "sha256-+pIIVCR+QsW9M3pH9Ss3dMvkeKM1OdhQ1y+s/T6pHtk=";
-        };
-      });
-
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
@@ -192,62 +180,13 @@ let
         doCheck = false; # requires asynctest, which does not work on python 3.11
       });
 
-      jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
-        version = "3.3.0";
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
-      });
-
-      jaraco-collections = super.jaraco-collections.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.0";
-        src = fetchPypi {
-          pname = "jaraco.collections";
-          inherit version;
-          hash = "sha256-NE0Udp1xbnSWr4eaxxs8br3UarxkvZ7CHRUkg2WqOsk=";
-        };
-      });
-
-      jaraco-functools = super.jaraco-functools.overridePythonAttrs (oldAttrs: rec {
-        version = "3.9.0";
-        src = fetchPypi {
-          pname = "jaraco.functools";
-          inherit version;
-          hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
-        };
-      });
-
-      lmcloud = super.lmcloud.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.35";
-        src = fetchFromGitHub {
-          owner = "zweckj";
-          repo = "lmcloud";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-TUve21yamtEmEceK/V1w7IZjnMgKConMfSY/GlqFpp8=";
-        };
-      });
-
-      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.0";
-        pyprojet = true;
-
-        src = fetchFromGitHub {
-          owner = "lxml";
-          repo = "lxml";
-          rev = "refs/tags/lxml-${version}";
-          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
-        };
-
-        nativeBuildInputs = with self; [
-          cython
-          setuptools
-          libxml2.dev
-          libxslt.dev
-        ];
-
-        patches = [];
       });
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
@@ -281,17 +220,6 @@ let
 
         doCheck = false; # no tests
       });
-
-      # Can probably be removed with 2024.6.0
-      plugwise = super.plugwise.overridePythonAttrs rec {
-        version = "0.37.3";
-        src = fetchFromGitHub {
-          owner = "plugwise";
-          repo = "python-plugwise";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-aQz0p+DNi1XVoFwdFjc3RjpHqA2kGf4pU1QS6m271gU=";
-        };
-      };
 
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
@@ -434,7 +362,6 @@ let
         };
         nativeBuildInputs = with self; [
           flit-core
-          pythonRelaxDepsHook
         ];
         pythonRelaxDeps = [
           "betterproto"
@@ -549,7 +476,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.6.4";
+  hassVersion = "2024.7.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -567,17 +494,16 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-WIAFTVNHzrKTRONmOc/lq5PvC34PDKF7UfIokLCVzNY=";
+    hash = "sha256-FML1JZFj2xebcQvXJmBu02Eczz3ejg4r7PfnpBiDc50=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ymv3AlArAD2rSXQwMhEVeynwhAo8ZMrtV1zUK4U8xqQ=";
+    hash = "sha256-okukdAbBXJCaDpnOCDY91dsLQdm5pMJ1SKXV9A68eoQ=";
   };
 
   build-system = with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -664,6 +590,7 @@ in python.pkgs.buildPythonApplication rec {
     ulid-transform
     urllib3
     voluptuous
+    voluptuous-openapi
     voluptuous-serialize
     yarl
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py

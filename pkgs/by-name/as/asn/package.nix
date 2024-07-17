@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "asn";
-  version = "0.76.1";
+  version = "0.77.0";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9UDd0tgRKEFC1V1+1s9Ghev0I48L8UR9/YbZKX3F1MU=";
+    hash = "sha256-A2Z6xNoC6X6ZDL8jecRE3MkW7EmNQ6EHyCBIlNlBoxA=";
   };
 
   nativeBuildInputs = [

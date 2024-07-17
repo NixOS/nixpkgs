@@ -7,8 +7,8 @@
 
 let
   pname = "ligo-mode";
-  version = "20230302.1616";
-  commit = "d1073474efc9e0a020a4bcdf5e0c12a217265a3a";
+  version = "1.7.1-unstable-2024-06-28";
+  commit = "a62dff504867c4c4d9e0047114568a6e6b1eb291";
 in
 melpaBuild {
   inherit pname version commit;
@@ -17,7 +17,7 @@ melpaBuild {
     owner = "ligolang";
     repo = "ligo";
     rev = commit;
-    hash = "sha256-wz9DF9mqi8WUt1Ebd+ueUTA314rKkdbjmoWF8cKuS8I=";
+    hash = "sha256-YnI2sZCE5rStWsQYY/D+Am1rep4UdK28rlmPMmJeY50=";
   };
 
   packageRequires = [ ];

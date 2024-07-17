@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-xwin";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "rust-cross";
     repo = "cargo-xwin";
     rev = "v${version}";
-    hash = "sha256-6IPkNTwSh5aYQUd0MBmAeQ+iv0owxHwgdQWcjsdoEnA=";
+    hash = "sha256-lz1IykhdJy3540g6A5EpxGM2czM5psi/zZdKkgJd7BA=";
   };
 
-  cargoHash = "sha256-lhlqMaqrmEbv2btOf4awtZfEmMVeHGc1JhCpRRlnr90=";
+  cargoHash = "sha256-qKLHrHQhjWysvOwVvlCjaQOoidUz42wEyJPyo/nz5Ro=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

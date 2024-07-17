@@ -61,19 +61,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-uCXchYx26DdxTjR1k2748KCEHPnekKS2fAM7SpyhNvM=";
     })
 
-    # https://github.com/sagemath/sage/pull/37763, landed in 10.4.beta2
-    (fetchpatch {
-      name = "scipy-fault-tolerance.patch";
-      url = "https://github.com/sagemath/sage/commit/551139c09f26a5da96b1187c3f0dd17b8d80ef84.diff";
-      hash = "sha256-PR4przrZ3ieHaW2nSY7l7VhNfrUupu9yCIrXpeyoAgg=";
-    })
-
-    # first two commits from https://github.com/sagemath/sage/pull/38100
-    (fetchpatch {
-      name = "sphinx-7.3-update.patch";
-      url = "https://github.com/sagemath/sage/compare/10.4.beta7...d2932e142991b442a3eee5dc4f8949e3f7e6fe5c.patch";
-      hash = "sha256-g6w0ImE0d2ocKnbGMQikcz9eI9r3/gESlA1NrQfGimk=";
-    })
+    # compile libs/gap/element.pyx with -O1
+    # a more conservative version of https://github.com/sagemath/sage/pull/37951
+    ./patches/gap-element-crash.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -83,11 +73,39 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # https://github.com/sagemath/sage/pull/37492
+    # https://github.com/sagemath/sage/pull/37763, landed in 10.4.beta2
+    (fetchpatch {
+      name = "scipy-fault-tolerance.patch";
+      url = "https://github.com/sagemath/sage/commit/551139c09f26a5da96b1187c3f0dd17b8d80ef84.diff";
+      hash = "sha256-PR4przrZ3ieHaW2nSY7l7VhNfrUupu9yCIrXpeyoAgg=";
+    })
+
+    # https://github.com/sagemath/sage/pull/37492, landed in 10.4.beta5
     (fetchpatch {
       name = "singular-4.3.2p14-upgrade.patch";
       url = "https://github.com/sagemath/sage/commit/a0c56816b051e97da44ac0a4e4d4f6915cf7fa0f.diff";
       sha256 = "sha256-WGMmPeBoj2LUC+2qxWuaJL89QUuGt6axGvxWkpM9LYg=";
+    })
+
+    # https://github.com/sagemath/sage/pull/37949, landed in 10.4.beta6
+    (fetchpatch {
+      name = "conway-polynomials-new-len.patch";
+      url = "https://github.com/sagemath/sage/commit/c9f5b45179e92ea0de1e0dbe0f47464010902851.diff";
+      hash = "sha256-DwN2UIX8dxfxjIiqVvMdGbIxJ7CR/Ag2XUmS5vUKFTs=";
+    })
+
+    # https://github.com/sagemath/sage/pull/37967, landed in 10.4.beta6
+    (fetchpatch {
+      name = "conway-polynomials-ell-point.patch";
+      url = "https://github.com/sagemath/sage/commit/4e0bbaf90262a42f8ea14d5bcfed65f9d1787f54.diff";
+      hash = "sha256-9gXydi1A+n7+K8YpH0PB8l/OMexhgO2F5NccU0cK+ls=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38100, landed in 10.4.beta8
+    (fetchpatch {
+      name = "sphinx-7.3-update.patch";
+      url = "https://github.com/sagemath/sage/commit/e1b22690db42885423be5049246eb71ff52bdfef.diff";
+      hash = "sha256-04KAyz8+0pJbRV8Ld0bNX1OoEx/35gIh3Nff+6n8QUU=";
     })
   ];
 

@@ -6,7 +6,6 @@
 
   fetchzip,
   substitute,
-  pythonRelaxDepsHook,
   pytestCheckHook,
 
   setuptools,
@@ -72,8 +71,6 @@ buildPythonPackage {
     # Magic patch from upstream - what does this even do??
     echo "from .rapidocr_onnxruntime.main import RapidOCR, VisRes" > __init__.py
   '';
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   # Upstream expects the source files to be under rapidocr_onnxruntime/rapidocr_onnxruntime
   # instead of rapidocr_onnxruntime for the wheel to build correctly.

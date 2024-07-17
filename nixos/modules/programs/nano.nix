@@ -43,6 +43,7 @@ in
         include "${cfg.package}/share/nano/extra/*.nanorc"
       '') + cfg.nanorc;
       systemPackages = [ cfg.package ];
+      pathsToLink = [ "/share/nano" ];
     };
   };
 }

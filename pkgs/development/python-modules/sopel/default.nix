@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.9";
+  version = "8.0.0";
   format = "setuptools";
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IJ+ovLQv6/UU1oepmUQjzaWBG3Rdd3xvui7FjK85Urs=";
+    hash = "sha256-juLJp0Et5qMZwBZzw0e4tKg1cBYqAsH8KUzqNoIP70U=";
   };
 
   patches = [

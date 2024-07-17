@@ -4,14 +4,16 @@
   stdenvNoCC,
   makeWrapper,
 }:
-
+let
+  build = "520";
+in
 stdenvNoCC.mkDerivation rec {
   pname = "swiftbar";
-  version = "1.4.3";
+  version = "2.0.0";
 
   src = fetchzip {
-    url = "https://github.com/swiftbar/SwiftBar/releases/download/v${version}/SwiftBar.zip";
-    sha256 = "sha256-Ut+lr1E7bMp8Uz1aL7EV0ZsfdTh9t7zUjDU/DScRpHY=";
+    url = "https://github.com/swiftbar/SwiftBar/releases/download/v${version}/SwiftBar.v${version}.b${build}.zip";
+    hash = "sha256-eippK01Q+J9jdwvnGcnr7nw3KwyQQqh051lHN3Xmy+c=";
     stripRoot = false;
   };
 

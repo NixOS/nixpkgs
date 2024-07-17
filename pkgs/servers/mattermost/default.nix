@@ -37,6 +37,10 @@ buildGoModule rec {
     hash = "sha256-ZlvO/7kdMopIHBDdFp6wSQCR+NobGdDC6PcVd1iG16E=";
   };
 
+  # Makes nix-update-script pick up the fetchurl for the webapp.
+  # https://github.com/Mic92/nix-update/blob/1.3.1/nix_update/eval.py#L179
+  offlineCache = webapp;
+
   vendorHash = "sha256-TJCtgNf56A1U0EbV5gXjTro+YudVBRWiSZoBC3nJxnE=";
 
   modRoot = "./server";
@@ -69,7 +73,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "v(9\.5\.[0-9]+)" ];
+      extraArgs = [ "--version-regex" "^v(9\.5\.[0-9]+)$" ];
     };
     tests.mattermost = nixosTests.mattermost;
   };

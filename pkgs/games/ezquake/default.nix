@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ezquake.com/";
     description = "Modern QuakeWorld client focused on competitive online play";
     mainProgram = "ezquake";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];
   };

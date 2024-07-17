@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   bleach,
   bokeh,
   param,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
     python = "py3";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "bokeh" ];
 

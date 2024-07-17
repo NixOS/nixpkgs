@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, xdotool, xorg, xsetroot, xterm, runtimeShell
 , fetchpatch
 , nixosTests }:
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
     xdotool
-    xorgserver
+    xorg.xvfb
     xsetroot
     xterm
     python3.pkgs.pytestCheckHook

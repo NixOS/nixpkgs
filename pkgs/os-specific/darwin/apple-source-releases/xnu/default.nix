@@ -1,4 +1,4 @@
-{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages
+{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages, pkgsBuildBuild
 , bootstrap_cmds, bison, flex
 , gnum4, unifdef, perl, python3
 , headersOnly ? true
@@ -12,7 +12,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
 
-  patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
+  patches = lib.optionals (lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11") [ ./python3.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -48,7 +48,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace 'MACHINE_ARCH=armv7' 'MACHINE_ARCH=arm64' # this might break the comments saying 32-bit is required
 
     patchShebangs .
-  '' + lib.optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") ''
     # iig is closed-sourced, we don't have it
     # create an empty file to the header instead
     # this line becomes: echo "" > $@; echo --header ...
@@ -72,7 +72,11 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   HOST_FLEX = "flex";
   HOST_BISON = "bison";
   HOST_GM4 = "m4";
-  MIGCC = "cc";
+  # use unwrapped clang to generate headers because wrapper is not compatible with a 32 bit -arch.
+  # aarch64 should likely do this as well and remove the --replace MACHINE_ARCH above
+  MIGCC = if stdenv.isx86_64 && lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11"
+    then "${lib.getBin pkgsBuildBuild.stdenv.cc.cc}/bin/clang"
+    else "cc";
   ARCHS = arch;
   ARCH_CONFIGS = arch;
 
@@ -80,7 +84,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
-    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0";
+    lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") " 10.12 10.13 10.14 10.15 11.0";
    in ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec
@@ -150,7 +154,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
 
-  appleHeaders = builtins.readFile (./. + "/headers-${arch}.txt");
+  appleHeaders = builtins.readFile (./. + "/headers-${stdenv.hostPlatform.darwinSdkVersion}-${arch}.txt");
 } // lib.optionalAttrs headersOnly {
   HOST_CODESIGN = "echo";
   HOST_CODESIGN_ALLOCATE = "echo";

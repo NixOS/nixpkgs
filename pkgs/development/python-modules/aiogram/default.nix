@@ -20,14 +20,13 @@
   pytest-lazy-fixture,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.8.0";
+  version = "3.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,12 +35,11 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lqZnebFmNNSAOv3XcWHl+gtoWO7z27Zk0O6AJ7w+HDk=";
+    hash = "sha256-7GTZvYyD6ypaH6PuOoh6TVboyS6nf8BFGgKvD59K6gc=";
   };
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pydantic" ];
 

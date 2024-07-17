@@ -14,11 +14,12 @@
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
-/ci @infinisil
+/ci @infinisil @NixOS/Security
 
 # Develompent support
 /.editorconfig @Mic92 @zowoq
 /shell.nix @infinisil @NixOS/Security
+/.envrc @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil
@@ -107,6 +108,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # NixOS QEMU virtualisation
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
+
+# ACME
+/nixos/modules/security/acme                @arianvp @flokli @aanderse # no merge permission: @m1cr0man @emilazy
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd

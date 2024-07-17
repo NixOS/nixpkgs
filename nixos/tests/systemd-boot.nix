@@ -239,7 +239,7 @@ in
 
   memtest86 = makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -254,7 +254,7 @@ in
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -269,7 +269,7 @@ in
 
   memtestSortKey = makeTest {
     name = "systemd-boot-memtest-sortkey";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -307,7 +307,7 @@ in
 
   extraEntries = makeTest {
     name = "systemd-boot-extra-entries";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -326,7 +326,7 @@ in
 
   extraFiles = makeTest {
     name = "systemd-boot-extra-files";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -343,7 +343,7 @@ in
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes = {
       inherit common;
@@ -426,32 +426,6 @@ in
         machine.fail("test -e /boot/loader/entries/nixos-generation-1.conf")
         machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
       '';
-  };
-
-  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
-  # itself, systems with such firmware won't boot without this fix
-  uefiLargeFileWorkaround = makeTest {
-    name = "uefi-large-file-workaround";
-    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
-    nodes.machine = { pkgs, ... }: {
-      imports = [common];
-      virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
-        # This patch deliberately breaks the FAT driver in EDK2 to
-        # exhibit (part of) the firmware bug that we are testing
-        # for. Files greater than 10MiB will fail to be read in a
-        # single Read() call, so systemd-boot will fail to load the
-        # initrd without a workaround. The number 10MiB was chosen
-        # because if it were smaller than the kernel size, even the
-        # LoadImage call would fail, which is not the failure mode
-        # we're testing for. It needs to be between the kernel size
-        # and the initrd size.
-        patches = old.patches or [] ++ [ ./systemd-boot-ovmf-broken-fat-driver.patch ];
-      });
-    };
-
-    testScript = ''
-      machine.wait_for_unit("multi-user.target")
-    '';
   };
 
   no-bootspec = makeTest

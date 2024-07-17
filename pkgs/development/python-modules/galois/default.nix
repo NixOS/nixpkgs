@@ -3,7 +3,6 @@
   buildPythonPackage,
   setuptools-scm,
   pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   pytestCheckHook,
   pytest-xdist,
@@ -28,7 +27,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

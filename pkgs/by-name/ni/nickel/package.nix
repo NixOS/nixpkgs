@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , python3
 , nix-update-script
 }:
@@ -17,9 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EwiZg0iyF9EQ0Z65Re5WgeV7xgs/wPtTQ9XA0iEMEIQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-JwuBjCWETIlBX5xswdznOAmzkL0Rn6cv7pxM6DwAkOs=";
 
   cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
 

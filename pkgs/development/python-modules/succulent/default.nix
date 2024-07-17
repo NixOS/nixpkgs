@@ -8,7 +8,6 @@
   pyyaml,
   poetry-core,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   toml-adapt,
   xmltodict,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

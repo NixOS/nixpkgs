@@ -6,7 +6,6 @@
   dbt-postgres,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   hypothesis,
   importlib-metadata,
   jinja2,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.4.4";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,14 +29,13 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uvwcnOKjwxEmA+/QRGSRofpoE4jZzmE02mGSDLINrJw=";
+    hash = "sha256-77WKfegchgHIxgzL3Yhtx/4S5pYi6HeVCQH/19YscWA=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

@@ -41,7 +41,7 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.6.2";
+    version = "2024.7.0";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -50,7 +50,7 @@ let
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-5jG9hx1tZkqLwjWF73Fm2oJBuejbq4a7GP9fMd8hRJg=";
+      hash = "sha256-EvDn7i4GOEHYwhptYF+2yKUb3VDWjR7/WCUGKEJi/H4=";
     };
 
     build-system = [

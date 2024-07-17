@@ -91,7 +91,6 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
   ] ++ (with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ]);
 
@@ -106,6 +105,7 @@ python.pkgs.buildPythonApplication rec {
     "djangorestframework"
     "markdown"
     "pillow"
+    "publicsuffixlist"
     "python-dateutil"
     "reportlab"
     "requests"

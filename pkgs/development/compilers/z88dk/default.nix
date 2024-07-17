@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "z88dk";
     repo = "z88dk";
     rev = "v${version}";
-    sha256 = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
+    hash = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
     fetchSubmodules = true;
   };
 

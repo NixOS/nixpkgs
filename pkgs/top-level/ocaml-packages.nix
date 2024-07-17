@@ -92,7 +92,7 @@ let
 
     biocaml = janeStreet_0_15.biocaml;
 
-    biotk = janeStreet_0_15.biotk;
+    biotk = callPackage ../development/ocaml-modules/biotk { };
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -585,6 +585,10 @@ let
 
     genspio = callPackage ../development/ocaml-modules/genspio { };
 
+    get-activity = callPackage ../development/ocaml-modules/get-activity { };
+
+    get-activity-lib = callPackage ../development/ocaml-modules/get-activity/lib.nix { };
+
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
     gettext-camomile = callPackage ../development/ocaml-modules/ocaml-gettext/camomile.nix { };
@@ -609,6 +613,10 @@ let
     github-data = callPackage ../development/ocaml-modules/github/data.nix {  };
     github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
+
+    gitlab = callPackage ../development/ocaml-modules/gitlab {  };
+    gitlab-jsoo = callPackage ../development/ocaml-modules/gitlab/jsoo.nix {  };
+    gitlab-unix = callPackage ../development/ocaml-modules/gitlab/unix.nix {  };
 
     gluon = callPackage ../development/ocaml-modules/gluon { };
 
@@ -834,22 +842,6 @@ let
       in callPackage ../development/ocaml-modules/biocaml {
         uri = self.uri.override { inherit angstrom; };
         cfstream = self.cfstream.override { inherit core_kernel; };
-      };
-
-      biotk = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/biotk {
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        uri = self.uri.override { inherit angstrom; };
-        vg = self.vg.override { htmlcBackend = false; };
-      };
-
-      phylogenetics = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/phylogenetics {
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
@@ -1462,7 +1454,7 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
-    phylogenetics = janeStreet_0_15.phylogenetics;
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 

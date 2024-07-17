@@ -1,7 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-, pythonRelaxDepsHook
 , setuptools
 , setuptools-scm
 , wheel
@@ -24,7 +23,6 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
     wheel
   ];

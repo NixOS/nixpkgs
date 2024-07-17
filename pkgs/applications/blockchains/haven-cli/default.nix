@@ -1,26 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson, easyloggingpp
 , CoreData, IOKit, PCSC
 , trezorSupport ? true, libusb1, protobuf, python3
+, monero-cli
 }:
 
 stdenv.mkDerivation rec {
   pname = "haven-cli";
-  version = "3.3.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "haven-protocol-org";
     repo = "haven-main";
     rev = "v${version}";
-    sha256 = "sha256-jKeLFWJDwS8WWRynkDgBjvjq2EDpTEJadwkNsANQXws=";
+    hash = "sha256-craPgQtavSatoVzduIQCWuakIBeXWFWa9E0ALau4AcI=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./use-system-libraries.patch
-  ];
+  inherit (monero-cli) patches;
 
   postPatch = ''
     # remove vendored libraries
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound

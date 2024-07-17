@@ -19,7 +19,6 @@
   pytestCheckHook,
   pythonOlder,
   antlr4,
-  pythonRelaxDepsHook,
   pyyaml,
   setuptools,
   six,
@@ -52,7 +51,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     antlr4
-    pythonRelaxDepsHook
     setuptools
   ];
 

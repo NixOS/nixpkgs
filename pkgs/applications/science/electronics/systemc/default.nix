@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://systemc.org/";
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ victormignot amiloradovsky ];
+    maintainers = with maintainers; [ amiloradovsky ];
   };
 }

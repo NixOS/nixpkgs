@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.12.0";
+  version = "1.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,33 +28,28 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "home-assistant-bluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KTaZ3xbZpBIN5zP73YdJW6QeCQThGdqejnfWwvL+0R8=";
+    hash = "sha256-WAsgiOmYqmt/PCKp+vZA2To95YZAgnYCF8ysCn5N9nc=";
   };
-
-  patches = [
-    # https://github.com/home-assistant-libs/home-assistant-bluetooth/issues/38
-    ./habluetooth-3.0-compat.patch
-  ];
 
   postPatch = ''
     # drop pytest parametrization (coverage, etc.)
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [ habluetooth ];
-
-  pythonImportsCheck = [ "home_assistant_bluetooth" ];
+  dependencies = [ habluetooth ];
 
   nativeCheckInputs = [
     bleak
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "home_assistant_bluetooth" ];
 
   meta = with lib; {
     description = "Basic bluetooth models used by Home Assistant";

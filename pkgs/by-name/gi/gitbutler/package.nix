@@ -23,13 +23,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.12.2";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     rev = "release/${version}";
-    hash = "sha256-m2hvcnY2h4DYtM4ME+dxmwnmUh768CHSoAq5VsKl6Sk=";
+    hash = "sha256-TNaWLcdPECK1y04aYW4bFk7YKlW+z5kny4uyG0TA5ps=";
   };
 
   # deactivate the upstream updater in tauri configuration
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-+4SPDvhpvR1bjwTcyLO3HeBuZGL3P03OaEnOvcX9t9c=";
+    hash = "sha256-HKsb+96YklgPoqc7bA6fMuRQzWFGmKSBOcF5I0BO3oQ=";
   };
 
   nativeBuildInputs = [
@@ -105,12 +105,12 @@ rustPlatform.buildRustPackage rec {
           buildGoModule (
             args
             // rec {
-              version = "0.18.20";
+              version = "0.20.2";
               src = fetchFromGitHub {
                 owner = "evanw";
                 repo = "esbuild";
                 rev = "v${version}";
-                hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
               };
 
               vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

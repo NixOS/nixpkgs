@@ -1,19 +1,8 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, tailscale }:
 
-let
-  version = "1.68.1";
-in
 buildGoModule {
   pname = "tailscale-nginx-auth";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "tailscale";
-    repo = "tailscale";
-    rev = "v${version}";
-    hash = "sha256-ZAzro69F7ovfdqzRss/U7puh1T37bkEtUXabCYc5LwU=";
-  };
-  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
+  inherit (tailscale) version src vendorHash;
 
   CGO_ENABLED = 0;
 
@@ -22,8 +11,8 @@ buildGoModule {
   ldflags = [
     "-w"
     "-s"
-    "-X tailscale.com/version.longStamp=${version}"
-    "-X tailscale.com/version.shortStamp=${version}"
+    "-X tailscale.com/version.longStamp=${tailscale.version}"
+    "-X tailscale.com/version.shortStamp=${tailscale.version}"
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''

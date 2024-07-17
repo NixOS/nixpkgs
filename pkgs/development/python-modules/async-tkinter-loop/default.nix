@@ -6,7 +6,6 @@
   poetry-core,
   tkinter,
   typing-extensions,
-  pythonRelaxDepsHook,
   pytestCheckHook,
 }:
 
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     poetry-core
   ];
 

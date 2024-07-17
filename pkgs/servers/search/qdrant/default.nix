@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.9.6";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-fRQZmCHbWC5G6kS4+9KWgI4Qc6JnX3aBS4wJJgTWHlk=";
+    sha256 = "sha256-TG8huGKhh0tqJhqtb6Pu3opX2lPK1UrbgrV/eoZnU08=";
   };
 
   cargoLock = {

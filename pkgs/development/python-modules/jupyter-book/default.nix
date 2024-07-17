@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jupyter_book";
-    hash = "sha256-U5xdBJNUYgDZ3ie9S1936uoDEV+JN/gl1P+Cs4AamH4=";
+    hash = "sha256-rRXuSanf7Hc6HTBJ2sOFY4KqL5txRKGAEUduZcEbX0Y=";
   };
 
   nativeBuildInputs = [ flit-core ];

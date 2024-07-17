@@ -511,6 +511,37 @@
       },
       "name": "visual-studio-keymap"
     },
+    "14004": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.1068": null,
+        "241.17011.169": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.17890.14": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.17890.24": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.45": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.50": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.61": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.62": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.63": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.69": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip",
+        "241.18034.76": "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip"
+      },
+      "name": "protocol-buffers"
+    },
     "14059": {
       "compatible": [
         "clion",
@@ -661,6 +692,7 @@
     "https://plugins.jetbrains.com/files/13017/445774/keymap-visualStudio-233.11799.165.zip": "sha256-Nb2tSxL+mAY1qJ3waipgV8ep+0R/BaYnzz7zfwtLHmk=",
     "https://plugins.jetbrains.com/files/13017/508253/keymap-visualStudio-241.14494.150.zip": "sha256-tNgt0vIkdCB/LcaSj58mT6cNlw4lytRo0cZSt7sIERU=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
+    "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip": "sha256-cltbHY5OOvf29otDNsF9Q2shJHDdW6UMbzDdZ6OATtI=",
     "https://plugins.jetbrains.com/files/164/546759/IdeaVim-2.12.0-signed.zip": "sha256-6ibo1vdwO4olQTCWpWAefT3QCwgtzTo1ojilDes8Rvg=",
     "https://plugins.jetbrains.com/files/17718/561438/github-copilot-intellij-1.5.11.5872.zip": "sha256-4bYtBaLvcXZv8eVfG09ywSbcP+7SUb4j+NZ5mb2aluE=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",

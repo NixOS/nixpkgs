@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "0.14.7";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "lit26";
     repo = "finvizfinance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ht1bez04MAgugsQqa47q2ED7z8xpiXmzkOYBR7/PZHU=";
+    hash = "sha256-cdQdpQWPnMJ69VxOrn8SvNWTRcGt3S/PwoClGO9uh5I=";
   };
 
   postPatch = ''

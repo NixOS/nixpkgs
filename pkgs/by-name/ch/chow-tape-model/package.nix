@@ -5,7 +5,7 @@
 , dbus
 , libepoxy
 , fetchFromGitHub
-, freeglut
+, libglut
 , freetype
 , gtk3
 , lib
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
+    hash = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     libepoxy
-    freeglut
+    libglut
     freetype
     gtk3
     libGL

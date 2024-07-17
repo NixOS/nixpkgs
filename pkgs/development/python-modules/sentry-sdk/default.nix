@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.7.1";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    hash = "sha256-MxpG4R6kWozBR5RiSBI/rCSsM2Gv2XJcx8B3IV3LGVk=";
+    hash = "sha256-sK3jd26zfGp707GXZEU9RwB1aFuqfTGl8rGfGreuj38=";
   };
 
   postPatch = ''
@@ -155,6 +155,8 @@ buildPythonPackage rec {
     pytest-watch
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # depends on git revision

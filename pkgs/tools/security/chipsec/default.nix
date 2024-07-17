@@ -23,6 +23,11 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
 
+  postPatch = ''
+    substituteInPlace tests/software/util.py \
+      --replace-fail "assertRegexpMatches" "assertRegex"
+  '';
+
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [

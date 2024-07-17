@@ -19,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.8";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     rev = "refs/tags/${version}";
-    hash = "sha256-+FHqOVuHlY9QUjCrYVnrMBZPMFH9Z2U7eZ6eUSINSrw=";
+    hash = "sha256-n1hCM7Sp0t2bOJEzErEd1PS/Xc7c+KDmJ4PjQuuF140=";
   };
 
   postPatch = ''
@@ -82,7 +82,6 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python.pkgs; [
     e2fsprogs
     py
-    python-dateutil
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
@@ -120,6 +119,8 @@ python.pkgs.buildPythonApplication rec {
   };
 
   outputs = [ "out" "doc" "man" ];
+
+  disabled = python.pythonOlder "3.9";
 
   meta = with lib; {
     changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";

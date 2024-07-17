@@ -29,13 +29,13 @@ let
   electron = electron_29;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.6.0";
+  version = "2024.6.4";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-qiUUrs23WHE3+KFsWDknuDSA6M3Zwjz9Jdjq6mn5XkE=";
+    hash = "sha256-oQ2VZoxePdYUC+xMKlRMpvPubSPULvt31XSh/OBw3Ec=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-Mgd15eFJtWoBqFFCsjmsnlNbcg5NDs1U7DlMkE0hIb8=";
+  npmDepsHash = "sha256-9d9pWrFYelAx/PPDHY3m92Frp8RSQuBqpiOjmWtm/1g=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-BL+j2hMwb3QGgS29Y6LjqnKscH+tEXMCOyivilHHwVI=";
+    hash = "sha256-ZmblY1APVa8moAR1waVBZPhrf5Wt1Gi6dvAxkhizckQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -139,7 +139,7 @@ in buildNpmPackage rec {
 
     pushd ${cargoRoot}
     export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
     export cargoCheckType=release
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \

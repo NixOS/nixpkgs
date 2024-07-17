@@ -27,7 +27,7 @@ buildDubPackage {
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/lit -t $out/bin
-    runHook preInstall
+    runHook postInstall
   '';
 
   meta = {

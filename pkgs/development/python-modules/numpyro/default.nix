@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-4WyfR8wx4qollYSgtslEMSCB0zypJAYCJjKtWEsOYA0=";
+    hash = "sha256-HnX6sYRdEpbCMDXHsk1l/h60630ZwmED3SUioLA3wrU=";
   };
 
   build-system = [ setuptools ];
@@ -69,11 +69,11 @@ buildPythonPackage rec {
   # TODO: remove when tensorflow-probability gets fixed.
   disabledTestPaths = [ "test/test_distributions.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
     changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.6.3";
+  version = "2.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZhZoR8O5oxcF8+zzihiIbiC/j3AkDL7AjaJSlZ0N48s=";
+    hash = "sha256-COcZgl2XzPWknSKMUZgZBEMzkDdwK2PouIEuWKOP8dc=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       --replace-fail "dev" "${version}"
 
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.4.0" "setuptools"
+      --replace-fail "setuptools==" "setuptools>="
   '';
 
   build-system = [

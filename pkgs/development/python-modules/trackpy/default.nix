@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.2";
+  version = "0.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HqInZkKvMM0T/HrDeZJcVHMxuRmhMvu0qAl5bAu3eQI=";
+    hash = "sha256-AChtnwkGDzD4O0h0POmQrHJbgFvbFZUp15H4fKqm0Co=";
   };
 
   propagatedBuildInputs = [

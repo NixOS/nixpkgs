@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "hatch-odoo";
-  version = "0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "acsone";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-+KM3tpeQ4e53bVhUeWUSfyuIzPRvWkjZi4S/gH4UHVY=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-I3jaiG0Xu8B34q30p7zTs+FeBXUQiPKTAJLSVxE9gYE=";
   };
 
   buildInputs = [hatch-vcs];

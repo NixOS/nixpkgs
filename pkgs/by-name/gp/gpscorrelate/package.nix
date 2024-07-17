@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
     homepage = "https://dfandrich.github.io/gpscorrelate/";
+    changelog = "https://github.com/dfandrich/gpscorrelate/releases/tag/${src.rev}";
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
   };

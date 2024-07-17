@@ -14,7 +14,6 @@
   sqlalchemy,
   pytestCheckHook,
   versioneer,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     versioneer
   ] ++ versioneer.optional-dependencies.toml;

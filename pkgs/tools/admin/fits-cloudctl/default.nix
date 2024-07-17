@@ -5,8 +5,8 @@
 
 buildGoModule rec {
   pname = "fits-cloudctl";
-  version = "0.12.20"; # also update these 3 vars:
-  gitversion = "tags/v0.12.20-0-g0a0d89a"; # git describe --long --all
+  version = "0.12.21"; # also update these 3 vars:
+  gitversion = "tags/v0.12.21-0-g0a0d89a"; # git describe --long --all
   gitsha = "0a0d89a8";                     # git rev-parse --short=8 HEAD
   gittime = "2024-05-15T17:34:46+02:00";   # date --iso-8601=seconds
 
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "fi-ts";
     repo = "cloudctl";
     rev = "v${version}";
-    hash = "sha256-WDqdp9E9O6nzwLJNwljV2FcgTqdEVVRppOeNxrSrBv8=";
+    hash = "sha256-O3wX7IW2puMg0xhOf9BUfxzCMCKHxtPJxOCpc+wY0Ao=";
   };
 
-  vendorHash = "sha256-18iCTv0H9X3IccWsTD44qEEt9nXnq/En5zoqEwkC8Bs=";
+  vendorHash = "sha256-YSWO7Y9qtqCWfAMnzSMOWlXezjnggMLV8xF42vgOS7s=";
 
   ldflags = [
     "-X github.com/metal-stack/v.Version=${version}"

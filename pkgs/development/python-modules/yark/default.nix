@@ -8,7 +8,6 @@
   poetry-core,
   progress,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   yt-dlp,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

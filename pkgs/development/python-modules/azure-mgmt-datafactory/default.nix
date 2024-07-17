@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-99uvyPwzRnUxp4ePA5Xa19QVTRvkAjvHDVIGgbcBP7o=";
+    hash = "sha256-CL1Z50yjbEkncmKT4FhJ7UaOiUtw1CD85TVEJ7KHjQ4=";
   };
 
   nativeBuildInputs = [ setuptools ];

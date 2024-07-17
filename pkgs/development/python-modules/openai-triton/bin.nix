@@ -13,7 +13,6 @@
   autoPatchelfHook,
   filelock,
   lit,
-  pythonRelaxDepsHook,
   zlib,
 }:
 
@@ -34,13 +33,13 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     "cmake"
+    # torch and triton refer to each other so this hook is included to mitigate that.
     "torch"
   ];
 
   buildInputs = [ zlib ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook # torch and triton refer to each other so this hook is included to mitigate that.
     autoPatchelfHook
   ];
 

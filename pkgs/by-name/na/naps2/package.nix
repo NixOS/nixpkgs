@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.4.2";
+  version = "7.4.3";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     rev = "v${version}";
-    hash = "sha256-1tPPb8bAQSc5FpizWpi7q4alxoA6xfb/QOAaTK2eNc8=";
+    hash = "sha256-/qSfxGHcCSoNp516LFYWgEL4csf8EKgtSffBt1C02uE=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
