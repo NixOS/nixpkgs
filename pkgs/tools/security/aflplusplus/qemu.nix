@@ -25,9 +25,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "AFLplusplus";
     repo = "qemuafl";
-    # rev origin: https://github.com/AFLplusplus/AFLplusplus/commits/stable/qemu_mode/QEMUAFL_VERSION
-    rev = "40033af00c4c5de172ed4fe60c21b9edbd2c189d";
-    sha256 = "sha256-oK0DLJjXDiQuRlbaNOurvw5vlr9HEeOobNywiFTq7xg=";
+    # rev origin: https://github.com/AFLplusplus/AFLplusplus/blob/v4.21c/qemu_mode/QEMUAFL_VERSION
+    rev = "a6f0632a65e101e680dd72643a6128dd180dff72";
+    sha256 = "sha256-4kaQA5KDUqkK+fbjHg47lxZHRN8JrfSC2zdjrbMbDPo=";
     fetchSubmodules = true;
   };
 
