@@ -95,6 +95,7 @@ CROSS_TARGETS=(
     powerpc64-unknown-linux-gnuabielfv2
     powerpc64le-unknown-linux-gnu
     riscv64-unknown-linux-gnu
+    x86_64-unknown-freebsd
 )
 
 is_cross() {
@@ -163,6 +164,7 @@ for target in "${targets[@]}"; do
     case "$target" in
         *linux*) nixpkgs_prefix="pkgs/stdenv/linux" ;;
         *darwin*) nixpkgs_prefix="pkgs/stdenv/darwin" ;;
+        *freebsd*) nixpkgs_prefix="pkgs/stdenv/freebsd" ;;
         *) die "don't know where to put '$target'" ;;
     esac
 

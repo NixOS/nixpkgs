@@ -1,5 +1,5 @@
 $src/libexec/ld-elf.so.1 $src/bin/mkdir $out
-$src/libexec/ld-elf.so.1 $src/bin/tar -I "$src/libexec/ld-elf.so.1 $src/bin/xz" -C $out -xf $stage1
+$src/libexec/ld-elf.so.1 $src/bin/tar -I "$src/libexec/ld-elf.so.1 $src/bin/xz" -C $out -xf $bootstrapTools
 export LD_LIBRARY_PATH=$out/lib
 
 BADLIST=ld-elf.so.1
