@@ -41,8 +41,6 @@ in
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/ghc-mod { };
-
   git-undo = callPackage ./manual-packages/git-undo { };
 
   grid = callPackage ./manual-packages/grid { };
