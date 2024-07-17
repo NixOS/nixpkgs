@@ -1,23 +1,24 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, fetchpatch
-# Emacs packages
-, _map
-, a
-, anaphora
-, cl-lib
-, dash
-, dash-functional
-, esxml
-, f
-, frame-purpose
-, ht
-, ov
-, rainbow-identifiers
-, request
-, s
-, tracking
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  fetchpatch,
+  # Emacs packages
+  _map,
+  a,
+  anaphora,
+  cl-lib,
+  dash,
+  dash-functional,
+  esxml,
+  f,
+  frame-purpose,
+  ht,
+  ov,
+  rainbow-identifiers,
+  request,
+  s,
+  tracking,
 }:
 
 melpaBuild {
