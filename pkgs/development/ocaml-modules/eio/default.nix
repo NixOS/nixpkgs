@@ -5,7 +5,6 @@
 , bigstringaf
 , cstruct
 , domain-local-await
-, dune-configurator
 , fetchurl
 , fmt
 , hmap
