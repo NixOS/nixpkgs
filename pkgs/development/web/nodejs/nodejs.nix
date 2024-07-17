@@ -61,7 +61,14 @@ let
 
     strictDeps = true;
 
-    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    env = {
+      # Tell ninja to avoid ANSI sequences, otherwise we don’t see build
+      # progress in Nix logs.
+      #
+      # Note: do not set TERM=dumb environment variable globally, it is used in
+      # test-ci-js test suite to skip tests that otherwise run fine.
+      NINJA = "TERM=dumb ninja";
+    } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
       # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
       # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
@@ -143,6 +150,9 @@ let
     # TODO: what about tests when cross-compiling?
     # Note that currently stdenv does not run check phase if build ≠ host.
     doCheck = true;
+
+    # See https://github.com/nodejs/node/issues/22006
+    enableParallelChecking = false;
 
     # Some dependencies required for tools/doc/node_modules (and therefore
     # test-addons, jstest and others) target are not included in the tarball.
