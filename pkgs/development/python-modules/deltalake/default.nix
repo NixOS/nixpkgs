@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, pyarrow
-, pyarrow-hotfix
-, openssl
-, pkg-config
-, pytestCheckHook
-, pytest-benchmark
-, pytest-cov
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  pyarrow,
+  pyarrow-hotfix,
+  openssl,
+  pkg-config,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -36,12 +37,14 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  nativeBuildInputs = [
-    pkg-config # openssl-sys needs this
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config # openssl-sys needs this
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
   pythonImportsCheck = [ "deltalake" ];
 
@@ -68,6 +71,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/delta-io/delta-rs";
     changelog = "https://github.com/delta-io/delta-rs/blob/python-v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kfollesdal mslingsby harvidsen andershus ];
+    maintainers = with maintainers; [
+      kfollesdal
+      mslingsby
+      harvidsen
+      andershus
+    ];
   };
 }

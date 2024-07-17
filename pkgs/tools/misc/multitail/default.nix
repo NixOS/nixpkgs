@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  pkg-config,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   version = "7.1.2";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-00NZI/KFcgEAkvESnx0KQFW1GvX6FgZLA4Z1Fv2qi+E=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [ ncurses ];
 

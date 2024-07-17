@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchzip
-, openjdk
-, writeScript
-, runCommandLocal
-, bash
-, unzip
-, makeWrapper
-, libredirect
-, xsettingsd
-, makeDesktopItem
-, copyDesktopItems
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchzip,
+  openjdk,
+  writeScript,
+  runCommandLocal,
+  bash,
+  unzip,
+  makeWrapper,
+  libredirect,
+  xsettingsd,
+  makeDesktopItem,
+  copyDesktopItems,
+  python3,
 }:
 let
   # Run update.py to update this file.
@@ -44,7 +45,7 @@ let
     })
 
     # Patch one of the classes so it works with the packages above by removing .internal. from the package names.
-    (runCommandLocal "anyk-patch" {} ''
+    (runCommandLocal "anyk-patch" { } ''
       mkdir $out
       cd $out
       ${unzip}/bin/unzip ${src}/application/abevjava.jar hu/piller/enykp/niszws/ClientStubBuilder.class
@@ -85,14 +86,18 @@ let
     # ÁNYK crashes with NullPointerException with the GTK look and feel so use the cross-platform one.
     exec ${openjdk}/bin/java -Dswing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel $SCALING_PROP "$@"
   '';
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "anyk";
   inherit version src;
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem rec {
@@ -138,4 +143,3 @@ in stdenv.mkDerivation {
     mainProgram = "anyk";
   };
 }
-

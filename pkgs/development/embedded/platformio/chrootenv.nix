@@ -1,7 +1,12 @@
-{ lib, buildFHSEnv, platformio-core }:
+{
+  lib,
+  buildFHSEnv,
+  platformio-core,
+}:
 
 let
-  pio-pkgs = pkgs:
+  pio-pkgs =
+    pkgs:
     let
       inherit (platformio-core) python;
     in
@@ -11,7 +16,8 @@ let
       git
       xdg-user-dirs
       ncurses
-    ]) ++ (with python.pkgs; [
+    ])
+    ++ (with python.pkgs; [
       python
       setuptools
       pip

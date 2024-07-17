@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, libtool
-, intltool
-, pkg-config
-, glib
-, gtk2
-, curl
-, libmpdclient
-, libsoup
-, gob2
-, vala
-, libunique
-, libSM
-, libICE
-, sqlite
-, hicolor-icon-theme
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+  intltool,
+  pkg-config,
+  glib,
+  gtk2,
+  curl,
+  libmpdclient,
+  libsoup,
+  gob2,
+  vala,
+  libunique,
+  libSM,
+  libICE,
+  sqlite,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,14 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
-  nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    intltool
+    gob2
+    vala
+    wrapGAppsHook3
+  ];
   buildInputs = [
     glib
     gtk2
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gmpclient.org";
     description = "A GTK2 frontend for Music Player Daemon";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

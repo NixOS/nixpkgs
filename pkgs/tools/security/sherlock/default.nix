@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -45,9 +46,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  checkInputs = with python3.pkgs; [
-    exrex
-  ];
+  checkInputs = with python3.pkgs; [ exrex ];
 
   checkPhase = ''
     runHook preCheck
@@ -60,9 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = with lib; {
     homepage = "https://sherlock-project.github.io/";

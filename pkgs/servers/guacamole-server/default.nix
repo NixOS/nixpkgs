@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoPatchelfHook
-, autoreconfHook
-, cairo
-, ffmpeg_4-headless
-, freerdp
-, libjpeg_turbo
-, libpng
-, libossp_uuid
-, libpulseaudio
-, libssh2
-, libtelnet
-, libvncserver
-, libvorbis
-, libwebp
-, libwebsockets
-, makeBinaryWrapper
-, openssl
-, pango
-, perl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoPatchelfHook,
+  autoreconfHook,
+  cairo,
+  ffmpeg_4-headless,
+  freerdp,
+  libjpeg_turbo,
+  libpng,
+  libossp_uuid,
+  libpulseaudio,
+  libssh2,
+  libtelnet,
+  libvncserver,
+  libvorbis,
+  libwebp,
+  libwebsockets,
+  makeBinaryWrapper,
+  openssl,
+  pango,
+  perl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,9 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
-  configureFlags = [
-    "--with-freerdp-plugin-dir=${placeholder "out"}/lib"
-  ];
+  configureFlags = [ "--with-freerdp-plugin-dir=${placeholder "out"}/lib" ];
 
   postPatch = ''
     patchShebangs ./src/protocols/rdp/**/*.pl
@@ -91,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "guacd";
     maintainers = [ lib.maintainers.drupol ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 })

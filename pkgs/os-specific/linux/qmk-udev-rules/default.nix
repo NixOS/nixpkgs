@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 ## Usage
 # In NixOS, set hardware.keyboard.qmk.enable = true;

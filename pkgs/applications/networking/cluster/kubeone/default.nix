@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, kubeone
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  kubeone,
+  testers,
 }:
 
 buildGoModule rec {
@@ -26,9 +27,7 @@ buildGoModule rec {
     "-X k8c.io/kubeone/pkg/cmd.date=unknown"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd kubeone \

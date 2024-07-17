@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, ed, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ed,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,17 +42,17 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
-  nativeCheckInputs = [ed];
+  nativeCheckInputs = [ ed ];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
     mainProgram = "patch";
 
-    longDescription =
-      '' GNU Patch takes a patch file containing a difference listing
-         produced by the diff program and applies those differences to one or
-         more original files, producing patched versions.
-      '';
+    longDescription = ''
+      GNU Patch takes a patch file containing a difference listing
+              produced by the diff program and applies those differences to one or
+              more original files, producing patched versions.
+    '';
 
     homepage = "https://savannah.gnu.org/projects/patch";
 

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, cups
-, zlib
-, libxml2
-, pango
-, atk
-, gtk2
-, glib
-, gdk-pixbuf
-, gdk-pixbuf-xlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  cups,
+  zlib,
+  libxml2,
+  pango,
+  atk,
+  gtk2,
+  glib,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,19 @@ stdenv.mkDerivation rec {
 
   # !!! Adobe Reader contains copies of OpenSSL, libcurl, and libicu.
   # We should probably remove those and use the regular Nixpkgs versions.
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf gdk-pixbuf-xlib ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libX11
+    zlib
+    libxml2
+    cups
+    pango
+    atk
+    gtk2
+    glib
+    gdk-pixbuf
+    gdk-pixbuf-xlib
+  ];
 
   passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 

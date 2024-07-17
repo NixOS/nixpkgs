@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.7.7";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-      substituteInPlace ./taktuk --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace ./taktuk --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
   meta = {
@@ -32,4 +37,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 }
-

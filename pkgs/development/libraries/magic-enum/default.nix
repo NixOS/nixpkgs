@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
 }:
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "magic-enum";
   version = "0.9.5";
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec{
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Static reflection for enums (to string, from string, iteration) for modern C++";
     homepage = "https://github.com/Neargye/magic_enum";
     changelog = "https://github.com/Neargye/magic_enum/releases/tag/v${version}";

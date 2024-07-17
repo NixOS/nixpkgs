@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.mtr;
 
-in {
+in
+{
   options = {
     programs.mtr = {
       enable = lib.mkOption {

@@ -1,4 +1,9 @@
-{ lib, fetchurl, tcl, tk }:
+{
+  lib,
+  fetchurl,
+  tcl,
+  tk,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "bwidget";

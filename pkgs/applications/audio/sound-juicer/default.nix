@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk3
-, itstool
-, libxml2
-, brasero
-, libcanberra-gtk3
-, gnome
-, gst_all_1
-, libmusicbrainz5
-, libdiscid
-, isocodes
-, gsettings-desktop-schemas
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk3,
+  itstool,
+  libxml2,
+  brasero,
+  libcanberra-gtk3,
+  gnome,
+  gst_all_1,
+  libmusicbrainz5,
+  libdiscid,
+  isocodes,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,9 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

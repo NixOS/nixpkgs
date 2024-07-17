@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, autoreconfHook
-, cairo
-, fetchFromGitHub
-, giflib
-, glib
-, gtk2-x11
-, libjpeg
-, libpcap
-, libpng
-, libuv
-, libwebsockets
-, libwebp
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cairo,
+  fetchFromGitHub,
+  giflib,
+  glib,
+  gtk2-x11,
+  libjpeg,
+  libpcap,
+  libpng,
+  libuv,
+  libwebsockets,
+  libwebp,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

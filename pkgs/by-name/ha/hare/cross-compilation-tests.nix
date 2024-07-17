@@ -1,9 +1,10 @@
-{ lib
-, buildPackages
-, hare
-, runCommandNoCC
-, stdenv
-, writeText
+{
+  lib,
+  buildPackages,
+  hare,
+  runCommandNoCC,
+  stdenv,
+  writeText,
 }:
 let
   inherit (stdenv.hostPlatform.uname) processor;

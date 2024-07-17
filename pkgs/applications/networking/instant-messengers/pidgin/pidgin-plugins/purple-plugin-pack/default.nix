@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pidgin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pidgin,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    pidgin
-  ];
+  buildInputs = [ pidgin ];
 
   meta = with lib; {
     homepage = "https://keep.imfreedom.org/pidgin/purple-plugin-pack";

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.2";
@@ -36,7 +43,10 @@ stdenv.mkDerivation rec {
     homepage = "https://haikarainen.github.io/light/";
     license = lib.licenses.gpl3;
     mainProgram = "light";
-    maintainers = with lib.maintainers; [ puffnfresh dtzWill ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      dtzWill
+    ];
     platforms = lib.platforms.linux;
   };
 }

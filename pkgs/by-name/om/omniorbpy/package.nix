@@ -16,13 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [
-    omniorb
-  ];
+  propagatedBuildInputs = [ omniorb ];
 
   configureFlags = [
     "--with-omniorb=${omniorb}"
@@ -43,11 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.getExe python3} -c "import omniidl_be.cxx; import omniidl_be.python"
   '';
 
-
   meta = with lib; {
     description = "The python backend for omniorb";
     homepage = "http://omniorb.sourceforge.net";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ nim65s ];
     platforms = platforms.unix;
   };

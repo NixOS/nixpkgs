@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, cmake, libtool, openssl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  cmake,
+  libtool,
+  openssl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aerospike-server";
@@ -12,8 +22,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf automake cmake libtool ];
-  buildInputs = [ openssl zlib ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    cmake
+    libtool
+  ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   dontUseCmakeConfigure = true;
 

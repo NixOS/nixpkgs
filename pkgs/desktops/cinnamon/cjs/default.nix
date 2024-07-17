@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, cairo
-, glib
-, readline
-, spidermonkey_102
-, meson
-, dbus
-, ninja
-, which
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkg-config,
+  cairo,
+  glib,
+  readline,
+  spidermonkey_102,
+  meson,
+  dbus,
+  ninja,
+  which,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-oSqEAZWEVb8NxFTScl8s5Mb04tCGDyVVslYW00s4YYk=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -43,13 +47,9 @@ stdenv.mkDerivation rec {
     dbus # for dbus-run-session
   ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
-  mesonFlags = [
-    "-Dprofiler=disabled"
-  ];
+  mesonFlags = [ "-Dprofiler=disabled" ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";

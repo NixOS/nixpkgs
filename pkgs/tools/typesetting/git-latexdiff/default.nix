@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, git, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  git,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     owner = "git-latexdiff";
   };
 
-  buildInputs = [ git bash ];
+  buildInputs = [
+    git
+    bash
+  ];
 
   dontBuild = true;
 

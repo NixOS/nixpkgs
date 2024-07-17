@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nix-update-script,
+}:
 
 let
   basis_universal = fetchFromGitHub {
@@ -7,7 +13,8 @@ let
     rev = "8903f6d69849fd782b72a551a4dd04a264434e20";
     hash = "sha256-o3dCxAAkpMoNkvkM7qD75cPn/obDc/fJ8u7KLPm1G6g=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "meshoptimizer";
   version = "0.20";
   src = fetchFromGitHub {
@@ -19,13 +26,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   cmakeFlags = [
     "-DMESHOPT_BUILD_GLTFPACK=ON"
     "-DMESHOPT_BASISU_PATH=${basis_universal}"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic)
-    "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
 
   passthru.updateScript = nix-update-script { };
 

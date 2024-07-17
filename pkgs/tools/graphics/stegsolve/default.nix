@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jre
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall

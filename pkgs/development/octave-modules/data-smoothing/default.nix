@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, optim
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  optim,
 }:
 
 buildOctavePackage rec {
@@ -13,9 +14,7 @@ buildOctavePackage rec {
     sha256 = "0q0vqdmp8ygyfhk296xbxcpsh5wvpa2kfgv4v0rys68nd2lxfaq1";
   };
 
-  requiredOctavePackages = [
-    optim
-  ];
+  requiredOctavePackages = [ optim ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/data-smoothing/index.html";

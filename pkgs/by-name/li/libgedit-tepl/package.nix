@@ -1,26 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, mesonEmulatorHook
-, ninja
-, gobject-introspection
-, gtk3
-, icu
-, libhandy
-, libgedit-amtk
-, libgedit-gfls
-, libgedit-gtksourceview
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  gobject-introspection,
+  gtk3,
+  icu,
+  libhandy,
+  libgedit-amtk,
+  libgedit-gfls,
+  libgedit-gtksourceview,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgedit-tepl";
   version = "6.10.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "gedit-technology";
@@ -37,9 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gtk-doc
     docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     icu
@@ -56,7 +59,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/gedit-technology/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [ manveru bobby285271 ];
+    maintainers = with maintainers; [
+      manveru
+      bobby285271
+    ];
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };

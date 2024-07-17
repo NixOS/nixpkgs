@@ -1,12 +1,20 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.idrac;
   inherit (lib) mkOption types;
 
-  configFile = if cfg.configurationPath != null
-               then cfg.configurationPath
-               else pkgs.writeText "idrac.yml" (builtins.toJSON cfg.configuration);
+  configFile =
+    if cfg.configurationPath != null then
+      cfg.configurationPath
+    else
+      pkgs.writeText "idrac.yml" (builtins.toJSON cfg.configuration);
 in
 {
   port = 9348;

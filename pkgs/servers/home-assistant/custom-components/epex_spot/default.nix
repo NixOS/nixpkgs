@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, beautifulsoup4
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  beautifulsoup4,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-WmPsFfQm8ChEr41XVgKi2BGwta5aKH9GDz4iIfTAPK4=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 ];
 
   postPatch = ''
     substituteInPlace custom_components/epex_spot/manifest.json --replace-fail 'bs4' 'beautifulsoup4'

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastgron";
@@ -15,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ curl ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     changelog = "https://github.com/adamritter/fastgron/releases/tag/${finalAttrs.src.rev}";

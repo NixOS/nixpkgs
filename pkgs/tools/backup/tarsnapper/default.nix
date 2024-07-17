@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
-, tarsnap
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+  tarsnap,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -36,9 +37,7 @@ python3Packages.buildPythonApplication rec {
     pexpect
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pynose
-  ];
+  nativeCheckInputs = with python3Packages; [ pynose ];
 
   # Remove standard module argparse from requirements
   pythonRemoveDeps = [ "argparse" ];

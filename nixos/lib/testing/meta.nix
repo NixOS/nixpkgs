@@ -15,14 +15,14 @@ in
         options = {
           maintainers = lib.mkOption {
             type = types.listOf types.raw;
-            default = [];
+            default = [ ];
             description = ''
               The [list of maintainers](https://nixos.org/manual/nixpkgs/stable/#var-meta-maintainers) for this test.
             '';
           };
           timeout = lib.mkOption {
             type = types.nullOr types.int;
-            default = 3600;  # 1 hour
+            default = 3600; # 1 hour
             description = ''
               The [{option}`test`](#test-opt-test)'s [`meta.timeout`](https://nixos.org/manual/nixpkgs/stable/#var-meta-timeout) in seconds.
             '';
@@ -43,7 +43,7 @@ in
           };
         };
       };
-      default = {};
+      default = { };
     };
   };
 }

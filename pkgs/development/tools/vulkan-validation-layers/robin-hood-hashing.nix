@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,19 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-J4u9Q6cXF0SLHbomP42AAn5LSKBYeVgTooOhqxOIpuM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DRH_STANDALONE_PROJECT=OFF"
-  ];
+  cmakeFlags = [ "-DRH_STANDALONE_PROJECT=OFF" ];
 
   meta = with lib; {
     description = "A faster, more efficient replacement for std::unordered_map / std::unordered_set";
-    homepage    = "https://github.com/martinus/robin-hood-hashing";
-    platforms   = platforms.linux;
-    license     = licenses.mit;
+    homepage = "https://github.com/martinus/robin-hood-hashing";
+    platforms = platforms.linux;
+    license = licenses.mit;
     maintainers = [ ];
   };
 }

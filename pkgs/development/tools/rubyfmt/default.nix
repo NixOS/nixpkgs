@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, autoconf
-, automake
-, bison
-, ruby
-, zlib
-, readline
-, libiconv
-, libobjc
-, libunwind
-, libxcrypt
-, libyaml
-, Foundation
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  bison,
+  ruby,
+  zlib,
+  readline,
+  libiconv,
+  libobjc,
+  libunwind,
+  libxcrypt,
+  libyaml,
+  Foundation,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,18 +37,20 @@ rustPlatform.buildRustPackage rec {
     ruby
   ];
 
-  buildInputs = [
-    zlib
-    libxcrypt
-    libyaml
-  ] ++ lib.optionals stdenv.isDarwin [
-    readline
-    libiconv
-    libobjc
-    libunwind
-    Foundation
-    Security
-  ];
+  buildInputs =
+    [
+      zlib
+      libxcrypt
+      libyaml
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      readline
+      libiconv
+      libobjc
+      libunwind
+      Foundation
+      Security
+    ];
 
   preConfigure = ''
     pushd librubyfmt/ruby_checkout

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qtbase
-, appstream-qt
-, kitemmodels
-, qt5integration
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
+  dtkdeclarative,
+  qtbase,
+  appstream-qt,
+  kitemmodels,
+  qt5integration,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,14 +45,10 @@ stdenv.mkDerivation rec {
     kitemmodels
   ];
 
-  cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
+  cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
+  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   meta = with lib; {
     description = "The 'launcher' or 'start menu' component for DDE";

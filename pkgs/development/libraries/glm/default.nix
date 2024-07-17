@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +27,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102823
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") "-fno-ipa-modref";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"
+  ) "-fno-ipa-modref";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=OFF"
@@ -81,4 +87,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ smancill ];
   };
 }
-

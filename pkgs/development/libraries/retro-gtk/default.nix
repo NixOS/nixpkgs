@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, meson
-, ninja
-, pkg-config
-, libepoxy
-, glib
-, gtk3
-, libpulseaudio
-, libsamplerate
-, gobject-introspection
-, vala
-, gtk-doc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  libepoxy,
+  glib,
+  gtk3,
+  libpulseaudio,
+  libsamplerate,
+  gobject-introspection,
+  vala,
+  gtk-doc,
 }:
 
 stdenv.mkDerivation rec {

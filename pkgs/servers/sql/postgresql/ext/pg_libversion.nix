@@ -1,10 +1,11 @@
- { lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, postgresql
-, libversion
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  postgresql,
+  libversion,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3nqXaBwPRUSo6wUY5YMjJ/nFFKmhgP1zFKapD+RqSDw=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     postgresql
@@ -47,4 +46,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = postgresql.meta.platforms;
   };
 })
-

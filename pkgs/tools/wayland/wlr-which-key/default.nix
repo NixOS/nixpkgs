@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cairo
-, glib
-, libxkbcommon
-, pango
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  glib,
+  libxkbcommon,
+  pango,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,9 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JELvmG2CiknBP3QbaXSl1uj6wEgLaDFVFBuS1l5SUk4=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     cairo

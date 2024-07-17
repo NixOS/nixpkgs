@@ -1,8 +1,14 @@
-{ lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab, fetchHex
-, file, cmake
-, nixosTests, writeText
-, ...
+{
+  lib,
+  beamPackages,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  fetchHex,
+  file,
+  cmake,
+  nixosTests,
+  writeText,
+  ...
 }:
 
 beamPackages.mixRelease rec {
@@ -17,9 +23,7 @@ beamPackages.mixRelease rec {
     sha256 = "sha256-ZiupcCu6ES/G9rsdNo5+JXOIPhb4CHT2YhKThWiLisw=";
   };
 
-  patches = [
-    ./Revert-Config-Restrict-permissions-of-OTP-config.patch
-  ];
+  patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
@@ -66,7 +70,11 @@ beamPackages.mixRelease rec {
           rev = "b647d0deecaa3acb140854fe4bda5b7e1dc6d1c8";
           sha256 = "0c7vmakcxlcs3j040018i7bfd6z0yq6fjfig02g5fgakx398s0x6";
         };
-        beamDeps = with final; [ combine plug inet_cidr ];
+        beamDeps = with final; [
+          combine
+          plug
+          inet_cidr
+        ];
       };
       prometheus_phx = beamPackages.buildMix rec {
         name = "prometheus_phx";
@@ -74,7 +82,7 @@ beamPackages.mixRelease rec {
 
         preBuild = ''
           touch config/prod.exs
-       '';
+        '';
         src = fetchFromGitLab {
           domain = "git.pleroma.social";
           group = "pleroma";
@@ -85,9 +93,7 @@ beamPackages.mixRelease rec {
         };
         beamDeps = with final; [ prometheus_ex ];
       };
-      majic = prev.majic.override {
-        buildInputs = [ file ];
-      };
+      majic = prev.majic.override { buildInputs = [ file ]; };
       # Some additional build inputs and build fixes
       http_signatures = prev.http_signatures.override {
         patchPhase = ''
@@ -98,9 +104,7 @@ beamPackages.mixRelease rec {
         nativeBuildInputs = [ cmake ];
         dontUseCmakeConfigure = true;
       };
-      syslog = prev.syslog.override {
-        buildPlugins = with beamPackages; [ pc ];
-      };
+      syslog = prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
 
       # This needs a different version (1.0.14 -> 1.0.18) to build properly with
       # our Erlang/OTP version.
@@ -132,25 +136,27 @@ beamPackages.mixRelease rec {
           sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
         };
 
-        beamDeps = [];
+        beamDeps = [ ];
       };
 
       mime = prev.mime.override {
-        patchPhase = let
-          cfgFile = writeText "config.exs" ''
-            use Mix.Config
-            config :mime, :types, %{
-              "application/activity+json" => ["activity+json"],
-              "application/jrd+json" => ["jrd+json"],
-              "application/ld+json" => ["activity+json"],
-              "application/xml" => ["xml"],
-              "application/xrd+xml" => ["xrd+xml"]
-            }
+        patchPhase =
+          let
+            cfgFile = writeText "config.exs" ''
+              use Mix.Config
+              config :mime, :types, %{
+                "application/activity+json" => ["activity+json"],
+                "application/jrd+json" => ["jrd+json"],
+                "application/ld+json" => ["activity+json"],
+                "application/xml" => ["xml"],
+                "application/xrd+xml" => ["xrd+xml"]
+              }
+            '';
+          in
+          ''
+            mkdir config
+            cp ${cfgFile} config/config.exs
           '';
-        in ''
-          mkdir config
-          cp ${cfgFile} config/config.exs
-        '';
       };
     };
   };
@@ -164,7 +170,11 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ picnoir kloenk yayayayaka ];
+    maintainers = with maintainers; [
+      picnoir
+      kloenk
+      yayayayaka
+    ];
     platforms = platforms.unix;
   };
 }

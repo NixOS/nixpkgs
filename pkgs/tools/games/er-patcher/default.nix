@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-vSCZQBI9Q+7m+TT9pS7R5Fw3BgTxznbFAArJ7J6+tUQ=";
   };
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 ];
 
   installPhase = ''
     mkdir -p $out/bin

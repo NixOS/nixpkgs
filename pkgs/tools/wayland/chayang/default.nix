@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wayland-protocols
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland-protocols,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson

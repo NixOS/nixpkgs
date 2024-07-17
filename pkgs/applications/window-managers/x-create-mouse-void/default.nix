@@ -1,4 +1,9 @@
-{ stdenv, lib, xorg, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  xorg,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "x-create-mouse-void";

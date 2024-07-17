@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, python3
-, vala
-, intltool
-, autoreconfHook
-, wrapGAppsHook3
-, cinnamon
-, lightdm
-, gtk3
-, pixman
-, libcanberra
-, libgnomekbd
-, libX11
-, libXext
-, linkFarm
-, lightdm-slick-greeter
-, numlockx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  vala,
+  intltool,
+  autoreconfHook,
+  wrapGAppsHook3,
+  cinnamon,
+  lightdm,
+  gtk3,
+  pixman,
+  libcanberra,
+  libgnomekbd,
+  libX11,
+  libXext,
+  linkFarm,
+  lightdm-slick-greeter,
+  numlockx,
 }:
 
 stdenv.mkDerivation rec {
@@ -104,16 +105,21 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-slick-greeter-xgreeters" [{
-    path = "${lightdm-slick-greeter}/share/xgreeters/slick-greeter.desktop";
-    name = "lightdm-slick-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-slick-greeter-xgreeters" [
+    {
+      path = "${lightdm-slick-greeter}/share/xgreeters/slick-greeter.desktop";
+      name = "lightdm-slick-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     description = "A slick-looking LightDM greeter";
     homepage = "https://github.com/linuxmint/slick-greeter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ water-sucks bobby285271 ];
+    maintainers = with maintainers; [
+      water-sucks
+      bobby285271
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, qt6
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qt6,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +37,6 @@ stdenv.mkDerivation rec {
       lib.licenses.beerware
       lib.licenses.gpl1Plus
     ];
-    maintainers = [
-      lib.maintainers.evanrichter
-    ];
+    maintainers = [ lib.maintainers.evanrichter ];
   };
 }

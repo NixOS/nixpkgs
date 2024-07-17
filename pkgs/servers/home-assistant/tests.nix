@@ -1,52 +1,27 @@
-{ lib
-, home-assistant
-}:
+{ lib, home-assistant }:
 
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    airzone_cloud = [
-      aioairzone
-    ];
-    bluetooth = [
-      pyswitchbot
-    ];
-    govee_ble = [
-      ibeacon-ble
-    ];
-    lovelace = [
-      pychromecast
-    ];
-    matrix = [
-      pydantic
-    ];
-    mopeka = [
-      pyswitchbot
-    ];
+    airzone_cloud = [ aioairzone ];
+    bluetooth = [ pyswitchbot ];
+    govee_ble = [ ibeacon-ble ];
+    lovelace = [ pychromecast ];
+    matrix = [ pydantic ];
+    mopeka = [ pyswitchbot ];
     onboarding = [
       pymetno
       radios
       rpi-bad-power
     ];
-    raspberry_pi = [
-      rpi-bad-power
-    ];
-    shelly = [
-      pyswitchbot
-    ];
-    tilt_ble = [
-      ibeacon-ble
-    ];
-    xiaomi_miio = [
-      arrow
-    ];
-    zha = [
-      pydeconz
-    ];
+    raspberry_pi = [ rpi-bad-power ];
+    shelly = [ pyswitchbot ];
+    tilt_ble = [ ibeacon-ble ];
+    xiaomi_miio = [ arrow ];
+    zha = [ pydeconz ];
   };
 
-  extraDisabledTestPaths = {
-  };
+  extraDisabledTestPaths = { };
 
   extraDisabledTests = {
     advantage_air = [
@@ -104,41 +79,58 @@ let
       "--deselect tests/components/velux/test_config_flow.py::test_import_valid_config"
     ];
   };
-in lib.listToAttrs (map (component: lib.nameValuePair component (
-  home-assistant.overridePythonAttrs (old: {
-    pname = "homeassistant-test-${component}";
-    format = "other";
+in
+lib.listToAttrs (
+  map (
+    component:
+    lib.nameValuePair component (
+      home-assistant.overridePythonAttrs (old: {
+        pname = "homeassistant-test-${component}";
+        format = "other";
 
-    dontBuild = true;
-    dontInstall = true;
+        dontBuild = true;
+        dontInstall = true;
 
-    nativeCheckInputs = old.nativeCheckInputs
-      ++ home-assistant.getPackages component home-assistant.python.pkgs
-      ++ extraCheckInputs.${component} or [ ];
+        nativeCheckInputs =
+          old.nativeCheckInputs
+          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ extraCheckInputs.${component} or [ ];
 
-    disabledTests = old.disabledTests or [] ++ extraDisabledTests.${component} or [];
-    disabledTestPaths = old.disabledTestPaths or [] ++ extraDisabledTestPaths.${component} or [ ];
+        disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
+        disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
 
-    # components are more often racy than the core
-    dontUsePytestXdist = true;
+        # components are more often racy than the core
+        dontUsePytestXdist = true;
 
-    pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ extraPytestFlagsArray.${component} or [ ]
-      ++ [ "tests/components/${component}" ];
+        pytestFlagsArray =
+          lib.remove "tests" old.pytestFlagsArray
+          ++ extraPytestFlagsArray.${component} or [ ]
+          ++ [ "tests/components/${component}" ];
 
-    preCheck = old.preCheck + lib.optionalString (builtins.elem component [ "emulated_hue" "songpal" "system_log" ]) ''
-      patch -p1 < ${./patches/tests-mock-source-ip.patch}
-    '';
+        preCheck =
+          old.preCheck
+          +
+            lib.optionalString
+              (builtins.elem component [
+                "emulated_hue"
+                "songpal"
+                "system_log"
+              ])
+              ''
+                patch -p1 < ${./patches/tests-mock-source-ip.patch}
+              '';
 
-    meta = old.meta // {
-      broken = lib.elem component [
-        # pinned version incompatible with urllib3>=2.0
-        "telegram_bot"
-        # depends on telegram_bot
-        "telegram"
-      ];
-      # upstream only tests on Linux, so do we.
-      platforms = lib.platforms.linux;
-    };
-  })
-)) home-assistant.supportedComponentsWithTests)
+        meta = old.meta // {
+          broken = lib.elem component [
+            # pinned version incompatible with urllib3>=2.0
+            "telegram_bot"
+            # depends on telegram_bot
+            "telegram"
+          ];
+          # upstream only tests on Linux, so do we.
+          platforms = lib.platforms.linux;
+        };
+      })
+    )
+  ) home-assistant.supportedComponentsWithTests
+)

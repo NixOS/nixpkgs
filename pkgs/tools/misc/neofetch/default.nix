@@ -1,5 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, pciutils
-, x11Support ? true, ueberzug, fetchpatch
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  bash,
+  makeWrapper,
+  pciutils,
+  x11Support ? true,
+  ueberzug,
+  fetchpatch,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -33,7 +41,10 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
   buildInputs = [ bash ];
@@ -44,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/neofetch \
-      --prefix PATH : ${lib.makeBinPath ([ pciutils ] ++ lib.optional x11Support ueberzug) }
+      --prefix PATH : ${lib.makeBinPath ([ pciutils ] ++ lib.optional x11Support ueberzug)}
   '';
 
   makeFlags = [
@@ -57,7 +68,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/dylanaraps/neofetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alibabzo konimex ];
+    maintainers = with maintainers; [
+      alibabzo
+      konimex
+    ];
     mainProgram = "neofetch";
   };
 }

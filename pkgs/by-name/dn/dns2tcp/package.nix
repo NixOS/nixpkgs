@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-b65olctlwLOY2GnVb7i7axGFiR0iLoTYstXdtVkU3vQ=";
     })
   ];
-
 
   meta = with lib; {
     description = "A tool for relaying TCP connections over DNS";

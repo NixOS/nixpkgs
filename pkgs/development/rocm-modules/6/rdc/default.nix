@@ -1,54 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-smi
-, rocm-runtime
-, libcap
-, grpc
-, protobuf
-, openssl
-, doxygen
-, graphviz
-, texliveSmall
-, gtest
-, buildDocs ? true
-, buildTests ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-smi,
+  rocm-runtime,
+  libcap,
+  grpc,
+  protobuf,
+  openssl,
+  doxygen,
+  graphviz,
+  texliveSmall,
+  gtest,
+  buildDocs ? true,
+  buildTests ? false,
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
-    changepage
-    latexmk
-    varwidth
-    multirow
-    hanging
-    adjustbox
-    collectbox
-    stackengine
-    enumitem
-    alphalph
-    wasysym
-    sectsty
-    tocloft
-    newunicodechar
-    etoc
-    helvetic
-    wasy
-    courier
-  ]));
-in stdenv.mkDerivation (finalAttrs: {
+  latex = lib.optionalAttrs buildDocs (
+    texliveSmall.withPackages (
+      ps: with ps; [
+        changepage
+        latexmk
+        varwidth
+        multirow
+        hanging
+        adjustbox
+        collectbox
+        stackengine
+        enumitem
+        alphalph
+        wasysym
+        sectsty
+        tocloft
+        newunicodechar
+        etoc
+        helvetic
+        wasy
+        courier
+      ]
+    )
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
   version = "6.0.2";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ];
+  outputs = [ "out" ] ++ lib.optionals buildDocs [ "doc" ] ++ lib.optionals buildTests [ "test" ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -57,14 +57,16 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QugcajxILmDeQiWG5uAUO41Wut45irg2Ynufgn1bmps=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    protobuf
-  ] ++ lib.optionals buildDocs [
-    doxygen
-    graphviz
-    latex
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      protobuf
+    ]
+    ++ lib.optionals buildDocs [
+      doxygen
+      graphviz
+      latex
+    ];
 
   buildInputs = [
     rocm-smi
@@ -72,9 +74,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libcap
     grpc
     openssl
-  ] ++ lib.optionals buildTests [
-    gtest
-  ];
+  ] ++ lib.optionals buildTests [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_VERBOSE_MAKEFILE=OFF"
@@ -90,22 +90,22 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
     "-DCMAKE_INSTALL_DOCDIR=doc"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_TESTS=ON"
-  ];
+  ] ++ lib.optionals buildTests [ "-DBUILD_TESTS=ON" ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "file(STRINGS /etc/os-release LINUX_DISTRO LIMIT_COUNT 1 REGEX \"NAME=\")" "set(LINUX_DISTRO \"NixOS\")"
   '';
 
-  postInstall = ''
-    find $out/bin -executable -type f -exec \
-      patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;
-  '' + lib.optionalString buildTests ''
-    mkdir -p $test
-    mv $out/bin/rdctst_tests $test/bin
-  '';
+  postInstall =
+    ''
+      find $out/bin -executable -type f -exec \
+        patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;
+    ''
+    + lib.optionalString buildTests ''
+      mkdir -p $test
+      mv $out/bin/rdctst_tests $test/bin
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;

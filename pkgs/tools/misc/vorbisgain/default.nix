@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libogg, libvorbis }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libogg,
+  libvorbis,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vorbisgain";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ libogg libvorbis ];
+  buildInputs = [
+    libogg
+    libvorbis
+  ];
 
   patchPhase = ''
     chmod -v +x configure

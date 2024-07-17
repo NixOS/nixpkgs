@@ -1,19 +1,22 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "slimserver";
-  meta.maintainers = with pkgs.lib.maintainers; [ adamcstephens ];
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "slimserver";
+    meta.maintainers = with pkgs.lib.maintainers; [ adamcstephens ];
 
-  nodes.machine = { ... }: {
-    services.slimserver.enable = true;
-    services.squeezelite = {
-      enable = true;
-      extraArguments = "-s 127.0.0.1 -d slimproto=info";
-    };
-    sound.enable = true;
-    boot.initrd.kernelModules = ["snd-dummy"];
-  };
+    nodes.machine =
+      { ... }:
+      {
+        services.slimserver.enable = true;
+        services.squeezelite = {
+          enable = true;
+          extraArguments = "-s 127.0.0.1 -d slimproto=info";
+        };
+        sound.enable = true;
+        boot.initrd.kernelModules = [ "snd-dummy" ];
+      };
 
-  testScript =
-    ''
+    testScript = ''
       import json
       rpc_get_player = {
           "id": 1,
@@ -44,4 +47,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           player_id = machine.succeed(f"curl http://localhost:9000/jsonrpc.js -g -X POST -d '{json.dumps(rpc_get_player)}'")
           assert player_mac == json.loads(player_id)["result"]["_id"], "squeezelite player not found"
     '';
-})
+  }
+)

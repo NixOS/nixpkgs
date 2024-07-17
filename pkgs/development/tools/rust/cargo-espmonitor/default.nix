@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, systemd
-,
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  systemd,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "espmonitor";

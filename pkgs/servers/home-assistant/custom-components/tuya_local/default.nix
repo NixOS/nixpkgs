@@ -1,9 +1,10 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 
-# dependencies
-, tinytuya
+  # dependencies
+  tinytuya,
 }:
 
 buildHomeAssistantComponent rec {

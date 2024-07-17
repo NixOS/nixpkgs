@@ -1,6 +1,4 @@
-{ callPackage
-, fetchpatch
-}:
+{ callPackage, fetchpatch }:
 
 callPackage ./generic.nix {
   version = "3.6.0";

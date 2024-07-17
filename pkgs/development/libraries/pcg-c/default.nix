@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.94";
@@ -11,9 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [
-    ./prefix-variable.patch
-    ];
+  patches = [ ./prefix-variable.patch ];
 
   preInstall = ''
     sed -i s,/usr/local,$out, Makefile

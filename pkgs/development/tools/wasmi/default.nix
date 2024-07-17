@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage rec {
     description = "An efficient WebAssembly interpreter";
     homepage = "https://github.com/paritytech/wasmi";
     changelog = "https://github.com/paritytech/wasmi/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "wasmi_cli";
     maintainers = with maintainers; [ dit7ya ];
   };

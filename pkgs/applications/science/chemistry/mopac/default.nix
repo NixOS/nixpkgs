@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, gfortran
-, fetchFromGitHub
-, cmake
-, blas
-, lapack
-, python3Packages
+{
+  stdenv,
+  lib,
+  gfortran,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  lapack,
+  python3Packages,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
@@ -21,11 +22,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-tdVb/u89EBggfG3Ofz1ICBE2ug4fbMsUWAILwJP9Ito=";
   };
 
-  nativeBuildInputs = [ gfortran cmake ];
+  nativeBuildInputs = [
+    gfortran
+    cmake
+  ];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
-  checkInputs = with python3Packages; [ python numpy ];
+  checkInputs = with python3Packages; [
+    python
+    numpy
+  ];
 
   doCheck = true;
 
@@ -38,6 +48,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openmopac/mopac";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
   };
 }

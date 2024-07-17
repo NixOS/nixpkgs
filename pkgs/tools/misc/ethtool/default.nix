@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libmnl
-, pkg-config
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libmnl,
+  pkg-config,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w65SawHOTY32x5SrFw3kpBBNER6o2Ns/H9fCX8uQVhk=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libmnl
-  ];
+  buildInputs = [ libmnl ];
 
   passthru = {
     updateScript = writeScript "update-ethtool" ''

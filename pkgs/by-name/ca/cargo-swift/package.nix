@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo plugin to easily build Swift packages from Rust code";
     mainProgram = "cargo-swift";
     homepage = "https://github.com/antoniusnaumann/cargo-swift";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ elliot ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, deltachat-rpc-server
-, libdeltachat
-, setuptools-scm
-, substituteAll
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  deltachat-rpc-server,
+  libdeltachat,
+  setuptools-scm,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   pythonImportsCheck = [ "deltachat2" ];
 

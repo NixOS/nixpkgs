@@ -1,15 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  cmake,
+  python3,
 }:
 
 let
-  zycore = callPackage ./zycore.nix {
-    inherit stdenv fetchFromGitHub cmake;
-  };
+  zycore = callPackage ./zycore.nix { inherit stdenv fetchFromGitHub cmake; };
 in
 stdenv.mkDerivation rec {
   pname = "zydis";
@@ -31,13 +30,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = [ python3 ];
-  passthru = { inherit zycore; };
+  passthru = {
+    inherit zycore;
+  };
 
   meta = with lib; {
     homepage = "https://zydis.re/";
     description = "Fast and lightweight x86/x86-64 disassembler library";
     license = licenses.mit;
-    maintainers = with maintainers; [ jbcrail AndersonTorres athre0z ];
+    maintainers = with maintainers; [
+      jbcrail
+      AndersonTorres
+      athre0z
+    ];
     platforms = platforms.all;
   };
 }

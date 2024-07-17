@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, libxml2
-, openssl
-, stdenv
-, curl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  libxml2,
+  openssl,
+  stdenv,
+  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,9 +31,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxml2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ curl ];
 
   # Tests require network access to a test server
   doCheck = false;
@@ -45,7 +44,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ eonpatapon figsoda ];
+    maintainers = with maintainers; [
+      eonpatapon
+      figsoda
+    ];
     license = licenses.asl20;
     mainProgram = "hurl";
   };

@@ -1,13 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, fetchpatch
-, libpulseaudio
-, audioBackend ? "pulseaudio"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  fetchpatch,
+  libpulseaudio,
+  audioBackend ? "pulseaudio",
 }:
 
-assert lib.assertOneOf "audioBackend" audioBackend [ "alsa" "pulseaudio" ];
+assert lib.assertOneOf "audioBackend" audioBackend [
+  "alsa"
+  "pulseaudio"
+];
 
 stdenv.mkDerivation rec {
   pname = "flite";
@@ -20,7 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n0p81jzndzc1rzgm66kw9ls189ricy5v1ps11y0p2fk1p56kbjf";
   };
 
-  buildInputs = lib.optional (stdenv.isLinux && audioBackend == "alsa") alsa-lib
+  buildInputs =
+    lib.optional (stdenv.isLinux && audioBackend == "alsa") alsa-lib
     ++ lib.optional (stdenv.isLinux && audioBackend == "pulseaudio") libpulseaudio;
 
   # https://github.com/festvox/flite/pull/60.

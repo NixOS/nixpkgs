@@ -1,26 +1,30 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, extra-cmake-modules
-, qtbase
-, qtmultimedia
-, qttools
-, libGL
-, libX11
-, libass
-, openal
-, ffmpeg_4
-, libuchardet
-, alsa-lib
-, libpulseaudio
-, libva
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  libGL,
+  libX11,
+  libass,
+  openal,
+  ffmpeg_4,
+  libuchardet,
+  alsa-lib,
+  libpulseaudio,
+  libva,
 }:
 
 mkDerivation rec {
   pname = "libqtav";
   version = "unstable-2020-09-10";
 
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    qttools
+  ];
   buildInputs = [
     qtbase
     qtmultimedia
@@ -58,9 +62,14 @@ mkDerivation rec {
     cp -a "./bin/"* "$out/bin"
   '';
 
-  stripDebugList = [ "lib" "libexec" "bin" "qml" ];
+  stripDebugList = [
+    "lib"
+    "libexec"
+    "bin"
+    "qml"
+  ];
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "A multimedia playback framework based on Qt + FFmpeg";
     #license = licenses.lgpl21; # For the libraries / headers only.
     license = licenses.gpl3; # With the examples (under bin) and most likely some of the optional dependencies used.

@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, cmake
-, buildGo121Module
-, makeWrapper
-, fetchFromGitHub
-, pythonPackages
-, pkg-config
-, systemd
-, hostname
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, extraTags ? [ ]
-, testers
-, datadog-agent
+{
+  lib,
+  stdenv,
+  cmake,
+  buildGo121Module,
+  makeWrapper,
+  fetchFromGitHub,
+  pythonPackages,
+  pkg-config,
+  systemd,
+  hostname,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  extraTags ? [ ],
+  testers,
+  datadog-agent,
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "5.0.97";
   python = pythonPackages.python;
-  owner   = "DataDog";
-  repo    = "datadog-agent";
+  owner = "DataDog";
+  repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
   version = "7.50.3";
 
@@ -34,10 +35,14 @@ let
     inherit version;
     nativeBuildInputs = [ cmake ];
     buildInputs = [ python ];
-    cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
+    cmakeFlags = [
+      "-DBUILD_DEMO=OFF"
+      "-DDISABLE_PYTHON2=ON"
+    ];
   };
 
-in buildGo121Module rec {
+in
+buildGo121Module rec {
   pname = "datadog-agent";
   inherit src version;
 
@@ -53,9 +58,11 @@ in buildGo121Module rec {
     "cmd/trace-agent"
   ];
 
-
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [rtloader] ++ lib.optionals withSystemd [ systemd ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
   tags = [
@@ -65,9 +72,7 @@ in buildGo121Module rec {
     "log"
     "secrets"
     "zlib"
-  ]
-  ++ lib.optionals withSystemd [ "systemd" ]
-  ++ extraTags;
+  ] ++ lib.optionals withSystemd [ "systemd" ] ++ extraTags;
 
   ldflags = [
     "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
@@ -94,17 +99,24 @@ in buildGo121Module rec {
 
   # Install the config files and python modules from the "dist" dir
   # into standard paths.
-  postInstall = ''
-    mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
-    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
-    cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
+  postInstall =
+    ''
+      mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
+      cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+      rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
+      cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
-    cp -R $src/pkg/status/templates $out/share/datadog-agent
+      cp -R $src/pkg/status/templates $out/share/datadog-agent
 
-    wrapProgram "$out/bin/agent" \
-      --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
+      wrapProgram "$out/bin/agent" \
+        --set PYTHONPATH "$out/${python.sitePackages}"''
+    + lib.optionalString withSystemd ''
+      \
+           --prefix LD_LIBRARY_PATH : ''
+    + lib.makeLibraryPath [
+      (lib.getLib systemd)
+      rtloader
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = datadog-agent;
@@ -116,9 +128,12 @@ in buildGo121Module rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar ];
+    homepage = "https://www.datadoghq.com";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      thoughtpolice
+      domenkozar
+    ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

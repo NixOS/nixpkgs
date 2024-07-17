@@ -1,11 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.localtimed;
-in {
-  imports = [ (lib.mkRenamedOptionModule [ "services" "localtime" ] [ "services" "localtimed" ]) ];
+in
+{
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "localtime"
+      ]
+      [
+        "services"
+        "localtimed"
+      ]
+    )
+  ];
 
   options = {
     services.localtimed = {

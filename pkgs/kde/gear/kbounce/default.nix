@@ -1,10 +1,7 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-}:
+{ mkKdeDerivation, qtsvg }:
 mkKdeDerivation {
   pname = "kbounce";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kbounce";
 }

@@ -1,13 +1,26 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "bignums";
   owner = "coq";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.13" "8.19"; out = "9.0.0+coq${coq.coq-version}"; }
-    { case = range "8.6" "8.17"; out = "${coq.coq-version}.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.13" "8.19";
+        out = "9.0.0+coq${coq.coq-version}";
+      }
+      {
+        case = range "8.6" "8.17";
+        out = "${coq.coq-version}.0";
+      }
+    ] null;
 
   release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
   release."9.0.0+coq8.18".sha256 = "sha256-vLeJ0GNKl4M84Uj2tAwlrxJOSR6VZoJQvdlDhxJRge8=";
@@ -24,14 +37,16 @@ mkCoqDerivation {
   release."8.12.0".sha256 = "14ijb3qy2hin3g4djx437jmnswxxq7lkfh3dwh9qvrds9a015yg8";
   release."8.11.0".sha256 = "1xcd7c7qlvs0narfba6px34zq0mz8rffnhxw0kzhhg6i4iw115dp";
   release."8.10.0".sha256 = "0bpb4flckn4nqxbs3wjiznyx1k7r8k93qdigp3qwmikp2lxvcbw5";
-  release."8.9.0".sha256  = "03qz1w2xb2j5p06liz5yyafl0fl9vprcqm6j0iwi7rxwghl00p01";
-  release."8.8.0".sha256  = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
-  release."8.7.0".sha256  = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
-  release."8.6.0".rev     = "v8.6.0";
-  release."8.6.0".sha256  = "0553pcsy21cyhmns6k9qggzb67az8kl31d0lwlnz08bsqswigzrj";
+  release."8.9.0".sha256 = "03qz1w2xb2j5p06liz5yyafl0fl9vprcqm6j0iwi7rxwghl00p01";
+  release."8.8.0".sha256 = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
+  release."8.7.0".sha256 = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
+  release."8.6.0".rev = "v8.6.0";
+  release."8.6.0".sha256 = "0553pcsy21cyhmns6k9qggzb67az8kl31d0lwlnz08bsqswigzrj";
   releaseRev = v: "${if lib.versions.isGe "9.0" v then "v" else "V"}${v}";
 
   mlPlugin = true;
 
-  meta = { license = lib.licenses.lgpl2; };
+  meta = {
+    license = lib.licenses.lgpl2;
+  };
 }

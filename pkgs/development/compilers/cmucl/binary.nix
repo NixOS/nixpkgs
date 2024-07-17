@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,23 +11,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   srcs = [
     (fetchurl {
-      url = "http://common-lisp.net/project/cmucl/downloads/release/"
-            + finalAttrs.version + "/cmucl-${finalAttrs.version}-x86-linux.tar.bz2";
+      url =
+        "http://common-lisp.net/project/cmucl/downloads/release/"
+        + finalAttrs.version
+        + "/cmucl-${finalAttrs.version}-x86-linux.tar.bz2";
       hash = "sha256-RdctcqPTtQh1Yb3BrpQ8jtRFQn85OcwOt1l90H6xDZs=";
     })
     (fetchurl {
-      url = "http://common-lisp.net/project/cmucl/downloads/release/"
-            + finalAttrs.version + "/cmucl-${finalAttrs.version}-x86-linux.extra.tar.bz2";
+      url =
+        "http://common-lisp.net/project/cmucl/downloads/release/"
+        + finalAttrs.version
+        + "/cmucl-${finalAttrs.version}-x86-linux.extra.tar.bz2";
       hash = "sha256-zEmiW3m5VPpFgPxV1WJNCqgYRlHMovtaMXcgXyNukls=";
-    })];
+    })
+  ];
 
   sourceRoot = ".";
 
-  outputs = [ "out" "doc" "man" ];
-
-  nativeBuildInputs = [
-    installShellFiles
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -57,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.publicDomain;
     maintainers = lib.teams.lisp.members;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 })

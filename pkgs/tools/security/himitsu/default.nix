@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, hare
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  hare,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     export HARECACHE=$(mktemp -d)
   '';
 
-  installFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=$(out)"
+  ];
 
   meta = with lib; {
     homepage = "https://himitsustore.org/";

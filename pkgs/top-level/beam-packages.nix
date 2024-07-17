@@ -1,19 +1,26 @@
-{ lib
-, beam
-, callPackage
-, wxGTK32
-, buildPackages
-, stdenv
-, wxSupport ? true
-, systemd
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  lib,
+  beam,
+  callPackage,
+  wxGTK32,
+  buildPackages,
+  stdenv,
+  wxSupport ? true,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 let
   self = beam;
 
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" "24" ];
+  versionLoop =
+    f:
+    lib.lists.foldr (version: acc: (f version) // acc) { } [
+      "26"
+      "25"
+      "24"
+    ];
 
   interpretersAliases = versionLoop (version: {
     "erlangR${version}" = self.interpreters."erlang_${version}";
@@ -22,7 +29,9 @@ let
     "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac";
   });
 
-  packagesAliases = versionLoop (version: { "erlangR${version}" = self.packages."erlang_${version}"; });
+  packagesAliases = versionLoop (version: {
+    "erlangR${version}" = self.packages."erlang_${version}";
+  });
 
 in
 
@@ -94,12 +103,22 @@ in
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
-      elixir elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
+      elixir
+      elixir_1_16
+      elixir_1_15
+      elixir_1_14
+      elixir_1_13
+      elixir_1_12
+      elixir_1_11
+      elixir_1_10
+      elixir-ls
+      lfe
+      lfe_2_1
+      ;
   } // interpretersAliases;
 
   # Helper function to generate package set with a specific Erlang version.
-  packagesWith = erlang:
-    callPackage ../development/beam-modules { inherit erlang; };
+  packagesWith = erlang: callPackage ../development/beam-modules { inherit erlang; };
 
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.

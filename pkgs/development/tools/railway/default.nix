@@ -1,5 +1,13 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, CoreServices
-, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "railway";
@@ -16,8 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -27,6 +39,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/railwayapp/cli";
     changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Crafter techknowlogick ];
+    maintainers = with maintainers; [
+      Crafter
+      techknowlogick
+    ];
   };
 }

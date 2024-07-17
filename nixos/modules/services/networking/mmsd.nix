@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.mmsd;
@@ -18,8 +23,8 @@ in
     extraArgs = mkOption {
       type = with types; listOf str;
       description = "Extra arguments passed to `mmsd-tng`";
-      default = [];
-      example = ["--debug"];
+      default = [ ];
+      example = [ "--debug" ];
     };
   };
   config = mkIf cfg.enable {

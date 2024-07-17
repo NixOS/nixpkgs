@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, appstream-glib
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, gdk-pixbuf
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, openssl
-, pipewire
-, sqlite
-, wayland
-, zbar
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  openssl,
+  pipewire,
+  sqlite,
+  wayland,
+  zbar,
 }:
 
 stdenv.mkDerivation rec {

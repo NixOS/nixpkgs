@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, libxslt
-, libxcrypt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, fixDarwinDylibNames
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  readline,
+  libxslt,
+  libxcrypt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  fixDarwinDylibNames,
+  wafHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +28,7 @@ stdenv.mkDerivation rec {
     wafHook
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ] ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     python3

@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, domain_shims
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  domain_shims,
 }:
 
 buildDunePackage rec {

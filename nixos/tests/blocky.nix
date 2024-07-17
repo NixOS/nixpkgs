@@ -2,26 +2,31 @@ import ./make-test-python.nix {
   name = "blocky";
 
   nodes = {
-    server = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.dnsutils ];
-      services.blocky = {
-        enable = true;
+    server =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.dnsutils ];
+        services.blocky = {
+          enable = true;
 
-        settings = {
-          customDNS = {
-            mapping = {
-              "printer.lan" = "192.168.178.3,2001:0db8:85a3:08d3:1319:8a2e:0370:7344";
+          settings = {
+            customDNS = {
+              mapping = {
+                "printer.lan" = "192.168.178.3,2001:0db8:85a3:08d3:1319:8a2e:0370:7344";
+              };
             };
+            upstream = {
+              default = [
+                "8.8.8.8"
+                "1.1.1.1"
+              ];
+            };
+            port = 53;
+            httpPort = 5000;
+            logLevel = "info";
           };
-          upstream = {
-            default = [ "8.8.8.8" "1.1.1.1" ];
-          };
-          port = 53;
-          httpPort = 5000;
-          logLevel = "info";
         };
       };
-    };
   };
 
   testScript = ''

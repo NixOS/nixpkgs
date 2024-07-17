@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, validatePkgConfig }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  validatePkgConfig,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duktape";

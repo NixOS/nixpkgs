@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, supportCompressedPackets ? true, zlib, bzip2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  supportCompressedPackets ? true,
+  zlib,
+  bzip2,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JKedgHCTDnvLyLR3nGl4XFAaxXDU1TgHrxPMlRFwtBo=";
   };
 
-  buildInputs = lib.optionals supportCompressedPackets [ zlib bzip2 ];
+  buildInputs = lib.optionals supportCompressedPackets [
+    zlib
+    bzip2
+  ];
 
   meta = with lib; {
     description = "A PGP packet visualizer";

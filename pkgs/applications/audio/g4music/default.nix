@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, desktop-file-utils
-, gitUpdater
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  desktop-file-utils,
+  gitUpdater,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "g4music";
@@ -35,19 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gtk4
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      gtk4
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "A beautiful, fast, fluent, light weight music player written in GTK4";

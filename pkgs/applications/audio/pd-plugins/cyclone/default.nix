@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, puredata }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  puredata,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cyclone";
@@ -27,7 +32,10 @@ stdenv.mkDerivation rec {
     description = "A library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments";
     homepage = "http://puredata.info/downloads/cyclone";
     license = licenses.tcltk;
-    maintainers = with maintainers; [ magnetophon carlthome ];
+    maintainers = with maintainers; [
+      magnetophon
+      carlthome
+    ];
     platforms = platforms.linux;
   };
 }

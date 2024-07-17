@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils, testers, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  installShellFiles,
+  coreutils,
+  testers,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spring-boot-cli";
@@ -9,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NRJ5vL/tcm/CrNIEUh7gntLsLwWD9bL048Ycx1pRlQU=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall

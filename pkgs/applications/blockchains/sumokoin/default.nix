@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, boost179
-, openssl
-, libsodium
-, libunwind
-, lmdb
-, unbound
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  boost179,
+  openssl,
+  libsodium,
+  libunwind,
+  lmdb,
+  unbound,
+  zeromq,
 }:
 
 stdenv.mkDerivation rec {

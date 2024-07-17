@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -7,9 +12,16 @@ let
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "programs" "_1password-gui" "gid" ] ''
-      A preallocated GID will be used instead.
-    '')
+    (lib.mkRemovedOptionModule
+      [
+        "programs"
+        "_1password-gui"
+        "gid"
+      ]
+      ''
+        A preallocated GID will be used instead.
+      ''
+    )
   ];
 
   options = {
@@ -25,17 +37,13 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "1Password GUI" {
-        default = [ "_1password-gui" ];
-      };
+      package = lib.mkPackageOption pkgs "1Password GUI" { default = [ "_1password-gui" ]; };
     };
   };
 
   config =
     let
-      package = cfg.package.override {
-        polkitPolicyOwners = cfg.polkitPolicyOwners;
-      };
+      package = cfg.package.override { polkitPolicyOwners = cfg.polkitPolicyOwners; };
     in
     lib.mkIf cfg.enable {
       environment.systemPackages = [ package ];

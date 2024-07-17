@@ -1,84 +1,93 @@
-{ stdenv
-, lib
-, fetchurl
-, bison
-, dtc
-, flex
-, libusb1
-, lzop
-, openssl
-, pkg-config
-, buildPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  bison,
+  dtc,
+  flex,
+  libusb1,
+  lzop,
+  openssl,
+  pkg-config,
+  buildPackages,
 }:
 
 let
-  buildBarebox = {
-    filesToInstall
-  , installDir ? "$out"
-  , defconfig
-  , extraMeta ? {}
-  , ... } @ args: stdenv.mkDerivation rec {
-    pname = "barebox-${defconfig}";
+  buildBarebox =
+    {
+      filesToInstall,
+      installDir ? "$out",
+      defconfig,
+      extraMeta ? { },
+      ...
+    }@args:
+    stdenv.mkDerivation rec {
+      pname = "barebox-${defconfig}";
 
-    version = "2020.12.0";
+      version = "2020.12.0";
 
-    src = fetchurl {
-      url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
-      sha256 = "06vsd95ihaa2nywpqy6k0c7xwk2pzws4yvbp328yd2pfiigachrv";
-    };
+      src = fetchurl {
+        url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
+        sha256 = "06vsd95ihaa2nywpqy6k0c7xwk2pzws4yvbp328yd2pfiigachrv";
+      };
 
-    postPatch = ''
-      patchShebangs scripts
-    '';
+      postPatch = ''
+        patchShebangs scripts
+      '';
 
-    nativeBuildInputs = [
-      bison
-      dtc
-      flex
-      openssl
-      libusb1
-      lzop
-      pkg-config
-    ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+      nativeBuildInputs = [
+        bison
+        dtc
+        flex
+        openssl
+        libusb1
+        lzop
+        pkg-config
+      ];
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-    hardeningDisable = [ "all" ];
+      hardeningDisable = [ "all" ];
 
-    makeFlags = [
-      "DTC=dtc"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ];
+      makeFlags = [
+        "DTC=dtc"
+        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+      ];
 
-    configurePhase = ''
-      runHook preConfigure
+      configurePhase = ''
+        runHook preConfigure
 
-      make ${defconfig}
+        make ${defconfig}
 
-      runHook postConfigure
-    '';
+        runHook postConfigure
+      '';
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+        mkdir -p ${installDir}
+        cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-    dontStrip = true;
+      dontStrip = true;
 
-    meta = with lib; {
-      homepage = "https://www.barebox.org";
-      description = "The Swiss Army Knive for bare metal";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ emantor ];
-    } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ];
+      meta =
+        with lib;
+        {
+          homepage = "https://www.barebox.org";
+          description = "The Swiss Army Knive for bare metal";
+          license = licenses.gpl2;
+          maintainers = with maintainers; [ emantor ];
+        }
+        // extraMeta;
+    }
+    // removeAttrs args [ "extraMeta" ];
 
-in {
+in
+{
   inherit buildBarebox;
 
   bareboxTools = buildBarebox {

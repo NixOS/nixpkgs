@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildFHSEnv
-, copyDesktopItems
-, dpkg
-, lndir
-, makeDesktopItem
-, makeWrapper
-, requireFile
+{
+  stdenv,
+  lib,
+  buildFHSEnv,
+  copyDesktopItems,
+  dpkg,
+  lndir,
+  makeDesktopItem,
+  makeWrapper,
+  requireFile,
 }:
 
 let
@@ -18,12 +19,15 @@ let
 
     dontUnpack = true;
     src = requireFile {
-      name = "PacketTracer_${builtins.replaceStrings ["."] [""] version}_amd64.deb";
+      name = "PacketTracer_${builtins.replaceStrings [ "." ] [ "" ] version}_amd64.deb";
       sha256 = "c39802d15dd61d00ba27fb8c116da45fd8562ab4b49996555ad66b88deace27f";
       url = "https://www.netacad.com";
     };
 
-    nativeBuildInputs = [ dpkg makeWrapper ];
+    nativeBuildInputs = [
+      dpkg
+      makeWrapper
+    ];
 
     installPhase = ''
       dpkg-deb -x $src $out
@@ -37,34 +41,40 @@ let
     desktopName = "Cisco Packet Tracer 7";
     icon = "${ptFiles}/opt/pt/art/app.png";
     exec = "packettracer7 %f";
-    mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
+    mimeTypes = [
+      "application/x-pkt"
+      "application/x-pka"
+      "application/x-pkz"
+    ];
   };
 
   fhs = buildFHSEnv {
     name = "packettracer7";
     runScript = "${ptFiles}/bin/packettracer7";
 
-    targetPkgs = pkgs: with pkgs; [
-      alsa-lib
-      dbus
-      expat
-      fontconfig
-      glib
-      libglvnd
-      libpulseaudio
-      libudev0-shim
-      libxkbcommon
-      libxml2
-      libxslt
-      nspr
-      nss
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXScrnSaver
-    ];
+    targetPkgs =
+      pkgs: with pkgs; [
+        alsa-lib
+        dbus
+        expat
+        fontconfig
+        glib
+        libglvnd
+        libpulseaudio
+        libudev0-shim
+        libxkbcommon
+        libxml2
+        libxslt
+        nspr
+        nss
+        xorg.libICE
+        xorg.libSM
+        xorg.libX11
+        xorg.libXScrnSaver
+      ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ciscoPacketTracer7";
   inherit version;
 

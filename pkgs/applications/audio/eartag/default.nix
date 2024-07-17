@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, gettext
-, glib
-, gobject-introspection
-, desktop-file-utils
-, appstream
-, appstream-glib
-, gtk4
-, librsvg
-, python3Packages
-, blueprint-compiler
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  gettext,
+  glib,
+  gobject-introspection,
+  desktop-file-utils,
+  appstream,
+  appstream-glib,
+  gtk4,
+  librsvg,
+  python3Packages,
+  blueprint-compiler,
 }:
 
 python3Packages.buildPythonApplication rec {

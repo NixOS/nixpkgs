@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, SDL2
-, SDL2_mixer
-, libGLU
-, libconfig
-, meson
-, ninja
-, pkg-config
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  SDL2,
+  SDL2_mixer,
+  libGLU,
+  libconfig,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
     owner = "Radvendii";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     SDL2

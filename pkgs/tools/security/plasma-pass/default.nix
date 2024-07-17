@@ -1,10 +1,16 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, extra-cmake-modules
-, ki18n
-, kitemmodels
-, oath-toolkit
-, qgpgme
-, plasma-framework
-, qt5 }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  ki18n,
+  kitemmodels,
+  oath-toolkit,
+  qgpgme,
+  plasma-framework,
+  qt5,
+}:
 
 mkDerivation rec {
   pname = "plasma-pass";
@@ -18,7 +24,7 @@ mkDerivation rec {
     rev = "v${version}";
   };
 
-  buildInputs  = [
+  buildInputs = [
     ki18n
     kitemmodels
     oath-toolkit
@@ -28,7 +34,10 @@ mkDerivation rec {
     qt5.qtdeclarative
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   meta = with lib; {
     description = "A Plasma applet to access passwords from pass, the standard UNIX password manager";
@@ -38,4 +47,3 @@ mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

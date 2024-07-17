@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -27,9 +28,7 @@ buildGoModule rec {
     })
   ];
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   postFixup = ''
     # Rename binary to avoid conflict with sx

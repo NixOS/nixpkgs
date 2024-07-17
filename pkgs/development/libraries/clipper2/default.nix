@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/CPP";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DCLIPPER2_EXAMPLES=OFF"
@@ -27,9 +26,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  patches = [
-    ./0001-fix-pc-paths.patch
-  ];
+  patches = [ ./0001-fix-pc-paths.patch ];
 
   meta = {
     description = "Polygon Clipping and Offsetting - C++ Only";

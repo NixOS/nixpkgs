@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  python3,
+}:
 
 buildGoModule rec {
   pname = "cod";
@@ -13,7 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-kezfBDTgpOTBYKTNlwuP+M5tXU2w/MXz0B5nBJcL1io=";
 
-  ldflags = [ "-s" "-w" "-X main.GitSha=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.GitSha=${src.rev}"
+  ];
 
   nativeCheckInputs = [ python3 ];
 

@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, unzip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  unzip,
 }:
 
 buildGoModule rec {
@@ -17,11 +18,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-MRZlv4eN1Qbu+QXr//YexTDYSK4pCXAPO7VvGqZhjho=";
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "A fast concurrent zip archiver and extractor";

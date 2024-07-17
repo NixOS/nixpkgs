@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, sudo
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  sudo,
 }:
 
 mkDerivation rec {
@@ -19,9 +20,7 @@ mkDerivation rec {
 
   sourceRoot = "${src.name}/src-qt5";
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
   buildInputs = [
     qtbase

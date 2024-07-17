@@ -1,8 +1,13 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "marl";
-  version = "1.0.0";  # Based on marl's CHANGES.md
+  version = "1.0.0"; # Based on marl's CHANGES.md
 
   src = fetchFromGitHub {
     owner = "google";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   # Turn on the flag to install after building the library.
-  cmakeFlags = ["-DMARL_INSTALL=ON"];
+  cmakeFlags = [ "-DMARL_INSTALL=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/marl";

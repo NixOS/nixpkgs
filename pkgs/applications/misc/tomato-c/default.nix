@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libnotify
-, makeWrapper
-, mpv
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libnotify,
+  makeWrapper,
+  mpv,
+  ncurses,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,9 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   installFlags = [
     "CPPFLAGS=$NIX_CFLAGS_COMPILE"
@@ -65,7 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for file in $out/bin/*; do
       wrapProgram $file \
-        --prefix PATH : ${lib.makeBinPath [ libnotify mpv ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            libnotify
+            mpv
+          ]
+        }
     done
   '';
 

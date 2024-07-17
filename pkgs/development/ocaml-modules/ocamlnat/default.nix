@@ -1,4 +1,11 @@
-{stdenv, lib, fetchurl, ocaml, findlib, ounit}:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ounit,
+}:
 
 # https://github.com/bmeurer/ocamlnat/issues/3
 assert lib.versionOlder ocaml.version "4";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dyvy0j6f47laxhnadvm71z1py9hz9zd49hamf6bij99cggb2ij1";
   };
 
-  nativeBuildInputs = [ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
   checkInputs = [ ounit ];
 
   strictDeps = true;
@@ -40,8 +50,6 @@ stdenv.mkDerivation rec {
       operating systems is planned, but not yet available.
     '';
     inherit (ocaml.meta) platforms;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
+    maintainers = [ lib.maintainers.maggesi ];
   };
 }

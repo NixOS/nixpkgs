@@ -1,14 +1,42 @@
-{ lib, stdenvNoCC, fetchFromGitLab, bc, librsvg, xcursorgen }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  bc,
+  librsvg,
+  xcursorgen,
+}:
 
 let
   dimensions = {
-    color = [ "Black" "Blue" "Green" "Orange" "Red" "White" ];
-    opacity = [ "" "Opaque_" ];  # Translucent or opaque.
-    thickness = [ "" "Slim_" ];  # Thick or slim edges.
-    handedness = [ "" "LH_" ];   # Right- or left-handed.
+    color = [
+      "Black"
+      "Blue"
+      "Green"
+      "Orange"
+      "Red"
+      "White"
+    ];
+    opacity = [
+      ""
+      "Opaque_"
+    ]; # Translucent or opaque.
+    thickness = [
+      ""
+      "Slim_"
+    ]; # Thick or slim edges.
+    handedness = [
+      ""
+      "LH_"
+    ]; # Right- or left-handed.
   };
   variantName =
-    { color, opacity, thickness, handedness }:
+    {
+      color,
+      opacity,
+      thickness,
+      handedness,
+    }:
     "${handedness}${opacity}${thickness}${color}";
   variants =
     # (The order of this list is already good looking enough to show in the
@@ -27,7 +55,11 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "0bpxqw4izj7m0zb9lnxnmsjicfw60ppkdyv5nwrrz4x865wb296a";
   };
 
-  nativeBuildInputs = [ bc librsvg xcursorgen ];
+  nativeBuildInputs = [
+    bc
+    librsvg
+    xcursorgen
+  ];
 
   patches = [ ./makefile-shell-var.patch ];
 
@@ -68,19 +100,21 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out
   '';
 
-  outputs = let
-    default = "Opaque_Black";
-  in
+  outputs =
+    let
+      default = "Opaque_Black";
+    in
     # Have the most-traditional variant be the default output (as the first).
     # Even with outputsToInstall=[], the default/first still has an effect on
     # some Nix tools (e.g. nix-build).
-    [ default ] ++ (lib.remove default variants)
+    [ default ]
+    ++ (lib.remove default variants)
     # Need a dummy "out" output to prevent the builder scripts from breaking.
     ++ [ "out" ];
 
   # No default output (to the extent possible).  Instead, the outputs'
   # attributes are used to choose which variant(s) to have.
-  outputsToInstall = [];
+  outputsToInstall = [ ];
 
   meta = with lib; {
     description = "The Comix Cursors mouse themes";

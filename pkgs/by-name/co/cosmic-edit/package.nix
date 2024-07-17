@@ -58,7 +58,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
   buildInputs = [
     libxkbcommon
     xorg.libX11
@@ -96,9 +100,18 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon mesa.drivers wayland
-      ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+          vulkan-loader
+          libxkbcommon
+          mesa.drivers
+          wayland
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -106,7 +119,10 @@ rustPlatform.buildRustPackage rec {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyanbinary
+    ];
     platforms = platforms.linux;
   };
 }

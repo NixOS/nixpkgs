@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,7 +41,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli matthewcroughan ];
+    maintainers = with maintainers; [
+      flokli
+      matthewcroughan
+    ];
     mainProgram = "mycelium";
   };
 }

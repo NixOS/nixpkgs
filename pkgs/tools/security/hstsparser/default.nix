@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,17 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9ZNBzPa4mFXbao73QukEL56sM/3dg4ElOMXgNGTVh1g=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    prettytable
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ prettytable ];
 
-  pythonImportsCheck = [
-    "hstsparser"
-  ];
+  pythonImportsCheck = [ "hstsparser" ];
 
   meta = with lib; {
     description = "Tool to parse Firefox and Chrome HSTS databases into forensic artifacts";

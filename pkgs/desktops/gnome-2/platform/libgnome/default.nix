@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2
-, intltool, libbonobo, GConf, gnome_vfs, libtool, libogg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  popt,
+  zlib,
+  libcanberra-gtk2,
+  intltool,
+  libbonobo,
+  GConf,
+  gnome_vfs,
+  libtool,
+  libogg,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +25,30 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./new-glib.patch ];
-  /* There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums. */
+  # There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums.
   postPatch = "sed '/returns the true filename/d' -i libgnome/gnome-config.h";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ popt zlib GConf gnome_vfs libcanberra-gtk2 libtool ];
-  propagatedBuildInputs = [ glib libbonobo libogg ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs = [
+    popt
+    zlib
+    GConf
+    gnome_vfs
+    libcanberra-gtk2
+    libtool
+  ];
+  propagatedBuildInputs = [
+    glib
+    libbonobo
+    libogg
+  ];
   meta.mainProgram = "gnome-open";
 }

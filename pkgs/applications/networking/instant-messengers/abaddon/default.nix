@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, pkg-config
-, curl
-, gtkmm3
-, libhandy
-, libopus
-, libsecret
-, libsodium
-, nlohmann_json
-, pcre2
-, spdlog
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  pkg-config,
+  curl,
+  gtkmm3,
+  libhandy,
+  libopus,
+  libsecret,
+  libsodium,
+  nlohmann_json,
+  pcre2,
+  spdlog,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,7 +71,10 @@ stdenv.mkDerivation rec {
       desktopName = "Abaddon";
       genericName = meta.description;
       startupWMClass = pname;
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       mimeTypes = [ "x-scheme-handler/discord" ];
     })
   ];

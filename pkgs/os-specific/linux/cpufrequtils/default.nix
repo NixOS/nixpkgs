@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libtool, gettext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpufrequtils";
@@ -20,7 +26,11 @@ stdenv.mkDerivation rec {
       -i Makefile
   '';
 
-  buildInputs = [ stdenv.cc.libc.linuxHeaders libtool gettext ];
+  buildInputs = [
+    stdenv.cc.libc.linuxHeaders
+    libtool
+    gettext
+  ];
 
   meta = with lib; {
     description = "Tools to display or change the CPU governor settings";

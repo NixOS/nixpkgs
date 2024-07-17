@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, ncompress, libX11 }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncompress,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stalin";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lz8riccpigdixwf6dswwva6s4kxaz3dzxhkqhcxgwmffy30vw8s";
   };
 
-  buildInputs = [ ncompress libX11 ];
+  buildInputs = [
+    ncompress
+    libX11
+  ];
 
   buildPhase = "./build ";
 
@@ -41,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "An optimizing Scheme compiler";
 
     maintainers = [ ];
-    platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms
+    platforms = [ "i686-linux" ]; # doesn't want to work on 64-bit platforms
   };
 }

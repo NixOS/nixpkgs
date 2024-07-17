@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wipe";
@@ -14,9 +18,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Secure file wiping utility";
     mainProgram = "wipe";
-    homepage    = "https://wipe.sourceforge.net/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.all;
+    homepage = "https://wipe.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     maintainers = [ maintainers.abbradar ];
   };
 }

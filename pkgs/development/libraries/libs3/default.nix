@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, curl, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  curl,
+  libxml2,
+}:
 
 stdenv.mkDerivation {
   pname = "libs3";
@@ -12,13 +19,17 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (fetchpatch { # Fix compilation with openssl 3.0
+    (fetchpatch {
+      # Fix compilation with openssl 3.0
       url = "https://github.com/bji/libs3/pull/112/commits/3c3a1cf915e62b730db854d8007ba835cb38677c.patch";
       hash = "sha256-+rWRh8dOznHlamc/T9qbgN0E2Rww3Hn94UeErxNDccs=";
     })
   ];
 
-  buildInputs = [ curl libxml2 ];
+  buildInputs = [
+    curl
+    libxml2
+  ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 

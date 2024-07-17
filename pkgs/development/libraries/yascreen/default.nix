@@ -1,4 +1,10 @@
-{ lib, stdenv, go-md2man, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  go-md2man,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yascreen";

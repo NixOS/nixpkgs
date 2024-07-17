@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, callPackage
-, ensureNewerSourcesForZipFilesHook
-, python3
-# optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
-, extraTools ? []
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  callPackage,
+  ensureNewerSourcesForZipFilesHook,
+  python3,
+  # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
+  extraTools ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,18 +40,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase = let
-    extraToolsList =
-      lib.optionalString (extraTools != [])
-        "--tools=\"${lib.concatStringsSep "," extraTools}\"";
-  in
-  ''
-    runHook preBuild
+  buildPhase =
+    let
+      extraToolsList = lib.optionalString (
+        extraTools != [ ]
+      ) "--tools=\"${lib.concatStringsSep "," extraTools}\"";
+    in
+    ''
+      runHook preBuild
 
-    python waf-light build ${extraToolsList}
+      python waf-light build ${extraToolsList}
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -62,15 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit python3 extraTools;
-    hook = callPackage ./hook.nix {
-      waf = finalAttrs.finalPackage;
-    };
+    hook = callPackage ./hook.nix { waf = finalAttrs.finalPackage; };
   };
 
   meta = {
     homepage = "https://waf.io";
     description = "The meta build system";
-    changelog  = "https://gitlab.com/ita1024/waf/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ita1024/waf/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "waf";
     maintainers = with lib.maintainers; [ AndersonTorres ];

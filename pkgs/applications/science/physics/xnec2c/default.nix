@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, wrapGAppsHook3
-, pkg-config
-, which
-, gtk3
-, blas
-, lapack
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  wrapGAppsHook3,
+  pkg-config,
+  which,
+  gtk3,
+  blas,
+  lapack,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -27,7 +28,11 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
-  buildInputs = [ gtk3 blas lapack ];
+  buildInputs = [
+    gtk3
+    blas
+    lapack
+  ];
 
   meta = with lib; {
     homepage = "https://www.xnec2c.org/";

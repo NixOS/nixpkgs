@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pcsclite,
+  libzip,
+  help2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libykneomgr";
@@ -10,11 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite libzip help2man ];
-
-  configureFlags = [
-    "--with-backend=pcsc"
+  buildInputs = [
+    pcsclite
+    libzip
+    help2man
   ];
+
+  configureFlags = [ "--with-backend=pcsc" ];
 
   meta = with lib; {
     description = "A C library to interact with the CCID-part of the Yubikey NEO";

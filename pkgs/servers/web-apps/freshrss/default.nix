@@ -1,8 +1,9 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nixosTests
-, php
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  php,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,7 +18,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
+    inherit (nixosTests)
+      freshrss-sqlite
+      freshrss-pgsql
+      freshrss-http-auth
+      freshrss-none-auth
+      ;
   };
 
   buildInputs = [ php ];
@@ -40,6 +46,9 @@ stdenvNoCC.mkDerivation rec {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ etu stunkymonkey ];
+    maintainers = with maintainers; [
+      etu
+      stunkymonkey
+    ];
   };
 }

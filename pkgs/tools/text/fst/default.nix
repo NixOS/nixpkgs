@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, libiconv
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     description = "Represent large sets and maps compactly with finite state transducers";
     mainProgram = "fst";
     homepage = "https://github.com/BurntSushi/fst";
-    license = with licenses; [ unlicense /* or */ mit ];
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = with maintainers; [ rmcgibbo ];
   };
 }

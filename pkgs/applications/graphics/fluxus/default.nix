@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, alsa-lib
-, fftw
-, freeglut
-, freetype
-, glew
-, libjack2
-, libjpeg
-, liblo
-, libsndfile
-, libtiff
-, ode
-, openal
-, openssl
-, racket_7_9
-, scons
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  alsa-lib,
+  fftw,
+  freeglut,
+  freetype,
+  glew,
+  libjack2,
+  libjpeg,
+  liblo,
+  libsndfile,
+  libtiff,
+  ode,
+  openal,
+  openssl,
+  racket_7_9,
+  scons,
 }:
 let
   racket = racket_7_9;

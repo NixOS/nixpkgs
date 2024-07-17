@@ -1,5 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake,
-  qtbase, cfitsio, gsl, wcslib, withTester ? false }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  cfitsio,
+  gsl,
+  wcslib,
+  withTester ? false,
+}:
 
 mkDerivation rec {
   pname = "stellarsolver";
@@ -14,11 +23,14 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qtbase cfitsio gsl wcslib ];
-
-  cmakeFlags = [
-    "-DBUILD_TESTER=${if withTester then "on" else "off"}"
+  buildInputs = [
+    qtbase
+    cfitsio
+    gsl
+    wcslib
   ];
+
+  cmakeFlags = [ "-DBUILD_TESTER=${if withTester then "on" else "off"}" ];
 
   meta = with lib; {
     homepage = "https://github.com/rlancaste/stellarsolver";

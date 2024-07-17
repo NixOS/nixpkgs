@@ -1,39 +1,44 @@
-{ lib
-, stdenv
-, pkg-config
-, cmake
-, fetchurl
-, git
-, cctools
-, DarwinTools
-, makeWrapper
-, CoreServices
-, bison
-, openssl
-, protobuf
-, curl
-, zlib
-, libssh
-, zstd
-, lz4
-, boost
-, readline
-, libtirpc
-, rpcsvc-proto
-, libedit
-, libevent
-, icu
-, re2
-, ncurses
-, libfido2
-, python3
-, cyrus_sasl
-, openldap
-, antlr
+{
+  lib,
+  stdenv,
+  pkg-config,
+  cmake,
+  fetchurl,
+  git,
+  cctools,
+  DarwinTools,
+  makeWrapper,
+  CoreServices,
+  bison,
+  openssl,
+  protobuf,
+  curl,
+  zlib,
+  libssh,
+  zstd,
+  lz4,
+  boost,
+  readline,
+  libtirpc,
+  rpcsvc-proto,
+  libedit,
+  libevent,
+  icu,
+  re2,
+  ncurses,
+  libfido2,
+  python3,
+  cyrus_sasl,
+  openldap,
+  antlr,
 }:
 
 let
-  pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
+  pythonDeps = with python3.pkgs; [
+    certifi
+    paramiko
+    pyyaml
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -63,33 +68,45 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      git
+      bison
+      makeWrapper
+    ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
+    ++ lib.optionals stdenv.isDarwin [
+      cctools
+      DarwinTools
+    ];
 
-  buildInputs = [
-    boost
-    curl
-    libedit
-    libssh
-    lz4
-    openssl
-    protobuf
-    readline
-    zlib
-    zstd
-    libevent
-    icu
-    re2
-    ncurses
-    libfido2
-    cyrus_sasl
-    openldap
-    python3
-    antlr.runtime.cpp
-  ] ++ pythonDeps
-  ++ lib.optionals stdenv.isLinux [ libtirpc ]
-  ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs =
+    [
+      boost
+      curl
+      libedit
+      libssh
+      lz4
+      openssl
+      protobuf
+      readline
+      zlib
+      zstd
+      libevent
+      icu
+      re2
+      ncurses
+      libfido2
+      cyrus_sasl
+      openldap
+      python3
+      antlr.runtime.cpp
+    ]
+    ++ pythonDeps
+    ++ lib.optionals stdenv.isLinux [ libtirpc ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   preConfigure = ''
     # Build MySQL

@@ -1,9 +1,10 @@
-{ buildDunePackage
-, fetchurl
-, findlib
-, lib
-, ocaml
-, re
+{
+  buildDunePackage,
+  fetchurl,
+  findlib,
+  lib,
+  ocaml,
+  re,
 }:
 
 buildDunePackage rec {

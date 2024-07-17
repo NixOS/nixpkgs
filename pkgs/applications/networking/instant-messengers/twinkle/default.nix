@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, libxml2
-, libsndfile
-, file
-, readline
-, bison
-, flex
-, ucommon
-, ccrtp
-, qtbase
-, qttools
-, qtquickcontrols2
-, alsa-lib
-, speex
-, ilbc
-, mkDerivation
-, bcg729
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libxml2,
+  libsndfile,
+  file,
+  readline,
+  bison,
+  flex,
+  ucommon,
+  ccrtp,
+  qtbase,
+  qttools,
+  qtquickcontrols2,
+  alsa-lib,
+  speex,
+  ilbc,
+  mkDerivation,
+  bcg729,
 }:
 
 mkDerivation rec {
@@ -57,7 +58,7 @@ mkDerivation rec {
     "-DWITH_SPEEX=On"
     "-DWITH_ILBC=On"
     "-DHAVE_LIBATOMIC=atomic"
-    /* "-DWITH_DIAMONDCARD=On" seems ancient and broken */
+    # "-DWITH_DIAMONDCARD=On" seems ancient and broken
   ];
 
   meta = with lib; {

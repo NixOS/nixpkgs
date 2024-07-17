@@ -1,12 +1,13 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, curl
-, libxml2
-, libffi
-, xar
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  curl,
+  libxml2,
+  libffi,
+  xar,
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -25,9 +26,7 @@ llvmPackages.stdenv.mkDerivation rec {
       --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -35,9 +34,7 @@ llvmPackages.stdenv.mkDerivation rec {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [
-    xar
-  ];
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 

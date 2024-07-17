@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, gnutls
-, openssl
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gnutls,
+  openssl,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ gnutls zlib openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    gnutls
+    zlib
+    openssl
+  ];
 
   meta = with lib; {
     description = "A reliable logging library";

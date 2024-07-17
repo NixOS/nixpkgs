@@ -1,9 +1,10 @@
-{ wrapGAppsHook3
-, lib
-, python3Packages
-, fetchFromGitHub
-, rofi
-, gobject-introspection
+{
+  wrapGAppsHook3,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  rofi,
+  gobject-introspection,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,12 +24,14 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = (with python3Packages; [
-    dbus-python
-    pygobject3
-    setproctitle
-    xlib
-  ]) ++ [ rofi ];
+  propagatedBuildInputs =
+    (with python3Packages; [
+      dbus-python
+      pygobject3
+      setproctitle
+      xlib
+    ])
+    ++ [ rofi ];
 
   postPatch = ''
     sed -i "s:/usr/lib/plasma-hud:$out/bin:" etc/xdg/autostart/plasma-hud.desktop

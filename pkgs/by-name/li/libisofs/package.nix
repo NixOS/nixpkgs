@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, acl
-, attr
-, autoreconfHook
-, libiconv
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  acl,
+  attr,
+  autoreconfHook,
+  libiconv,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,20 +21,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-U5We19f/X1UKYFacCRl+XRXn67W8cYOBORb2uEjanT4=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    acl
-    attr
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ] ++ [
-    zlib
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      acl
+      attr
+    ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ]
+    ++ [ zlib ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 
@@ -42,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
     changelog = "https://dev.lovelyhq.com/libburnia/libisofs/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ abbradar AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      abbradar
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
   };
 })

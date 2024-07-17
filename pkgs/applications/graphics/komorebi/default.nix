@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, vala
-, pkg-config
-, glib
-, gtk3
-, libgee
-, webkitgtk
-, clutter-gtk
-, clutter-gst
-, ninja
-, wrapGAppsHook3
-, testers
-, komorebi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  vala,
+  pkg-config,
+  glib,
+  gtk3,
+  libgee,
+  webkitgtk,
+  clutter-gtk,
+  clutter-gst,
+  ninja,
+  wrapGAppsHook3,
+  testers,
+  komorebi,
 }:
 
 stdenv.mkDerivation rec {

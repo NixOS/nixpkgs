@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libusb1
-, openssl
-, rage
-, AppKit
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libusb1,
+  openssl,
+  rage,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,24 +23,23 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SbgH67XuxBa7WFirSdOIUxfJGlIYezISCEA3LJGN3ys=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libusb1
     openssl
   ] ++ lib.optional stdenv.isDarwin AppKit;
 
-  nativeCheckInputs = [
-    rage
-  ];
+  nativeCheckInputs = [ rage ];
 
   meta = with lib; {
     description = "A Ledger Nano plugin for age";
     mainProgram = "age-plugin-ledger";
     homepage = "https://github.com/Ledger-Donjon/age-plugin-ledger";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ erdnaxe ];
   };
 }

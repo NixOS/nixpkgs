@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, opencl-headers, cmake, withTracing ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencl-headers,
+  cmake,
+  withTracing ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencl-icd-loader";
@@ -14,9 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ opencl-headers ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "OCL_ICD_ENABLE_TRACE" withTracing)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "OCL_ICD_ENABLE_TRACE" withTracing) ];
 
   meta = with lib; {
     description = "Official Khronos OpenCL ICD Loader";

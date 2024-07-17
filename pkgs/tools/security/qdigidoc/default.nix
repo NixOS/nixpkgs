@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, cmake
-, flatbuffers
-, gettext
-, pkg-config
-, libdigidocpp
-, opensc
-, openldap
-, openssl
-, pcsclite
-, qtbase
-, qtsvg
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  flatbuffers,
+  gettext,
+  pkg-config,
+  libdigidocpp,
+  opensc,
+  openldap,
+  openssl,
+  pcsclite,
+  qtbase,
+  qtsvg,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -21,8 +22,7 @@ mkDerivation rec {
   version = "4.5.1";
 
   src = fetchurl {
-    url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
     hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
   };
 
@@ -39,7 +39,12 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    qttools
+  ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -63,9 +68,7 @@ mkDerivation rec {
   # searches the program's runtime path as well).
   # LD_LIBRARY_PATH takes precedence for all calling objects, see dlopen(3).
   # https://github.com/open-eid/cmake/pull/35 might be an alternative.
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/" ];
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
@@ -73,6 +76,10 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli mmahut yana ];
+    maintainers = with maintainers; [
+      flokli
+      mmahut
+      yana
+    ];
   };
 }

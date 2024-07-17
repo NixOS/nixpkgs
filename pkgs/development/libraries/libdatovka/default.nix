@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, autoreconfHook
-, pkg-config
-, fetchurl
-, expat
-, gpgme
-, libgcrypt
-, libxml2
-, libxslt
-, gnutls
-, curl
-, docbook_xsl
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  fetchurl,
+  expat,
+  gpgme,
+  libgcrypt,
+  libxml2,
+  libxslt,
+  gnutls,
+  curl,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,16 +23,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4JFPlEpSFv5t3p/NGq0cfn+neJj2M0BNWWd6nlCjHE0=";
   };
 
-  patches = [
-    ./libdatovka-deprecated-fn-curl.patch
-  ];
+  patches = [ ./libdatovka-deprecated-fn-curl.patch ];
 
-  configureFlags = [
-    "--with-docbook-xsl-stylesheets=${docbook_xsl}/xml/xsl/docbook"
-  ];
+  configureFlags = [ "--with-docbook-xsl-stylesheets=${docbook_xsl}/xml/xsl/docbook" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ expat gpgme libgcrypt libxml2 libxslt gnutls curl docbook_xsl ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    expat
+    gpgme
+    libgcrypt
+    libxml2
+    libxslt
+    gnutls
+    curl
+    docbook_xsl
+  ];
 
   meta = with lib; {
     description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";

@@ -1,7 +1,22 @@
 {
-  lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules,
-  zlib, boost179, libunwind, elfutils, sparsehash, zstd,
-  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  zlib,
+  boost179,
+  libunwind,
+  elfutils,
+  sparsehash,
+  zstd,
+  qtbase,
+  kio,
+  kitemmodels,
+  threadweaver,
+  kconfigwidgets,
+  kcoreaddons,
+  kdiagram,
 }:
 
 mkDerivation rec {
@@ -15,10 +30,24 @@ mkDerivation rec {
     sha256 = "sha256-pP+s60ERnmOctYTe/vezCg0VYzziApNY0QaF3aTccZU=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
-    zlib boost179 libunwind elfutils sparsehash zstd
-    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
+    zlib
+    boost179
+    libunwind
+    elfutils
+    sparsehash
+    zstd
+    qtbase
+    kio
+    kitemmodels
+    threadweaver
+    kconfigwidgets
+    kcoreaddons
+    kdiagram
   ];
 
   meta = with lib; {

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, vala
-, wrapGAppsHook3
-, installShellFiles
-, scdoc
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, gtk3
-, ibus
-, libgee
-, xorg
-, snippetexpanderd
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  installShellFiles,
+  scdoc,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  gtk3,
+  ibus,
+  libgee,
+  xorg,
+  snippetexpanderd,
 }:
 
 stdenv.mkDerivation rec {

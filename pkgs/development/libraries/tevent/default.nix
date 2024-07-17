@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, cmocka
-, readline
-, talloc
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, which
-, wafHook
-, libxcrypt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  cmocka,
+  readline,
+  talloc,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  which,
+  wafHook,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {

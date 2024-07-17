@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
 
-, # build deps
-  clickgen
-, python3Packages
+  # build deps
+  clickgen,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -44,7 +45,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "The Banana Cursor";
     homepage = "https://github.com/ful1e5/banana-cursor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ getpsyched yrd ];
+    maintainers = with maintainers; [
+      getpsyched
+      yrd
+    ];
     platforms = platforms.linux;
   };
 })

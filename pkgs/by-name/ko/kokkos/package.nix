@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "Kokkos_ENABLE_TESTS" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "Kokkos_ENABLE_TESTS" true) ];
 
   postPatch = ''
     patchShebangs .

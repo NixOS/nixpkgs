@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, perl, xorgproto, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  xorgproto,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ratmen";
@@ -12,9 +19,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libX11
   ];
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     description = "A minimalistic X11 menu creator";
     license = licenses.free; # 9menu derivative with 9menu license

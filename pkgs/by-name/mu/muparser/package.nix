@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +23,9 @@ stdenv.mkDerivation rec {
       --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   meta = {
     description = "An extensible high performance math expression parser library written in C++";

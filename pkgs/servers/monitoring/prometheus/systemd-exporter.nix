@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "systemd_exporter";
@@ -23,7 +28,9 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.BuildDate=unknown"
   ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) systemd;
+  };
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, unzip
-, libGL
-, libICE
-, libSM
-, libX11
-, libXrandr
-, zlib
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  unzip,
+  libGL,
+  libICE,
+  libSM,
+  libX11,
+  libXrandr,
+  zlib,
+  alsa-lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +41,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  runtimeDependencies = [
-    alsa-lib
-  ];
+  runtimeDependencies = [ alsa-lib ];
 
   noDumpEnvVars = true;
 
@@ -63,7 +62,10 @@ stdenv.mkDerivation rec {
     description = "A free/libre soft-body physics simulator mainly targeted at simulating vehicle physics";
     homepage = "https://www.rigsofrods.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin wegank ];
+    maintainers = with maintainers; [
+      raskin
+      wegank
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

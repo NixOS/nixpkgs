@@ -9,7 +9,7 @@
   ffmpeg-full,
   util-linux,
   python3,
-  getopt
+  getopt,
 }:
 
 let
@@ -29,7 +29,7 @@ let
     pname = "${pname}-client";
     inherit (source) version;
 
-    src = runCommand "cp-source" {} ''
+    src = runCommand "cp-source" { } ''
       cp -r ${src}/client $out
     '';
 
@@ -42,10 +42,18 @@ let
   };
 
   wrapper = import ./wrapper.nix {
-    inherit stdenv ffmpeg-full tone pname nodejs getopt;
+    inherit
+      stdenv
+      ffmpeg-full
+      tone
+      pname
+      nodejs
+      getopt
+      ;
   };
 
-in buildNpmPackage {
+in
+buildNpmPackage {
   inherit pname src;
   inherit (source) version;
 
@@ -75,7 +83,10 @@ in buildNpmPackage {
     description = "Self-hosted audiobook and podcast server";
     changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${source.version}";
     license = licenses.gpl3;
-    maintainers = [ maintainers.jvanbruegge maintainers.adamcstephens ];
+    maintainers = [
+      maintainers.jvanbruegge
+      maintainers.adamcstephens
+    ];
     platforms = platforms.linux;
     mainProgram = "audiobookshelf";
   };

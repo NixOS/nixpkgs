@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kwayland";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtwayland];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ qtwayland ];
 }

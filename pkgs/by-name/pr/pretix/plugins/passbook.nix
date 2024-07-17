@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
 
-# build-system
-, pretix-plugin-build
-, setuptools
+  # build-system
+  pretix-plugin-build,
+  setuptools,
 
-# runtime
-, openssl
+  # runtime
+  openssl,
 
-# dependencies
-, googlemaps
-, wallet-py3k
+  # dependencies
+  googlemaps,
+  wallet-py3k,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "pretix_passbook"
-  ];
+  pythonImportsCheck = [ "pretix_passbook" ];
 
   meta = with lib; {
     description = "Support for Apple Wallet/Passbook files in pretix";

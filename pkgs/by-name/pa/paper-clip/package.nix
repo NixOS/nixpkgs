@@ -1,17 +1,18 @@
-{ lib
-, desktop-file-utils
-, exempi
-, fetchFromGitHub
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, poppler
-, stdenv
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  exempi,
+  fetchFromGitHub,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  stdenv,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

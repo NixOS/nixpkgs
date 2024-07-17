@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, poppler }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  zathura_core,
+  girara,
+  poppler,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zathura-pdf-poppler";
@@ -9,8 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "049h8m9swxni7ar6fsbm0hb3fg4ffmjc3m6vyg78ilfi3kayxavi";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config zathura_core ];
-  buildInputs = [ poppler girara ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    zathura_core
+  ];
+  buildInputs = [
+    poppler
+    girara
+  ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 

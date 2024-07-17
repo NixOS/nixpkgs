@@ -1,12 +1,12 @@
-{ buildPackages
-, fetchzip
-, javaOpts ? "-XX:+UseZGC"
-, jdk
-, jre_headless
-, lib
-, makeWrapper
-, stdenvNoCC
-,
+{
+  buildPackages,
+  fetchzip,
+  javaOpts ? "-XX:+UseZGC",
+  jdk,
+  jre_headless,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "HentaiAtHome";
@@ -18,11 +18,15 @@ stdenvNoCC.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [
+    jdk
+    makeWrapper
+  ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (stdenvNoCC.buildPlatform.libc == "glibc")
-    "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (
+    stdenvNoCC.buildPlatform.libc == "glibc"
+  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   buildPhase = ''
     make all
@@ -48,8 +52,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ehwiki.org/wiki/Hentai@Home";
-    description =
-      "Hentai@Home is an open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
+    description = "Hentai@Home is an open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
     mainProgram = "HentaiAtHome";

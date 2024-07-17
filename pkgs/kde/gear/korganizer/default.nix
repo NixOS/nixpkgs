@@ -1,10 +1,7 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "korganizer";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
   meta.mainProgram = "korganizer";
 }

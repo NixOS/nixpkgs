@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, glibcLocales
-, gobject-introspection
-, wrapGAppsHook3
-, gtk3
-, keybinder3
-, libnotify
-, libutempter
-, vte
-, libwnck
-, dconf
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  glibcLocales,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gtk3,
+  keybinder3,
+  libnotify,
+  libutempter,
+  vte,
+  libwnck,
+  dconf,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -78,9 +79,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preFixup = ''
     gappsWrapperArgs+=(

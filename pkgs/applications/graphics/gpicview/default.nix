@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  gtk2,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpicview";
@@ -16,7 +24,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   buildInputs = [ gtk2 ];
 

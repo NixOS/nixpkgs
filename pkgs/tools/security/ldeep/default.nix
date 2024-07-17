@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-67jVpzvdjEcjFmTRE2YjPr4AO1iN+PakwoKcjvimt8g=";
   };
 
-  pythonRelaxDeps = [
-    "cryptography"
-  ];
+  pythonRelaxDeps = [ "cryptography" ];
 
   build-system = with python3.pkgs; [
     cython
@@ -42,9 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ldeep"
-  ];
+  pythonImportsCheck = [ "ldeep" ];
 
   meta = with lib; {
     description = "In-depth LDAP enumeration utility";

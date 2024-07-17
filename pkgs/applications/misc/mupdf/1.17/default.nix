@@ -1,18 +1,34 @@
-{ stdenv, lib, fetchurl, pkg-config, freetype, harfbuzz, openjpeg
-, jbig2dec, libjpeg , darwin
-, enableX11 ? true, libX11, libXext, libXi, libXrandr
-, enableCurl ? true, curl, openssl
-, enableGL ? true, freeglut, libGLU
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  freetype,
+  harfbuzz,
+  openjpeg,
+  jbig2dec,
+  libjpeg,
+  darwin,
+  enableX11 ? true,
+  libX11,
+  libXext,
+  libXi,
+  libXrandr,
+  enableCurl ? true,
+  curl,
+  openssl,
+  enableGL ? true,
+  freeglut,
+  libGLU,
 }:
 
 let
 
   # OpenJPEG version is hardcoded in package source
-  openJpegVersion = with stdenv;
-    lib.versions.majorMinor (lib.getVersion openjpeg);
+  openJpegVersion = with stdenv; lib.versions.majorMinor (lib.getVersion openjpeg);
 
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.17.0";
   pname = "mupdf";
 
@@ -24,8 +40,7 @@ in stdenv.mkDerivation rec {
   patches =
     # Use shared libraries to decrease size
     lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
-    ++ lib.optional stdenv.isDarwin ./darwin.patch
-  ;
+    ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
@@ -33,16 +48,46 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
-                ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
-                ++ lib.optionals enableCurl [ curl openssl ]
-                ++ lib.optionals enableGL (
-                  if stdenv.isDarwin then
-                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
-                  else
-                    [ freeglut libGLU ])
-                ;
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  buildInputs =
+    [
+      freetype
+      harfbuzz
+      openjpeg
+      jbig2dec
+      libjpeg
+      freeglut
+      libGLU
+    ]
+    ++ lib.optionals enableX11 [
+      libX11
+      libXext
+      libXi
+      libXrandr
+    ]
+    ++ lib.optionals enableCurl [
+      curl
+      openssl
+    ]
+    ++ lib.optionals enableGL (
+      if stdenv.isDarwin then
+        with darwin.apple_sdk.frameworks;
+        [
+          GLUT
+          OpenGL
+        ]
+      else
+        [
+          freeglut
+          libGLU
+        ]
+    );
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "doc"
+  ];
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible
@@ -84,7 +129,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ vrthra fpletz ];
+    maintainers = with maintainers; [
+      vrthra
+      fpletz
+    ];
     platforms = platforms.unix;
     knownVulnerabilities = [
       "CVE-2020-26519: denial of service when parsing JBIG2"

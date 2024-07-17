@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, postgresql
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  postgresql,
 }:
 
 buildOctavePackage rec {
@@ -18,13 +19,9 @@ buildOctavePackage rec {
     ./c_verror.patch
   ];
 
-  propagatedBuildInputs = [
-    postgresql
-  ];
+  propagatedBuildInputs = [ postgresql ];
 
-  requiredOctavePackages = [
-    struct
-  ];
+  requiredOctavePackages = [ struct ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/database/index.html";

@@ -1,7 +1,8 @@
-{ fetchCrate
-, lib
-, rustPlatform
-, protobuf
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-i1ZIEbU6tw7xA1w+ffD/h1HIkOwVep9wQJys9Bydvv0=";
 
-  cargoBuildFlags = ["--bin" pname];
+  cargoBuildFlags = [
+    "--bin"
+    pname
+  ];
 
   nativeBuildInputs = [ protobuf ];
 

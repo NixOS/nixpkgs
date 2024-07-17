@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # update Carg.lock to work with openssl 3
   postPatch = ''
@@ -51,6 +50,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lilyball ];
+    maintainers = with maintainers; [
+      figsoda
+      lilyball
+    ];
   };
 }

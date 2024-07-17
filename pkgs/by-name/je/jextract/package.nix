@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, emptyDirectory
-, writeText
-, makeBinaryWrapper
-, gradle
-, jdk22
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  emptyDirectory,
+  writeText,
+  makeBinaryWrapper,
+  gradle,
+  jdk22,
+  llvmPackages,
 }:
 
 let
@@ -90,6 +91,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/openjdk/jextract";
     platforms = jdk22.meta.platforms;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jlesquembre sharzy ];
+    maintainers = with maintainers; [
+      jlesquembre
+      sharzy
+    ];
   };
 }

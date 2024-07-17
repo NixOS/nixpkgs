@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, SDL, SDL_image }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  SDL,
+  SDL_image,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vp";
@@ -13,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ SDL SDL_image ];
+  buildInputs = [
+    SDL
+    SDL_image
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
 
@@ -21,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://brlcad.org/~erik/";
     description = "SDL based picture viewer/slideshow";
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
     mainProgram = "vp";
   };

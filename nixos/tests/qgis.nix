@@ -1,4 +1,10 @@
-import ./make-test-python.nix ({ pkgs, lib, qgisPackage, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    lib,
+    qgisPackage,
+    ...
+  }:
   let
     testScript = pkgs.writeTextFile {
       name = "qgis-test.py";
@@ -12,13 +18,15 @@ import ./make-test-python.nix ({ pkgs, lib, qgisPackage, ... }:
     };
 
     nodes = {
-      machine = { pkgs, ... }: {
-        virtualisation.diskSize = 2 * 1024;
+      machine =
+        { pkgs, ... }:
+        {
+          virtualisation.diskSize = 2 * 1024;
 
-        imports = [ ./common/x11.nix ];
-        environment.systemPackages = [ qgisPackage ];
+          imports = [ ./common/x11.nix ];
+          environment.systemPackages = [ qgisPackage ];
 
-      };
+        };
     };
 
     testScript = ''
@@ -27,4 +35,5 @@ import ./make-test-python.nix ({ pkgs, lib, qgisPackage, ... }:
       machine.succeed("${qgisPackage}/bin/qgis --version | grep 'QGIS ${qgisPackage.version}'")
       machine.succeed("${qgisPackage}/bin/qgis --code ${testScript}")
     '';
-  })
+  }
+)

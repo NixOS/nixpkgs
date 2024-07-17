@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libtirpc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtirpc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,13 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K6pYEBC8cDYavfo38SHpKuucXOZ/mnGRPOvWk1nMllQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libtirpc
-  ];
+  buildInputs = [ libtirpc ];
 
   meta = {
     description = "Secure replacement for inetd";

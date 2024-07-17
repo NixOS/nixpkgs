@@ -1,14 +1,15 @@
-{ lib
-, flutter319
-, python3
-, fetchFromGitHub
-, pcre2
-, libnotify
-, libappindicator
-, pkg-config
-, gnome
-, makeWrapper
-, removeReferencesTo
+{
+  lib,
+  flutter319,
+  python3,
+  fetchFromGitHub,
+  pcre2,
+  libnotify,
+  libappindicator,
+  pkg-config,
+  gnome,
+  makeWrapper,
+  removeReferencesTo,
 }:
 
 flutter319.buildFlutterApplication rec {
@@ -88,6 +89,9 @@ flutter319.buildFlutterApplication rec {
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

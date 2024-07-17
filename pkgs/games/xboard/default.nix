@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libX11
-, xorgproto
-, libXt
-, libXaw
-, libSM
-, libICE
-, libXmu
-, libXext
-, gnuchess
-, texinfo
-, libXpm
-, pkg-config
-, librsvg
-, cairo
-, pango
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libX11,
+  xorgproto,
+  libXt,
+  libXaw,
+  libSM,
+  libICE,
+  libXmu,
+  libXext,
+  gnuchess,
+  texinfo,
+  libXpm,
+  pkg-config,
+  librsvg,
+  cairo,
+  pango,
+  gtk2,
 }:
 
 stdenv.mkDerivation rec {

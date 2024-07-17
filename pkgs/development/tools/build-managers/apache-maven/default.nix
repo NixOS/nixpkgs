@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jdk
-, makeWrapper
-, callPackage
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jdk,
+  makeWrapper,
+  callPackage,
 }:
 
 assert jdk != null;
@@ -35,9 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.buildMavenPackage = callPackage ./build-package.nix {
-    maven = finalAttrs.finalPackage;
-  };
+  passthru.buildMavenPackage = callPackage ./build-package.nix { maven = finalAttrs.finalPackage; };
 
   meta = with lib; {
     mainProgram = "mvn";

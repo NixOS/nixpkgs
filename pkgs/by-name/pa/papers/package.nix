@@ -1,45 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, appstream
-, desktop-file-utils
-, gtk4
-, glib
-, pango
-, atk
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, poppler
-, ghostscriptX
-, djvulibre
-, libspectre
-, libarchive
-, libsecret
-, wrapGAppsHook4
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gsettings-desktop-schemas
-, dbus
-, gi-docgen
-, libgxps
-, supportXPS ? true # Open XML Paper Specification via libgxps
-, withLibsecret ? true
-, libadwaita
-, exempi
-, cargo
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  appstream,
+  desktop-file-utils,
+  gtk4,
+  glib,
+  pango,
+  atk,
+  gdk-pixbuf,
+  shared-mime-info,
+  itstool,
+  poppler,
+  ghostscriptX,
+  djvulibre,
+  libspectre,
+  libarchive,
+  libsecret,
+  wrapGAppsHook4,
+  librsvg,
+  gobject-introspection,
+  yelp-tools,
+  gsettings-desktop-schemas,
+  dbus,
+  gi-docgen,
+  libgxps,
+  supportXPS ? true, # Open XML Paper Specification via libgxps
+  withLibsecret ? true,
+  libadwaita,
+  exempi,
+  cargo,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
   version = "45.0-unstable-2024-03-27";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -92,18 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     libspectre
     pango
     poppler
-  ] ++ lib.optionals withLibsecret [
-    libsecret
-  ] ++ lib.optionals supportXPS [
-    libgxps
-  ];
+  ] ++ lib.optionals withLibsecret [ libsecret ] ++ lib.optionals supportXPS [ libgxps ];
 
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
-  ] ++ lib.optionals (!withLibsecret) [
-    "-Dkeyring=disabled"
-  ];
+  ] ++ lib.optionals (!withLibsecret) [ "-Dkeyring=disabled" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")

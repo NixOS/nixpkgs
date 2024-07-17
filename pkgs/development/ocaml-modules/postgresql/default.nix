@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, dune-configurator, postgresql }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-configurator,
+  postgresql,
+}:
 
 buildDunePackage rec {
   pname = "postgresql";

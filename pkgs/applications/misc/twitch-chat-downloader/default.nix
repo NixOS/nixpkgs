@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, iso8601
-, progressbar2
-, requests
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  iso8601,
+  progressbar2,
+  requests,
 }:
 
 buildPythonApplication rec {

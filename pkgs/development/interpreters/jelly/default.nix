@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication {
   pname = "jelly";
@@ -21,9 +25,9 @@ python3Packages.buildPythonApplication {
   meta = with lib; {
     description = "A recreational programming language inspired by J";
     mainProgram = "jelly";
-    homepage    = "https://github.com/DennisMitchell/jellylanguage";
-    license     = licenses.mit;
+    homepage = "https://github.com/DennisMitchell/jellylanguage";
+    license = licenses.mit;
     maintainers = [ maintainers.tckmn ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

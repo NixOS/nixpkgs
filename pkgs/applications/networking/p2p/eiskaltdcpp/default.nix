@@ -1,6 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libX11
-, mkDerivation, qtbase, qttools, qtmultimedia, qtscript
-, libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  bzip2,
+  libX11,
+  mkDerivation,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtscript,
+  libiconv,
+  pcre-cpp,
+  libidn,
+  lua5,
+  miniupnpc,
+  aspell,
+  gettext,
+  perl,
+}:
 
 mkDerivation rec {
   pname = "eiskaltdcpp";
@@ -13,13 +32,30 @@ mkDerivation rec {
     sha256 = "sha256-JmAopXFS6MkxW0wDQ1bC/ibRmWgOpzU0971hcqAehLU=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ qtbase qttools qtmultimedia qtscript bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext
-    (perl.withPackages (p: with p; [
-      GetoptLong
-      TermShellUI
-    ])) ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    qtbase
+    qttools
+    qtmultimedia
+    qtscript
+    bzip2
+    libX11
+    pcre-cpp
+    libidn
+    lua5
+    miniupnpc
+    aspell
+    gettext
+    (perl.withPackages (
+      p: with p; [
+        GetoptLong
+        TermShellUI
+      ]
+    ))
+  ] ++ lib.optional stdenv.isDarwin libiconv;
 
   cmakeFlags = [
     "-DDBUS_NOTIFY=ON"

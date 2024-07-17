@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, utilmacros
-, libX11
-, libXaw
-, libXmu
-, libXt
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  utilmacros,
+  libX11,
+  libXaw,
+  libXmu,
+  libXt,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config utilmacros ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    utilmacros
+  ];
   buildInputs = [
     libX11
     libXaw

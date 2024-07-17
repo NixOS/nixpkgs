@@ -1,4 +1,11 @@
-{ lib, fetchFromGitLab, stdenv, llvmPackages_12, cargo, libiconv }:
+{
+  lib,
+  fetchFromGitLab,
+  stdenv,
+  llvmPackages_12,
+  cargo,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
   };
 
-  nativeBuildInputs = [ llvmPackages_12.llvm cargo ];
+  nativeBuildInputs = [
+    llvmPackages_12.llvm
+    cargo
+  ];
   propagatedBuildDeps = [ llvmPackages_12.libllvm ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

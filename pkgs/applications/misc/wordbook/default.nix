@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk4
-, libadwaita
-, librsvg
-, espeak-ng
-, gobject-introspection
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk4,
+  libadwaita,
+  librsvg,
+  espeak-ng,
+  gobject-introspection,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
 }:
 
 python3.pkgs.buildPythonApplication rec {

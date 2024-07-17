@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -49,8 +54,23 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
-    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+    (mkRenamedOptionModule
+      [
+        "services"
+        "murmur"
+        "welcome"
+      ]
+      [
+        "services"
+        "murmur"
+        "welcometext"
+      ]
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "murmur"
+      "pidfile"
+    ] "Hardcoded to /run/murmur/murmurd.pid now")
   ];
 
   options = {
@@ -281,7 +301,11 @@ in
       };
 
       dbus = mkOption {
-        type = types.enum [ null "session" "system" ];
+        type = types.enum [
+          null
+          "session"
+          "system"
+        ];
         default = null;
         description = "Enable D-Bus remote control. Set to the bus you want Murmur to connect to.";
       };
@@ -290,14 +314,14 @@ in
 
   config = mkIf cfg.enable {
     users.users.murmur = {
-      description     = "Murmur Service user";
-      home            = "/var/lib/murmur";
-      createHome      = true;
-      uid             = config.ids.uids.murmur;
-      group           = "murmur";
+      description = "Murmur Service user";
+      home = "/var/lib/murmur";
+      createHome = true;
+      uid = config.ids.uids.murmur;
+      group = "murmur";
     };
     users.groups.murmur = {
-      gid             = config.ids.gids.murmur;
+      gid = config.ids.gids.murmur;
     };
 
     networking.firewall = mkIf cfg.openFirewall {
@@ -307,9 +331,9 @@ in
 
     systemd.services.murmur = {
       description = "Murmur Chat Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
-      preStart    = ''
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
           -i ${configFile}
@@ -354,56 +378,65 @@ in
 
     # currently not included in upstream package, addition requested at
     # https://github.com/mumble-voip/mumble/issues/6078
-    services.dbus.packages = mkIf (cfg.dbus == "system") [(pkgs.writeTextFile {
-      name = "murmur-dbus-policy";
-      text = ''
-        <!DOCTYPE busconfig PUBLIC
-          "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-          "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-        <busconfig>
-          <policy user="murmur">
-            <allow own="net.sourceforge.mumble.murmur"/>
-          </policy>
+    services.dbus.packages = mkIf (cfg.dbus == "system") [
+      (pkgs.writeTextFile {
+        name = "murmur-dbus-policy";
+        text = ''
+          <!DOCTYPE busconfig PUBLIC
+            "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+            "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+          <busconfig>
+            <policy user="murmur">
+              <allow own="net.sourceforge.mumble.murmur"/>
+            </policy>
 
-          <policy context="default">
-            <allow send_destination="net.sourceforge.mumble.murmur"/>
-            <allow receive_sender="net.sourceforge.mumble.murmur"/>
-          </policy>
-        </busconfig>
-      '';
-      destination = "/share/dbus-1/system.d/murmur.conf";
-    })];
+            <policy context="default">
+              <allow send_destination="net.sourceforge.mumble.murmur"/>
+              <allow receive_sender="net.sourceforge.mumble.murmur"/>
+            </policy>
+          </busconfig>
+        '';
+        destination = "/share/dbus-1/system.d/murmur.conf";
+      })
+    ];
 
-    security.apparmor.policies."bin.mumble-server".profile = ''
-      include <tunables/global>
+    security.apparmor.policies."bin.mumble-server".profile =
+      ''
+        include <tunables/global>
 
-      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
-        include <abstractions/base>
-        include <abstractions/nameservice>
-        include <abstractions/ssl_certs>
-        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
-        pix ${cfg.package}/bin/.mumble-server-wrapped,
+        ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+          include <abstractions/base>
+          include <abstractions/nameservice>
+          include <abstractions/ssl_certs>
+          include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+          pix ${cfg.package}/bin/.mumble-server-wrapped,
 
-        r ${config.environment.etc."os-release".source},
-        r ${config.environment.etc."lsb-release".source},
-        owner rwk /var/lib/murmur/murmur.sqlite,
-        owner rw /var/lib/murmur/murmur.sqlite-journal,
-        owner r /var/lib/murmur/,
-        r /run/murmur/murmurd.pid,
-        r /run/murmur/murmurd.ini,
-        r ${configFile},
-      '' + optionalString (cfg.logFile != null) ''
+          r ${config.environment.etc."os-release".source},
+          r ${config.environment.etc."lsb-release".source},
+          owner rwk /var/lib/murmur/murmur.sqlite,
+          owner rw /var/lib/murmur/murmur.sqlite-journal,
+          owner r /var/lib/murmur/,
+          r /run/murmur/murmurd.pid,
+          r /run/murmur/murmurd.ini,
+          r ${configFile},
+      ''
+      + optionalString (cfg.logFile != null) ''
         rw ${cfg.logFile},
-      '' + optionalString (cfg.sslCert != "") ''
+      ''
+      + optionalString (cfg.sslCert != "") ''
         r ${cfg.sslCert},
-      '' + optionalString (cfg.sslKey != "") ''
+      ''
+      + optionalString (cfg.sslKey != "") ''
         r ${cfg.sslKey},
-      '' + optionalString (cfg.sslCa != "") ''
+      ''
+      + optionalString (cfg.sslCa != "") ''
         r ${cfg.sslCa},
-      '' + optionalString (cfg.dbus != null) ''
+      ''
+      + optionalString (cfg.dbus != null) ''
         dbus bus=${cfg.dbus}
-      '' + ''
-      }
-    '';
+      ''
+      + ''
+        }
+      '';
   };
 }

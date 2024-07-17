@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-wt/wLtvAZ19ZiLIjPrKbqVztLyXEa8hy6cEkaCO+tuY=";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=$(out)"
+  ];
 
   doCheck = true;
 

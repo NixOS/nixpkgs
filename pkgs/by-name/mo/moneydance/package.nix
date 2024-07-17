@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, makeWrapper, openjdk22, openjfx22, jvmFlags ? [ ] }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  openjdk22,
+  openjfx22,
+  jvmFlags ? [ ],
+}:
 let
   openjfx = openjfx22;
   jdk = openjdk22.override {
@@ -16,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk openjfx ];
+  buildInputs = [
+    jdk
+    openjfx
+  ];
 
   # Note the double escaping in the call to makeWrapper. The escapeShellArgs
   # call quotes each element of the flags list as a word[1] and returns a
@@ -26,26 +37,30 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # 1. https://www.gnu.org/software/bash/manual/html_node/Word-Splitting.html
   # 2. https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
-  installPhase = let
-    finalJvmFlags = [
-      "-client"
-      "--add-modules"
-      "javafx.swing,javafx.controls,javafx.graphics"
-      "-classpath"
-      "${placeholder "out"}/libexec/*"
-    ] ++ jvmFlags ++ [ "Moneydance" ];
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      finalJvmFlags = [
+        "-client"
+        "--add-modules"
+        "javafx.swing,javafx.controls,javafx.graphics"
+        "-classpath"
+        "${placeholder "out"}/libexec/*"
+      ] ++ jvmFlags ++ [ "Moneydance" ];
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/libexec $out/bin
-    cp -p $src/lib/* $out/libexec/
-    makeWrapper ${jdk}/bin/java $out/bin/moneydance \
-      --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
+      mkdir -p $out/libexec $out/bin
+      cp -p $src/lib/* $out/libexec/
+      makeWrapper ${jdk}/bin/java $out/bin/moneydance \
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  passthru = { inherit jdk; };
+  passthru = {
+    inherit jdk;
+  };
 
   meta = {
     homepage = "https://infinitekind.com/moneydance";

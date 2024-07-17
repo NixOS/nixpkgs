@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitLab, yojson }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "ocf";

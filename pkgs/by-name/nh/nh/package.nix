@@ -1,17 +1,21 @@
-{ stdenv
-, lib
-, rustPlatform
-, installShellFiles
-, makeBinaryWrapper
-, darwin
-, fetchFromGitHub
-, nix-update-script
-, nvd
-, nix-output-monitor
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  installShellFiles,
+  makeBinaryWrapper,
+  darwin,
+  fetchFromGitHub,
+  nix-update-script,
+  nvd,
+  nix-output-monitor,
 }:
 let
   version = "3.5.15";
-  runtimeDeps = [ nvd nix-output-monitor ];
+  runtimeDeps = [
+    nvd
+    nix-output-monitor
+  ];
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -56,6 +60,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/viperML/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
-    maintainers = with lib.maintainers; [ drupol viperML ];
+    maintainers = with lib.maintainers; [
+      drupol
+      viperML
+    ];
   };
 }

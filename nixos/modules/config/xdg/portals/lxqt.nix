@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -22,12 +27,13 @@ in
 
     styles = mkOption {
       type = types.listOf types.package;
-      default = [];
-      example = literalExpression ''[
-        pkgs.libsForQt5.qtstyleplugin-kvantum
-        pkgs.breeze-qt5
-        pkgs.qtcurve
-      ];
+      default = [ ];
+      example = literalExpression ''
+        [
+                pkgs.libsForQt5.qtstyleplugin-kvantum
+                pkgs.breeze-qt5
+                pkgs.qtcurve
+              ];
       '';
       description = ''
         Extra Qt styles that will be available to the
@@ -39,9 +45,7 @@ in
   config = mkIf cfg.enable {
     xdg.portal = {
       enable = true;
-      extraPortals = [
-        (pkgs.lxqt.xdg-desktop-portal-lxqt.override { extraQtStyles = cfg.styles; })
-      ];
+      extraPortals = [ (pkgs.lxqt.xdg-desktop-portal-lxqt.override { extraQtStyles = cfg.styles; }) ];
     };
 
     environment.systemPackages = cfg.styles;

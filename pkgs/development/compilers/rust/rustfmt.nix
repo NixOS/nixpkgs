@@ -1,4 +1,11 @@
-{ lib, stdenv, rustPlatform, rustc, Security, asNightly ? false }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  rustc,
+  Security,
+  asNightly ? false,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustfmt" + lib.optionalString asNightly "-nightly";
@@ -11,9 +18,7 @@ rustPlatform.buildRustPackage rec {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [
-    rustc.llvm
-  ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ rustc.llvm ] ++ lib.optional stdenv.isDarwin Security;
 
   # rustfmt uses the rustc_driver and std private libraries, and Rust's build process forces them to have
   # an install name of `@rpath/...` [0] [1] instead of the standard on macOS, which is an absolute path
@@ -37,8 +42,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     mainProgram = "rustfmt";
-    maintainers = with maintainers; [ globin basvandijk ];
+    maintainers = with maintainers; [
+      globin
+      basvandijk
+    ];
   };
 }

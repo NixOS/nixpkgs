@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, substituteAll
-, ffmpeg
-, installShellFiles
+{
+  lib,
+  python3,
+  fetchPypi,
+  substituteAll,
+  ffmpeg,
+  installShellFiles,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,9 +39,7 @@ python3.pkgs.buildPythonApplication rec {
       --bash contrib/completion/you-get-completion.bash
   '';
 
-  pythonImportsCheck = [
-    "you_get"
-  ];
+  pythonImportsCheck = [ "you_get" ];
 
   meta = with lib; {
     description = "A tiny command line utility to download media contents from the web";

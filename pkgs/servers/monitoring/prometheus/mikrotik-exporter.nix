@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "mikrotik-exporter-unstable";
@@ -15,7 +20,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) mikrotik; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) mikrotik;
+  };
 
   meta = with lib; {
     inherit (src.meta) homepage;

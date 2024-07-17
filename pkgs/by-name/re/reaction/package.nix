@@ -6,7 +6,8 @@
 }:
 let
   version = "1.3.0";
-in buildGoModule {
+in
+buildGoModule {
   inherit version;
   pname = "reaction";
 
@@ -40,7 +41,7 @@ in buildGoModule {
     changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
     license = licenses.agpl3Plus;
     mainProgram = "reaction";
-    maintainers = with maintainers; [ppom];
+    maintainers = with maintainers; [ ppom ];
     platforms = platforms.unix;
   };
 }

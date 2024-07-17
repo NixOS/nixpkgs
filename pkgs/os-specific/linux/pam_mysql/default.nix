@@ -1,14 +1,15 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pam
-, pkg-config
-, libmysqlclient
-, mariadb
-, libxcrypt
+{
+  lib,
+  nixosTests,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pam,
+  pkg-config,
+  libmysqlclient,
+  mariadb,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,17 @@ stdenv.mkDerivation rec {
     sha256 = "07acf0hbhkd0kg49gnj4nb5ilnv3v4xx3dsggvzvjg8gi3cjmsap";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ pam libmysqlclient mariadb libxcrypt ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
+  buildInputs = [
+    pam
+    libmysqlclient
+    mariadb
+    libxcrypt
+  ];
 
   passthru.tests = {
     inherit (nixosTests) auth-mysql;

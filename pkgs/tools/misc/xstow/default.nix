@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, ncurses
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am --replace xstow-stow ""
   '';
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   meta = with lib; {
     description = "A replacement of GNU Stow written in C++";

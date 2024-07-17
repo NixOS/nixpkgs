@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ghauri"
-  ];
+  pythonImportsCheck = [ "ghauri" ];
 
   meta = with lib; {
     description = "Tool for detecting and exploiting SQL injection security flaws";

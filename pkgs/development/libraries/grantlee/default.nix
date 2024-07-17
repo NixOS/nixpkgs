@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, qtbase, cmake, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  cmake,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "grantlee";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-enP7b6A7Ndew2LJH569fN3IgPu2/KL5rCmU/jmKb9sY=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtbase ];
 
   meta = {

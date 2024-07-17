@@ -1,4 +1,8 @@
-{ lib, fetchurl, trivialBuild }:
+{
+  lib,
+  fetchurl,
+  trivialBuild,
+}:
 
 trivialBuild {
   pname = "yes-no";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gettext
-, magic
-, pexpect
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gettext,
+  magic,
+  pexpect,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-usa4xSNAv0AaML7qv5kCQDA3VMz4IneLFDVyv7uPUcQ=";
   };
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = [
     magic

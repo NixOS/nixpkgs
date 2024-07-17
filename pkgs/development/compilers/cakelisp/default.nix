@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, gcc, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  gcc,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "cakelisp";
@@ -13,16 +19,18 @@ stdenv.mkDerivation {
 
   buildInputs = [ gcc ];
 
-  postPatch = ''
-    substituteInPlace runtime/HotReloading.cake \
-        --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
-    substituteInPlace src/ModuleManager.cpp \
-        --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Build.sh --replace '--export-dynamic' '-export_dynamic'
-    substituteInPlace runtime/HotReloading.cake --replace '--export-dynamic' '-export_dynamic'
-    substituteInPlace Bootstrap.cake --replace '--export-dynamic' '-export_dynamic'
-  '';
+  postPatch =
+    ''
+      substituteInPlace runtime/HotReloading.cake \
+          --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
+      substituteInPlace src/ModuleManager.cpp \
+          --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Build.sh --replace '--export-dynamic' '-export_dynamic'
+      substituteInPlace runtime/HotReloading.cake --replace '--export-dynamic' '-export_dynamic'
+      substituteInPlace Bootstrap.cake --replace '--export-dynamic' '-export_dynamic'
+    '';
 
   buildPhase = ''
     runHook preBuild
@@ -38,9 +46,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://macoy.me/code/macoy/cakelisp";
-  };
+  passthru.updateScript = unstableGitUpdater { url = "https://macoy.me/code/macoy/cakelisp"; };
 
   meta = with lib; {
     description = "A performance-oriented Lisp-like language";

@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -32,9 +33,7 @@ python3.pkgs.buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "acltoolkit"
-  ];
+  pythonImportsCheck = [ "acltoolkit" ];
 
   meta = with lib; {
     description = "ACL abuse swiss-knife";

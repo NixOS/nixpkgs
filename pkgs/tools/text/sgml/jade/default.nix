@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gnum4 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnum4,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jade";
@@ -10,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "84e2f8a2a87aab44f86a46b71405d4f919b219e4c73e03a83ab6c746a674b187";
   };
 
-  patchsrc =  fetchurl {
+  patchsrc = fetchurl {
     url = "mirror://debian/pool/main/j/jade/jade_${version}-${debpatch}.diff.gz";
     sha256 = "8e94486898e3503308805f856a65ba5b499a6f21994151270aa743de48305464";
   };

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, llvmPackages_16
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages_16,
+  unstableGitUpdater,
 }:
 
 let
@@ -29,9 +30,7 @@ llvmPackages.stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -48,7 +47,7 @@ llvmPackages.stdenv.mkDerivation {
   # LLVM may be compiled with -fno-rtti, so let's just turn it off.
   # A mismatch between lib{clang,LLVM}* and us can lead to the link time error:
   # undefined reference to `typeinfo for clang::ASTConsumer'
-  env.CXXFLAGS="-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
 
   meta = with lib; {
     homepage = "https://github.com/rpav/c2ffi";
@@ -56,5 +55,5 @@ llvmPackages.stdenv.mkDerivation {
     mainProgram = "c2ffi";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];
- };
+  };
 }

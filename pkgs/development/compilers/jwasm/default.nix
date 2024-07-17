@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -9,12 +10,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
-    repo  = "JWasm";
+    repo = "JWasm";
     rev = "v${finalAttrs.version}";
     hash = "sha256-22eNtHXF+RQT4UbXIVjn1JP/s6igp5O1oQT7sVl7c1U=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   dontConfigure = true;
 

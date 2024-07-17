@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, unzip
-, zlib
-, python3
-, parallel
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  unzip,
+  zlib,
+  python3,
+  parallel,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,18 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-APHPv7Q64JITfHsvjCThZ6hvGHerk6wjOm32KdTv4k8=";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   buildInputs = [
     zlib
     python3
   ];
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postFixup = ''
     for f in $out/bin/parallel-* ; do

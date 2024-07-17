@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  jre_headless,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purpur";
   version = "1.19.2r1763";
 
   src = fetchurl {
-    url = "https://api.purpurmc.org/v2/purpur/${builtins.replaceStrings [ "r" ] [ "/" ] version}/download";
+    url = "https://api.purpurmc.org/v2/purpur/${
+      builtins.replaceStrings [ "r" ] [ "/" ] version
+    }/download";
     sha256 = "sha256-6wcCwVIGV32YQlgB57qthy6uWtuXGN4G8S7uAAgVyDE=";
   };
 
@@ -24,7 +33,9 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   passthru = {
-    tests = { inherit (nixosTests) minecraft-server; };
+    tests = {
+      inherit (nixosTests) minecraft-server;
+    };
   };
 
   meta = with lib; {

@@ -36,24 +36,22 @@ buildDotnetModule rec {
   strictDeps = true;
   executables = [ "Celeste64" ];
   nativeBuildInputs = [ copyDesktopItems ];
-  runtimeDeps =
-    [
-      libdecor
-      libGL
-      SDL2
-      systemd
-      libpulseaudio
-      wayland
-      libdrm
-      libxkbcommon
-      xorg.libX11
-      xorg.libXfixes
-      xorg.libXext
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-    ]
-    ++ lib.optionals withSELinux [ libselinux ];
+  runtimeDeps = [
+    libdecor
+    libGL
+    SDL2
+    systemd
+    libpulseaudio
+    wayland
+    libdrm
+    libxkbcommon
+    xorg.libX11
+    xorg.libXfixes
+    xorg.libXext
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ] ++ lib.optionals withSELinux [ libselinux ];
 
   postInstall = ''
     export ICON_DIR=$out/share/icons/hicolor/256x256/apps
@@ -62,7 +60,6 @@ buildDotnetModule rec {
     cp -r $src/Content $out/lib/$pname/
     cp $src/Content/Models/Sources/logo1.png $ICON_DIR/Celeste64.png
   '';
-
 
   desktopItems = [
     (makeDesktopItem {
@@ -77,8 +74,15 @@ buildDotnetModule rec {
   ];
 
   meta = {
-    license = with lib.licenses; [ unfree mit ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    license = with lib.licenses; [
+      unfree
+      mit
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
     maintainers = with lib.maintainers; [ lychee ];
     mainProgram = "Celeste64";
     homepage = "https://github.com/ExOK/Celeste64";

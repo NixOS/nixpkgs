@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libpcap,
+  makeWrapper,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
@@ -11,9 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BS+ItZd6cSMX92M6XGYrIeAiCB2iBdvbMvKdLfwawLQ=";
   };
 
-  patches = [
-    ./remove-install-exec-hook.patch
-  ];
+  patches = [ ./remove-install-exec-hook.patch ];
 
   perlModules = with perlPackages; [
     HTTPDate
@@ -23,8 +29,14 @@ stdenv.mkDerivation rec {
     URI
   ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ perlPackages.perl libpcap ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
+  buildInputs = [
+    perlPackages.perl
+    libpcap
+  ];
 
   postInstall = ''
     for binary in get-{oui,iab}; do
@@ -41,7 +53,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/royhills/arp-scan/wiki/arp-scan-User-Guide";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor mikoim r-burns ];
+    maintainers = with maintainers; [
+      bjornfor
+      mikoim
+      r-burns
+    ];
     mainProgram = "arp-scan";
   };
 }

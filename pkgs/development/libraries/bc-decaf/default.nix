@@ -1,8 +1,9 @@
-{ cmake
-, fetchFromGitLab
-, lib
-, python3
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  lib,
+  python3,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +11,7 @@ stdenv.mkDerivation rec {
   version = "unstable-2022-07-20";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 ];
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -24,7 +23,10 @@ stdenv.mkDerivation rec {
   };
 
   # Do not build static libraries and do not enable -Werror
-  cmakeFlags = [ "-DENABLE_STATIC=NO" "-DENABLE_STRICT=NO" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO"
+    "-DENABLE_STRICT=NO"
+  ];
 
   meta = with lib; {
     description = "Elliptic curve library supporting Ed448-Goldilocks and Curve25519. Belledonne Communications' fork for Linphone.";

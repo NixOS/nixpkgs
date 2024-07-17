@@ -1,36 +1,37 @@
-{ mkDerivation
-, extra-cmake-modules
-, kcmutils
-, kconfigwidgets
-, kdbusaddons
-, kdoctools
-, ki18n
-, kiconthemes
-, kio
-, kirigami2
-, kirigami-addons
-, knotifications
-, kpeople
-, kpeoplevcard
-, kwayland
-, lib
-, libXtst
-, libfakekey
-, makeWrapper
-, modemmanager-qt
-, pulseaudio-qt
-, qca-qt5
-, qqc2-desktop-style
-, qtgraphicaleffects
-, qtmultimedia
-, qtquickcontrols2
-, qtx11extras
-, breeze-icons
-, sshfs
-, wayland
-, wayland-protocols
-, wayland-scanner
-, plasma-wayland-protocols
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kcmutils,
+  kconfigwidgets,
+  kdbusaddons,
+  kdoctools,
+  ki18n,
+  kiconthemes,
+  kio,
+  kirigami2,
+  kirigami-addons,
+  knotifications,
+  kpeople,
+  kpeoplevcard,
+  kwayland,
+  lib,
+  libXtst,
+  libfakekey,
+  makeWrapper,
+  modemmanager-qt,
+  pulseaudio-qt,
+  qca-qt5,
+  qqc2-desktop-style,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtx11extras,
+  breeze-icons,
+  sshfs,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  plasma-wayland-protocols,
 }:
 
 mkDerivation {
@@ -67,11 +68,13 @@ mkDerivation {
     breeze-icons
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
-
-  qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ sshfs ]}"
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    makeWrapper
   ];
+
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ sshfs ]}" ];
 
   meta = with lib; {
     description = "KDE Connect provides several features to integrate your phone and your computer";

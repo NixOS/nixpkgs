@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, systemd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  systemd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "brightnessctl";
@@ -16,7 +22,11 @@ stdenv.mkDerivation rec {
       --replace "pkg-config" "$PKG_CONFIG"
   '';
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1" ];
+  makeFlags = [
+    "PREFIX="
+    "DESTDIR=$(out)"
+    "ENABLE_SYSTEMD=1"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];

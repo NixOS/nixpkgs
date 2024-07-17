@@ -13,15 +13,30 @@ with pkgs.lib;
 {
 
   # the derivation. use language extensions specified by args
-  ctagsWrapped = makeOverridable ( {args, name} :  pkgs.writeScriptBin name ''
-  #!${pkgs.runtimeShell}
-  exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
-  '') {
-    args = let x = pkgs.ctagsWrapped; in concatLists [
-      x.defaultArgs x.phpLang x.jsLang x.nixLang x.asLang x.rubyLang
-    ];
-    name = "${ctags.name}-wrapped";
-  };
+  ctagsWrapped =
+    makeOverridable
+      (
+        { args, name }:
+        pkgs.writeScriptBin name ''
+          #!${pkgs.runtimeShell}
+          exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
+        ''
+      )
+      {
+        args =
+          let
+            x = pkgs.ctagsWrapped;
+          in
+          concatLists [
+            x.defaultArgs
+            x.phpLang
+            x.jsLang
+            x.nixLang
+            x.asLang
+            x.rubyLang
+          ];
+        name = "${ctags.name}-wrapped";
+      };
 
   ### language arguments
 
@@ -59,9 +74,7 @@ with pkgs.lib;
   # {
   # a : function () {}
   # only recognize names up 100 characters. Else you'll be in trouble scanning compressed .js files.
-  jsLang = [
-    "--regex-JavaScript=/([^ \\t]{1,100})[ \\t]*:[ \\t]*function[ \\t]*\\(/\\1/f/"
-  ];
+  jsLang = [ "--regex-JavaScript=/([^ \\t]{1,100})[ \\t]*:[ \\t]*function[ \\t]*\\(/\\1/f/" ];
 
   # find foo in "foo =", don't think we can do a lot better
   nixLang = [

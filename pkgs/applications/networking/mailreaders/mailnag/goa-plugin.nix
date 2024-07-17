@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gobject-introspection
-, gnome-online-accounts
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gobject-introspection,
+  gnome-online-accounts,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -16,13 +17,9 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0bij6cy96nhq7xzslx0fnhmiac629h0x4wgy67k4i4npwqw10680";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ gobject-introspection ];
 
-  buildInputs = [
-    gnome-online-accounts
-  ];
+  buildInputs = [ gnome-online-accounts ];
 
   meta = with lib; {
     description = "Mailnag GNOME Online Accounts plugin.";

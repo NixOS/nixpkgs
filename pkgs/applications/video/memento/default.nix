@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtx11extras ? null # qt5 only
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtx11extras ? null, # qt5 only
+  wrapQtAppsHook,
 
-# before that => zeal
-, sqlite
-, json_c
-, mecab
-, libzip
-, mpv
-, yt-dlp
-# optional
-, makeWrapper}:
+  # before that => zeal
+  sqlite,
+  json_c,
+  mecab,
+  libzip,
+  mpv,
+  yt-dlp,
+  # optional
+  makeWrapper,
+}:
 
 let
   isQt5 = lib.versions.major qtbase.version == "5";
@@ -45,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     mecab
   ] ++ lib.optionals isQt5 [ qtx11extras ];
 
-  propagatedBuildInputs = [ mpv  ];
+  propagatedBuildInputs = [ mpv ];
 
   preFixup = ''
-     wrapProgram "$out/bin/memento" \
-       --prefix PATH : "${yt-dlp}/bin" \
+    wrapProgram "$out/bin/memento" \
+      --prefix PATH : "${yt-dlp}/bin" \
   '';
 
   meta = with lib; {
@@ -61,4 +63,3 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "memento";
   };
 })
-

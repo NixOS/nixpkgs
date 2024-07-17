@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -31,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     changelog = "https://dev.lovelyhq.com/libburnia/libburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ abbradar AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      abbradar
+      AndersonTorres
+    ];
     mainProgram = "cdrskin";
     platforms = lib.platforms.unix;
   };

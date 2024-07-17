@@ -1,15 +1,19 @@
-{ stdenv
-, fetchFromSourcehut
-, hare
-, haredo
-, lib
-, scdoc
+{
+  stdenv,
+  fetchFromSourcehut,
+  hare,
+  haredo,
+  lib,
+  scdoc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";
   version = "1.0.2-unstable-2023-11-28";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~autumnull";

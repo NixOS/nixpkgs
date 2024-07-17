@@ -1,21 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, glib
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  glib,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "shared-mime-info";
   version = "2.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -40,9 +44,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  mesonFlags = [
-    "-Dupdate-mimedb=true"
-  ];
+  mesonFlags = [ "-Dupdate-mimedb=true" ];
 
   meta = with lib; {
     description = "A database of common MIME types";

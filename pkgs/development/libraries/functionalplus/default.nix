@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "functionalplus";
@@ -18,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Dobiasd/FunctionalPlus";
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

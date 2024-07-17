@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, ulid-transform
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  ulid-transform,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-AZsloE1vNQ9o2pg878J6I5qYXyI4fqYEvr18SrTocWo=";
   };
 
-  propagatedBuildInputs = [
-    ulid-transform
-  ];
+  propagatedBuildInputs = [ ulid-transform ];
 
   meta = with lib; {
     changelog = "https://github.com/basnijholt/adaptive-lighting/releases/tag/${version}";

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, gettext
-, libxml2
-, libhandy
-, fetchurl
-, fetchpatch
-, pkg-config
-, libcanberra-gtk3
-, gtk3
-, glib
-, meson
-, ninja
-, python3
-, wrapGAppsHook3
-, appstream-glib
-, desktop-file-utils
-, gnome
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  gettext,
+  libxml2,
+  libhandy,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libcanberra-gtk3,
+  gtk3,
+  glib,
+  meson,
+  ninja,
+  python3,
+  wrapGAppsHook3,
+  appstream-glib,
+  desktop-file-utils,
+  gnome,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {

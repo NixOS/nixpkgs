@@ -1,19 +1,20 @@
-{ cmake
-, darwin
-, fetchFromGitHub
-, ffmpeg
-, fontconfig
-, git
-, lib
-, libGL
-, libxkbcommon
-, makeDesktopItem
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
-, wayland
-, xorg
+{
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  ffmpeg,
+  fontconfig,
+  git,
+  lib,
+  libGL,
+  libxkbcommon,
+  makeDesktopItem,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +49,10 @@ rustPlatform.buildRustPackage rec {
   RUSTFLAGS = "--cfg tokio_unstable";
 
   # Some users might want to add "rustls-tls(-native)" for Rust TLS instead of OpenSSL.
-  buildFeatures = [ "video-ffmpeg" "lang-cjk" ];
+  buildFeatures = [
+    "video-ffmpeg"
+    "lang-cjk"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,23 +61,26 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    ffmpeg
-    fontconfig
-    libGL
-    libxkbcommon
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.Foundation
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      fontconfig
+      libGL
+      libxkbcommon
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.Foundation
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;
@@ -87,7 +94,13 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     patchelf $out/bin/gossip \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
   desktopItems = [
@@ -97,7 +110,11 @@ rustPlatform.buildRustPackage rec {
       icon = "gossip";
       comment = meta.description;
       desktopName = "Gossip";
-      categories = [ "Chat" "Network" "InstantMessaging" ];
+      categories = [
+        "Chat"
+        "Network"
+        "InstantMessaging"
+      ];
       startupWMClass = "gossip";
     })
   ];

@@ -1,8 +1,16 @@
-{ lib, skawarePackages, skalibs, execline, s6, s6-dns
+{
+  lib,
+  skawarePackages,
+  skalibs,
+  execline,
+  s6,
+  s6-dns,
 
-# Whether to build the TLS/SSL tools and what library to use
-# acceptable values: "bearssl", "libressl", false
-, sslSupport ? "bearssl" , libressl, bearssl
+  # Whether to build the TLS/SSL tools and what library to use
+  # acceptable values: "bearssl", "libressl", false
+  sslSupport ? "bearssl",
+  libressl,
+  bearssl,
 }:
 
 let
@@ -14,7 +22,6 @@ let
 
 in
 assert sslSupportEnabled -> sslLibs ? ${sslSupport};
-
 
 skawarePackages.buildPackage {
   pname = "s6-networking";
@@ -31,35 +38,42 @@ skawarePackages.buildPackage {
 
   description = "A suite of small networking utilities for Unix systems";
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   # TODO: nsss support
-  configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--libexecdir=\${lib}/libexec"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-include=${s6-dns.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-lib=${s6.out}/lib"
-    "--with-lib=${s6-dns.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
-    "--with-dynlib=${s6.out}/lib"
-    "--with-dynlib=${s6-dns.lib}/lib"
-  ]
-  ++ (lib.optionals sslSupportEnabled [
-       "--enable-ssl=${sslSupport}"
-       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
-       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
-       "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
-     ]);
+  configureFlags =
+    [
+      "--libdir=\${lib}/lib"
+      "--libexecdir=\${lib}/libexec"
+      "--dynlibdir=\${lib}/lib"
+      "--bindir=\${bin}/bin"
+      "--includedir=\${dev}/include"
+      "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+      "--with-include=${skalibs.dev}/include"
+      "--with-include=${execline.dev}/include"
+      "--with-include=${s6.dev}/include"
+      "--with-include=${s6-dns.dev}/include"
+      "--with-lib=${skalibs.lib}/lib"
+      "--with-lib=${execline.lib}/lib"
+      "--with-lib=${s6.out}/lib"
+      "--with-lib=${s6-dns.lib}/lib"
+      "--with-dynlib=${skalibs.lib}/lib"
+      "--with-dynlib=${execline.lib}/lib"
+      "--with-dynlib=${s6.out}/lib"
+      "--with-dynlib=${s6-dns.lib}/lib"
+    ]
+    ++ (lib.optionals sslSupportEnabled [
+      "--enable-ssl=${sslSupport}"
+      "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+      "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
+      "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
+    ]);
 
   postInstall = ''
     # remove all s6 executables from build directory

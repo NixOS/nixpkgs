@@ -1,8 +1,24 @@
-{lib, stdenv, fetchurl, fetchpatch, xz, dpkg
-, libxslt, docbook_xsl, makeWrapper, writeShellScript
-, python3Packages
-, perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
-, sendmailPath ? "/run/wrappers/bin/sendmail"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  xz,
+  dpkg,
+  libxslt,
+  docbook_xsl,
+  makeWrapper,
+  writeShellScript,
+  python3Packages,
+  perlPackages,
+  curl,
+  gnupg,
+  diffutils,
+  nano,
+  pkg-config,
+  bash-completion,
+  help2man,
+  sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
 let
@@ -10,7 +26,8 @@ let
   sensible-editor = writeShellScript "sensible-editor" ''
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "2.23.5";
   pname = "debian-devscripts";
 
@@ -33,9 +50,38 @@ in stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils bash-completion help2man ] ++
-    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps Moo FileHomeDir IPCRun FileDirList FileTouch ]);
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+  buildInputs =
+    [
+      xz
+      dpkg
+      libxslt
+      python
+      setuptools
+      curl
+      gnupg
+      diffutils
+      bash-completion
+      help2man
+    ]
+    ++ (with perlPackages; [
+      perl
+      CryptSSLeay
+      LWP
+      TimeDate
+      DBFile
+      FileDesktopEntry
+      ParseDebControl
+      LWPProtocolHttps
+      Moo
+      FileHomeDir
+      IPCRun
+      FileDirList
+      FileTouch
+    ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -83,7 +129,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

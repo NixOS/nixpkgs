@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, libpng
-, zlib
-, zopfli
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libpng,
+  zlib,
+  zopfli,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MAqth5Yt7+SabY6iEgSFcaBmuHvA0ZkNdXSgvhKao1Y=";
   };
 
-  patches = [
-    ./remove-7z.patch
-  ];
+  patches = [ ./remove-7z.patch ];
 
   # Remove bundled libs
   postPatch = ''

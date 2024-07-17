@@ -1,10 +1,11 @@
-{ fetchurl
-, frink
-, jdk
-, lib
-, rlwrap
-, stdenv
-, testers
+{
+  fetchurl,
+  frink,
+  jdk,
+  lib,
+  rlwrap,
+  stdenv,
+  testers,
 }:
 stdenv.mkDerivation rec {
   pname = "frink";
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jdk ];
 
-  buildInputs = [ jdk rlwrap ];
+  buildInputs = [
+    jdk
+    rlwrap
+  ];
 
   installPhase = ''
     runHook preInstall

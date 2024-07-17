@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, cstruct }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+}:
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.07";

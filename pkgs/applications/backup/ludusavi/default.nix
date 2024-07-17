@@ -1,22 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, makeWrapper
-, bzip2
-, fontconfig
-, freetype
-, libGL
-, libX11
-, libXcursor
-, libXrandr
-, libXi
-, libxkbcommon
-, vulkan-loader
-, wayland
-, gnome
-, libsForQt5
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  bzip2,
+  fontconfig,
+  freetype,
+  libGL,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXi,
+  libxkbcommon,
+  vulkan-loader,
+  wayland,
+  gnome,
+  libsForQt5,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -77,9 +78,13 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${
+        lib.makeBinPath [
+          gnome.zenity
+          libsForQt5.kdialog
+        ]
+      }
     '';
-
 
   meta = with lib; {
     description = "Backup tool for PC game saves";

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, boost
-, zlib
-, libX11
-, libICE
-, libSM
-, libpng
-, libjpeg
-, libtiff
-, pkg-config
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  boost,
+  zlib,
+  libX11,
+  libICE,
+  libSM,
+  libpng,
+  libjpeg,
+  libtiff,
+  pkg-config,
+  SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,14 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
-  postPatch = '' cd unix
-                 ./prebuild.sh
-                 cd ..
-                 sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in}
-                 sed -i -e 's/^povuser.*/povuser=$(TMPDIR)\/.povray/' Makefile.{am,in}
-                 sed -i -e 's/^povowner.*/povowner=nobody/' Makefile.{am,in}
-                 sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
-               '';
+  postPatch = ''
+    cd unix
+                    ./prebuild.sh
+                    cd ..
+                    sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in}
+                    sed -i -e 's/^povuser.*/povuser=$(TMPDIR)\/.povray/' Makefile.{am,in}
+                    sed -i -e 's/^povowner.*/povowner=nobody/' Makefile.{am,in}
+                    sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
+  '';
 
   configureFlags = [
     "COMPILED_BY=NixOS"

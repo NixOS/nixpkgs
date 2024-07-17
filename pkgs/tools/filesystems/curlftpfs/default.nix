@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fuse, curl, pkg-config, glib, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  fuse,
+  curl,
+  pkg-config,
+  glib,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "curlftpfs";
@@ -18,8 +28,16 @@ stdenv.mkDerivation rec {
     ./suse-bug-955687.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fuse curl glib zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    fuse
+    curl
+    glib
+    zlib
+  ];
 
   CFLAGS = lib.optionalString stdenv.isDarwin "-D__off_t=off_t";
 

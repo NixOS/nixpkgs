@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -21,7 +26,5 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.libnitrokey ];
-  };
+  config = mkIf cfg.enable { services.udev.packages = [ pkgs.libnitrokey ]; };
 }

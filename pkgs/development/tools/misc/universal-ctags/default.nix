@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, autoreconfHook
-, buildPackages
-, coreutils
-, fetchFromGitHub
-, jansson
-, libiconv
-, perl
-, pkg-config
-, python3
-, libseccomp
-, libyaml
-, pcre2
-, libxml2
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  coreutils,
+  fetchFromGitHub,
+  jansson,
+  libiconv,
+  perl,
+  pkg-config,
+  python3,
+  libseccomp,
+  libyaml,
+  pcre2,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f8+Ifjn7bhSYozOy7kn+zCLdHGrH3iFupHUZEGynz9Y=";
   };
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,15 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libxml2
     jansson
-  ]
-  ++ lib.optional stdenv.isDarwin libiconv
-  ++ lib.optional stdenv.isLinux libseccomp;
+  ] ++ lib.optional stdenv.isDarwin libiconv ++ lib.optional stdenv.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 
-  patches = [
-    ./000-nixos-specific.patch
-  ];
+  patches = [ ./000-nixos-specific.patch ];
 
   postPatch = ''
     substituteInPlace Tmain/utils.sh \
@@ -63,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkFlags = [
-    "man-test" "tlib" "tmain" "tutil" "units"
+    "man-test"
+    "tlib"
+    "tmain"
+    "tutil"
+    "units"
   ];
 
   meta = with lib; {

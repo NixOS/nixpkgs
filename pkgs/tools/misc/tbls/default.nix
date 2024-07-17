@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, tbls
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  tbls,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   CGO_CFLAGS = [ "-Wno-format-security" ];
 

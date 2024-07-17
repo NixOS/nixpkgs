@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, libfm-extra }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  glib,
+  pkg-config,
+  libfm-extra,
+}:
 
 stdenv.mkDerivation rec {
   pname = "menu-cache";
@@ -21,7 +29,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib libfm-extra ];
+  buildInputs = [
+    glib
+    libfm-extra
+  ];
 
   meta = with lib; {
     description = "Library to read freedesktop.org menu files";

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, glib
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  glib,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
   pname = "g3kb-switch";
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
   meta = with lib; {
     homepage = "https://github.com/lyokha/g3kb-switch";

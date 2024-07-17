@@ -1,12 +1,12 @@
 {
-  alsa-lib
-, fetchFromGitHub
-, gtk3
-, lib
-, libpulseaudio
-, pkg-config
-, stdenv
-, wrapGAppsHook3
+  alsa-lib,
+  fetchFromGitHub,
+  gtk3,
+  lib,
+  libpulseaudio,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,9 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   configurePhase = ''
     runHook preConfigure

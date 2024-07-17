@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libpng, zlib, nasm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libpng,
+  zlib,
+  nasm,
+}:
 
 stdenv.mkDerivation rec {
   version = "4.1.5";
@@ -11,10 +20,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-k8qWtU4j3ipIHvY60ae7kdNnPvWnUa0qgacqlSIJijo=";
   };
 
-  cmakeFlags = [ "-DENABLE_STATIC=NO" "-DPNG_SUPPORTED=TRUE" ]; # See https://github.com/mozilla/mozjpeg/issues/351
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO"
+    "-DPNG_SUPPORTED=TRUE"
+  ]; # See https://github.com/mozilla/mozjpeg/issues/351
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libpng zlib nasm ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libpng
+    zlib
+    nasm
+  ];
 
   meta = {
     description = "Mozilla JPEG Encoder Project";

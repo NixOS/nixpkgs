@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "flannel";
@@ -19,13 +24,18 @@ buildGoModule rec {
   # TestRouteCache/TestV6RouteCache fail with "Failed to create newns: operation not permitted"
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests) flannel; };
+  passthru.tests = {
+    inherit (nixosTests) flannel;
+  };
 
   meta = with lib; {
     description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
     homepage = "https://github.com/flannel-io/flannel";
-    maintainers = with maintainers; [ johanot offline ];
+    maintainers = with maintainers; [
+      johanot
+      offline
+    ];
     platforms = with platforms; linux;
     mainProgram = "flannel";
   };

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.bird;
@@ -13,7 +19,10 @@ in
   port = 9324;
   extraOpts = {
     birdVersion = mkOption {
-      type = types.enum [ 1 2 ];
+      type = types.enum [
+        1
+        2
+      ];
       default = 2;
       description = ''
         Specifies whether BIRD1 or BIRD2 is in use.

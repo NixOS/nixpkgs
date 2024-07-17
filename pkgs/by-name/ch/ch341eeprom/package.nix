@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusb1
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
 }:
 stdenv.mkDerivation {
   pname = "ch341eeprom";
@@ -17,9 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

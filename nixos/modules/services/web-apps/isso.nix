@@ -1,13 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    literalExpression
+    ;
 
   cfg = config.services.isso;
 
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "isso.conf" cfg.settings;
-in {
+in
+{
 
   options = {
     services.isso = {
@@ -27,9 +39,7 @@ in {
           for supported values.
         '';
 
-        type = types.submodule {
-          freeformType = settingsFormat.type;
-        };
+        type = types.submodule { freeformType = settingsFormat.type; };
 
         example = literalExpression ''
           {
@@ -79,11 +89,18 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
         UMask = "0077";
       };
     };

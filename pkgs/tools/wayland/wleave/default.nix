@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, at-spi2-atk
-, pkg-config
-, glib
-, gtk3
-, gtk-layer-shell
-, installShellFiles
-, scdoc
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  at-spi2-atk,
+  pkg-config,
+  glib,
+  gtk3,
+  gtk-layer-shell,
+  installShellFiles,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {

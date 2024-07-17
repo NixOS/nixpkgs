@@ -1,9 +1,11 @@
-{ lib, stdenv
-, autoreconfHook
-, gengetopt
-, pkg-config
-, fetchFromGitLab
-, pari
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  gengetopt,
+  pkg-config,
+  fetchFromGitLab,
+  pari,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +25,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    pari
-  ];
+  buildInputs = [ pari ];
 
-  configureFlags = [
-    "--with-pari"
-  ];
+  configureFlags = [ "--with-pari" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/sagemath/lcalc";

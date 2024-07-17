@@ -13,7 +13,11 @@
 mkKdeDerivation {
   pname = "kalk";
 
-  extraNativeBuildInputs = [pkg-config bison flex];
+  extraNativeBuildInputs = [
+    pkg-config
+    bison
+    flex
+  ];
   extraBuildInputs = [
     qtdeclarative
     qqc2-desktop-style

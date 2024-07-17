@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, boxed-cpp
-, freetype
-, fontconfig
-, libunicode
-, libutempter
-, termbench-pro
-, qtmultimedia
-, qt5compat
-, wrapQtAppsHook
-, pcre
-, boost
-, catch2
-, fmt
-, microsoft-gsl
-, range-v3
-, yaml-cpp
-, ncurses
-, file
-, utmp
-, sigtool
-, nixosTests
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  boxed-cpp,
+  freetype,
+  fontconfig,
+  libunicode,
+  libutempter,
+  termbench-pro,
+  qtmultimedia,
+  qt5compat,
+  wrapQtAppsHook,
+  pcre,
+  boost,
+  catch2,
+  fmt,
+  microsoft-gsl,
+  range-v3,
+  yaml-cpp,
+  ncurses,
+  file,
+  utmp,
+  sigtool,
+  nixosTests,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (final: {
@@ -40,7 +41,10 @@ stdenv.mkDerivation (final: {
 
   patches = [ ./dont-fix-app-bundle.diff ];
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -66,28 +70,30 @@ stdenv.mkDerivation (final: {
     microsoft-gsl
     range-v3
     yaml-cpp
-  ]
-  ++ lib.optionals stdenv.isLinux [ libutempter ]
-  ++ lib.optionals stdenv.isDarwin [ utmp ];
+  ] ++ lib.optionals stdenv.isLinux [ libutempter ] ++ lib.optionals stdenv.isDarwin [ utmp ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
-  postInstall = ''
-    mkdir -p $out/nix-support $terminfo/share
-  '' + lib.optionalString stdenv.isDarwin ''
-    mkdir $out/Applications
-    installShellCompletion --zsh $out/contour.app/Contents/Resources/shell-integration/shell-integration.zsh
-    installShellCompletion --fish $out/contour.app/Contents/Resources/shell-integration/shell-integration.fish
-    cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
-    mv $out/contour.app $out/Applications
-    ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
-  '' + lib.optionalString stdenv.isLinux ''
-    mv $out/share/terminfo $terminfo/share/
-    installShellCompletion --zsh $out/share/contour/shell-integration/shell-integration.zsh
-    installShellCompletion --fish $out/share/contour/shell-integration/shell-integration.fish
-  '' + ''
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/nix-support $terminfo/share
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir $out/Applications
+      installShellCompletion --zsh $out/contour.app/Contents/Resources/shell-integration/shell-integration.zsh
+      installShellCompletion --fish $out/contour.app/Contents/Resources/shell-integration/shell-integration.fish
+      cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
+      mv $out/contour.app $out/Applications
+      ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      mv $out/share/terminfo $terminfo/share/
+      installShellCompletion --zsh $out/share/contour/shell-integration/shell-integration.zsh
+      installShellCompletion --fish $out/share/contour/shell-integration/shell-integration.fish
+    ''
+    + ''
+      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 

@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cargo
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python311
-, rustPlatform
-, symlinkJoin
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, blueprint-compiler
-, cairo
-, cmake
-, dbus
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, graphene
-, gtk4
-, libGL
-, libadwaita
-, libdrm
-, mesa
-, pango
-, sqlite
-, udev
-, wayland
-, dmidecode
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cargo,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python311,
+  rustPlatform,
+  symlinkJoin,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  blueprint-compiler,
+  cairo,
+  cmake,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  graphene,
+  gtk4,
+  libGL,
+  libadwaita,
+  libdrm,
+  mesa,
+  pango,
+  sqlite,
+  udev,
+  wayland,
+  dmidecode,
+  vulkan-loader,
 }:
 
 let
@@ -57,15 +58,10 @@ stdenv.mkDerivation rec {
   cargoDeps = symlinkJoin {
     name = "cargo-vendor-dir";
     paths = [
-      (rustPlatform.importCargoLock {
-        lockFile = ./Cargo.lock;
-      })
-      (rustPlatform.importCargoLock {
-        lockFile = ./gatherer-Cargo.lock;
-      })
+      (rustPlatform.importCargoLock { lockFile = ./Cargo.lock; })
+      (rustPlatform.importCargoLock { lockFile = ./gatherer-Cargo.lock; })
     ];
   };
-
 
   nativeBuildInputs = [
     blueprint-compiler

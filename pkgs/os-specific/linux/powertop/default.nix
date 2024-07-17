@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, libnl
-, ncurses
-, pciutils
-, pkg-config
-, zlib
-, autoreconfHook
-, autoconf-archive
-, nix-update-script
-, testers
-, powertop
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  libnl,
+  ncurses,
+  pciutils,
+  pkg-config,
+  zlib,
+  autoreconfHook,
+  autoconf-archive,
+  nix-update-script,
+  testers,
+  powertop,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +27,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
-  buildInputs = [ gettext libnl ncurses pciutils zlib ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    autoconf-archive
+  ];
+  buildInputs = [
+    gettext
+    libnl
+    ncurses
+    pciutils
+    zlib
+  ];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
@@ -52,7 +66,10 @@ stdenv.mkDerivation rec {
     description = "Analyze power consumption on Intel-based laptops";
     mainProgram = "powertop";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fpletz anthonyroussel ];
+    maintainers = with maintainers; [
+      fpletz
+      anthonyroussel
+    ];
     platforms = platforms.linux;
   };
 }

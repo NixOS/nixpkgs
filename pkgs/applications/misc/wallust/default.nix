@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitea
-, rustPlatform
-, nix-update-script
-, imagemagick
-, makeWrapper
+{
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  nix-update-script,
+  imagemagick,
+  makeWrapper,
 }:
 let
   version = "2.10.0";
@@ -35,7 +36,10 @@ rustPlatform.buildRustPackage {
     description = "A better pywal";
     homepage = "https://codeberg.org/explosion-mental/wallust";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ onemoresuza iynaix ];
+    maintainers = with lib.maintainers; [
+      onemoresuza
+      iynaix
+    ];
     downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
     mainProgram = "wallust";
   };

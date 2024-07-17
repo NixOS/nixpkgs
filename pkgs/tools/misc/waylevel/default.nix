@@ -1,7 +1,8 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, wayland
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waylevel";
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-gw5m1/btJ5zZP04C7BCnHqEOUBoeu0whK8W7xA+xSQo=";
 
   postFixup = ''
-    patchelf --set-rpath ${lib.makeLibraryPath [wayland]} $out/bin/waylevel
+    patchelf --set-rpath ${lib.makeLibraryPath [ wayland ]} $out/bin/waylevel
   '';
 
   meta = with lib; {

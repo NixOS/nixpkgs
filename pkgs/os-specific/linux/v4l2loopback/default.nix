@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+}:
 
 stdenv.mkDerivation {
   pname = "v4l2loopback";
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
     hash = "sha256-ggmYH5MUXhMPvA8UZ2EAG+eGoPTNbw7B8UxmmgP6CsE=";
   };
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+  ];
 
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
@@ -24,7 +33,10 @@ stdenv.mkDerivation {
     make install-utils PREFIX=$bin
   '';
 
-  outputs = [ "out" "bin" ];
+  outputs = [
+    "out"
+    "bin"
+  ];
 
   makeFlags = kernel.makeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"

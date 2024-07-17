@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -26,9 +27,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/arduino/arduino-language-server/version.versionString=${version}"
     "-X github.com/arduino/arduino-language-server/version.commit=unknown"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-extldflags '-static'"
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
   meta = with lib; {
     description = "An Arduino Language Server based on Clangd to Arduino code autocompletion";

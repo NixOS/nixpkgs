@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+}:
 let
   libs-src = fetchFromGitHub {
     owner = "megatokio";

@@ -1,9 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
-, wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
-, systemd, libGL, libX11, mesa
-, xwayland ? null
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  scdoc,
+  makeWrapper,
+  wlroots,
+  wayland,
+  wayland-protocols,
+  pixman,
+  libxkbcommon,
+  xcbutilwm,
+  systemd,
+  libGL,
+  libX11,
+  mesa,
+  xwayland ? null,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,16 +33,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-Suq14YRw/MReDRvO/TQqjpZvpzAEDnHUyVbQj0BPT4c=";
   };
 
-  depsBuildBuild = [
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
+    wayland-scanner
+    scdoc
+    makeWrapper
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
-
   buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon xcbutilwm
+    wlroots
+    wayland
+    wayland-protocols
+    pixman
+    libxkbcommon
+    xcbutilwm
     mesa # for libEGL headers
-    systemd libGL libX11
+    systemd
+    libGL
+    libX11
   ];
 
   mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
@@ -40,9 +68,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Wayland kiosk that runs a single, maximized application";
-    homepage    = "https://www.hjdskes.nl/projects/cage/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://www.hjdskes.nl/projects/cage/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
     mainProgram = "cage";
   };

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -31,19 +32,13 @@ python3.pkgs.buildPythonApplication rec {
     python-vlc
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [ "test_datafile_download" ];
 
-  pythonImportCheck = [
-    "castero"
-  ];
+  pythonImportCheck = [ "castero" ];
 
   # Resolve configuration tests, which access $HOME
   preCheck = ''

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitea
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitea,
 }:
 
 buildGoModule rec {
@@ -37,7 +38,9 @@ buildGoModule rec {
     homepage = "https://gitea.elara.ws/Elara6331/itd";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi raphaelr ];
+    maintainers = with maintainers; [
+      mindavi
+      raphaelr
+    ];
   };
 }
-

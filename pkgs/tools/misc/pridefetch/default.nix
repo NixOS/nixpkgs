@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, python3
-, stdenv
-, strip-nondeterminism
-, zip
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  stdenv,
+  strip-nondeterminism,
+  zip,
 }:
 
 let
@@ -27,11 +28,7 @@ stdenv.mkDerivation {
     zip
   ];
 
-  buildInputs = [
-    (python3.withPackages (pythonPackages: with pythonPackages; [
-      distro
-    ]))
-  ];
+  buildInputs = [ (python3.withPackages (pythonPackages: with pythonPackages; [ distro ])) ];
 
   buildPhase = ''
     runHook preBuild
@@ -60,9 +57,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/SpyHoodle/pridefetch";
     license = licenses.mit;
-    maintainers = [
-      maintainers.minion3665
-    ];
+    maintainers = [ maintainers.minion3665 ];
     platforms = platforms.all;
     mainProgram = "pridefetch";
   };

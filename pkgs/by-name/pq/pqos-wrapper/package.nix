@@ -1,7 +1,8 @@
-{ lib
-, intel-cmt-cat
-, fetchFromGitLab
-, python3
+{
+  lib,
+  intel-cmt-cat,
+  fetchFromGitLab,
+  python3,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pqos-wrapper";

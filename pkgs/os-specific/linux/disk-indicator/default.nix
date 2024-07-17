@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+}:
 
 stdenv.mkDerivation {
   pname = "disk-indicator";
@@ -25,9 +30,7 @@ stdenv.mkDerivation {
     ./configure.sh --all
   '';
 
-  makeFlags = [
-    "COMPILER=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "COMPILER=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

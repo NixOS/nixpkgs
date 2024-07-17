@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,15 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-KkV+ZQAPegbeZKj3ixDSFQEyKwkKeMYceSc27xGtQms=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

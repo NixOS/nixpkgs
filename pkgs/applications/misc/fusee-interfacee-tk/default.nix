@@ -1,7 +1,18 @@
-{ lib, stdenv , fetchFromGitHub , python3 , makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+}:
 
-let pythonEnv = python3.withPackages(ps: [ ps.tkinter ps.pyusb ]);
-in stdenv.mkDerivation rec {
+let
+  pythonEnv = python3.withPackages (ps: [
+    ps.tkinter
+    ps.pyusb
+  ]);
+in
+stdenv.mkDerivation rec {
   pname = "fusee-interfacee-tk";
   version = "1.0.1";
 

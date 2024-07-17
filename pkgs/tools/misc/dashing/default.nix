@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, dashing }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  dashing,
+}:
 
 buildGoModule rec {
   pname = "dashing";
@@ -13,11 +19,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-XeUFmzf6y0S82gMOzkj4AUNFkVvkVOwauYpqY4jeWLM=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = dashing;
-  };
+  passthru.tests.version = testers.testVersion { package = dashing; };
 
   meta = with lib; {
     description = "A Dash Generator Script for Any HTML";

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchzip
-, cmake
-, extra-cmake-modules
-, qttools
-, kwayland
-, leptonica
-, tesseract4
-, qtmultimedia
-, qtx11extras
-, wrapQtAppsHook
-, gst_all_1
-, testers
-, crow-translate
+{
+  lib,
+  stdenv,
+  fetchzip,
+  cmake,
+  extra-cmake-modules,
+  qttools,
+  kwayland,
+  leptonica,
+  tesseract4,
+  qtmultimedia,
+  qtx11extras,
+  wrapQtAppsHook,
+  gst_all_1,
+  testers,
+  crow-translate,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,26 +37,26 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    kwayland
-    leptonica
-    tesseract4
-    qtmultimedia
-    qtx11extras
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      kwayland
+      leptonica
+      tesseract4
+      qtmultimedia
+      qtx11extras
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = crow-translate;
-  };
+  passthru.tests.version = testers.testVersion { package = crow-translate; };
 
   meta = with lib; {
     description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";

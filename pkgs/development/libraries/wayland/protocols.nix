@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, meson, ninja, wayland-scanner
-, python3, wayland
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  python3,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
   version = "1.35";
 
   # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.linker == "bfd" && wayland.withLibraries;
+  doCheck =
+    stdenv.hostPlatform == stdenv.buildPlatform
+    && stdenv.hostPlatform.linker == "bfd"
+    && wayland.withLibraries;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
@@ -21,8 +30,15 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja wayland-scanner ];
-  nativeCheckInputs = [ python3 wayland ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    wayland-scanner
+  ];
+  nativeCheckInputs = [
+    python3
+    wayland
+  ];
 
   mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
 
@@ -35,9 +51,9 @@ stdenv.mkDerivation rec {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.all;
+    homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos ];
   };
 

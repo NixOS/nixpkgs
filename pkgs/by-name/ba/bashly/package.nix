@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, bundlerApp
+{
+  lib,
+  stdenvNoCC,
+  bundlerApp,
 }:
 
 let

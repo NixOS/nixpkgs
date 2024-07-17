@@ -1,9 +1,10 @@
-{ black
-, blacken-docs
-, fetchFromGitHub
-, lib
-, python3
-, ruff
+{
+  black,
+  blacken-docs,
+  fetchFromGitHub,
+  lib,
+  python3,
+  ruff,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
@@ -17,9 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-vRJxpWs2i4A8gi8F4YrTlmgBSnA73KeMCrmjLNF1zpA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   passthru.optional-dependencies = {
     black = [ black ];
@@ -33,7 +32,8 @@ python3.pkgs.buildPythonApplication rec {
     ruff = [ ruff ];
   };
 
-  propagatedBuildInputs = with python3.pkgs;
+  propagatedBuildInputs =
+    with python3.pkgs;
     [
       autopep8
       ipython

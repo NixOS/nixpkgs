@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, callPackage
-, rocmUpdateScript
-, llvm
-, clang
-, clang-unwrapped
-, rocm-device-libs
-, rocm-runtime
-, rocm-thunk
-, perl
-, elfutils
-, libdrm
-, numactl
-, lit
+{
+  lib,
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  llvm,
+  clang,
+  clang-unwrapped,
+  rocm-device-libs,
+  rocm-runtime,
+  rocm-thunk,
+  perl,
+  elfutils,
+  libdrm,
+  numactl,
+  lit,
 }:
 
 callPackage ../base.nix rec {

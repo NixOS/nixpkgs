@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, staticOnly ? stdenv.hostPlatform.isStatic
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  staticOnly ? stdenv.hostPlatform.isStatic,
+  testers,
 }:
 
 # ?TODO: there's also python lib in there
@@ -35,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   doCheck = true;
 
@@ -54,18 +59,18 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
     description = "A generic-purpose lossless compression algorithm and tool";
-    longDescription =
-      ''  Brotli is a generic-purpose lossless compression algorithm that
-          compresses data using a combination of a modern variant of the LZ77
-          algorithm, Huffman coding and 2nd order context modeling, with a
-          compression ratio comparable to the best currently available
-          general-purpose compression methods. It is similar in speed with
-          deflate but offers more dense compression.
+    longDescription = ''
+      Brotli is a generic-purpose lossless compression algorithm that
+              compresses data using a combination of a modern variant of the LZ77
+              algorithm, Huffman coding and 2nd order context modeling, with a
+              compression ratio comparable to the best currently available
+              general-purpose compression methods. It is similar in speed with
+              deflate but offers more dense compression.
 
-          The specification of the Brotli Compressed Data Format is defined
-          in the following internet draft:
-          http://www.ietf.org/id/draft-alakuijala-brotli
-      '';
+              The specification of the Brotli Compressed Data Format is defined
+              in the following internet draft:
+              http://www.ietf.org/id/draft-alakuijala-brotli
+    '';
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
     pkgConfigModules = [

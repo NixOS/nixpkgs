@@ -1,4 +1,18 @@
-{ lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  rocmPackages,
+  python3,
+  cargo,
+  rustc,
+  cmake,
+  clang,
+  zlib,
+  libxml2,
+  libedit,
+  rustPlatform,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zluda";
@@ -74,8 +88,6 @@ rustPlatform.buildRustPackage rec {
     description = "ZLUDA - CUDA on Intel GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.errnoh
-    ];
+    maintainers = [ lib.maintainers.errnoh ];
   };
 }

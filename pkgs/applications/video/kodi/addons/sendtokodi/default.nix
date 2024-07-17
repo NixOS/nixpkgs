@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, kodi, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+  kodi,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "sendtokodi";
@@ -12,13 +19,9 @@ buildKodiAddon rec {
     hash = "sha256-Ga+9Q7x8+sEmQmteHbSyCahZ/T/l28BAEM84w7bf7z8=";
   };
 
-  patches = [
-    ./use-packaged-deps.patch
-  ];
+  patches = [ ./use-packaged-deps.patch ];
 
-  propagatedBuildInputs = [
-    inputstreamhelper
-  ];
+  propagatedBuildInputs = [ inputstreamhelper ];
 
   postPatch = ''
     # Remove vendored youtube-dl and yt-dlp libraries.
@@ -28,7 +31,12 @@ buildKodiAddon rec {
   passthru = {
     # Instead of the vendored libraries, we propagate youtube-dl and yt-dlp via
     # the Python path.
-    pythonPath = with kodi.pythonPackages; makePythonPath [ youtube-dl yt-dlp ];
+    pythonPath =
+      with kodi.pythonPackages;
+      makePythonPath [
+        youtube-dl
+        yt-dlp
+      ];
   };
 
   meta = with lib; {

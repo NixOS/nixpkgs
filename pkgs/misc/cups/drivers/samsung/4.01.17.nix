@@ -11,12 +11,13 @@
 # }
 # (This advice was tested on the 1st November 2016.)
 
-{ lib
-, stdenv
-, cups
-, libusb-compat-0_1
-, fetchurl
-, patchPpdFilesHook
+{
+  lib,
+  stdenv,
+  cups,
+  libusb-compat-0_1,
+  fetchurl,
+  patchPpdFilesHook,
 }:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
@@ -24,8 +25,14 @@
 let
   installationPath = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
   appendPath = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "64";
-  libPath = lib.makeLibraryPath [ cups libusb-compat-0_1 ] + ":$out/lib:${stdenv.cc.cc.lib}/lib${appendPath}";
-in stdenv.mkDerivation rec {
+  libPath =
+    lib.makeLibraryPath [
+      cups
+      libusb-compat-0_1
+    ]
+    + ":$out/lib:${stdenv.cc.cc.lib}/lib${appendPath}";
+in
+stdenv.mkDerivation rec {
   pname = "samsung-UnifiedLinuxDriver";
   version = "4.01.17";
 

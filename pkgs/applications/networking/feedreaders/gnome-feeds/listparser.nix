@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonPackage rec {
     description = "A parser for subscription lists";
     homepage = "https://github.com/kurtmckee/listparser";
     license = licenses.lgpl3Plus;
-    maintainers = [
-      maintainers.pbogdan
-    ];
+    maintainers = [ maintainers.pbogdan ];
     platforms = platforms.linux;
   };
 }

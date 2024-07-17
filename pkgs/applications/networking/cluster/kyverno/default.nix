@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kyverno }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kyverno,
+}:
 
 buildGoModule rec {
   pname = "kyverno";
@@ -12,7 +19,8 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/kyverno/kyverno/pkg/version.BuildVersion=v${version}"
     "-X github.com/kyverno/kyverno/pkg/version.BuildHash=${version}"
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"

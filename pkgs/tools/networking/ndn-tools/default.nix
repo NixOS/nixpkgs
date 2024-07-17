@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, wafHook
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  libpcap,
+  ndn-cxx,
+  openssl,
+  pkg-config,
+  sphinx,
+  wafHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +33,16 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    sphinx
+    wafHook
+  ];
+  buildInputs = [
+    libpcap
+    ndn-cxx
+    openssl
+  ];
 
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"

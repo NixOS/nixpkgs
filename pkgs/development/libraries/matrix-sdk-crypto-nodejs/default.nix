@@ -7,5 +7,5 @@ import ./generic.nix {
     "vodozemac-0.3.0" = "sha256-tAimsVD8SZmlVybb7HvRffwlNsfb7gLWGCplmwbLIVE=";
   };
   cargoLock = ./Cargo-beta.6.lock;
-  patches = [];
+  patches = [ ];
 }

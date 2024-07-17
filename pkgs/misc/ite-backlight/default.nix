@@ -1,14 +1,15 @@
-{ lib
-, pkgs
-, stdenv
-, fetchpatch
-, ninja
-, libusb1
-, meson
-, boost
-, fetchFromGitHub
-, pkg-config
-, microsoft-gsl
+{
+  lib,
+  pkgs,
+  stdenv,
+  fetchpatch,
+  ninja,
+  libusb1,
+  meson,
+  boost,
+  fetchFromGitHub,
+  pkg-config,
+  microsoft-gsl,
 }:
 
 stdenv.mkDerivation rec {

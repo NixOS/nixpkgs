@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, makeWrapper
-, wasm-pack
-, CoreServices
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  makeWrapper,
+  wasm-pack,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {

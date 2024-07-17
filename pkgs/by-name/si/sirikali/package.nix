@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, libpwquality
-, hicolor-icon-theme
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, kdePackages
-, cryfs
-, encfs
-, fscrypt-experimental
-, gocryptfs
-, securefs
-, sshfs
-, libgcrypt
-, libsecret
-, withKWallet ? true
-, withLibsecret ? true
+{
+  lib,
+  stdenv,
+  libpwquality,
+  hicolor-icon-theme,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  kdePackages,
+  cryfs,
+  encfs,
+  fscrypt-experimental,
+  gocryptfs,
+  securefs,
+  sshfs,
+  libgcrypt,
+  libsecret,
+  withKWallet ? true,
+  withLibsecret ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,10 +36,7 @@ stdenv.mkDerivation rec {
     libpwquality
     hicolor-icon-theme
     libgcrypt
-  ]
-  ++ lib.optionals withKWallet [ kdePackages.kwallet ]
-  ++ lib.optionals withLibsecret [ libsecret ]
-  ;
+  ] ++ lib.optionals withKWallet [ kdePackages.kwallet ] ++ lib.optionals withLibsecret [ libsecret ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -47,14 +45,16 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.makeBinPath [
-      cryfs
-      encfs
-      fscrypt-experimental
-      gocryptfs
-      securefs
-      sshfs
-    ]}''
+    ''--prefix PATH : ${
+      lib.makeBinPath [
+        cryfs
+        encfs
+        fscrypt-experimental
+        gocryptfs
+        securefs
+        sshfs
+      ]
+    }''
   ];
 
   doCheck = true;

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, asciidoc
-, zlib, jansson, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  asciidoc,
+  zlib,
+  jansson,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +22,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-XkYvBjPmwhwo2p8/jTXazHRAgSGkI7LTLUlqbxMxlys=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja asciidoc ];
-  buildInputs = [ zlib jansson openssl ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    asciidoc
+  ];
+  buildInputs = [
+    zlib
+    jansson
+    openssl
+  ];
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   enableParallelBuilding = true;
 
   meta = {

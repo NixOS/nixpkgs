@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qttools
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  qtbase,
 }:
 
 mkDerivation rec {
@@ -17,9 +18,7 @@ mkDerivation rec {
     hash = "sha256-47bQmT2bHcbWpeosuF/vpSJcws4SqTmalY/XFEf7cxQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     qttools
@@ -32,7 +31,7 @@ mkDerivation rec {
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.linux;
   };
 }

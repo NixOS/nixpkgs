@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, jemalloc, nodejs }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  jemalloc,
+  nodejs,
+}:
 
 buildGoModule rec {
   pname = "dgraph";
@@ -15,19 +22,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [
-    "-X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}-oss"
-  ];
+  ldflags = [ "-X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}-oss" ];
 
-  tags = [
-    "oss"
-  ];
+  tags = [ "oss" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   # todo those dependencies are required in the makefile, but verify how they are used
   # actually
-  buildInputs = [ jemalloc nodejs ];
+  buildInputs = [
+    jemalloc
+    nodejs
+  ];
 
   subPackages = [ "dgraph" ];
 

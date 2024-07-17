@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland
-, libepoxy
-, glib
-, libwpe
-, libxkbcommon
-, libGL
-, libX11
-, webkitgtk
- }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland,
+  libepoxy,
+  glib,
+  libwpe,
+  libxkbcommon,
+  libGL,
+  libX11,
+  webkitgtk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
@@ -23,9 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "k8l2aumGTurq7isKdPIsvKCN9CwaG9tVsIbyUo44DTg=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config

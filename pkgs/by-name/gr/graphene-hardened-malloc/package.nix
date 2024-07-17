@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, makeWrapper
-, python3
-, runCommand
-, stdenv
-, stress-ng
+{
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  python3,
+  runCommand,
+  stdenv,
+  stress-ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

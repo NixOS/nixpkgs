@@ -1,23 +1,43 @@
-{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  dbus,
+  libgcrypt,
+  pkg-config,
+  intltool,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgnome-keyring";
   version = "2.32.0";
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "030gka96kzqg1r19b4xrmac89hf1xj1kr5p461yvbzfxh46qqf2n";
-  };
+  src =
+    let
+      inherit (finalAttrs) pname version;
+    in
+    fetchurl {
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+      sha256 = "030gka96kzqg1r19b4xrmac89hf1xj1kr5p461yvbzfxh46qqf2n";
+    };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
-  propagatedBuildInputs = [ glib dbus libgcrypt ];
-  nativeBuildInputs = [ pkg-config intltool ];
+  propagatedBuildInputs = [
+    glib
+    dbus
+    libgcrypt
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   configureFlags = [
     # not ideal to use -config scripts but it's not possible switch it to pkg-config
@@ -38,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gnome-keyring-1" ];
     inherit (glib.meta) platforms maintainers;
     homepage = "https://gitlab.gnome.org/Archive/libgnome-keyring";
-    license = with lib.licenses; [ gpl2 lgpl2 ];
+    license = with lib.licenses; [
+      gpl2
+      lgpl2
+    ];
   };
 })

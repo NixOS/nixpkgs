@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, appstream-glib
-, cargo
-, desktop-file-utils
-, glib
-, meson
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
-, gtk4
-, libadwaita
-, libxml2
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
+  gtk4,
+  libadwaita,
+  libxml2,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VA4KZ8x/MMAA/g/x59h1CyHhlj0vbZqwAFdsfTPA2Ds=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   nativeBuildInputs = [
     appstream-glib
@@ -51,9 +50,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   meta = with lib; {
     description = "Generate project icons and avatars from a symbolic icon";
@@ -61,6 +58,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ figsoda foo-dogsquared ];
+    maintainers = with maintainers; [
+      figsoda
+      foo-dogsquared
+    ];
   };
 }

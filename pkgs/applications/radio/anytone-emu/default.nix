@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,13 +25,9 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    udev
-  ];
+  buildInputs = [ udev ];
 
   meta = with lib; {
     description = "A tiny emulator for AnyTone radios";

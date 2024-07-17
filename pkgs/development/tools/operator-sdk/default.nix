@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, go
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  go,
+  fetchFromGitHub,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -18,13 +19,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-YspUrnSS6d8Ta8dmUjx9A5D/V5Bqm08DQJrRBaIGyQg=";
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    go
-  ];
+  buildInputs = [ go ];
 
   doCheck = false;
 

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, lzip
-, pkg-config
-, SDL
-, SDL_image
-, SDL_mixer
-, SDL_ttf
-, buildEnv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  lzip,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_ttf,
+  buildEnv,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
         paths = buildInputs;
       };
     in
-    [
-      "SDLMINUSI=-I${sdl-env}/include/SDL"
-    ];
+    [ "SDLMINUSI=-I${sdl-env}/include/SDL" ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-sdl/";

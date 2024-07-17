@@ -1,17 +1,40 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.unpoller;
 
-  configFile = pkgs.writeText "unpoller.json" (generators.toJSON {} {
-    inherit (cfg) poller influxdb loki prometheus unifi;
-  });
+  configFile = pkgs.writeText "unpoller.json" (
+    generators.toJSON { } {
+      inherit (cfg)
+        poller
+        influxdb
+        loki
+        prometheus
+        unifi
+        ;
+    }
+  );
 
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "unifi-poller" ] [ "services" "unpoller" ])
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "unifi-poller"
+      ]
+      [
+        "services"
+        "unpoller"
+      ]
+    )
   ];
 
   options.services.unpoller = {
@@ -35,7 +58,7 @@ in {
       };
       plugins = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Load additional plugins.
         '';
@@ -177,122 +200,133 @@ in {
       };
     };
 
-    unifi = let
-      controllerOptions = {
-        user = mkOption {
-          type = types.str;
-          default = "unifi";
-          description = ''
-            Unifi service user name.
-          '';
+    unifi =
+      let
+        controllerOptions = {
+          user = mkOption {
+            type = types.str;
+            default = "unifi";
+            description = ''
+              Unifi service user name.
+            '';
+          };
+          pass = mkOption {
+            type = types.path;
+            default = pkgs.writeText "unpoller-unifi-default.password" "unifi";
+            defaultText = literalExpression "unpoller-unifi-default.password";
+            description = ''
+              Path of a file containing the password for the unifi service user.
+              This file needs to be readable by the unifi-poller user.
+            '';
+            apply = v: "file://${v}";
+          };
+          url = mkOption {
+            type = types.str;
+            default = "https://unifi:8443";
+            description = ''
+              URL of the Unifi controller.
+            '';
+          };
+          sites = mkOption {
+            type =
+              with types;
+              either (enum [
+                "default"
+                "all"
+              ]) (listOf str);
+            default = "all";
+            description = ''
+              List of site names for which statistics should be exported.
+              Or the string "default" for the default site or the string "all" for all sites.
+            '';
+            apply = toList;
+          };
+          save_ids = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Collect and save data from the intrusion detection system to influxdb and Loki.
+            '';
+          };
+          save_events = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Collect and save data from UniFi events to influxdb and Loki.
+            '';
+          };
+          save_alarms = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Collect and save data from UniFi alarms to influxdb and Loki.
+            '';
+          };
+          save_anomalies = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Collect and save data from UniFi anomalies to influxdb and Loki.
+            '';
+          };
+          save_dpi = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Collect and save data from deep packet inspection.
+              Adds around 150 data points and impacts performance.
+            '';
+          };
+          save_sites = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Collect and save site data.
+            '';
+          };
+          hash_pii = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Hash, with md5, client names and MAC addresses. This attempts
+              to protect personally identifiable information.
+            '';
+          };
+          verify_ssl = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Verify the Unifi controller's certificate.
+            '';
+          };
         };
-        pass = mkOption {
-          type = types.path;
-          default = pkgs.writeText "unpoller-unifi-default.password" "unifi";
-          defaultText = literalExpression "unpoller-unifi-default.password";
-          description = ''
-            Path of a file containing the password for the unifi service user.
-            This file needs to be readable by the unifi-poller user.
-          '';
-          apply = v: "file://${v}";
-        };
-        url = mkOption {
-          type = types.str;
-          default = "https://unifi:8443";
-          description = ''
-            URL of the Unifi controller.
-          '';
-        };
-        sites = mkOption {
-          type = with types; either (enum [ "default" "all" ]) (listOf str);
-          default = "all";
-          description = ''
-            List of site names for which statistics should be exported.
-            Or the string "default" for the default site or the string "all" for all sites.
-          '';
-          apply = toList;
-        };
-        save_ids = mkOption {
+
+      in
+      {
+        dynamic = mkOption {
           type = types.bool;
           default = false;
           description = ''
-            Collect and save data from the intrusion detection system to influxdb and Loki.
+            Let prometheus select which controller to poll when scraping.
+            Use with default credentials. See unifi-poller wiki for more.
           '';
         };
-        save_events = mkOption {
-          type = types.bool;
-          default = false;
+
+        defaults = controllerOptions;
+
+        controllers = mkOption {
+          type =
+            with types;
+            listOf (submodule {
+              options = controllerOptions;
+            });
+          default = [ ];
           description = ''
-            Collect and save data from UniFi events to influxdb and Loki.
+            List of Unifi controllers to poll. Use defaults if empty.
           '';
-        };
-        save_alarms = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Collect and save data from UniFi alarms to influxdb and Loki.
-          '';
-        };
-        save_anomalies = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Collect and save data from UniFi anomalies to influxdb and Loki.
-          '';
-        };
-        save_dpi = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Collect and save data from deep packet inspection.
-            Adds around 150 data points and impacts performance.
-          '';
-        };
-        save_sites = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Collect and save site data.
-          '';
-        };
-        hash_pii = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Hash, with md5, client names and MAC addresses. This attempts
-            to protect personally identifiable information.
-          '';
-        };
-        verify_ssl = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Verify the Unifi controller's certificate.
-          '';
+          apply = map (flip removeAttrs [ "_module" ]);
         };
       };
-
-    in {
-      dynamic = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Let prometheus select which controller to poll when scraping.
-          Use with default credentials. See unifi-poller wiki for more.
-        '';
-      };
-
-      defaults = controllerOptions;
-
-      controllers = mkOption {
-        type = with types; listOf (submodule { options = controllerOptions; });
-        default = [];
-        description = ''
-          List of Unifi controllers to poll. Use defaults if empty.
-        '';
-        apply = map (flip removeAttrs [ "_module" ]);
-      };
-    };
   };
 
   config = mkIf cfg.enable {

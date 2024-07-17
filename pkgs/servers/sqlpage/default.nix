@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, fetchurl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
+  fetchurl,
 }:
 
 let
@@ -70,9 +71,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ooK4eIaPbUsxgDuVJkWHlArMa81TtlRfR6YYEAh7cLY=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [

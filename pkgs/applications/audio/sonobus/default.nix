@@ -1,22 +1,23 @@
-{ lib
-, pkg-config
-, stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, alsa-lib
-, cmake
-, freetype
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXinerama
-, libXrandr
-, libjack2
-, libopus
-, curl
-, gtk3
-, webkitgtk
+{
+  lib,
+  pkg-config,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  alsa-lib,
+  cmake,
+  freetype,
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libjack2,
+  libopus,
+  curl,
+  gtk3,
+  webkitgtk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

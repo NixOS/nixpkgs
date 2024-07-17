@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, getopt
-, ksh
-, bc
-, tzdata
-, pkgsMusl # for passthru.tests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  getopt,
+  ksh,
+  bc,
+  tzdata,
+  pkgsMusl, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   # given op. On a case-insensitive filesystem this generated makefile clobbers
   # a distinct, shipped, Makefile and causes infinite recursion during tests
   # which eventually fail with "fork: Resource temporarily unavailable"
-  configureFlags = [
-    "--without-makefile"
-  ];
+  configureFlags = [ "--without-makefile" ];
 
   buildPhase = ''
     runHook preBuild
@@ -71,9 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [ ksh ];
 
   # Disabled tests:
   # directive-export{,-gmake}: another failure related to TZ variables
@@ -108,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable version of NetBSD 'make'";
     license = lib.licenses.bsd3;
     mainProgram = "bmake";
-    maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
     # ofborg: x86_64-linux builds the musl package, aarch64-linux doesn't
     broken = stdenv.hostPlatform.isMusl && stdenv.buildPlatform.isAarch64;

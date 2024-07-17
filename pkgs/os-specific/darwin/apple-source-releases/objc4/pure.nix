@@ -1,4 +1,11 @@
-{ stdenv, fetchapplesource, libauto, launchd, libc_old, libunwind }:
+{
+  stdenv,
+  fetchapplesource,
+  libauto,
+  launchd,
+  libc_old,
+  libunwind,
+}:
 
 stdenv.mkDerivation rec {
   version = "551.1";
@@ -6,13 +13,18 @@ stdenv.mkDerivation rec {
 
   src = fetchapplesource {
     inherit version;
-    name   = "objc4";
+    name = "objc4";
     sha256 = "1jrdb6yyb5jwwj27c1r0nr2y2ihqjln8ynj61mpkvp144c1cm5bg";
   };
 
   patches = [ ./spinlocks.patch ];
 
-  buildInputs = [ libauto launchd libc_old libunwind ];
+  buildInputs = [
+    libauto
+    launchd
+    libc_old
+    libunwind
+  ];
 
   buildPhase = ''
     cp ${./objc-probes.h} runtime/objc-probes.h

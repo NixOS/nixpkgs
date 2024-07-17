@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch2
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch2,
+  nixosTests,
 }:
 let
   version = "0.11.0";
@@ -22,7 +23,12 @@ buildGoModule {
 
   vendorHash = "sha256-akFbHgo8xI2/4aQsyutjhXPM5d0A3se3kG/6Ebw1Qcs=";
 
-  excludedPackages = [ "acceptance" "demo" "tools" "pkg/private/xtest/graphupdater" ];
+  excludedPackages = [
+    "acceptance"
+    "demo"
+    "tools"
+    "pkg/private/xtest/graphupdater"
+  ];
 
   postInstall = ''
     set +e
@@ -45,6 +51,9 @@ buildGoModule {
     homepage = "https://scion-architecture.net/";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ sarcasticadmin matthewcroughan ];
+    maintainers = with maintainers; [
+      sarcasticadmin
+      matthewcroughan
+    ];
   };
 }

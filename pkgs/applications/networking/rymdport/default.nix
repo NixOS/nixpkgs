@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, libGL
-, xorg
-, Carbon
-, Cocoa
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libGL,
+  xorg,
+  Carbon,
+  Cocoa,
 }:
 
 buildGoModule rec {
@@ -22,24 +23,25 @@ buildGoModule rec {
 
   vendorHash = "sha256-RsmwTRVjhEgKAT9aekSfkRuai2165KG7q5aFjAiLSPU=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = with xorg; [
-    libGL
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
-    IOKit
-  ];
+  buildInputs =
+    with xorg;
+    [
+      libGL
+      libX11
+      libXcursor
+      libXext
+      libXi
+      libXinerama
+      libXrandr
+      libXxf86vm
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      Cocoa
+      IOKit
+    ];
 
   postInstall = ''
     for res in $(ls internal/assets/icons | sed -e 's/icon-//g' -e 's/.png//g'); do

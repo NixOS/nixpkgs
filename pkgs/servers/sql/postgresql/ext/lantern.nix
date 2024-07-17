@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, postgresql
-, postgresqlTestHook
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,13 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    postgresql
-  ];
+  buildInputs = [ postgresql ];
 
   installPhase = ''
     runHook preInstall
@@ -36,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  cmakeFlags = [
-    "-DBUILD_FOR_DISTRIBUTING=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_FOR_DISTRIBUTING=ON" ];
 
   passthru.tests.extension = stdenv.mkDerivation {
     name = "lantern-pg-test";

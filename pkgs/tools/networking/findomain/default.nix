@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,9 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -53,7 +52,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Findomain/Findomain";
     changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne figsoda ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      figsoda
+    ];
     mainProgram = "findomain";
   };
 }

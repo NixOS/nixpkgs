@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, pkg-config, libGL, glfw, soil, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libGL,
+  glfw,
+  soil,
+  lib,
+}:
 
 stdenv.mkDerivation {
   pname = "esshader";
@@ -16,11 +24,11 @@ stdenv.mkDerivation {
       --replace "-lGLESv2" "-lGL -lGLESv2"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libGL glfw soil
+    libGL
+    glfw
+    soil
   ];
 
   installPhase = ''

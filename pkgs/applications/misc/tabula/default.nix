@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tabula";
   version = "1.2.1";
-
 
   src = fetchzip {
     url = "https://github.com/tabulapdf/tabula/releases/download/v${version}/tabula-jar-${version}.zip";
     sha256 = "0lkpv8hkji81fanyxm7ph8421fr9a6phqc3pbhw2bc4gljg7sgxi";
   };
 
-
   nativeBuildInputs = [ makeWrapper ];
-
 
   installPhase = ''
     mkdir -pv $out/share/tabula
@@ -21,7 +23,6 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/tabula --add-flags "-jar $out/share/tabula/tabula.jar"
   '';
-
 
   meta = with lib; {
     description = "A tool for liberating data tables locked inside PDF files";

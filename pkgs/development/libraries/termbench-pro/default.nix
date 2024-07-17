@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fmt,
+}:
 
 stdenv.mkDerivation {
   pname = "termbench-pro";

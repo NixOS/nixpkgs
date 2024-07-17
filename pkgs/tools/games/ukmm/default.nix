@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, libglvnd
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  libglvnd,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,9 +40,7 @@ rustPlatform.buildRustPackage rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]})
   '';
 
-  cargoTestFlags = [
-    "--all"
-  ];
+  cargoTestFlags = [ "--all" ];
 
   checkFlags = [
     # Requires a game dump of Breath of the Wild

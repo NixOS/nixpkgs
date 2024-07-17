@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, libusb1, systemd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libusb1,
+  systemd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dmrconfig";
@@ -22,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libusb1 systemd
+    libusb1
+    systemd
   ];
 
   preConfigure = ''
@@ -30,7 +37,10 @@ stdenv.mkDerivation rec {
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];
+  makeFlags = [
+    "VERSION=${version}"
+    "GITCOUNT=0"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/udev/rules.d

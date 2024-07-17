@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, linkFarm, lightdm-enso-os-greeter
-, dbus, pcre, libepoxy, xorg, at-spi2-core, libxklavier, libxkbcommon
-, gtk3, vala, cmake, libgee, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook3, librsvg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  linkFarm,
+  lightdm-enso-os-greeter,
+  dbus,
+  pcre,
+  libepoxy,
+  xorg,
+  at-spi2-core,
+  libxklavier,
+  libxkbcommon,
+  gtk3,
+  vala,
+  cmake,
+  libgee,
+  lightdm,
+  gdk-pixbuf,
+  clutter-gtk,
+  wrapGAppsHook3,
+  librsvg,
+}:
 
 stdenv.mkDerivation {
   pname = "lightdm-enso-os-greeter";
@@ -13,9 +34,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-v79J5KyjeJ99ifN7nK/B+J7f292qDAEHsmsHLAMKVYY=";
   };
 
-  patches = [
-    ./fix-paths.patch
-  ];
+  patches = [ ./fix-paths.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -46,10 +65,12 @@ stdenv.mkDerivation {
     cd greeter
   '';
 
-  passthru.xgreeters = linkFarm "enso-os-greeter-xgreeters" [{
-    path = "${lightdm-enso-os-greeter}/share/xgreeters/pantheon-greeter.desktop";
-    name = "pantheon-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "enso-os-greeter-xgreeters" [
+    {
+      path = "${lightdm-enso-os-greeter}/share/xgreeters/pantheon-greeter.desktop";
+      name = "pantheon-greeter.desktop";
+    }
+  ];
 
   postFixup = ''
     substituteInPlace $out/share/xgreeters/pantheon-greeter.desktop \
@@ -65,8 +86,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nick92/Enso-OS";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [
-      eadwu
-    ];
+    maintainers = with maintainers; [ eadwu ];
   };
 }

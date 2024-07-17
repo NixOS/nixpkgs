@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, wxGTK32
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  wxGTK32,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,17 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cBrTvFoz6WZIsh5qPPiWxQ338Z0OfcIefiI8CZF6nn8=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     wxGTK32
     SDL2
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   meta = {
     description = "Audibilization and Visualization of Sorting Algorithms";

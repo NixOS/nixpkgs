@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rkbin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rkbin,
 }:
 
 stdenv.mkDerivation {

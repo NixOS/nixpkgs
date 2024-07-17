@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,27 +14,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
   };
 
-  patches = lib.optionals stdenv.isCygwin [
-    ./1.16-cygwin.patch
-    ./1.16-vpath.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    # Do not require <sys/ioctl.h>
-    (fetchpatch2 {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/get-w32-console-maxcols.mingw32.patch?h=mingw-w64-popt&id=63f2cdb0de116362c49681cef20f7a8b4355e85a";
-      sha256 = "zv43l1RBqNzT/JG+jQaMVFaFv+ZYPuIiAtKUDzJJBbc=";
-      stripLen = 1;
-      extraPrefix = "src/";
-    })
+  patches =
+    lib.optionals stdenv.isCygwin [
+      ./1.16-cygwin.patch
+      ./1.16-vpath.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      # Do not require <sys/ioctl.h>
+      (fetchpatch2 {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/get-w32-console-maxcols.mingw32.patch?h=mingw-w64-popt&id=63f2cdb0de116362c49681cef20f7a8b4355e85a";
+        sha256 = "zv43l1RBqNzT/JG+jQaMVFaFv+ZYPuIiAtKUDzJJBbc=";
+        stripLen = 1;
+        extraPrefix = "src/";
+      })
 
-    # Do not try to detect setuid, it is not a thing.
-    (fetchpatch2 {
-      url = "https://github.com/rpm-software-management/popt/commit/905544c5d9767894edaf71a1e3ce5126944c5695.patch";
-      sha256 = "3PmcxeiEZ/Hof0zoVFSytEXvQ8gE8Sp5UdagExPVICU=";
-      stripLen = 1;
-      extraPrefix = "src/";
-      revert = true;
-    })
-  ];
+      # Do not try to detect setuid, it is not a thing.
+      (fetchpatch2 {
+        url = "https://github.com/rpm-software-management/popt/commit/905544c5d9767894edaf71a1e3ce5126944c5695.patch";
+        sha256 = "3PmcxeiEZ/Hof0zoVFSytEXvQ8gE8Sp5UdagExPVICU=";
+        stripLen = 1;
+        extraPrefix = "src/";
+        revert = true;
+      })
+    ];
 
   doCheck = false; # fails
 

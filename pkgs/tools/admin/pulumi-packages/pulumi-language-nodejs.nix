@@ -1,6 +1,7 @@
-{ buildGoModule
-, pulumi
-, nodejs
+{
+  buildGoModule,
+  pulumi,
+  nodejs,
 }:
 buildGoModule rec {
   inherit (pulumi) version src;
@@ -24,7 +25,5 @@ buildGoModule rec {
     "-X github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
   ];
 
-  nativeCheckInputs = [
-    nodejs
-  ];
+  nativeCheckInputs = [ nodejs ];
 }

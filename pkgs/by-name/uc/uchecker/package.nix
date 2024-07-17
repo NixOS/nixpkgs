@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,18 +26,14 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   nativeCheckInputs = with python3.pkgs; [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "uchecker"
-  ];
+  pythonImportsCheck = [ "uchecker" ];
 
   meta = with lib; {
     description = "A simple tool to detect outdated shared libraries";

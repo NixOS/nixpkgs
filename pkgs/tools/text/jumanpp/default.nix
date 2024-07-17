@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, protobuf, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  protobuf,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jumanpp";
@@ -31,8 +39,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DJPP_ENABLE_TESTS=OFF" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ protobuf ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ protobuf ] ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";

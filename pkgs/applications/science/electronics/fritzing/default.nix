@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, qmake
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtserialport
-, qtwayland
-, qt5compat
-, boost
-, libngspice
-, libgit2
-, quazip
-, clipper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qmake,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtserialport,
+  qtwayland,
+  qt5compat,
+  boost,
+  libngspice,
+  libgit2,
+  quazip,
+  clipper,
 }:
 
 let
@@ -49,7 +50,12 @@ stdenv.mkDerivation {
     hash = "sha256-Xi5sPU2RGkqh7T+EOvwxJJKKYDhJfccyEZ8LBBTb2s4=";
   };
 
-  nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
   buildInputs = [
     qtbase
     qtsvg
@@ -60,9 +66,7 @@ stdenv.mkDerivation {
     quazip
     libngspice
     clipper
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice
@@ -89,9 +93,7 @@ stdenv.mkDerivation {
   ];
   env.NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
 
-  qmakeFlags = [
-    "phoenix.pro"
-  ];
+  qmakeFlags = [ "phoenix.pro" ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
@@ -111,8 +113,14 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
-    license = with licenses; [ gpl3 cc-by-sa-30 ];
-    maintainers = with maintainers; [ robberer muscaln ];
+    license = with licenses; [
+      gpl3
+      cc-by-sa-30
+    ];
+    maintainers = with maintainers; [
+      robberer
+      muscaln
+    ];
     platforms = platforms.unix;
     mainProgram = "Fritzing";
   };

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, testers
-, texinfo
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  testers,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mo+YBhaCqGRWfVRvZCD0iB2pd/DsHsfWGFeFxwwyxPk=";
   };
 
-  outputs = [ "bin" "out" "dev" "doc" "info" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "doc"
+    "info"
+  ];
 
   nativeBuildInputs = [
     cmake

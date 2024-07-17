@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python ? null
-, swig
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python ? null,
+  swig,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,22 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ' ''${Python3_SITELIB}' ' ${placeholder "out"}/${python.sitePackages}'
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals (python != null) [
-    python
-    swig
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals (python != null) [
+      python
+      swig
+    ];
 
   cmakeFlags = [
     "-DPLFIT_USE_OPENMP=ON"
-  ] ++ lib.optionals (python != null) [
-    "-DPLFIT_COMPILE_PYTHON_MODULE=ON"
-  ];
+  ] ++ lib.optionals (python != null) [ "-DPLFIT_COMPILE_PYTHON_MODULE=ON" ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   doCheck = true;
 

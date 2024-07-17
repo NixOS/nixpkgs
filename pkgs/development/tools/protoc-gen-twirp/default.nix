@@ -1,4 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 
 buildGoPackage rec {
   pname = "protoc-gen-twirp";
@@ -13,9 +17,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/twitchtv/twirp";
 
-  subPackages = [
-    "protoc-gen-twirp"
-  ];
+  subPackages = [ "protoc-gen-twirp" ];
 
   doCheck = true;
 

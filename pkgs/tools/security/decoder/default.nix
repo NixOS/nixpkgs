@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   makeFlags = [ "OPENSSL=y" ];
 

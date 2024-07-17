@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, makeWrapper
-, mpv
-, pulseaudio
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  mpv,
+  pulseaudio,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,13 +18,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-M9WpB59AWSaGMnGrO37Fc+7O6pVBc2BDAv/BGlPmo8E=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/cplay-ng \
-      --prefix PATH : ${lib.makeBinPath [ mpv pulseaudio ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          mpv
+          pulseaudio
+        ]
+      }
   '';
 
   meta = with lib; {

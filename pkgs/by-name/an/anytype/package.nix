@@ -1,4 +1,9 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+}:
 
 let
   pname = "anytype";
@@ -10,7 +15,8 @@ let
     hash = "sha256-Rvl52nKrOWQfT2qgssEpFjQCjva54zPvm6aEXmO0NTc=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];

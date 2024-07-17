@@ -1,13 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, sfml
-, glm
-, python3
-, glew
-, pkg-config
-, SDL2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+  glm,
+  python3,
+  glew,
+  pkg-config,
+  SDL2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "SHADERed";
@@ -34,9 +36,7 @@ stdenv.mkDerivation rec {
     sfml
   ];
 
-  patches = [
-    ./install_path_fix.patch
-  ];
+  patches = [ ./install_path_fix.patch ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 

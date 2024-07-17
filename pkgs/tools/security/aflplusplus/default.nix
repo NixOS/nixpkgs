@@ -1,8 +1,22 @@
-{ lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
-, clang, llvm, gcc, which, libcgroup, python3, perl, gmp
-, file, wine ? null
-, cmocka
-, llvmPackages
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchFromGitHub,
+  callPackage,
+  makeWrapper,
+  clang,
+  llvm,
+  gcc,
+  which,
+  libcgroup,
+  python3,
+  perl,
+  gmp,
+  file,
+  wine ? null,
+  cmocka,
+  llvmPackages,
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -12,9 +26,13 @@ assert (wine != null) -> (stdenv.targetPlatform.system == "i686-linux");
 
 let
   aflplusplus-qemu = callPackage ./qemu.nix { };
-  qemu-exe-name = if stdenv.targetPlatform.system == "x86_64-linux" then "qemu-x86_64"
-    else if stdenv.targetPlatform.system == "i686-linux" then "qemu-i386"
-    else throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
+  qemu-exe-name =
+    if stdenv.targetPlatform.system == "x86_64-linux" then
+      "qemu-x86_64"
+    else if stdenv.targetPlatform.system == "i686-linux" then
+      "qemu-i386"
+    else
+      throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
   libdislocator = callPackage ./libdislocator.nix { inherit aflplusplus; };
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
@@ -31,9 +49,18 @@ let
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which clang gcc ];
-    buildInputs = [ llvm python3 gmp llvmPackages.bintools ]
-      ++ lib.optional (wine != null) python3.pkgs.wrapPython;
+    nativeBuildInputs = [
+      makeWrapper
+      which
+      clang
+      gcc
+    ];
+    buildInputs = [
+      llvm
+      python3
+      gmp
+      llvmPackages.bintools
+    ] ++ lib.optional (wine != null) python3.pkgs.wrapPython;
 
     # Flag is already set by package and causes some compiler warnings.
     # warning: "_FORTIFY_SOURCE" redefined
@@ -86,50 +113,56 @@ let
       runHook postBuild
     '';
 
-    postInstall = ''
-      # remove afl-clang(++) which are just symlinks to afl-clang-fast
-      rm $out/bin/afl-clang $out/bin/afl-clang++
+    postInstall =
+      ''
+        # remove afl-clang(++) which are just symlinks to afl-clang-fast
+        rm $out/bin/afl-clang $out/bin/afl-clang++
 
-      # the makefile neglects to install unsigaction
-      cp qemu_mode/unsigaction/unsigaction*.so $out/lib/afl/
+        # the makefile neglects to install unsigaction
+        cp qemu_mode/unsigaction/unsigaction*.so $out/lib/afl/
 
-      # Install the custom QEMU emulator for binary blob fuzzing.
-      ln -s ${aflplusplus-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
+        # Install the custom QEMU emulator for binary blob fuzzing.
+        ln -s ${aflplusplus-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
 
-      # give user a convenient way of accessing libcompconv.so, libdislocator.so, libtokencap.so
-      cat > $out/bin/get-afl-qemu-libcompcov-so <<END
-      #!${stdenv.shell}
-      echo $out/lib/afl/libcompcov.so
-      END
-      chmod +x $out/bin/get-afl-qemu-libcompcov-so
-      ln -s ${libdislocator}/bin/get-libdislocator-so $out/bin/
-      ln -s ${libtokencap}/bin/get-libtokencap-so $out/bin/
+        # give user a convenient way of accessing libcompconv.so, libdislocator.so, libtokencap.so
+        cat > $out/bin/get-afl-qemu-libcompcov-so <<END
+        #!${stdenv.shell}
+        echo $out/lib/afl/libcompcov.so
+        END
+        chmod +x $out/bin/get-afl-qemu-libcompcov-so
+        ln -s ${libdislocator}/bin/get-libdislocator-so $out/bin/
+        ln -s ${libtokencap}/bin/get-libtokencap-so $out/bin/
 
-      # Install the cgroups wrapper for asan-based fuzzing.
-      cp utils/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
-      chmod +x $out/bin/afl-cgroup
-      substituteInPlace $out/bin/afl-cgroup \
-        --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
-        --replace "cgexec"   "${libcgroup}/bin/cgexec" \
-        --replace "cgdelete" "${libcgroup}/bin/cgdelete"
+        # Install the cgroups wrapper for asan-based fuzzing.
+        cp utils/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
+        chmod +x $out/bin/afl-cgroup
+        substituteInPlace $out/bin/afl-cgroup \
+          --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
+          --replace "cgexec"   "${libcgroup}/bin/cgexec" \
+          --replace "cgdelete" "${libcgroup}/bin/cgdelete"
 
-      patchShebangs $out/bin
+        patchShebangs $out/bin
 
-    '' + lib.optionalString (wine != null) ''
-      substitute afl-wine-trace $out/bin/afl-wine-trace \
-        --replace "qemu_mode/unsigaction" "$out/lib/afl"
-      chmod +x $out/bin/afl-wine-trace
+      ''
+      + lib.optionalString (wine != null) ''
+        substitute afl-wine-trace $out/bin/afl-wine-trace \
+          --replace "qemu_mode/unsigaction" "$out/lib/afl"
+        chmod +x $out/bin/afl-wine-trace
 
-      # qemu needs to be fed ELFs, not wrapper scripts, so we have to cheat a bit if we
-      # detect a wrapped wine
-      for winePath in ${wine}/bin/.wine ${wine}/bin/wine; do
-        if [ -x $winePath ]; then break; fi
-      done
-      makeWrapperArgs="--set-default 'AFL_WINE_PATH' '$winePath'" \
-        wrapPythonProgramsIn $out/bin ${python3.pkgs.pefile}
-    '';
+        # qemu needs to be fed ELFs, not wrapper scripts, so we have to cheat a bit if we
+        # detect a wrapped wine
+        for winePath in ${wine}/bin/.wine ${wine}/bin/wine; do
+          if [ -x $winePath ]; then break; fi
+        done
+        makeWrapperArgs="--set-default 'AFL_WINE_PATH' '$winePath'" \
+          wrapPythonProgramsIn $out/bin ${python3.pkgs.pefile}
+      '';
 
-    nativeInstallCheckInputs = [ perl file cmocka ];
+    nativeInstallCheckInputs = [
+      perl
+      file
+      cmocka
+    ];
     doInstallCheck = true;
     installCheckPhase = ''
       runHook preInstallCheck
@@ -164,10 +197,17 @@ let
         A heavily enhanced version of AFL, incorporating many features
         and improvements from the community
       '';
-      homepage    = "https://aflplus.plus";
-      license     = lib.licenses.asl20;
-      platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with lib.maintainers; [ ris mindavi ];
+      homepage = "https://aflplus.plus";
+      license = lib.licenses.asl20;
+      platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
+      maintainers = with lib.maintainers; [
+        ris
+        mindavi
+      ];
     };
   };
-in aflplusplus
+in
+aflplusplus

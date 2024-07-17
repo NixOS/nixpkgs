@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, openssl, perl, pkg-config, rustPlatform
-, CoreServices, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  perl,
+  pkg-config,
+  rustPlatform,
+  CoreServices,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,14 +23,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0q7yxvvngfvn4s889qzp1qnsw2c6qy2ryv9vz9cxhmqidx4dg4va";
 
-  nativeBuildInputs = [ openssl perl pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  nativeBuildInputs = [
+    openssl
+    perl
+    pkg-config
+  ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+  ];
 
   meta = with lib; {
     description = "A Cargo subcommand for the client-side Web";
     mainProgram = "cargo-web";
     homepage = "https://github.com/koute/cargo-web";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ kevincox ];
   };
 }

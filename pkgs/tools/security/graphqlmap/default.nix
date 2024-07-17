@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,16 +16,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-lGnhNwtDc8KoPlwJ1p2FYq0NQ8PhSR3HgtluU7uxa/c=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ requests ];
 
   # Tests are not available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "graphqlmap"
-  ];
+  pythonImportsCheck = [ "graphqlmap" ];
 
   meta = with lib; {
     description = "Tool to interact with a GraphQL endpoint";

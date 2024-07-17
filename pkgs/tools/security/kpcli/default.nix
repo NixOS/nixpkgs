@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
   version = "4.0";
@@ -20,11 +27,25 @@ stdenv.mkDerivation rec {
     chmod +x $out/share/kpcli.pl
 
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; makePerlPath ([
-         CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
-      ] ++ lib.optional stdenv.isDarwin MacPasteboard)}"
+      "${
+        with perlPackages;
+        makePerlPath (
+          [
+            CaptureTiny
+            Clipboard
+            Clone
+            CryptRijndael
+            SortNaturally
+            TermReadKey
+            TermShellUI
+            FileKeePass
+            TermReadLineGnu
+            XMLParser
+          ]
+          ++ lib.optional stdenv.isDarwin MacPasteboard
+        )
+      }"
   '';
-
 
   meta = with lib; {
     description = "KeePass Command Line Interface";

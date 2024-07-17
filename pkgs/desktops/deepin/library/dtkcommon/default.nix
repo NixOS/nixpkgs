@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wRTzgvtmbGJJaIwi1f5m98K2o6g7yZdnKYR1nsDDwk8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   dontWrapQtApps = true;
 

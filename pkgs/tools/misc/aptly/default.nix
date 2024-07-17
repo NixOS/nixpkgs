@@ -1,4 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz, testers, aptly }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  gnupg,
+  bzip2,
+  xz,
+  graphviz,
+  testers,
+  aptly,
+}:
 
 buildGoModule rec {
   pname = "aptly";
@@ -13,15 +25,29 @@ buildGoModule rec {
 
   vendorHash = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name aptly completion.d/aptly
     installShellCompletion --zsh --name _aptly completion.d/_aptly
     wrapProgram "$out/bin/aptly" \
-      --prefix PATH ":" "${lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          gnupg
+          bzip2
+          xz
+          graphviz
+        ]
+      }"
   '';
 
   doCheck = false;
@@ -36,8 +62,7 @@ buildGoModule rec {
     description = "Debian repository management tool";
     license = licenses.mit;
     maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
-    changelog =
-      "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
+    changelog = "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
     mainProgram = "aptly";
   };
 }

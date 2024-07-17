@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchhg
-, libepoxy
-, xorg
-, libGLU
-, glm
-, pkg-config
-, imagemagick
-, makeWrapper
-, installShellFiles
+{
+  stdenv,
+  lib,
+  fetchhg,
+  libepoxy,
+  xorg,
+  libGLU,
+  glm,
+  pkg-config,
+  imagemagick,
+  makeWrapper,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = [ ./update.sh finalAttrs.src.url ];
+  passthru.updateScript = [
+    ./update.sh
+    finalAttrs.src.url
+  ];
 
   meta = with lib; {
     mainProgram = "shader-shark";

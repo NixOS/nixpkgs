@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, curl
-, gtkmm3
-, glibmm
-, gnutls
-, yajl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  curl,
+  gtkmm3,
+  glibmm,
+  gnutls,
+  yajl,
+  pkg-config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
@@ -23,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     curl

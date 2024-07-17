@@ -1,39 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, gettext
-, python3
-, wrapGAppsHook3
-, ddcutil
-, alsa-lib
-, glib
-, gtk3
-, libgudev
-, libinput
-, libnl
-, librsvg
-, linux-pam
-, libxcrypt
-, networkmanager
-, pulseaudio
-, gdk-pixbuf-xlib
-, tzdata
-, xkeyboard_config
-, runtimeShell
-, xorg
-, xdotool
-, getconf
-, dbus
-, util-linux
-, dde-session-ui
-, coreutils
-, lshw
-, dmidecode
-, systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gettext,
+  python3,
+  wrapGAppsHook3,
+  ddcutil,
+  alsa-lib,
+  glib,
+  gtk3,
+  libgudev,
+  libinput,
+  libnl,
+  librsvg,
+  linux-pam,
+  libxcrypt,
+  networkmanager,
+  pulseaudio,
+  gdk-pixbuf-xlib,
+  tzdata,
+  xkeyboard_config,
+  runtimeShell,
+  xorg,
+  xdotool,
+  getconf,
+  dbus,
+  util-linux,
+  dde-session-ui,
+  coreutils,
+  lshw,
+  dmidecode,
+  systemd,
 }:
 
 buildGoModule rec {
@@ -135,7 +136,16 @@ buildGoModule rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ util-linux dde-session-ui glib lshw dmidecode systemd ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          util-linux
+          dde-session-ui
+          glib
+          lshw
+          dmidecode
+          systemd
+        ]
+      }"
     )
   '';
 

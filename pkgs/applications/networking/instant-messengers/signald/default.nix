@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
-gradle, git, perl, makeWrapper, substituteAll, jre_minimal
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  jdk17_headless,
+  coreutils,
+  findutils,
+  gnused,
+  gradle,
+  git,
+  perl,
+  makeWrapper,
+  substituteAll,
+  jre_minimal,
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
@@ -41,7 +53,10 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradleWithJdk perl ];
+    nativeBuildInputs = [
+      gradleWithJdk
+      perl
+    ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -77,13 +92,16 @@ let
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
-    outputHash = {
-      x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
-      aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    outputHash =
+      {
+        x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
+        aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
+      }
+      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname src version;
 
   patches = [
@@ -114,13 +132,23 @@ in stdenv.mkDerivation {
     mkdir -p $out
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
-      --prefix PATH : ${lib.makeBinPath [ coreutils findutils gnused ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          findutils
+          gnused
+        ]
+      } \
       --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradleWithJdk makeWrapper ];
+  nativeBuildInputs = [
+    git
+    gradleWithJdk
+    makeWrapper
+  ];
 
   doCheck = true;
 
@@ -134,10 +162,13 @@ in stdenv.mkDerivation {
     homepage = "https://signald.org";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ expipiplus1 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

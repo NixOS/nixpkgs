@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, libX11, libXi, libXtst, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  libX11,
+  libXi,
+  libXtst,
+  xorgproto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mid2key";
@@ -11,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
   };
 
-  buildInputs = [ alsa-lib libX11 libXi libXtst xorgproto ];
+  buildInputs = [
+    alsa-lib
+    libX11
+    libXi
+    libXtst
+    xorgproto
+  ];
 
   buildPhase = "make";
 

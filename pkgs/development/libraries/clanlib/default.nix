@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libGL
-, libpng
-, pkg-config
-, xorg
-, file
-, freetype
-, fontconfig
-, alsa-lib
-, libXrender
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libGL,
+  libpng,
+  pkg-config,
+  xorg,
+  file,
+  freetype,
+  fontconfig,
+  alsa-lib,
+  libXrender,
 }:
 
 stdenv.mkDerivation rec {

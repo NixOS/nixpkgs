@@ -6,25 +6,13 @@
 
 # Tested in lib/tests/filesystem.sh
 let
-  inherit (builtins)
-    readDir
-    pathExists
-    toString
-    ;
+  inherit (builtins) readDir pathExists toString;
 
-  inherit (lib.attrsets)
-    mapAttrs'
-    filterAttrs
-    ;
+  inherit (lib.attrsets) mapAttrs' filterAttrs;
 
-  inherit (lib.filesystem)
-    pathType
-    ;
+  inherit (lib.filesystem) pathType;
 
-  inherit (lib.strings)
-    hasSuffix
-    removeSuffix
-    ;
+  inherit (lib.strings) hasSuffix removeSuffix;
 in
 
 {
@@ -46,17 +34,21 @@ in
   pathType =
     builtins.readFileType or
     # Nix <2.14 compatibility shim
-    (path:
-      if ! pathExists path
+    (
+      path:
+      if
+        !pathExists path
       # Fail irrecoverably to mimic the historic behavior of this function and
       # the new builtins.readFileType
-      then abort "lib.filesystem.pathType: Path ${toString path} does not exist."
+      then
+        abort "lib.filesystem.pathType: Path ${toString path} does not exist."
       # The filesystem root is the only path where `dirOf / == /` and
       # `baseNameOf /` is not valid. We can detect this and directly return
       # "directory", since we know the filesystem root can't be anything else.
-      else if dirOf path == path
-      then "directory"
-      else (readDir (dirOf path)).${baseNameOf path}
+      else if dirOf path == path then
+        "directory"
+      else
+        (readDir (dirOf path)).${baseNameOf path}
     );
 
   /*
@@ -75,8 +67,7 @@ in
       pathIsDirectory /some/file.nix
       => false
   */
-  pathIsDirectory = path:
-    pathExists path && pathType path == "directory";
+  pathIsDirectory = path: pathExists path && pathType path == "directory";
 
   /*
     Whether a path exists and is a regular file, meaning not a symlink or any other special file type.
@@ -94,8 +85,7 @@ in
       pathIsRegularFile /some/file.nix
       => true
   */
-  pathIsRegularFile = path:
-    pathExists path && pathType path == "regular";
+  pathIsRegularFile = path: pathExists path && pathType path == "regular";
 
   /*
     A map of all haskell packages defined in the given path,
@@ -107,19 +97,20 @@ in
   haskellPathsInDir =
     # The directory within to search
     root:
-    let # Files in the root
-        root-files = builtins.attrNames (builtins.readDir root);
-        # Files with their full paths
-        root-files-with-paths =
-          map (file:
-            { name = file; value = root + "/${file}"; }
-          ) root-files;
-        # Subdirectories of the root with a cabal file.
-        cabal-subdirs =
-          builtins.filter ({ name, value }:
-            builtins.pathExists (value + "/${name}.cabal")
-          ) root-files-with-paths;
-    in builtins.listToAttrs cabal-subdirs;
+    let
+      # Files in the root
+      root-files = builtins.attrNames (builtins.readDir root);
+      # Files with their full paths
+      root-files-with-paths = map (file: {
+        name = file;
+        value = root + "/${file}";
+      }) root-files;
+      # Subdirectories of the root with a cabal file.
+      cabal-subdirs = builtins.filter (
+        { name, value }: builtins.pathExists (value + "/${name}.cabal")
+      ) root-files-with-paths;
+    in
+    builtins.listToAttrs cabal-subdirs;
   /*
     Find the first directory containing a file matching 'pattern'
     upward from a given 'file'.
@@ -132,23 +123,28 @@ in
     pattern:
     # The file to start searching upward from
     file:
-    let go = path:
-          let files = builtins.attrNames (builtins.readDir path);
-              matches = builtins.filter (match: match != null)
-                          (map (builtins.match pattern) files);
-          in
-            if builtins.length matches != 0
-              then { inherit path matches; }
-              else if path == /.
-                then null
-                else go (dirOf path);
-        parent = dirOf file;
-        isDir =
-          let base = baseNameOf file;
-              type = (builtins.readDir parent).${base} or null;
-          in file == /. || type == "directory";
-    in go (if isDir then file else parent);
-
+    let
+      go =
+        path:
+        let
+          files = builtins.attrNames (builtins.readDir path);
+          matches = builtins.filter (match: match != null) (map (builtins.match pattern) files);
+        in
+        if builtins.length matches != 0 then
+          { inherit path matches; }
+        else if path == /. then
+          null
+        else
+          go (dirOf path);
+      parent = dirOf file;
+      isDir =
+        let
+          base = baseNameOf file;
+          type = (builtins.readDir parent).${base} or null;
+        in
+        file == /. || type == "directory";
+    in
+    go (if isDir then file else parent);
 
   /*
     Given a directory, return a flattened list of all files within it recursively.
@@ -158,12 +154,15 @@ in
   listFilesRecursive =
     # The path to recursively list
     dir:
-    lib.flatten (lib.mapAttrsToList (name: type:
-    if type == "directory" then
-      lib.filesystem.listFilesRecursive (dir + "/${name}")
-    else
-      dir + "/${name}"
-  ) (builtins.readDir dir));
+    lib.flatten (
+      lib.mapAttrsToList (
+        name: type:
+        if type == "directory" then
+          lib.filesystem.listFilesRecursive (dir + "/${name}")
+        else
+          dir + "/${name}"
+      ) (builtins.readDir dir)
+    );
 
   /*
     Transform a directory tree containing package files suitable for
@@ -263,49 +262,44 @@ in
     let
       # Determine if a directory entry from `readDir` indicates a package or
       # directory of packages.
-      directoryEntryIsPackage = basename: type:
-        type == "directory" || hasSuffix ".nix" basename;
+      directoryEntryIsPackage = basename: type: type == "directory" || hasSuffix ".nix" basename;
 
       # List directory entries that indicate packages in the given `path`.
-      packageDirectoryEntries = path:
-        filterAttrs directoryEntryIsPackage (readDir path);
+      packageDirectoryEntries = path: filterAttrs directoryEntryIsPackage (readDir path);
 
       # Transform a directory entry (a `basename` and `type` pair) into a
       # package.
-      directoryEntryToAttrPair = subdirectory: basename: type:
+      directoryEntryToAttrPair =
+        subdirectory: basename: type:
         let
           path = subdirectory + "/${basename}";
         in
-        if type == "regular"
-        then
-        {
-          name = removeSuffix ".nix" basename;
-          value = callPackage path { };
-        }
+        if type == "regular" then
+          {
+            name = removeSuffix ".nix" basename;
+            value = callPackage path { };
+          }
+        else if type == "directory" then
+          {
+            name = basename;
+            value = packagesFromDirectory path;
+          }
         else
-        if type == "directory"
-        then
-        {
-          name = basename;
-          value = packagesFromDirectory path;
-        }
-        else
-        throw
-          ''
+          throw ''
             lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString subdirectory}
           '';
 
       # Transform a directory into a package (if there's a `package.nix`) or
       # set of packages (otherwise).
-      packagesFromDirectory = path:
+      packagesFromDirectory =
+        path:
         let
           defaultPackagePath = path + "/package.nix";
         in
-        if pathExists defaultPackagePath
-        then callPackage defaultPackagePath { }
-        else mapAttrs'
-          (directoryEntryToAttrPair path)
-          (packageDirectoryEntries path);
+        if pathExists defaultPackagePath then
+          callPackage defaultPackagePath { }
+        else
+          mapAttrs' (directoryEntryToAttrPair path) (packageDirectoryEntries path);
     in
     packagesFromDirectory directory;
 }

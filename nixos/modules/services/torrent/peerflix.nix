@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +19,8 @@ let
     }
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -41,9 +48,7 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - peerflix - - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.stateDir}' - peerflix - - -" ];
 
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
@@ -66,6 +71,6 @@ in {
       isSystemUser = true;
       group = "peerflix";
     };
-    users.groups.peerflix = {};
+    users.groups.peerflix = { };
   };
 }

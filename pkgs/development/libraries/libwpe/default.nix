@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, libxkbcommon
-, libGL
-, ninja
-, libX11
-, webkitgtk
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  libxkbcommon,
+  libGL,
+  ninja,
+  libX11,
+  webkitgtk,
 }:
 
 stdenv.mkDerivation rec {

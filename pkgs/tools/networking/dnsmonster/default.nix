@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-gAjR1MoudBAx1dxGObIVPqJdfehWkKckKtwM7sTP0w4=";
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   ldflags = [
     "-s"

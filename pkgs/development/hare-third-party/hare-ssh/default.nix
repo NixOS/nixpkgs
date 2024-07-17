@@ -1,4 +1,10 @@
-{ lib, stdenv, hare, hareThirdParty, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  hare,
+  hareThirdParty,
+  fetchFromSourcehut,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-ssh";

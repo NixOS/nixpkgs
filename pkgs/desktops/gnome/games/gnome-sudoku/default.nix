@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, vala
-, pkg-config
-, gobject-introspection
-, gettext
-, gtk4
-, gnome
-, wrapGAppsHook4
-, libadwaita
-, libgee
-, json-glib
-, qqwing
-, itstool
-, libxml2
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  gobject-introspection,
+  gettext,
+  gtk4,
+  gnome,
+  wrapGAppsHook4,
+  libadwaita,
+  libgee,
+  json-glib,
+  qqwing,
+  itstool,
+  libxml2,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {

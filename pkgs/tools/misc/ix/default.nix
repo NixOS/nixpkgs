@@ -1,4 +1,10 @@
-{ lib, resholve, fetchurl, bash, curl }:
+{
+  lib,
+  resholve,
+  fetchurl,
+  bash,
+  curl,
+}:
 
 resholve.mkDerivation {
   pname = "ix";

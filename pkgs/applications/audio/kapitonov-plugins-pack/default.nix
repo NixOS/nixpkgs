@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, ladspa-sdk, libxcb, lv2, xcbutilwm, xorg
-, zita-convolver, zita-resampler
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust,
+  meson,
+  ninja,
+  pkg-config,
+  boost,
+  cairo,
+  fftw,
+  ladspa-sdk,
+  libxcb,
+  lv2,
+  xcbutilwm,
+  xorg,
+  zita-convolver,
+  zita-resampler,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kapitonov-plugins-pack";

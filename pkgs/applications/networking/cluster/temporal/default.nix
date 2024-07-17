@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  temporal,
+}:
 
 buildGoModule rec {
   pname = "temporal";
@@ -17,7 +23,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There too many integration tests.
   doCheck = false;
@@ -36,9 +45,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = temporal;
-  };
+  passthru.tests.version = testers.testVersion { package = temporal; };
 
   meta = with lib; {
     description = "A microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";

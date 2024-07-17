@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,9 +22,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   vendorHash = "sha256-JFvC9V0xS8SZSdLsOtpyTrFzXjYAOaPQaJHdcnJzK3s=";
 
@@ -38,7 +37,10 @@ buildGoModule rec {
     description = "A simple, scriptable keybind retrieval utility for Hyprland";
     homepage = "https://github.com/hyprland-community/Hyprkeys";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ NotAShelf donovanglover ];
+    maintainers = with maintainers; [
+      NotAShelf
+      donovanglover
+    ];
     mainProgram = "hyprkeys";
   };
 }

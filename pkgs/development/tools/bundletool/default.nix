@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre_headless }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre_headless,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bundletool";

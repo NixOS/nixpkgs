@@ -1,18 +1,18 @@
-{ config, lib, pkg, ... }:
+{
+  config,
+  lib,
+  pkg,
+  ...
+}:
 let
-  inherit (lib)
-    mkOption
-    types
-    ;
+  inherit (lib) mkOption types;
 
   cfg = config.virtualisation.podman.networkSocket;
 
 in
 {
   options.virtualisation.podman.networkSocket = {
-    server = mkOption {
-      type = types.enum [ "ghostunnel" ];
-    };
+    server = mkOption { type = types.enum [ "ghostunnel" ]; };
   };
 
   config = lib.mkIf (cfg.enable && cfg.server == "ghostunnel") {

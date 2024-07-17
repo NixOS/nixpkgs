@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, buildbot
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  buildbot,
+  stdenv,
 
-# patch
-, coreutils
+  # patch
+  coreutils,
 
-# propagates
-, autobahn
-, future
-, msgpack
-, twisted
+  # propagates
+  autobahn,
+  future,
+  msgpack,
+  twisted,
 
-# tests
-, parameterized
-, psutil
-, setuptools-trial
+  # tests
+  parameterized,
+  psutil,
+  setuptools-trial,
 
-# passthru
-, nixosTests
+  # passthru
+  nixosTests,
 }:
 
 buildPythonPackage (rec {
@@ -36,9 +37,7 @@ buildPythonPackage (rec {
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
-  nativeBuildInputs = [
-    setuptools-trial
-  ];
+  nativeBuildInputs = [ setuptools-trial ];
 
   propagatedBuildInputs = [
     autobahn

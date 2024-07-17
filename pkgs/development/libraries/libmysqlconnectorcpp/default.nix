@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, boost
-, openssl
-, mysql80
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  openssl,
+  mysql80,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-oXvx+tErGrF/X2x3ZiifuHIA6RlFMjTD7BZk13NL6Pg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost

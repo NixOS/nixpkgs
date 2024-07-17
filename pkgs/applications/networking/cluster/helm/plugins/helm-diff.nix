@@ -1,4 +1,8 @@
-{ buildGo122Module, fetchFromGitHub, lib }:
+{
+  buildGo122Module,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGo122Module rec {
   pname = "helm-diff";
@@ -13,7 +17,11 @@ buildGo122Module rec {
 
   vendorHash = "sha256-E0ERop/TBr36sfTKCD+DdZwHSkhYdGmvKoJF2gl3gwE=";
 
-  ldflags = [ "-s" "-w" "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}"
+  ];
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -23,6 +28,6 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.libbladeRF ];
-    users.groups.bladerf = {};
+    users.groups.bladerf = { };
   };
 }

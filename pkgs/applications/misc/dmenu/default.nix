@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null
-# update script dependencies
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXinerama,
+  libXft,
+  zlib,
+  patches ? null,
+  # update script dependencies
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Go9T5v0tdJg57IcMXiez4U2lw+6sv8uUXRWeHVQzeV8=";
   };
 
-  buildInputs = [ libX11 libXinerama zlib libXft ];
+  buildInputs = [
+    libX11
+    libXinerama
+    zlib
+    libXft
+  ];
 
   inherit patches;
 
@@ -27,15 +40,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "git://git.suckless.org/dmenu";
-  };
+  passthru.updateScript = gitUpdater { url = "git://git.suckless.org/dmenu"; };
 
   meta = with lib; {
     description = "A generic, highly customizable, and efficient menu for the X Window System";
     homepage = "https://tools.suckless.org/dmenu";
     license = licenses.mit;
-    maintainers = with maintainers; [ pSub globin qusic ];
+    maintainers = with maintainers; [
+      pSub
+      globin
+      qusic
+    ];
     platforms = platforms.all;
     mainProgram = "dmenu";
   };

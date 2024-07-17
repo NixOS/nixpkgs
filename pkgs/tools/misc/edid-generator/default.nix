@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, dos2unix
-, edid-decode
-, hexdump
-, zsh
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dos2unix,
+  edid-decode,
+  hexdump,
+  zsh,
 }:
 
 # Usage:
@@ -31,7 +32,12 @@ stdenv.mkDerivation {
     sha256 = "sha256-UGxze273VB5cQDWrv9X/Lam6WbOu9U3bro8GcVbEvws=";
   };
 
-  nativeBuildInputs = [ dos2unix edid-decode hexdump zsh ];
+  nativeBuildInputs = [
+    dos2unix
+    edid-decode
+    hexdump
+    zsh
+  ];
 
   postPatch = ''
     patchShebangs modeline2edid
@@ -72,7 +78,10 @@ stdenv.mkDerivation {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";
     homepage = "https://github.com/akatrevorjay/edid-generator";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ flokli nazarewk ];
+    maintainers = with lib.maintainers; [
+      flokli
+      nazarewk
+    ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
   };

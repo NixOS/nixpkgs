@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libx86emu";
@@ -23,7 +28,10 @@ stdenv.mkDerivation rec {
   buildFlags = [ "shared" ];
   enableParallelBuilding = true;
 
-  installFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "LIBDIR=/lib"
+  ];
 
   meta = with lib; {
     description = "x86 emulation library";

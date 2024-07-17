@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-bI7PdUl+/kBx4F9T+tvF7QHNQ2pSvRjT31O/nIUvUAE=";
 
-  ldflags = [ "-w" "-s" ];
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd crawley \

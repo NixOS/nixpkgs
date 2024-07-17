@@ -1,4 +1,10 @@
-{ stdenv, pkgs, lib, fetchFromSourcehut, nixosTests }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  fetchFromSourcehut,
+  nixosTests,
+}:
 
 let
   perl = pkgs.perl.withPackages (pps: [

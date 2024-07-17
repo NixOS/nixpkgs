@@ -1,13 +1,27 @@
-{ lib, stdenv, fetchFromGitea, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
-, tcl, which, ps, getconf
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-# dependency ordering is broken at the moment when building with openssl
-, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchurl,
+  fetchpatch,
+  lua,
+  jemalloc,
+  pkg-config,
+  nixosTests,
+  tcl,
+  which,
+  ps,
+  getconf,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  # dependency ordering is broken at the moment when building with openssl
+  tlsSupport ? !stdenv.hostPlatform.isStatic,
+  openssl,
 
-# Using system jemalloc fixes cross-compilation and various setups.
-# However the experimental 'active defragmentation' feature of redict requires
-# their custom patched version of jemalloc.
-, useSystemJemalloc ? true
+  # Using system jemalloc fixes cross-compilation and various setups.
+  # However the experimental 'active defragmentation' feature of redict requires
+  # their custom patched version of jemalloc.
+  useSystemJemalloc ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ lua ]
+  buildInputs =
+    [ lua ]
     ++ lib.optional useSystemJemalloc jemalloc
     ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
@@ -42,8 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # More cross-compiling fixes.
-  makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ]
+  makeFlags =
+    [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    ]
     ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
@@ -55,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  nativeCheckInputs = [
+    which
+    tcl
+    ps
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
@@ -88,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Only;
     platforms = platforms.all;
     changelog = "https://codeberg.org/redict/redict/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ yuka gmemstr ];
+    maintainers = with maintainers; [
+      yuka
+      gmemstr
+    ];
     mainProgram = "redict-cli";
   };
 })

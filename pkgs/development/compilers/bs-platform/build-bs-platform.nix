@@ -1,21 +1,34 @@
 # This file is based on https://github.com/turboMaCk/bs-platform.nix/blob/master/build-bs-platform.nix
 # to make potential future updates simpler
 
-{ lib, stdenv, fetchFromGitHub, ninja, runCommand, nodejs, python3,
-  ocaml-version, version, src,
-  patches ? [],
-  ocaml ? (import ./ocaml.nix {
-    version = ocaml-version;
-    inherit lib stdenv;
-    src = "${src}/ocaml";
-  }),
-  custom-ninja ? (ninja.overrideAttrs (attrs: {
-    src = runCommand "ninja-patched-source" {} ''
-      mkdir -p $out
-      tar zxvf ${src}/vendor/ninja.tar.gz -C $out
-    '';
-    patches = [];
-  }))
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ninja,
+  runCommand,
+  nodejs,
+  python3,
+  ocaml-version,
+  version,
+  src,
+  patches ? [ ],
+  ocaml ? (
+    import ./ocaml.nix {
+      version = ocaml-version;
+      inherit lib stdenv;
+      src = "${src}/ocaml";
+    }
+  ),
+  custom-ninja ? (
+    ninja.overrideAttrs (attrs: {
+      src = runCommand "ninja-patched-source" { } ''
+        mkdir -p $out
+        tar zxvf ${src}/vendor/ninja.tar.gz -C $out
+      '';
+      patches = [ ];
+    })
+  ),
 }:
 
 let
@@ -33,7 +46,11 @@ stdenv.mkDerivation rec {
   # https://github.com/BuckleScript/bucklescript/blob/7.2.0/scripts/install.js#L225-L227
   BS_TRAVIS_CI = "1";
 
-  buildInputs = [ nodejs python3 custom-ninja ];
+  buildInputs = [
+    nodejs
+    python3
+    custom-ninja
+  ];
 
   prePatch = ''
     sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js

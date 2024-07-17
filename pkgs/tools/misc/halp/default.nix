@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
-, unixtools
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
+  unixtools,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,17 +26,11 @@ rustPlatform.buildRustPackage rec {
     ./fix-target-dir.patch
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  nativeCheckInputs = [
-    unixtools.script
-  ];
+  nativeCheckInputs = [ unixtools.script ];
 
   # tests are failing on darwin
   doCheck = !stdenv.isDarwin;
@@ -73,7 +68,10 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
     changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "halp";
   };

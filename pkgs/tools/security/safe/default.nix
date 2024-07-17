@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [
-    "-X main.Version=${version}"
-  ];
+  ldflags = [ "-X main.Version=${version}" ];
 
   meta = with lib; {
     description = "A Vault CLI";

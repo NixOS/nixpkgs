@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, librsb
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  librsb,
 }:
 
 buildOctavePackage rec {
@@ -13,9 +14,7 @@ buildOctavePackage rec {
     sha256 = "0jyy2m7wylzyjqj9n6mjizhj0ccq8xnxm2g6pdlrmncxq1401khd";
   };
 
-  propagatedBuildInputs = [
-    librsb
-  ];
+  propagatedBuildInputs = [ librsb ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/sparsersb/index.html";

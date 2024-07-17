@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, cmake
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, faudio
-, physfs
-, SDL2
-, tinyxml-2
-, Foundation
-, IOKit
-, makeAndPlay ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  cmake,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  faudio,
+  physfs,
+  SDL2,
+  tinyxml-2,
+  Foundation,
+  IOKit,
+  makeAndPlay ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,18 +41,21 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    faudio
-    physfs
-    SDL2
-    tinyxml-2
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
+  buildInputs =
+    [
+      faudio
+      physfs
+      SDL2
+      tinyxml-2
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Foundation
+      IOKit
+    ];
 
   cmakeDir = "../desktop_version";
 
-  cmakeFlags = [
-    "-DBUNDLE_DEPENDENCIES=OFF"
-  ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
+  cmakeFlags = [ "-DBUNDLE_DEPENDENCIES=OFF" ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
 
   desktopItems = [
     (makeDesktopItem {
@@ -83,13 +87,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A retro-styled platform game" + lib.optionalString makeAndPlay " (redistributable, without original levels)";
-    longDescription = ''
-      VVVVVV is a platform game all about exploring one simple mechanical
-      idea - what if you reversed gravity instead of jumping?
-    '' + lib.optionalString makeAndPlay ''
-      (Redistributable version, doesn't include the original levels.)
-    '';
+    description =
+      "A retro-styled platform game"
+      + lib.optionalString makeAndPlay " (redistributable, without original levels)";
+    longDescription =
+      ''
+        VVVVVV is a platform game all about exploring one simple mechanical
+        idea - what if you reversed gravity instead of jumping?
+      ''
+      + lib.optionalString makeAndPlay ''
+        (Redistributable version, doesn't include the original levels.)
+      '';
     homepage = "https://thelettervsixtim.es";
     license = licenses.unfree;
     maintainers = with maintainers; [ martfont ];

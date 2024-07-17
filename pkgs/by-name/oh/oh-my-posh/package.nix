@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,9 +20,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -57,6 +56,9 @@ buildGoModule rec {
     homepage = "https://ohmyposh.dev";
     changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins urandom ];
+    maintainers = with maintainers; [
+      lucperkins
+      urandom
+    ];
   };
 }

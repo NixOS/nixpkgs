@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "djmount";

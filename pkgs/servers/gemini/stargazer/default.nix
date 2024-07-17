@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, Security
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  Security,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage rec {
     basic-functionality = nixosTests.stargazer;
   };
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

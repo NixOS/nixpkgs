@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -15,7 +16,13 @@ in
       '';
 
       logLevel = lib.mkOption {
-        type = lib.types.enum [ "error" "warning" "info" "debug" "trace" ];
+        type = lib.types.enum [
+          "error"
+          "warning"
+          "info"
+          "debug"
+          "trace"
+        ];
         default = "debug";
         description = ''
           The logging verbosity of the multipassd binary.

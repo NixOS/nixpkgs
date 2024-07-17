@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, zlib
-, geoip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  zlib,
+  geoip,
 }:
 
 buildGoModule rec {
@@ -29,11 +30,17 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib geoip ];
+  buildInputs = [
+    zlib
+    geoip
+  ];
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "geographical download redirector for distributing files efficiently across a set of mirrors";

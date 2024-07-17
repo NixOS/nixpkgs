@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gucci }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gucci,
+}:
 
 buildGoModule rec {
   pname = "gucci";
@@ -13,11 +19,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-/4OnbtxxhXQnmSV6UbjgzXdL7szhL9rKiG5BR8FsyqI=";
 
-  ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.AppVersion=${version}"
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gucci;
-  };
+  passthru.tests.version = testers.testVersion { package = gucci; };
 
   checkFlags = [
     "-short"

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libusb1, libyubikey, json_c }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libusb1,
+  libyubikey,
+  json_c,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yubikey-personalization";
@@ -27,11 +36,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 libyubikey json_c ];
-
-  configureFlags = [
-    "--with-backend=libusb-1.0"
+  buildInputs = [
+    libusb1
+    libyubikey
+    json_c
   ];
+
+  configureFlags = [ "--with-backend=libusb-1.0" ];
 
   doCheck = true;
 

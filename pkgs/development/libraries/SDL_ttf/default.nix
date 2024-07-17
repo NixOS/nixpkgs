@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, freetype }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  SDL,
+  freetype,
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL_ttf";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  buildInputs = [ SDL freetype ];
+  buildInputs = [
+    SDL
+    freetype
+  ];
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 

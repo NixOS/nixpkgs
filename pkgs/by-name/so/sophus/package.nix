@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, eigen
-, fmt
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  eigen,
+  fmt,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TNuUoL9r1s+kGE4tCOGFGTDv1sLaHJDUKa6c9x41Z7w=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     eigen
@@ -35,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ implementation of Lie Groups using Eigen";
     homepage = "https://github.com/strasdat/Sophus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ locochoco acowley ];
+    maintainers = with lib.maintainers; [
+      locochoco
+      acowley
+    ];
     platforms = lib.platforms.all;
   };
 })

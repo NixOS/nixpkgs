@@ -1,6 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  pantheon,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
-stdenvNoCC.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec {
   pname = "flat-remix-icon-theme";
   version = "20220525";
 
@@ -11,9 +20,7 @@ stdenvNoCC.mkDerivation rec  {
     sha256 = "sha256-JpUa2nxZxrLTd80qdiGpob4Trq41ONthsPA4zFj/6nk=";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     breeze-icons

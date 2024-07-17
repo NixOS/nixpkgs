@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, fontconfig
-, freealut
-, freeglut
-, ftgl
-, gettext
-, glpng
-, libGL
-, libGLU
-, openal
-, pkg-config
-, quesoglc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  fontconfig,
+  freealut,
+  freeglut,
+  ftgl,
+  gettext,
+  glpng,
+  libGL,
+  libGLU,
+  openal,
+  pkg-config,
+  quesoglc,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +51,6 @@ stdenv.mkDerivation rec {
     "--disable-sdlimage"
     "--disable-sdlmixer"
   ];
-
 
   postInstall = ''
     install -D misc/chromium-bsu.png $out/share/pixmaps/chromium-bsu.png

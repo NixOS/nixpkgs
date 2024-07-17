@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, glib
-, gettext
-, xorg
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  gettext,
+  xorg,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  go,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,10 +43,7 @@ stdenv.mkDerivation rec {
     sed -i "s,/usr,$out," bamboo.xml
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
-
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     isIbusEngine = true;

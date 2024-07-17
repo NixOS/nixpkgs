@@ -1,8 +1,9 @@
-{ mkYarnPackage
-, fetchYarnDeps
-, meta
-, version
-, src
+{
+  mkYarnPackage,
+  fetchYarnDeps,
+  meta,
+  version,
+  src,
 }:
 
 mkYarnPackage {
@@ -31,7 +32,6 @@ mkYarnPackage {
   '';
 
   doDist = false;
-
 
   inherit meta;
 }

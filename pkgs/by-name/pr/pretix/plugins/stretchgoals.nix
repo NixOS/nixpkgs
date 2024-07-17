@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pretix-plugin-build
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pretix-plugin-build,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -24,9 +25,7 @@ buildPythonPackage {
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "pretix_stretchgoals"
-  ];
+  pythonImportsCheck = [ "pretix_stretchgoals" ];
 
   meta = with lib; {
     description = "Display the average ticket sales price over time";

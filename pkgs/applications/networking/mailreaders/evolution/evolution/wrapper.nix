@@ -1,4 +1,10 @@
-{ lib, makeWrapper, symlinkJoin, gnome, plugins }:
+{
+  lib,
+  makeWrapper,
+  symlinkJoin,
+  gnome,
+  plugins,
+}:
 
 symlinkJoin {
   name = "evolution-with-plugins";

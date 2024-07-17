@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, libsndfile, freeglut, alsa-lib, mesa, libGLU, libX11, libXmu
-, libXext, libXi }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libsndfile,
+  freeglut,
+  alsa-lib,
+  mesa,
+  libGLU,
+  libX11,
+  libXmu,
+  libXext,
+  libXi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sndpeek";
@@ -36,18 +48,18 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Real-time 3D animated audio display/playback";
     longDescription = ''
-       sndpeek is just what it sounds (and looks) like:
-         * real-time 3D animated display/playback
-         * can use mic-input or wav/aiff/snd/raw/mat file (with playback)
-         * time-domain waveform
-         * FFT magnitude spectrum
-         * 3D waterfall plot
-         * lissajous! (interchannel correlation)
-         * rotatable and scalable display
-         * freeze frame! (for didactic purposes)
-         * real-time spectral feature extraction (centroid, rms, flux, rolloff)
-         * available on MacOS X, Linux, and Windows under GPL
-         * part of the sndtools distribution.
+      sndpeek is just what it sounds (and looks) like:
+        * real-time 3D animated display/playback
+        * can use mic-input or wav/aiff/snd/raw/mat file (with playback)
+        * time-domain waveform
+        * FFT magnitude spectrum
+        * 3D waterfall plot
+        * lissajous! (interchannel correlation)
+        * rotatable and scalable display
+        * freeze frame! (for didactic purposes)
+        * real-time spectral feature extraction (centroid, rms, flux, rolloff)
+        * available on MacOS X, Linux, and Windows under GPL
+        * part of the sndtools distribution.
     '';
     homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
     license = licenses.gpl2;

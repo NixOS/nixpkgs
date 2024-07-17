@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, libxml2, freetype, libGLU, libGL, glew
-, qtbase, wrapQtAppsHook, autoPatchelfHook, python3
-, cmake, libjpeg, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  freetype,
+  libGLU,
+  libGL,
+  glew,
+  qtbase,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  python3,
+  cmake,
+  libjpeg,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tulip";
@@ -11,12 +25,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-arpC+FsDYGMf47phtSzyjjvDg/UYZS+akOe5CYfajdU=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ libxml2 freetype glew libjpeg qtbase python3 ]
+  buildInputs =
+    [
+      libxml2
+      freetype
+      glew
+      libjpeg
+      qtbase
+      python3
+    ]
     ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.isLinux [ libGLU libGL ];
+    ++ lib.optionals stdenv.isLinux [
+      libGLU
+      libGL
+    ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
@@ -33,13 +60,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A visualization framework for the analysis and visualization of relational data";
 
-    longDescription =
-      '' Tulip is an information visualization framework dedicated to the
-         analysis and visualization of relational data.  Tulip aims to
-         provide the developer with a complete library, supporting the design
-         of interactive information visualization applications for relational
-         data that can be tailored to the problems he or she is addressing.
-      '';
+    longDescription = ''
+      Tulip is an information visualization framework dedicated to the
+              analysis and visualization of relational data.  Tulip aims to
+              provide the developer with a complete library, supporting the design
+              of interactive information visualization applications for relational
+              data that can be tailored to the problems he or she is addressing.
+    '';
 
     homepage = "http://tulip.labri.fr/";
 

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, antlr4
-, capnproto
-, readline
-, surelog
-, uhdm
-, yosys
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  antlr4,
+  capnproto,
+  readline,
+  surelog,
+  uhdm,
+  yosys,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,15 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
   GIT_VERSION = "2023-11-28-b8ed72d";
 
   # Derive our package version from GIT_VERSION, remove hash, just keep date.
-  version = builtins.concatStringsSep "-" (
-    lib.take 3 (builtins.splitVersion finalAttrs.GIT_VERSION));
+  version = builtins.concatStringsSep "-" (lib.take 3 (builtins.splitVersion finalAttrs.GIT_VERSION));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo  = "synlig";
-    rev   = "${finalAttrs.GIT_VERSION}";
-    hash  = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    repo = "synlig";
+    rev = "${finalAttrs.GIT_VERSION}";
+    hash = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
+    fetchSubmodules = false; # we use all dependencies from nix
   };
 
   patches = [
@@ -39,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     antlr4.runtime.cpp
@@ -76,11 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Check that the plugin can be loaded successfully and parse simple file.
   doCheck = true;
   checkPhase = ''
-     runHook preCheck
-     echo "module litmustest(); endmodule;" > litmustest.sv
-     yosys -p "plugin -i build/release/systemverilog-plugin/systemverilog.so;\
-               read_systemverilog litmustest.sv"
-     runHook postCheck
+    runHook preCheck
+    echo "module litmustest(); endmodule;" > litmustest.sv
+    yosys -p "plugin -i build/release/systemverilog-plugin/systemverilog.so;\
+              read_systemverilog litmustest.sv"
+    runHook postCheck
   '';
 
   installPhase = ''
@@ -93,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "SystemVerilog support plugin for Yosys";
-    homepage    = "https://github.com/chipsalliance/synlig";
-    license     = licenses.asl20;
+    homepage = "https://github.com/chipsalliance/synlig";
+    license = licenses.asl20;
     maintainers = with maintainers; [ hzeller ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 })

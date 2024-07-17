@@ -1,11 +1,12 @@
-{ lib
-, annexremote
-, buildPythonApplication
-, drivelib
-, fetchPypi
-, gitpython
-, humanfriendly
-, tenacity
+{
+  lib,
+  annexremote,
+  buildPythonApplication,
+  drivelib,
+  fetchPypi,
+  gitpython,
+  humanfriendly,
+  tenacity,
 }:
 
 buildPythonApplication rec {
@@ -30,9 +31,7 @@ buildPythonApplication rec {
   # testing this special remote obviously depends on authenticating with google
   doCheck = false;
 
-  pythonImportsCheck = [
-    "git_annex_remote_googledrive"
-  ];
+  pythonImportsCheck = [ "git_annex_remote_googledrive" ];
 
   meta = with lib; {
     description = "A git-annex special remote for Google Drive";

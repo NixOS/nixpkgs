@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,13 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-N81x9hq473LfM+bQIQLWizCAsVc/pzyB84PV7/N5jk4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    zstandard
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ zstandard ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   installPhase = ''
     runHook preInstall

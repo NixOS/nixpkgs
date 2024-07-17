@@ -1,4 +1,12 @@
-{ buildGoModule, fetchFromGitHub, lib, libGL, nssmdns, pkg-config, xorg }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libGL,
+  nssmdns,
+  pkg-config,
+  xorg,
+}:
 
 buildGoModule rec {
   pname = "keylight-controller-mschneider82";
@@ -13,24 +21,24 @@ buildGoModule rec {
 
   vendorHash = "sha256-nFttVJbEAAGsrAglMphuw0wJ2Kf8sWB4HrpVqfHO76o=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libGL
-    nssmdns
-  ] ++ (with xorg; [
-    libX11
-    libX11.dev
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
-    xinput
-  ]);
+  buildInputs =
+    [
+      libGL
+      nssmdns
+    ]
+    ++ (with xorg; [
+      libX11
+      libX11.dev
+      libXcursor
+      libXext
+      libXi
+      libXinerama
+      libXrandr
+      libXxf86vm
+      xinput
+    ]);
 
   meta = with lib; {
     description = "A desktop application to control Elgato Keylights";

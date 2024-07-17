@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, stdenv
-, testers
-, manifest-tool
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  stdenv,
+  testers,
+  manifest-tool,
 }:
 
 buildGoModule rec {
@@ -28,15 +29,17 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "-linkmode=external"
-    "-extldflags"
-    "-static"
-  ];
+  ldflags =
+    [
+      "-s"
+      "-w"
+      "-X main.version=${version}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "-linkmode=external"
+      "-extldflags"
+      "-static"
+    ];
 
   preConfigure = ''
     export ldflags+=" -X main.gitCommit=$(cat .git-revision)"
@@ -49,9 +52,7 @@ buildGoModule rec {
     "static_build"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = manifest-tool;
-  };
+  passthru.tests.version = testers.testVersion { package = manifest-tool; };
 
   meta = with lib; {
     description = "Command line tool to create and query container image manifest list/indexes";

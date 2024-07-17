@@ -1,4 +1,11 @@
-{ fetchurl, lib, stdenv, ncurses, pkg-config, gtk2 }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncurses,
+  pkg-config,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mp3info";
@@ -10,31 +17,34 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses gtk2 ];
+  buildInputs = [
+    ncurses
+    gtk2
+  ];
 
   hardeningDisable = [ "format" ];
 
-  configurePhase =
-    '' sed -i Makefile \
-           -e "s|^prefix=.*$|prefix=$out|g ;
-               s|/bin/rm|rm|g ;
-               s|/usr/bin/install|install|g"
-    '';
+  configurePhase = ''
+    sed -i Makefile \
+              -e "s|^prefix=.*$|prefix=$out|g ;
+                  s|/bin/rm|rm|g ;
+                  s|/usr/bin/install|install|g"
+  '';
 
-  preInstall =
-    '' mkdir -p "$out/bin"
-       mkdir -p "$out/man/man1"
-    '';
+  preInstall = ''
+    mkdir -p "$out/bin"
+          mkdir -p "$out/man/man1"
+  '';
 
   meta = {
     description = "MP3 technical info viewer and ID3 1.x tag editor";
 
-    longDescription =
-      '' MP3Info is a little utility used to read and modify the ID3 tags of
-         MP3 files.  MP3Info can also display various techincal aspects of an
-         MP3 file including playing time, bit-rate, sampling frequency and
-         other attributes in a pre-defined or user-specifiable output format.
-      '';
+    longDescription = ''
+      MP3Info is a little utility used to read and modify the ID3 tags of
+              MP3 files.  MP3Info can also display various techincal aspects of an
+              MP3 file including playing time, bit-rate, sampling frequency and
+              other attributes in a pre-defined or user-specifiable output format.
+    '';
 
     homepage = "http://www.ibiblio.org/mp3info/";
 

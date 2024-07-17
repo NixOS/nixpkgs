@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,18 +27,18 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
-  checkFlags = [
-    # requires internet access
-    "--skip=workspace::package::external::remote_repo::test::full_download"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # both tests fail on darwin with 'Attempted to create a NULL object.'
-    "--skip=workspace::fs::local::test::read"
-    "--skip=workspace::package::external::manager::test::local_package"
-  ];
+  checkFlags =
+    [
+      # requires internet access
+      "--skip=workspace::package::external::remote_repo::test::full_download"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # both tests fail on darwin with 'Attempted to create a NULL object.'
+      "--skip=workspace::fs::local::test::read"
+      "--skip=workspace::package::external::manager::test::local_package"
+    ];
 
   # workspace::package::external::manager::test::local_package tries to access the data directory
   preCheck = ''
@@ -49,7 +50,13 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda GaetanLepage ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      GaetanLepage
+    ];
   };
 }

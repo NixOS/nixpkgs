@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -21,9 +22,7 @@ buildGoModule rec {
   # but with go.mod changes removed due to conflict
   patches = [ ./0001-use-builtin-go-syscerts.patch ];
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   doCheck = false;
 

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,9 +23,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -44,18 +43,20 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # Fails on sandbox
-    "--ignore=tests/unittests/test_client.py"
-    "--deselect=tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
-    "--deselect=tests/unittests/test_render_functions.py::test_render_time"
-    # Only execute unittests, because cli tests require a running Redis
-    "tests/unittests/"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Flaky tests
-    "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
-    "--deselect=tests/unittests/test_utils.py::test_timer"
-  ];
+  pytestFlagsArray =
+    [
+      # Fails on sandbox
+      "--ignore=tests/unittests/test_client.py"
+      "--deselect=tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
+      "--deselect=tests/unittests/test_render_functions.py::test_render_time"
+      # Only execute unittests, because cli tests require a running Redis
+      "tests/unittests/"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Flaky tests
+      "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
+      "--deselect=tests/unittests/test_utils.py::test_timer"
+    ];
 
   pythonImportsCheck = [ "iredis" ];
 

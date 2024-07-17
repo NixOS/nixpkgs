@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, bash, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  bash,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "rtl_433-exporter";
@@ -15,7 +21,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-BsNB0OTwBUu9kK+lSN7EF8ZQH3kFx8P9h4QgcfCvtg4=";
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) rtl_433; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) rtl_433;
+  };
 
   meta = with lib; {
     description = "Prometheus time-series DB exporter for rtl_433 433MHz radio packet decoder";

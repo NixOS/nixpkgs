@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, perl, pkg-config, glib, ncurses
-, enablePlugin ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  pkg-config,
+  glib,
+  ncurses,
+  enablePlugin ? false,
+}:
 
 # Enabling the plugin and using it with a recent irssi, segafults on join:
 # http://marc.info/?l=silc-devel&m=125610477802211
@@ -26,14 +34,18 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ perl glib ncurses ];
+  buildInputs = [
+    perl
+    glib
+    ncurses
+  ];
 
   meta = {
     homepage = "http://silcnet.org/";
     description = "Secure Internet Live Conferencing server";
     mainProgram = "silc";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, flex
-, libuuid
-, libx86emu
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  flex,
+  libuuid,
+  libx86emu,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-YAhsnE1DJ5UlYAuhDxS/5IpfIJB6DrhCT3E0YiKENjU=";
   };
 
-  nativeBuildInputs = [
-    flex
-  ];
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [
     libuuid
@@ -39,13 +38,9 @@ stdenv.mkDerivation rec {
     substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
   '';
 
-  makeFlags = [
-    "LIBDIR=/lib"
-  ];
+  makeFlags = [ "LIBDIR=/lib" ];
 
-  installFlags = [
-    "DESTDIR=$(out)"
-  ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
     description = "Hardware detection tool from openSUSE";

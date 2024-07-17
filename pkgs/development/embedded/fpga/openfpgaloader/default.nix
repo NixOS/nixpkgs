@@ -1,14 +1,14 @@
 {
-  cmake
-, fetchFromGitHub
-, hidapi
-, lib
-, libftdi1
-, libusb1
-, pkg-config
-, stdenv
-, udev
-, zlib
+  cmake,
+  fetchFromGitHub,
+  hidapi,
+  lib,
+  libftdi1,
+  libusb1,
+  pkg-config,
+  stdenv,
+  udev,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libftdi1
     libusb1
     zlib
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [
-    udev
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [ udev ];
 
   meta = {
     description = "Universal utility for programming FPGAs";

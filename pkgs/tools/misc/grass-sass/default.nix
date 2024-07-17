@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A Sass compiler written purely in Rust";
     homepage = "https://github.com/connorskees/grass";
-    changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${replaceStrings [ "." ] [ "" ] version}";
+    changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${
+      replaceStrings [ "." ] [ "" ] version
+    }";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "grass";

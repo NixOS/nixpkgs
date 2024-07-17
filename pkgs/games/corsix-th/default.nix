@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, doxygen
-, ffmpeg
-, freetype
-, lua
-, makeWrapper
-, SDL2
-, SDL2_mixer
-, timidity
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  ffmpeg,
+  freetype,
+  lua,
+  makeWrapper,
+  SDL2,
+  SDL2_mixer,
+  timidity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WA/VJqHXzBfVUBNtxCVsGBRzSRQ0pvDvAy03ntc0KZE=";
   };
 
-  luaEnv = lua.withPackages(p: with p; [ luafilesystem lpeg luasec luasocket ]);
-  nativeBuildInputs = [ cmake doxygen makeWrapper ];
-  buildInputs = [ ffmpeg freetype lua finalAttrs.luaEnv SDL2 SDL2_mixer timidity ];
+  luaEnv = lua.withPackages (
+    p: with p; [
+      luafilesystem
+      lpeg
+      luasec
+      luasocket
+    ]
+  );
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    makeWrapper
+  ];
+  buildInputs = [
+    ffmpeg
+    freetype
+    lua
+    finalAttrs.luaEnv
+    SDL2
+    SDL2_mixer
+    timidity
+  ];
   cmakeFlags = [ "-Wno-dev" ];
 
   postInstall = ''

@@ -1,9 +1,28 @@
-{ lib, fetchFromGitHub, wrapGAppsHook3, gettext
-, python3Packages, gnome, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gettext,
+  python3Packages,
+  gnome,
+  gtk3,
+  glib,
+  gdk-pixbuf,
+  gsettings-desktop-schemas,
+  gobject-introspection,
+}:
 
 let
-  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
-in buildPythonApplication rec {
+  inherit (python3Packages)
+    buildPythonApplication
+    isPy3k
+    dbus-python
+    pygobject3
+    mpd2
+    setuptools
+    ;
+in
+buildPythonApplication rec {
   pname = "sonata";
   version = "1.7.0";
 

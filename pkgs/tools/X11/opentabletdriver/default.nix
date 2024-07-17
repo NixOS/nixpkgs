@@ -1,19 +1,20 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, gtk3
-, libX11
-, libXrandr
-, libappindicator
-, libevdev
-, libnotify
-, udev
-, copyDesktopItems
-, makeDesktopItem
-, nixosTests
-, wrapGAppsHook3
-, jq
-, coreutils
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  gtk3,
+  libX11,
+  libXrandr,
+  libappindicator,
+  libevdev,
+  libnotify,
+  udev,
+  copyDesktopItems,
+  makeDesktopItem,
+  nixosTests,
+  wrapGAppsHook3,
+  jq,
+  coreutils,
 }:
 
 buildDotnetModule rec {
@@ -27,16 +28,22 @@ buildDotnetModule rec {
     hash = "sha256-zK+feU96JOXjmkTndM9VyUid3z+MZFxJGH+MXaB6kzk=";
   };
 
-  patches = [
-    ./remove-git-from-generate-rules.patch
-  ];
+  patches = [ ./remove-git-from-generate-rules.patch ];
 
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
-  projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  projectFile = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
   nugetDeps = ./deps.nix;
 
-  executables = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  executables = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -120,8 +127,14 @@ buildDotnetModule rec {
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ gepbird thiagokokada ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      gepbird
+      thiagokokada
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "otd";
   };
 }

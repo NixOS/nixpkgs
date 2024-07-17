@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "rancher";
   version = "2.7.7";
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "cli";
-    rev    = "v${version}";
-    hash   = "sha256-HgLV4iuZXkL6BOKtUul1pFuIWv09VnUSPbdrtFd6Khk=";
+    owner = "rancher";
+    repo = "cli";
+    rev = "v${version}";
+    hash = "sha256-HgLV4iuZXkL6BOKtUul1pFuIWv09VnUSPbdrtFd6Khk=";
   };
 
   ldflags = [

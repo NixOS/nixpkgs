@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk2
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk2,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation {
@@ -17,18 +18,14 @@ stdenv.mkDerivation {
     hash = "sha256-VbvX0wrgMIPmPnu3aQdtQ6H0X3umi8aJ42QvmmeMrJ0=";
   };
 
-  buildInputs = [
-    gtk2
-  ];
+  buildInputs = [ gtk2 ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "An application launcher written in C and using GTK for the interface";
@@ -39,4 +36,3 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
   };
 }
-

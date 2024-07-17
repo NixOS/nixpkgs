@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, meson
-, ninja
-, json_c
-, pkg-config
-, gtk-layer-shell
-, libpulseaudio
-, libmpdclient
-, libxkbcommon
-, alsa-lib
-, makeWrapper
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  meson,
+  ninja,
+  json_c,
+  pkg-config,
+  gtk-layer-shell,
+  libpulseaudio,
+  libmpdclient,
+  libxkbcommon,
+  alsa-lib,
+  makeWrapper,
 }:
 stdenv.mkDerivation rec {
   pname = "sfwbar";

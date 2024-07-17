@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,16 +15,39 @@ let
 
   keyFile = "${cfg.keyPath}/${cfg.selector}.private";
 
-  args = [ "-f" "-l"
-           "-p" cfg.socket
-           "-d" cfg.domains
-           "-k" keyFile
-           "-s" cfg.selector
-         ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
+  args =
+    [
+      "-f"
+      "-l"
+      "-p"
+      cfg.socket
+      "-d"
+      cfg.domains
+      "-k"
+      keyFile
+      "-s"
+      cfg.selector
+    ]
+    ++ optionals (cfg.configFile != null) [
+      "-x"
+      cfg.configFile
+    ];
 
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "opendkim"
+        "keyFile"
+      ]
+      [
+        "services"
+        "opendkim"
+        "keyPath"
+      ]
+    )
   ];
 
   ###### interface
@@ -87,7 +115,6 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -99,15 +126,11 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "opendkim") {
-      opendkim.gid = config.ids.gids.opendkim;
-    };
+    users.groups = optionalAttrs (cfg.group == "opendkim") { opendkim.gid = config.ids.gids.opendkim; };
 
     environment.systemPackages = [ pkgs.opendkim ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.opendkim = {
       description = "OpenDKIM signing and verification daemon";
@@ -134,7 +157,7 @@ in {
         StateDirectoryMode = "0700";
         ReadWritePaths = [ cfg.keyPath ];
 
-        AmbientCapabilities = [];
+        AmbientCapabilities = [ ];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
@@ -153,12 +176,18 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6 AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6 AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
         UMask = "0077";
       };
     };

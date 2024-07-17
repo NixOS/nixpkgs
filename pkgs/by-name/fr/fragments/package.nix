@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, appstream-glib
-, cargo
-, dbus
-, desktop-file-utils
-, git
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, openssl
-, pkg-config
-, rustPlatform
-, rustc
-, sqlite
-, transmission_4
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  appstream-glib,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  git,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  sqlite,
+  transmission_4,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {

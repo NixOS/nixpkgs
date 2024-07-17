@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchFromBitbucket
-, proj # >= 6.3.0
+{
+  buildOctavePackage,
+  lib,
+  fetchFromBitbucket,
+  proj, # >= 6.3.0
 }:
 
 buildOctavePackage rec {
@@ -21,9 +22,7 @@ buildOctavePackage rec {
     sed -i s/"warning(errorText)"/"warning(\"%s\", errorText)"/g src/*.cc
   '';
 
-  propagatedBuildInputs = [
-    proj
-  ];
+  propagatedBuildInputs = [ proj ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/octproj/index.html";

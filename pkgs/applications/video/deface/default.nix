@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, makeWrapper
-, pkgs
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  pkgs,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,9 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-tLNTgdnKKmyYHVajz0dHIb7cvC1by5LQ5CFIbMvPEYk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     imageio
@@ -34,15 +33,17 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Native onnxruntime lib used by Python module onnxruntime can't find its other libs without this
-  makeWrapperArgs = [
-    ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"''
-  ];
+  makeWrapperArgs = [ ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"'' ];
 
   patchPhase = ''
     substituteInPlace pyproject.toml requirements.txt --replace "opencv-python" "opencv"
   '';
 
-  pythonImportsCheck = [ "deface" "onnx" "onnxruntime" ];
+  pythonImportsCheck = [
+    "deface"
+    "onnx"
+    "onnxruntime"
+  ];
 
   meta = with lib; {
     description = "Video anonymization by face detection";

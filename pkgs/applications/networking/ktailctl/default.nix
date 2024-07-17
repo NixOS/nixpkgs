@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
-, cmake
-, extra-cmake-modules
-, git
-, go
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
-, kconfig
-, kcoreaddons
-, kguiaddons
-, ki18n
-, kirigami
-, kirigami-addons
-, knotifications
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  cmake,
+  extra-cmake-modules,
+  git,
+  go,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  kconfig,
+  kcoreaddons,
+  kguiaddons,
+  ki18n,
+  kirigami,
+  kirigami-addons,
+  knotifications,
+  nlohmann_json,
 }:
 
 let
@@ -30,12 +31,13 @@ let
     hash = "sha256-fIx6XfNGK+jDpeaoCzTKwv3J01yWoHOgWxjbwTGVK1U=";
   };
 
-  goDeps = (buildGoModule {
-    pname = "tailwrap";
-    inherit src version;
-    modRoot = "tailwrap";
-    vendorHash = "sha256-egTzSdOKrhdEBKarIfROxZUsxbnR9F1JDbdoKzGf9UM=";
-  }).goModules;
+  goDeps =
+    (buildGoModule {
+      pname = "tailwrap";
+      inherit src version;
+      modRoot = "tailwrap";
+      vendorHash = "sha256-egTzSdOKrhdEBKarIfROxZUsxbnR9F1JDbdoKzGf9UM=";
+    }).goModules;
 in
 stdenv.mkDerivation {
   pname = "ktailctl";

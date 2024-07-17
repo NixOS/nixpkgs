@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtwebengine,
-}:
+{ mkKdeDerivation, qtwebengine }:
 mkKdeDerivation {
   pname = "grantlee-editor";
 
-  extraBuildInputs = [qtwebengine];
+  extraBuildInputs = [ qtwebengine ];
 }

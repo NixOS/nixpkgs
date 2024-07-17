@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cc65
-, lzsa
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cc65,
+  lzsa,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

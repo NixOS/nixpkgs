@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, qttools
-, wrapQtAppsHook
-, qtbase
-, qtwayland
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,19 +28,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
-  installPhase = if stdenv.isDarwin then ''
-    runHook preInstall
+  installPhase =
+    if stdenv.isDarwin then
+      ''
+        runHook preInstall
 
-    mkdir -p $out/Applications
-    mv CuteMaze.app $out/Applications
-    makeWrapper $out/Applications/CuteMaze.app/Contents/MacOS/CuteMaze $out/bin/cutemaze
+        mkdir -p $out/Applications
+        mv CuteMaze.app $out/Applications
+        makeWrapper $out/Applications/CuteMaze.app/Contents/MacOS/CuteMaze $out/bin/cutemaze
 
-    runHook postInstall
-  '' else null;
+        runHook postInstall
+      ''
+    else
+      null;
 
   meta = with lib; {
     changelog = "https://github.com/gottcode/cutemaze/blob/v${version}/ChangeLog";

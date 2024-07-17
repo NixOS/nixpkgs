@@ -1,4 +1,8 @@
-{ stdenv, lib, idris2, makeWrapper
+{
+  stdenv,
+  lib,
+  idris2,
+  makeWrapper,
 }:
 # Usage: let
 #          pkg = idris2Packages.buildIdris {
@@ -11,34 +15,40 @@
 #          bin = pkg.executable;
 #        }
 #
-{ src
-, ipkgName
-, version ? "unversioned"
-, idrisLibraries # Other libraries built with buildIdris
-, ... }@attrs:
+{
+  src,
+  ipkgName,
+  version ? "unversioned",
+  idrisLibraries, # Other libraries built with buildIdris
+  ...
+}@attrs:
 
 let
-  propagate = libs: lib.unique (lib.concatMap (nextLib: [nextLib] ++ nextLib.propagatedIdrisLibraries) libs);
+  propagate =
+    libs: lib.unique (lib.concatMap (nextLib: [ nextLib ] ++ nextLib.propagatedIdrisLibraries) libs);
   ipkgFileName = ipkgName + ".ipkg";
   idrName = "idris2-${idris2.version}";
   libSuffix = "lib/${idrName}";
   propagatedIdrisLibraries = propagate idrisLibraries;
-  libDirs =
-    (lib.makeSearchPath libSuffix propagatedIdrisLibraries) +
-    ":${idris2}/${idrName}";
+  libDirs = (lib.makeSearchPath libSuffix propagatedIdrisLibraries) + ":${idris2}/${idrName}";
   supportDir = "${idris2}/${idrName}/lib";
   drvAttrs = builtins.removeAttrs attrs [
     "ipkgName"
     "idrisLibraries"
   ];
 
-  derivation = stdenv.mkDerivation (finalAttrs:
-    drvAttrs // {
+  derivation = stdenv.mkDerivation (
+    finalAttrs:
+    drvAttrs
+    // {
       pname = ipkgName;
       inherit version;
       src = src;
-      nativeBuildInputs = [ idris2 makeWrapper ] ++ attrs.nativeBuildInputs or [];
-      buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [];
+      nativeBuildInputs = [
+        idris2
+        makeWrapper
+      ] ++ attrs.nativeBuildInputs or [ ];
+      buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [ ];
 
       IDRIS2_PACKAGE_PATH = libDirs;
 
@@ -58,7 +68,8 @@ let
     }
   );
 
-in {
+in
+{
   executable = derivation.overrideAttrs {
     installPhase = ''
       runHook preInstall
@@ -84,9 +95,14 @@ in {
     '';
   };
 
-  library = { withSource ? false }:
-    let installCmd = if withSource then "--install-with-src" else "--install";
-    in derivation.overrideAttrs {
+  library =
+    {
+      withSource ? false,
+    }:
+    let
+      installCmd = if withSource then "--install-with-src" else "--install";
+    in
+    derivation.overrideAttrs {
       installPhase = ''
         runHook preInstall
         mkdir -p $out/${libSuffix}

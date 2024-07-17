@@ -1,4 +1,8 @@
-{ lib, appleDerivation', stdenvNoCC }:
+{
+  lib,
+  appleDerivation',
+  stdenvNoCC,
+}:
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
@@ -10,7 +14,7 @@ appleDerivation' stdenvNoCC {
   meta = with lib; {
     description = "Impure primitive symlinks to the Mac OS native dyld, along with headers";
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apple-psl20;
+    platforms = platforms.darwin;
+    license = licenses.apple-psl20;
   };
 }

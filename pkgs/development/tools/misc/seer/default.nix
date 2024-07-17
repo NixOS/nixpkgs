@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gdb, qtcharts, qtbase, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gdb,
+  qtcharts,
+  qtbase,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "seer";
@@ -20,8 +29,14 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/gdb" "${gdb}/bin/gdb"
   '';
 
-  buildInputs = [ qtbase qtcharts ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qtcharts
+  ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   meta = with lib; {
     description = "A Qt gui frontend for GDB";

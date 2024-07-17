@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, bluez
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bluez,
+  ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

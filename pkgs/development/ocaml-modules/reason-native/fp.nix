@@ -3,9 +3,7 @@
 {
   pname = "fp";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   meta = {
     description = "A library for creating and operating on file paths consistently on multiple platforms";

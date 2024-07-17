@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pj4+rG8XbrxVuNgnTVUTPmgrPBRSnoBnqFhOO/JGGWI=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "A CLI tool that helps you avoid undefined user behavior by validating your API specifications";

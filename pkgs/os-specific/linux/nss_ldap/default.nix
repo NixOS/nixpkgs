@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, openldap, perl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openldap,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nss_ldap";
@@ -33,9 +39,7 @@ stdenv.mkDerivation rec {
     perl # shebang of vers_string
   ];
 
-  buildInputs = [
-    openldap
-  ];
+  buildInputs = [ openldap ];
 
   meta = with lib; {
     description = "LDAP module for the Solaris Nameservice Switch (NSS)";

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,22 +21,21 @@ python3.pkgs.buildPythonApplication rec {
       --replace " --cov" ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    dnspython
-    docopt
-    publicsuffixlist
-    pydns
-    pyspf
-    requests
-  ] ++ publicsuffixlist.optional-dependencies.update;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      dnspython
+      docopt
+      publicsuffixlist
+      pydns
+      pyspf
+      requests
+    ]
+    ++ publicsuffixlist.optional-dependencies.update;
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "trustymail"
-  ];
+  pythonImportsCheck = [ "trustymail" ];
 
   meta = with lib; {
     description = "Tool to scan domains and return data based on trustworthy email best practices";

@@ -1,30 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, python3
-, sqlite
-, gdk-pixbuf
-, gnome
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  python3,
+  sqlite,
+  gdk-pixbuf,
+  gnome,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gom";
   version = "0.4";
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
   };
 
-  patches = [
-    ./longer-stress-timeout.patch
-  ];
+  patches = [ ./longer-stress-timeout.patch ];
 
   nativeBuildInputs = [
     gobject-introspection

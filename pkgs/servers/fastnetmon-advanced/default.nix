@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, bzip2
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bzip2,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +16,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-2AKUNPQ7OzuYOolJHwTnWHzB4Qpwun/77+dFCN/cE98=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [
-    bzip2
-  ];
+  buildInputs = [ bzip2 ];
 
   unpackPhase = ''
     ar xf $src
@@ -64,7 +61,9 @@ stdenv.mkDerivation rec {
     $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
   '';
 
-  passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
+  passthru.tests = {
+    inherit (nixosTests) fastnetmon-advanced;
+  };
 
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";

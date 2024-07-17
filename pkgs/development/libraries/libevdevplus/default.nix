@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libevdevplus";
@@ -6,16 +12,19 @@ stdenv.mkDerivation rec {
 
   # adds missing cmake install directives
   # https://github.com/YukiWorkshop/libevdevPlus/pull/10
-  patches = [ ./0001-Add-cmake-install-directives.patch];
+  patches = [ ./0001-Add-cmake-install-directives.patch ];
 
-  src  = fetchFromGitHub {
-    owner  = "YukiWorkshop";
-    repo   = "libevdevPlus";
-    rev    = "b4d4b3143056424a3da9f0516ca02a47209ef757";
+  src = fetchFromGitHub {
+    owner = "YukiWorkshop";
+    repo = "libevdevPlus";
+    rev = "b4d4b3143056424a3da9f0516ca02a47209ef757";
     sha256 = "09y65s16gch0w7fy1s9yjk9gz3bjzxix36h5wmwww6lkj2i1z3rj";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

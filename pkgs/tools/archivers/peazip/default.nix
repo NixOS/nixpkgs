@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, fpc
-, lazarus
-, xorg
-, libqt5pas
-, _7zz
-, archiver
-, brotli
-, upx
-, zpaq
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  fpc,
+  lazarus,
+  xorg,
+  libqt5pas,
+  _7zz,
+  archiver,
+  brotli,
+  upx,
+  zpaq,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {

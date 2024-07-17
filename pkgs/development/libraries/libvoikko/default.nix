@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, autoreconfHook
-, hfst-ospell
-, fetchFromGitHub
-, pkg-config
-, python3
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  hfst-ospell,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    hfst-ospell
-  ];
+  buildInputs = [ hfst-ospell ];
 
   meta = with lib; {
     homepage = "https://voikko.puimula.org/";

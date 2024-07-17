@@ -1,6 +1,7 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 let
   pname = "motrix";
@@ -11,9 +12,7 @@ let
     hash = "sha256-oSO+VH3bZcjnXjECqZgOmsvlOONbfgOq50qVLvHdKfo=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

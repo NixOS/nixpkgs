@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, runCommand
-, writeText
-, openjdk21_headless
-, gradle
-, pkg-config
-, perl
-, cmake
-, gperf
-, gtk2
-, gtk3
-, libXtst
-, libXxf86vm
-, glib
-, alsa-lib
-, ffmpeg_4
-, python3
-, ruby
-, withMedia ? true
-, withWebKit ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  runCommand,
+  writeText,
+  openjdk21_headless,
+  gradle,
+  pkg-config,
+  perl,
+  cmake,
+  gperf,
+  gtk2,
+  gtk3,
+  libXtst,
+  libXxf86vm,
+  glib,
+  alsa-lib,
+  ffmpeg_4,
+  python3,
+  ruby,
+  withMedia ? true,
+  withWebKit ? false,
 }:
 
 let
@@ -36,42 +37,66 @@ let
     url = "https://github.com/unicode-org/icu/releases/${icuPath}";
     hash = "sha256-QDgpjuAqDDiRcYXvj/Tr3pyLVSx3f9A+TfbGtLGCXiA=";
   };
-  icuFakeRepository = runCommand "icu-data-repository" {} ''
+  icuFakeRepository = runCommand "icu-data-repository" { } ''
     install -Dm644 ${icuData} $out/${icuPath}
   '';
 
-  makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}${build}";
+  makePackage =
+    args:
+    stdenv.mkDerivation (
+      {
+        version = "${major}${update}${build}";
 
-    src = fetchFromGitHub {
-      owner = "openjdk";
-      repo = "jfx22u";
-      rev = repover;
-      hash = "sha256-VoEufSO+LciUCvoAM86MG1iMjCA3FSb60Ik4OP2Rk/Q=";
-    };
+        src = fetchFromGitHub {
+          owner = "openjdk";
+          repo = "jfx22u";
+          rev = repover;
+          hash = "sha256-VoEufSO+LciUCvoAM86MG1iMjCA3FSb60Ik4OP2Rk/Q=";
+        };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
-    nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
+        buildInputs = [
+          gtk2
+          gtk3
+          libXtst
+          libXxf86vm
+          glib
+          alsa-lib
+          ffmpeg_4
+        ];
+        nativeBuildInputs = [
+          gradle
+          perl
+          pkg-config
+          cmake
+          gperf
+          python3
+          ruby
+        ];
 
-    dontUseCmakeConfigure = true;
+        dontUseCmakeConfigure = true;
 
-    config = writeText "gradle.properties" (''
-      CONF = Release
-      JDK_HOME = ${openjdk21_headless.home}
-    '' + args.gradleProperties or "");
+        config = writeText "gradle.properties" (
+          ''
+            CONF = Release
+            JDK_HOME = ${openjdk21_headless.home}
+          ''
+          + args.gradleProperties or ""
+        );
 
-    buildPhase = ''
-      runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ln -s $config gradle.properties
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon --console=plain $gradleFlags sdk
+          export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
+          export GRADLE_USER_HOME=$(mktemp -d)
+          ln -s $config gradle.properties
+          export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
+          gradle --no-daemon --console=plain $gradleFlags sdk
 
-      runHook postBuild
-    '';
-  } // args);
+          runHook postBuild
+        '';
+      }
+      // args
+    );
 
   # Fake build to pre-download deps into fixed-output derivation.
   # We run nearly full build because I see no other way to download everything that's needed.
@@ -124,7 +149,10 @@ makePackage {
     done
   '';
 
-  disallowedReferences = [ openjdk21_headless openjdk21_headless ];
+  disallowedReferences = [
+    openjdk21_headless
+    openjdk21_headless
+  ];
 
   passthru.deps = deps;
 

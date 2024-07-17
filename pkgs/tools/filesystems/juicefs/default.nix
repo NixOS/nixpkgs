@@ -1,7 +1,8 @@
-{ lib
-, buildGo121Module
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  buildGo121Module,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 # JuiceFS 1.1.2 doesn't build with Go 1.22. Fixed in upstream. This can be
@@ -19,7 +20,10 @@ buildGo121Module rec {
 
   vendorHash = "sha256-ofUo/3EQPhXPNeD/3to5oFir/3eAaf9WBHR4DOzcxBQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = false; # requires network access
 

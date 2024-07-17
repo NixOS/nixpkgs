@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, flex
-, bison
-, systemd
-, postgresql
-, openssl
-, libyaml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  flex,
+  bison,
+  systemd,
+  postgresql,
+  openssl,
+  libyaml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,10 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XMfUMyoI2mK0imvz/5HTO8CHyKubyPGSTN69v79fkjg=";
   };
 
-  nativeBuildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [
+    cmake
+    flex
+    bison
+  ];
 
-  buildInputs = [ openssl libyaml postgresql ]
-    ++ lib.optionals stdenv.isLinux [ systemd ];
+  buildInputs = [
+    openssl
+    libyaml
+    postgresql
+  ] ++ lib.optionals stdenv.isLinux [ systemd ];
 
   cmakeFlags = [
     "-DFLB_RELEASE=ON"
@@ -41,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
   );
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -53,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
+    maintainers = [
+      lib.maintainers.samrose
+      lib.maintainers.fpletz
+    ];
     platforms = lib.platforms.unix;
   };
 })

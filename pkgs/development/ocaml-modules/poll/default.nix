@@ -1,10 +1,11 @@
-{ buildDunePackage
-, dune-configurator
-, fetchurl
-, kqueue
-, lib
-, ppx_expect
-, ppx_optcomp
+{
+  buildDunePackage,
+  dune-configurator,
+  fetchurl,
+  kqueue,
+  lib,
+  ppx_expect,
+  ppx_optcomp,
 }:
 
 buildDunePackage rec {
@@ -23,13 +24,9 @@ buildDunePackage rec {
     ppx_optcomp
   ];
 
-  propagatedBuildInputs = [
-    kqueue
-  ];
+  propagatedBuildInputs = [ kqueue ];
 
-  checkInputs = [
-    ppx_expect
-  ];
+  checkInputs = [ ppx_expect ];
 
   doCheck = true;
 

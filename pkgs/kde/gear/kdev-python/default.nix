@@ -1,4 +1,4 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kdev-python";
   # FIXME(qt5)

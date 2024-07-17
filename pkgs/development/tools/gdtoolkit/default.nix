@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, godot3-server
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  godot3-server,
 }:
 
 let
@@ -62,7 +63,8 @@ python.pkgs.buildPythonApplication rec {
          - disable doCheck for gdtoolkit, or
          - provide a compatible godot-server version to gdtoolkit"
       '';
-    in lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
+    in
+    lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
       # The tests want to run the installed executables
       export PATH=$out/bin:$PATH
 
@@ -78,12 +80,20 @@ python.pkgs.buildPythonApplication rec {
       rm tests/potential-godot-bugs/multiline-subscription-expression.gd
     '';
 
-  pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
+  pythonImportsCheck = [
+    "gdtoolkit"
+    "gdtoolkit.formatter"
+    "gdtoolkit.linter"
+    "gdtoolkit.parser"
+  ];
 
   meta = with lib; {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
     license = licenses.mit;
-    maintainers = with maintainers; [ shiryel tmarkus ];
+    maintainers = with maintainers; [
+      shiryel
+      tmarkus
+    ];
   };
 }

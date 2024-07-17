@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cudaPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cudaPackages,
+}:
 
 stdenv.mkDerivation {
   pname = "nvidia-optical-flow-sdk";
@@ -21,9 +26,7 @@ stdenv.mkDerivation {
   # Makes setupCudaHook propagate nvidia-optical-flow-sdk together with cuda
   # packages. Currently used by opencv4.cxxdev, hopefully can be removed in the
   # future
-  nativeBuildInputs = [
-    cudaPackages.markForCudatoolkitRootHook
-  ];
+  nativeBuildInputs = [ cudaPackages.markForCudatoolkitRootHook ];
 
   meta = with lib; {
     description = "Nvidia optical flow headers for computing the relative motion of pixels between images";

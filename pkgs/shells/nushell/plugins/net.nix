@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  IOKit,
+  CoreFoundation,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
@@ -20,9 +21,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-BsCOej31vfTf+Wca4+AjxkhXz6wpMRFJmGBsUqOj2U0=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation

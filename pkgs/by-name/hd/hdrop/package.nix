@@ -1,15 +1,16 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, scdoc
-, coreutils
-, util-linux
-, jq
-, libnotify
-, withHyprland ? true
-, hyprland
-, gawk
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  scdoc,
+  coreutils,
+  util-linux,
+  jq,
+  libnotify,
+  withHyprland ? true,
+  hyprland,
+  gawk,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -32,14 +33,18 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/hdrop --prefix PATH ':' \
-      "${lib.makeBinPath ([
-        coreutils
-        util-linux
-        jq
-        libnotify
-        gawk
-      ]
-      ++ lib.optional withHyprland hyprland)}"
+      "${
+        lib.makeBinPath (
+          [
+            coreutils
+            util-linux
+            jq
+            libnotify
+            gawk
+          ]
+          ++ lib.optional withHyprland hyprland
+        )
+      }"
   '';
 
   meta = with lib; {

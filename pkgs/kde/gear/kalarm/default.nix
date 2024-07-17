@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  libcanberra,
-}:
+{ mkKdeDerivation, libcanberra }:
 mkKdeDerivation {
   pname = "kalarm";
 
-  extraBuildInputs = [libcanberra];
+  extraBuildInputs = [ libcanberra ];
 }

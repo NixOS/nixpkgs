@@ -1,4 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoPackage rec {
   pname = "dovecot_exporter";
@@ -15,13 +20,18 @@ buildGoPackage rec {
 
   goDeps = ./dovecot-exporter-deps.nix;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) dovecot; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) dovecot;
+  };
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus metrics exporter for Dovecot";
     mainProgram = "dovecot_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

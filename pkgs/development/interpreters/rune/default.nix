@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage rec {
     description = "An interpreter for the Rune Language, an embeddable dynamic programming language for Rust";
     homepage = "https://rune-rs.github.io/";
     changelog = "https://github.com/rune-rs/rune/releases/tag/${version}";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "rune";
   };

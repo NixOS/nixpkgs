@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, coreutils
-, python
-, root
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  coreutils,
+  python,
+  root,
 }:
 
 let
@@ -23,27 +24,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WH+qZVbMVMzYmtNUIUYbR2HXgJvBei5y9QNNrqFCIys=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
+  nativeBuildInputs = [ cmake ] ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
-  buildInputs = [
-    root_py
-  ]
-  ++ lib.optional withPython python;
+  buildInputs = [ root_py ] ++ lib.optional withPython python;
 
   # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
-  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '';
+  preConfigure =
+    lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      '';
 
-  cmakeFlags = [
-    "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
-  ] ++ lib.optionals withPython [
-    "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
-    "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"
-  ];
+  cmakeFlags =
+    [ "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}" ]
+    ++ lib.optionals withPython [
+      "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
+      "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"
+    ];
 
   postInstall = ''
     substituteInPlace "$out"/bin/HepMC3-config \

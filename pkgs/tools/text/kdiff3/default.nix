@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, extra-cmake-modules
-, kdoctools
-, wrapQtAppsHook
-, boost
-, kcrash
-, kconfig
-, kinit
-, kparts
-, kiconthemes
+{
+  stdenv,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  wrapQtAppsHook,
+  boost,
+  kcrash,
+  kconfig,
+  kinit,
+  kparts,
+  kiconthemes,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-O/N5VMoZo2Xze1WLV0yPvTZnGcCH17gheI0++tDESFE=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ boost kconfig kcrash kinit kparts kiconthemes ];
+  buildInputs = [
+    boost
+    kconfig
+    kcrash
+    kinit
+    kparts
+    kiconthemes
+  ];
 
   cmakeFlags = [ "-Wno-dev" ];
 

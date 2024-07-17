@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, powershell
-, autoSignDarwinBinariesHook
-, glibcLocales
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  powershell,
+  autoSignDarwinBinariesHook,
+  glibcLocales,
 }:
 buildDotnetModule rec {
   pname = "ilspycmd";
@@ -18,9 +19,11 @@ buildDotnetModule rec {
     hash = "sha256-ERBYXgpBRXISfqBSBEydEQuD/5T1dvJ+wNg2U5pKip4=";
   };
 
-  nativeBuildInputs = [
-    powershell
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ];
+  nativeBuildInputs =
+    [ powershell ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
@@ -43,7 +46,10 @@ buildDotnetModule rec {
       mspl
       asl20
     ];
-    sourceProvenance = with sourceTypes; [ fromSource binaryBytecode ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     maintainers = with maintainers; [ emilytrau ];
   };
 }

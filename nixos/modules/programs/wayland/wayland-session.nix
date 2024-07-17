@@ -1,9 +1,13 @@
-{ lib, pkgs, xwayland ? true }:
+{
+  lib,
+  pkgs,
+  xwayland ? true,
+}:
 
 {
   security = {
     polkit.enable = true;
-    pam.services.swaylock = {};
+    pam.services.swaylock = { };
   };
 
   hardware.opengl.enable = lib.mkDefault true;

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 stdenv.mkDerivation (self: {
   pname = "cloudlogoffline";
@@ -20,10 +21,7 @@ stdenv.mkDerivation (self: {
   nativeBuildInputs = [
     qt5.qmake
     qt5.wrapQtAppsHook
-  ]
-  ++ lib.optionals (!stdenv.isDarwin) [
-    copyDesktopItems
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
   buildInputs = [
     qt5.qtbase
@@ -34,12 +32,14 @@ stdenv.mkDerivation (self: {
     qt5.qtsvg
   ];
 
-  postPatch = let
-    targetDir = if stdenv.isDarwin then "Applications" else "bin";
-  in ''
-    substituteInPlace CloudLogOffline.pro \
-      --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
-  '';
+  postPatch =
+    let
+      targetDir = if stdenv.isDarwin then "Applications" else "bin";
+    in
+    ''
+      substituteInPlace CloudLogOffline.pro \
+        --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
+    '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     install -d $out/share/pixmaps
@@ -54,7 +54,11 @@ stdenv.mkDerivation (self: {
       icon = "cloudlogoffline";
       comment = self.meta.description;
       genericName = "Ham radio contact logbook";
-      categories = [ "Network" "Utility" "HamRadio" ];
+      categories = [
+        "Network"
+        "Utility"
+        "HamRadio"
+      ];
     })
   ];
 

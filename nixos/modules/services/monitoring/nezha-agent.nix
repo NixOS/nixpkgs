@@ -46,7 +46,12 @@ in
         '';
       };
       reportDelay = lib.mkOption {
-        type = lib.types.enum [ 1 2 3 4 ];
+        type = lib.types.enum [
+          1
+          2
+          3
+          4
+        ];
         default = 1;
         description = ''
           The interval between system status reportings.

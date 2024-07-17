@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, flex
-, gccmakedep
-, imake
-, libXau
-, libXaw
-, libXext
-, libXpm
-, libXt
-, xorgcffiles
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  gccmakedep,
+  imake,
+  libXau,
+  libXaw,
+  libXext,
+  libXpm,
+  libXt,
+  xorgcffiles,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,9 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
   ];
 
-  buildFlags = [ "WORLDOPTS=" "World" ];
+  buildFlags = [
+    "WORLDOPTS="
+    "World"
+  ];
 
-  installFlags = [ "LDLIBS=-lfl" "DESTDIR=${placeholder "out"}" ];
+  installFlags = [
+    "LDLIBS=-lfl"
+    "DESTDIR=${placeholder "out"}"
+  ];
 
   postInstall = ''
     mv $out/${xorgcffiles}/* $out

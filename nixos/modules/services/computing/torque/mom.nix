@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -32,7 +37,12 @@ in
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-mom-init = {
-      path = with pkgs; [ torque util-linux procps inetutils ];
+      path = with pkgs; [
+        torque
+        util-linux
+        procps
+        inetutils
+      ];
 
       script = ''
         pbs_mkdirs -v aux
@@ -50,7 +60,10 @@ in
 
       wantedBy = [ "multi-user.target" ];
       requires = [ "torque-mom-init.service" ];
-      after = [ "torque-mom-init.service" "network.target" ];
+      after = [
+        "torque-mom-init.service"
+        "network.target"
+      ];
 
       serviceConfig = {
         Type = "forking";

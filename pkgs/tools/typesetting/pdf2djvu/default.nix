@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, gettext
-, libtool
-, pkg-config
-, djvulibre
-, exiv2
-, fontconfig
-, graphicsmagick
-, libjpeg
-, libuuid
-, poppler
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  gettext,
+  libtool,
+  pkg-config,
+  djvulibre,
+  exiv2,
+  fontconfig,
+  graphicsmagick,
+  libjpeg,
+  libuuid,
+  poppler,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     djvulibre

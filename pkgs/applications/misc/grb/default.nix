@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "grb";
@@ -11,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hQ21DXnkBJVCgGXQKDR+DjaDC3RXS2pNmSLDoHvHA4E=";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A cli-accessible Greek Bible with the Septuagint, SBL and Apocrypha";

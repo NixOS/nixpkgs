@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, erlang }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  erlang,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rebar";

@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-VQGWi01mOP2N4oYsaDK7wn/+hSFEDHhSma9DOZ06Z3k=";
 
-  subPackages = [
-    "cmd/cvemap/"
-  ];
+  subPackages = [ "cmd/cvemap/" ];
 
   ldflags = [
     "-s"

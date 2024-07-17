@@ -1,5 +1,8 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ppxlib, uchar
+{
+  buildDunePackage,
+  js_of_ocaml-compiler,
+  ppxlib,
+  uchar,
 }:
 
 buildDunePackage {
@@ -9,7 +12,10 @@ buildDunePackage {
 
   buildInputs = [ ppxlib ];
 
-  propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
+  propagatedBuildInputs = [
+    js_of_ocaml-compiler
+    uchar
+  ];
 
   meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_11
-, nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_11,
+  nix,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,17 +17,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-pS0D+wdebtpNaGpDee9aBwEKTDvNU56VXer9uzULXcM=";
   };
 
-  nativeBuildInputs = [
-    zig_0_11.hook
-  ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
-  zigBuildFlags = [
-    "-Dnix=${lib.getExe nix}"
-  ];
+  zigBuildFlags = [ "-Dnix=${lib.getExe nix}" ];
 
-  zigCheckFlags = [
-    "-Dnix=${lib.getExe nix}"
-  ];
+  zigCheckFlags = [ "-Dnix=${lib.getExe nix}" ];
 
   meta = with lib; {
     description = "Convert the dependencies in `build.zig.zon` to a Nix expression";

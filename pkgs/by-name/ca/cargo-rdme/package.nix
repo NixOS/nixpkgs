@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rdme";
@@ -9,9 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-WlZGhVWm6RYgODQZV4Sj3Q31FsPNd5SdYtp7kfUMxpI=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   cargoHash = "sha256-AVwKktP96QYAOjo5gFeXpY0wOQObwarn82oaT6AVuBk=";
 

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, substituteAll
-, fetchFromGitHub
-, fetchpatch
-, libpulseaudio
-, python3
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  fetchpatch,
+  libpulseaudio,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +36,7 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "sound-output-device-chooser";
   };
 
-  makeFlags = [
-    "INSTALL_DIR=${placeholder "out"}/share/gnome-shell/extensions"
-  ];
+  makeFlags = [ "INSTALL_DIR=${placeholder "out"}/share/gnome-shell/extensions" ];
 
   preInstall = ''
     mkdir -p ${placeholder "out"}/share/gnome-shell/extensions

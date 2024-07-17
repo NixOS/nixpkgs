@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, qtbase
-, qtsvg
-, qttools
-, qtdeclarative
-, libXfixes
-, libXtst
-, qtwayland
-, wayland
-, wrapQtAppsHook
-, kdePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtdeclarative,
+  libXfixes,
+  libXtst,
+  qtwayland,
+  wayland,
+  wrapQtAppsHook,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {

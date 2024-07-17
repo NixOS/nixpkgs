@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, python3
-, fetchPypi
+{
+  lib,
+  stdenv,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -33,9 +34,7 @@ python3.pkgs.buildPythonPackage {
     yarl
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytest
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytest ];
 
   meta = {
     homepage = "https://github.com/Skydio/revup";

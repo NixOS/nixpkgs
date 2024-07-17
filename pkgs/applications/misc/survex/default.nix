@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, Carbon
-, Cocoa
-, ffmpeg
-, glib
-, libGLU
-, libICE
-, libX11
-, mesa
-, perl
-, pkg-config
-, proj
-, python3
-, wrapGAppsHook3
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+  ffmpeg,
+  glib,
+  libGLU,
+  libICE,
+  libX11,
+  mesa,
+  perl,
+  pkg-config,
+  proj,
+  python3,
+  wrapGAppsHook3,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,22 +43,25 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ffmpeg
-    glib
-    proj
-    wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # TODO: libGLU doesn't build for macOS because of Mesa issues
-    # (#233265); is it required for anything?
-    libGLU
-    mesa
-    libICE
-    libX11
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      glib
+      proj
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # TODO: libGLU doesn't build for macOS because of Mesa issues
+      # (#233265); is it required for anything?
+      libGLU
+      mesa
+      libICE
+      libX11
+    ];
 
   postPatch = ''
     patchShebangs .

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lvm2
-, pkg-config
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lvm2,
+  pkg-config,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/fetchit" ];
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ lvm2 ];
 
   # Flags are derived from

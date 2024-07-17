@@ -1,4 +1,11 @@
-{ lib, crystal, fetchFromGitHub, fetchurl, jq, bash }:
+{
+  lib,
+  crystal,
+  fetchFromGitHub,
+  fetchurl,
+  jq,
+  bash,
+}:
 let
   icon = fetchurl {
     url = "https://github.com/mawww/kakoune/raw/master/doc/kakoune_logo.svg";

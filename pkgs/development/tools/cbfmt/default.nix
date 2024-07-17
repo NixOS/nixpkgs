@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, testers, cbfmt }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  testers,
+  cbfmt,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cbfmt";
@@ -13,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-6oZCpjQ8t/QLFhEtF7td8KGI/kFE04pg7OELutsrJKo=";
 
-  passthru.tests.version = testers.testVersion {
-    package = cbfmt;
-  };
+  passthru.tests.version = testers.testVersion { package = cbfmt; };
 
   meta = with lib; {
     description = "A tool to format codeblocks inside markdown and org documents";

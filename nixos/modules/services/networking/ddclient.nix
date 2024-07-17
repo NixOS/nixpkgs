@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.ddclient;
@@ -13,11 +18,16 @@ let
     foreground=YES
     use=${cfg.use}
     login=${cfg.username}
-    password=${if cfg.protocol == "nsupdate" then "/run/${RuntimeDirectory}/ddclient.key" else "@password_placeholder@"}
+    password=${
+      if cfg.protocol == "nsupdate" then
+        "/run/${RuntimeDirectory}/ddclient.key"
+      else
+        "@password_placeholder@"
+    }
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
@@ -29,13 +39,20 @@ let
 
   preStart = ''
     install --mode=600 --owner=$USER ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
-    '' else if (cfg.passwordFile != null) then ''
-      "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
-    '' else ''
-      sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
-    '')}
+    ${lib.optionalString (cfg.configFile == null) (
+      if (cfg.protocol == "nsupdate") then
+        ''
+          install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+        ''
+      else if (cfg.passwordFile != null) then
+        ''
+          "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
+        ''
+      else
+        ''
+          sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
+        ''
+    )}
   '';
 
 in
@@ -45,13 +62,44 @@ with lib;
 {
 
   imports = [
-    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
-      (config:
-        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in optional (value != "") value))
-    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
-    (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
-    (mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")
+    (mkChangedOptionModule
+      [
+        "services"
+        "ddclient"
+        "domain"
+      ]
+      [
+        "services"
+        "ddclient"
+        "domains"
+      ]
+      (
+        config:
+        let
+          value = getAttrFromPath [
+            "services"
+            "ddclient"
+            "domain"
+          ] config;
+        in
+        optional (value != "") value
+      )
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "ddclient"
+      "homeDir"
+    ] "")
+    (mkRemovedOptionModule [
+      "services"
+      "ddclient"
+      "password"
+    ] "Use services.ddclient.passwordFile instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "ddclient"
+      "ipv6"
+    ] "")
   ];
 
   ###### interface
@@ -87,7 +135,9 @@ with lib;
 
       username = mkOption {
         # For `nsupdate` username contains the path to the nsupdate executable
-        default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
+        default = lib.optionalString (
+          config.services.ddclient.protocol == "nsupdate"
+        ) "${pkgs.bind.dnsutils}/bin/nsupdate";
         defaultText = "";
         type = str;
         description = ''
@@ -199,7 +249,6 @@ with lib;
       };
     };
   };
-
 
   ###### implementation
 

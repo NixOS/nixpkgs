@@ -1,10 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.hound;
-in {
+in
+{
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "hound" "extraGroups" ] "Use users.users.hound.extraGroups instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "hound"
+      "extraGroups"
+    ] "Use users.users.hound.extraGroups instead")
   ];
 
   meta.maintainers = with maintainers; [ SuperSandro2000 ];
@@ -76,9 +86,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = lib.mkIf (cfg.group == "hound") {
-      hound = { };
-    };
+    users.groups = lib.mkIf (cfg.group == "hound") { hound = { }; };
 
     users.users = lib.mkIf (cfg.user == "hound") {
       hound = {
@@ -89,26 +97,28 @@ in {
       };
     };
 
-    systemd.services.hound = let
-      configFile = pkgs.writeTextFile {
-        name = "hound.json";
-        text = cfg.config;
-        checkPhase = ''
-          # check if the supplied text is valid json
-          ${lib.getExe pkgs.jq} . $target > /dev/null
-        '';
+    systemd.services.hound =
+      let
+        configFile = pkgs.writeTextFile {
+          name = "hound.json";
+          text = cfg.config;
+          checkPhase = ''
+            # check if the supplied text is valid json
+            ${lib.getExe pkgs.jq} . $target > /dev/null
+          '';
+        };
+      in
+      {
+        description = "Hound Code Search";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          WorkingDirectory = cfg.home;
+          ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
+          ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf ${configFile}";
+        };
       };
-    in {
-      description = "Hound Code Search";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
-        ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf ${configFile}";
-      };
-    };
   };
 }

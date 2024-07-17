@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uucp";
@@ -28,20 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "AR:=$(AR)" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";
     mainProgram = "uucp";
 
-    longDescription =
-      '' Taylor UUCP is a free implementation of UUCP and is the standard
-         UUCP used on the GNU system.  If you don't know what UUCP is chances
-         are, nowadays, that you won't need it.  If you do need it, you've
-         just found one of the finest UUCP implementations available.
-      '';
+    longDescription = ''
+      Taylor UUCP is a free implementation of UUCP and is the standard
+              UUCP used on the GNU system.  If you don't know what UUCP is chances
+              are, nowadays, that you won't need it.  If you do need it, you've
+              just found one of the finest UUCP implementations available.
+    '';
 
     homepage = "https://www.gnu.org/software/uucp/uucp.html";
 

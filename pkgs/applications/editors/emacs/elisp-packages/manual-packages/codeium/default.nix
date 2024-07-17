@@ -1,4 +1,11 @@
-{ fetchFromGitHub, melpaBuild, pkgs, lib, substituteAll, writeText }:
+{
+  fetchFromGitHub,
+  melpaBuild,
+  pkgs,
+  lib,
+  substituteAll,
+  writeText,
+}:
 
 melpaBuild {
   pname = "codeium";

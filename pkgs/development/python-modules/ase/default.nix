@@ -39,9 +39,7 @@ buildPythonPackage rec {
     flask
     pillow
     psycopg2
-  ] ++ lib.optionals stdenv.isDarwin [
-    tkinter
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ tkinter ];
 
   nativeCheckInputs = [
     pytestCheckHook

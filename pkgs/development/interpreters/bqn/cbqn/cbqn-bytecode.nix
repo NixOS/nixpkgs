@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -29,7 +30,13 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dzaima/cbqnBytecode";
     description = "CBQN precompiled bytecode";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      sternenseemann
+      synthetica
+      shnarazk
+      detegr
+    ];
     platforms = platforms.all;
   };
 }

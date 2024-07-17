@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, pkg-config
-, which
-, libapparmor
-, libseccomp
-, libselinux
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  which,
+  libapparmor,
+  libseccomp,
+  libselinux,
+  makeWrapper,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -24,11 +25,24 @@ buildGoModule rec {
   };
 
   vendorHash = null;
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    makeWrapper
+    pkg-config
+    which
+  ];
 
-  buildInputs = [ libselinux libseccomp libapparmor ];
+  buildInputs = [
+    libselinux
+    libseccomp
+    libapparmor
+  ];
 
   makeFlags = [ "BUILDTAGS+=seccomp" ];
 
@@ -48,7 +62,9 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
+  passthru.tests = {
+    inherit (nixosTests) cri-o docker podman;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

@@ -1,10 +1,27 @@
-{ version, sha256, patches ? [] }:
+{
+  version,
+  sha256,
+  patches ? [ ],
+}:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk, freebsd, libiconv
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  perl,
+  xz,
+  libintl,
+  bash,
+  gnulib,
+  gawk,
+  freebsd,
+  libiconv,
 
-# we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+  # we are a dependency of gcc, this simplifies bootstraping
+  interactive ? false,
+  ncurses,
+  procps,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -13,7 +30,13 @@
 # files.
 
 let
-  inherit (lib) getDev getLib optional optionals optionalString;
+  inherit (lib)
+    getDev
+    getLib
+    optional
+    optionals
+    optionalString
+    ;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
@@ -28,15 +51,16 @@ stdenv.mkDerivation {
 
   patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
-  postPatch = ''
-    patchShebangs tp/maintain
-  ''
-  # This patch is needed for IEEE-standard long doubles on
-  # powerpc64; it does not apply cleanly to texinfo 5.x or
-  # earlier.  It is merged upstream in texinfo 6.8.
-  + lib.optionalString (version == "6.7") ''
-    patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
-  '';
+  postPatch =
+    ''
+      patchShebangs tp/maintain
+    ''
+    # This patch is needed for IEEE-standard long doubles on
+    # powerpc64; it does not apply cleanly to texinfo 5.x or
+    # earlier.  It is merged upstream in texinfo 6.8.
+    + lib.optionalString (version == "6.7") ''
+      patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
+    '';
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
@@ -47,28 +71,43 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # A native compiler is needed to build tools needed at build time
-  depsBuildBuild = [ buildPackages.stdenv.cc perl ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    perl
+  ];
 
-  buildInputs = [ xz.bin bash libintl ]
-    ++ optionals stdenv.isSunOS [ libiconv gawk ]
+  buildInputs =
+    [
+      xz.bin
+      bash
+      libintl
+    ]
+    ++ optionals stdenv.isSunOS [
+      libiconv
+      gawk
+    ]
     ++ optional interactive ncurses;
 
-  configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+  configureFlags =
+    [ "PERL=${buildPackages.perl}/bin/perl" ]
     # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
     # fallbacks.
     # Also prevent the buildPlatform's awk being used in the texindex script
-    ++ optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${gawk}/bin/awk" ]
+    ++ optionals crossBuildTools [
+      "--enable-perl-xs=no"
+      "TI_AWK=${gawk}/bin/awk"
+    ]
     ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
-  installTargets = [ "install" "install-tex" ];
+  installTargets = [
+    "install"
+    "install-tex"
+  ];
 
-  nativeCheckInputs = [ procps ]
-    ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
+  nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
-  doCheck = interactive
-    && !stdenv.isDarwin
-    && !stdenv.isSunOS; # flaky
+  doCheck = interactive && !stdenv.isDarwin && !stdenv.isSunOS; # flaky
 
   checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
@@ -89,7 +128,10 @@ stdenv.mkDerivation {
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra oxij ];
+    maintainers = with maintainers; [
+      vrthra
+      oxij
+    ];
     # see comment above in patches section
     broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
 

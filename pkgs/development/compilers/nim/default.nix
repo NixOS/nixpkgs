@@ -1,12 +1,29 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
-, nim-unwrapped-2, nim-unwrapped-1, nim }:
+{
+  lib,
+  callPackage,
+  buildPackages,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  fetchFromGitHub,
+  makeWrapper,
+  openssl,
+  pcre,
+  readline,
+  boehmgc,
+  sqlite,
+  Security,
+  nim-unwrapped-2,
+  nim-unwrapped-1,
+  nim,
+}:
 
 let
-  parseCpu = platform:
+  parseCpu =
+    platform:
     with platform;
     # Derive a Nim CPU identifier
     if isAarch32 then
@@ -38,7 +55,8 @@ let
     else
       abort "no Nim CPU support known for ${config}";
 
-  parseOs = platform:
+  parseOs =
+    platform:
     with platform;
     # Derive a Nim OS identifier
     if isAndroid then
@@ -72,7 +90,8 @@ let
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
 
-in {
+in
+{
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
@@ -84,8 +103,13 @@ in {
       hash = "sha256-cVJr0HQ53I43j6Gm60B+2hKY8fPU30R23KDjyjy+Pwk=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ]
-      ++ lib.optional stdenv.isDarwin Security;
+    buildInputs = [
+      boehmgc
+      openssl
+      pcre
+      readline
+      sqlite
+    ] ++ lib.optional stdenv.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -101,23 +125,25 @@ in {
       # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
     ];
 
-    configurePhase = let
-      bootstrapCompiler = stdenv.mkDerivation {
-        pname = "nim-bootstrap";
-        inherit (finalAttrs) version src preBuild;
-        enableParallelBuilding = true;
-        installPhase = ''
-          runHook preInstall
-          install -Dt $out/bin bin/nim
-          runHook postInstall
-        '';
-      };
-    in ''
-      runHook preConfigure
-      cp ${bootstrapCompiler}/bin/nim bin/
-      echo 'define:nixbuild' >> config/nim.cfg
-      runHook postConfigure
-    '';
+    configurePhase =
+      let
+        bootstrapCompiler = stdenv.mkDerivation {
+          pname = "nim-bootstrap";
+          inherit (finalAttrs) version src preBuild;
+          enableParallelBuilding = true;
+          installPhase = ''
+            runHook preInstall
+            install -Dt $out/bin bin/nim
+            runHook postInstall
+          '';
+        };
+      in
+      ''
+        runHook preConfigure
+        cp ${bootstrapCompiler}/bin/nim bin/
+        echo 'define:nixbuild' >> config/nim.cfg
+        runHook postConfigure
+      '';
 
     kochArgs = [
       "--cpu:${nimHost.cpu}"
@@ -160,29 +186,36 @@ in {
     };
   });
 
-  nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
-    version = "1.6.20";
-    src = fetchurl {
-      url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
-    };
+  nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "1.6.20";
+      src = fetchurl {
+        url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
+        hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
+      };
 
-    patches = [
-      ./NIM_CONFIG_DIR.patch
-      # Override compiler configuration via an environmental variable
+      patches = [
+        ./NIM_CONFIG_DIR.patch
+        # Override compiler configuration via an environmental variable
 
-      ./nixbuild.patch
-      # Load libraries at runtime by absolute path
+        ./nixbuild.patch
+        # Load libraries at runtime by absolute path
 
-      ./extra-mangling.patch
-      # Mangle store paths of modules to prevent runtime dependence.
-    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
-  });
+        ./extra-mangling.patch
+        # Mangle store paths of modules to prevent runtime dependence.
+      ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
+    }
+  );
 
-} // (let
-  wrapNim = { nim', patches }:
-    let targetPlatformConfig = stdenv.targetPlatform.config;
-    in stdenv.mkDerivation (finalAttrs: {
+}
+// (
+  let
+    wrapNim =
+      { nim', patches }:
+      let
+        targetPlatformConfig = stdenv.targetPlatform.config;
+      in
+      stdenv.mkDerivation (finalAttrs: {
         name = "${targetPlatformConfig}-nim-wrapper-${nim'.version}";
         inherit (nim') version;
         preferLocalBuild = true;
@@ -253,12 +286,15 @@ in {
           '';
 
         wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
-          "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
-            placeholder "out"
-          }/bin"
+          "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${placeholder "out"}/bin"
           # Used by nim-gdb
 
-          "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl pcre ]}"
+          "--prefix LD_LIBRARY_PATH : ${
+            lib.makeLibraryPath [
+              openssl
+              pcre
+            ]
+          }"
           # These libraries may be referred to by the standard library.
           # This is broken for cross-compilation because the package
           # set will be shifted back by nativeBuildInputs.
@@ -267,55 +303,60 @@ in {
           # Use the custom configuration
         ];
 
-        installPhase = ''
-          runHook preInstall
+        installPhase =
+          ''
+            runHook preInstall
 
-          mkdir -p $out/bin $out/etc
+            mkdir -p $out/bin $out/etc
 
-          cp -r config $out/etc/nim
+            cp -r config $out/etc/nim
 
-          for binpath in ${nim'}/bin/nim?*; do
-            local binname=`basename $binpath`
+            for binpath in ${nim'}/bin/nim?*; do
+              local binname=`basename $binpath`
+              makeWrapper \
+                $binpath $out/bin/${targetPlatformConfig}-$binname \
+                $wrapperArgs
+              ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
+            done
+
             makeWrapper \
-              $binpath $out/bin/${targetPlatformConfig}-$binname \
+              ${nim'}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
+              --set-default CC $(command -v $CC) \
+              --set-default CXX $(command -v $CXX) \
               $wrapperArgs
-            ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
-          done
+            ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
 
-          makeWrapper \
-            ${nim'}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
-            --set-default CC $(command -v $CC) \
-            --set-default CXX $(command -v $CXX) \
-            $wrapperArgs
-          ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
+            makeWrapper \
+              ${nim'}/bin/testament $out/bin/${targetPlatformConfig}-testament \
+              $wrapperArgs
+            ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
 
-          makeWrapper \
-            ${nim'}/bin/testament $out/bin/${targetPlatformConfig}-testament \
-            $wrapperArgs
-          ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
+          ''
+          + ''
+            runHook postInstall
+          '';
 
-        '' + ''
-          runHook postInstall
-        '';
-
-        passthru = { nim = nim'; };
+        passthru = {
+          nim = nim';
+        };
 
         meta = nim'.meta // {
-          description = nim'.meta.description
-            + " (${targetPlatformConfig} wrapper)";
+          description = nim'.meta.description + " (${targetPlatformConfig} wrapper)";
           platforms = with lib.platforms; unix ++ genode;
         };
       });
-in {
+  in
+  {
 
-  nim2 = wrapNim {
-    nim' = buildPackages.nim-unwrapped-2;
-    patches = [ ./nim2.cfg.patch ];
-  };
+    nim2 = wrapNim {
+      nim' = buildPackages.nim-unwrapped-2;
+      patches = [ ./nim2.cfg.patch ];
+    };
 
-  nim1 = wrapNim {
-    nim' = buildPackages.nim-unwrapped-1;
-    patches = [ ./nim.cfg.patch ];
-  };
+    nim1 = wrapNim {
+      nim' = buildPackages.nim-unwrapped-1;
+      patches = [ ./nim.cfg.patch ];
+    };
 
-})
+  }
+)

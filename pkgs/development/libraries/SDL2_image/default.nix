@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL2,
+  libpng,
+  libjpeg,
+  libtiff,
+  giflib,
+  libwebp,
+  libXpm,
+  zlib,
+  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,21 +25,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ SDL2 libpng libjpeg libtiff giflib libwebp libXpm zlib ]
-    ++ lib.optional stdenv.isDarwin Foundation;
+  buildInputs = [
+    SDL2
+    libpng
+    libjpeg
+    libtiff
+    giflib
+    libwebp
+    libXpm
+    zlib
+  ] ++ lib.optional stdenv.isDarwin Foundation;
 
-  configureFlags = [
-    # Disable dynamically loaded dependencies
-    "--disable-jpg-shared"
-    "--disable-png-shared"
-    "--disable-tif-shared"
-    "--disable-webp-shared"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Darwin headless will hang when trying to run the SDL test program
-    "--disable-sdltest"
-    # Don't use native macOS frameworks
-    "--disable-imageio"
-  ];
+  configureFlags =
+    [
+      # Disable dynamically loaded dependencies
+      "--disable-jpg-shared"
+      "--disable-png-shared"
+      "--disable-tif-shared"
+      "--disable-webp-shared"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Darwin headless will hang when trying to run the SDL test program
+      "--disable-sdltest"
+      # Don't use native macOS frameworks
+      "--disable-imageio"
+    ];
 
   enableParallelBuilding = true;
 

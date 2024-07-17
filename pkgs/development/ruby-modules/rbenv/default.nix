@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, bash, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rbenv";
@@ -14,8 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     patchShebangs src/configure
-     pushd src
+    patchShebangs src/configure
+    pushd src
   '';
 
   installPhase = ''

@@ -1,10 +1,11 @@
-{ fetchCrate
-, installShellFiles
-, lib
-, libbsd
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  fetchCrate,
+  installShellFiles,
+  lib,
+  libbsd,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "00gv2i2pxy56l6ysslbscxinr4r0mpk9p2ivkrnjnwhc8j3v8v7h";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [ libbsd ];
 
@@ -37,4 +41,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "inputplug";
   };
 }
-

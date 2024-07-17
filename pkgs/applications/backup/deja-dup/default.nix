@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchFromGitLab
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, desktop-file-utils
-, glib
-, gtk4
-, coreutils
-, libsoup_3
-, libsecret
-, libadwaita
-, wrapGAppsHook4
-, libgpg-error
-, json-glib
-, duplicity
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  coreutils,
+  libsoup_3,
+  libsecret,
+  libadwaita,
+  wrapGAppsHook4,
+  libgpg-error,
+  json-glib,
+  duplicity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
   ];
 
-  mesonFlags = [
-    "-Dduplicity_command=${duplicity}/bin/duplicity"
-  ];
+  mesonFlags = [ "-Dduplicity_command=${duplicity}/bin/duplicity" ];
 
   meta = with lib; {
     description = "A simple backup tool";

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, mesa
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  mesa,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-G80EKAsXomdk8GsnNyvjN8shz3YMKhqdWWYyVB7xTsU=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+  ];
 
   buildInputs = [
     stdenv.cc.cc.lib
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Metal.desktop --replace /usr/ $out/
- '';
+  '';
 
   meta = with lib; {
     description = "ToneLib Metal – Guitar amp simulator targeted at metal players";

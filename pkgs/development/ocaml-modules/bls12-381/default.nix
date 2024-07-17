@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, fetchFromGitLab
-, zarith
-, zarith_stubs_js ? null
-, integers_stubs_js
-, integers
-, hex
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  zarith,
+  zarith_stubs_js ? null,
+  integers_stubs_js,
+  integers,
+  hex,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -33,9 +34,7 @@ buildDunePackage rec {
     integers
   ];
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

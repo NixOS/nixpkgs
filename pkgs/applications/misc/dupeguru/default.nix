@@ -1,4 +1,11 @@
-{ stdenv, lib, python3Packages, gettext, qt5, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  python3Packages,
+  gettext,
+  qt5,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -36,9 +43,7 @@ python3Packages.buildPythonApplication rec {
     "NO_VENV=1"
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"

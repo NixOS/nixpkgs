@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A high performance X11 animated wallpaper setter";

@@ -1,8 +1,19 @@
-{ mkDerivation, extra-cmake-modules, ki18n, qtbase, }:
+{
+  mkDerivation,
+  extra-cmake-modules,
+  ki18n,
+  qtbase,
+}:
 
 mkDerivation {
   pname = "kunitconversion";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ ki18n qtbase ];
-  outputs = [ "out" "dev" ];
+  buildInputs = [
+    ki18n
+    qtbase
+  ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, sphinx
-, acl
-, curl
-, fuse
-, libselinux
-, udev
-, xz
-, zstd
-, fuseSupport ? true
-, selinuxSupport ? true
-, udevSupport ? true
-, glibcLocales
-, rsync
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sphinx,
+  acl,
+  curl,
+  fuse,
+  libselinux,
+  udev,
+  xz,
+  zstd,
+  fuseSupport ? true,
+  selinuxSupport ? true,
+  udevSupport ? true,
+  glibcLocales,
+  rsync,
 }:
 
 stdenv.mkDerivation {
@@ -31,12 +32,27 @@ stdenv.mkDerivation {
     sha256 = "04ibglizjzyd7ih13q6m7ic78n0mzw9nfmb3zd1fcm9j62qlq11i";
   };
 
-  buildInputs = [ acl curl xz zstd ]
+  buildInputs =
+    [
+      acl
+      curl
+      xz
+      zstd
+    ]
     ++ lib.optionals (fuseSupport) [ fuse ]
     ++ lib.optionals (selinuxSupport) [ libselinux ]
     ++ lib.optionals (udevSupport) [ udev ];
-  nativeBuildInputs = [ meson ninja pkg-config python3 sphinx ];
-  nativeCheckInputs = [ glibcLocales rsync ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    sphinx
+  ];
+  nativeCheckInputs = [
+    glibcLocales
+    rsync
+  ];
 
   postPatch = ''
     for f in test/test-*.sh.in; do
@@ -46,7 +62,8 @@ stdenv.mkDerivation {
   '';
 
   PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
-  mesonFlags = lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
+  mesonFlags =
+    lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
     ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
     ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 

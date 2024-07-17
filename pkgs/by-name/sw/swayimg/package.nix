@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wayland
-, wayland-protocols
-, json_c
-, libxkbcommon
-, fontconfig
-, giflib
-, libheif
-, libjpeg
-, libwebp
-, libtiff
-, librsvg
-, libpng
-, libjxl
-, libexif
-, libavif
-, openexr_3
-, bash-completion
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  json_c,
+  libxkbcommon,
+  fontconfig,
+  giflib,
+  libheif,
+  libjpeg,
+  libwebp,
+  libtiff,
+  librsvg,
+  libpng,
+  libjxl,
+  libexif,
+  libavif,
+  openexr_3,
+  bash-completion,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
@@ -37,15 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  depsBuildBuild = [
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
+    wayland-scanner
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
-
-  mesonFlags = [
-    (lib.mesonOption "version" finalAttrs.version)
-  ];
+  mesonFlags = [ (lib.mesonOption "version" finalAttrs.version) ];
 
   buildInputs = [
     bash-completion
@@ -67,9 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     openexr_3
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";

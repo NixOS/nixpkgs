@@ -1,25 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, openssl
-, check
-, pcsclite
-, PCSC
-, gengetopt
-, help2man
-, cmake
-, zlib
-, withApplePCSC ? stdenv.isDarwin
-, nix-update-script
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  check,
+  pcsclite,
+  PCSC,
+  gengetopt,
+  help2man,
+  cmake,
+  zlib,
+  withApplePCSC ? stdenv.isDarwin,
+  nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
   version = "2.5.1";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "Yubico";
@@ -43,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     check
     zlib.dev
-  ]
-  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+  ] ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
     "-DGENERATE_MAN_PAGES=ON"
@@ -58,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "yubico-piv-tool-([0-9.]+)$"
+      ];
     };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
@@ -82,7 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ viraptor anthonyroussel ];
+    maintainers = with maintainers; [
+      viraptor
+      anthonyroussel
+    ];
     mainProgram = "yubico-piv-tool";
   };
 })

@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3
-, perl
-, bison
-, flex
-, texinfo
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  perl,
+  bison,
+  flex,
+  texinfo,
+  perlPackages,
 
-, openldap
-, libcap_ng
-, sqlite
-, openssl
-, db
-, libedit
-, pam
-, krb5
-, libmicrohttpd
-, cjson
+  openldap,
+  libcap_ng,
+  sqlite,
+  openssl,
+  db,
+  libedit,
+  pam,
+  krb5,
+  libmicrohttpd,
+  cjson,
 
-, CoreFoundation
-, Security
-, SystemConfiguration
+  CoreFoundation,
+  Security,
+  SystemConfiguration,
 
-, curl
-, jdk
-, unzip
-, which
+  curl,
+  jdk,
+  unzip,
+  which,
 
-, nixosTests
+  nixosTests,
 
-, withCJSON ? true
-, withCapNG ? stdenv.isLinux
-# libmicrohttpd should theoretically work for darwin as well, but something is broken.
-# It affects tests check-bx509d and check-httpkadmind.
-, withMicroHTTPD ? stdenv.isLinux
-, withOpenLDAP ? true
-, withOpenLDAPAsHDBModule ? false
-, withOpenSSL ? true
-, withSQLite3 ? true
+  withCJSON ? true,
+  withCapNG ? stdenv.isLinux,
+  # libmicrohttpd should theoretically work for darwin as well, but something is broken.
+  # It affects tests check-bx509d and check-httpkadmind.
+  withMicroHTTPD ? stdenv.isLinux,
+  withOpenLDAP ? true,
+  withOpenLDAPAsHDBModule ? false,
+  withOpenSSL ? true,
+  withSQLite3 ? true,
 }:
 
 assert lib.assertMsg (withOpenLDAPAsHDBModule -> withOpenLDAP) ''
@@ -58,7 +59,12 @@ stdenv.mkDerivation {
     hash = "sha256-uljzQBzXrZCZjcIWfioqHN8YsbUUNy14Vo+A3vZIXzM=";
   };
 
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -68,11 +74,19 @@ stdenv.mkDerivation {
     bison
     flex
     texinfo
-  ]
-  ++ (with perlPackages; [ JSON ]);
+  ] ++ (with perlPackages; [ JSON ]);
 
-  buildInputs = [ db libedit pam ]
-    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
+  buildInputs =
+    [
+      db
+      libedit
+      pam
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      CoreFoundation
+      Security
+      SystemConfiguration
+    ]
     ++ lib.optionals (withCJSON) [ cjson ]
     ++ lib.optionals (withCapNG) [ libcap_ng ]
     ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
@@ -88,25 +102,21 @@ stdenv.mkDerivation {
     which
   ];
 
-  configureFlags = [
-    "--with-libedit-include=${libedit.dev}/include"
-    "--with-libedit-lib=${libedit}/lib"
-    "--with-berkeley-db-include=${db.dev}/include"
-    "--with-berkeley-db"
+  configureFlags =
+    [
+      "--with-libedit-include=${libedit.dev}/include"
+      "--with-libedit-lib=${libedit}/lib"
+      "--with-berkeley-db-include=${db.dev}/include"
+      "--with-berkeley-db"
 
-    "--without-x"
-    "--disable-afs-string-to-key"
-  ] ++ lib.optionals (withCapNG) [
-    "--with-capng"
-  ] ++ lib.optionals (withCJSON) [
-    "--with-cjson=${cjson}"
-  ] ++ lib.optionals (withOpenLDAP) [
-    "--with-openldap=${openldap.dev}"
-  ] ++ lib.optionals (withOpenLDAPAsHDBModule) [
-    "--enable-hdb-openldap-module"
-  ] ++ lib.optionals (withSQLite3) [
-    "--with-sqlite3=${sqlite.dev}"
-  ];
+      "--without-x"
+      "--disable-afs-string-to-key"
+    ]
+    ++ lib.optionals (withCapNG) [ "--with-capng" ]
+    ++ lib.optionals (withCJSON) [ "--with-cjson=${cjson}" ]
+    ++ lib.optionals (withOpenLDAP) [ "--with-openldap=${openldap.dev}" ]
+    ++ lib.optionals (withOpenLDAPAsHDBModule) [ "--enable-hdb-openldap-module" ]
+    ++ lib.optionals (withSQLite3) [ "--with-sqlite3=${sqlite.dev}" ];
 
   # (check-ldap) slapd resides within ${openldap}/libexec,
   #              which is not part of $PATH by default.

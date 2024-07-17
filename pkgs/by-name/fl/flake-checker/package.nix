@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,10 +19,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LM0tYSRhM4GGb/Pa5l2xMAJ26ZyAuSEKlZansE/VNNw=";
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-    SystemConfiguration
-  ]);
+  buildInputs = lib.optionals stdenv.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
 
   meta = with lib; {
     description = "Health checks for your Nix flakes";

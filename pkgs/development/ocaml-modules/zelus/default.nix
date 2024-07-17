@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, menhir
-, menhirLib
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  menhirLib,
 }:
 
 buildDunePackage rec {
@@ -24,13 +25,9 @@ buildDunePackage rec {
     patchShebangs configure
   '';
 
-  nativeBuildInputs = [
-    menhir
-  ];
+  nativeBuildInputs = [ menhir ];
 
-  buildInputs = [
-    menhirLib
-  ];
+  buildInputs = [ menhirLib ];
 
   meta = with lib; {
     description = "A synchronous language with ODEs";

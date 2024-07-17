@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, doxygen
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, qtimageformats
-, lxqt
-, librsvg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qttools,
+  doxygen,
+  wrapQtAppsHook,
+  qtbase,
+  dtkcore,
+  qtimageformats,
+  lxqt,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +63,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

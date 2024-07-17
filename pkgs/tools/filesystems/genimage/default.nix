@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libconfuse, gettext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libconfuse,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "genimage";
@@ -9,8 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qHVuNWeg1NgsNrCMzB4IglC5AG1WcMaysBQYXm7GBnE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libconfuse gettext ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libconfuse
+    gettext
+  ];
 
   postInstall = ''
     # As there is no manpage or built-in --help, add the README file for

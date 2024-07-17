@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, protobuf
-, rust-jemalloc-sys
-, Security
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  protobuf,
+  rust-jemalloc-sys,
+  Security,
 }:
 
 let
@@ -33,9 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/quickwit";
 
-  buildInputs = [
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gtk3
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, gitUpdater
-, dbus
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gtk3,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  gitUpdater,
+  dbus,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
   version = "5.8.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "gedit-technology";
@@ -36,9 +41,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   propagatedBuildInputs = [
     # Required by libgedit-amtk-5.pc
@@ -62,14 +65,15 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater {
-    odd-unstable = true;
-  };
+  passthru.updateScript = gitUpdater { odd-unstable = true; };
 
   meta = with lib; {
     homepage = "https://github.com/gedit-technology/libgedit-amtk";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = with maintainers; [ manveru bobby285271 ];
+    maintainers = with maintainers; [
+      manveru
+      bobby285271
+    ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

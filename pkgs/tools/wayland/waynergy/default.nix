@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, wayland-scanner
-, libdrm
-, wayland
-, wayland-protocols
-, wl-clipboard
-, libxkbcommon
-, libressl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  libdrm,
+  wayland,
+  wayland-protocols,
+  wl-clipboard,
+  libxkbcommon,
+  libressl,
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";
@@ -24,8 +25,20 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
-  buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
+  buildInputs = [
+    libdrm
+    wayland
+    wayland-protocols
+    wl-clipboard
+    libxkbcommon
+    libressl
+  ];
 
   postPatch = ''
     substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"

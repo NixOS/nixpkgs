@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,17 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-eP2xYd/S/c4Z/cdK8IWghEUyF7pSTb5Cpg5pS/tpzUI=";
   };
 
-  pythonRemoveDeps = [
-    "pathlib"
-  ];
+  pythonRemoveDeps = [ "pathlib" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
-  build-system  = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     colorama
@@ -42,9 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "malwoverview"
-  ];
+  pythonImportsCheck = [ "malwoverview" ];
 
   meta = with lib; {
     description = "Tool for threat hunting and gathering intel information from various sources";

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,9 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     bitstring
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     "test_process"
@@ -46,9 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_server"
   ];
 
-  pythonImportsCheck = [
-    "cantoolz"
-  ];
+  pythonImportsCheck = [ "cantoolz" ];
 
   meta = with lib; {
     description = "Black-box CAN network analysis framework";

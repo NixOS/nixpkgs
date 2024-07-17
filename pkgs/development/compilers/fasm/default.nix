@@ -1,4 +1,9 @@
-{ stdenv, lib, fasm-bin, isx86_64 }:
+{
+  stdenv,
+  lib,
+  fasm-bin,
+  isx86_64,
+}:
 
 stdenv.mkDerivation {
   inherit (fasm-bin) version src meta;
@@ -15,7 +20,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     install -Dt $out/bin fasm tools/libc/fasm-*

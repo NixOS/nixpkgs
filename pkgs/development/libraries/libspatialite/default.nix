@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, validatePkgConfig
-, freexl
-, geos
-, librttopo
-, libxml2
-, minizip
-, proj
-, sqlite
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  validatePkgConfig,
+  freexl,
+  geos,
+  librttopo,
+  libxml2,
+  minizip,
+  proj,
+  sqlite,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libspatialite";
   version = "5.1.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${version}.tar.gz";
@@ -38,9 +42,7 @@ stdenv.mkDerivation rec {
     minizip
     proj
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   enableParallelBuilding = true;
 
@@ -62,7 +64,11 @@ stdenv.mkDerivation rec {
     description = "Extensible spatial index library in C++";
     homepage = "https://www.gaia-gis.it/fossil/libspatialite";
     # They allow any of these
-    license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+      mpl11
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
   };

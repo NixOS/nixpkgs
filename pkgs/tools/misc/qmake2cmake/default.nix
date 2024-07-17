@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, packaging
-, platformdirs
-, portalocker
-, pyparsing
-, sympy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  packaging,
+  platformdirs,
+  portalocker,
+  pyparsing,
+  sympy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-M5XVQ8MXo2Yxg5eZCho2YAGFtB0h++mEAg8NcQVuP/w=";
   };
 
-  patches = [
-    ./fix-locations.patch
-  ];
+  patches = [ ./fix-locations.patch ];
 
   propagatedBuildInputs = [
     packaging
@@ -31,9 +30,7 @@ buildPythonPackage rec {
     sympy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

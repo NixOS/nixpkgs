@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, darwin
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lima
-, lima-bin
-, makeWrapper
-, qemu
-, testers
-, colima
+{
+  lib,
+  stdenv,
+  darwin,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lima,
+  lima-bin,
+  makeWrapper,
+  qemu,
+  testers,
+  colima,
   # use lima-bin on darwin to support native macOS virtualization
   # https://github.com/NixOS/nixpkgs/pull/209171
-, lima-drv ? if stdenv.isDarwin then lima-bin else lima
+  lima-drv ? if stdenv.isDarwin then lima-bin else lima,
 }:
 
 buildGoModule rec {
@@ -32,8 +33,10 @@ buildGoModule rec {
     '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
   vendorHash = "sha256-FPcz109zQBHaS/bIl78rVeiEluR1PhrJhgs21Ex6qEg=";
 
@@ -50,7 +53,12 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima-drv qemu ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          lima-drv
+          qemu
+        ]
+      }
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
@@ -67,7 +75,10 @@ buildGoModule rec {
     description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaschmid tricktron ];
+    maintainers = with maintainers; [
+      aaschmid
+      tricktron
+    ];
     mainProgram = "colima";
   };
 }

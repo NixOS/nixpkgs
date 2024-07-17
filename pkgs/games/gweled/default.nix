@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchbzr, gettext
-, gtk2, wrapGAppsHook3, autoreconfHook, pkg-config
-, libmikmod, librsvg, libcanberra-gtk2, hicolor-icon-theme }:
+{
+  lib,
+  stdenv,
+  fetchbzr,
+  gettext,
+  gtk2,
+  wrapGAppsHook3,
+  autoreconfHook,
+  pkg-config,
+  libmikmod,
+  librsvg,
+  libcanberra-gtk2,
+  hicolor-icon-theme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gweled";
@@ -18,9 +29,20 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace "AM_GNU_GETTEXT_VERSION([0.19.8])" "AM_GNU_GETTEXT_VERSION([${gettext.version}])"
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook3 gettext autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gettext
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ gtk2 libmikmod librsvg hicolor-icon-theme libcanberra-gtk2 ];
+  buildInputs = [
+    gtk2
+    libmikmod
+    librsvg
+    hicolor-icon-theme
+    libcanberra-gtk2
+  ];
 
   configureFlags = [ "--disable-setgid" ];
 

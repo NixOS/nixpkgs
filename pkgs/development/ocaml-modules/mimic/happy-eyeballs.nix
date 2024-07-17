@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, mimic, happy-eyeballs-mirage }:
+{
+  lib,
+  buildDunePackage,
+  mimic,
+  happy-eyeballs-mirage,
+}:
 
 buildDunePackage {
   pname = "mimic-happy-eyeballs";

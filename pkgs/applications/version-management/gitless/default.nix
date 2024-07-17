@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitless"
-  ];
+  pythonImportsCheck = [ "gitless" ];
 
   meta = with lib; {
     description = "Version control system built on top of Git";

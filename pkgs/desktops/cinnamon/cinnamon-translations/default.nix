@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-kLZ0niamPV5Kaq6ZBTp1SMAl6dKMkcC+rodtAoH5+Go=";
   };
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
   installPhase = ''
     mv usr $out # files get installed like so: msgfmt -o usr/share/locale/$lang/LC_MESSAGES/$dir.mo $file

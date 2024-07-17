@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, cmake, enableJemalloc ? !stdenv.hostPlatform.isMusl, jemalloc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  cmake,
+  enableJemalloc ? !stdenv.hostPlatform.isMusl,
+  jemalloc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lwan";
@@ -11,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z8kiuZHLEupCKFrj8guiu9fTG7s+5KiQ6x0pg9iMy0c=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [ zlib ] ++ lib.optional enableJemalloc jemalloc;
 

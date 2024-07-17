@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation {
@@ -15,9 +16,7 @@ stdenv.mkDerivation {
     hash = "sha256-uozwuTAOPsRwYM9KyG3V0hwcmaPpfZPID9Wdd4olsvY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "A C++ library for Quadratic Programming";

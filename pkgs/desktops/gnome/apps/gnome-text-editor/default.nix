@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, meson
-, fetchurl
-, python3
-, pkg-config
-, gtk4
-, glib
-, gtksourceview5
-, gsettings-desktop-schemas
-, wrapGAppsHook4
-, ninja
-, gnome
-, cairo
-, enchant
-, icu
-, itstool
-, libadwaita
-, editorconfig-core-c
-, libxml2
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  meson,
+  fetchurl,
+  python3,
+  pkg-config,
+  gtk4,
+  glib,
+  gtksourceview5,
+  gsettings-desktop-schemas,
+  wrapGAppsHook4,
+  ninja,
+  gnome,
+  cairo,
+  enchant,
+  icu,
+  itstool,
+  libadwaita,
+  editorconfig-core-c,
+  libxml2,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,9 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-text-editor";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-text-editor"; };
   };
 
   meta = with lib; {

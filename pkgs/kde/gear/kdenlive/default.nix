@@ -16,13 +16,11 @@ mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (
-      substituteAll {
-        src = ./dependency-paths.patch;
-        inherit mediainfo mlt;
-        ffmpeg = ffmpeg-full;
-      }
-    )
+    (substituteAll {
+      src = ./dependency-paths.patch;
+      inherit mediainfo mlt;
+      ffmpeg = ffmpeg-full;
+    })
   ];
 
   extraBuildInputs = [
@@ -37,7 +35,5 @@ mkKdeDerivation {
     libv4l
   ];
 
-  qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
-  ];
+  qtWrapperArgs = [ "--set FREI0R_PATH ${frei0r}/lib/frei0r-1" ];
 }

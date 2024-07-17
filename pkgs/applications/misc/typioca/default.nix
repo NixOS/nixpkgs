@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, typioca
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  typioca,
 }:
 
 buildGoModule rec {
@@ -25,9 +26,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = typioca;
-    };
+    version = testers.testVersion { package = typioca; };
   };
 
   meta = with lib; {

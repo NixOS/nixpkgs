@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, kernel
-, writeScript
-, coreutils
-, gnugrep
-, jq
-, curl
-, common-updater-scripts
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  writeScript,
+  coreutils,
+  gnugrep,
+  jq,
+  curl,
+  common-updater-scripts,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = import ./update.nix {
-    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts runtimeShell;
+    inherit
+      lib
+      writeScript
+      coreutils
+      gnugrep
+      jq
+      curl
+      common-updater-scripts
+      runtimeShell
+      ;
   };
 
   meta = {
@@ -62,6 +72,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     # driver is only ment for linux thinkpads i think  bellow platforms should cover it.
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

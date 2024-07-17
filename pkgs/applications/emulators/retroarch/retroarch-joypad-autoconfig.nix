@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-eWfSqHusTri1HQUkSxY/iAceF/9PFVMC0rhLu/4W35k=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Joypad autoconfig files";

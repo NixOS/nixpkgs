@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, aubio
-, boost
-, cmake
-, ffmpeg
-, fmt
-, gettext
-, glew
-, glibmm
-, glm
-, icu
-, libepoxy
-, librsvg
-, libxmlxx
-, nlohmann_json
-, pango
-, pkg-config
-, portaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  aubio,
+  boost,
+  cmake,
+  ffmpeg,
+  fmt,
+  gettext,
+  glew,
+  glibmm,
+  glm,
+  icu,
+  libepoxy,
+  librsvg,
+  libxmlxx,
+  nlohmann_json,
+  pango,
+  pkg-config,
+  portaudio,
 }:
 
 stdenv.mkDerivation rec {

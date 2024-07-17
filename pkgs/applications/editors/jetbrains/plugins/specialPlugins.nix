@@ -1,4 +1,11 @@
-{ delve, autoPatchelfHook, stdenv, lib, glibc, gcc-unwrapped }:
+{
+  delve,
+  autoPatchelfHook,
+  stdenv,
+  lib,
+  glibc,
+  gcc-unwrapped,
+}:
 # This is a list of plugins that need special treatment. For example, the go plugin (id is 9568) comes with delve, a
 # debugger, but that needs various linking fixes. The changes here replace it with the system one.
 {
@@ -28,7 +35,8 @@
     buildPhase =
       let
         arch = (if stdenv.isLinux then "linux" else "mac") + (if stdenv.isAarch64 then "arm" else "");
-      in ''
+      in
+      ''
         runHook preBuild
         ln -sf ${delve}/bin/dlv lib/dlv/${arch}/dlv
         runHook postBuild
@@ -41,7 +49,12 @@
       agent="copilot-agent/bin/copilot-agent-linux"
       orig_size=$(stat --printf=%s $agent)
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $agent
-      patchelf --set-rpath ${lib.makeLibraryPath [glibc gcc-unwrapped]} $agent
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          glibc
+          gcc-unwrapped
+        ]
+      } $agent
       chmod +x $agent
       new_size=$(stat --printf=%s $agent)
       var_skip=20

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +39,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   meta = with lib; {
     description = "Application manager for DDE";

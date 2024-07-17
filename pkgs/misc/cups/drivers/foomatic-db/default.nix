@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cups
-, cups-filters
-, ghostscript
-, gnused
-, perl
-, autoconf
-, automake
-, patchPpdFilesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cups,
+  cups-filters,
+  ghostscript,
+  gnused,
+  perl,
+  autoconf,
+  automake,
+  patchPpdFilesHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-8Pui83Z7g5aHBJk46AYeKil/0++I6zcc5S/BWRuy1WM=";
   };
 
-  buildInputs = [ cups cups-filters ghostscript gnused perl ];
+  buildInputs = [
+    cups
+    cups-filters
+    ghostscript
+    gnused
+    perl
+  ];
 
-  nativeBuildInputs = [ autoconf automake patchPpdFilesHook perl ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    patchPpdFilesHook
+    perl
+  ];
 
   # sed-substitute indirection is more robust
   # against characters in paths that might need escaping
@@ -63,12 +75,14 @@ stdenv.mkDerivation rec {
   # Comments indicate the respective
   # package the command is contained in.
   ppdFileCommands = [
-    "cat" "date" "printf"  # coreutils
-    "rastertohp"  # cups
-    "foomatic-rip"  # cups-filters or foomatic-filters
-    "gs"  # ghostscript
-    "sed"  # gnused
-    "perl"  # perl
+    "cat"
+    "date"
+    "printf" # coreutils
+    "rastertohp" # cups
+    "foomatic-rip" # cups-filters or foomatic-filters
+    "gs" # ghostscript
+    "sed" # gnused
+    "perl" # perl
   ];
 
   # compress ppd files
@@ -83,7 +97,7 @@ stdenv.mkDerivation rec {
     description = "OpenPrinting printer support database (free content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";
-    license = lib.licenses.free;  # mostly GPL and MIT, see README in source dir
+    license = lib.licenses.free; # mostly GPL and MIT, see README in source dir
     maintainers = [ lib.maintainers.yarny ];
     # list printer manufacturers here so people
     # searching for ppd files can find this package

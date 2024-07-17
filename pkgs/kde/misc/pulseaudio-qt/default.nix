@@ -14,8 +14,11 @@ mkKdeDerivation rec {
     hash = "sha256-2MpiTs8hMIVrhZz5NBF39v74xR8g93KNgH0JxxUO0GU=";
   };
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [pulseaudio];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ pulseaudio ];
 
-  meta.license = with lib.licenses; [lgpl21Only lgpl3Only];
+  meta.license = with lib.licenses; [
+    lgpl21Only
+    lgpl3Only
+  ];
 }

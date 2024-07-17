@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnupg
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnupg,
 }:
 
 let

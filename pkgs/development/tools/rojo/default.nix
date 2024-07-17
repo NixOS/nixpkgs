@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 
 let
@@ -24,16 +25,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9kmSNWsZY0OcqaYOCblMwkXTdGXhj7f/2pUDx/L/o2o=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    SystemConfiguration
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      SystemConfiguration
+    ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
   OPENSSL_NO_VENDOR = "1";

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnome
-, gtk4
-, wrapGAppsHook4
-, librsvg
-, gsound
-, gettext
-, itstool
-, vala
-, libxml2
-, libgee
-, libgnome-games-support_2_0
-, meson
-, ninja
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk4,
+  wrapGAppsHook4,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  vala,
+  libxml2,
+  libgee,
+  libgnome-games-support_2_0,
+  meson,
+  ninja,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

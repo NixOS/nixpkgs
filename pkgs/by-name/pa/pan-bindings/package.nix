@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGo122Module
-, cmake
-, ncurses
-, asio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGo122Module,
+  cmake,
+  ncurses,
+  asio,
 }:
 
 let
@@ -15,12 +16,14 @@ let
     rev = "4361d30f1c5145a70651c259f2d56369725b0d15";
     hash = "sha256-0WxrgXTCM+BwGcjjWBBKiZawje2yxB5RRac6Sk5t3qc=";
   };
-  goDeps = (buildGo122Module {
-    name = "pan-bindings-goDeps";
-    inherit src version;
-    modRoot = "go";
-    vendorHash = "sha256-7EitdEJTRtiM29qmVnZUM6w68vCBI8mxZhCA7SnAxLA=";
-  });
+  goDeps = (
+    buildGo122Module {
+      name = "pan-bindings-goDeps";
+      inherit src version;
+      modRoot = "go";
+      vendorHash = "sha256-7EitdEJTRtiM29qmVnZUM6w68vCBI8mxZhCA7SnAxLA=";
+    }
+  );
 in
 
 stdenv.mkDerivation {

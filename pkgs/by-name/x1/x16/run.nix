@@ -1,6 +1,7 @@
-{ runtimeShell
-, symlinkJoin
-, writeTextFile
+{
+  runtimeShell,
+  symlinkJoin,
+  writeTextFile,
 }:
 
 { emulator, rom }:

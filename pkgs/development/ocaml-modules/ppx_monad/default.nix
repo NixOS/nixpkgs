@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, ppxlib
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ppxlib,
 }:
 
 buildDunePackage rec {
@@ -15,13 +18,10 @@ buildDunePackage rec {
     sha256 = "sha256-cbguAddSlUxBK7pmT7vNmtJW9TrVZZjdSJRMT3lqxOA=";
   };
 
-  propagatedBuildInputs = [
-    ppxlib
-  ];
+  propagatedBuildInputs = [ ppxlib ];
 
   doCheck = true;
-  checkInputs = [
-  ];
+  checkInputs = [ ];
 
   meta = {
     description = "An OCaml Syntax Extension for all Monadic Syntaxes";

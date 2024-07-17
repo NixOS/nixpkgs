@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ppx_cstruct, lwt, ounit2
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  ppx_cstruct,
+  lwt,
+  ounit2,
 }:
 
 buildDunePackage rec {
@@ -15,7 +21,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct lwt ];
+  propagatedBuildInputs = [
+    cstruct
+    lwt
+  ];
 
   doCheck = true;
   checkInputs = [ ounit2 ];

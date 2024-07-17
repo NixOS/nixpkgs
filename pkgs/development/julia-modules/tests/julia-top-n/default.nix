@@ -1,5 +1,14 @@
-{ mkDerivation, aeson, base, filepath, lib, optparse-applicative
-, sandwich, text, unliftio, yaml
+{
+  mkDerivation,
+  aeson,
+  base,
+  filepath,
+  lib,
+  optparse-applicative,
+  sandwich,
+  text,
+  unliftio,
+  yaml,
 }:
 mkDerivation {
   pname = "julia-top-n";
@@ -8,7 +17,13 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base filepath optparse-applicative sandwich text unliftio
+    aeson
+    base
+    filepath
+    optparse-applicative
+    sandwich
+    text
+    unliftio
     yaml
   ];
   license = lib.licenses.bsd3;

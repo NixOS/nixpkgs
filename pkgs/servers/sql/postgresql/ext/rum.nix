@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rum";

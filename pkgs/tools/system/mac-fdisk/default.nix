@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, installShellFiles
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,9 +73,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   enableParallelBuilding = true;
 

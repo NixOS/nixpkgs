@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, meson
-, ninja
-, wrapGAppsHook3
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-4jKsRpzuyHH31LXndC3Ua4TYcI0G0v9qqe0cbvLuCDA=";
   };
 
-  patches = [
-    ./siglo-no-user-install.patch
-  ];
+  patches = [ ./siglo-no-user-install.patch ];
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py # patchShebangs requires an executable file

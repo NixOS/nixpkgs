@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, SDL }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL_gfx";
@@ -11,10 +16,9 @@ stdenv.mkDerivation rec {
 
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
   propagatedBuildInputs = [ SDL ];
-  buildInputs = [ SDL ] ;
+  buildInputs = [ SDL ];
 
-  configureFlags = [ "--disable-mmx" ]
-    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [ "--disable-mmx" ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   meta = with lib; {
     description = "SDL graphics drawing primitives and support functions";

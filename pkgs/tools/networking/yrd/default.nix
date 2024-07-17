@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,9 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    nose
-  ];
+  nativeCheckInputs = with python3.pkgs; [ nose ];
 
   checkPhase = ''
     nosetests -v yrd

@@ -1,11 +1,14 @@
-{ reason, re, pastel, ... }:
+{
+  reason,
+  re,
+  pastel,
+  ...
+}:
 
 {
   pname = "file-context-printer";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   propagatedBuildInputs = [
     re

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "beluga";

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  libjpeg,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,7 @@ stdenv.mkDerivation rec {
     libjpeg
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = {
     description = "Digital modem message program";

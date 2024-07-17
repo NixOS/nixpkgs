@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, zarith
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  zarith,
 }:
 
 buildDunePackage rec {
@@ -17,9 +18,7 @@ buildDunePackage rec {
     hash = "sha256-mSD/xSweeK9WMxWDdX/vzN96iXo74RkufjuNvtzsP9o=";
   };
 
-  propagatedBuildInputs = [
-    zarith
-  ];
+  propagatedBuildInputs = [ zarith ];
 
   meta = {
     description = "Verified Polyhedra Library";

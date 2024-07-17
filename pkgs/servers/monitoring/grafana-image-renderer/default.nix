@@ -1,4 +1,11 @@
-{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nodejs,
+  runtimeShell,
+}:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.

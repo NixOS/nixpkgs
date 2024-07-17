@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, stdenv
-, libiconv
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  stdenv,
+  libiconv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,21 +22,23 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mhNEeczbqXVsHoErwEIPUuJqNcyR6dTKBDeHCVH+KsE=";
 
-  buildInputs = [
-    openssl # required for openssl-sys
-  ] ++ lib.optional stdenv.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl # required for openssl-sys
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [
     pkg-config # required for openssl-sys
   ];
 
   cargoTestFlags = [
-      # Only run lib tests (unit tests)
-      # All other tests are integration tests which should not be run with Nix build
-      "--lib"
+    # Only run lib tests (unit tests)
+    # All other tests are integration tests which should not be run with Nix build
+    "--lib"
   ];
 
   meta = with lib; {

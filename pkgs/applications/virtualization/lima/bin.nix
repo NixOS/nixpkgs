@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, writeScript
-, installShellFiles
-, qemu
-, makeBinaryWrapper
-, autoPatchelfHook
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  writeScript,
+  installShellFiles,
+  qemu,
+  makeBinaryWrapper,
+  autoPatchelfHook,
 }:
 
 let
@@ -41,14 +42,21 @@ stdenvNoCC.mkDerivation {
   inherit version;
   pname = "lima";
   src = fetchurl {
-    inherit (dist.${stdenvNoCC.hostPlatform.system} or
-      (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")) url sha256;
+    inherit
+      (dist.${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
+      )
+      url
+      sha256
+      ;
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ]
-    ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall

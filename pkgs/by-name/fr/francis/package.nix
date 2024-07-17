@@ -1,9 +1,10 @@
-{ cmake
-, fetchFromGitLab
-, kdePackages
-, lib
-, pkg-config
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  kdePackages,
+  lib,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +45,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Using the well-known pomodoro technique to help you get more productive";
     homepage = "https://apps.kde.org/francis/";
-    license = with licenses; [ bsd2 bsd3 cc0 lgpl2Plus lgpl21Plus gpl3Plus ];
+    license = with licenses; [
+      bsd2
+      bsd3
+      cc0
+      lgpl2Plus
+      lgpl21Plus
+      gpl3Plus
+    ];
     mainProgram = "francis";
     maintainers = with maintainers; [ cimm ];
     platforms = lib.platforms.linux;

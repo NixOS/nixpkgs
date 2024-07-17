@@ -1,6 +1,28 @@
-{ fetchpatch, fetchurl, lib, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
-libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
-libpng, zlib, makeWrapper }:
+{
+  fetchpatch,
+  fetchurl,
+  lib,
+  stdenv,
+  libGLU,
+  freeglut,
+  libX11,
+  plib,
+  openal,
+  freealut,
+  libXrandr,
+  xorgproto,
+  libXext,
+  libSM,
+  libICE,
+  libXi,
+  libXt,
+  libXrender,
+  libXxf86vm,
+  libvorbis,
+  libpng,
+  zlib,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "torcs";
@@ -40,8 +62,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libGLU freeglut libX11 plib openal freealut libXrandr xorgproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
+  buildInputs = [
+    libGLU
+    freeglut
+    libX11
+    plib
+    openal
+    freealut
+    libXrandr
+    xorgproto
+    libXext
+    libSM
+    libICE
+    libXi
+    libXt
+    libXrender
+    libXxf86vm
+    libpng
+    zlib
+    libvorbis
+  ];
 
   installTargets = "install datainstall";
 
@@ -49,8 +89,8 @@ stdenv.mkDerivation rec {
     description = "Car racing game";
     homepage = "https://torcs.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

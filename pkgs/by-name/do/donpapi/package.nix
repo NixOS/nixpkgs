@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,9 +39,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "donpapi"
-  ];
+  pythonImportsCheck = [ "donpapi" ];
 
   meta = with lib; {
     description = "Tool for dumping DPAPI credentials remotely";

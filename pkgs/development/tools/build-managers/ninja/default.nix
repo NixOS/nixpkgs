@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, asciidoc
-, docbook_xml_dtd_45
-, docbook_xsl
-, installShellFiles
-, libxslt
-, python3
-, re2c
-, buildPackages
-, buildDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  installShellFiles,
+  libxslt,
+  python3,
+  re2c,
+  buildPackages,
+  buildDocs ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,17 +27,18 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [
-    python3
-    re2c
-    installShellFiles
-  ]
-  ++ lib.optionals buildDocs [
-    asciidoc
-    docbook_xml_dtd_45
-    docbook_xsl
-    libxslt.bin
-  ];
+  nativeBuildInputs =
+    [
+      python3
+      re2c
+      installShellFiles
+    ]
+    ++ lib.optionals buildDocs [
+      asciidoc
+      docbook_xml_dtd_45
+      docbook_xsl
+      libxslt.bin
+    ];
 
   patches = lib.optionals stdenv.is32bit [
     # Otherwise ninja may fail on some files in a larger FS.
@@ -52,42 +54,48 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    ''
+      runHook preBuild
 
-    # for list of env vars
-    # see https://github.com/ninja-build/ninja/blob/v1.11.1/configure.py#L264
-    CXX="$CXX_FOR_BUILD" \
-    AR="$AR_FOR_BUILD" \
-    CFLAGS="$CFLAGS_FOR_BUILD" \
-    CXXFLAGS="$CXXFLAGS_FOR_BUILD" \
-    LDFLAGS="$LDFLAGS_FOR_BUILD" \
-    python configure.py --bootstrap
-    python configure.py
+      # for list of env vars
+      # see https://github.com/ninja-build/ninja/blob/v1.11.1/configure.py#L264
+      CXX="$CXX_FOR_BUILD" \
+      AR="$AR_FOR_BUILD" \
+      CFLAGS="$CFLAGS_FOR_BUILD" \
+      CXXFLAGS="$CXXFLAGS_FOR_BUILD" \
+      LDFLAGS="$LDFLAGS_FOR_BUILD" \
+      python configure.py --bootstrap
+      python configure.py
 
-    source rebuild_args
-  '' + lib.optionalString buildDocs ''
-    # "./ninja -vn manual" output copied here to support cross compilation.
-    asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
-    xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
-  '' + ''
+      source rebuild_args
+    ''
+    + lib.optionalString buildDocs ''
+      # "./ninja -vn manual" output copied here to support cross compilation.
+      asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
+      xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
+    ''
+    + ''
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    install -Dm555 -t $out/bin ninja
-    installShellCompletion --name ninja \
-      --bash misc/bash-completion \
-      --zsh misc/zsh-completion
-  '' + lib.optionalString buildDocs ''
-    install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
-  '' + ''
+      install -Dm555 -t $out/bin ninja
+      installShellCompletion --name ninja \
+        --bash misc/bash-completion \
+        --zsh misc/zsh-completion
+    ''
+    + lib.optionalString buildDocs ''
+      install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   setupHook = ./setup-hook.sh;
 
@@ -103,6 +111,10 @@ stdenv.mkDerivation rec {
     homepage = "https://ninja-build.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice bjornfor orivej ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      bjornfor
+      orivej
+    ];
   };
 }

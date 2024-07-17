@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qtbase ];
+  buildInputs = [
+    obs-studio
+    qtbase
+  ];
 
   patches = [
     # Patch cmake file to link against the obs build output, instead of its sources
@@ -27,6 +37,9 @@ stdenv.mkDerivation rec {
     description = "Multi-site simultaneous broadcast plugin for OBS Studio";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

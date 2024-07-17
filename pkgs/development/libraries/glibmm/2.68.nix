@@ -1,21 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnum4
-, glib
-, libsigcxx30
-, gnome
-, Cocoa
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnum4,
+  glib,
+  libsigcxx30,
+  gnome,
+  Cocoa,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
   version = "2.80.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -30,9 +34,7 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs = [
     glib

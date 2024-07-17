@@ -1,48 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, ninja
-, yasm
-, libjpeg
-, openssl
-, libopus
-, ffmpeg_4
-, protobuf
-, openh264
-, usrsctp
-, libvpx
-, libX11
-, libXtst
-, libXcomposite
-, libXdamage
-, libXext
-, libXrender
-, libXrandr
-, libXi
-, glib
-, abseil-cpp
-, pipewire
-, mesa
-, libdrm
-, libGL
-, Cocoa
-, AppKit
-, IOKit
-, IOSurface
-, Foundation
-, AVFoundation
-, CoreMedia
-, VideoToolbox
-, CoreGraphics
-, CoreVideo
-, OpenGL
-, Metal
-, MetalKit
-, CoreFoundation
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  ninja,
+  yasm,
+  libjpeg,
+  openssl,
+  libopus,
+  ffmpeg_4,
+  protobuf,
+  openh264,
+  usrsctp,
+  libvpx,
+  libX11,
+  libXtst,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXrender,
+  libXrandr,
+  libXi,
+  glib,
+  abseil-cpp,
+  pipewire,
+  mesa,
+  libdrm,
+  libGL,
+  Cocoa,
+  AppKit,
+  IOKit,
+  IOSurface,
+  Foundation,
+  AVFoundation,
+  CoreMedia,
+  VideoToolbox,
+  CoreGraphics,
+  CoreVideo,
+  OpenGL,
+  Metal,
+  MetalKit,
+  CoreFoundation,
+  ApplicationServices,
 }:
 
 let
@@ -82,62 +83,75 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch = ''
-    rm -r src/third_party/libsrtp
-    cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
-      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
-      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
-      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
-      --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
-  '';
+  postPatch =
+    ''
+      rm -r src/third_party/libsrtp
+      cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+        --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
+        --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
+        --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
+        --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+    '';
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ pkg-config cmake ninja yasm ];
-
-  propagatedBuildInputs = [
-    libjpeg
-    openssl
-    libopus
-    ffmpeg_4
-    protobuf
-    openh264
-    usrsctp
-    libvpx
-    abseil-cpp
-  ] ++ lib.optionals stdenv.isLinux [
-    libX11
-    libXtst
-    libXcomposite
-    libXdamage
-    libXext
-    libXrender
-    libXrandr
-    libXi
-    glib
-    pipewire
-    mesa
-    libdrm
-    libGL
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    AppKit
-    IOKit
-    IOSurface
-    Foundation
-    AVFoundation
-    CoreMedia
-    VideoToolbox
-    CoreGraphics
-    CoreVideo
-    OpenGL
-    Metal
-    MetalKit
-    CoreFoundation
-    ApplicationServices
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    yasm
+  ];
+
+  propagatedBuildInputs =
+    [
+      libjpeg
+      openssl
+      libopus
+      ffmpeg_4
+      protobuf
+      openh264
+      usrsctp
+      libvpx
+      abseil-cpp
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libX11
+      libXtst
+      libXcomposite
+      libXdamage
+      libXext
+      libXrender
+      libXrandr
+      libXi
+      glib
+      pipewire
+      mesa
+      libdrm
+      libGL
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+      AppKit
+      IOKit
+      IOSurface
+      Foundation
+      AVFoundation
+      CoreMedia
+      VideoToolbox
+      CoreGraphics
+      CoreVideo
+      OpenGL
+      Metal
+      MetalKit
+      CoreFoundation
+      ApplicationServices
+    ];
 
   enableParallelBuilding = true;
 

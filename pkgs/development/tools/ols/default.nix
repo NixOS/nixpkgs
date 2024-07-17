@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, makeBinaryWrapper, unstableGitUpdater, odin, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  unstableGitUpdater,
+  odin,
+  lib,
+}:
 
 stdenv.mkDerivation {
   pname = "ols";
@@ -11,17 +18,11 @@ stdenv.mkDerivation {
     hash = "sha256-iBrXpLrnBL5W47Iz0Uy4nd5h/ADqSnxZt2jWQi9eYiM=";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    odin
-  ];
+  buildInputs = [ odin ];
 
   postPatch = ''
     patchShebangs build.sh
@@ -50,6 +51,9 @@ stdenv.mkDerivation {
     mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
-    maintainers = with maintainers; [ astavie znaniye ];
+    maintainers = with maintainers; [
+      astavie
+      znaniye
+    ];
   };
 }

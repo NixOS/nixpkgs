@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, glib
-, gtk3
-, nemo
-, gnome
-, cinnamon-translations
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  glib,
+  gtk3,
+  nemo,
+  gnome,
+  cinnamon-translations,
 }:
 
 let

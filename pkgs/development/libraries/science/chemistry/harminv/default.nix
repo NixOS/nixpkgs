@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gfortran
-, blas
-, lapack
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gfortran,
+  blas,
+  lapack,
 }:
 
 assert !blas.isILP64;
@@ -26,9 +27,15 @@ stdenv.mkDerivation rec {
     touch ChangeLog
   '';
 
-  nativeBuildInputs = [ autoreconfHook gfortran ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gfortran
+  ];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   configureFlags = [ "--enable-shared" ];
 
@@ -37,7 +44,10 @@ stdenv.mkDerivation rec {
     mainProgram = "GDSIIConvert";
     homepage = "https://github.com/NanoComp/harminv";
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
     platforms = platforms.linux;
   };
 }

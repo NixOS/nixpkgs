@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kotlin";
@@ -9,8 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-63to4BAp+me8jQYO5UwSAY8sYN3EOM8h2xRRcimqaTs=";
   };
 
-  propagatedBuildInputs = [ jre ] ;
-  nativeBuildInputs = [ makeWrapper unzip ];
+  propagatedBuildInputs = [ jre ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     mkdir -p $out

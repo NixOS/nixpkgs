@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, lv2, fftwFloat, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+  fftwFloat,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "talentedhack";
@@ -13,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ lv2 fftwFloat ];
+  buildInputs = [
+    lv2
+    fftwFloat
+  ];
 
   # To avoid name clashes, plugins should be compiled with symbols hidden, except for `lv2_descriptor`:
   preConfigure = ''

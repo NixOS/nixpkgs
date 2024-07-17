@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, dnspython
-, fqdn
-, idna
-, natsort
-, python-dateutil
-, pyyaml
-, python
-, runCommand
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  dnspython,
+  fqdn,
+  idna,
+  natsort,
+  python-dateutil,
+  pyyaml,
+  python,
+  runCommand,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-l4JGodbUmFxHFeEaxgClEozHcbyYP0F2yj5gDqV88IA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dnspython
@@ -41,18 +40,19 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "octodns" ];
 
-  passthru.withProviders = ps: let
-    pyEnv = python.withPackages ps;
-  in runCommand "octodns-with-providers" { } ''
-    mkdir -p $out/bin
-    ln -st $out/bin ${pyEnv}/bin/octodns-*
-  '';
+  passthru.withProviders =
+    ps:
+    let
+      pyEnv = python.withPackages ps;
+    in
+    runCommand "octodns-with-providers" { } ''
+      mkdir -p $out/bin
+      ln -st $out/bin ${pyEnv}/bin/octodns-*
+    '';
 
   meta = with lib; {
     description = "Tools for managing DNS across multiple providers";

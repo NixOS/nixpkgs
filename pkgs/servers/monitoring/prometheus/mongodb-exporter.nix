@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "mongodb_exporter";
@@ -28,12 +32,11 @@ buildGoModule rec {
   # nixpkgs doesn't have mongodb application available;
   doCheck = false;
 
-  meta = with lib;
-    {
-      description = "A Prometheus exporter for MongoDB including sharding, replication and storage engines";
-      homepage = "https://github.com/percona/mongodb_exporter";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ undefined-moe ];
-      mainProgram = "mongodb_exporter";
-    };
+  meta = with lib; {
+    description = "A Prometheus exporter for MongoDB including sharding, replication and storage engines";
+    homepage = "https://github.com/percona/mongodb_exporter";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ undefined-moe ];
+    mainProgram = "mongodb_exporter";
+  };
 }

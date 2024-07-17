@@ -1,5 +1,11 @@
-{ lib, stdenv, buildPackages, fetchurl, pciutils
-, gitUpdater }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  pciutils,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";

@@ -80,6 +80,9 @@ buildGoModule rec {
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
     mainProgram = "steampipe";
-    maintainers = with lib.maintainers; [ hardselius anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      hardselius
+      anthonyroussel
+    ];
   };
 }

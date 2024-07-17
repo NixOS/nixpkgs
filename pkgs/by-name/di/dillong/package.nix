@@ -32,11 +32,13 @@ stdenv.mkDerivation {
     mbedtls_2
   ];
 
-  outputs = [ "out" "doc" "man" ];
-
-  configureFlags = [
-    (lib.enableFeature true "ssl")
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
+
+  configureFlags = [ (lib.enableFeature true "ssl") ];
 
   strictDeps = true;
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchFromSourcehut
-, makeWrapper
-, installShellFiles
-, wtype
-, wl-clipboard
-, pass
-, bemenu
-, scdoc
+{
+  lib,
+  stdenvNoCC,
+  fetchFromSourcehut,
+  makeWrapper,
+  installShellFiles,
+  wtype,
+  wl-clipboard,
+  pass,
+  bemenu,
+  scdoc,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,19 +17,30 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
-    repo  = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256  = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
+    sha256 = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles scdoc ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+    scdoc
+  ];
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
     install -D tessen $out/bin/tessen
-    wrapProgram $out/bin/tessen --prefix PATH : ${ lib.makeBinPath [ bemenu pass wtype wl-clipboard ] }
+    wrapProgram $out/bin/tessen --prefix PATH : ${
+      lib.makeBinPath [
+        bemenu
+        pass
+        wtype
+        wl-clipboard
+      ]
+    }
     runHook postInstall
   '';
 

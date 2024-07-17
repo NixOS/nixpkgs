@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-e+dNPNbCHYDXUS/W+hMqf/37fhVgEGzId6rhP3cToTE=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   cmakeFlags = [
     "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"

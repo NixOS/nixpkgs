@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchCrate, stdenv, CoreServices }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
@@ -18,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-katex";
     homepage = "https://github.com/lzanini/${pname}";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
+    maintainers = with maintainers; [
+      lovesegfault
+      matthiasbeyer
+    ];
   };
 }

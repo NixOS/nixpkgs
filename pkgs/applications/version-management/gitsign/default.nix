@@ -1,4 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal, testers, gitsign }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  makeWrapper,
+  gitMinimal,
+  testers,
+  gitsign,
+}:
 
 buildGoModule rec {
   pname = "gitsign";
@@ -19,7 +28,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}"
+  ];
 
   preCheck = ''
     # test all paths
@@ -39,6 +52,9 @@ buildGoModule rec {
     changelog = "https://github.com/sigstore/gitsign/releases/tag/v${version}";
     description = "Keyless Git signing using Sigstore";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lesuisse developer-guy ];
+    maintainers = with lib.maintainers; [
+      lesuisse
+      developer-guy
+    ];
   };
 }

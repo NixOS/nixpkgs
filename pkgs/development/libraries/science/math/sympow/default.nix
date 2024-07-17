@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, makeWrapper
-, which
-, autoconf
-, help2man
-, file
-, pari
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  makeWrapper,
+  which,
+  autoconf,
+  help2man,
+  file,
+  pari,
 }:
 
 stdenv.mkDerivation rec {

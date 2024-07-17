@@ -1,8 +1,9 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, sqlite
-, stdenv
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  sqlite,
+  stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite_orm";
@@ -15,13 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KqphGFcnR1Y11KqL7sxODSv7lEvcURdF6kLd3cg84kc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
-    sqlite
-  ];
+  propagatedBuildInputs = [ sqlite ];
 
   strictDeps = true;
 

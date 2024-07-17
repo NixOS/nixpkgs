@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, chmlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  chmlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+RbFE/jOD8sofHMCFgTIfgokrXYqDbCSSnN6SdEZ/b0=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     wxGTK32

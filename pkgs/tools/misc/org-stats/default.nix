@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
-, installShellFiles
-, testers
-, org-stats
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  substituteAll,
+  installShellFiles,
+  testers,
+  org-stats,
 }:
 
 buildGoModule rec {
@@ -29,11 +30,12 @@ buildGoModule rec {
     })
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     $out/bin/org-stats man > org-stats.1

@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cursewords";
@@ -20,9 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # no tests
 
-  propagatedBuildInputs = [
-    python3Packages.blessed
-  ];
+  propagatedBuildInputs = [ python3Packages.blessed ];
 
   meta = with lib; {
     homepage = "https://github.com/thisisparker/cursewords";

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, mlton
-, pkg-config
-, getopt
-, boehmgc
-, darwin
-, libbacktrace
-, libpng
-, ncurses
-, readline
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  mlton,
+  pkg-config,
+  getopt,
+  boehmgc,
+  darwin,
+  libbacktrace,
+  libpng,
+  ncurses,
+  readline,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,22 +25,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-lRIEtclx+NKxAO72nsvnxVeEGCEe6glC6w8MXh1HEwY=";
   };
 
-  patches = [
-    ./use-system-libraries.patch
-  ];
+  patches = [ ./use-system-libraries.patch ];
 
-  postPatch = ''
-    substituteInPlace cc0/Makefile \
-      --replace '$(shell ./get_version.sh)' '${version}'
-    substituteInPlace cc0/compiler/bin/buildid \
-      --replace '`../get_version.sh`' '${version}' \
-      --replace '`date`' '1970-01-01T00:00:00Z' \
-      --replace '`hostname`' 'nixpkgs'
-  '' + lib.optionalString stdenv.isDarwin ''
-    for f in cc0/compiler/bin/coin-o0-support cc0/compiler/bin/cc0-o0-support; do
-      substituteInPlace $f --replace '$(brew --prefix gnu-getopt)' '${getopt}'
-    done
-  '';
+  postPatch =
+    ''
+      substituteInPlace cc0/Makefile \
+        --replace '$(shell ./get_version.sh)' '${version}'
+      substituteInPlace cc0/compiler/bin/buildid \
+        --replace '`../get_version.sh`' '${version}' \
+        --replace '`date`' '1970-01-01T00:00:00Z' \
+        --replace '`hostname`' 'nixpkgs'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      for f in cc0/compiler/bin/coin-o0-support cc0/compiler/bin/cc0-o0-support; do
+        substituteInPlace $f --replace '$(brew --prefix gnu-getopt)' '${getopt}'
+      done
+    '';
 
   preConfigure = ''
     cd cc0/
@@ -68,9 +69,7 @@ stdenv.mkDerivation rec {
     mv $out/c0-mode/ $out/share/emacs/site-lisp/
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://bitbucket.org/c0-lang/c0.git";
-  };
+  passthru.updateScript = unstableGitUpdater { url = "https://bitbucket.org/c0-lang/c0.git"; };
 
   meta = with lib; {
     description = "A small safe subset of the C programming language, augmented with contracts";

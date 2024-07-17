@@ -1,9 +1,10 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
-, llvm
-, clang-unwrapped
-, gtest
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  llvm,
+  clang-unwrapped,
+  gtest,
 }:
 
 callPackage ../base.nix rec {

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, netlify-cli
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  netlify-cli,
 }:
 
 buildGoModule rec {

@@ -1,12 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub
-, libkiwix
-, pkg-config
-, qmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qtimageformats
-, aria2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  libkiwix,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtwebengine,
+  qtsvg,
+  qtimageformats,
+  aria2,
 }:
 
 mkDerivation {
@@ -33,9 +36,7 @@ mkDerivation {
     qtimageformats
   ];
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ aria2 ]}"
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ aria2 ]}" ];
 
   meta = with lib; {
     description = "An offline reader for Web content";

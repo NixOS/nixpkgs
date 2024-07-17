@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, notation }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  notation,
+}:
 
 buildGoModule rec {
   pname = "notation";
@@ -13,9 +20,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-USkufc1dG4eyRfRJHSX4mVZHnvOc5onHenF98Aedac4=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
   excludedPackages = [ "./test" ];

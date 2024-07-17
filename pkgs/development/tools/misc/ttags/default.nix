@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, ttags }:
-let version = "0.3.0";
-in rustPlatform.buildRustPackage {
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  ttags,
+}:
+let
+  version = "0.3.0";
+in
+rustPlatform.buildRustPackage {
   pname = "ttags";
   inherit version;
 

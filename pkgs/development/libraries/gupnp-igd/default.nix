@@ -1,33 +1,35 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gobject-introspection
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, glib
-, gupnp
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gobject-introspection,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  glib,
+  gupnp,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-igd";
   version = "1.2.0";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,7 +23,10 @@ let
 
 in
 {
-  meta.maintainers = with maintainers; [ jbedo cfhammill ];
+  meta.maintainers = with maintainers; [
+    jbedo
+    cfhammill
+  ];
 
   options.services.rstudio-server = {
     enable = mkEnableOption "RStudio server";
@@ -61,41 +69,43 @@ in
 
   };
 
-  config = mkIf cfg.enable
-    {
-      systemd.services.rstudio-server = {
-        description = "Rstudio server";
+  config = mkIf cfg.enable {
+    systemd.services.rstudio-server = {
+      description = "Rstudio server";
 
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ rserver-conf rsession-conf ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [
+        rserver-conf
+        rsession-conf
+      ];
 
-        serviceConfig = {
-          Restart = "on-failure";
-          Type = "forking";
-          ExecStart = "${cfg.package}/bin/rserver";
-          StateDirectory = "rstudio-server";
-          RuntimeDirectory = "rstudio-server";
-        };
+      serviceConfig = {
+        Restart = "on-failure";
+        Type = "forking";
+        ExecStart = "${cfg.package}/bin/rserver";
+        StateDirectory = "rstudio-server";
+        RuntimeDirectory = "rstudio-server";
       };
-
-      environment.etc = {
-        "rstudio/rserver.conf".source = rserver-conf;
-        "rstudio/rsession.conf".source = rsession-conf;
-        "pam.d/rstudio".source = "/etc/pam.d/login";
-      };
-      environment.systemPackages = [ cfg.package ];
-
-      users = {
-        users.rstudio-server = {
-          uid = config.ids.uids.rstudio-server;
-          description = "rstudio-server";
-          group = "rstudio-server";
-        };
-        groups.rstudio-server = {
-          gid = config.ids.gids.rstudio-server;
-        };
-      };
-
     };
+
+    environment.etc = {
+      "rstudio/rserver.conf".source = rserver-conf;
+      "rstudio/rsession.conf".source = rsession-conf;
+      "pam.d/rstudio".source = "/etc/pam.d/login";
+    };
+    environment.systemPackages = [ cfg.package ];
+
+    users = {
+      users.rstudio-server = {
+        uid = config.ids.uids.rstudio-server;
+        description = "rstudio-server";
+        group = "rstudio-server";
+      };
+      groups.rstudio-server = {
+        gid = config.ids.gids.rstudio-server;
+      };
+    };
+
+  };
 }

@@ -1,45 +1,46 @@
-{ lib
-, stdenv
-, fetchurl
-, wrapGAppsHook3
-, autoPatchelfHook
-, makeDesktopItem
-, atk
-, cairo
-, coreutils
-, curl
-, cups
-, dbus-glib
-, dbus
-, dconf
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk3
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXt
-, libnotify
-, gnome
-, libGLU
-, libGL
-, nspr
-, nss
-, pango
-, gsettings-desktop-schemas
-, alsa-lib
-, libXtst
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  makeDesktopItem,
+  atk,
+  cairo,
+  coreutils,
+  curl,
+  cups,
+  dbus-glib,
+  dbus,
+  dconf,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrender,
+  libXt,
+  libnotify,
+  gnome,
+  libGLU,
+  libGL,
+  nspr,
+  nss,
+  pango,
+  gsettings-desktop-schemas,
+  alsa-lib,
+  libXtst,
 }:
 
 stdenv.mkDerivation rec {
@@ -100,7 +101,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
-
   desktopItem = makeDesktopItem {
     name = "zotero";
     exec = "zotero -url %U";
@@ -108,11 +108,16 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Zotero";
     genericName = "Reference Management";
-    categories = [ "Office" "Database" ];
+    categories = [
+      "Office"
+      "Database"
+    ];
     startupNotify = true;
-    mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
+    mimeTypes = [
+      "x-scheme-handler/zotero"
+      "text/plain"
+    ];
   };
-
 
   installPhase = ''
     runHook preInstall

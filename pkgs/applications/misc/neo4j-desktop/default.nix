@@ -1,4 +1,8 @@
-{ appimageTools, lib, fetchurl }:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+}:
 let
   pname = "neo4j-desktop";
   version = "1.5.8";
@@ -9,7 +13,8 @@ let
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];

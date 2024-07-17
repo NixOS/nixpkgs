@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -15,8 +20,7 @@ in
     enable = mkEnableOption "flannel networking";
 
     openFirewallPorts = mkOption {
-      description = ''
-        Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
+      description = ''Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
       type = types.bool;
       default = true;
     };
@@ -33,23 +37,28 @@ in
     };
 
     services.kubernetes.kubelet = {
-      cni.config = mkDefault [{
-        name = "mynet";
-        type = "flannel";
-        cniVersion = "0.3.1";
-        delegate = {
-          isDefaultGateway = true;
-          bridge = "mynet";
-        };
-      }];
+      cni.config = mkDefault [
+        {
+          name = "mynet";
+          type = "flannel";
+          cniVersion = "0.3.1";
+          delegate = {
+            isDefaultGateway = true;
+            bridge = "mynet";
+          };
+        }
+      ];
     };
 
     networking = {
       firewall.allowedUDPPorts = mkIf cfg.openFirewallPorts [
-        8285  # flannel udp
-        8472  # flannel vxlan
+        8285 # flannel udp
+        8472 # flannel vxlan
       ];
-      dhcpcd.denyInterfaces = [ "mynet*" "flannel*" ];
+      dhcpcd.denyInterfaces = [
+        "mynet*"
+        "flannel*"
+      ];
     };
 
     services.kubernetes.pki.certs = {
@@ -61,45 +70,58 @@ in
     };
 
     # give flannel some kubernetes rbac permissions if applicable
-    services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
-
-      flannel-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRole";
-        metadata = { name = "flannel"; };
-        rules = [{
-          apiGroups = [ "" ];
-          resources = [ "pods" ];
-          verbs = [ "get" ];
-        }
+    services.kubernetes.addonManager.bootstrapAddons =
+      mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode))
         {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
-      };
 
-      flannel-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRoleBinding";
-        metadata = { name = "flannel"; };
-        roleRef = {
-          apiGroup = "rbac.authorization.k8s.io";
-          kind = "ClusterRole";
-          name = "flannel";
+          flannel-cr = {
+            apiVersion = "rbac.authorization.k8s.io/v1";
+            kind = "ClusterRole";
+            metadata = {
+              name = "flannel";
+            };
+            rules = [
+              {
+                apiGroups = [ "" ];
+                resources = [ "pods" ];
+                verbs = [ "get" ];
+              }
+              {
+                apiGroups = [ "" ];
+                resources = [ "nodes" ];
+                verbs = [
+                  "list"
+                  "watch"
+                ];
+              }
+              {
+                apiGroups = [ "" ];
+                resources = [ "nodes/status" ];
+                verbs = [ "patch" ];
+              }
+            ];
+          };
+
+          flannel-crb = {
+            apiVersion = "rbac.authorization.k8s.io/v1";
+            kind = "ClusterRoleBinding";
+            metadata = {
+              name = "flannel";
+            };
+            roleRef = {
+              apiGroup = "rbac.authorization.k8s.io";
+              kind = "ClusterRole";
+              name = "flannel";
+            };
+            subjects = [
+              {
+                kind = "User";
+                name = "flannel-client";
+              }
+            ];
+          };
+
         };
-        subjects = [{
-          kind = "User";
-          name = "flannel-client";
-        }];
-      };
-
-    };
   };
 
   meta.buildDocsInSandbox = false;

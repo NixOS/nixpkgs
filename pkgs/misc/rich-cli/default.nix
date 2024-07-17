@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -53,9 +54,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'textual = "^0.1.18"' 'textual = "*"'
   '';
 
-  nativeBuildInputs = with py.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with py.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with py.pkgs; [
     rich
@@ -65,9 +64,7 @@ python3.pkgs.buildPythonApplication rec {
     rich-rst
   ];
 
-  pythonImportsCheck = [
-    "rich_cli"
-  ];
+  pythonImportsCheck = [ "rich_cli" ];
 
   meta = with lib; {
     description = "Command Line Interface to Rich";

@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "polypane";
@@ -10,10 +14,9 @@ let
     sha256 = "sha256-wy+MzuGQ1+Ayj6SgyItKdy6nldTBy3p24xWlgFwcW+0=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname src version;
-  };
-in appimageTools.wrapType2 {
+  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+in
+appimageTools.wrapType2 {
   inherit pname src version;
 
   extraPkgs = pkgs: [ pkgs.bash ];

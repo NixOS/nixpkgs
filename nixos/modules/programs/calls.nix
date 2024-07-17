@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.calls;
-in {
+in
+{
   options = {
     programs.calls = {
       enable = lib.mkEnableOption ''
@@ -14,12 +20,8 @@ in {
   config = lib.mkIf cfg.enable {
     programs.dconf.enable = true;
 
-    environment.systemPackages = [
-      pkgs.calls
-    ];
+    environment.systemPackages = [ pkgs.calls ];
 
-    services.dbus.packages = [
-      pkgs.callaudiod
-    ];
+    services.dbus.packages = [ pkgs.callaudiod ];
   };
 }

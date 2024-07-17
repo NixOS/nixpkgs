@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitLab, cmake, pkg-config, gtkmm3, libsigcxx, xorg }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  gtkmm3,
+  libsigcxx,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jstest-gtk";
@@ -11,8 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "0icbbhrj5aqljhiavdy3hic60vp0zzfzyg0d6vpjaqkbzd5pv9d8";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ gtkmm3 libsigcxx xorg.libX11 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    gtkmm3
+    libsigcxx
+    xorg.libX11
+  ];
 
   meta = with lib; {
     description = "A simple joystick tester based on Gtk+";

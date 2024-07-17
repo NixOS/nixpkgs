@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf-archive
-, autoreconfHook
-, makeWrapper
-, pkg-config
-, substituteAll
-, curl
-, gtk3
-, libassuan
-, libbsd
-, libproxy
-, libxml2
-, nssTools
-, openssl
-, p11-kit
-, pcsclite
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  substituteAll,
+  curl,
+  gtk3,
+  libassuan,
+  libbsd,
+  libproxy,
+  libxml2,
+  nssTools,
+  openssl,
+  p11-kit,
+  pcsclite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +37,24 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
 
-
-  nativeBuildInputs = [ wrapGAppsHook3 autoreconfHook autoconf-archive pkg-config makeWrapper ];
-  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    curl
+    gtk3
+    libassuan
+    libbsd
+    libproxy
+    libxml2
+    openssl
+    p11-kit
+    pcsclite
+  ];
 
   preConfigure = ''
     mkdir openssl
@@ -100,6 +116,9 @@ stdenv.mkDerivation rec {
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bfortz chvp ];
+    maintainers = with maintainers; [
+      bfortz
+      chvp
+    ];
   };
 }

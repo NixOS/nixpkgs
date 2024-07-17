@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, json-glib
-, libICE
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_412
-, python3
-, libxslt
-, gettext
-, makeWrapper
-, systemd
-, xorg
-, libepoxy
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  json-glib,
+  libICE,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  python3,
+  libxslt,
+  gettext,
+  makeWrapper,
+  systemd,
+  xorg,
+  libepoxy,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

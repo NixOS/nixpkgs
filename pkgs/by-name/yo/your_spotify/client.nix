@@ -43,7 +43,10 @@ mkYarnPackage rec {
     popd
     runHook postBuild
   '';
-  nativeBuildInputs = [yarn fixup-yarn-lock];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -53,6 +56,12 @@ mkYarnPackage rec {
   '';
   doDist = false;
   meta = {
-    inherit (your_spotify.meta) homepage changelog description license maintainers;
+    inherit (your_spotify.meta)
+      homepage
+      changelog
+      description
+      license
+      maintainers
+      ;
   };
 }

@@ -1,20 +1,27 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-testing";
   version = "0.1.1";
 
-  outputs = [ "out" "dev" "devdoc" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -38,9 +45,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dinstalled_tests=true"

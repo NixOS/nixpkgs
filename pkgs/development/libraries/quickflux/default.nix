@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtquickcontrols2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtquickcontrols2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     qtbase
@@ -44,9 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Only a QML module
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
   preFixup = ''
     # Has extra $out in includes list, breaks usage of module (complains about non-existent path in module includes)

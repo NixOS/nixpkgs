@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libpng
-, libjpeg
-, libtiff
-, zlib
-, bzip2
-, libGL
-, libGLU
-, libXcursor
-, libXext
-, libXrandr
-, libXft
-, CoreServices
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libpng,
+  libjpeg,
+  libtiff,
+  zlib,
+  bzip2,
+  libGL,
+  libGLU,
+  libXcursor,
+  libXext,
+  libXrandr,
+  libXft,
+  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bu+IEqNkv9OAf96dPYre3CP759pjalVIbYyc3QSQW2w=";
   };
 
-  buildInputs = [ libpng libjpeg libtiff zlib bzip2 libGL libGLU libXcursor libXext libXrandr libXft ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = [
+    libpng
+    libjpeg
+    libtiff
+    zlib
+    bzip2
+    libGL
+    libGLU
+    libXcursor
+    libXext
+    libXrandr
+    libXft
+  ] ++ lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 
@@ -44,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://fox-toolkit.org";
     license = licenses.lgpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

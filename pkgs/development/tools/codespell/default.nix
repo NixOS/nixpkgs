@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, aspellDicts
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  aspellDicts,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,9 +23,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "--cov-report=" ""
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   nativeCheckInputs = with python3.pkgs; [
     aspell-python
@@ -50,7 +49,13 @@ python3.pkgs.buildPythonApplication rec {
     description = "Fix common misspellings in source code";
     mainProgram = "codespell";
     homepage = "https://github.com/codespell-project/codespell";
-    license = with licenses; [ gpl2Only cc-by-sa-30 ];
-    maintainers = with maintainers; [ johnazoidberg SuperSandro2000 ];
+    license = with licenses; [
+      gpl2Only
+      cc-by-sa-30
+    ];
+    maintainers = with maintainers; [
+      johnazoidberg
+      SuperSandro2000
+    ];
   };
 }

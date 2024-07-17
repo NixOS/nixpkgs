@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, ffmpeg_6
-, darwin
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  ffmpeg_6,
+  darwin,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,10 +36,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ ffmpeg_6 ] ++ lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
+  buildInputs =
+    [ ffmpeg_6 ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Accelerate
+        CoreGraphics
+        CoreVideo
+        zlib
+      ]
+    );
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_TOOLS=ON"
+  ];
 
   meta = with lib; {
     homepage = "https://acoustid.org/chromaprint";

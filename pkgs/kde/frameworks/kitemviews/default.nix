@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "kitemviews";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

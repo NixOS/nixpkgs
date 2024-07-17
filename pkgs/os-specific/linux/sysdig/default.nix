@@ -1,6 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
-, luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb
-, protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kernel,
+  installShellFiles,
+  pkg-config,
+  luajit,
+  ncurses,
+  perl,
+  jsoncpp,
+  openssl,
+  curl,
+  jq,
+  gcc,
+  elfutils,
+  tbb,
+  protobuf,
+  grpc,
+  yaml-cpp,
+  nlohmann_json,
+  re2,
+  zstd,
+  uthash,
+}:
 
 let
   # Compare with https://github.com/draios/sysdig/blob/0.37.1/cmake/modules/falcosecurity-libs.cmake
@@ -24,7 +47,8 @@ let
   };
 
   version = "0.37.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "sysdig";
   inherit version;
 
@@ -35,7 +59,12 @@ in stdenv.mkDerivation {
     hash = "sha256-V1rvQ6ZznL9UiUFW2lyW6gvdoGttOd5kgT2KPQCjmvQ=";
   };
 
-  nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [
     luajit
     ncurses
@@ -97,48 +126,56 @@ in stdenv.mkDerivation {
     # fix compiler warnings been treated as errors
     "-Wno-error";
 
-  preConfigure = ''
-    if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
-      echo "falcosecurity-libs checksum needs to be updated!"
-      exit 1
-    fi
-    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -lzstd -labsl_synchronization")
-  '' + lib.optionalString (kernel != null) ''
-    export INSTALL_MOD_PATH="$out"
-    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  '';
+  preConfigure =
+    ''
+      if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
+        echo "falcosecurity-libs checksum needs to be updated!"
+        exit 1
+      fi
+      cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -lzstd -labsl_synchronization")
+    ''
+    + lib.optionalString (kernel != null) ''
+      export INSTALL_MOD_PATH="$out"
+      export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    '';
 
-  postInstall = ''
-    # Fix the bash completion location
-    installShellCompletion --bash $out/etc/bash_completion.d/sysdig
-    rm $out/etc/bash_completion.d/sysdig
-    rmdir $out/etc/bash_completion.d
-    rmdir $out/etc
-  '' + lib.optionalString (kernel != null) ''
-    make install_driver
-    kernel_dev=${kernel.dev}
-    kernel_dev=''${kernel_dev#${builtins.storeDir}/}
-    kernel_dev=''${kernel_dev%%-linux*dev*}
-    if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
-        sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-    else
-        for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
-          if test -f "$i"; then
-            xz -d $i
-            sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
-            xz -9 ''${i%.xz}
-          fi
-        done
-    fi
-  '';
+  postInstall =
+    ''
+      # Fix the bash completion location
+      installShellCompletion --bash $out/etc/bash_completion.d/sysdig
+      rm $out/etc/bash_completion.d/sysdig
+      rmdir $out/etc/bash_completion.d
+      rmdir $out/etc
+    ''
+    + lib.optionalString (kernel != null) ''
+      make install_driver
+      kernel_dev=${kernel.dev}
+      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
+      kernel_dev=''${kernel_dev%%-linux*dev*}
+      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
+          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+      else
+          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
+            if test -f "$i"; then
+              xz -d $i
+              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
+              xz -9 ''${i%.xz}
+            fi
+          done
+      fi
+    '';
 
   meta = {
-    description =
-      "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
-    license = with lib.licenses; [ asl20 gpl2 mit ];
+    description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
+    license = with lib.licenses; [
+      asl20
+      gpl2
+      mit
+    ];
     maintainers = with lib.maintainers; [ raskin ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    broken = kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
+    broken =
+      kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
 
   cfg = config.boot.swraid;
 
@@ -6,15 +12,41 @@
 
   enable_implicitly_for_old_state_versions = lib.versionOlder config.system.stateVersion "23.11";
 
-  minimum_config_is_set = config_text:
-    (builtins.match ".*(MAILADDR|PROGRAM).*" mdadm_conf.text) != null;
+  minimum_config_is_set =
+    config_text: (builtins.match ".*(MAILADDR|PROGRAM).*" mdadm_conf.text) != null;
 
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "boot" "initrd" "services" "swraid" "enable" ] [ "boot" "swraid" "enable" ])
-    (lib.mkRenamedOptionModule [ "boot" "initrd" "services" "swraid" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
+    (lib.mkRenamedOptionModule
+      [
+        "boot"
+        "initrd"
+        "services"
+        "swraid"
+        "enable"
+      ]
+      [
+        "boot"
+        "swraid"
+        "enable"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "boot"
+        "initrd"
+        "services"
+        "swraid"
+        "mdadmConf"
+      ]
+      [
+        "boot"
+        "swraid"
+        "mdadmConf"
+      ]
+    )
   ];
-
 
   options.boot.swraid = {
     enable = lib.mkEnableOption "swraid support using mdadm" // {
@@ -43,9 +75,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.mkIf
-        ( !enable_implicitly_for_old_state_versions && !minimum_config_is_set mdadm_conf)
-        [ "mdadm: Neither MAILADDR nor PROGRAM has been set. This will cause the `mdmon` service to crash." ];
+    warnings =
+      lib.mkIf (!enable_implicitly_for_old_state_versions && !minimum_config_is_set mdadm_conf)
+        [
+          "mdadm: Neither MAILADDR nor PROGRAM has been set. This will cause the `mdmon` service to crash."
+        ];
 
     environment.systemPackages = [ pkgs.mdadm ];
 
@@ -56,7 +90,13 @@ in {
     systemd.packages = [ pkgs.mdadm ];
 
     boot.initrd = {
-      availableKernelModules = [ "md_mod" "raid0" "raid1" "raid10" "raid456" ];
+      availableKernelModules = [
+        "md_mod"
+        "raid0"
+        "raid1"
+        "raid10"
+        "raid456"
+      ];
 
       extraUdevRulesCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/

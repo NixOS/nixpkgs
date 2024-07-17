@@ -1,10 +1,11 @@
-{ stdenv
-, yarn
-, fixup-yarn-lock
-, nodejs-slim
-, fetchFromGitHub
-, fetchYarnDeps
-, gotify-server
+{
+  stdenv,
+  yarn,
+  fixup-yarn-lock,
+  nodejs-slim,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  gotify-server,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
   };
 
-  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs-slim ];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+    nodejs-slim
+  ];
 
   postPatch = ''
     export HOME=$NIX_BUILD_TOP/fake_home

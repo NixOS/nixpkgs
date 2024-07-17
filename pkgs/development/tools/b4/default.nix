@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, patatt }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  patatt,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
@@ -25,6 +30,10 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2Only;
     description = "A helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
-    maintainers = with maintainers; [ jb55 qyliss mfrw ];
+    maintainers = with maintainers; [
+      jb55
+      qyliss
+      mfrw
+    ];
   };
 }

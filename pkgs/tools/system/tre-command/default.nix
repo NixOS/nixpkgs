@@ -1,4 +1,9 @@
-{ rustPlatform, fetchFromGitHub, lib, installShellFiles }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tre-command";
@@ -22,7 +27,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # this test requires package to be in a git repo to succeed
-  checkFlags = [ "--skip" "respect_git_ignore" ];
+  checkFlags = [
+    "--skip"
+    "respect_git_ignore"
+  ];
 
   meta = with lib; {
     description = "Tree command, improved";

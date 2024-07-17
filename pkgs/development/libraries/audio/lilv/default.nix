@@ -1,34 +1,49 @@
-{ lib
-, stdenv
-, fetchurl
-, lv2
-, meson
-, ninja
-, pkg-config
-, python3
-, libsndfile
-, serd
-, sord
-, sratom
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lv2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libsndfile,
+  serd,
+  sord,
+  sratom,
+  gitUpdater,
 
-# test derivations
-, pipewire
+  # test derivations
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lilv";
   version = "0.24.24";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
     hash = "sha256-a7a+n4hQQXbQZC8S3oCbK54txVYhporbjH7bma76u08=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config python3 ];
-  buildInputs = [ libsndfile serd sord sratom ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
+  buildInputs = [
+    libsndfile
+    serd
+    sord
+    sratom
+  ];
   propagatedBuildInputs = [ lv2 ];
 
   mesonFlags = [
