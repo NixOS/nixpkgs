@@ -1,7 +1,8 @@
-{ lib
-, melpaBuild
-, lsp-bridge
-, yasnippet
+{
+  lib,
+  melpaBuild,
+  lsp-bridge,
+  yasnippet,
 }:
 
 melpaBuild {
@@ -10,9 +11,7 @@ melpaBuild {
 
   src = lsp-bridge.src;
 
-  packageRequires = [
-    yasnippet
-  ];
+  packageRequires = [ yasnippet ];
 
   files = ''("acm/*.el" "acm/icons")'';
 
@@ -20,6 +19,9 @@ melpaBuild {
     description = "Asynchronous Completion Menu";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fxttr kira-bruneau ];
+    maintainers = with lib.maintainers; [
+      fxttr
+      kira-bruneau
+    ];
   };
 }
