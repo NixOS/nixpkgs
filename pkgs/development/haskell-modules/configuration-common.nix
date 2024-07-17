@@ -3111,4 +3111,7 @@ self: super: {
   # 2024-07-09: zinza has bumped their QuickCheck and tasty dependencies beyond stackage lts.
   # Can possibly be removed once QuickCheck >= 2.15 and tasty >= 1.5
   zinza = dontCheck super.zinza;
+
+  # Doesn't officially support hedgehog > 1.3 yet: https://github.com/coot/free-algebras/pull/33
+  free-algebras = doJailbreak super.free-algebras;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
