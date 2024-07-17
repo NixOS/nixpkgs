@@ -156,6 +156,9 @@ stdenv.mkDerivation rec {
       "mipsel-linux" "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
       "riscv64-linux" "s390x-linux"
     ];
-    maintainers = with maintainers; [ thoughtpolice dtzWill ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      thoughtpolice
+    ];
   };
 }
