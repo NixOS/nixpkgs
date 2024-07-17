@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 dotnetConfigureHook() {
     echo "Executing dotnetConfigureHook"
 
@@ -6,6 +7,7 @@ dotnetConfigureHook() {
     if [[ -z ${nugetSource-} ]]; then
         echo
         echo "ERROR: no dependencies were specified"
+        # shellcheck disable=SC2016
         echo 'Hint: set `nugetSource` if using these hooks individually. If this is happening with `buildDotnetModule`, please open an issue.'
         echo
 
@@ -22,16 +24,20 @@ dotnetConfigureHook() {
     local -r libPath=@libPath@
     local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
+    local dotnetProjectFilesArray
+    local dotnetTestProjectFilesArray
+    local dotnetFlagsArray
+    local dotnetRestoreFlagsArray
     if [[ -n $__structuredAttrs ]]; then
-        local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-        local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
-        local dotnetFlagsArray=( "${dotnetFlags[@]}" )
-        local dotnetRestoreFlagsArray=( "${dotnetRestoreFlags[@]}" )
+        dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
+        dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
+        dotnetFlagsArray=( "${dotnetFlags[@]}" )
+        dotnetRestoreFlagsArray=( "${dotnetRestoreFlags[@]}" )
     else
-        local dotnetProjectFilesArray=($dotnetProjectFiles)
-        local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
-        local dotnetFlagsArray=($dotnetFlags)
-        local dotnetRestoreFlagsArray=($dotnetRestoreFlags)
+        mapfile -t dotnetProjectFilesArray <<< "$dotnetProjectFiles"
+        mapfile -t dotnetTestProjectFilesArray <<< "$dotnetTestProjectFiles"
+        mapfile -t dotnetFlagsArray <<< "$dotnetFlags"
+        mapfile -t dotnetRestoreFlagsArray <<< "$dotnetRestoreFlags"
     fi
 
     if [[ -z ${enableParallelBuilding-} ]]; then
@@ -67,8 +73,8 @@ EOF
     # nugetSourceSedQuoted abomination below safely escapes nugetSource string
     # for use as a sed replacement string to avoid issues with slashes and other
     # special characters ('&', '\\' and '\n').
-    find -name paket.dependencies -exec sed -i "s/source .*/source $nugetSourceSedQuoted\/lib/g" {} \;
-    find -name paket.lock -exec sed -i "s/remote:.*/remote: $nugetSourceSedQuoted\/lib/g" {} \;
+    find . -name paket.dependencies -exec sed -i "s/source .*/source $nugetSourceSedQuoted\/lib/g" {} \;
+    find . -name paket.lock -exec sed -i "s/remote:.*/remote: $nugetSourceSedQuoted\/lib/g" {} \;
 
     dotnet tool restore --add-source "$nugetSource/lib"
 
@@ -94,7 +100,8 @@ EOF
     # Find all native binaries and nuget libraries, and fix them up,
     # by setting the proper interpreter and rpath to some commonly used libraries
     local binary
-    for binary in $(find "$HOME/.nuget/packages/" -type f -executable); do
+    while IFS= read -r -d '' binary
+    do
         if patchelf --print-interpreter "$binary" >/dev/null 2>/dev/null; then
             echo "Found binary: $binary, fixing it up..."
             patchelf --set-interpreter "$(cat "$dynamicLinker")" "$binary"
@@ -110,7 +117,7 @@ EOF
 
             patchelf --set-rpath "$libPath" "$binary"
         fi
-    done
+    done < <(find "$HOME/.nuget/packages/" -type f -executable -print0)
 
     runHook postConfigure
 

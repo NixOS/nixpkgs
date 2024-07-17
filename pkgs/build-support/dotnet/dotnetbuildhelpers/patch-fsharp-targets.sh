@@ -5,7 +5,7 @@
 
 # export FSharpTargetsPath=$(dirname $(which fsharpc))/../lib/mono/4.0/Microsoft.FSharp.Targets
 
-# In build scripts, you would add somehting like this:
+# In build scripts, you would add something like this:
 
 # export FSharpTargetsPath="${fsharp}/lib/mono/4.0/Microsoft.FSharp.Targets"
 
@@ -14,7 +14,7 @@
 
 echo "Patching F# targets in fsproj files..."
 
-find -iname \*.fsproj -print -exec \
+find . -iname \*.fsproj -print -exec \
   sed --in-place=.bak \
-    -e 's,<FSharpTargetsPath>\([^<]*\)</FSharpTargetsPath>,<FSharpTargetsPath Condition="Exists('\'\\1\'')">\1</FSharpTargetsPath>,'g \
+    -e 's,<FSharpTargetsPath>\([^<]*\)</FSharpTargetsPath>,<FSharpTargetsPath Condition="Exists('\'\\1\'')">\1</FSharpTargetsPath>,g' \
     {} \;

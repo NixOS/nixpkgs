@@ -1,4 +1,5 @@
 #!@runtimeShell@
+# shellcheck shell=bash
 
 set -euo pipefail
 shopt -s nullglob
@@ -31,7 +32,7 @@ for index in "${sources[@]}"; do
         continue
     fi
 
-    remote_sources+=($index)
+    remote_sources+=("$index")
 
     base_address=$(
     curl --compressed --netrc -fsL "$index" | \

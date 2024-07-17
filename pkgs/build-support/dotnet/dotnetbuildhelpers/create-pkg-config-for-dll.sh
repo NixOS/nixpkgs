@@ -5,13 +5,13 @@ dllFullPath="$2"
 
 dllVersion="$(monodis --assembly "$dllFullPath" | grep ^Version: | cut -f 2 -d : | xargs)"
 [ -z "$dllVersion" ] && echo "Defaulting dllVersion to 0.0.0" && dllVersion="0.0.0"
-dllFileName="$(basename $dllFullPath)"
-dllRootName="$(basename -s .dll $dllFileName)"
+dllFileName="$(basename "$dllFullPath")"
+dllRootName="$(basename -s .dll "$dllFileName")"
 targetPcFile="$targetDir"/"$dllRootName".pc
 
 mkdir -p "$targetDir"
 
-cat > $targetPcFile << EOF
+cat > "$targetPcFile" << EOF
 Libraries=$dllFullPath
 
 Name: $dllRootName

@@ -1,10 +1,12 @@
+# shellcheck shell=bash
+#
 # For compatibility, convert makeWrapperArgs to an array unless we are using
 # structured attributes. That is, we ensure that makeWrapperArgs is always an
 # array.
 # See https://github.com/NixOS/nixpkgs/blob/858f4db3048c5be3527e183470e93c1a72c5727c/pkgs/build-support/dotnet/build-dotnet-module/hooks/dotnet-fixup-hook.sh#L1-L3
 # and https://github.com/NixOS/nixpkgs/pull/313005#issuecomment-2175482920
 if [[ -z $__structuredAttrs ]]; then
-    makeWrapperArgs=( ${makeWrapperArgs-} )
+    mapfile -d ' ' -t makeWrapperArgs "${makeWrapperArgs-}"
 fi
 
 # First argument is the executable you want to wrap,
@@ -58,7 +60,7 @@ dotnetFromEnv'
         "${gappsWrapperArgs[@]}" \
         "${makeWrapperArgs[@]}"
 
-    echo "installed wrapper to "$2""
+    echo "installed wrapper to $2"
 }
 
 dotnetFixupHook() {
@@ -73,7 +75,8 @@ dotnetFixupHook() {
         if [[ -n $__structuredAttrs ]]; then
             local dotnetExecutablesArray=( "${dotnetExecutables[@]}" )
         else
-            local dotnetExecutablesArray=($dotnetExecutables)
+            local dotnetExecutablesArray
+            mapfile -t dotnetExecutablesArray <<< "$dotnetExecutables"
         fi
         for executable in "${dotnetExecutablesArray[@]}"; do
             executableBasename=$(basename "$executable")
@@ -89,7 +92,7 @@ dotnetFixupHook() {
             fi
         done
     else
-        while IFS= read -d '' executable; do
+        while IFS= read -r -d '' executable; do
             executableBasename=$(basename "$executable")
             wrapDotnetProgram "$executable" "$out/bin/$executableBasename" \;
         done < <(find "$dotnetInstallPath" ! -name "*.dll" -executable -type f -print0)
