@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   bash,
+  gnused,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r bin $out
-    wrapProgram $out/bin/any-nix-shell --prefix PATH ":" $out/bin
+    wrapProgram $out/bin/any-nix-shell --prefix PATH ":" ${
+      lib.makeBinPath [
+        (placeholder "out")
+        gnused
+        which
+      ]
+    }
   '';
 
   meta = with lib; {
