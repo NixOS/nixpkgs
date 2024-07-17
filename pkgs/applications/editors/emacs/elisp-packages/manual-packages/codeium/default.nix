@@ -9,7 +9,6 @@ melpaBuild {
     rev = "1.6.13";
     hash = "sha256-CjT21GhryO8/iM0Uzm/s/I32WqVo4M3tSlHC06iEDXA=";
   };
-  buildInputs = [ pkgs.codeium ];
 
   patches = [
     (substituteAll {
