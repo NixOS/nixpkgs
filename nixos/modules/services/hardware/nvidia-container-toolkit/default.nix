@@ -52,6 +52,17 @@
         '';
       };
 
+      device-name-strategy = lib.mkOption {
+        default = "index";
+        type = lib.types.enum [ "index" "uuid" "type-index" ];
+        description = ''
+          Specify the strategy for generating device names,
+          passed to `nvidia-ctk cdi generate`. This will affect how
+          you reference the device using `nvidia.com/gpu=` in
+          the container runtime.
+        '';
+      };
+
       mount-nvidia-docker-1-directories = lib.mkOption {
         default = true;
         type = lib.types.bool;
@@ -119,6 +130,7 @@
             script = pkgs.callPackage ./cdi-generate.nix {
               inherit (config.hardware.nvidia-container-toolkit) mounts;
               nvidia-driver = config.hardware.nvidia.package;
+              deviceNameStrategy = config.hardware.nvidia-container-toolkit.device-name-strategy;
             };
           in
           lib.getExe script;
