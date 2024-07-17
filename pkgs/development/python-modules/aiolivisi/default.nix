@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pydantic,
-  pytestCheckHook,
   pythonOlder,
   websockets,
 }:

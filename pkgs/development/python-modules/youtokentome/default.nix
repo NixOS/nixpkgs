@@ -5,7 +5,6 @@
   setuptools,
   click,
   cython,
-  pytestCheckHook,
   pythonOlder,
   tabulate,
 }:

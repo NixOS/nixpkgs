@@ -3,7 +3,6 @@
   anytree,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
   poetry-core,
   pythonOlder,
 }:
