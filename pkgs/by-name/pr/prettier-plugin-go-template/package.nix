@@ -6,6 +6,7 @@
 
 buildNpmPackage rec {
   pname = "prettier-plugin-go-template";
+  version = "0-unstable-2023-07-26";
 
   src = fetchFromGitHub {
     owner = "NiklasPor";
