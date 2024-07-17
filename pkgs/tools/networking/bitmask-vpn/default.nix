@@ -136,7 +136,7 @@ buildGoModule rec {
     # but qmake searches for qmlcachegen in qtbase/libexec which leads to the error
     mkdir -p build/qt
     cp ${./gui_gui_qmlcache.qrc} build/qt/gui_gui_qmlcache.qrc
-    
+
     make build
 
     runHook postBuild
