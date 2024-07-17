@@ -56,12 +56,15 @@ jobs:
             file=${entry[1]}
             case $type in
               A*)
+                source=""
                 dest=$file
                 ;;
               M*)
+                source=$file
                 dest=$file
                 ;;
               C*|R*)
+                source=$file
                 read -r -d '' dest
                 ;;
               *)
@@ -69,7 +72,10 @@ jobs:
                 continue
             esac
 
-            if ! nixfmt --check "$dest"; then
+            # Ignore files that weren't already formatted
+            if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
+              echo "Ignoring file $file because it's not formatted in the base commit"
+            elif ! nixfmt --check "$dest"; then
               unformattedFiles+=("$file")
             fi
           done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
