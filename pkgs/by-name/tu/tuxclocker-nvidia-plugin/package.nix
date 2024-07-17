@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , boost
 , libX11
 , libXext
