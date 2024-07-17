@@ -8,6 +8,7 @@
   cryptography,
   fetchFromGitHub,
   flaky,
+  hatchling,
   httpx,
   pytest-asyncio,
   pytest-timeout,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.3";
+  version = "21.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,10 +31,10 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eyIRZkt1ea2L20ryogKrmSx/+xL2fhNXcf3vUnuS9vo=";
+    hash = "sha256-5raEejd8WH9JrFvMIy2AuMGK9O/FJ2rq9PeVqK+IMOU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools hatchling ];
 
   dependencies = [
     aiolimiter
