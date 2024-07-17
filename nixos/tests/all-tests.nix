@@ -774,6 +774,7 @@ in {
   apache_datasketches = handleTest ./apache_datasketches.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-jit = handleTest ./postgresql-jit.nix {};
+  postgresql-upgrade = handleTest ./postgresql-upgrade.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   postgresql-tls-client-cert = handleTest ./postgresql-tls-client-cert.nix {};
   powerdns = handleTest ./powerdns.nix {};

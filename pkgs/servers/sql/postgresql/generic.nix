@@ -238,13 +238,19 @@ let
           package = this;
         };
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      } // lib.optionalAttrs jitSupport {
+      } // (lib.optionalAttrs jitSupport {
         postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
           inherit (stdenv) system;
           pkgs = self;
           package = this;
         };
-      };
+      }) // (
+        import ../../../../nixos/tests/postgresql-upgrade.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        }
+      );
     };
 
     meta = with lib; {
