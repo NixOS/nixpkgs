@@ -1,4 +1,5 @@
 #!@runtimeShell@
+# shellcheck shell=bash
 
 set -euo pipefail
 shopt -s nullglob
@@ -31,7 +32,7 @@ for index in "${sources[@]}"; do
         continue
     fi
 
-    remote_sources+=($index)
+    remote_sources+=("$index")
 
     base_address=$(
     curl --compressed --netrc -fsL "$index" | \
@@ -91,10 +92,22 @@ for package in *; do
       exit 1
     fi
 
-    if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
+    source_independent_hash=""
+    nupkg_file=$(echo "$version/$package.$version.nupkg" | tr '[:upper:]' '[:lower:]')
+    stripped_file=$(mktemp tmp-XXXXXXXX.zip)
+    if zip --quiet "$nupkg_file" --output-file "$stripped_file" --temp-path "$TMPDIR" --delete .signature.p7s ; then
+        source_independent_hash=$(nix-hash --type sha256 --sri "$stripped_file")
+        rm "$stripped_file"
     else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
+        rm "$stripped_file"
+        (( $? == 12 ))
+        source_independent_hash=$(nix-hash --type sha256 --sri "$nupkg_file")
+    fi
+
+    if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; sourceIndependentHash = \"$source_independent_hash\"; url = \"$url\"; })"
+    else
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sourceIndependentHash = \"$source_independent_hash\"; hash = \"$hash\"; })"
     fi
   done
   cd ..
