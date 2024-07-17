@@ -141,7 +141,7 @@ in {
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \
-          -Dairsonic.contextPath=${cfg.contextPath} \
+          -Dserver.context-path=${cfg.contextPath} \
           -Djava.awt.headless=true \
           ${optionalString (cfg.virtualHost != null)
             "-Dserver.use-forward-headers=true"} \
