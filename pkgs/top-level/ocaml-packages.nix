@@ -8,6 +8,16 @@ let
   {
     inherit ocaml;
 
+    ### 0 ###
+
+    "0install" = callPackage ../development/ocaml-modules/0install {
+        inherit (self) "0install-solver";
+    };
+
+    "0install-solver" = callPackage ../development/ocaml-modules/0install/solver.nix {
+        inherit (self) "0install";
+    };
+
     ### A ###
     aches = callPackage ../development/ocaml-modules/aches { };
     aches-lwt = callPackage ../development/ocaml-modules/aches/lwt.nix { };
@@ -1378,6 +1388,16 @@ let
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
+    opam-0install = callPackage ../development/ocaml-modules/opam-0install {
+        inherit (self) "0install-solver";
+    };
+
+    opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install/cudf.nix {
+        inherit (self) "0install-solver";
+    };
+
+    opam-client = callPackage ../development/ocaml-modules/opam-client { };
+
     opam-core = callPackage ../development/ocaml-modules/opam-core {
       inherit (pkgs) opam unzip;
     };
@@ -1391,6 +1411,8 @@ let
     opam-repository = callPackage ../development/ocaml-modules/opam-repository {
       inherit (pkgs) unzip;
     };
+
+    opam-solver = callPackage ../development/ocaml-modules/opam-solver { };
 
     opam-state = callPackage ../development/ocaml-modules/opam-state {
       inherit (pkgs) unzip;
