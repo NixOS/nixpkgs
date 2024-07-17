@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, melpaBuild
-, js2-mode
+{
+  lib,
+  fetchFromGitHub,
+  melpaBuild,
+  js2-mode,
 }:
 
 melpaBuild {
