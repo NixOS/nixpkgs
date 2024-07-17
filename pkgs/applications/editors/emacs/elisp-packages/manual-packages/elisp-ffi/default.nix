@@ -1,8 +1,9 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, pkg-config
-, libffi
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  pkg-config,
+  libffi,
 }:
 
 melpaBuild {
@@ -23,16 +24,16 @@ melpaBuild {
   preBuild = ''
     mv ffi.el elisp-ffi.el
     make
- '';
+  '';
 
   meta = {
     description = "Emacs Lisp Foreign Function Interface";
     longDescription = ''
-        This library provides an FFI for Emacs Lisp so that Emacs
-        programs can invoke functions in native libraries. It works by
-        driving a subprocess to do the heavy lifting, passing result
-        values on to Emacs.
-      '';
+      This library provides an FFI for Emacs Lisp so that Emacs
+      programs can invoke functions in native libraries. It works by
+      driving a subprocess to do the heavy lifting, passing result
+      values on to Emacs.
+    '';
     license = lib.licenses.unlicense;
   };
 }
