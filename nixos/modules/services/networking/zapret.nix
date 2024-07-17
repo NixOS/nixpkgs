@@ -22,7 +22,7 @@ in {
       description = "
         Rules for zapret to work. Run ```bash nix-shell -p zapret --command blockcheck``` to get values to pass here.
 
-        Config example can be found here https://github.com/bol-van/zapret/blob/${cfg.package.src.ref}/config
+        Config example can be found here https://github.com/bol-van/zapret/blob/master/config
       ";
     };
 
