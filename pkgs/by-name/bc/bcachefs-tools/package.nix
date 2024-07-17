@@ -22,6 +22,7 @@
   nix-update-script,
   python3,
   fetchpatch,
+  installShellFiles,
   fuseSupport ? false,
 }:
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
@@ -94,10 +96,17 @@ stdenv.mkDerivation (finalAttrs: {
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ];
 
-  postInstall = ''
-    substituteInPlace $out/libexec/bcachefsck_all \
-      --replace-fail "/usr/bin/python3" "${python3}/bin/python3"
-  '';
+  postInstall =
+    ''
+      substituteInPlace $out/libexec/bcachefsck_all \
+        --replace-fail "/usr/bin/python3" "${python3}/bin/python3"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd bcachefs \
+        --bash <($out/sbin/bcachefs completions bash) \
+        --zsh  <($out/sbin/bcachefs completions zsh) \
+        --fish <($out/sbin/bcachefs completions fish)
+    '';
 
   passthru = {
     tests = {
@@ -105,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   enableParallelBuilding = true;
