@@ -117,3 +117,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # python3Packages: format with nixfmt
 59b1aef59071cae6e87859dc65de973d2cc595c0
+
+# treewide: Nix format pass 1
+a387cca6b9e27901dff47f7dd6d919374ece65fd
