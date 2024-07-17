@@ -98,8 +98,7 @@ buildNpmPackage rec {
 
   postPatch = ''
     chmod +w ../../
-    mkdir ../../docstubs
-    ln -s ${docstubs}/stubs ../../docstubs
+    ln -s ${docstubs} ../../docstubs
     ln -s ${pyright-root}/node_modules ../../node_modules
     chmod +w ../pyright-internal
     ln -s ${pyright-internal}/node_modules ../pyright-internal/node_modules
