@@ -8,7 +8,7 @@
 
   # dependencies
   pyasn1,
-  pysmi-lextudio,
+  pysmi,
   pysnmpcrypto,
 
   # tests
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyasn1
-    pysmi-lextudio
+    pysmi
     pysnmpcrypto
   ];
 
