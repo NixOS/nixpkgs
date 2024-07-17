@@ -1,7 +1,8 @@
-{ lib
-, melpaBuild
-, fetchFromGitLab
-, unstableGitUpdater
+{
+  lib,
+  melpaBuild,
+  fetchFromGitLab,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
