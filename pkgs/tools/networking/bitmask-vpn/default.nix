@@ -23,7 +23,7 @@
 , provider ? "riseup"
 }:
 let
-  version = "0.24.6";
+  version = "git";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
@@ -74,6 +74,9 @@ buildGoModule rec {
       src = ./fix_paths.patch;
       inherit qtbase qtdeclarative qttools;
     })
+
+    # Don't build the debug version
+    ./build-release.patch
   ];
 
   postPatch = ''
