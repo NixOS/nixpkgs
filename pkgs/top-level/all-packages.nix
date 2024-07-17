@@ -11655,7 +11655,7 @@ with pkgs;
 
   pipr = callPackage ../applications/misc/pipr { };
 
-  pipreqs = callPackage ../tools/misc/pipreqs { };
+  pipreqs = callPackage ../tools/misc/pipreqs { python3 = python311; };
 
   pius = callPackage ../tools/security/pius { };
 
