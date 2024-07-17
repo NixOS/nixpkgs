@@ -1083,6 +1083,10 @@
     dependencies = [ self.telescope-nvim ];
   };
 
+  neotest-golang = super.neotest-golang.overrideAttrs {
+    dependencies = [ self.nvim-dap-go ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   };
