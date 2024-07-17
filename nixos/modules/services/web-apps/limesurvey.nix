@@ -18,7 +18,7 @@ let
 
   limesurveyConfig = pkgs.writeText "config.php" ''
     <?php
-      return \array_merge(
+      $config = \array_merge(
         \json_decode('${builtins.toJSON cfg.config}', true),
         [
           'config' => [
@@ -27,6 +27,12 @@ let
           ]
         ]
       );
+      $db_password = \trim(\file_get_contents(\getenv('CREDENTIALS_DIRECTORY') . DIRECTORY_SEPARATOR . 'db_password'));
+      if ($db_password !== "") {
+        $config['components']['db']['password'] = $db_password;
+      }
+      sleep(2);
+      return $config;
     ?>
   '';
 
@@ -238,7 +244,6 @@ in
           connectionString = "${cfg.database.type}:dbname=${cfg.database.name};host=${if pgsqlLocal then cfg.database.socket else cfg.database.host};port=${toString cfg.database.port}" +
             optionalString mysqlLocal ";socket=${cfg.database.socket}";
           username = cfg.database.user;
-          password = mkIf (cfg.database.passwordFile != null) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
           tablePrefix = "limesurvey_";
         };
         assetManager.basePath = "${stateDir}/tmp/assets";
@@ -287,10 +292,13 @@ in
         chown ${user}:${group} "${stateDir}/credentials/encryption_key"
         cp -f "''${CREDENTIALS_DIRECTORY}"/encryption_nonce "${stateDir}/credentials/encryption_nonce"
         chown ${user}:${group} "${stateDir}/credentials/encryption_nonce"
+        cp -f "''${CREDENTIALS_DIRECTORY}"/db_password "${stateDir}/credentials/db_password"
+        chown ${user}:${group} "${stateDir}/credentials/db_password"
       '';
       LoadCredential = [
         "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
         "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
+        "db_password:${if cfg.database.passwordFile != null then cfg.database.passwordFile else pkgs.writeText "null_db_password" ""}"
       ];
     };
 
@@ -355,10 +363,7 @@ in
         User = user;
         Group = group;
         Type = "oneshot";
-        LoadCredential = [
-          "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
-          "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
-        ];
+        LoadCredential = config.systemd.services.phpfpm-limesurvey.serviceConfig.LoadCredential;
       };
     };
 
