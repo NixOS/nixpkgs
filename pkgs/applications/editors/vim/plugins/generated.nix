@@ -532,6 +532,18 @@ final: prev:
     meta.homepage = "https://github.com/aznhe21/actions-preview.nvim/";
   };
 
+  advanced-git-search-nvim = buildVimPlugin {
+    pname = "advanced-git-search.nvim";
+    version = "2024-05-13";
+    src = fetchFromGitHub {
+      owner = "aaronhallaert";
+      repo = "advanced-git-search.nvim";
+      rev = "d11e1360b7cdb9270673b7852bbc1e91e1af25da";
+      sha256 = "12ymb4n81z8brzc6n19h5mfb1pnfxwrnvgnss6wqjilzqa1cmjzw";
+    };
+    meta.homepage = "https://github.com/aaronhallaert/advanced-git-search.nvim/";
+  };
+
   adwaita-nvim = buildVimPlugin {
     pname = "adwaita.nvim";
     version = "2024-04-28";

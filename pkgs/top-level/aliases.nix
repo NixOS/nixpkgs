@@ -382,6 +382,7 @@ mapAliases ({
   emacsWithPackages = emacs.pkgs.withPackages; # Added 2020-12-18
 
   empathy = throw "empathy was removed as it is unmaintained and no longer launches due to libsoup3 migration"; # Added 2023-01-20
+  EmptyEpsilon = empty-epsilon; # Added 2024-07-14
   enchant1 = throw "enchant1 has been removed from nixpkgs, as it was unmaintained"; # Added 2023-01-18
   enyo-doom = enyo-launcher; # Added 2022-09-09
   epoxy = libepoxy; # Added 2021-11-11
@@ -1497,6 +1498,7 @@ mapAliases ({
   xineLib = xine-lib; # Added 2021-04-27
   xineUI = xine-ui; # Added 2021-04-27
   xmlada = gnatPackages.xmlada; # Added 2024-02-25
+  xmr-stak = throw "xmr-stak has been removed from nixpkgs because it was broken"; # Added 2024-07-15
   xonsh-unwrapped = python3Packages.xonsh; # Added 2024-06-18
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03

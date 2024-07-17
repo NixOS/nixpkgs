@@ -1,7 +1,7 @@
 { lib
 , config
 , fetchFromGitHub
-, symlinkJoin
+, fetchpatch2
 , stdenv
 , cmake
 , cudaPackages ? { }
@@ -9,7 +9,6 @@
 , pythonSupport ? true
 , pythonPackages
 , llvmPackages
-, boost
 , blas
 , swig
 , addOpenGLRunpath
@@ -55,6 +54,15 @@ stdenv.mkDerivation {
     hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # Replace distutils with packaging for version checks
+      url = "https://github.com/facebookresearch/faiss/commit/c540e762ca0ecf8f43da0bfc215da148c5cf420e.patch";
+      includes = [ "faiss/python/loader.py" ];
+      hash = "sha256-yMHAXo0+oDXknSpv1fxUgil3R/WG1+vTLyxvwVR3VtE=";
+    })
+  ];
+
   buildInputs = [
     blas
     swig
@@ -68,6 +76,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
+    pythonPackages.packaging
   ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [

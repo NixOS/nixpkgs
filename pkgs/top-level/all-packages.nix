@@ -1051,14 +1051,19 @@ with pkgs;
 
   mya = callPackage ../applications/misc/mya { };
 
-  mysql-shell = callPackage ../development/tools/mysql-shell {
-    inherit (darwin) cctools DarwinTools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    antlr = antlr4_10;
-    boost = boost177; # Configure checks for specific version.
-    icu =  icu73;
-    protobuf = protobuf_24;
-  };
+  mysql-shell = mysql-shell_8;
+
+  inherit ({
+    mysql-shell_8 = callPackage ../development/tools/mysql-shell/8.nix {
+      inherit (darwin) cctools DarwinTools;
+      inherit (darwin.apple_sdk.frameworks) CoreServices;
+      antlr = antlr4_10;
+      icu =  icu73;
+      protobuf = protobuf_24;
+    };
+  })
+  mysql-shell_8
+  ;
 
   mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
     inherit (darwin) cctools DarwinTools;
@@ -8499,6 +8504,8 @@ with pkgs;
 
   graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
 
+  graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
@@ -9695,15 +9702,9 @@ with pkgs;
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly { };
-
   m2r = with python3Packages; toPythonApplication m2r;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
-
-  mdbook = callPackage ../tools/text/mdbook {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
 
   mdbook-emojicodes = callPackage ../tools/text/mdbook-emojicodes { };
 
@@ -14434,11 +14435,8 @@ with pkgs;
 
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
-  wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
-
-  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
-    openssl = openssl_1_1;
-  };
+  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
+  wkhtmltopdf = wkhtmltopdf-bin;
 
   wml = callPackage ../development/web/wml { };
 
@@ -25576,7 +25574,11 @@ with pkgs;
 
   mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
-  mailmanPackages = callPackage ../servers/mail/mailman { };
+  mailmanPackages = callPackage ../servers/mail/mailman {
+    # Hyperkitty test fails with 3.12:
+    # https://gitlab.com/mailman/hyperkitty/-/issues/514
+    python3 = python311;
+  };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
@@ -29682,7 +29684,9 @@ with pkgs;
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
-  chirp = callPackage ../applications/radio/chirp { };
+  chirp = callPackage ../applications/radio/chirp {
+    python3 = python311;
+  };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
@@ -30354,7 +30358,7 @@ with pkgs;
 
   font-manager = callPackage ../by-name/fo/font-manager/package.nix {
     libsoup = libsoup_3;
-    webkitgtk = webkitgtk_4_1;
+    webkitgtk = webkitgtk_6_0;
   };
 
   fontfinder = callPackage ../applications/misc/fontfinder { };
@@ -31338,13 +31342,6 @@ with pkgs;
 
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
-  spotifyd = callPackage ../applications/audio/spotifyd {
-    withALSA = stdenv.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.isLinux;
-    withPortAudio = stdenv.isDarwin;
-    withMpris = stdenv.isLinux;
-  };
-
   srain = callPackage ../applications/networking/irc/srain { };
 
   super-productivity = callPackage ../applications/office/super-productivity { };
@@ -31425,8 +31422,6 @@ with pkgs;
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3nator = callPackage ../tools/misc/i3nator { };
-
-  i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
 
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
@@ -32123,8 +32118,6 @@ with pkgs;
 
   lls = callPackage ../applications/networking/lls { };
 
-  localsend = callPackage ../applications/networking/localsend { };
-
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -32403,8 +32396,6 @@ with pkgs;
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monitorcontrol = callPackage ../applications/misc/monitorcontrol { };
-
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
@@ -36163,8 +36154,6 @@ with pkgs;
 
   eidolon = callPackage ../games/eidolon { };
 
-  EmptyEpsilon = callPackage ../games/empty-epsilon { };
-
   endgame-singularity = callPackage ../games/endgame-singularity { };
 
   endless-sky = callPackage ../games/endless-sky { };
@@ -37731,10 +37720,10 @@ with pkgs;
     inherit (darwin) DarwinTools;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
-    protobuf = protobuf_21;
+    protobuf = protobuf_23;
     # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_202301.override {
       static = true;
       cxxStandard = "20";
     };

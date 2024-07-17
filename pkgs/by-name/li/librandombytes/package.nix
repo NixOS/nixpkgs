@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts-build
   '';
 
+  __structuredAttrs = true;
+
   # NOTE: librandombytes uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
   configurePlatforms = [ ];
@@ -43,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ python3 ];
 
   buildInputs = [ openssl ];
+
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id "$out/lib/librandombytes-kernel.1.dylib" "$out/lib/librandombytes-kernel.1.dylib"
+    install_name_tool -change "librandombytes-kernel.1.dylib" "$out/lib/librandombytes-kernel.1.dylib" "$out/bin/randombytes-info"
+  '';
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";

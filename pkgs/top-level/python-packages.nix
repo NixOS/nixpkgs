@@ -2523,6 +2523,8 @@ self: super: with self; {
 
   coreschema = callPackage ../development/python-modules/coreschema { };
 
+  corner = callPackage ../development/python-modules/corner { };
+
   cornice = callPackage ../development/python-modules/cornice { };
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
@@ -3559,6 +3561,8 @@ self: super: with self; {
 
   dogtail = callPackage ../development/python-modules/dogtail { };
 
+  dohq-artifactory = callPackage ../development/python-modules/dohq-artifactory { };
+
   doit = callPackage ../development/python-modules/doit { };
 
   doit-py = callPackage ../development/python-modules/doit-py { };
@@ -4023,6 +4027,8 @@ self: super: with self; {
   evernote = callPackage ../development/python-modules/evernote { };
 
   evohome-async = callPackage ../development/python-modules/evohome-async { };
+
+  evosax = callPackage ../development/python-modules/evosax { };
 
   evtx = callPackage ../development/python-modules/evtx { };
 
@@ -4501,6 +4507,8 @@ self: super: with self; {
   flower = callPackage ../development/python-modules/flower { };
 
   flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
+
+  flowmc = callPackage ../development/python-modules/flowmc { };
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
@@ -6445,6 +6453,8 @@ self: super: with self; {
   kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
+
+  kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
 
@@ -9201,6 +9211,8 @@ self: super: with self; {
 
   objax = callPackage ../development/python-modules/objax { };
 
+  objexplore = callPackage ../development/python-modules/objexplore { };
+
   objsize = callPackage ../development/python-modules/objsize { };
 
   objgraph = callPackage ../development/python-modules/objgraph {
@@ -10171,6 +10183,10 @@ self: super: with self; {
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
   pyindego = callPackage ../development/python-modules/pyindego { };
+
+  pyinstaller = callPackage ../development/python-modules/pyinstaller { };
+
+  pyinstaller-hooks-contrib = callPackage ../development/python-modules/pyinstaller-hooks-contrib { };
 
   pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
 
@@ -14403,8 +14419,6 @@ self: super: with self; {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
-  solaredge = callPackage ../development/python-modules/solaredge { };
-
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
@@ -14916,6 +14930,8 @@ self: super: with self; {
   };
 
   sudachipy = callPackage ../development/python-modules/sudachipy { };
+
+  suds = callPackage ../development/python-modules/suds { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "1.0.5";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-ykvI5qW4toNYKAnrk3ADwat1gAUazbDGGKZEZAvKngQ=";
+    hash = "sha256-cAWLVB7KpLsfXcxAbSXkE3O6N0V1mw3z9UdMeH0IkpI=";
   };
 
   pythonRelaxDeps = true;

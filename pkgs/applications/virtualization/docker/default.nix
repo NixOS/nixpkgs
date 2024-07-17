@@ -319,7 +319,7 @@ rec {
     cliRev = "v${version}";
     cliHash = "sha256-fpjSnUq3T6WZO/FLeT377FWxwevbULob9dPiSBxZdHI=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-v5uhFQPbBIpfnKtAkmbq4w+TbaG01tqTSWNBE3NvPKU=";
+    mobyHash = "sha256-xinRILDSuubAAJh/dmpaU3csTf0VgukJIfSUkcHpa28=";
     runcRev = "v1.1.13";
     runcHash = "sha256-RQsM8Q7HogDVGbNpen3wxXNGR9lfqmNhkXTRoC+LBk8=";
     containerdRev = "v1.7.18";
