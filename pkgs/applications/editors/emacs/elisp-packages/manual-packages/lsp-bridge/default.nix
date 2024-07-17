@@ -1,29 +1,32 @@
-{ lib
-, python3
-, melpaBuild
-, fetchFromGitHub
-, substituteAll
-, acm
-, markdown-mode
-, git
-, go
-, gopls
-, pyright
-, ruff
-, tempel
-, unstableGitUpdater
+{
+  lib,
+  python3,
+  melpaBuild,
+  fetchFromGitHub,
+  substituteAll,
+  acm,
+  markdown-mode,
+  git,
+  go,
+  gopls,
+  pyright,
+  ruff,
+  tempel,
+  unstableGitUpdater,
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
-    epc
-    orjson
-    paramiko
-    rapidfuzz
-    setuptools
-    sexpdata
-    six
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      epc
+      orjson
+      paramiko
+      rapidfuzz
+      setuptools
+      sexpdata
+      six
+    ]
+  );
 in
 melpaBuild {
   pname = "lsp-bridge";
@@ -89,6 +92,9 @@ melpaBuild {
     description = "Blazingly fast LSP client for Emacs";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fxttr kira-bruneau ];
+    maintainers = with lib.maintainers; [
+      fxttr
+      kira-bruneau
+    ];
   };
 }
