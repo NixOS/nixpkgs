@@ -14,7 +14,6 @@ in
   imports = [
     ./config.nix
     ./exchange.nix
-    ./libeufin.nix
   ];
 
   options.services.taler = {
