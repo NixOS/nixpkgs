@@ -28,12 +28,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
   };
 
-  patches =
-    lib.optionals
-      (stdenv.hostPlatform.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"))
-      [
-        ./0001-remove-unifiedtypeidentifiers-framework
-      ];
+  patches = lib.optionals (
+    stdenv.hostPlatform.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+  ) [ ./0001-remove-unifiedtypeidentifiers-framework ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -126,7 +123,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
-    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
     mainProgram = "tracy";
     maintainers = with maintainers; [
@@ -134,5 +130,6 @@ stdenv.mkDerivation rec {
       nagisa
       paveloom
     ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
