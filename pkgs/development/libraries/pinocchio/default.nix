@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , boost
 , eigen
 , example-robot-data
-, collisionSupport ? !stdenv.isDarwin
+, collisionSupport ? true
 , console-bridge
 , jrl-cmakemodules
 , hpp-fcl
@@ -30,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
       --replace-fail "add_pinocchio_unit_test(force)" ""
   '';
+
+  patches = [
+    # fix urdf & collision support on aarch64-darwin
+    (fetchpatch {
+      name = "static-pointer_cast.patch";
+      url = "https://github.com/stack-of-tasks/pinocchio/pull/2339/commits/ead869e8f3cce757851b9a011c4a2f55fb66582b.patch";
+      hash = "sha256-CkrWQJP/pPNs6B3a1FclfM7JWwkmsPzRumS46KQHv0s=";
+    })
+  ];
 
   # example-robot-data models are used in checks.
   # Upstream provide them as git submodule, but we can use our own version instead.
@@ -71,9 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
     (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
-  ] ++ lib.optionals (pythonSupport && stdenv.isDarwin) [
-    # AssertionError: '.' != '/tmp/nix-build-pinocchio-2.7.0.drv/sou[84 chars].dae'
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;test-py-bindings_geometry_model_urdf'"
   ];
 
   doCheck = true;
