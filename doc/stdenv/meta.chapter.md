@@ -115,9 +115,28 @@ For example, a package which requires dynamic linking and cannot be linked stati
 ```nix
 {
   meta.platforms = lib.platforms.all;
+  meta.badPlatforms = [{ hasSharedLibraries = false; }];
+}
+```
+
+or
+
+```nix
+{
+  meta.platforms = lib.platforms.all;
   meta.badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
 }
 ```
+
+In the examples above, `lib.systems.inspect.platformPatterns.isStatic` is an alias for `{ isStatic = true; }` platform pattern. The difference between `isStatic` and `hasSharedLibraries` is that:
+
+* isStatic: packages should be statically linked against the dependencies when
+  possible. Dynamic linking may or may not be available.
+
+* hasSharedLibraries: the platform supports dynamic linking. For example, if set
+  to `false`, things like dlopen do not work. If the package *requires* dynamic
+  linking (e.g. must load plugins dynamically), it should be considered
+  unavailable on such platform.
 
 The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L95-L106) function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
 Some packages use this to automatically detect the maximum set of features with which they can be built.

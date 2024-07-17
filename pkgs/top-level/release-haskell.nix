@@ -434,7 +434,8 @@ let
           [
             "aarch64-linux" # times out on Hydra
 
-            # Static doesn't work on darwin
+            # Darwin requires dynamic linker support that pkgsStatic disables.
+            # TODO: do not disable hasSharedLibraries in pkgsStatic?
             "x86_64-darwin"
             "aarch64-darwin"
           ] {

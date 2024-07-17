@@ -164,6 +164,10 @@ rec {
   # apply only to the `parsed` field.
 
   platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
+    # Matches platforms that are statically linked. That does not imply that
+    # dynamic linking is not supported.
     isStatic = { isStatic = true; };
+    # Matches platforms that support dynamic linking.
+    hasSharedLibraries = { hasSharedLibraries = true; };
   };
 }
