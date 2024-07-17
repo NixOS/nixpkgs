@@ -23,9 +23,10 @@ melpaBuild {
   packageRequires = [
     dash
     editorconfig
-    nodejs
     s
   ];
+
+  propagatedUserEnvPkgs = [ nodejs ];
 
   meta = {
     description = "Unofficial copilot plugin for Emacs";
