@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "apptools";
-  version = "5.2.1";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xiaPXfzzCIvK92oAA+ULd3TQG1JY1xmbQQtIUv8iRuM=";
+    hash = "sha256-MFgL9ioNXdYW7dXiuZWCJ2M/NctVfGhgRSpWgJ5r1Wc=";
   };
 
   propagatedBuildInputs = [
