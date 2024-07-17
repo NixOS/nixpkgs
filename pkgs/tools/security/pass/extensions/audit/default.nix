@@ -1,9 +1,22 @@
-{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
+{
+  lib,
+  stdenv,
+  pass,
+  fetchFromGitHub,
+  pythonPackages,
+  makeWrapper,
+  gnupg,
+}:
 
 let
-  pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
+  pythonEnv = pythonPackages.python.withPackages (p: [
+    p.requests
+    p.setuptools
+    p.zxcvbn
+  ]);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pass-audit";
   version = "1.2";
 
@@ -26,19 +39,29 @@ in stdenv.mkDerivation rec {
       --replace-fail "install --root" "install --prefix ''' --root"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildInputs = [ pythonEnv ];
   nativeBuildInputs = [ makeWrapper ];
 
   # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
   doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ pythonPackages.green pass gnupg ];
+  nativeCheckInputs = [
+    pythonPackages.green
+    pass
+    gnupg
+  ];
   checkPhase = ''
     ${pythonEnv.interpreter} -m green -q
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX="
+  ];
   postInstall = ''
     wrapProgram $out/lib/password-store/extensions/audit.bash \
       --prefix PYTHONPATH : "$out/${pythonEnv.sitePackages}" \

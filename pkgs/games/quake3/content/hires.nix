@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchzip }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+}:
 
 stdenv.mkDerivation {
   pname = "quake3hires";

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, accounts-qt
-, dbus-test-runner
-, pkg-config
-, qmake
-, qtbase
-, qtdeclarative
-, signond
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  accounts-qt,
+  dbus-test-runner,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtdeclarative,
+  signond,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,17 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZpnkZauowLPBnO3DDDtG/x07XoQGVNqEF8AQB5TZK84=";
   };
 
-  postPatch = ''
-    substituteInPlace src/src.pro \
-      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
-      --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+  postPatch =
+    ''
+      substituteInPlace src/src.pro \
+        --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
+        --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
 
-    # Don't install test binary
-    sed -i tests/tst_plugin.pro \
-      -e '/TARGET = tst_plugin/a INSTALLS -= target'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
-    sed -i accounts-qml-module.pro -e '/tests/d'
-  '';
+      # Don't install test binary
+      sed -i tests/tst_plugin.pro \
+        -e '/TARGET = tst_plugin/a INSTALLS -= target'
+    ''
+    + lib.optionalString (!finalAttrs.doCheck) ''
+      sed -i accounts-qml-module.pro -e '/tests/d'
+    '';
 
   # QMake can't find Qt modules in buildInputs
   strictDeps = false;

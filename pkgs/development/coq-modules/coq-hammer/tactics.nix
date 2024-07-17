@@ -1,14 +1,33 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 let
   owner = "lukaszcz";
   repo = "coqhammer";
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = "8.19"; out = "1.3.2+8.19"; }
-    { case = "8.18"; out = "1.3.2+8.18"; }
-    { case = "8.17"; out = "1.3.2+8.17"; }
-    { case = "8.16"; out = "1.3.2+8.16"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = "8.19";
+        out = "1.3.2+8.19";
+      }
+      {
+        case = "8.18";
+        out = "1.3.2+8.18";
+      }
+      {
+        case = "8.17";
+        out = "1.3.2+8.17";
+      }
+      {
+        case = "8.16";
+        out = "1.3.2+8.16";
+      }
+    ] null;
 
   release = {
     "1.3.2+8.19".sha256 = "sha256-Zd7piAWlKPAZKEz7HVWxhnzOLbA/eR9C/E0T298MJVY=";
@@ -25,9 +44,21 @@ mkCoqDerivation {
   inherit version;
   pname = "coq-hammer-tactics";
 
-  inherit owner repo defaultVersion release releaseRev;
+  inherit
+    owner
+    repo
+    defaultVersion
+    release
+    releaseRev
+    ;
   passthru = {
-    inherit owner repo defaultVersion release releaseRev;
+    inherit
+      owner
+      repo
+      defaultVersion
+      release
+      releaseRev
+      ;
   };
 
   mlPlugin = true;

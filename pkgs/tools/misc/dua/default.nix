@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qn1QDiYHcygomOFwFEy00wsMykrQ9/84Ed4nAUTlA1k=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   doCheck = false;
 
@@ -34,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Byron/dua-cli";
     changelog = "https://github.com/Byron/dua-cli/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ figsoda killercup ];
+    maintainers = with maintainers; [
+      figsoda
+      killercup
+    ];
     mainProgram = "dua";
   };
 }

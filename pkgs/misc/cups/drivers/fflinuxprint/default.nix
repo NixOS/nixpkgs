@@ -1,9 +1,10 @@
-{ autoPatchelfHook
-, cups
-, dpkg
-, fetchurl
-, lib
-, stdenv
+{
+  autoPatchelfHook,
+  cups,
+  dpkg,
+  fetchurl,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     dpkg
   ];
 
-  buildInputs = [
-    cups
-  ];
+  buildInputs = [ cups ];
 
   dontConfigure = true;
   dontBuild = true;

@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     apacheHttpd
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    libintl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   passthru = {
     inherit apacheHttpd;

@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, dbus
-, doxygen
-, graphviz
-, gtest
-, libxml2
-, lomiri
-, pkg-config
-, process-cpp
-, properties-cpp
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  dbus,
+  doxygen,
+  graphviz,
+  gtest,
+  libxml2,
+  lomiri,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,20 +54,22 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace doc/CMakeLists.txt \
-      --replace 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+  postPatch =
+    ''
+      substituteInPlace doc/CMakeLists.txt \
+        --replace 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
 
-    # Warning on aarch64-linux breaks build due to -Werror
-    substituteInPlace CMakeLists.txt \
-      --replace '-Werror' ""
+      # Warning on aarch64-linux breaks build due to -Werror
+      substituteInPlace CMakeLists.txt \
+        --replace '-Werror' ""
 
-    # pkg-config output patching hook expects prefix variable here
-    substituteInPlace data/dbus-cpp.pc.in \
-      --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-  '';
+      # pkg-config output patching hook expects prefix variable here
+      substituteInPlace data/dbus-cpp.pc.in \
+        --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+    '';
 
   strictDeps = true;
 
@@ -86,17 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     properties-cpp
   ];
 
-  nativeCheckInputs = [
-    dbus
-  ];
+  nativeCheckInputs = [ dbus ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
-  cmakeFlags = [
-    "-DDBUS_CPP_ENABLE_DOC_GENERATION=ON"
-  ];
+  cmakeFlags = [ "-DDBUS_CPP_ENABLE_DOC_GENERATION=ON" ];
 
   # Too flaky on ARM CI & for some amd64 users
   doCheck = false;
@@ -120,8 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = "dbus-cppc";
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "dbus-cpp"
-    ];
+    pkgConfigModules = [ "dbus-cpp" ];
   };
 })

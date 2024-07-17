@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, crystal, openssl, testers, amqpcat }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  openssl,
+  testers,
+  amqpcat,
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
@@ -19,9 +26,7 @@ crystal.buildCrystalPackage rec {
   # Tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = amqpcat;
-  };
+  passthru.tests.version = testers.testVersion { package = amqpcat; };
 
   meta = with lib; {
     description = "A CLI tool for publishing to and consuming from AMQP servers";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libinklevel }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libinklevel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ink";
@@ -9,11 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1fk0b8vic04a3i3vmq73hbk7mzbi57s8ks6ighn3mvr6m2v8yc9d";
   };
 
-  buildInputs = [
-    libinklevel
-  ];
+  buildInputs = [ libinklevel ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = with lib; {
     description = "A command line tool for checking the ink level of your locally connected printer";

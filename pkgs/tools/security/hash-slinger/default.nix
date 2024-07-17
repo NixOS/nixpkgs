@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, unbound
-, libreswan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  libreswan,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     pyunbound
   ];
 
-  buildInputs = [
-    python3.pkgs.wrapPython
-  ];
+  buildInputs = [ python3.pkgs.wrapPython ];
 
   propagatedBuildInputs = [
     unbound

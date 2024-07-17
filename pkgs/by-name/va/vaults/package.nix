@@ -1,23 +1,24 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook3
-, glib
-, gtk4
-, libadwaita
-, wayland
-, gocryptfs
-, cryfs
-, cmake
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook3,
+  glib,
+  gtk4,
+  libadwaita,
+  wayland,
+  gocryptfs,
+  cryfs,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,13 +42,16 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gocryptfs cryfs ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gocryptfs
+          cryfs
+        ]
+      }"
     )
   '';
 

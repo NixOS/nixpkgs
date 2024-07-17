@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, asciidoc
-, databasePath ? "/etc/secureboot"
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  asciidoc,
+  databasePath ? "/etc/secureboot",
 }:
 
 buildGoModule rec {
@@ -19,9 +20,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-kVXzHTONPCE1UeAnUiULjubJeZFD0DAxIk+w8/Dqs6c=";
 
-  ldflags = [ "-s" "-w" "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}"
+  ];
 
-  nativeBuildInputs = [ installShellFiles asciidoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    asciidoc
+  ];
 
   postBuild = ''
     make docs/sbctl.8

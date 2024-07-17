@@ -1,10 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # openafsMod, openafsBin, mkCellServDB
 with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib) getBin literalExpression mkOption mkIf optionalString singleton types;
+  inherit (lib)
+    getBin
+    literalExpression
+    mkOption
+    mkIf
+    optionalString
+    singleton
+    types
+    ;
 
   cfg = config.services.openafsClient;
 
@@ -13,7 +26,9 @@ let
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
-  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.cellServDB);
+  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (
+    mkCellServDB cfg.cellName cfg.cellServDB
+  );
 
   afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
     mkdir -p $out
@@ -50,16 +65,26 @@ in
       };
 
       cellServDB = mkOption {
-        default = [];
-        type = with types; listOf (submodule { options = cellServDBConfig; });
+        default = [ ];
+        type =
+          with types;
+          listOf (submodule {
+            options = cellServDBConfig;
+          });
         description = ''
           This cell's database server records, added to the global
           CellServDB. See CellServDB(5) man page for syntax. Ignored when
           `afsdb` is set to `true`.
         '';
         example = [
-          { ip = "1.2.3.4"; dnsname = "first.afsdb.server.dns.fqdn.org"; }
-          { ip = "2.3.4.5"; dnsname = "second.afsdb.server.dns.fqdn.org"; }
+          {
+            ip = "1.2.3.4";
+            dnsname = "first.afsdb.server.dns.fqdn.org";
+          }
+          {
+            ip = "2.3.4.5";
+            dnsname = "second.afsdb.server.dns.fqdn.org";
+          }
         ];
       };
 
@@ -179,16 +204,17 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.afsdb || cfg.cellServDB != [];
+      {
+        assertion = cfg.afsdb || cfg.cellServDB != [ ];
         message = "You should specify all cell-local database servers in config.services.openafsClient.cellServDB or set config.services.openafsClient.afsdb.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsClient.cellName.";
       }
     ];
@@ -216,8 +242,10 @@ in
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
       wants = lib.optional (!cfg.startDisconnected) "network-online.target";
-      after = singleton (if cfg.startDisconnected then  "network.target" else "network-online.target");
-      serviceConfig = { RemainAfterExit = true; };
+      after = singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
+      serviceConfig = {
+        RemainAfterExit = true;
+      };
       restartIfChanged = false;
 
       preStart = ''

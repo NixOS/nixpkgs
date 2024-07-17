@@ -15,9 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tdLcil3oYptx7l02ErboTYhBi4bFzTm6MV6esEYvGMs=";
   };
 
-  cmakeFlags = [
-    (lib.cmakeBool "WITH_KDE" false)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "WITH_KDE" false) ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -30,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "StormLib MPQ archiving utility";
     license = lib.licenses.gpl3Only;
     mainProgram = "smpq";
-    maintainers = with lib.maintainers; [ aanderse karolchmist ];
+    maintainers = with lib.maintainers; [
+      aanderse
+      karolchmist
+    ];
     platforms = lib.platforms.all;
   };
 })

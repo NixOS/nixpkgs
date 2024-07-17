@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,9 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "trueseeing"
-  ];
+  pythonImportsCheck = [ "trueseeing" ];
 
   meta = with lib; {
     description = "Non-decompiling Android vulnerability scanner";

@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, glib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,20 +20,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  configureFlags = [
-    "--enable-iconv"
-  ];
+  configureFlags = [ "--enable-iconv" ];
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben luc65r ];
+    maintainers = with maintainers; [
+      siraben
+      luc65r
+    ];
     platforms = with platforms; linux ++ darwin;
   };
 }

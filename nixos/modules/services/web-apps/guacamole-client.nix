@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.guacamole-client;
@@ -14,9 +15,7 @@ in
       package = lib.mkPackageOption pkgs "guacamole-client" { };
 
       settings = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = settingsFormat.type;
-        };
+        type = lib.types.submodule { freeformType = settingsFormat.type; };
         default = {
           guacd-hostname = "localhost";
           guacd-port = 4822;
@@ -44,16 +43,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.etc."guacamole/guacamole.properties" = lib.mkIf
-      (cfg.settings != {})
-      { source = (settingsFormat.generate "guacamole.properties" cfg.settings); };
+    environment.etc."guacamole/guacamole.properties" = lib.mkIf (cfg.settings != { }) {
+      source = (settingsFormat.generate "guacamole.properties" cfg.settings);
+    };
 
     services = lib.mkIf cfg.enableWebserver {
       tomcat = {
         enable = true;
-        webapps = [
-          cfg.package
-        ];
+        webapps = [ cfg.package ];
       };
     };
   };

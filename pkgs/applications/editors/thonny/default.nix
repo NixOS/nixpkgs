@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  tk,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 with python3.pkgs;
 
@@ -15,14 +22,19 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = "Thonny";
-    exec = "thonny";
-    icon = "thonny";
-    desktopName = "Thonny";
-    comment     = "Python IDE for beginners";
-    categories  = [ "Development" "IDE" ];
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Thonny";
+      exec = "thonny";
+      icon = "thonny";
+      desktopName = "Thonny";
+      comment = "Python IDE for beginners";
+      categories = [
+        "Development"
+        "IDE"
+      ];
+    })
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     jedi

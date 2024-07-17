@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+}:
 
 let
   version = "0.75";
@@ -15,7 +20,8 @@ let
     sha256 = "1y0ivviy58i0pmavhvrpznc4yjigjknff298gnw9rkg5wxm0gbbq";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "cdb";
   inherit version;
 
@@ -24,7 +30,11 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
-  outputs = [ "bin" "doc" "out" ];
+  outputs = [
+    "bin"
+    "doc"
+    "out"
+  ];
 
   postPatch = ''
     # A little patch, borrowed from Archlinux AUR, borrowed from Gentoo Portage

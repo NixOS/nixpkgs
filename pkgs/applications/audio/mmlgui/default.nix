@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, pkg-config
-, glfw
-, libvgm
-, libX11
-, libXau
-, libXdmcp
-, Carbon
-, Cocoa
-, cppunit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  pkg-config,
+  glfw,
+  libvgm,
+  libX11,
+  libXau,
+  libXdmcp,
+  Carbon,
+  Cocoa,
+  cppunit,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,29 +48,26 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    glfw
-    libvgm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXau
-    libXdmcp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
-  ];
+  buildInputs =
+    [
+      glfw
+      libvgm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXau
+      libXdmcp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ];
 
-  checkInputs = [
-    cppunit
-  ];
+  checkInputs = [ cppunit ];
 
-  makeFlags = [
-    "RELEASE=1"
-  ];
+  makeFlags = [ "RELEASE=1" ];
 
   enableParallelBuilding = true;
 
@@ -85,9 +83,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/superctr/mmlgui.git";
-  };
+  passthru.updateScript = unstableGitUpdater { url = "https://github.com/superctr/mmlgui.git"; };
 
   meta = with lib; {
     homepage = "https://github.com/superctr/mmlgui";

@@ -1,11 +1,18 @@
-{ lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
-, AppKit
-, CoreImage
-, ffmpeg-base ? callPackage ./base.nix { }
-, ffmpeg-avutil, ffmpeg
-, OpenGL
-, stdenv
-, VideoToolbox
+{
+  lib,
+  buildDunePackage,
+  dune-configurator,
+  pkg-config,
+  fetchFromGitHub,
+  callPackage,
+  AppKit,
+  CoreImage,
+  ffmpeg-base ? callPackage ./base.nix { },
+  ffmpeg-avutil,
+  ffmpeg,
+  OpenGL,
+  stdenv,
+  VideoToolbox,
 }:
 
 buildDunePackage {
@@ -16,9 +23,18 @@ buildDunePackage {
   inherit (ffmpeg-base) version src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreImage OpenGL VideoToolbox ];
-  propagatedBuildInputs = [ ffmpeg-avutil ffmpeg.dev ];
+  buildInputs =
+    [ dune-configurator ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      CoreImage
+      OpenGL
+      VideoToolbox
+    ];
+  propagatedBuildInputs = [
+    ffmpeg-avutil
+    ffmpeg.dev
+  ];
 
   doCheck = true;
 

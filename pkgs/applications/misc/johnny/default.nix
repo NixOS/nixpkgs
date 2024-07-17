@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, qt5, john, makeWrapper, makeDesktopItem
-, copyDesktopItems }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  john,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 stdenv.mkDerivation rec {
   pname = "johnny";
@@ -12,9 +20,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 
-  buildInputs = [ john qt5.qtbase ];
-  nativeBuildInputs =
-    [ makeWrapper copyDesktopItems qt5.wrapQtAppsHook qt5.qmake ];
+  buildInputs = [
+    john
+    qt5.qtbase
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+    qt5.wrapQtAppsHook
+    qt5.qmake
+  ];
 
   installPhase = ''
     install -D ${pname} $out/bin/${pname}
@@ -34,7 +49,10 @@ stdenv.mkDerivation rec {
       icon = pname;
       exec = pname;
       terminal = false;
-      categories = [ "Application" "System" ];
+      categories = [
+        "Application"
+        "System"
+      ];
       startupNotify = true;
     })
   ];

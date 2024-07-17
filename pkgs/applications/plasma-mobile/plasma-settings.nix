@@ -1,25 +1,26 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kauth
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, kitemmodels
-, libselinux
-, libsepol
-, modemmanager-qt
-, networkmanager-qt
-, pcre
-, plasma-framework
-, util-linux
+  kauth,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  kitemmodels,
+  libselinux,
+  libsepol,
+  modemmanager-qt,
+  networkmanager-qt,
+  pcre,
+  plasma-framework,
+  util-linux,
 }:
 
 mkDerivation rec {

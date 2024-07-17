@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gtk-doc
-, intltool
-, itstool
-, libtool
-, pkg-config
-, wrapGAppsHook3
-, yelp-tools
-, clutter-gtk
-, gst_all_1
-, glib
-, gtk2
-, libgsf
-, libxml2
-, fluidsynth
-, orc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-doc,
+  intltool,
+  itstool,
+  libtool,
+  pkg-config,
+  wrapGAppsHook3,
+  yelp-tools,
+  clutter-gtk,
+  gst_all_1,
+  glib,
+  gtk2,
+  libgsf,
+  libxml2,
+  fluidsynth,
+  orc,
 }:
 
 stdenv.mkDerivation {

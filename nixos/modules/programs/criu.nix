@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.criu;
-in {
+let
+  cfg = config.programs.criu;
+in
+{
 
   options = {
     programs.criu = {
@@ -15,9 +22,7 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "CHECKPOINT_RESTORE")
-    ];
+    system.requiredKernelConfig = with config.lib.kernelConfig; [ (isYes "CHECKPOINT_RESTORE") ];
     boot.kernel.features.criu = true;
     environment.systemPackages = [ pkgs.criu ];
   };

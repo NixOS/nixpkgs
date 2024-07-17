@@ -20,9 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "javier-lopez";
     repo = "learn";
-    sparseCheckout = [
-      "sh/tools/simple-dlna-browser"
-    ];
+    sparseCheckout = [ "sh/tools/simple-dlna-browser" ];
     rev = "666e2c402723251ba19ce9d7c11b83b06c15a2c5";
     sha256 = "sha256-jwPAEgti5DrjNnNVW/61GGTP+QedGAjz9kPwYhMAdTk=";
   };
@@ -36,14 +34,16 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp sh/tools/simple-dlna-browser $outputWrapped
     makeWrapper $outputWrapped $outputWrapper \
-      --prefix PATH : ${lib.makeBinPath [
-        curl
-        gawk
-        gnugrep
-        gnused
-        socat
-        wget
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          gawk
+          gnugrep
+          gnused
+          socat
+          wget
+        ]
+      }
 
     # Set the program name to a fixed value
     # Normally it is guessed by the filename, but we don't want it to be the name of the wrapper
@@ -65,4 +65,3 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ loveisgrief ];
   };
 }
-

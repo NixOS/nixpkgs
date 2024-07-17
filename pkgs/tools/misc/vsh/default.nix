@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "vsh";
@@ -15,7 +19,11 @@ buildGoModule rec {
   vendorHash = null;
 
   # make sure version gets set at compile time
-  ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.vshVersion=v${version}"
+  ];
 
   meta = with lib; {
     description = "HashiCorp Vault interactive shell";

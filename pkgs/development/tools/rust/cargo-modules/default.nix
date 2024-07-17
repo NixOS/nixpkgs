@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
@@ -13,9 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-umaKVs1fFiUKz2HIJuB+7skSwRQbG12dl9eD+et42go=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   checkFlags = [
     "--skip=cfg_test::smoke"
@@ -46,6 +50,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ figsoda rvarago matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      rvarago
+      matthiasbeyer
+    ];
   };
 }

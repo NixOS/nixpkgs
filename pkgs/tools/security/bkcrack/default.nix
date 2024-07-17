@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,9 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBKCRACK_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ "-DBKCRACK_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}" ];
 
   postInstall = ''
     mkdir -p $out/bin $out/share/doc/bkcrack $out/share/licenses/bkcrack

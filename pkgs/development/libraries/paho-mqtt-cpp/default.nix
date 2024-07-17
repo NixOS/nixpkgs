@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, paho-mqtt-c, enableStatic ? stdenv.hostPlatform.isStatic, enableShared ? !stdenv.hostPlatform.isStatic }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  paho-mqtt-c,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+}:
 
 stdenv.mkDerivation rec {
   pname = "paho.mqtt.cpp";
@@ -13,7 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl paho-mqtt-c ];
+  buildInputs = [
+    openssl
+    paho-mqtt-c
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "PAHO_WITH_SSL" true)

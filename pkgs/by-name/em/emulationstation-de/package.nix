@@ -12,7 +12,7 @@
   libgit2,
   poppler,
   pugixml,
-  SDL2
+  SDL2,
 }:
 
 stdenv.mkDerivation {

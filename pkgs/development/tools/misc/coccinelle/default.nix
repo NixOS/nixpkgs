@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, ocamlPackages
-, pkg-config
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ocamlPackages,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {

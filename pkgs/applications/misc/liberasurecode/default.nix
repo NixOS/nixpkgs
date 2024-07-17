@@ -1,17 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, installShellFiles
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  installShellFiles,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "liberasurecode";
   version = "1.6.3";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "openstack";
@@ -28,7 +33,11 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    installShellFiles
+  ];
 
   buildInputs = [ zlib ];
 

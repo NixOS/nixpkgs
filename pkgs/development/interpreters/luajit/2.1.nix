@@ -1,4 +1,9 @@
-{ self, callPackage, fetchFromGitHub, passthruFun }:
+{
+  self,
+  callPackage,
+  fetchFromGitHub,
+  passthruFun,
+}:
 
 callPackage ./default.nix rec {
   # The patch version is the timestamp of the git commit,

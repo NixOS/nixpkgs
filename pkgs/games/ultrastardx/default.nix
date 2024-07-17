@@ -1,35 +1,52 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, lua
-, fpc
-, pcre
-, portaudio
-, freetype
-, libpng
-, SDL2
-, SDL2_image
-, SDL2_gfx
-, SDL2_mixer
-, SDL2_net, SDL2_ttf
-, ffmpeg_4
-, sqlite
-, zlib
-, libX11
-, libGLU
-, libGL
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  lua,
+  fpc,
+  pcre,
+  portaudio,
+  freetype,
+  libpng,
+  SDL2,
+  SDL2_image,
+  SDL2_gfx,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  ffmpeg_4,
+  sqlite,
+  zlib,
+  libX11,
+  libGLU,
+  libGL,
 }:
 
 let
   sharedLibs = [
-    pcre portaudio freetype
-    SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg_4
+    pcre
+    portaudio
+    freetype
+    SDL2
+    SDL2_image
+    SDL2_gfx
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    sqlite
+    lua
+    zlib
+    libX11
+    libGLU
+    libGL
+    ffmpeg_4
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ultrastardx";
   version = "2024.3.0";
 
@@ -40,8 +57,14 @@ in stdenv.mkDerivation rec {
     hash = "sha256-0+7PMSnQoNu6tcR9MB6b94fWlMRvH10ySUhdSicWU8U=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ fpc libpng ] ++ sharedLibs;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    fpc
+    libpng
+  ] ++ sharedLibs;
 
   postPatch = ''
     substituteInPlace src/config.inc.in \
@@ -68,9 +91,12 @@ in stdenv.mkDerivation rec {
       -i src/lib/ffmpeg-4.0/swscale.pas
   '';
 
-  preBuild = with lib;
-    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
-    in ''
+  preBuild =
+    with lib;
+    let
+      items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+    in
+    ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';
 

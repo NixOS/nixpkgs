@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, pkg-config, autoreconfHook, help2man, gettext, libxml2, perl, python3, doxygen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  help2man,
+  gettext,
+  libxml2,
+  perl,
+  python3,
+  doxygen,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +32,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    gettext
+    libxml2
+    help2man
+    perl
+    pkg-config
+  ];
 
   buildInputs = [ python3 ];
 
@@ -43,8 +62,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dell/libsmbios";
     description = "A library to obtain BIOS information";
-    license = with licenses; [ osl21 gpl2Plus ];
+    license = with licenses; [
+      osl21
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

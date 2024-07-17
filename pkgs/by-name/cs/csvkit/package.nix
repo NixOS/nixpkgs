@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -25,13 +26,9 @@ pythonEnv.pkgs.buildPythonApplication {
     setuptools # csvsql imports pkg_resources
   ];
 
-  nativeCheckInputs = with pythonEnv.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with pythonEnv.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "csvkit"
-  ];
+  pythonImportsCheck = [ "csvkit" ];
 
   disabledTests = [
     # Tries to compare CLI output - and fails!

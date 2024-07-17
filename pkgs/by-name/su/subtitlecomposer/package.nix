@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, ffmpeg
-, openal
-, stdenv
-, libsForQt5
+{
+  lib,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  ffmpeg,
+  openal,
+  stdenv,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,19 +21,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-RKS3VTtpxnox0hzessMHmoGPpT+Ho0b3fxtQMGw9OrM=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
-  buildInputs = [ ffmpeg openal ] ++ (with libsForQt5; [
-    kcodecs
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    ki18n
-    kio
-    ktextwidgets
-    kwidgetsaddons
-    kxmlgui
-    sonnet
-  ]);
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs =
+    [
+      ffmpeg
+      openal
+    ]
+    ++ (with libsForQt5; [
+      kcodecs
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      ki18n
+      kio
+      ktextwidgets
+      kwidgetsaddons
+      kxmlgui
+      sonnet
+    ]);
 
   meta = with lib; {
     homepage = "https://apps.kde.org/subtitlecomposer";

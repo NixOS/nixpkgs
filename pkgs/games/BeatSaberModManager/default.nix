@@ -29,10 +29,12 @@ buildDotnetModule rec {
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [
-    sdk_7_0
-    sdk_6_0
-  ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_7_0
+      sdk_6_0
+    ];
 
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
@@ -50,9 +52,7 @@ buildDotnetModule rec {
   ];
 
   # Required for OneClick
-  makeWrapperArgs = [
-    ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
-  ];
+  makeWrapperArgs = [ ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"'' ];
 
   meta = with lib; {
     description = "Yet another mod installer for Beat Saber, heavily inspired by ModAssistant";

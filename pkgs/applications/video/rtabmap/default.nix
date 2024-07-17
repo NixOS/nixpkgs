@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, opencv
-, pcl
-, libusb1
-, eigen
-, wrapQtAppsHook
-, qtbase
-, g2o
-, ceres-solver
-, libpointmatcher
-, octomap
-, freenect
-, libdc1394
-, librealsense
-, libGL
-, libGLU
-, vtkWithQt5
-, wrapGAppsHook3
-, liblapack
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  opencv,
+  pcl,
+  libusb1,
+  eigen,
+  wrapQtAppsHook,
+  qtbase,
+  g2o,
+  ceres-solver,
+  libpointmatcher,
+  octomap,
+  freenect,
+  libdc1394,
+  librealsense,
+  libGL,
+  libGLU,
+  vtkWithQt5,
+  wrapGAppsHook3,
+  liblapack,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     ## Required
     opencv

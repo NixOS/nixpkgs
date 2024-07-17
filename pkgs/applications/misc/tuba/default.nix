@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, vala
-, meson
-, ninja
-, python3
-, pkg-config
-, wrapGAppsHook4
-, desktop-file-utils
-, gtk4
-, libadwaita
-, json-glib
-, glib
-, glib-networking
-, gobject-introspection
-, gtksourceview5
-, libxml2
-, libgee
-, libsoup_3
-, libsecret
-, libwebp
-, libspelling
-, icu
-, gst_all_1
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gtk4,
+  libadwaita,
+  json-glib,
+  glib,
+  glib-networking,
+  gobject-introspection,
+  gtksourceview5,
+  libxml2,
+  libgee,
+  libsoup_3,
+  libsecret,
+  libwebp,
+  libspelling,
+  icu,
+  gst_all_1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,27 +48,29 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    glib
-    glib-networking
-    gtksourceview5
-    json-glib
-    libxml2
-    libgee
-    libsoup_3
-    gtk4
-    libadwaita
-    libsecret
-    libwebp
-    libspelling
-    icu
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      glib
+      glib-networking
+      gtksourceview5
+      json-glib
+      libxml2
+      libgee
+      libsoup_3
+      gtk4
+      libadwaita
+      libsecret
+      libwebp
+      libspelling
+      icu
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+    ]);
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
@@ -81,6 +84,9 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.geopjr.Tuba";
     license = licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with maintainers; [ chuangzhu aleksana ];
+    maintainers = with maintainers; [
+      chuangzhu
+      aleksana
+    ];
   };
 }

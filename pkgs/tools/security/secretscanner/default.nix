@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, hyperscan
-, pkg-config
-, protobuf
-, protoc-gen-go
-, protoc-gen-go-grpc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  hyperscan,
+  pkg-config,
+  protobuf,
+  protoc-gen-go,
+  protoc-gen-go-grpc,
 }:
 
 buildGoModule rec {
@@ -33,9 +34,7 @@ buildGoModule rec {
     protoc-gen-go-grpc
   ];
 
-  buildInputs = [
-    hyperscan
-  ];
+  buildInputs = [ hyperscan ];
 
   preBuild = ''
     # Compile proto files
@@ -56,4 +55,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

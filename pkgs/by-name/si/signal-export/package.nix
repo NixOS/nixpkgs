@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, nix-update-script
+{
+  lib,
+  python3,
+  fetchPypi,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,9 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-Hm0BVF2RUsxDacsAB3MJtk1t9FYmBPjeb5JzwaLkZ14=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     setuptools
@@ -35,6 +34,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Export your Signal chats to markdown files with attachments.";
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ phaer picnoir ];
+    maintainers = with maintainers; [
+      phaer
+      picnoir
+    ];
   };
 }

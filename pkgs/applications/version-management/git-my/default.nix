@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-my";
@@ -18,8 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "List remote branches if they're merged and/or available locally";
+    description = "List remote branches if they're merged and/or available locally";
     homepage = "https://github.com/davidosomething/git-my";
     license = licenses.free;
     maintainers = with maintainers; [ bb010g ];
@@ -27,4 +30,3 @@ stdenv.mkDerivation rec {
     mainProgram = "git-my";
   };
 }
-

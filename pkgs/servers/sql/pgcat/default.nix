@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GwcqR8pEvz42NEmcuXpcoPdChzRBYsDEnllX62T8ulQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   checkFlags = [
     # requires network access
@@ -43,9 +42,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/postgresml/pgcat";
     description = "PostgreSQL pooler with sharding, load balancing and failover support.";
-    license = with licenses; [mit];
+    license = with licenses; [ mit ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [cathalmullan];
+    maintainers = with maintainers; [ cathalmullan ];
     mainProgram = "pgcat";
   };
 }

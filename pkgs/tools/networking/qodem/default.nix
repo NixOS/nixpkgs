@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, ncurses, SDL, gpm, miniupnpc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  ncurses,
+  SDL,
+  gpm,
+  miniupnpc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qodem";
@@ -11,8 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "NAdcTVmNrDa3rbsbxJxFoI7sz5NK5Uw+TbP+a1CdB+Q=";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ ncurses SDL gpm miniupnpc ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    ncurses
+    SDL
+    gpm
+    miniupnpc
+  ];
 
   meta = with lib; {
     homepage = "https://qodem.sourceforge.net/";

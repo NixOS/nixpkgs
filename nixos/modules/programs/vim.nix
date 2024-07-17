@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.vim;
-in {
+in
+{
   options.programs.vim = {
     defaultEditor = lib.mkOption {
       type = lib.types.bool;
@@ -13,13 +19,13 @@ in {
       '';
     };
 
-    package = lib.mkPackageOption pkgs "vim" {
-      example = "vim-full";
-    };
+    package = lib.mkPackageOption pkgs "vim" { example = "vim-full"; };
   };
 
   config = lib.mkIf cfg.defaultEditor {
     environment.systemPackages = [ cfg.package ];
-    environment.variables = { EDITOR = lib.mkOverride 900 "vim"; };
+    environment.variables = {
+      EDITOR = lib.mkOverride 900 "vim";
+    };
   };
 }

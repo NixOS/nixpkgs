@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  Cocoa,
+}:
 
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
@@ -13,8 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ zlib ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   installPhase = ''
     runHook preInstall

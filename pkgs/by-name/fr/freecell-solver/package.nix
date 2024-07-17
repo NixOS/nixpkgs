@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, cmocka
-, gmp
-, gperf
-, libtap
-, ninja
-, perl
-, pkg-config
-, python3
-, rinutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  cmocka,
+  gmp,
+  gperf,
+  libtap,
+  ninja,
+  perl,
+  pkg-config,
+  python3,
+  rinutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lfeKSxXS+jQCcf5PzFNUBlloGRuiLbDUDoGykbjVPTI=";
   };
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   pythonPath = with python3.pkgs; [
     cffi
@@ -31,27 +37,32 @@ stdenv.mkDerivation (finalAttrs: {
     six
   ];
 
-  nativeBuildInputs = [
-    cmake
-    cmocka
-    gperf
-    ninja
-    perl
-    pkg-config
-    python3
-  ]
-  ++ (with perl.pkgs; TaskFreecellSolverTesting.buildInputs ++ [
-    GamesSolitaireVerify
-    HTMLTemplate
-    Moo
-    PathTiny
-    StringShellQuote
-    TaskFreecellSolverTesting
-    TemplateToolkit
-    TextTemplate
-  ])
-  ++ [ python3.pkgs.wrapPython ]
-  ++ finalAttrs.pythonPath;
+  nativeBuildInputs =
+    [
+      cmake
+      cmocka
+      gperf
+      ninja
+      perl
+      pkg-config
+      python3
+    ]
+    ++ (
+      with perl.pkgs;
+      TaskFreecellSolverTesting.buildInputs
+      ++ [
+        GamesSolitaireVerify
+        HTMLTemplate
+        Moo
+        PathTiny
+        StringShellQuote
+        TaskFreecellSolverTesting
+        TemplateToolkit
+        TextTemplate
+      ]
+    )
+    ++ [ python3.pkgs.wrapPython ]
+    ++ finalAttrs.pythonPath;
 
   buildInputs = [
     gmp

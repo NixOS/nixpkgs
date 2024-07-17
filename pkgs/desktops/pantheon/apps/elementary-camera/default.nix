@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, glib
-, granite
-, gst_all_1
-, gtk3
-, libcanberra
-, libgee
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  glib,
+  granite,
+  gst_all_1,
+  gtk3,
+  libcanberra,
+  libgee,
+  libhandy,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,22 +38,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    granite
-    gtk3
-    libcanberra
-    libgee
-    libhandy
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    # gtkSupport needed for gtksink
-    # https://github.com/elementary/camera/issues/181
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      glib
+      granite
+      gtk3
+      libcanberra
+      libgee
+      libhandy
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      # gtkSupport needed for gtksink
+      # https://github.com/elementary/camera/issues/181
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

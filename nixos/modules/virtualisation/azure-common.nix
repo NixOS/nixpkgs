@@ -7,8 +7,19 @@ with lib;
   require = [ ./azure-agent.nix ];
   virtualisation.azure.agent.enable = true;
 
-  boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-  boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
+  boot.kernelParams = [
+    "console=ttyS0"
+    "earlyprintk=ttyS0"
+    "rootdelay=300"
+    "panic=1"
+    "boot.panic_on_fail"
+  ];
+  boot.initrd.kernelModules = [
+    "hv_vmbus"
+    "hv_netvsc"
+    "hv_utils"
+    "hv_storvsc"
+  ];
 
   # Generate a GRUB menu.
   boot.loader.grub.device = "/dev/sda";
@@ -37,7 +48,10 @@ with lib;
 
   # Always include cryptsetup so that NixOps can use it.
   # sg_scan is needed to finalize disk removal on older kernels
-  environment.systemPackages = [ pkgs.cryptsetup pkgs.sg3_utils ];
+  environment.systemPackages = [
+    pkgs.cryptsetup
+    pkgs.sg3_utils
+  ];
 
   networking.usePredictableInterfaceNames = false;
 

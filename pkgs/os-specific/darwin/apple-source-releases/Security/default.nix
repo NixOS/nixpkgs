@@ -1,11 +1,26 @@
-{ appleDerivation, xcbuildHook, xpc, dtrace, xnu }:
+{
+  appleDerivation,
+  xcbuildHook,
+  xpc,
+  dtrace,
+  xnu,
+}:
 
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook dtrace ];
+  nativeBuildInputs = [
+    xcbuildHook
+    dtrace
+  ];
   # buildInputs = [ Foundation xpc darling ];
-  buildInputs = [ xpc xnu ];
+  buildInputs = [
+    xpc
+    xnu
+  ];
 
-  xcbuildFlags = [ "-target" "Security_frameworks_osx" ];
+  xcbuildFlags = [
+    "-target"
+    "Security_frameworks_osx"
+  ];
 
   # env.NIX_CFLAGS_COMPILE = "-Wno-error -I${xnu}/include/libkern -DPRIVATE -I${xnu}/Library/Frameworks/System.framework/Headers";
 

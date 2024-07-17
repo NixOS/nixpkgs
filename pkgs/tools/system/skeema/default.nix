@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, testers, skeema }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  coreutils,
+  testers,
+  skeema,
+}:
 
 buildGoModule rec {
   pname = "skeema";
@@ -15,7 +22,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preCheck = ''
     # Fix tests expecting /usr/bin/printf and /bin/echo
@@ -47,9 +57,7 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = skeema;
-  };
+  passthru.tests.version = testers.testVersion { package = skeema; };
 
   meta = with lib; {
     description = "Declarative pure-SQL schema management for MySQL and MariaDB";

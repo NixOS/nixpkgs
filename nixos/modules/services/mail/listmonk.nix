@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -6,30 +11,40 @@ let
   tomlFormat = pkgs.formats.toml { };
   cfgFile = tomlFormat.generate "listmonk.toml" cfg.settings;
   # Escaping is done according to https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
-  setDatabaseOption = key: value:
+  setDatabaseOption =
+    key: value:
     "UPDATE settings SET value = '${
       lib.replaceStrings [ "'" ] [ "''" ] (builtins.toJSON value)
     }' WHERE key = '${key}';";
-  updateDatabaseConfigSQL = pkgs.writeText "update-database-config.sql"
-    (concatStringsSep "\n" (mapAttrsToList setDatabaseOption
-      (if (cfg.database.settings != null) then
-        cfg.database.settings
+  updateDatabaseConfigSQL = pkgs.writeText "update-database-config.sql" (
+    concatStringsSep "\n" (
+      mapAttrsToList setDatabaseOption (
+        if (cfg.database.settings != null) then cfg.database.settings else { }
+      )
+    )
+  );
+  updateDatabaseConfigScript = pkgs.writeShellScriptBin "update-database-config.sh" ''
+    ${
+      if cfg.database.mutableSettings then
+        ''
+          if [ ! -f /var/lib/listmonk/.db_settings_initialized ]; then
+            ${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL} ;
+            touch /var/lib/listmonk/.db_settings_initialized
+          fi
+        ''
       else
-        { })));
-  updateDatabaseConfigScript =
-    pkgs.writeShellScriptBin "update-database-config.sh" ''
-      ${if cfg.database.mutableSettings then ''
-        if [ ! -f /var/lib/listmonk/.db_settings_initialized ]; then
-          ${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL} ;
-          touch /var/lib/listmonk/.db_settings_initialized
-        fi
-      '' else
-        "${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL}"}
-    '';
+        "${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL}"
+    }
+  '';
 
   databaseSettingsOpts = with types; {
-    freeformType =
-      oneOf [ (listOf str) (listOf (attrsOf anything)) str int bool ];
+    freeformType = oneOf [
+      (listOf str)
+      (listOf (attrsOf anything))
+      str
+      int
+      bool
+    ];
 
     options = {
       "app.notify_emails" = mkOption {
@@ -40,16 +55,19 @@ let
 
       "privacy.exportable" = mkOption {
         type = listOf str;
-        default = [ "profile" "subscriptions" "campaign_views" "link_clicks" ];
-        description =
-          "List of fields which can be exported through an automatic export request";
+        default = [
+          "profile"
+          "subscriptions"
+          "campaign_views"
+          "link_clicks"
+        ];
+        description = "List of fields which can be exported through an automatic export request";
       };
 
       "privacy.domain_blocklist" = mkOption {
         type = listOf str;
         default = [ ];
-        description =
-          "E-mail addresses with these domains are disallowed from subscribing.";
+        description = "E-mail addresses with these domains are disallowed from subscribing.";
       };
 
       smtp = mkOption {
@@ -68,12 +86,15 @@ let
             };
             max_conns = mkOption {
               type = types.int;
-              description =
-                "Maximum number of simultaneous connections, defaults to 1";
+              description = "Maximum number of simultaneous connections, defaults to 1";
               default = 1;
             };
             tls_type = mkOption {
-              type = types.enum [ "none" "STARTTLS" "TLS" ];
+              type = types.enum [
+                "none"
+                "STARTTLS"
+                "TLS"
+              ];
               description = "Type of TLS authentication with the SMTP server";
             };
           };
@@ -84,8 +105,9 @@ let
 
       # TODO: refine this type based on the smtp one.
       "bounce.mailboxes" = mkOption {
-        type = listOf
-          (submodule { freeformType = with types; listOf (attrsOf anything); });
+        type = listOf (submodule {
+          freeformType = with types; listOf (attrsOf anything);
+        });
         default = [ ];
         description = "List of bounce mailboxes";
       };
@@ -93,12 +115,12 @@ let
       messengers = mkOption {
         type = listOf str;
         default = [ ];
-        description =
-          "List of messengers, see: <https://github.com/knadh/listmonk/blob/master/models/settings.go#L64-L74> for options.";
+        description = "List of messengers, see: <https://github.com/knadh/listmonk/blob/master/models/settings.go#L64-L74> for options.";
       };
     };
   };
-in {
+in
+{
   ###### interface
   options = {
     services.listmonk = {
@@ -107,15 +129,13 @@ in {
         createLocally = mkOption {
           type = types.bool;
           default = false;
-          description =
-            "Create the PostgreSQL database and database user locally.";
+          description = "Create the PostgreSQL database and database user locally.";
         };
 
         settings = mkOption {
           default = null;
           type = with types; nullOr (submodule databaseSettingsOpts);
-          description =
-            "Dynamic settings in the PostgreSQL database, set by a SQL script, see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.";
+          description = "Dynamic settings in the PostgreSQL database, set by a SQL script, see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.";
         };
         mutableSettings = mkOption {
           type = types.bool;
@@ -126,7 +146,7 @@ in {
           '';
         };
       };
-      package = mkPackageOption pkgs "listmonk" {};
+      package = mkPackageOption pkgs "listmonk" { };
       settings = mkOption {
         type = types.submodule { freeformType = tomlFormat.type; };
         description = ''
@@ -137,8 +157,7 @@ in {
       secretFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description =
-          "A file containing secrets as environment variables. See <https://listmonk.app/docs/configuration/#environment-variables> for details on supported values.";
+        description = "A file containing secrets as environment variables. See <https://listmonk.app/docs/configuration/#environment-variables> for details on supported values.";
       };
     };
   };
@@ -164,18 +183,19 @@ in {
     services.postgresql = mkIf cfg.database.createLocally {
       enable = true;
 
-      ensureUsers = [{
-        name = "listmonk";
-        ensureDBOwnership = true;
-      }];
+      ensureUsers = [
+        {
+          name = "listmonk";
+          ensureDBOwnership = true;
+        }
+      ];
 
       ensureDatabases = [ "listmonk" ];
     };
 
     systemd.services.listmonk = {
       description = "Listmonk - newsletter and mailing list manager";
-      after = [ "network.target" ]
-        ++ optional cfg.database.createLocally "postgresql.service";
+      after = [ "network.target" ] ++ optional cfg.database.createLocally "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";
@@ -204,7 +224,10 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         PrivateDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;
@@ -214,7 +237,11 @@ in {
         UMask = "0027";
         MemoryDenyWriteExecute = true;
         LockPersonality = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         ProtectKernelModules = true;
         PrivateUsers = true;
       };

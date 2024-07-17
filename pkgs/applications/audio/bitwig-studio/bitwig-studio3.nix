@@ -1,8 +1,25 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
-, gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pulseaudio
-, wrapGAppsHook3, makeWrapper }:
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  cairo,
+  dpkg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  xorg,
+  libglvnd,
+  libjack2,
+  ffmpeg,
+  libxkbcommon,
+  xdg-utils,
+  zlib,
+  pulseaudio,
+  wrapGAppsHook3,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
@@ -13,7 +30,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   unpackCmd = ''
     mkdir -p root
@@ -24,7 +45,24 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib
+    cairo
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libxcb
+    xcbutil
+    xcbutilwm
+    zlib
+    libXtst
+    libxkbcommon
+    pulseaudio
+    libjack2
+    libX11
+    libglvnd
+    libXcursor
+    stdenv.cc.cc.lib
   ];
 
   ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
@@ -69,6 +107,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitwig.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    maintainers = with maintainers; [
+      bfortz
+      michalrus
+      mrVanDalo
+    ];
   };
 }

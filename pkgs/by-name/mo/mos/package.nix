@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
@@ -13,9 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   sourceRoot = ".";
 
-  nativeBuildInputs = [
-    undmg
-  ];
+  nativeBuildInputs = [ undmg ];
 
   installPhase = ''
     runHook preInstall

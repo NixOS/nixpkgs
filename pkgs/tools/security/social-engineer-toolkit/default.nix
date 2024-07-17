@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, python3Packages, makeWrapper, metasploit }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
+  metasploit,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "social-engineer-toolkit";
@@ -20,9 +26,7 @@ python3Packages.buildPythonApplication rec {
       --replace "/opt/metasploit-framework" "${metasploit}/bin"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = with python3Packages; [
     pexpect

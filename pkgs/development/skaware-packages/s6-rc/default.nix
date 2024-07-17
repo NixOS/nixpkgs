@@ -1,4 +1,12 @@
-{ lib, stdenv, skawarePackages, targetPackages, skalibs, execline, s6 }:
+{
+  lib,
+  stdenv,
+  skawarePackages,
+  targetPackages,
+  skalibs,
+  execline,
+  s6,
+}:
 
 skawarePackages.buildPackage {
   pname = "s6-rc";
@@ -16,7 +24,13 @@ skawarePackages.buildPackage {
   description = "A service manager for s6-based systems";
   platforms = lib.platforms.unix;
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     "--libdir=\${lib}/lib"

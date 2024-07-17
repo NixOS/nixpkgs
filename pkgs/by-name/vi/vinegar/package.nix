@@ -1,18 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeBinaryWrapper
-, pkg-config
-, libGL
-, libxkbcommon
-, xorg
-, wayland
-, vulkan-headers
-, wine64Packages
-, fetchpatch
-, fetchFromGitLab
-, fetchurl
-,
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  pkg-config,
+  libGL,
+  libxkbcommon,
+  xorg,
+  wayland,
+  vulkan-headers,
+  wine64Packages,
+  fetchpatch,
+  fetchFromGitLab,
+  fetchurl,
 }:
 let
   stagingPatch = fetchFromGitLab {
@@ -31,8 +31,7 @@ let
       patchShebangs ./patches/gitapply.sh
       python3 ./staging/patchinstall.py --destdir="$PWD" --all
     '';
-    patches = (oldAttrs.patches or [ ])
-      ++ [
+    patches = (oldAttrs.patches or [ ]) ++ [
       (fetchurl {
         name = "childwindow.patch";
         hash = "sha256-u3mDvlbhQnfh2tUKb8jNJA0tTcLIaKVLfY8ktJmeRns=";
@@ -71,8 +70,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-pi9FjKYXH8cqTx2rTRCyT4+pOM5HnIKosEcmcpbuywQ=";
 
-  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
-  buildInputs = [ libGL libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXfixes wayland vulkan-headers wine ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libGL
+    libxkbcommon
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXfixes
+    wayland
+    vulkan-headers
+    wine
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -88,7 +99,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/vinegar \
-      --prefix PATH : ${lib.makeBinPath [wine]}
+      --prefix PATH : ${lib.makeBinPath [ wine ]}
   '';
 
   meta = with lib; {

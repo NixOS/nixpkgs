@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchurl
-, youtube-dl
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchurl,
+  youtube-dl,
 }:
 
 let
@@ -45,9 +46,7 @@ python3Packages.buildPythonApplication rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    youtube-dl
-  ];
+  propagatedBuildInputs = [ youtube-dl ];
 
   # package has no tests
   doCheck = false;

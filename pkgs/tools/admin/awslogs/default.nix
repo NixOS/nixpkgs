@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,9 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     jmespath
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -39,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_main_get_with_color"
   ];
 
-  pythonImportsCheck = [
-    "awslogs"
-  ];
+  pythonImportsCheck = [ "awslogs" ];
 
   meta = with lib; {
     description = "AWS CloudWatch logs for Humans";

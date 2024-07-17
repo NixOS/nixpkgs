@@ -1,4 +1,9 @@
-{ pkgs, stdenv, lib, nixosTests }:
+{
+  pkgs,
+  stdenv,
+  lib,
+  nixosTests,
+}:
 
 let
   nodePackages = import ./node-composition.nix {
@@ -47,7 +52,10 @@ nodePackages.n8n.override {
 
   meta = with lib; {
     description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
-    maintainers = with maintainers; [ freezeboy k900 ];
+    maintainers = with maintainers; [
+      freezeboy
+      k900
+    ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";
   };

@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, texinfo, help2man }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  texinfo,
+  help2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gengetopt";
@@ -18,7 +24,10 @@ stdenv.mkDerivation rec {
   # test suite is not thread safe
   enableParallelBuilding = false;
 
-  nativeBuildInputs = [ texinfo help2man ];
+  nativeBuildInputs = [
+    texinfo
+    help2man
+  ];
 
   #Fix, see #28255
   postPatch = ''
@@ -27,19 +36,17 @@ stdenv.mkDerivation rec {
       'set +o posix'
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    CXXFLAGS = "-std=c++14";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++14"; };
 
   meta = {
     description = "Command-line option parser generator";
     mainProgram = "gengetopt";
 
-    longDescription =
-      '' GNU Gengetopt program generates a C function that uses getopt_long
-         function to parse the command line options, to validate them and
-         fills a struct
-      '';
+    longDescription = ''
+      GNU Gengetopt program generates a C function that uses getopt_long
+              function to parse the command line options, to validate them and
+              fills a struct
+    '';
 
     homepage = "https://www.gnu.org/software/gengetopt/";
 

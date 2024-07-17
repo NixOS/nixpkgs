@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, jdk_headless, maven
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk_headless,
+  maven,
+  makeWrapper,
 }:
 
 let
   platform =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "mac"
-    else if stdenv.isWindows then "windows"
-    else throw "unsupported platform";
+    if stdenv.isLinux then
+      "linux"
+    else if stdenv.isDarwin then
+      "mac"
+    else if stdenv.isWindows then
+      "windows"
+    else
+      throw "unsupported platform";
 in
 maven.buildMavenPackage rec {
   pname = "java-language-server";
@@ -26,7 +34,10 @@ maven.buildMavenPackage rec {
   mvnParameters = "-DskipTests";
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk_headless makeWrapper ];
+  nativeBuildInputs = [
+    jdk_headless
+    makeWrapper
+  ];
 
   dontConfigure = true;
   preBuild = ''

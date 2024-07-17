@@ -1,12 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
-in {
-  meta.maintainers = with maintainers; [ mbaillie mfrw ];
+in
+{
+  meta.maintainers = with maintainers; [
+    mbaillie
+    mfrw
+  ];
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
@@ -29,7 +38,7 @@ in {
       description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
-    package = lib.mkPackageOption pkgs "tailscale" {};
+    package = lib.mkPackageOption pkgs "tailscale" { };
 
     openFirewall = mkOption {
       default = false;
@@ -38,7 +47,12 @@ in {
     };
 
     useRoutingFeatures = mkOption {
-      type = types.enum [ "none" "client" "server" "both" ];
+      type = types.enum [
+        "none"
+        "client"
+        "server"
+        "both"
+      ];
       default = "none";
       example = "server";
       description = ''
@@ -63,15 +77,15 @@ in {
     extraUpFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscale up`.";
       type = types.listOf types.str;
-      default = [];
-      example = ["--ssh"];
+      default = [ ];
+      example = [ "--ssh" ];
     };
 
     extraDaemonFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscaled`.";
       type = types.listOf types.str;
-      default = [];
-      example = ["--no-logs-no-support"];
+      default = [ ];
+      example = [ "--no-logs-no-support" ];
     };
   };
 
@@ -81,16 +95,14 @@ in {
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [
-        pkgs.procps     # for collecting running services (opt-in feature)
-        pkgs.getent     # for `getent` to look up user shells
-        pkgs.kmod       # required to pass tailscale's v6nat check
+        pkgs.procps # for collecting running services (opt-in feature)
+        pkgs.getent # for `getent` to look up user shells
+        pkgs.kmod # required to pass tailscale's v6nat check
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
-      ] ++ (lib.optionals (cfg.permitCertUid != null) [
-        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-      ]);
+      ] ++ (lib.optionals (cfg.permitCertUid != null) [ "TS_PERMIT_CERT_UID=${cfg.permitCertUid}" ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
@@ -106,8 +118,8 @@ in {
     };
 
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
-      after = ["tailscaled.service"];
-      wants = ["tailscaled.service"];
+      after = [ "tailscaled.service" ];
+      wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
@@ -127,7 +139,9 @@ in {
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
+    networking.firewall.checkReversePath = mkIf (
+      cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+    ) "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 

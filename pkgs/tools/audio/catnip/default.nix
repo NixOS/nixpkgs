@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, portaudio
-, testers
-, catnip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  portaudio,
+  testers,
+  catnip,
 }:
 
 buildGoModule rec {
@@ -20,13 +21,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-Hj453+5fhbUL6YMeupT5D6ydaEMe+ZQNgEYHtCUtTx4=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    portaudio
-  ];
+  buildInputs = [ portaudio ];
 
   ldflags = [
     "-s"
@@ -35,9 +32,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = catnip;
-    };
+    version = testers.testVersion { package = catnip; };
   };
 
   meta = with lib; {

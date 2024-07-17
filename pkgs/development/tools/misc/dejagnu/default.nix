@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, expect, makeWrapper }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  expect,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dejagnu";

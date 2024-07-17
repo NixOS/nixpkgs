@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "xcaddy";
@@ -31,6 +35,9 @@ buildGoModule rec {
     description = "Build Caddy with plugins";
     mainProgram = "xcaddy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tjni emilylange ];
+    maintainers = with maintainers; [
+      tjni
+      emilylange
+    ];
   };
 }

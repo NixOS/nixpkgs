@@ -1,4 +1,10 @@
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,8 +13,7 @@ let
 
   cfg = config.services.searx;
 
-  settingsFile = pkgs.writeText "settings.yml"
-    (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "settings.yml" (builtins.toJSON cfg.settings);
 
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
 
@@ -27,11 +32,19 @@ let
     done
   '';
 
-  settingType = with types; (oneOf
-    [ bool int float str
+  settingType =
+    with types;
+    (oneOf [
+      bool
+      int
+      float
+      str
       (listOf settingType)
       (attrsOf settingType)
-    ]) // { description = "JSON value"; };
+    ])
+    // {
+      description = "JSON value";
+    };
 
 in
 
@@ -39,8 +52,17 @@ in
 
   imports = [
     (mkRenamedOptionModule
-      [ "services" "searx" "configFile" ]
-      [ "services" "searx" "settingsFile" ])
+      [
+        "services"
+        "searx"
+        "configFile"
+      ]
+      [
+        "services"
+        "searx"
+        "settingsFile"
+      ]
+    )
   ];
 
   options = {
@@ -161,7 +183,9 @@ in
 
       uwsgiConfig = mkOption {
         type = options.services.uwsgi.instance.type;
-        default = { http = ":8080"; };
+        default = {
+          http = ":8080";
+        };
         example = literalExpression ''
           {
             disable-logging = true;
@@ -184,38 +208,47 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users.searx =
-      { description = "Searx daemon user";
-        group = "searx";
-        isSystemUser = true;
-      };
+    users.users.searx = {
+      description = "Searx daemon user";
+      group = "searx";
+      isSystemUser = true;
+    };
 
     users.groups.searx = { };
 
     systemd.services.searx-init = {
       description = "Initialise Searx settings";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "searx";
-        RuntimeDirectory = "searx";
-        RuntimeDirectoryMode = "750";
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      serviceConfig =
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "searx";
+          RuntimeDirectory = "searx";
+          RuntimeDirectoryMode = "750";
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = builtins.toPath cfg.environmentFile;
+        };
       script = generateConfig;
     };
 
     systemd.services.searx = mkIf (!cfg.runInUwsgi) {
       description = "Searx server, the meta search engine.";
-      wantedBy = [ "network.target" "multi-user.target" ];
+      wantedBy = [
+        "network.target"
+        "multi-user.target"
+      ];
       requires = [ "searx-init.service" ];
       after = [ "searx-init.service" ];
-      serviceConfig = {
-        User  = "searx";
-        Group = "searx";
-        ExecStart = lib.getExe cfg.package;
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      serviceConfig =
+        {
+          User = "searx";
+          Group = "searx";
+          ExecStart = lib.getExe cfg.package;
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = builtins.toPath cfg.environmentFile;
+        };
       environment = {
         SEARX_SETTINGS_PATH = cfg.settingsFile;
         SEARXNG_SETTINGS_PATH = cfg.settingsFile;
@@ -268,5 +301,8 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ rnhmjoj _999eagle ];
+  meta.maintainers = with maintainers; [
+    rnhmjoj
+    _999eagle
+  ];
 }

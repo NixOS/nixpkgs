@@ -1,15 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 stdenv.mkDerivation rec {
   pname = "moon-buggy";
   version = "1.0.51";
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   src = fetchurl {
     url = "http://m.seehuhn.de/programs/moon-buggy-${version}.tar.gz";

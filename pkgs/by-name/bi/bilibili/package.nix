@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, electron
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  electron,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,8 +42,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electron-based bilibili desktop client";
     homepage = "https://github.com/msojocs/bilibili-linux";
-    license = with licenses; [ unfree mit ];
-    maintainers = with maintainers; [ jedsek kashw2 ];
+    license = with licenses; [
+      unfree
+      mit
+    ];
+    maintainers = with maintainers; [
+      jedsek
+      kashw2
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "bilibili";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glibcLocales
-, installShellFiles
-, jq
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glibcLocales,
+  installShellFiles,
+  jq,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,11 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ (with python3.pkgs; [
-    setuptools-scm
-  ]);
+  nativeBuildInputs = [ installShellFiles ] ++ (with python3.pkgs; [ setuptools-scm ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -70,9 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_sorting_fields"
   ];
 
-  pythonImportsCheck = [
-    "todoman"
-  ];
+  pythonImportsCheck = [ "todoman" ];
 
   meta = {
     homepage = "https://github.com/pimutils/todoman";
@@ -88,9 +83,14 @@ python3.pkgs.buildPythonApplication rec {
       now.
       Unsupported fields may not be shown but are never deleted or altered.
     '';
-    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${builtins.replaceStrings ["."] ["-"] version}";
+    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ leenaars antonmosich ];
+    maintainers = with lib.maintainers; [
+      leenaars
+      antonmosich
+    ];
     mainProgram = "todo";
   };
 }

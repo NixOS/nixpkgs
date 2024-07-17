@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, SDL2
-, SDL2_ttf
-, SDL2_image
-, boost
-, libmpdclient
-, libwtk-sdl2
-, icu
-, libconfig
-, dejavu_fonts
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  boost,
+  libmpdclient,
+  libwtk-sdl2,
+  icu,
+  libconfig,
+  dejavu_fonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # https://stackoverflow.com/questions/53089494/configure-error-could-not-find-a-version-of-the-library
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-  ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   doCheck = true;
 

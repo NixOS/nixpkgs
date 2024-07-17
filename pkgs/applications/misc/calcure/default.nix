@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-rs3TCZjMndeh2N7e+U62baLs+XqWK1Mk7KVnypSnWPg=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     holidays
@@ -26,9 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     taskw
   ];
 
-  pythonImportsCheck = [
-    "calcure"
-  ];
+  pythonImportsCheck = [ "calcure" ];
 
   meta = with lib; {
     description = "Modern TUI calendar and task manager with minimal and customizable UI";

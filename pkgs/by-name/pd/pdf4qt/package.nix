@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, lcms
-, cmake
-, pkg-config
-, qt6
-, openjpeg
-, tbb_2021_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  lcms,
+  cmake,
+  pkg-config,
+  qt6,
+  openjpeg,
+  tbb_2021_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     tbb_2021_11
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "PDF4QT_INSTALL_TO_USR" false)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "PDF4QT_INSTALL_TO_USR" false) ];
 
   meta = {
     description = "Open source PDF editor";

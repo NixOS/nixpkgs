@@ -1,10 +1,11 @@
-{ buildDunePackage
-, dune-configurator
-, fetchFromGitHub
-, lib
-, SDL2
-, SDL2_mixer
-, tsdl
+{
+  buildDunePackage,
+  dune-configurator,
+  fetchFromGitHub,
+  lib,
+  SDL2,
+  SDL2_mixer,
+  tsdl,
 }:
 
 buildDunePackage rec {
@@ -20,9 +21,7 @@ buildDunePackage rec {
     hash = "sha256-HGtO5iO3lxuVa707MDIhw0pgDZLHt9qY+Rd24sFkags=";
   };
 
-  buildInputs = [
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     SDL2

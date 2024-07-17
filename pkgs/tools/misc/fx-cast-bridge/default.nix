@@ -1,4 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, avahi-compat, nodejs_18, python3 }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  avahi-compat,
+  nodejs_18,
+  python3,
+}:
 
 buildNpmPackage rec {
   pname = "fx-cast-bridge";

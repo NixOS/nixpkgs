@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   # No tests exist for mitm6.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mitm6"
-  ];
+  pythonImportsCheck = [ "mitm6" ];
 
   meta = {
     description = "DHCPv6 network spoofing application";

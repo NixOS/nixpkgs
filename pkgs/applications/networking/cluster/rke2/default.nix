@@ -1,4 +1,9 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "rke2";
@@ -34,7 +39,10 @@ buildGoModule rec {
     description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution.";
     changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm zygot ];
+    maintainers = with maintainers; [
+      zimbatm
+      zygot
+    ];
     mainProgram = "rke2";
     broken = stdenv.isDarwin;
   };

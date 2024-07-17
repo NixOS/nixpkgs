@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
   # backports-functools-lru-cache -> pytest -> wc-width -> backports-functools-lru-cache
   doCheck = false;
 
-  pythonImportsCheck = [
-    "backports.functools_lru_cache"
-  ];
+  pythonImportsCheck = [ "backports.functools_lru_cache" ];
 
   meta = {
     description = "Backport of functools.lru_cache";
@@ -35,4 +34,3 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 }
-

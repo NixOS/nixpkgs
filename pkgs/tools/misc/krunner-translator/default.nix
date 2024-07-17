@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, krunner
-, kconfigwidgets
-, ktextwidgets
-, kservice
-, ki18n
-, translate-shell
-, qtbase
-, qtdeclarative
-, qtlocation
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  krunner,
+  kconfigwidgets,
+  ktextwidgets,
+  kservice,
+  ki18n,
+  translate-shell,
+  qtbase,
+  qtdeclarative,
+  qtlocation,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "8MusGvNhTxa8Sm8WiSwRaVIfZOeXmgcO4T6H9LqFGLs=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   dontWrapQtApps = true;
 

@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, nodejs-slim, fetchzip, testers }:
+{
+  lib,
+  stdenvNoCC,
+  nodejs-slim,
+  fetchzip,
+  testers,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
@@ -21,9 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "Unleash the power of Twilio from your command prompt";

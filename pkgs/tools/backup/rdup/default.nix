@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, glib, pcre }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  glib,
+  pcre,
+}:
 
 stdenv.mkDerivation {
   pname = "rdup";
@@ -11,14 +19,20 @@ stdenv.mkDerivation {
     sha256 = "0bzyv6qmnivxnv9nw7lnfn46k0m1dlxcjj53zcva6v8y8084l1iw";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib pcre ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    glib
+    pcre
+  ];
 
   meta = {
     description = "The only backup program that doesn't make backups";
-    homepage    = "https://github.com/miekg/rdup";
-    license    = lib.licenses.gpl3;
-    platforms   = lib.platforms.linux;
+    homepage = "https://github.com/miekg/rdup";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

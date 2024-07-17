@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.alvr;
@@ -24,8 +29,14 @@ in
     environment.systemPackages = [ cfg.package ];
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9943 9944 ];
-      allowedUDPPorts = [ 9943 9944 ];
+      allowedTCPPorts = [
+        9943
+        9944
+      ];
+      allowedUDPPorts = [
+        9943
+        9944
+      ];
     };
   };
 

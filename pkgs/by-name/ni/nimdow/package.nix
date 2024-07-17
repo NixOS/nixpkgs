@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, nixosTests, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
@@ -14,9 +20,7 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  nimFlags = [
-    "--deepcopy:on"
-  ];
+  nimFlags = [ "--deepcopy:on" ];
 
   postInstall = ''
     install -D config.default.toml $out/share/nimdow/config.default.toml
@@ -35,8 +39,10 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta = with lib;
-    finalAttrs.src.meta // {
+  meta =
+    with lib;
+    finalAttrs.src.meta
+    // {
       description = "Nim based tiling window manager";
       platforms = platforms.linux;
       license = [ licenses.gpl2 ];

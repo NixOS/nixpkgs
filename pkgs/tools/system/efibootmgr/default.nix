@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, efivar, popt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  efivar,
+  popt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
@@ -13,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ efivar popt ];
+  buildInputs = [
+    efivar
+    popt
+  ];
 
   makeFlags = [
     "EFIDIR=nixos"

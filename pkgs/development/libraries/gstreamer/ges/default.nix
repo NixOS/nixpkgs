@@ -1,19 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, bash-completion
-, gst-plugins-base
-, gst-plugins-bad
-, gst-devtools
-, libxml2
-, flex
-, gettext
-, gobject-introspection
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  bash-completion,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-devtools,
+  libxml2,
+  flex,
+  gettext,
+  gobject-introspection,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +41,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     python3
     flex
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  ] ++ lib.optionals enableDocumentation [ hotdoc ];
 
   buildInputs = [
     bash-completion
@@ -54,9 +55,7 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = [ (lib.mesonEnable "doc" enableDocumentation) ];
 
   postPatch = ''
     patchShebangs \

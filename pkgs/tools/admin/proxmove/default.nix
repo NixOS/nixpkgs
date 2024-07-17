@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-8xzsmQsogoMrdpf8+mVZRWPGQt9BO0dBT0aKt7ygUe4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    proxmoxer
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ proxmoxer ];
 
   preBuild = ''
     rm -R assets

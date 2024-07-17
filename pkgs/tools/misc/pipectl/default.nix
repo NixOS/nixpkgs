@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, scdoc
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +17,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ixch5iyeIjx+hSvln8L0N8pXG7ordpsFVroqZPUzAG0=";
   };
 
-  nativeBuildInputs = [ cmake scdoc ];
-
-  cmakeFlags = [
-    "-DINSTALL_DOCUMENTATION=ON"
+  nativeBuildInputs = [
+    cmake
+    scdoc
   ];
+
+  cmakeFlags = [ "-DINSTALL_DOCUMENTATION=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/pipectl";

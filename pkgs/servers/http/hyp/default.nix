@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "hyp-server";
@@ -12,9 +16,12 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     description = "Hyperminimal https server";
     mainProgram = "hyp";
-    homepage    = "https://github.com/rnhmjoj/hyp";
-    license     = with licenses; [gpl3Plus mit];
+    homepage = "https://github.com/rnhmjoj/hyp";
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
     maintainers = with maintainers; [ rnhmjoj ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

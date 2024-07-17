@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, php
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {

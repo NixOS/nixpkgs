@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkgui
-, gsettings-qt
-, gtk3
-, kconfig
-, kwindowsystem
-, kglobalaccel
-, xorg
-, iconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  dtkgui,
+  gsettings-qt,
+  gtk3,
+  kconfig,
+  kwindowsystem,
+  kglobalaccel,
+  xorg,
+  iconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-H9TvWF6Q0lX4GF4mQ71E3SUqWbhH7dzHIlScovbN7lM=";
   };
 
-  patches = [
-    ./fix-custom-wallpapers-path.diff
-  ];
+  patches = [ ./fix-custom-wallpapers-path.diff ];
 
   postPatch = ''
     substituteInPlace src/service/impl/appearancemanager.cpp \

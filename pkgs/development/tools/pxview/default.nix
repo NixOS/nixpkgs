@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, perlPackages, pxlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  perlPackages,
+  pxlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pxview";
@@ -8,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1kpdqs6lvnyj02v9fbz1s427yqhgrxp7zw63rzfgiwd4iqp75139";
   };
 
-  buildInputs = [ pxlib perl ] ++ (with perlPackages; [ libxml_perl ]);
+  buildInputs = [
+    pxlib
+    perl
+  ] ++ (with perlPackages; [ libxml_perl ]);
   nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [ "--with-pxlib=${pxlib.out}" ];

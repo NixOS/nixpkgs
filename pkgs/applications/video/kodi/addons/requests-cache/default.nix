@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+}:
 buildKodiAddon rec {
   pname = "requests-cache";
   namespace = "script.module.requests-cache";
@@ -9,15 +16,11 @@ buildKodiAddon rec {
     sha256 = "sha256-6M/v/ghS2TnSZhG8bREjxfEfcfLOmvA6hgsa7JUk9Dk=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.requests-cache";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.requests-cache"; };
   };
 
   meta = with lib; {

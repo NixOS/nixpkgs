@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   name = "pixel-code";
@@ -7,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/qwerasd205/PixelCode/releases/download/v${version}/otf.zip";
     hash = "sha256-GNYEnv0bIWz5d8821N46FD2NBNBf3Dd7DNqjSdJKDoE=";
-    stripRoot=false;
+    stripRoot = false;
   };
 
   installPhase = ''

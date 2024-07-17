@@ -1,19 +1,29 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.boot.initrd.clevis;
   systemd = config.boot.initrd.systemd;
-  supportedFs = [ "zfs" "bcachefs" ];
+  supportedFs = [
+    "zfs"
+    "bcachefs"
+  ];
 in
 {
-  meta.maintainers = with maintainers; [ julienmalka camillemndn ];
+  meta.maintainers = with maintainers; [
+    julienmalka
+    camillemndn
+  ];
   meta.doc = ./clevis.md;
 
   options = {
     boot.initrd.clevis.enable = mkEnableOption "Clevis in initrd";
-
 
     boot.initrd.clevis.package = mkOption {
       type = types.package;
@@ -25,12 +35,14 @@ in
     boot.initrd.clevis.devices = mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
-      type = types.attrsOf (types.submodule ({
-        options.secretFile = mkOption {
-          description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
-          type = types.path;
-        };
-      }));
+      type = types.attrsOf (
+        types.submodule ({
+          options.secretFile = mkOption {
+            description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
+            type = types.path;
+          };
+        })
+      );
     };
 
     boot.initrd.clevis.useTang = mkOption {
@@ -45,20 +57,28 @@ in
 
     # Implementation of clevis unlocking for the supported filesystems are located directly in the respective modules.
 
-
-    assertions = (attrValues (mapAttrs
-      (device: _: {
-        assertion = (any (fs: fs.device == device && (elem fs.fsType supportedFs) || (fs.fsType == "zfs" && hasPrefix "${device}/" fs.device)) config.system.build.fileSystems) || (hasAttr device config.boot.initrd.luks.devices);
-        message = ''
-          No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
-      })
-      cfg.devices));
-
+    assertions = (
+      attrValues (
+        mapAttrs (device: _: {
+          assertion =
+            (any (
+              fs:
+              fs.device == device && (elem fs.fsType supportedFs)
+              || (fs.fsType == "zfs" && hasPrefix "${device}/" fs.device)
+            ) config.system.build.fileSystems)
+            || (hasAttr device config.boot.initrd.luks.devices);
+          message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
+        }) cfg.devices
+      )
+    );
 
     warnings =
-      if cfg.useTang && !config.boot.initrd.network.enable && !config.boot.initrd.systemd.network.enable
-      then [ "In order to use a Tang pinned secret you must configure networking in initrd" ]
-      else [ ];
+      if
+        cfg.useTang && !config.boot.initrd.network.enable && !config.boot.initrd.systemd.network.enable
+      then
+        [ "In order to use a Tang pinned secret you must configure networking in initrd" ]
+      else
+        [ ];
 
     boot.initrd = {
       extraUtilsCommands = mkIf (!systemd.enable) ''
@@ -84,7 +104,9 @@ in
         sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'
       '';
 
-      secrets = lib.mapAttrs' (name: value: nameValuePair "/etc/clevis/${name}.jwe" value.secretFile) cfg.devices;
+      secrets = lib.mapAttrs' (
+        name: value: nameValuePair "/etc/clevis/${name}.jwe" value.secretFile
+      ) cfg.devices;
 
       systemd = {
         extraBin = mkIf systemd.enable {

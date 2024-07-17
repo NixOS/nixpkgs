@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, curl
-, openssl
-, nix-update-script
-, testers
-, snac2
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  curl,
+  openssl,
+  nix-update-script,
+  testers,
+  snac2,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +21,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-2dDIbY6IaB53BbtNtzyOrigjzkGk7By2N2zZSuQhDAs=";
   };
 
-  buildInputs = [ curl openssl ];
+  buildInputs = [
+    curl
+    openssl
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-Dst_mtim=st_mtimespec"
-    "-Dst_ctim=st_ctimespec"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-Dst_mtim=st_mtimespec"
+      "-Dst_ctim=st_ctimespec"
+    ]
+  );
 
   passthru = {
     tests.version = testers.testVersion {

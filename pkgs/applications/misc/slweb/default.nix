@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, redo-apenwarr
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  redo-apenwarr,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "A static website generator which aims at being simplistic";

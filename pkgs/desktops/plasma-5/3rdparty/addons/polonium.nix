@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, plasma-framework
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  plasma-framework,
 }:
 
 # how to update:
@@ -26,7 +27,10 @@ buildNpmPackage rec {
 
   # the installer does a bunch of stuff that fails in our sandbox, so just build here and then we
   # manually do the install
-  buildFlags = [ "res" "src" ];
+  buildFlags = [
+    "res"
+    "src"
+  ];
 
   nativeBuildInputs = [ plasma-framework ];
 
@@ -45,7 +49,10 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg kotatsuyaki ];
+    maintainers = with maintainers; [
+      peterhoeg
+      kotatsuyaki
+    ];
     inherit (plasma-framework.meta) platforms;
   };
 }

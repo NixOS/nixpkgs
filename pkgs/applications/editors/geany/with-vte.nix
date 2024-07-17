@@ -1,14 +1,19 @@
-{ symlinkJoin
-, makeWrapper
-, geany
-, vte
+{
+  symlinkJoin,
+  makeWrapper,
+  geany,
+  vte,
 }:
 
 symlinkJoin {
   name = "geany-with-vte-${geany.version}";
 
   # TODO: add geany-plugins
-  paths = with geany; [ out doc man ];
+  paths = with geany; [
+    out
+    doc
+    man
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, go
-, pkg-config
-, libgudev
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  go,
+  pkg-config,
+  libgudev,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libgudev
-  ];
+  buildInputs = [ libgudev ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, darwin, buildDunePackage, dune-configurator
-, lapack, blas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  darwin,
+  buildDunePackage,
+  dune-configurator,
+  lapack,
+  blas,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -18,9 +25,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ lapack blas ] ++
-    lib.optionals stdenv.isDarwin
-      [ darwin.apple_sdk.frameworks.Accelerate ];
+  propagatedBuildInputs = [
+    lapack
+    blas
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {
     homepage = "https://mmottl.github.io/lacaml";

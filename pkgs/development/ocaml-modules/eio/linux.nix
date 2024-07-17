@@ -1,8 +1,9 @@
-{ buildDunePackage
-, eio
-, fmt
-, logs
-, uring
+{
+  buildDunePackage,
+  eio,
+  fmt,
+  logs,
+  uring,
 }:
 
 buildDunePackage {

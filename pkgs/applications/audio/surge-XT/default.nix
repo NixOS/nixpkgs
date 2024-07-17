@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, freetype
-, libjack2
-, lv2
-, libX11
-, libXcursor
-, libXext
-, libXinerama
-, libXrandr
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  libjack2,
+  lv2,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,9 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DSURGE_BUILD_LV2=TRUE"
-  ];
+  cmakeFlags = [ "-DSURGE_BUILD_LV2=TRUE" ];
 
   CXXFLAGS = [
     # GCC 13: error: 'uint32_t' has not been declared
@@ -55,13 +54,15 @@ stdenv.mkDerivation rec {
   ];
 
   # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
+  NIX_LDFLAGS = (
+    toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ]
+  );
 
   # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
   postPatch = ''
@@ -73,6 +74,9 @@ stdenv.mkDerivation rec {
     homepage = "https://surge-synthesizer.github.io";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon orivej ];
+    maintainers = with maintainers; [
+      magnetophon
+      orivej
+    ];
   };
 }

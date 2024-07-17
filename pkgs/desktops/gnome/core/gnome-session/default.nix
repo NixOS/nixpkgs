@@ -1,30 +1,31 @@
-{ fetchurl
-, lib
-, stdenv
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, json-glib
-, libICE
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_412
-, python3
-, libxslt
-, gettext
-, makeWrapper
-, systemd
-, xorg
-, libepoxy
-, bash
-, gnome-session-ctl
+{
+  fetchurl,
+  lib,
+  stdenv,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  json-glib,
+  libICE,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  python3,
+  libxslt,
+  gettext,
+  makeWrapper,
+  systemd,
+  xorg,
+  libepoxy,
+  bash,
+  gnome-session-ctl,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
   # Also bump ./ctl.nix when bumping major version.
   version = "46.0";
 
-  outputs = [ "out" "sessions" ];
+  outputs = [
+    "out"
+    "sessions"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";

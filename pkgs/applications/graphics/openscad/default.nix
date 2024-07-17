@@ -1,37 +1,41 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, qtbase
-, qtmultimedia
-, qscintilla
-, bison
-, flex
-, eigen
-, boost
-, libGLU, libGL
-, glew
-, opencsg
-, cgal_4
-, mpfr
-, gmp
-, glib
-, pkg-config
-, harfbuzz
-, gettext
-, freetype
-, fontconfig
-, double-conversion
-, lib3mf
-, libzip
-, mkDerivation
-, qtmacextras
-, qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
-, wayland
-, wayland-protocols
-, wrapGAppsHook3
-, qtwayland
-, cairo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qtbase,
+  qtmultimedia,
+  qscintilla,
+  bison,
+  flex,
+  eigen,
+  boost,
+  libGLU,
+  libGL,
+  glew,
+  opencsg,
+  cgal_4,
+  mpfr,
+  gmp,
+  glib,
+  pkg-config,
+  harfbuzz,
+  gettext,
+  freetype,
+  fontconfig,
+  double-conversion,
+  lib3mf,
+  libzip,
+  mkDerivation,
+  qtmacextras,
+  qmake,
+  spacenavSupport ? stdenv.isLinux,
+  libspnav,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  qtwayland,
+  cairo,
 }:
 
 mkDerivation rec {
@@ -58,19 +62,49 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bison flex pkg-config gettext qmake wrapGAppsHook3];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+    gettext
+    qmake
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [
-    eigen boost glew opencsg cgal_4 mpfr gmp glib
-    harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla cairo
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
+  buildInputs =
+    [
+      eigen
+      boost
+      glew
+      opencsg
+      cgal_4
+      mpfr
+      gmp
+      glib
+      harfbuzz
+      lib3mf
+      libzip
+      double-conversion
+      freetype
+      fontconfig
+      qtbase
+      qtmultimedia
+      qscintilla
+      cairo
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libGLU
+      libGL
+      wayland
+      wayland-protocols
+      qtwayland
+    ]
     ++ lib.optional stdenv.isDarwin qtmacextras
-    ++ lib.optional spacenavSupport libspnav
-  ;
+    ++ lib.optional spacenavSupport libspnav;
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
-    lib.optionals spacenavSupport [
+  qmakeFlags =
+    [ "VERSION=${version}" ]
+    ++ lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
@@ -109,7 +143,11 @@ mkDerivation rec {
     homepage = "https://openscad.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      raskin
+      gebner
+    ];
     mainProgram = "openscad";
   };
 }

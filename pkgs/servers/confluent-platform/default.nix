@@ -1,11 +1,11 @@
 {
-  bash
-, fetchurl
-, gnused
-, jre
-, lib
-, makeBinaryWrapper
-, stdenv
+  bash,
+  fetchurl,
+  gnused,
+  jre,
+  lib,
+  makeBinaryWrapper,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bHT8VWSUqxiM/g7opRXZmEOAs2d61dWBTtuwwlzPgBc=";
   };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     bash
@@ -56,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Confluent event streaming platform based on Apache Kafka";
     homepage = "https://www.confluent.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ zoedsoupe autophagy ];
+    maintainers = with lib.maintainers; [
+      zoedsoupe
+      autophagy
+    ];
     platforms = lib.platforms.unix;
   };
 })

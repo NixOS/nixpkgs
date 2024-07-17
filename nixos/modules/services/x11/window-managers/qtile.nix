@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -17,36 +22,39 @@ in
       default = null;
       example = literalExpression "./your_config.py";
       description = ''
-          Path to the qtile configuration file.
-          If null, $XDG_CONFIG_HOME/qtile/config.py will be used.
+        Path to the qtile configuration file.
+        If null, $XDG_CONFIG_HOME/qtile/config.py will be used.
       '';
     };
 
     backend = mkOption {
-      type = types.enum [ "x11" "wayland" ];
+      type = types.enum [
+        "x11"
+        "wayland"
+      ];
       default = "x11";
       description = ''
-          Backend to use in qtile: `x11` or `wayland`.
+        Backend to use in qtile: `x11` or `wayland`.
       '';
     };
 
     extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
-        default = _: [];
-        defaultText = literalExpression ''
-          python3Packages: with python3Packages; [];
-        '';
-        description = ''
-          Extra Python packages available to Qtile.
-          An example would be to include `python3Packages.qtile-extras`
-          for additional unofficial widgets.
-        '';
-        example = literalExpression ''
-          python3Packages: with python3Packages; [
-            qtile-extras
-          ];
-        '';
-      };
+      type = types.functionTo (types.listOf types.package);
+      default = _: [ ];
+      defaultText = literalExpression ''
+        python3Packages: with python3Packages; [];
+      '';
+      description = ''
+        Extra Python packages available to Qtile.
+        An example would be to include `python3Packages.qtile-extras`
+        for additional unofficial widgets.
+      '';
+      example = literalExpression ''
+        python3Packages: with python3Packages; [
+          qtile-extras
+        ];
+      '';
+    };
 
     finalPackage = mkOption {
       type = types.package;
@@ -57,19 +65,20 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.qtile.finalPackage = pkgs.python3.withPackages (p:
-      [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p)
+    services.xserver.windowManager.qtile.finalPackage = pkgs.python3.withPackages (
+      p: [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p)
     );
 
-    services.xserver.windowManager.session = [{
-      name = "qtile";
-      start = ''
-        ${cfg.finalPackage}/bin/qtile start -b ${cfg.backend} \
-        ${optionalString (cfg.configFile != null)
-        "--config \"${cfg.configFile}\""} &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.windowManager.session = [
+      {
+        name = "qtile";
+        start = ''
+          ${cfg.finalPackage}/bin/qtile start -b ${cfg.backend} \
+          ${optionalString (cfg.configFile != null) "--config \"${cfg.configFile}\""} &
+          waitPID=$!
+        '';
+      }
+    ];
 
     environment.systemPackages = [
       # pkgs.qtile is currently a buildenv of qtile and its dependencies.

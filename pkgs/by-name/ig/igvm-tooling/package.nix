@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, which
-, acpica-tools
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  which,
+  acpica-tools,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -54,18 +55,21 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ acpica-tools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
-    ecdsa
-    cstruct
-    pyelftools
-    pytest
-    cached-property
-    frozendict
-  ] ++ [
-    acpica-tools
-    which
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      setuptools
+      ecdsa
+      cstruct
+      pyelftools
+      pytest
+      cached-property
+      frozendict
+    ]
+    ++ [
+      acpica-tools
+      which
+    ];
 
   postInstall = ''
     mkdir -p $out/share/igvm-tooling/acpi/acpi-clh

@@ -1,6 +1,7 @@
-{ lib
-, trivialBuild
-, fetchurl
+{
+  lib,
+  trivialBuild,
+  fetchurl,
 }:
 
 trivialBuild rec {

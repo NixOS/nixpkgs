@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
-, graphviz, doxygen
-, ocamlPackages, ltl2ba, coq, why3
-, gdk-pixbuf, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeWrapper,
+  writeText,
+  graphviz,
+  doxygen,
+  ocamlPackages,
+  ltl2ba,
+  coq,
+  why3,
+  gdk-pixbuf,
+  wrapGAppsHook3,
 }:
 
 let
@@ -38,10 +49,10 @@ in
 stdenv.mkDerivation rec {
   pname = "frama-c";
   version = "28.1";
-  slang   = "Nickel";
+  slang = "Nickel";
 
   src = fetchurl {
-    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
     hash = "sha256-AiC8dDt9okaM65JvMx7cfd+qfGA7pHli3j4zyOHj9ZM=";
   };
 
@@ -53,13 +64,36 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ wrapGAppsHook3 ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
+  nativeBuildInputs =
+    [ wrapGAppsHook3 ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      dune_3
+      menhir
+    ]);
 
   buildInputs = with ocamlPackages; [
-    dune-site dune-configurator
-    ltl2ba ocamlgraph yojson menhirLib camlzip
-    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
-    ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
+    dune-site
+    dune-configurator
+    ltl2ba
+    ocamlgraph
+    yojson
+    menhirLib
+    camlzip
+    lablgtk3
+    lablgtk3-sourceview3
+    coq
+    graphviz
+    zarith
+    apron
+    why3
+    mlgmpidl
+    doxygen
+    ppx_deriving
+    ppx_import
+    ppx_deriving_yaml
+    ppx_deriving_yojson
     gdk-pixbuf
     unionFind
   ];
@@ -73,7 +107,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
+    gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins
@@ -97,12 +131,14 @@ stdenv.mkDerivation rec {
     addEnvHooks "$targetOffset" addFramaCPath
   '';
 
-
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = "http://frama-c.com/";
-    license     = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = lib.platforms.unix;
+    homepage = "http://frama-c.com/";
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      amiddelk
+    ];
+    platforms = lib.platforms.unix;
   };
 }

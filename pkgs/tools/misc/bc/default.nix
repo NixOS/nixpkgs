@@ -1,5 +1,13 @@
-{ lib, stdenv, autoreconfHook, buildPackages
-, fetchurl, flex, readline, ed, texinfo
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  fetchurl,
+  flex,
+  readline,
+  ed,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +26,18 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     # Tools
-    autoreconfHook ed flex texinfo
+    autoreconfHook
+    ed
+    flex
+    texinfo
     # Libraries for build
-    buildPackages.readline buildPackages.ncurses
+    buildPackages.readline
+    buildPackages.ncurses
   ];
-  buildInputs = [ readline flex ];
+  buildInputs = [
+    readline
+    flex
+  ];
 
   doCheck = true; # not cross
 

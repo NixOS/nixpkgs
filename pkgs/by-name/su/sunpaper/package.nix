@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, sunwait
-, wallutils
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  sunwait,
+  wallutils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -49,7 +50,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hexive/sunpaper";
     license = lib.licenses.asl20;
     mainProgram = "sunpaper";
-    maintainers = with lib.maintainers; [ eclairevoyant jevy ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      jevy
+    ];
     platforms = lib.platforms.linux;
   };
 })

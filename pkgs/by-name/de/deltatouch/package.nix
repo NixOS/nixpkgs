@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, fetchpatch
-, cmake
-, intltool
-, libdeltachat
-, lomiri
-, qt5
-, quirc
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchpatch,
+  cmake,
+  intltool,
+  libdeltachat,
+  lomiri,
+  qt5,
+  quirc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tqcQmFmF8Z9smVMfaXOmXQ3Uw41bUcU4iUi8fxBlg8U=";
     fetchSubmodules = true;
   };
-
 
   patches = [
     (fetchpatch {

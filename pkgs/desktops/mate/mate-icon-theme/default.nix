@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, iconnamingutils
-, librsvg
-, gtk3
-, hicolor-icon-theme
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  iconnamingutils,
+  librsvg,
+  gtk3,
+  hicolor-icon-theme,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +26,9 @@ stdenv.mkDerivation rec {
     iconnamingutils
   ];
 
-  buildInputs = [
-    librsvg
-  ];
+  buildInputs = [ librsvg ];
 
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

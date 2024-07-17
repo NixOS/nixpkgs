@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, perl
-, po4a
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  perl,
+  po4a,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://packages.debian.org/sid/debianutils";
@@ -39,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       The specific utilities included are: add-shell installkernel ischroot
       remove-shell run-parts savelog tempfile which
     '';
-    license = with lib.licenses; [ gpl2Plus publicDomain smail ];
+    license = with lib.licenses; [
+      gpl2Plus
+      publicDomain
+      smail
+    ];
     mainProgram = "ischroot";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,16 +19,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9fv8Z9AE9GV/Bq+iAsxUkD/CS25/kOBKKS4SAke/tFk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "A jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
     changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda siraben ];
+    maintainers = with maintainers; [
+      figsoda
+      siraben
+    ];
     mainProgram = "jaq";
   };
 }

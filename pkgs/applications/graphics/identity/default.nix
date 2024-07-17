@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  nix-update-script,
 
-, appstream
-, blueprint-compiler
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
+  appstream,
+  blueprint-compiler,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
 
-, dav1d
-, gst_all_1
-, gtk4
-, libadwaita
-, libwebp
+  dav1d,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {

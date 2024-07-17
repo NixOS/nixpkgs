@@ -1,6 +1,11 @@
 # This module defines global configuration for Haka.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,12 +15,14 @@ let
 
   haka = cfg.package;
 
-  hakaConf = pkgs.writeText "haka.conf"
-  ''
+  hakaConf = pkgs.writeText "haka.conf" ''
     [general]
-    configuration = ${if lib.strings.hasPrefix "/" cfg.configFile
-      then "${cfg.configFile}"
-      else "${haka}/share/haka/sample/${cfg.configFile}"}
+    configuration = ${
+      if lib.strings.hasPrefix "/" cfg.configFile then
+        "${cfg.configFile}"
+      else
+        "${haka}/share/haka/sample/${cfg.configFile}"
+    }
     ${optionalString (builtins.lessThan 0 cfg.threads) "thread = ${cfg.threads}"}
 
     [packet]
@@ -99,14 +106,14 @@ in
       nfqueue = mkEnableOption "nfqueue";
 
       dump.enable = mkEnableOption "dump";
-      dump.input  = mkOption {
+      dump.input = mkOption {
         default = "/tmp/input.pcap";
         example = "/path/to/file.pcap";
         type = types.path;
         description = "Path to file where incoming packets are dumped";
       };
 
-      dump.output  = mkOption {
+      dump.output = mkOption {
         default = "/tmp/output.pcap";
         example = "/path/to/file.pcap";
         type = types.path;
@@ -115,22 +122,24 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.pcap != cfg.nfqueue;
+      {
+        assertion = cfg.pcap != cfg.nfqueue;
         message = "either pcap or nfqueue can be enabled, not both.";
       }
-      { assertion = cfg.nfqueue -> !dump.enable;
+      {
+        assertion = cfg.nfqueue -> !dump.enable;
         message = "dump can only be used with nfqueue.";
       }
-      { assertion = cfg.interfaces != [];
+      {
+        assertion = cfg.interfaces != [ ];
         message = "at least one interface must be specified.";
-      }];
-
+      }
+    ];
 
     environment.systemPackages = [ haka ];
 

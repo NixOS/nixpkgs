@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -24,7 +29,7 @@ in
         ExecStart = ''
           ${pkgs.sundtek}/bin/mediasrv -d -v -p ${pkgs.sundtek}/bin ;\
           ${pkgs.sundtek}/bin/mediaclient --start --wait-for-devices
-          '';
+        '';
         ExecStop = "${pkgs.sundtek}/bin/mediaclient --shutdown";
         RemainAfterExit = true;
       };

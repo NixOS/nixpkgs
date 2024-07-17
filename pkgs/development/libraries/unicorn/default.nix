@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, IOKit
-, cctools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  IOKit,
+  cctools,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,13 +22,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ cctools ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    IOKit
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
@@ -44,6 +41,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.unicorn-engine.org";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice luc65r ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      luc65r
+    ];
   };
 }

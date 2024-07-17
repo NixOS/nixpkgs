@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
   let
     track = pkgs.fetchurl {
       # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
@@ -17,42 +18,56 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     defaultMpdCfg = with defaultCfg; {
-      inherit dataDir musicDirectory user group;
+      inherit
+        dataDir
+        musicDirectory
+        user
+        group
+        ;
       enable = true;
     };
 
-    musicService = { user, group, musicDirectory }: {
-      description = "Sets up the music file(s) for MPD to use.";
-      requires = [ "mpd.service" ];
-      after = [ "mpd.service" ];
-      wantedBy = [ "default.target" ];
-      script = ''
-        cp ${track} ${musicDirectory}
-      '';
-      serviceConfig = {
-        User = user;
-        Group = group;
+    musicService =
+      {
+        user,
+        group,
+        musicDirectory,
+      }:
+      {
+        description = "Sets up the music file(s) for MPD to use.";
+        requires = [ "mpd.service" ];
+        after = [ "mpd.service" ];
+        wantedBy = [ "default.target" ];
+        script = ''
+          cp ${track} ${musicDirectory}
+        '';
+        serviceConfig = {
+          User = user;
+          Group = group;
+        };
       };
-    };
 
-    mkServer = { mpd, musicService, }:
-      { boot.kernelModules = [ "snd-dummy" ];
+    mkServer =
+      { mpd, musicService }:
+      {
+        boot.kernelModules = [ "snd-dummy" ];
         sound.enable = true;
         services.mpd = mpd;
         systemd.services.musicService = musicService;
       };
-  in {
+  in
+  {
     name = "mpd";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ emmanuelrosa ];
     };
 
-  nodes =
-    { client =
-      { ... }: { };
+    nodes = {
+      client = { ... }: { };
 
       serverALSA =
-        { ... }: lib.mkMerge [
+        { ... }:
+        lib.mkMerge [
           (mkServer {
             mpd = defaultMpdCfg // {
               network.listenAddress = "any";
@@ -70,7 +85,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         ];
 
       serverPulseAudio =
-        { ... }: lib.mkMerge [
+        { ... }:
+        lib.mkMerge [
           (mkServer {
             mpd = defaultMpdCfg // {
               extraConfig = ''
@@ -95,40 +111,41 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         ];
     };
 
-  testScript = ''
-    mpc = "${pkgs.mpc-cli}/bin/mpc --wait"
+    testScript = ''
+      mpc = "${pkgs.mpc-cli}/bin/mpc --wait"
 
-    # Connects to the given server and attempts to play a tune.
-    def play_some_music(server):
-        server.wait_for_unit("mpd.service")
-        server.succeed(f"{mpc} update")
-        _, tracks = server.execute(f"{mpc} ls")
+      # Connects to the given server and attempts to play a tune.
+      def play_some_music(server):
+          server.wait_for_unit("mpd.service")
+          server.succeed(f"{mpc} update")
+          _, tracks = server.execute(f"{mpc} ls")
 
-        for track in tracks.splitlines():
-            server.succeed(f"{mpc} add {track}")
+          for track in tracks.splitlines():
+              server.succeed(f"{mpc} add {track}")
 
-        _, added_tracks = server.execute(f"{mpc} playlist")
+          _, added_tracks = server.execute(f"{mpc} playlist")
 
-        # Check we succeeded adding audio tracks to the playlist
-        assert len(added_tracks.splitlines()) > 0
+          # Check we succeeded adding audio tracks to the playlist
+          assert len(added_tracks.splitlines()) > 0
 
-        server.succeed(f"{mpc} play")
+          server.succeed(f"{mpc} play")
 
-        _, output = server.execute(f"{mpc} status")
-        # Assure audio track is playing
-        assert "playing" in output
+          _, output = server.execute(f"{mpc} status")
+          # Assure audio track is playing
+          assert "playing" in output
 
-        server.succeed(f"{mpc} stop")
+          server.succeed(f"{mpc} stop")
 
 
-    play_some_music(serverALSA)
-    play_some_music(serverPulseAudio)
+      play_some_music(serverALSA)
+      play_some_music(serverPulseAudio)
 
-    client.wait_for_unit("multi-user.target")
-    client.succeed(f"{mpc} -h serverALSA status")
+      client.wait_for_unit("multi-user.target")
+      client.succeed(f"{mpc} -h serverALSA status")
 
-    # The PulseAudio-based server is configured not to accept external client connections
-    # to perform the following test:
-    client.fail(f"{mpc} -h serverPulseAudio status")
-  '';
-})
+      # The PulseAudio-based server is configured not to accept external client connections
+      # to perform the following test:
+      client.fail(f"{mpc} -h serverPulseAudio status")
+    '';
+  }
+)

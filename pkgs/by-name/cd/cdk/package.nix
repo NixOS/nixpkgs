@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,9 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oxJ7Wf5QX16Jjao90VsM9yShJ0zmgWW3eb4vKdTE8vY=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   enableParallelBuilding = true;
 
@@ -25,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://invisible-island.net/cdk/";
     changelog = "https://invisible-island.net/cdk/CHANGES.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      raskin
+      AndersonTorres
+    ];
     inherit (ncurses.meta) platforms;
   };
 })

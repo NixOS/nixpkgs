@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -17,9 +18,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-DwVNNotRcYbvJX6iXffSQyZMFTxQexIhfG8reFmozN8=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   postInstall = ''
     ln -s $out/bin/ci.py $out/bin/ci_edit

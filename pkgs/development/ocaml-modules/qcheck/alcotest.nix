@@ -1,4 +1,8 @@
-{ buildDunePackage, qcheck-core, alcotest }:
+{
+  buildDunePackage,
+  qcheck-core,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "qcheck-alcotest";
@@ -7,7 +11,10 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ qcheck-core alcotest ];
+  propagatedBuildInputs = [
+    qcheck-core
+    alcotest
+  ];
 
   meta = qcheck-core.meta // {
     description = "Alcotest backend for qcheck";

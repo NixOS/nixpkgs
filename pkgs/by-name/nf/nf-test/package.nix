@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, makeWrapper
-, nextflow
-, nf-test
-, openjdk11
-, stdenv
-, testers
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  nextflow,
+  nf-test,
+  openjdk11,
+  stdenv,
+  testers,
 }:
 stdenv.mkDerivation rec {
 
@@ -18,14 +19,9 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = ".";
 
-  buildInputs = [
-    makeWrapper
-  ];
+  buildInputs = [ makeWrapper ];
 
-  nativeBuildInputs = [
-    nextflow
-  ];
-
+  nativeBuildInputs = [ nextflow ];
 
   installPhase = ''
     runHook preInstall

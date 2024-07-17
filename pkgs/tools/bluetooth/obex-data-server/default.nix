@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb-compat-0_1, glib, dbus-glib, bluez, openobex, dbus }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
+  glib,
+  dbus-glib,
+  bluez,
+  openobex,
+  dbus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obex-data-server";
@@ -14,13 +25,20 @@ stdenv.mkDerivation rec {
     pkg-config
     dbus-glib # required for dbus-binding-tool
   ];
-  buildInputs = [ libusb-compat-0_1 glib dbus-glib bluez openobex dbus ];
+  buildInputs = [
+    libusb-compat-0_1
+    glib
+    dbus-glib
+    bluez
+    openobex
+    dbus
+  ];
 
   patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];
 
   preConfigure = ''
-  addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
-  export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
+    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
   '';
 
   meta = with lib; {

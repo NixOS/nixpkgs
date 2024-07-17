@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, java, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
@@ -7,9 +13,7 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
     hash = "sha256-Se47rsgp8V6Ypv0QHrwjIXrDPchM1nSl/GmUWMEvLIo=";
   };
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     cp -r . "$out"
     for i in "$out"/bin/*; do

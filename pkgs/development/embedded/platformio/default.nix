@@ -1,4 +1,8 @@
-{ newScope, fetchFromGitHub, python3Packages }:
+{
+  newScope,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 let
   callPackage = newScope self;

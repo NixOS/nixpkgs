@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, eglexternalplatform
-, pkg-config
-, meson
-, ninja
-, wayland-scanner
-, libGL
-, libX11
-, libdrm
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  eglexternalplatform,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  libGL,
+  libX11,
+  libdrm,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
   version = "1.1.13";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "Nvidia";
@@ -33,9 +37,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/includedir/d' wayland-eglstream.pc.in
   '';
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -52,9 +54,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  propagatedBuildInputs = [
-    eglexternalplatform
-  ];
+  propagatedBuildInputs = [ eglexternalplatform ];
 
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";

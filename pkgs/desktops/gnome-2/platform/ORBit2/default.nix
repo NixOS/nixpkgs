@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libIDL, libintl, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  libIDL,
+  libintl,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ORBit2";
@@ -15,10 +24,19 @@ stdenv.mkDerivation rec {
   # sh: gcc: not found
   # output does not contain binaries for build
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkg-config libintl ];
-  propagatedBuildInputs = [ glib libIDL ];
+  nativeBuildInputs = [
+    pkg-config
+    libintl
+  ];
+  propagatedBuildInputs = [
+    glib
+    libIDL
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-idl-compiler=${lib.getExe' buildPackages.gnome2.ORBit2 "orbit-idl-2"}"
@@ -54,9 +72,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    homepage    = "https://developer-old.gnome.org/ORBit2/";
+    homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "A CORBA 2.4-compliant Object Request Broker";
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

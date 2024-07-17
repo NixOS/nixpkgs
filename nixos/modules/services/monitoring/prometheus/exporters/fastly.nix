@@ -1,8 +1,9 @@
-{ config
-, lib
-, pkgs
-, options
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
 }:
 
 let
@@ -11,7 +12,7 @@ let
     mkOption
     optionals
     types
-  ;
+    ;
 
   cfg = config.services.prometheus.exporters.fastly;
 in
@@ -40,16 +41,24 @@ in
     serviceConfig = {
       LoadCredential = "fastly-api-token:${cfg.tokenPath}";
     };
-    script = let
-      call = escapeShellArgs ([
-        "${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter"
-        "-listen" "${cfg.listenAddress}:${toString cfg.port}"
-      ] ++ optionals (cfg.configFile != null) [
-        "--config-file" cfg.configFile
-      ] ++ cfg.extraFlags);
-    in ''
-      export FASTLY_API_TOKEN="$(cat $CREDENTIALS_DIRECTORY/fastly-api-token)"
-      ${call}
-    '';
+    script =
+      let
+        call = escapeShellArgs (
+          [
+            "${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter"
+            "-listen"
+            "${cfg.listenAddress}:${toString cfg.port}"
+          ]
+          ++ optionals (cfg.configFile != null) [
+            "--config-file"
+            cfg.configFile
+          ]
+          ++ cfg.extraFlags
+        );
+      in
+      ''
+        export FASTLY_API_TOKEN="$(cat $CREDENTIALS_DIRECTORY/fastly-api-token)"
+        ${call}
+      '';
   };
 }

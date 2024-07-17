@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libpcap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  libpcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tcptrack";
@@ -21,7 +28,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses libpcap ];
+  buildInputs = [
+    ncurses
+    libpcap
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
@@ -31,6 +41,9 @@ stdenv.mkDerivation rec {
     mainProgram = "tcptrack";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor maintainers.vrthra ];
+    maintainers = [
+      maintainers.bjornfor
+      maintainers.vrthra
+    ];
   };
 }

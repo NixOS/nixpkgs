@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hdapsd";
@@ -11,12 +15,12 @@ stdenv.mkDerivation rec {
 
   postInstall = builtins.readFile ./postInstall.sh;
 
-  meta = with lib;
-    { description = "Hard Drive Active Protection System Daemon";
-      mainProgram = "hdapsd";
-      homepage = "http://hdaps.sf.net/";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.ehmry ];
-    };
+  meta = with lib; {
+    description = "Hard Drive Active Protection System Daemon";
+    mainProgram = "hdapsd";
+    homepage = "http://hdaps.sf.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ehmry ];
+  };
 }

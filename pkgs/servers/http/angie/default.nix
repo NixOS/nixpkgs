@@ -1,11 +1,12 @@
-{ callPackage
-, runCommand
-, lib
-, fetchurl
-, nixosTests
-, withQuic ? false
-, fetchpatch
-, ...
+{
+  callPackage,
+  runCommand,
+  lib,
+  fetchurl,
+  nixosTests,
+  withQuic ? false,
+  fetchpatch,
+  ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
@@ -17,9 +18,7 @@ callPackage ../nginx/generic.nix args rec {
     hash = "sha256-yzEbYOxvt2SPTYD/Dw4SJDg94muKGan+QX51sf6xuU4=";
   };
 
-  configureFlags = lib.optional withQuic [
-    "--with-http_v3_module"
-  ];
+  configureFlags = lib.optional withQuic [ "--with-http_v3_module" ];
 
   preInstall = ''
     if [[ -e man/angie.8 ]]; then
@@ -39,9 +38,9 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
-    homepage    = "https://angie.software/en/";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.all;
+    homepage = "https://angie.software/en/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

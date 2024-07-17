@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, libxml2
-, zlib
-, coreutils
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  libxml2,
+  zlib,
+  coreutils,
+  callPackage,
 }@args:
 
 import ./generic.nix args {

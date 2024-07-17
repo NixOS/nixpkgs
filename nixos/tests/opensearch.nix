@@ -1,7 +1,9 @@
 let
-  opensearchTest = extraSettings:
+  opensearchTest =
+    extraSettings:
     import ./make-test-python.nix (
-      { pkgs, lib, ... }: {
+      { pkgs, lib, ... }:
+      {
         name = "opensearch";
         meta.maintainers = with pkgs.lib.maintainers; [ shyim ];
 
@@ -22,17 +24,16 @@ let
               "curl --fail localhost:9200"
           )
         '';
-      });
+      }
+    );
 in
 {
-  opensearch = opensearchTest {};
+  opensearch = opensearchTest { };
   opensearchCustomPathAndUser = opensearchTest {
     services.opensearch.dataDir = "/var/opensearch_test";
     services.opensearch.user = "open_search";
     services.opensearch.group = "open_search";
-    systemd.tmpfiles.rules = [
-      "d /var/opensearch_test 0700 open_search open_search -"
-    ];
+    systemd.tmpfiles.rules = [ "d /var/opensearch_test 0700 open_search open_search -" ];
     users = {
       groups.open_search = { };
       users.open_search = {

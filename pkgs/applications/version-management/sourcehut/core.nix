@@ -1,29 +1,30 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, flask
-, humanize
-, sqlalchemy
-, sqlalchemy-utils
-, psycopg2
-, markdown
-, mistletoe
-, bleach
-, requests
-, beautifulsoup4
-, pygments
-, cryptography
-, prometheus-client
-, alembic
-, redis
-, celery
-, html5lib
-, importlib-metadata
-, tinycss2
-, sassc
-, pythonOlder
-, minify
-, setuptools
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  flask,
+  humanize,
+  sqlalchemy,
+  sqlalchemy-utils,
+  psycopg2,
+  markdown,
+  mistletoe,
+  bleach,
+  requests,
+  beautifulsoup4,
+  pygments,
+  cryptography,
+  prometheus-client,
+  alembic,
+  redis,
+  celery,
+  html5lib,
+  importlib-metadata,
+  tinycss2,
+  sassc,
+  pythonOlder,
+  minify,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedNativeBuildInputs = [
     sassc
@@ -89,6 +88,9 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [
+      eadwu
+      christoph-heiss
+    ];
   };
 }

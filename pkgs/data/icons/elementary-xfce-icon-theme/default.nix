@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gdk-pixbuf,
+  optipng,
+  librsvg,
+  gtk3,
+  pantheon,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";

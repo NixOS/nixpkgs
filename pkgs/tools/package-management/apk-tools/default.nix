@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, scdoc, openssl, zlib
-, luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform, lua
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  scdoc,
+  openssl,
+  zlib,
+  luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
+  lua,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gO7Yf60eabvAdPDSzxvxeEMsvc6ixy1iQ6/o7WWlE2Q=";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc ]
-    ++ lib.optionals luaSupport [ lua lua.pkgs.lua-zlib ];
-  buildInputs = [ openssl zlib ] ++ lib.optional luaSupport lua;
+  nativeBuildInputs =
+    [
+      pkg-config
+      scdoc
+    ]
+    ++ lib.optionals luaSupport [
+      lua
+      lua.pkgs.lua-zlib
+    ];
+  buildInputs = [
+    openssl
+    zlib
+  ] ++ lib.optional luaSupport lua;
   strictDeps = true;
 
   makeFlags = [

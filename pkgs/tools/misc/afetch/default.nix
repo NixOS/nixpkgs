@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,15 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A fetch program written in C";
     homepage = "https://github.com/13-CF/afetch";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 jk ];
+    maintainers = with maintainers; [
+      dan4ik605743
+      jk
+    ];
     platforms = platforms.linux;
     mainProgram = "afetch";
   };

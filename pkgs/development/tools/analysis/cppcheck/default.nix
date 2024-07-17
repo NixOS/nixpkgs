@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, docbook_xml_dtd_45
-, docbook_xsl
-, installShellFiles
-, libxslt
-, pcre
-, pkg-config
-, python3
-, which
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  installShellFiles,
+  libxslt,
+  pcre,
+  pkg-config,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
   version = "2.14.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "danmar";
@@ -40,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [ ps.pygments ]))
   ];
 
-  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MATCHCOMPILER=yes"
+    "FILESDIR=$(out)/share/cppcheck"
+    "HAVE_RULES=yes"
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -79,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    maintainers = with lib.maintainers; [ joachifm paveloom ];
+    maintainers = with lib.maintainers; [
+      joachifm
+      paveloom
+    ];
     platforms = lib.platforms.unix;
   };
 })

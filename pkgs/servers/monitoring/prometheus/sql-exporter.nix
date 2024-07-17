@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, go, prometheus-sql-exporter, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go,
+  prometheus-sql-exporter,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "sql_exporter";
@@ -13,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = let t = "github.com/prometheus/common/version"; in
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
     [
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=${src.rev}"

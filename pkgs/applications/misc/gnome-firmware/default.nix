@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, appstream-glib
-, desktop-file-utils
-, fwupd
-, gettext
-, glib
-, gtk4
-, libadwaita
-, libxmlb
-, meson
-, ninja
-, pkg-config
-, systemd
-, help2man
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  appstream-glib,
+  desktop-file-utils,
+  fwupd,
+  gettext,
+  glib,
+  gtk4,
+  libadwaita,
+  libxmlb,
+  meson,
+  ninja,
+  pkg-config,
+  systemd,
+  help2man,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,13 +51,9 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  mesonFlags = [
-    "-Dconsolekit=false"
-  ];
+  mesonFlags = [ "-Dconsolekit=false" ];
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "(alpha|beta|rc).*";
-  };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gnome-firmware";

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, makeWrapper
-, alsa-lib
-, curl
-, libao
-, libpulseaudio
-, libzip
-, lua
-, miniupnpc
-, SDL2
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  curl,
+  libao,
+  libpulseaudio,
+  libzip,
+  lua,
+  miniupnpc,
+  SDL2,
+  vulkan-loader,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  cmakeFlags = [
-    "-DUSE_HOST_SDL=ON"
-  ];
+  cmakeFlags = [ "-DUSE_HOST_SDL=ON" ];
 
   postFixup = ''
     wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}

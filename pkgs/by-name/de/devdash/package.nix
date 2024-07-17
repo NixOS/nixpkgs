@@ -1,9 +1,9 @@
 {
-  lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, coreutils
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  coreutils,
 }:
 
 buildGoModule rec {
@@ -35,9 +35,7 @@ buildGoModule rec {
     runHook postPatch
   '';
 
-  runtimeDependencies = [
-    coreutils
-  ];
+  runtimeDependencies = [ coreutils ];
 
   passthru.updateScript = nix-update-script { };
 

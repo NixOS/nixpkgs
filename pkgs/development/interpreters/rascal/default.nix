@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rascal";
@@ -14,12 +20,11 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      makeWrapper ${jdk}/bin/java $out/bin/rascal \
-        --add-flags "-jar ${src}" \
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    makeWrapper ${jdk}/bin/java $out/bin/rascal \
+      --add-flags "-jar ${src}" \
+  '';
 
   meta = {
     homepage = "https://www.rascal-mpl.org/";

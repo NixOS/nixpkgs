@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, cacert
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  cacert,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
@@ -19,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-2MugS0/MO85lQvDbiFwnsX4LYdk7TACDFR8OOLEFGUQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   checkFlags = [
     # All these test try to connect to Reddit.

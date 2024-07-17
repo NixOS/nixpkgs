@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, pythonPackages
-, mopidy
+{
+  lib,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -15,9 +16,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-  ];
+  propagatedBuildInputs = [ mopidy ];
 
   doCheck = false;
 

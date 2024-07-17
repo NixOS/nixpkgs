@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.esdm;
@@ -6,21 +11,49 @@ in
 {
   imports = [
     # removed option 'services.esdm.cuseRandomEnable'
-    (lib.mkRemovedOptionModule [ "services" "esdm" "cuseRandomEnable" ] ''
-      Use services.esdm.enableLinuxCompatServices instead.
-    '')
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "esdm"
+        "cuseRandomEnable"
+      ]
+      ''
+        Use services.esdm.enableLinuxCompatServices instead.
+      ''
+    )
     # removed option 'services.esdm.cuseUrandomEnable'
-    (lib.mkRemovedOptionModule [ "services" "esdm" "cuseUrandomEnable" ] ''
-      Use services.esdm.enableLinuxCompatServices instead.
-    '')
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "esdm"
+        "cuseUrandomEnable"
+      ]
+      ''
+        Use services.esdm.enableLinuxCompatServices instead.
+      ''
+    )
     # removed option 'services.esdm.procEnable'
-    (lib.mkRemovedOptionModule [ "services" "esdm" "procEnable" ] ''
-      Use services.esdm.enableLinuxCompatServices instead.
-    '')
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "esdm"
+        "procEnable"
+      ]
+      ''
+        Use services.esdm.enableLinuxCompatServices instead.
+      ''
+    )
     # removed option 'services.esdm.verbose'
-    (lib.mkRemovedOptionModule [ "services" "esdm" "verbose" ] ''
-      There is no replacement.
-    '')
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "esdm"
+        "verbose"
+      ]
+      ''
+        There is no replacement.
+      ''
+    )
   ];
 
   options.services.esdm = {
@@ -44,10 +77,22 @@ in
       # It is necessary to set those options for these services to be started by systemd in NixOS
       (lib.mkIf cfg.enableLinuxCompatServices {
         systemd.targets."esdm-linux-compat".wantedBy = [ "basic.target" ];
-        systemd.services."esdm-server-suspend".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
-        systemd.services."esdm-server-resume".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
+        systemd.services."esdm-server-suspend".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        systemd.services."esdm-server-resume".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
       })
-    ]);
+    ]
+  );
 
-  meta.maintainers = with lib.maintainers; [ orichter thillux ];
+  meta.maintainers = with lib.maintainers; [
+    orichter
+    thillux
+  ];
 }

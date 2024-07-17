@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, glib, attr }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  glib,
+  attr,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ciopfs";
@@ -10,9 +18,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse glib attr ];
+  buildInputs = [
+    fuse
+    glib
+    attr
+  ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";

@@ -1,8 +1,9 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
-, fd
-, libqalculate
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  fd,
+  libqalculate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +32,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-cTvrq0fH057UIx/O9u8zHMsg+psMGg1q9klV5OMxtok=";
 
-  cargoBuildFlags = [ "--package" "pop-launcher-bin" ];
+  cargoBuildFlags = [
+    "--package"
+    "pop-launcher-bin"
+  ];
 
   postInstall = ''
     mv $out/bin/pop-launcher{-bin,}

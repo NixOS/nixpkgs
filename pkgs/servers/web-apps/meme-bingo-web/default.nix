@@ -1,4 +1,9 @@
-{ lib, fetchFromGitea, rustPlatform, makeWrapper }:
+{
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  makeWrapper,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "meme-bingo-web";

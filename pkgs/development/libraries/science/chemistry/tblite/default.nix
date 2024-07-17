@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gfortran
-, meson
-, ninja
-, pkg-config
-, blas
-, lapack
-, mctc-lib
-, mstore
-, toml-f
-, multicharge
-, dftd4
-, simple-dftd3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+  blas,
+  lapack,
+  mctc-lib,
+  mstore,
+  toml-f,
+  multicharge,
+  dftd4,
+  simple-dftd3,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
@@ -55,7 +56,10 @@ stdenv.mkDerivation rec {
     simple-dftd3
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
   preCheck = ''
@@ -65,7 +69,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     homepage = "https://github.com/tblite/tblite";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, ncurses, libpcap, cmake, openssl, git, lksctp-tools }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libpcap,
+  cmake,
+  openssl,
+  git,
+  lksctp-tools,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.6.1";
@@ -24,9 +34,15 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake git ];
-  buildInputs = [ ncurses libpcap openssl ]
-    ++ lib.optional (stdenv.isLinux) lksctp-tools;
+  nativeBuildInputs = [
+    cmake
+    git
+  ];
+  buildInputs = [
+    ncurses
+    libpcap
+    openssl
+  ] ++ lib.optional (stdenv.isLinux) lksctp-tools;
 
   meta = with lib; {
     homepage = "http://sipp.sf.net";

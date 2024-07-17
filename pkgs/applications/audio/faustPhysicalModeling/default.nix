@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
   version = "2.72.14";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UBMVU2oAfoAaSQXxZxV+LFq8dyb5dvy/0cCG4XywZVc=";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
 
   dontWrapQtApps = true;
 

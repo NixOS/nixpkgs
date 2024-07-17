@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, wrapGAppsHook4, gtk4 }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gtk4,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripdrag";
@@ -13,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-un7HE91w4p5+2LrjasKC8/q+nGg8F/6+ZACS5X3OJ1Q=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [ gtk4 ];
 

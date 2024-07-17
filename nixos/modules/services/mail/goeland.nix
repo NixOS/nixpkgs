@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -40,17 +45,21 @@ in
     services.goeland.settings.database = "${cfg.stateDir}/goeland.db";
 
     systemd.services.goeland = {
-      serviceConfig = let confFile = tomlFormat.generate "config.toml" cfg.settings; in mkMerge [
-        {
-          ExecStart = "${pkgs.goeland}/bin/goeland run -c ${confFile}";
-          User = "goeland";
-          Group = "goeland";
-        }
-        (mkIf (cfg.stateDir == "/var/lib/goeland") {
-          StateDirectory = "goeland";
-          StateDirectoryMode = "0750";
-        })
-      ];
+      serviceConfig =
+        let
+          confFile = tomlFormat.generate "config.toml" cfg.settings;
+        in
+        mkMerge [
+          {
+            ExecStart = "${pkgs.goeland}/bin/goeland run -c ${confFile}";
+            User = "goeland";
+            Group = "goeland";
+          }
+          (mkIf (cfg.stateDir == "/var/lib/goeland") {
+            StateDirectory = "goeland";
+            StateDirectoryMode = "0750";
+          })
+        ];
       startAt = cfg.schedule;
     };
 

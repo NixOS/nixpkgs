@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
     "LIBEXECDIR=${placeholder "out"}/modules"
   ];
 
-  passthru.updateScript = directoryListingUpdater {
-    url = "https://redwax.eu/dist/rs/";
-  };
+  passthru.updateScript = directoryListingUpdater { url = "https://redwax.eu/dist/rs/"; };
 
   meta = with lib; {
     description = "RedWax CA service module";

@@ -1,41 +1,42 @@
-{ lib
-, clangStdenv
-, llvmPackages
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, bison
-, boost
-, cairo
-, cgal_5
-, clipper2
-, double-conversion
-, eigen
-, flex
-, fontconfig
-, freetype
-, ghostscript
-, glib
-, glm
-, gmp
-, harfbuzz
-, hidapi
-, lib3mf
-, libGLU
-, libICE
-, libSM
-, libsForQt5
-, libspnav
-, libzip
-, mesa
-, mpfr
-, python3
-, tbb_2021_11
-, wayland
-, wayland-protocols
-, wrapGAppsHook3
-, xorg
+{
+  lib,
+  clangStdenv,
+  llvmPackages,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  bison,
+  boost,
+  cairo,
+  cgal_5,
+  clipper2,
+  double-conversion,
+  eigen,
+  flex,
+  fontconfig,
+  freetype,
+  ghostscript,
+  glib,
+  glm,
+  gmp,
+  harfbuzz,
+  hidapi,
+  lib3mf,
+  libGLU,
+  libICE,
+  libSM,
+  libsForQt5,
+  libspnav,
+  libzip,
+  mesa,
+  mpfr,
+  python3,
+  tbb_2021_11,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  xorg,
 }:
 let
   # get cccl from source to avoid license issues
@@ -50,7 +51,10 @@ let
       rev = "0c9d03276206a5f59368e908e3d643610f9fddcd";
       hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
     };
-    nativeBuildInputs = [ cmake pkg-config ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
     buildInputs = [ tbb_2021_11 ];
     cmakeFlags = [
       # only enable what we need
@@ -91,7 +95,12 @@ clangStdenv.mkDerivation rec {
   };
   patches = [ ./test.diff ];
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ numpy pillow ]))
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        pillow
+      ]
+    ))
     bison
     cmake
     flex
@@ -101,49 +110,51 @@ clangStdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with libsForQt5; with qt5; [
-    # manifold dependencies
-    clipper2
-    glm
-    tbb_2021_11
-    nvidia-cccl
+  buildInputs =
+    with libsForQt5;
+    with qt5;
+    [
+      # manifold dependencies
+      clipper2
+      glm
+      tbb_2021_11
+      nvidia-cccl
 
-    boost
-    cairo
-    cgal_5
-    double-conversion
-    eigen
-    fontconfig
-    freetype
-    ghostscript
-    glib
-    gmp
-    harfbuzz
-    hidapi
-    lib3mf
-    libspnav
-    libzip
-    mpfr
-    qscintilla
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals clangStdenv.isLinux [
-    xorg.libXdmcp
-    libICE
-    libSM
-    wayland
-    wayland-protocols
-    qtwayland
-    libGLU
-  ]
-  ++ lib.optional clangStdenv.isDarwin qtmacextras
-  ;
+      boost
+      cairo
+      cgal_5
+      double-conversion
+      eigen
+      fontconfig
+      freetype
+      ghostscript
+      glib
+      gmp
+      harfbuzz
+      hidapi
+      lib3mf
+      libspnav
+      libzip
+      mpfr
+      qscintilla
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals clangStdenv.isLinux [
+      xorg.libXdmcp
+      libICE
+      libSM
+      wayland
+      wayland-protocols
+      qtwayland
+      libGLU
+    ]
+    ++ lib.optional clangStdenv.isDarwin qtmacextras;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
+    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=ON" # faster build
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
@@ -174,7 +185,10 @@ clangStdenv.mkDerivation rec {
     # note that the *binary license* is gpl3 due to CGAL
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pca006132 raskin ];
+    maintainers = with lib.maintainers; [
+      pca006132
+      raskin
+    ];
     mainProgram = "openscad";
   };
 }

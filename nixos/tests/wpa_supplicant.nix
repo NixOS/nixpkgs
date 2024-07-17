@@ -1,182 +1,197 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
-{
-  name = "wpa_supplicant";
-  meta = with lib.maintainers; {
-    maintainers = [ oddlama rnhmjoj ];
-  };
-
-  nodes = let
-    machineWithHostapd = extraConfigModule: { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        extraConfigModule
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "wpa_supplicant";
+    meta = with lib.maintainers; {
+      maintainers = [
+        oddlama
+        rnhmjoj
       ];
+    };
 
-      # add a virtual wlan interface
-      boot.kernelModules = [ "mac80211_hwsim" ];
+    nodes =
+      let
+        machineWithHostapd =
+          extraConfigModule:
+          { ... }:
+          {
+            imports = [
+              ../modules/profiles/minimal.nix
+              extraConfigModule
+            ];
 
-      # wireless access point
-      services.hostapd = {
-        enable = true;
-        radios.wlan0 = {
-          band = "2g";
-          countryCode = "US";
-          networks = {
-            wlan0 = {
-              ssid = "nixos-test-sae";
-              authentication = {
-                mode = "wpa3-sae";
-                saePasswords = [ { password = "reproducibility"; } ];
+            # add a virtual wlan interface
+            boot.kernelModules = [ "mac80211_hwsim" ];
+
+            # wireless access point
+            services.hostapd = {
+              enable = true;
+              radios.wlan0 = {
+                band = "2g";
+                countryCode = "US";
+                networks = {
+                  wlan0 = {
+                    ssid = "nixos-test-sae";
+                    authentication = {
+                      mode = "wpa3-sae";
+                      saePasswords = [ { password = "reproducibility"; } ];
+                    };
+                    bssid = "02:00:00:00:00:00";
+                  };
+                  wlan0-1 = {
+                    ssid = "nixos-test-mixed";
+                    authentication = {
+                      mode = "wpa3-sae-transition";
+                      saeAddToMacAllow = true;
+                      saePasswordsFile = pkgs.writeText "password" "reproducibility";
+                      wpaPasswordFile = pkgs.writeText "password" "reproducibility";
+                    };
+                    bssid = "02:00:00:00:00:01";
+                  };
+                  wlan0-2 = {
+                    ssid = "nixos-test-wpa2";
+                    authentication = {
+                      mode = "wpa2-sha256";
+                      wpaPassword = "reproducibility";
+                    };
+                    bssid = "02:00:00:00:00:02";
+                  };
+                };
               };
-              bssid = "02:00:00:00:00:00";
             };
-            wlan0-1 = {
-              ssid = "nixos-test-mixed";
-              authentication = {
-                mode = "wpa3-sae-transition";
-                saeAddToMacAllow = true;
-                saePasswordsFile = pkgs.writeText "password" "reproducibility";
-                wpaPasswordFile = pkgs.writeText "password" "reproducibility";
-              };
-              bssid = "02:00:00:00:00:01";
+
+            # wireless client
+            networking.wireless = {
+              # the override is needed because the wifi is
+              # disabled with mkVMOverride in qemu-vm.nix.
+              enable = lib.mkOverride 0 true;
+              userControlled.enable = true;
+              interfaces = [ "wlan1" ];
+              fallbackToWPA2 = lib.mkDefault true;
+
+              # networks will be added on-demand below for the specific
+              # network that should be tested
+
+              # secrets
+              environmentFile = pkgs.writeText "wpa-secrets" ''
+                PSK_NIXOS_TEST="reproducibility"
+              '';
             };
-            wlan0-2 = {
-              ssid = "nixos-test-wpa2";
-              authentication = {
-                mode = "wpa2-sha256";
-                wpaPassword = "reproducibility";
+          };
+      in
+      {
+        basic =
+          { ... }:
+          {
+            imports = [ ../modules/profiles/minimal.nix ];
+
+            # add a virtual wlan interface
+            boot.kernelModules = [ "mac80211_hwsim" ];
+
+            # wireless client
+            networking.wireless = {
+              # the override is needed because the wifi is
+              # disabled with mkVMOverride in qemu-vm.nix.
+              enable = lib.mkOverride 0 true;
+              userControlled.enable = true;
+              interfaces = [ "wlan1" ];
+              fallbackToWPA2 = true;
+
+              networks = {
+                # test WPA2 fallback
+                mixed-wpa = {
+                  psk = "password";
+                  authProtocols = [
+                    "WPA-PSK"
+                    "SAE"
+                  ];
+                };
+                sae-only = {
+                  psk = "password";
+                  authProtocols = [ "SAE" ];
+                };
+
+                # secrets substitution test cases
+                test1.psk = "@PSK_VALID@"; # should be replaced
+                test2.psk = "@PSK_SPECIAL@"; # should be replaced
+                test3.psk = "@PSK_MISSING@"; # should not be replaced
+                test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
+                test5.psk = "@PSK_AWK_REGEX@"; # should be replaced
               };
-              bssid = "02:00:00:00:00:02";
+
+              # secrets
+              environmentFile = pkgs.writeText "wpa-secrets" ''
+                PSK_VALID="S0m3BadP4ssw0rd";
+                # taken from https://github.com/minimaxir/big-list-of-naughty-strings
+                PSK_SPECIAL=",./;'[]\/\-= <>?:\"{}|_+ !@#$%^&*()`~";
+                PSK_AWK_REGEX="PassowrdWith&symbol";
+              '';
+            };
+          };
+
+        imperative =
+          { ... }:
+          {
+            imports = [ ../modules/profiles/minimal.nix ];
+
+            # add a virtual wlan interface
+            boot.kernelModules = [ "mac80211_hwsim" ];
+
+            # wireless client
+            networking.wireless = {
+              enable = lib.mkOverride 0 true;
+              userControlled.enable = true;
+              allowAuxiliaryImperativeNetworks = true;
+              interfaces = [ "wlan1" ];
+            };
+          };
+
+        # Test connecting to the SAE-only hotspot using SAE
+        machineSae = machineWithHostapd {
+          networking.wireless = {
+            fallbackToWPA2 = false;
+            networks.nixos-test-sae = {
+              psk = "@PSK_NIXOS_TEST@";
+              authProtocols = [ "SAE" ];
+            };
+          };
+        };
+
+        # Test connecting to the SAE and WPA2 mixed hotspot using SAE
+        machineMixedUsingSae = machineWithHostapd {
+          networking.wireless = {
+            fallbackToWPA2 = false;
+            networks.nixos-test-mixed = {
+              psk = "@PSK_NIXOS_TEST@";
+              authProtocols = [ "SAE" ];
+            };
+          };
+        };
+
+        # Test connecting to the SAE and WPA2 mixed hotspot using WPA2
+        machineMixedUsingWpa2 = machineWithHostapd {
+          networking.wireless = {
+            fallbackToWPA2 = true;
+            networks.nixos-test-mixed = {
+              psk = "@PSK_NIXOS_TEST@";
+              authProtocols = [ "WPA-PSK-SHA256" ];
+            };
+          };
+        };
+
+        # Test connecting to the WPA2 legacy hotspot using WPA2
+        machineWpa2 = machineWithHostapd {
+          networking.wireless = {
+            fallbackToWPA2 = true;
+            networks.nixos-test-wpa2 = {
+              psk = "@PSK_NIXOS_TEST@";
+              authProtocols = [ "WPA-PSK-SHA256" ];
             };
           };
         };
       };
 
-      # wireless client
-      networking.wireless = {
-        # the override is needed because the wifi is
-        # disabled with mkVMOverride in qemu-vm.nix.
-        enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
-        interfaces = [ "wlan1" ];
-        fallbackToWPA2 = lib.mkDefault true;
-
-        # networks will be added on-demand below for the specific
-        # network that should be tested
-
-        # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_NIXOS_TEST="reproducibility"
-        '';
-      };
-    };
-  in {
-    basic = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
-
-      # add a virtual wlan interface
-      boot.kernelModules = [ "mac80211_hwsim" ];
-
-      # wireless client
-      networking.wireless = {
-        # the override is needed because the wifi is
-        # disabled with mkVMOverride in qemu-vm.nix.
-        enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
-        interfaces = [ "wlan1" ];
-        fallbackToWPA2 = true;
-
-        networks = {
-          # test WPA2 fallback
-          mixed-wpa = {
-            psk = "password";
-            authProtocols = [ "WPA-PSK" "SAE" ];
-          };
-          sae-only = {
-            psk = "password";
-            authProtocols = [ "SAE" ];
-          };
-
-          # secrets substitution test cases
-          test1.psk = "@PSK_VALID@";              # should be replaced
-          test2.psk = "@PSK_SPECIAL@";            # should be replaced
-          test3.psk = "@PSK_MISSING@";            # should not be replaced
-          test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
-          test5.psk = "@PSK_AWK_REGEX@";          # should be replaced
-        };
-
-        # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_VALID="S0m3BadP4ssw0rd";
-          # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\/\-= <>?:\"{}|_+ !@#$%^&*()`~";
-          PSK_AWK_REGEX="PassowrdWith&symbol";
-        '';
-      };
-    };
-
-    imperative = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
-
-      # add a virtual wlan interface
-      boot.kernelModules = [ "mac80211_hwsim" ];
-
-      # wireless client
-      networking.wireless = {
-        enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
-        allowAuxiliaryImperativeNetworks = true;
-        interfaces = [ "wlan1" ];
-      };
-    };
-
-    # Test connecting to the SAE-only hotspot using SAE
-    machineSae = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = false;
-        networks.nixos-test-sae = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "SAE" ];
-        };
-      };
-    };
-
-    # Test connecting to the SAE and WPA2 mixed hotspot using SAE
-    machineMixedUsingSae = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = false;
-        networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "SAE" ];
-        };
-      };
-    };
-
-    # Test connecting to the SAE and WPA2 mixed hotspot using WPA2
-    machineMixedUsingWpa2 = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = true;
-        networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "WPA-PSK-SHA256" ];
-        };
-      };
-    };
-
-    # Test connecting to the WPA2 legacy hotspot using WPA2
-    machineWpa2 = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = true;
-        networks.nixos-test-wpa2 = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "WPA-PSK-SHA256" ];
-        };
-      };
-    };
-  };
-
-  testScript =
-    ''
+    testScript = ''
       config_file = "/run/wpa_supplicant/wpa_supplicant.conf"
 
       with subtest("Configuration file is inaccessible to other users"):
@@ -234,4 +249,5 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
             "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
           )
     '';
-})
+  }
+)

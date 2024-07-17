@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, python3
-, fetchPypi
-, openssl
+{
+  lib,
+  stdenv,
+  python3,
+  fetchPypi,
+  openssl,
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-, extraInputs ? []
+  extraInputs ? [ ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,9 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Qb+E5x/GVb+KS1LrRA0GIa6WEJaghtIOEy4VEuLt3/g=";
   };
 
-  patches = [
-    ./fix-libcrypto-loading.patch
-  ];
+  patches = [ ./fix-libcrypto-loading.patch ];
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
@@ -37,21 +36,24 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    jmespath
-    looseversion
-    markupsafe
-    msgpack
-    packaging
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-    tornado
-  ] ++ extraInputs;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      distro
+      jinja2
+      jmespath
+      looseversion
+      markupsafe
+      msgpack
+      packaging
+      psutil
+      pycryptodomex
+      pyyaml
+      pyzmq
+      requests
+      tornado
+    ]
+    ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";

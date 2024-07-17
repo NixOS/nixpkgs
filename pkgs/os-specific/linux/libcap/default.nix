@@ -1,18 +1,25 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
-, usePam ? !isStatic, pam ? null
-, isStatic ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  attr,
+  runtimeShell,
+  usePam ? !isStatic,
+  pam ? null,
+  isStatic ? stdenv.hostPlatform.isStatic,
 
-# passthru.tests
-, bind
-, chrony
-, htop
-, libgcrypt
-, libvirt
-, ntp
-, qemu
-, squid
-, tor
-, uwsgi
+  # passthru.tests
+  bind,
+  chrony,
+  htop,
+  libgcrypt,
+  libvirt,
+  ntp,
+  qemu,
+  squid,
+  tor,
+  uwsgi,
 }:
 
 assert usePam -> pam != null;
@@ -26,8 +33,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8xH489rYRpnQVm0db37JQ6kpiyj3FMrjyTHf1XSS1+s=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ lib.optional usePam "pam";
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+    "doc"
+  ] ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -35,13 +47,18 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ attr ];
 
-  makeFlags = [
-    "lib=lib"
-    "PAM_CAP=${if usePam then "yes" else "no"}"
-    "BUILD_CC=$(CC_FOR_BUILD)"
-    "CC:=$(CC)"
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
+  makeFlags =
+    [
+      "lib=lib"
+      "PAM_CAP=${if usePam then "yes" else "no"}"
+      "BUILD_CC=$(CC_FOR_BUILD)"
+      "CC:=$(CC)"
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ]
+    ++ lib.optionals isStatic [
+      "SHARED=no"
+      "LIBCSTATIC=yes"
+    ];
 
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh
@@ -60,14 +77,16 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "RAISE_SETFCAP=no" ];
 
-  postInstall = ''
-    ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
-    mkdir -p "$doc/share/doc/${pname}-${version}"
-    cp License "$doc/share/doc/${pname}-${version}/"
-  '' + lib.optionalString usePam ''
-    mkdir -p "$pam/lib/security"
-    mv "$lib"/lib/security "$pam/lib"
-  '';
+  postInstall =
+    ''
+      ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
+      mkdir -p "$doc/share/doc/${pname}-${version}"
+      cp License "$doc/share/doc/${pname}-${version}/"
+    ''
+    + lib.optionalString usePam ''
+      mkdir -p "$pam/lib/security"
+      mv "$lib"/lib/security "$pam/lib"
+    '';
 
   passthru.tests = {
     inherit
@@ -80,7 +99,8 @@ stdenv.mkDerivation rec {
       qemu
       squid
       tor
-      uwsgi;
+      uwsgi
+      ;
   };
 
   meta = {

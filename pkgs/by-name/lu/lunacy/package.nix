@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, zlib
-, libgcc
-, fontconfig
-, libX11
-, lttng-ust
-, icu
-, libICE
-, libSM
-, libXcursor
-, openssl
-, imagemagick
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  zlib,
+  libgcc,
+  fontconfig,
+  libX11,
+  lttng-ust,
+  icu,
+  libICE,
+  libSM,
+  libXcursor,
+  openssl,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,16 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # adds to the RPATHS of all shared objects (exe and libs)
-  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
-    icu
-    openssl
-    stdenv.cc.libc
-    stdenv.cc.cc
-  ] ++ [
-    # technically, this should be in runtimeDependencies but will not work as
-    # "lib" is appended to all elements in the array
-    "${placeholder "out"}/lib/lunacy"
-  ];
+  appendRunpaths =
+    map (pkg: (lib.getLib pkg) + "/lib") [
+      icu
+      openssl
+      stdenv.cc.libc
+      stdenv.cc.cc
+    ]
+    ++ [
+      # technically, this should be in runtimeDependencies but will not work as
+      # "lib" is appended to all elements in the array
+      "${placeholder "out"}/lib/lunacy"
+    ];
 
   # will add to the RPATH of executable only
   runtimeDependencies = [

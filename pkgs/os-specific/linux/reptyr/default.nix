@@ -1,8 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 let
   python = python3.withPackages (p: [ p.pexpect ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "0.10.0";
   pname = "reptyr";
 
@@ -13,7 +19,10 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-jlO/ykrwGJkgKiPxfRQEX4TSksrbPQhkQs+QddwqaQ4=";
   };
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+  makeFlags = [
+    "PREFIX="
+    "DESTDIR=$(out)"
+  ];
 
   nativeCheckInputs = [ python ];
 
@@ -21,9 +30,7 @@ in stdenv.mkDerivation rec {
   # It can be neither used nor tested if the kernel is not told to allow this
   doCheck = false;
 
-  checkFlags = [
-    "PYTHON_CMD=${python.interpreter}"
-  ];
+  checkFlags = [ "PYTHON_CMD=${python.interpreter}" ];
 
   meta = {
     platforms = [
@@ -37,7 +44,7 @@ in stdenv.mkDerivation rec {
       "aarch64-linux"
       "riscv64-linux"
     ];
-    maintainers = with lib.maintainers; [raskin];
+    maintainers = with lib.maintainers; [ raskin ];
     license = lib.licenses.mit;
     description = "Reparent a running program to a new terminal";
     mainProgram = "reptyr";

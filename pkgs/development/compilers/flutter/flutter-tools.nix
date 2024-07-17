@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, systemPlatform
-, buildDartApplication
-, git
-, which
-, dart
-, version
-, flutterSrc
-, patches ? [ ]
-, pubspecLock
+{
+  lib,
+  stdenv,
+  systemPlatform,
+  buildDartApplication,
+  git,
+  which,
+  dart,
+  version,
+  flutterSrc,
+  patches ? [ ],
+  pubspecLock,
 }:
 
 buildDartApplication.override { inherit dart; } rec {
@@ -23,19 +24,23 @@ buildDartApplication.override { inherit dart; } rec {
   inherit patches;
   # The given patches are made for the entire SDK source tree.
   prePatch = ''pushd "$NIX_BUILD_TOP/source"'';
-  postPatch = ''
-    popd
-  ''
-  # Use arm64 instead of arm64e.
-  + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace lib/src/ios/xcodeproj.dart \
-      --replace-fail arm64e arm64
-  '';
+  postPatch =
+    ''
+      popd
+    ''
+    # Use arm64 instead of arm64e.
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace lib/src/ios/xcodeproj.dart \
+        --replace-fail arm64e arm64
+    '';
 
   # When the JIT snapshot is being built, the application needs to run.
   # It attempts to generate configuration files, and relies on a few external
   # tools.
-  nativeBuildInputs = [ git which ];
+  nativeBuildInputs = [
+    git
+    which
+  ];
   preConfigure = ''
     export HOME=.
     export FLUTTER_ROOT="$NIX_BUILD_TOP/source"

@@ -1,16 +1,17 @@
-{ stdenv
-, fetchFromGitLab
-, fetchpatch
-, lib
-, darwin
-, nettle
-, nix-update-script
-, rustPlatform
-, pkg-config
-, capnproto
-, installShellFiles
-, openssl
-, sqlite
+{
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  lib,
+  darwin,
+  nettle,
+  nix-update-script,
+  rustPlatform,
+  pkg-config,
+  capnproto,
+  installShellFiles,
+  openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,11 +42,19 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    nettle
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs =
+    [
+      openssl
+      sqlite
+      nettle
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
@@ -74,7 +83,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ minijackson doronbehar ];
+    maintainers = with maintainers; [
+      minijackson
+      doronbehar
+    ];
     mainProgram = "sq";
   };
 }

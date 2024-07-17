@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, zig_0_10
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  zig_0_10,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

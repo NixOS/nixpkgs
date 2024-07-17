@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, SDL, libvorbis, flac, libmikmod }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  SDL,
+  libvorbis,
+  flac,
+  libmikmod,
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL_sound";
@@ -9,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "1pz6g56gcy7pmmz3hhych3iq9jvinml2yjz15fjqjlj8pc5zv69r";
   };
 
-  buildInputs = [ SDL libvorbis flac libmikmod ];
+  buildInputs = [
+    SDL
+    libvorbis
+    flac
+    libmikmod
+  ];
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 

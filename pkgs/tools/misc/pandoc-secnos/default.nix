@@ -1,8 +1,9 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
-, pandoc-xnos
-, setuptools
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  lib,
+  pandoc-xnos,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -17,15 +18,11 @@ buildPythonApplication rec {
     sha256 = "sha256-J9KLZvioYM3Pl2UXjrEgd4PuLTwCLYy9SsJIzgw5/jU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ pandoc-xnos ];
 
-  patches = [
-    ./patch/fix-manifest.patch
-  ];
+  patches = [ ./patch/fix-manifest.patch ];
 
   # Different pandoc executables are not available
   doCheck = false;

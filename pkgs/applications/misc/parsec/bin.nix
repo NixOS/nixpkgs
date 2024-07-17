@@ -1,28 +1,29 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, dpkg
-, autoPatchelfHook
-, makeWrapper
-, fetchurl
-, alsa-lib
-, openssl
-, udev
-, libglvnd
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXfixes
-, libpulseaudio
-, libva
-, ffmpeg_5
-, libpng
-, libjpeg8
-, curl
-, vulkan-loader
-, gnome
-, zenity ? gnome.zenity
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  alsa-lib,
+  openssl,
+  udev,
+  libglvnd,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libXfixes,
+  libpulseaudio,
+  libva,
+  ffmpeg_5,
+  libpng,
+  libjpeg8,
+  curl,
+  vulkan-loader,
+  gnome,
+  zenity ? gnome.zenity,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -42,7 +43,11 @@ stdenvNoCC.mkDerivation {
     runHook postUnpack
   '';
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     stdenv.cc.cc # libstdc++
@@ -70,9 +75,7 @@ stdenvNoCC.mkDerivation {
     vulkan-loader
   ];
 
-  binPath = lib.makeBinPath [
-    zenity
-  ];
+  binPath = lib.makeBinPath [ zenity ];
 
   prepareParsec = ''
     if [[ ! -e "$HOME/.parsec/appdata.json" ]]; then
@@ -117,7 +120,10 @@ stdenvNoCC.mkDerivation {
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx pabloaul ];
+    maintainers = with maintainers; [
+      arcnmx
+      pabloaul
+    ];
     platforms = platforms.linux;
     mainProgram = "parsecd";
   };

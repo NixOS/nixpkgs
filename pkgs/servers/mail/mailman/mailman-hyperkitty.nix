@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchPypi
-, mailman
-, nixosTests
+{
+  lib,
+  python3,
+  fetchPypi,
+  mailman,
+  nixosTests,
 }:
 
 with python3.pkgs;
@@ -36,11 +37,11 @@ buildPythonPackage rec {
   # There is an AssertionError
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mailman_hyperkitty"
-  ];
+  pythonImportsCheck = [ "mailman_hyperkitty" ];
 
-  passthru.tests = { inherit (nixosTests) mailman; };
+  passthru.tests = {
+    inherit (nixosTests) mailman;
+  };
 
   meta = with lib; {
     description = "Mailman archiver plugin for HyperKitty";

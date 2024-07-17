@@ -1,4 +1,13 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kubeshark, nix-update-script }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kubeshark,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "kubeshark";
@@ -13,14 +22,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-SmvO9DYOXxnmN2dmHPPOguVwEbWSH/xNLBB+idpzopo=";
 
-  ldflags = let t = "github.com/kubeshark/kubeshark"; in [
-   "-s" "-w"
-   "-X ${t}/misc.GitCommitHash=${src.rev}"
-   "-X ${t}/misc.Branch=master"
-   "-X ${t}/misc.BuildTimestamp=0"
-   "-X ${t}/misc.Platform=unknown"
-   "-X ${t}/misc.Ver=${version}"
-  ];
+  ldflags =
+    let
+      t = "github.com/kubeshark/kubeshark";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}/misc.GitCommitHash=${src.rev}"
+      "-X ${t}/misc.Branch=master"
+      "-X ${t}/misc.BuildTimestamp=0"
+      "-X ${t}/misc.Platform=unknown"
+      "-X ${t}/misc.Ver=${version}"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,6 +70,9 @@ buildGoModule rec {
       Think TCPDump and Wireshark re-invented for Kubernetes
       capturing, dissecting and monitoring all traffic and payloads going in, out and across containers, pods, nodes and clusters.
     '';
-    maintainers = with maintainers; [ bryanasdev000 qjoly ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      qjoly
+    ];
   };
 }

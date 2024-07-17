@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, ffmpeg, x264, libpulseaudio
-, mesa # for libgbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  ffmpeg,
+  x264,
+  libpulseaudio,
+  mesa, # for libgbm
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +26,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-SXPXvKXn236oO1WakkMNql3lj2flYYlmArVHGomH0/k=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    scdoc
+  ];
   buildInputs = [
-    wayland wayland-protocols ffmpeg x264 libpulseaudio mesa
+    wayland
+    wayland-protocols
+    ffmpeg
+    x264
+    libpulseaudio
+    mesa
   ];
 
   meta = with lib; {

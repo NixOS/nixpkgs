@@ -1,10 +1,11 @@
-{ lib
-, qt5
-, qtbase
-, qttools
-, qtwebsockets
-, qtmultimedia
-, fetchFromGitHub
+{
+  lib,
+  qt5,
+  qtbase,
+  qttools,
+  qtwebsockets,
+  qtmultimedia,
+  fetchFromGitHub,
 }:
 
 qt5.mkDerivation {
@@ -27,9 +28,7 @@ qt5.mkDerivation {
     mv bin $out
   '';
 
-  nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   buildInputs = [
     qtbase

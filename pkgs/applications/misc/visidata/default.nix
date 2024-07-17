@@ -1,47 +1,51 @@
-{ stdenv
-, lib
-, buildPythonApplication
-, fetchFromGitHub
-# python requirements
-, beautifulsoup4
-, boto3
-, faker
-, fonttools
-, h5py
-, importlib-metadata
-, lxml
-, matplotlib
-, numpy
-, odfpy
-, openpyxl
-, pandas
-, pdfminer-six
-, praw
-, psutil
-, psycopg2
-, pyarrow
-, pyshp
-, pypng
-, python-dateutil
-, pyyaml
-, requests
-, seaborn
-, setuptools
-, sh
-, tabulate
-, urllib3
-, vobject
-, wcwidth
-, xlrd
-, xlwt
-, zstandard
-, zulip
-# other
-, git
-, withPcap ? true, dpkt, dnslib
-, withXclip ? stdenv.isLinux, xclip
-, testers
-, visidata
+{
+  stdenv,
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  # python requirements
+  beautifulsoup4,
+  boto3,
+  faker,
+  fonttools,
+  h5py,
+  importlib-metadata,
+  lxml,
+  matplotlib,
+  numpy,
+  odfpy,
+  openpyxl,
+  pandas,
+  pdfminer-six,
+  praw,
+  psutil,
+  psycopg2,
+  pyarrow,
+  pyshp,
+  pypng,
+  python-dateutil,
+  pyyaml,
+  requests,
+  seaborn,
+  setuptools,
+  sh,
+  tabulate,
+  urllib3,
+  vobject,
+  wcwidth,
+  xlrd,
+  xlwt,
+  zstandard,
+  zulip,
+  # other
+  git,
+  withPcap ? true,
+  dpkt,
+  dnslib,
+  withXclip ? stdenv.isLinux,
+  xclip,
+  testers,
+  visidata,
 }:
 buildPythonApplication rec {
   pname = "visidata";
@@ -54,61 +58,64 @@ buildPythonApplication rec {
     hash = "sha256-gplrkrFTIP6TLvk1YazD5roDzsPvDtOXLlTOmTio52s=";
   };
 
-  propagatedBuildInputs = [
-    # from visidata/requirements.txt
-    # packages not (yet) present in nixpkgs are commented
-    python-dateutil
-    pandas
-    requests
-    lxml
-    openpyxl
-    xlrd
-    xlwt
-    h5py
-    psycopg2
-    boto3
-    pyshp
-    #mapbox-vector-tile
-    pypng
-    #pyconll
-    fonttools
-    #sas7bdat
-    #xport
-    #savReaderWriter
-    pyyaml
-    #namestand
-    #datapackage
-    pdfminer-six
-    #tabula
-    vobject
-    tabulate
-    wcwidth
-    zstandard
-    odfpy
-    urllib3
-    pyarrow
-    seaborn
-    matplotlib
-    sh
-    psutil
-    numpy
+  propagatedBuildInputs =
+    [
+      # from visidata/requirements.txt
+      # packages not (yet) present in nixpkgs are commented
+      python-dateutil
+      pandas
+      requests
+      lxml
+      openpyxl
+      xlrd
+      xlwt
+      h5py
+      psycopg2
+      boto3
+      pyshp
+      #mapbox-vector-tile
+      pypng
+      #pyconll
+      fonttools
+      #sas7bdat
+      #xport
+      #savReaderWriter
+      pyyaml
+      #namestand
+      #datapackage
+      pdfminer-six
+      #tabula
+      vobject
+      tabulate
+      wcwidth
+      zstandard
+      odfpy
+      urllib3
+      pyarrow
+      seaborn
+      matplotlib
+      sh
+      psutil
+      numpy
 
-    #requests_cache
-    beautifulsoup4
+      #requests_cache
+      beautifulsoup4
 
-    faker
-    praw
-    zulip
-    #pyairtable
+      faker
+      praw
+      zulip
+      #pyairtable
 
-    setuptools
-    importlib-metadata
-  ] ++ lib.optionals withPcap [ dpkt dnslib ]
-  ++ lib.optional withXclip xclip;
+      setuptools
+      importlib-metadata
+    ]
+    ++ lib.optionals withPcap [
+      dpkt
+      dnslib
+    ]
+    ++ lib.optional withXclip xclip;
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
@@ -141,7 +148,7 @@ buildPythonApplication rec {
     install -Dm644 _visidata -t $out/share/zsh/site-functions
   '';
 
-  pythonImportsCheck = ["visidata"];
+  pythonImportsCheck = [ "visidata" ];
 
   passthru.tests.version = testers.testVersion {
     package = visidata;
@@ -151,7 +158,10 @@ buildPythonApplication rec {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ raskin markus1189 ];
+    maintainers = with lib.maintainers; [
+      raskin
+      markus1189
+    ];
     homepage = "https://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

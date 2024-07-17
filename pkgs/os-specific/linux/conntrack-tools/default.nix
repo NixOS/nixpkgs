@@ -1,7 +1,19 @@
-{ fetchurl, lib, stdenv, flex, bison, pkg-config, libmnl, libnfnetlink
-, libnetfilter_conntrack, libnetfilter_queue, libnetfilter_cttimeout
-, libnetfilter_cthelper, libtirpc
-, systemdSupport ? true, systemd
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+  bison,
+  pkg-config,
+  libmnl,
+  libnfnetlink,
+  libnetfilter_conntrack,
+  libnetfilter_queue,
+  libnetfilter_cttimeout,
+  libnetfilter_cthelper,
+  libtirpc,
+  systemdSupport ? true,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,16 +26,21 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libmnl libnfnetlink libnetfilter_conntrack libnetfilter_queue
-    libnetfilter_cttimeout libnetfilter_cthelper libtirpc
-  ] ++ lib.optionals systemdSupport [
-    systemd
+    libmnl
+    libnfnetlink
+    libnetfilter_conntrack
+    libnetfilter_queue
+    libnetfilter_cttimeout
+    libnetfilter_cthelper
+    libtirpc
+  ] ++ lib.optionals systemdSupport [ systemd ];
+  nativeBuildInputs = [
+    flex
+    bison
+    pkg-config
   ];
-  nativeBuildInputs = [ flex bison pkg-config ];
 
-  configureFlags = [
-    (lib.enableFeature systemdSupport "systemd")
-  ];
+  configureFlags = [ (lib.enableFeature systemdSupport "systemd") ];
 
   meta = with lib; {
     homepage = "http://conntrack-tools.netfilter.org/";

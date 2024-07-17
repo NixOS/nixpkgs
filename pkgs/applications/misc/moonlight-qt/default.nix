@@ -1,26 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, pkg-config
-, qmake
-, qtquickcontrols2
-, SDL2
-, SDL2_ttf
-, libva
-, libvdpau
-, libxkbcommon
-, alsa-lib
-, libpulseaudio
-, openssl
-, libopus
-, ffmpeg
-, wayland
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  pkg-config,
+  qmake,
+  qtquickcontrols2,
+  SDL2,
+  SDL2_ttf,
+  libva,
+  libvdpau,
+  libxkbcommon,
+  alsa-lib,
+  libpulseaudio,
+  openssl,
+  libopus,
+  ffmpeg,
+  wayland,
+  darwin,
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AVFoundation
+    AppKit
+    AudioUnit
+    VideoToolbox
+    ;
 in
 
 stdenv.mkDerivation rec {
@@ -43,26 +49,29 @@ stdenv.mkDerivation rec {
     qmake
   ];
 
-  buildInputs = [
-    qtquickcontrols2
-    SDL2
-    SDL2_ttf
-    openssl
-    libopus
-    ffmpeg
-  ] ++ lib.optionals stdenv.isLinux [
-    libva
-    libvdpau
-    libxkbcommon
-    alsa-lib
-    libpulseaudio
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    AVFoundation
-    AppKit
-    AudioUnit
-    VideoToolbox
-  ];
+  buildInputs =
+    [
+      qtquickcontrols2
+      SDL2
+      SDL2_ttf
+      openssl
+      libopus
+      ffmpeg
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libva
+      libvdpau
+      libxkbcommon
+      alsa-lib
+      libpulseaudio
+      wayland
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AVFoundation
+      AppKit
+      AudioUnit
+      VideoToolbox
+    ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications $out/bin

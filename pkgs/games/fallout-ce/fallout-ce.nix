@@ -1,6 +1,4 @@
-{ callPackage
-, fetchFromGitHub
-}:
+{ callPackage, fetchFromGitHub }:
 
 callPackage ./build.nix rec {
   pname = "fallout-ce";

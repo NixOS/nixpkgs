@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,9 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   # Path issues with the tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylode"
-  ];
+  pythonImportsCheck = [ "pylode" ];
 
   meta = with lib; {
     description = "OWL ontology documentation tool using Python and templating, based on LODE";

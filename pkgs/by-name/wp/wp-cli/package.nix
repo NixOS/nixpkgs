@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, formats
-, installShellFiles
-, makeWrapper
-, php
-, phpIniFile ? null
+{
+  stdenv,
+  lib,
+  fetchurl,
+  formats,
+  installShellFiles,
+  makeWrapper,
+  php,
+  phpIniFile ? null,
 }:
 
 let
@@ -17,14 +18,13 @@ let
   };
 
   ini =
-    if phpIniFile == null
-    then
-      (formats.ini { }).generate "php.ini"
-        {
-          PHP.memory_limit = -1; # no limit as composer uses a lot of memory
-          Phar."phar.readonly" = "Off";
-        }
-    else phpIniFile;
+    if phpIniFile == null then
+      (formats.ini { }).generate "php.ini" {
+        PHP.memory_limit = -1; # no limit as composer uses a lot of memory
+        Phar."phar.readonly" = "Off";
+      }
+    else
+      phpIniFile;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

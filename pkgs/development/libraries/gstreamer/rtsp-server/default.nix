@@ -1,16 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gettext
-, gobject-introspection
-, gst-plugins-base
-, gst-plugins-bad
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gettext,
+  gobject-introspection,
+  gst-plugins-base,
+  gst-plugins-bad,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +36,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  ] ++ lib.optionals enableDocumentation [ hotdoc ];
 
   buildInputs = [
     gst-plugins-base
@@ -61,6 +61,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr lilyinstarlight ];
+    maintainers = with maintainers; [
+      bkchr
+      lilyinstarlight
+    ];
   };
 }

@@ -1,4 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  asciidoctor,
+  installShellFiles,
+  git,
+  testers,
+  git-lfs,
+}:
 
 buildGoModule rec {
   pname = "git-lfs";
@@ -13,7 +22,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-N8HB2qwBxjzfNucftHxmX2W9srCx62pjmkCWzwiCj/I=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -45,9 +57,7 @@ buildGoModule rec {
       --zsh <($out/bin/git-lfs completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = git-lfs;
-  };
+  passthru.tests.version = testers.testVersion { package = git-lfs; };
 
   meta = with lib; {
     description = "Git extension for versioning large files";

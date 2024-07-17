@@ -20,9 +20,11 @@ mkKdeDerivation {
     })
   ];
 
-  extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
-  ];
+  extraCmakeFlags = [ "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner" ];
 
-  extraBuildInputs = [qtwayland libvncserver xorg.libXdamage];
+  extraBuildInputs = [
+    qtwayland
+    libvncserver
+    xorg.libXdamage
+  ];
 }

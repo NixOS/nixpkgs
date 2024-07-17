@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
 
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  makeWrapper,
 
-, glm
-, lua5_4
-, SDL2
-, SDL2_mixer
-, enet
-, libuv
-, libuuid
-, wayland-protocols
-, Carbon
-, CoreServices
-# optionals
-, opencl-headers
-, OpenCL
+  glm,
+  lua5_4,
+  SDL2,
+  SDL2_mixer,
+  enet,
+  libuv,
+  libuuid,
+  wayland-protocols,
+  Carbon,
+  CoreServices,
+  # optionals
+  opencl-headers,
+  OpenCL,
 
-, callPackage
-, nixosTests
+  callPackage,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,20 +47,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    glm
-    lua5_4
-    SDL2
-    SDL2_mixer
-    enet
-    libuv
-    libuuid
-    # Only needed for the game
-    #postgresql
-    #libpqxx
-    #mosquitto
-  ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
+  buildInputs =
+    [
+      glm
+      lua5_4
+      SDL2
+      SDL2_mixer
+      enet
+      libuv
+      libuuid
+      # Only needed for the game
+      #postgresql
+      #libpqxx
+      #mosquitto
+    ]
+    ++ lib.optional stdenv.isLinux wayland-protocols
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      CoreServices
+      OpenCL
+    ]
     ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
   cmakeFlags = [
@@ -87,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
-    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -103,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://mgerhardy.github.io/vengi/";
     downloadPage = "https://github.com/mgerhardy/vengi/releases";
-    license = [ licenses.mit licenses.cc-by-sa-30 ];
+    license = [
+      licenses.mit
+      licenses.cc-by-sa-30
+    ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

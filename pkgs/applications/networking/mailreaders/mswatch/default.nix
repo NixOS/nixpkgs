@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchsvn
-, pkg-config
-, autoreconfHook
-, bison
-, flex
-, glib
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  pkg-config,
+  autoreconfHook,
+  bison,
+  flex,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison # For yacc
     flex
   ];
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
   meta = with lib; {
     description = "A command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";

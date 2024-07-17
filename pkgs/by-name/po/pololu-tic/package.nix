@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusbp
-, cmake
-, pkg-config
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusbp,
+  cmake,
+  pkg-config,
+  qt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
-    libusbp
-  ];
+  propagatedBuildInputs = [ libusbp ];
 
-  buildInputs = [
-    qt5.qtbase
-  ];
+  buildInputs = [ qt5.qtbase ];
 
   meta = with lib; {
     homepage = "https://github.com/pololu/pololu-tic-software";

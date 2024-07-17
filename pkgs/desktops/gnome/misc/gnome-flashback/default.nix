@@ -1,42 +1,41 @@
-{ stdenv
-, lib
-, autoreconfHook
-, fetchurl
-, gettext
-, glib
-, gnome-bluetooth
-, gnome-desktop
-, gnome-panel
-, gnome-session
-, gnome
-, gsettings-desktop-schemas
-, gtk3
-, ibus
-, libcanberra-gtk3
-, libpulseaudio
-, libxkbfile
-, libxml2
-, pkg-config
-, polkit
-, gdm
-, systemd
-, upower
-, pam
-, wrapGAppsHook3
-, writeTextFile
-, xkeyboard_config
-, xorg
-, runCommand
-, buildEnv
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  fetchurl,
+  gettext,
+  glib,
+  gnome-bluetooth,
+  gnome-desktop,
+  gnome-panel,
+  gnome-session,
+  gnome,
+  gsettings-desktop-schemas,
+  gtk3,
+  ibus,
+  libcanberra-gtk3,
+  libpulseaudio,
+  libxkbfile,
+  libxml2,
+  pkg-config,
+  polkit,
+  gdm,
+  systemd,
+  upower,
+  pam,
+  wrapGAppsHook3,
+  writeTextFile,
+  xkeyboard_config,
+  xorg,
+  runCommand,
+  buildEnv,
 }:
 let
   pname = "gnome-flashback";
   version = "3.52.1";
 
   # From data/sessions/Makefile.am
-  requiredComponentsCommon = enableGnomePanel:
-    [ ]
-    ++ lib.optional enableGnomePanel "gnome-panel";
+  requiredComponentsCommon = enableGnomePanel: [ ] ++ lib.optional enableGnomePanel "gnome-panel";
   requiredComponentsGsd = [
     "org.gnome.SettingsDaemon.A11ySettings"
     "org.gnome.SettingsDaemon.Color"
@@ -55,7 +54,13 @@ let
     "org.gnome.SettingsDaemon.Wacom"
     "org.gnome.SettingsDaemon.XSettings"
   ];
-  requiredComponents = wmName: enableGnomePanel: "RequiredComponents=${lib.concatStringsSep ";" ([ wmName ] ++ requiredComponentsCommon enableGnomePanel ++ requiredComponentsGsd)};";
+  requiredComponents =
+    wmName: enableGnomePanel:
+    "RequiredComponents=${
+      lib.concatStringsSep ";" (
+        [ wmName ] ++ requiredComponentsCommon enableGnomePanel ++ requiredComponentsGsd
+      )
+    };";
 
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
@@ -127,7 +132,12 @@ let
         versionPolicy = "odd-unstable";
       };
 
-      mkWmApplication = { wmName, wmLabel, wmCommand }:
+      mkWmApplication =
+        {
+          wmName,
+          wmLabel,
+          wmCommand,
+        }:
         writeTextFile {
           name = "gnome-flashback-${wmName}-wm";
           destination = "/share/applications/${wmName}.desktop";
@@ -145,7 +155,12 @@ let
           '';
         };
 
-      mkGnomeSession = { wmName, wmLabel, enableGnomePanel }:
+      mkGnomeSession =
+        {
+          wmName,
+          wmLabel,
+          enableGnomePanel,
+        }:
         writeTextFile {
           name = "gnome-flashback-${wmName}-gnome-session";
           destination = "/share/gnome-session/sessions/gnome-flashback-${wmName}.session";
@@ -156,25 +171,36 @@ let
           '';
         };
 
-      mkSessionForWm = { wmName, wmLabel, wmCommand }:
-        writeTextFile
-          {
-            name = "gnome-flashback-${wmName}-xsession";
-            destination = "/share/xsessions/gnome-flashback-${wmName}.desktop";
-            text = ''
-              [Desktop Entry]
-              Name=GNOME Flashback (${wmLabel})
-              Comment=This session logs you into GNOME Flashback with ${wmLabel}
-              Exec=${gnome-session}/bin/gnome-session --session=gnome-flashback-${wmName}
-              TryExec=${wmCommand}
-              Type=Application
-              DesktopNames=GNOME-Flashback;GNOME;
-            '';
-          } // {
+      mkSessionForWm =
+        {
+          wmName,
+          wmLabel,
+          wmCommand,
+        }:
+        writeTextFile {
+          name = "gnome-flashback-${wmName}-xsession";
+          destination = "/share/xsessions/gnome-flashback-${wmName}.desktop";
+          text = ''
+            [Desktop Entry]
+            Name=GNOME Flashback (${wmLabel})
+            Comment=This session logs you into GNOME Flashback with ${wmLabel}
+            Exec=${gnome-session}/bin/gnome-session --session=gnome-flashback-${wmName}
+            TryExec=${wmCommand}
+            Type=Application
+            DesktopNames=GNOME-Flashback;GNOME;
+          '';
+        }
+        // {
           providedSessions = [ "gnome-flashback-${wmName}" ];
         };
 
-      mkSystemdTargetForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
+      mkSystemdTargetForWm =
+        {
+          wmName,
+          wmLabel,
+          wmCommand,
+          enableGnomePanel,
+        }:
         runCommand "gnome-flashback-${wmName}.target" { } ''
           mkdir -p $out/lib/systemd/user
           cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \

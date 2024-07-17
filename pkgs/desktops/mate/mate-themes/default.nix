@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, mate-icon-theme
-, gtk2
-, gtk3
-, gtk_engines
-, gtk-engine-murrine
-, gdk-pixbuf
-, librsvg
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  mate-icon-theme,
+  gtk2,
+  gtk3,
+  gtk_engines,
+  gtk-engine-murrine,
+  gdk-pixbuf,
+  librsvg,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +37,7 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontDropIconThemeCache = true;
 
@@ -53,7 +52,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A set of themes from MATE";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ lgpl21Plus lgpl3Only gpl3Plus ];
+    license = with licenses; [
+      lgpl21Plus
+      lgpl3Only
+      gpl3Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

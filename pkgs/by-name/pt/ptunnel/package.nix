@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libpcap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=cc"
   ];
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   meta = with lib; {
     description = "A tool for reliably tunneling TCP connections over ICMP echo request and reply packets";

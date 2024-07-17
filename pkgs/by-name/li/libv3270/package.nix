@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, which
-, pkg-config
-, gtk3
-, lib3270
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  pkg-config,
+  gtk3,
+  lib3270,
 }:
 
 stdenv.mkDerivation rec {

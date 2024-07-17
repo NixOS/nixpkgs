@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, home-assistant
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  home-assistant,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       'homeassistant = "~${lib.versions.majorMinor home-assistant.version}"'
   '';
 
-  pythonImportsCheck = [
-    "homeassistant-stubs"
-  ];
+  pythonImportsCheck = [ "homeassistant-stubs" ];
 
   doCheck = false;
 

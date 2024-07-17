@@ -1,4 +1,10 @@
-{ self, callPackage, fetchFromGitHub, lib, passthruFun }:
+{
+  self,
+  callPackage,
+  fetchFromGitHub,
+  lib,
+  passthruFun,
+}:
 
 callPackage ./default.nix rec {
   # The patch version is the timestamp of the git commit,
@@ -12,9 +18,9 @@ callPackage ./default.nix rec {
     hash = "sha256-3/7ASZRniytw5RkOy0F9arHkZevq6dxmya+Ba3A5IIA=";
   };
 
-  extraMeta = { # this isn't precise but it at least stops the useless Hydra build
-    platforms = with lib; filter (p: !hasPrefix "aarch64-" p)
-      (platforms.linux ++ platforms.darwin);
+  extraMeta = {
+    # this isn't precise but it at least stops the useless Hydra build
+    platforms = with lib; filter (p: !hasPrefix "aarch64-" p) (platforms.linux ++ platforms.darwin);
   };
   inherit self passthruFun;
 }

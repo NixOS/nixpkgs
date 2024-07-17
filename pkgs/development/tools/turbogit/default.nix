@@ -1,4 +1,11 @@
-{ fetchFromGitHub, buildGoModule, lib, installShellFiles, libgit2, pkg-config }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+  installShellFiles,
+  libgit2,
+  pkg-config,
+}:
 buildGoModule rec {
   pname = "turbogit";
   version = "3.1.1";
@@ -15,7 +22,10 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   buildInputs = [ libgit2 ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   postInstall = ''
     # Move turbogit binary to tug
     ln -s $out/bin/turbogit $out/bin/tug

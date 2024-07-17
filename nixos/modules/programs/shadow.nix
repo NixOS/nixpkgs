@@ -1,5 +1,11 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.loginDefs;
 in
@@ -24,27 +30,37 @@ in
         '';
         type = submodule {
           freeformType = (pkgs.formats.keyValue { }).type;
-          /* There are three different sources for user/group id ranges, each of which gets
-             used by different programs:
-             - The login.defs file, used by the useradd, groupadd and newusers commands
-             - The update-users-groups.pl file, used by NixOS in the activation phase to
-               decide on which ids to use for declaratively defined users without a static
-               id
-             - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
-               by systemd for features like ConditionUser=@system and systemd-sysusers
-              */
+          /*
+            There are three different sources for user/group id ranges, each of which gets
+            used by different programs:
+            - The login.defs file, used by the useradd, groupadd and newusers commands
+            - The update-users-groups.pl file, used by NixOS in the activation phase to
+              decide on which ids to use for declaratively defined users without a static
+              id
+            - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+              by systemd for features like ConditionUser=@system and systemd-sysusers
+          */
           options = {
             DEFAULT_HOME = lib.mkOption {
               description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
-              type = enum [ "yes" "no" ];
+              type = enum [
+                "yes"
+                "no"
+              ];
             };
 
             ENCRYPT_METHOD = lib.mkOption {
               description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
-              type = enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
+              type = enum [
+                "YESCRYPT"
+                "SHA512"
+                "SHA256"
+                "MD5"
+                "DES"
+              ];
             };
 
             SYS_UID_MIN = lib.mkOption {
@@ -158,10 +174,10 @@ in
       }
     ];
 
-    security.loginDefs.settings.CHFN_RESTRICT =
-      lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
+    security.loginDefs.settings.CHFN_RESTRICT = lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
-    environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
+    environment.systemPackages =
+      lib.optional config.users.mutableUsers cfg.package
       ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
       ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
@@ -169,9 +185,7 @@ in
       # Create custom toKeyValue generator
       # see https://man7.org/linux/man-pages/man5/login.defs.5.html for config specification
       let
-        toKeyValue = lib.generators.toKeyValue {
-          mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
-        };
+        toKeyValue = lib.generators.toKeyValue { mkKeyValue = lib.generators.mkKeyValueDefault { } " "; };
       in
       {
         # /etc/login.defs: global configuration for pwdutils.
@@ -187,8 +201,12 @@ in
       };
 
     security.pam.services = {
-      chsh = { rootOK = true; };
-      chfn = { rootOK = true; };
+      chsh = {
+        rootOK = true;
+      };
+      chfn = {
+        rootOK = true;
+      };
       su = {
         rootOK = true;
         forwardXAuth = true;
@@ -211,7 +229,9 @@ in
         showMotd = true;
         updateWtmp = true;
       };
-      chpasswd = { rootOK = true; };
+      chpasswd = {
+        rootOK = true;
+      };
     };
 
     security.wrappers =

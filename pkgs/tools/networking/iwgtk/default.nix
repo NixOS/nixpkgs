@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wrapGAppsHook4
-, gtk4
-, qrencode
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wrapGAppsHook4,
+  gtk4,
+  qrencode,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,18 @@ stdenv.mkDerivation rec {
   # patch systemd service to pass necessary environments and use absolute paths
   patches = [ ./systemd-service.patch ];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook4 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wrapGAppsHook4
+  ];
 
-  buildInputs = [ gtk4 qrencode ];
+  buildInputs = [
+    gtk4
+    qrencode
+  ];
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/user/iwgtk.service --subst-var out

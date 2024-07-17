@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, ogg, libopus }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  ogg,
+  libopus,
+}:
 
 buildDunePackage rec {
   pname = "opus";
@@ -15,7 +23,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ogg libopus.dev ];
+  propagatedBuildInputs = [
+    ogg
+    libopus.dev
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-opus";

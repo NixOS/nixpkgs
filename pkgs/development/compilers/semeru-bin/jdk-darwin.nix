@@ -2,7 +2,7 @@
 
 let
   sources = (lib.importJSON ./sources.json).openj9.mac;
-  common = opts: callPackage (import ./jdk-darwin-base.nix opts) {};
+  common = opts: callPackage (import ./jdk-darwin-base.nix opts) { };
 in
 {
   jdk-8 = common { sourcePerArch = sources.jdk.openjdk8; };

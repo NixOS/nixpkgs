@@ -1,13 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildGoPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
 }:
 
 buildGoPackage rec {
   pname = "aws-assume-role";
   version = "0.3.2";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   goPackagePath = "github.com/remind101/assume-role";
 

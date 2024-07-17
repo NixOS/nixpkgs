@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, moonraker-api
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  moonraker-api,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-oFHV9+5byWCOUxUhOvGHNilCZaoOp2xxb33nF8+CYjE=";
   };
 
-  propagatedBuildInputs = [
-    moonraker-api
-  ];
+  propagatedBuildInputs = [ moonraker-api ];
 
   #skip phases with nothing to do
   dontConfigure = true;

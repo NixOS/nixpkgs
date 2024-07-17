@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib, makeWrapper, openssh }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  openssh,
+}:
 
 buildGoModule rec {
   pname = "morph";
@@ -26,13 +32,19 @@ buildGoModule rec {
     wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
   '';
 
-  outputs = [ "out" "lib" ];
+  outputs = [
+    "out"
+    "lib"
+  ];
 
   meta = with lib; {
     description = "A NixOS host manager written in Golang";
     license = licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
-    maintainers = with maintainers; [adamt johanot];
+    maintainers = with maintainers; [
+      adamt
+      johanot
+    ];
     mainProgram = "morph";
   };
 }

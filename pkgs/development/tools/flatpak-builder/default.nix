@@ -1,53 +1,61 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  nixosTests,
 
-, docbook_xml_dtd_45
-, docbook_xsl
-, gettext
-, libxml2
-, libxslt
-, pkg-config
-, xmlto
-, meson
-, ninja
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  gettext,
+  libxml2,
+  libxslt,
+  pkg-config,
+  xmlto,
+  meson,
+  ninja,
 
-, acl
-, appstream
-, breezy
-, binutils
-, bzip2
-, coreutils
-, cpio
-, curl
-, debugedit
-, elfutils
-, flatpak
-, gitMinimal
-, glib
-, glibcLocales
-, gnumake
-, gnupg
-, gnutar
-, json-glib
-, libcap
-, libsoup
-, libyaml
-, ostree
-, patch
-, rpm
-, unzip
-, attr
+  acl,
+  appstream,
+  breezy,
+  binutils,
+  bzip2,
+  coreutils,
+  cpio,
+  curl,
+  debugedit,
+  elfutils,
+  flatpak,
+  gitMinimal,
+  glib,
+  glibcLocales,
+  gnumake,
+  gnupg,
+  gnutar,
+  json-glib,
+  libcap,
+  libsoup,
+  libyaml,
+  ostree,
+  patch,
+  rpm,
+  unzip,
+  attr,
 }:
 
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
   version = "1.4.2";
 
-  outputs = [ "out" "doc" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+    "installedTests"
+  ];
 
   # fetchFromGitHub fetches an archive which does not contain the full source (https://github.com/flatpak/flatpak-builder/issues/558)
   src = fetchurl {

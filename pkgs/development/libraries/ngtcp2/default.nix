@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, brotli, libev, nghttp3, quictls
-, CoreServices
-, withJemalloc ? false, jemalloc
-, curlHTTP3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  brotli,
+  libev,
+  nghttp3,
+  quictls,
+  CoreServices,
+  withJemalloc ? false,
+  jemalloc,
+  curlHTTP3,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +25,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -26,13 +37,9 @@ stdenv.mkDerivation rec {
     libev
     nghttp3
     quictls
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ] ++ lib.optional withJemalloc jemalloc;
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ] ++ lib.optional withJemalloc jemalloc;
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_STATIC_LIB" false) ];
 
   doCheck = true;
 

@@ -1,14 +1,15 @@
-{ lib
-, python3
-, fetchFromGitHub
-, desktop-file-utils
-, glib
-, gobject-introspection
-, gtk4
-, meson
-, ninja
-, wrapGAppsHook4
-, libadwaita
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  desktop-file-utils,
+  glib,
+  gobject-introspection,
+  gtk4,
+  meson,
+  ninja,
+  wrapGAppsHook4,
+  libadwaita,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,9 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python

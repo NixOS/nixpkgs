@@ -1,4 +1,17 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest, rapidjson }:
+{
+  stdenv,
+  lib,
+  rel,
+  addonDir,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pugixml,
+  glib,
+  nspr,
+  nss,
+  gtest,
+  rapidjson,
+}:
 let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
@@ -26,13 +39,25 @@ buildKodiBinaryAddon rec {
 
   extraNativeBuildInputs = [ gtest ];
 
-  extraBuildInputs = [ pugixml rapidjson ];
+  extraBuildInputs = [
+    pugixml
+    rapidjson
+  ];
 
-  extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
+  extraRuntimeDependencies = [
+    glib
+    nspr
+    nss
+    stdenv.cc.cc.lib
+  ];
 
-  extraInstallPhase = let n = namespace; in ''
-    ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
-  '';
+  extraInstallPhase =
+    let
+      n = namespace;
+    in
+    ''
+      ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.adaptive";

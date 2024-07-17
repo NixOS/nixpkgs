@@ -1,29 +1,30 @@
-{ boost
-, cmake
-, fetchFromGitHub
-, freeglut
-, freetype
-, glew
-, libjpeg
-, libmypaint
-, libpng
-, libusb1
-, lz4
-, xz
-, lzo
-, openblas
-, opencv
-, pkg-config
-, qtbase
-, qtmultimedia
-, qtscript
-, qtserialport
-, lib
-, stdenv
-, superlu
-, wrapQtAppsHook
-, libtiff
-, zlib
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  freeglut,
+  freetype,
+  glew,
+  libjpeg,
+  libmypaint,
+  libpng,
+  libusb1,
+  lz4,
+  xz,
+  lzo,
+  openblas,
+  opencv,
+  pkg-config,
+  qtbase,
+  qtmultimedia,
+  qtscript,
+  qtserialport,
+  lib,
+  stdenv,
+  superlu,
+  wrapQtAppsHook,
+  libtiff,
+  zlib,
 }:
 let
   libtiff-ver = "4.0.3"; # The version in thirdparty/tiff-*
@@ -36,19 +37,27 @@ let
     hash = "sha256-5iXOvh4QTv+G0fjEHU62u7QCee+jbvKhK0+fQXbdJis=";
   };
 
-  opentoonz-opencv = opencv.override {
-    inherit libtiff;
-  };
+  opentoonz-opencv = opencv.override { inherit libtiff; };
 
   opentoonz-libtiff = stdenv.mkDerivation {
     pname = "libtiff";
     version = "${libtiff-ver}-opentoonz";
 
     inherit src;
-    outputs = [ "bin" "dev" "out" "man" "doc" ];
+    outputs = [
+      "bin"
+      "dev"
+      "out"
+      "man"
+      "doc"
+    ];
 
     nativeBuildInputs = [ pkg-config ];
-    propagatedBuildInputs = [ zlib libjpeg xz ];
+    propagatedBuildInputs = [
+      zlib
+      libjpeg
+      xz
+    ];
 
     postUnpack = ''
       sourceRoot="$sourceRoot/thirdparty/tiff-${libtiff-ver}"
@@ -89,7 +98,11 @@ stdenv.mkDerivation {
   pname = "opentoonz";
   version = opentoonz-ver;
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     boost

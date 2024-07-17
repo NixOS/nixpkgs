@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, bzip2
-, htslib
-, llvmPackages
-, xz
-, zlib
-, delly
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  bzip2,
+  htslib,
+  llvmPackages,
+  xz,
+  zlib,
+  delly,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

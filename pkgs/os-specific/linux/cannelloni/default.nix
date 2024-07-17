@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lksctp-tools, sctpSupport ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lksctp-tools,
+  sctpSupport ? true,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";
@@ -10,15 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pAXHo9NCXMFKYcIJogytBiPkQE0nK6chU5TKiDNCKA8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optionals sctpSupport [ lksctp-tools ];
 
-  cmakeFlags = [
-    "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}"
-  ];
+  cmakeFlags = [ "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}" ];
 
   meta = with lib; {
     description = "A SocketCAN over Ethernet tunnel";

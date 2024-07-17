@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, static ? stdenv.hostPlatform.isStatic
-, cxxStandard ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  static ? stdenv.hostPlatform.isStatic,
+  cxxStandard ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ] ++ lib.optionals (cxxStandard != null) [
-    "-DCMAKE_CXX_STANDARD=${cxxStandard}"
-  ];
+  ] ++ lib.optionals (cxxStandard != null) [ "-DCMAKE_CXX_STANDARD=${cxxStandard}" ];
 
   nativeBuildInputs = [ cmake ];
 

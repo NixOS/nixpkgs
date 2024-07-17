@@ -1,12 +1,13 @@
-{ lib
-, commitizen
-, fetchFromGitHub
-, git
-, python3
-, stdenv
-, installShellFiles
-, nix-update-script
-, testers
+{
+  lib,
+  commitizen,
+  fetchFromGitHub,
+  git,
+  python3,
+  stdenv,
+  installShellFiles,
+  nix-update-script,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-tj+zH94IiFqkmkIqyNmgQgQNjvqWgCviLzfGrrCHX1k=";
   };
 
-  pythonRelaxDeps = [
-    "decli"
-  ];
+  pythonRelaxDeps = [ "decli" ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -87,13 +86,12 @@ python3.pkgs.buildPythonApplication rec {
     let
       argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
     in
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      ''
-        installShellCompletion --cmd cz \
-          --bash <(${argcomplete} --shell bash $out/bin/cz) \
-          --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
-          --fish <(${argcomplete} --shell fish $out/bin/cz)
-      '';
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd cz \
+        --bash <(${argcomplete} --shell bash $out/bin/cz) \
+        --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
+        --fish <(${argcomplete} --shell fish $out/bin/cz)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -109,6 +107,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [ lovesegfault anthonyroussel ];
+    maintainers = with maintainers; [
+      lovesegfault
+      anthonyroussel
+    ];
   };
 }

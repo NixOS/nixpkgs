@@ -1,11 +1,16 @@
-{ lib, ruby, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  ruby,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "chef-cli";
   gemdir = ./.;
   inherit ruby;
 
-  exes = ["chef-cli"];
+  exes = [ "chef-cli" ];
 
   passthru.updateScript = bundlerUpdateScript "chef-cli";
 

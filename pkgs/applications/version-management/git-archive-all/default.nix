@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonApplication rec {
@@ -34,9 +35,7 @@ buildPythonApplication rec {
       --replace "import pycodestyle" ""
   '';
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   checkInputs = [
     pytestCheckHook

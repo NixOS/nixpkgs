@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libjpeg
-, libtiff
-, proj
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libjpeg,
+  libtiff,
+  proj,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-bE6UAUKiorriTgYrqhxbMAN2NEtmV/8IIfF02RUghSI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   sourceRoot = "${src.name}/libgeotiff";
 
@@ -34,7 +38,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libtiff proj ];
+  buildInputs = [
+    libtiff
+    proj
+  ];
 
   #hardeningDisable = [ "format" ];
 

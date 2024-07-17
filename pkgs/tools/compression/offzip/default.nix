@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchzip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +15,9 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A tool to unpack the zip data contained in any type of file";

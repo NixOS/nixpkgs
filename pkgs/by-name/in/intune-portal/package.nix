@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, libuuid
-, xorg
-, curlMinimal
-, openssl
-, libsecret
-, webkitgtk
-, libsoup
-, gtk3
-, atk
-, pango
-, glib
-, sqlite
-, zlib
-, systemd
-, msalsdk-dbusclient
-, pam
-, dbus
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  libuuid,
+  xorg,
+  curlMinimal,
+  openssl,
+  libsecret,
+  webkitgtk,
+  libsoup,
+  gtk3,
+  atk,
+  pango,
+  glib,
+  sqlite,
+  zlib,
+  systemd,
+  msalsdk-dbusclient,
+  pam,
+  dbus,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
@@ -100,7 +101,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = { inherit (nixosTests) intune; };
+    tests = {
+      inherit (nixosTests) intune;
+    };
   };
 
   meta = with lib; {

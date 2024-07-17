@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, libpulseaudio
-, glib
-, pango
-, gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  libpulseaudio,
+  glib,
+  pango,
+  gtk3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IH+SLIHO/wu+przH+mgOEnH9m+iAE5s/BJhh0UUHR/0=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [ libpulseaudio glib pango gtk3 ];
+  buildInputs = [
+    libpulseaudio
+    glib
+    pango
+    gtk3
+  ];
 
   postInstall = ''
     install -Dm644 Myxer.desktop $out/share/applications/Myxer.desktop
@@ -37,7 +46,10 @@ rustPlatform.buildRustPackage rec {
     description = "A modern Volume Mixer for PulseAudio";
     homepage = "https://github.com/Aurailus/Myxer";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ erin rster2002 ];
+    maintainers = with maintainers; [
+      erin
+      rster2002
+    ];
     mainProgram = "myxer";
     platforms = platforms.linux;
   };

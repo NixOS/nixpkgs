@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, cargo-c
-, rust
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  cargo-c,
+  rust,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

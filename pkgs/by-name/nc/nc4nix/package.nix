@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule {
@@ -25,4 +26,3 @@ buildGoModule {
     platforms = platforms.linux;
   };
 }
-

@@ -1,9 +1,10 @@
-{ stdenv,
+{
+  stdenv,
   fetchurl,
   lib,
   dpkg,
   gnome,
-  insync
+  insync,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aB1/ZzcQH3T1lviMZO8jXbtdbe4TW20f0TAcv4HDOGI=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-  ];
+  nativeBuildInputs = [ dpkg ];
 
   buildInputs = [
     gnome.nautilus-python

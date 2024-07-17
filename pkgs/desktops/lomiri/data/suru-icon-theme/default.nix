@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, gitUpdater
-, gtk3
-, hicolor-icon-theme
-, ubuntu-themes
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  gtk3,
+  hicolor-icon-theme,
+  ubuntu-themes,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -25,9 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hicolor-icon-theme # theme setup hook
   ];
 
-  propagatedBuildInputs = [
-    ubuntu-themes
-  ];
+  propagatedBuildInputs = [ ubuntu-themes ];
 
   dontConfigure = true;
   dontBuild = true;

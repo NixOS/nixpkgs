@@ -1,28 +1,29 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, glib-networking
-, gst_all_1
-, gtkmm3
-, libayatana-appindicator
-, libcanberra
-, libepoxy
-, libpsl
-, libdatrie
-, libdeflate
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libxkbcommon
-, sqlite
-, pcre
-, pcre2
-, pkg-config
-, webkitgtk
-, wrapGAppsHook3
-, xorg
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  glib-networking,
+  gst_all_1,
+  gtkmm3,
+  libayatana-appindicator,
+  libcanberra,
+  libepoxy,
+  libpsl,
+  libdatrie,
+  libdeflate,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libxkbcommon,
+  sqlite,
+  pcre,
+  pcre2,
+  pkg-config,
+  webkitgtk,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

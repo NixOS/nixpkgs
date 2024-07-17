@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeBinaryWrapper
-, runCommand
-, symlinkJoin
-, vale
-, valeStyles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  runCommand,
+  symlinkJoin,
+  vale,
+  valeStyles,
 }:
 
 buildGoModule rec {
@@ -23,23 +24,29 @@ buildGoModule rec {
 
   vendorHash = "sha256-4GtMKhxGkNwF6ydFE708SbzBm9mwCDKtINljTQXwz2c=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   # Tests require network access
   doCheck = false;
 
-  passthru.withStyles = selector: symlinkJoin {
-    name = "vale-with-styles-${vale.version}";
-    paths = [ vale ] ++ selector valeStyles;
-    nativeBuildInputs = [ makeBinaryWrapper ];
-    postBuild = ''
-      wrapProgram "$out/bin/vale" \
-        --set VALE_STYLES_PATH "$out/share/vale/styles/"
-    '';
-    meta = {
-      inherit (vale.meta) mainProgram;
+  passthru.withStyles =
+    selector:
+    symlinkJoin {
+      name = "vale-with-styles-${vale.version}";
+      paths = [ vale ] ++ selector valeStyles;
+      nativeBuildInputs = [ makeBinaryWrapper ];
+      postBuild = ''
+        wrapProgram "$out/bin/vale" \
+          --set VALE_STYLES_PATH "$out/share/vale/styles/"
+      '';
+      meta = {
+        inherit (vale.meta) mainProgram;
+      };
     };
-  };
 
   meta = with lib; {
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";

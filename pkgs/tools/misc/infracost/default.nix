@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "infracost";
@@ -12,7 +17,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-ji9TpUcq0aUAn5vV5dnaC15i0Uli2Qsz/BrOKB3/Rl4=";
 
-  ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/infracost/infracost/internal/version.Version=v${version}"
+  ];
 
   subPackages = [ "cmd/infracost" ];
 
@@ -28,9 +37,7 @@ buildGoModule rec {
     rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
   '';
 
-  checkFlags = [
-    "-short"
-  ];
+  checkFlags = [ "-short" ];
 
   postInstall = ''
     export INFRACOST_SKIP_UPDATE_CHECK=true
@@ -61,7 +68,11 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk kashw2 ];
+    maintainers = with maintainers; [
+      davegallant
+      jk
+      kashw2
+    ];
     mainProgram = "infracost";
   };
 }

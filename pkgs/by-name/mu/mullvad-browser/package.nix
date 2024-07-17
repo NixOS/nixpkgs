@@ -1,60 +1,61 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeText
-, wrapGAppsHook3
-, autoPatchelfHook
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  writeText,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  callPackage,
 
-, atk
-, cairo
-, dbus
-, dbus-glib
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libxcb
-, libX11
-, libXext
-, libXrender
-, libXt
-, libXtst
-, mesa
-, pango
-, pciutils
-, zlib
+  atk,
+  cairo,
+  dbus,
+  dbus-glib,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libxcb,
+  libX11,
+  libXext,
+  libXrender,
+  libXt,
+  libXtst,
+  mesa,
+  pango,
+  pciutils,
+  zlib,
 
-, libnotifySupport ? stdenv.isLinux
-, libnotify
+  libnotifySupport ? stdenv.isLinux,
+  libnotify,
 
-, waylandSupport ? stdenv.isLinux
-, libxkbcommon
-, libdrm
-, libGL
+  waylandSupport ? stdenv.isLinux,
+  libxkbcommon,
+  libdrm,
+  libGL,
 
-, mediaSupport ? true
-, ffmpeg
+  mediaSupport ? true,
+  ffmpeg,
 
-, audioSupport ? mediaSupport
+  audioSupport ? mediaSupport,
 
-, pipewireSupport ? audioSupport
-, pipewire
+  pipewireSupport ? audioSupport,
+  pipewire,
 
-, pulseaudioSupport ? audioSupport
-, libpulseaudio
-, apulse
-, alsa-lib
+  pulseaudioSupport ? audioSupport,
+  libpulseaudio,
+  apulse,
+  alsa-lib,
 
-, libvaSupport ? mediaSupport
-, libva
+  libvaSupport ? mediaSupport,
+  libva,
 
-# Extra preferences
-, extraPrefs ? ""
+  # Extra preferences
+  extraPrefs ? "",
 }:
 
 let
@@ -82,12 +83,17 @@ let
       stdenv.cc.cc
       stdenv.cc.libc
       zlib
-    ] ++ lib.optionals libnotifySupport [ libnotify ]
-      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
-      ++ lib.optionals pipewireSupport [ pipewire ]
-      ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-      ++ lib.optionals libvaSupport [ libva ]
-      ++ lib.optionals mediaSupport [ ffmpeg ]
+    ]
+    ++ lib.optionals libnotifySupport [ libnotify ]
+    ++ lib.optionals waylandSupport [
+      libxkbcommon
+      libdrm
+      libGL
+    ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals libvaSupport [ libva ]
+    ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
   version = "13.5.1";
@@ -106,26 +112,33 @@ let
     };
   };
 
-  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
-    # Some light branding indicating this build uses our distro preferences
-    Global = {
-      id = "nixos";
-      version = "1.0";
-      about = "Mullvad Browser for NixOS";
-    };
-  });
+  distributionIni = writeText "distribution.ini" (
+    lib.generators.toINI { } {
+      # Some light branding indicating this build uses our distro preferences
+      Global = {
+        id = "nixos";
+        version = "1.0";
+        about = "Mullvad Browser for NixOS";
+      };
+    }
+  );
 
-  policiesJson = writeText "policies.json" (builtins.toJSON {
-    policies.DisableAppUpdate = true;
-  });
+  policiesJson = writeText "policies.json" (builtins.toJSON { policies.DisableAppUpdate = true; });
 in
 stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    wrapGAppsHook3
+    autoPatchelfHook
+  ];
   buildInputs = [
     gtk3
     alsa-lib
@@ -136,23 +149,29 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  desktopItems = [(makeDesktopItem {
-    name = "mullvad-browser";
-    exec = "mullvad-browser %U";
-    icon = "mullvad-browser";
-    desktopName = "Mullvad Browser";
-    genericName = "Web Browser";
-    comment = meta.description;
-    categories = [ "Network" "WebBrowser" "Security" ];
-    mimeTypes = [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/vnd.mozilla.xul+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-    ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mullvad-browser";
+      exec = "mullvad-browser %U";
+      icon = "mullvad-browser";
+      desktopName = "Mullvad Browser";
+      genericName = "Web Browser";
+      comment = meta.description;
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Security"
+      ];
+      mimeTypes = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/vnd.mozilla.xul+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -201,11 +220,16 @@ stdenv.mkDerivation rec {
     lockPref("noscript.firstRunRedirection", false);
 
     // Allow sandbox access to sound devices if using ALSA directly
-    ${if (audioSupport && !pulseaudioSupport) then ''
-      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
-    '' else ''
-      clearPref("security.sandbox.content.write_path_whitelist");
-    ''}
+    ${
+      if (audioSupport && !pulseaudioSupport) then
+        ''
+          pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+        ''
+      else
+        ''
+          clearPref("security.sandbox.content.write_path_whitelist");
+        ''
+    }
 
     ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
@@ -267,11 +291,19 @@ stdenv.mkDerivation rec {
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh ];
+    maintainers = with maintainers; [
+      felschr
+      panicgh
+    ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [ mpl20 lgpl21Plus lgpl3Plus free ];
+    license = with licenses; [
+      mpl20
+      lgpl21Plus
+      lgpl3Plus
+      free
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

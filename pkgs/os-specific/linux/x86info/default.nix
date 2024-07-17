@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pciutils
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pciutils,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    pciutils
-  ];
+  buildInputs = [ pciutils ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -48,7 +47,10 @@ stdenv.mkDerivation rec {
       registers (MSRs) via the msr kernel module.  it will approximate processor
       frequency, and identify the cache sizes and layout.
     '';
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = lib.licenses.gpl2;
     homepage = "https://github.com/kernelslacker/x86info";
     maintainers = with lib.maintainers; [ jcumming ];

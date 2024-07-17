@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, doxygen
-, wrapQtAppsHook
-, wrapGAppsHook3
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, deepin-pw-check
-, qtbase
-, qtx11extras
-, qtmultimedia
-, polkit-qt
-, libxcrypt
-, librsvg
-, gtest
-, runtimeShell
-, dbus
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  doxygen,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  deepin-pw-check,
+  qtbase,
+  qtx11extras,
+  qtmultimedia,
+  polkit-qt,
+  libxcrypt,
+  librsvg,
+  gtest,
+  runtimeShell,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
@@ -87,7 +88,10 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Control panel of Deepin Desktop Environment";

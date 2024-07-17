@@ -1,6 +1,7 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
 }:
 buildGoPackage rec {
   pname = "snicat";
@@ -17,7 +18,11 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
 
   installPhase = ''
     runHook preInstall

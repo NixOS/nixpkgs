@@ -1,4 +1,9 @@
-{ linkFarm, hello, writeTextFile, runCommand }:
+{
+  linkFarm,
+  hello,
+  writeTextFile,
+  runCommand,
+}:
 let
   foo = writeTextFile {
     name = "foo";
@@ -6,19 +11,32 @@ let
   };
 
   linkFarmFromList = linkFarm "linkFarmFromList" [
-    { name = "foo"; path = foo; }
-    { name = "hello"; path = hello; }
+    {
+      name = "foo";
+      path = foo;
+    }
+    {
+      name = "hello";
+      path = hello;
+    }
   ];
 
   linkFarmWithRepeats = linkFarm "linkFarmWithRepeats" [
-    { name = "foo"; path = foo; }
-    { name = "hello"; path = hello; }
-    { name = "foo"; path = hello; }
+    {
+      name = "foo";
+      path = foo;
+    }
+    {
+      name = "hello";
+      path = hello;
+    }
+    {
+      name = "foo";
+      path = hello;
+    }
   ];
 
-  linkFarmFromAttrs = linkFarm "linkFarmFromAttrs" {
-    inherit foo hello;
-  };
+  linkFarmFromAttrs = linkFarm "linkFarmFromAttrs" { inherit foo hello; };
 in
 runCommand "test-linkFarm" { } ''
   function assertPathEquals() {

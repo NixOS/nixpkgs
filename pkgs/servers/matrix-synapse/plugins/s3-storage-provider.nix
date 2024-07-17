@@ -1,13 +1,14 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, matrix-synapse-unwrapped
-, pythonOlder
-, tqdm
-, twisted
-, psycopg2
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  matrix-synapse-unwrapped,
+  pythonOlder,
+  tqdm,
+  twisted,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
@@ -29,26 +30,23 @@ buildPythonPackage rec {
       --replace "humanize>=0.5.1,<0.6" "humanize>=0.5.1"
   '';
 
-  buildInputs = [
-    matrix-synapse-unwrapped
-  ];
+  buildInputs = [ matrix-synapse-unwrapped ];
 
-  propagatedBuildInputs = [
-    boto3
-    humanize
-    tqdm
-    twisted
-    psycopg2
-  ]
-  # For the s3_media_upload script
-  ++ matrix-synapse-unwrapped.propagatedBuildInputs;
+  propagatedBuildInputs =
+    [
+      boto3
+      humanize
+      tqdm
+      twisted
+      psycopg2
+    ]
+    # For the s3_media_upload script
+    ++ matrix-synapse-unwrapped.propagatedBuildInputs;
 
   # Tests need network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "s3_storage_provider"
-  ];
+  pythonImportsCheck = [ "s3_storage_provider" ];
 
   meta = with lib; {
     description = "Synapse storage provider to fetch and store media in Amazon S3";

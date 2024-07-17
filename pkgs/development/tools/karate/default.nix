@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "karate";

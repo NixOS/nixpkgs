@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchpatch
-, fetchFromGitHub
-, pkgsBuildBuild
-, jq
-, moreutils
-, dbip-country-lite
+{
+  lib,
+  stdenvNoCC,
+  fetchpatch,
+  fetchFromGitHub,
+  pkgsBuildBuild,
+  jq,
+  moreutils,
+  dbip-country-lite,
 }:
 
 let

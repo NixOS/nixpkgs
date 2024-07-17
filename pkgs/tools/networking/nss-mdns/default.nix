@@ -1,4 +1,10 @@
-{ lib, autoreconfHook, pkg-config, stdenv, fetchFromGitHub }:
+{
+  lib,
+  autoreconfHook,
+  pkg-config,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nss-mdns";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   # Note: Although `nss-mdns' works by talking to `avahi-daemon', it
   # doesn't depend on the Avahi libraries.  Instead, it contains

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +16,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-g74XyNtNdYf2qTCFBWIVZ3LhngDln/yu3bRJzO890JU=";
   };
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 ];
 
-  makeFlags = [
-    "prefix=$(out)"
-  ];
+  makeFlags = [ "prefix=$(out)" ];
 
   # fix the plugins directory
   postPatch = ''

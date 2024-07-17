@@ -1,11 +1,12 @@
-{ stdenv
-, arrow-cpp
-, glib
-, gobject-introspection
-, lib
-, meson
-, ninja
-, pkg-config
+{
+  stdenv,
+  arrow-cpp,
+  glib,
+  gobject-introspection,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

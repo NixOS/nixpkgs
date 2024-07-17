@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencl-clhpp,
+  ocl-icd,
+}:
 
 stdenv.mkDerivation {
   pname = "opencl-info";
@@ -19,7 +25,10 @@ stdenv.mkDerivation {
     ./opencl-info-clhpp2.diff
   ];
 
-  buildInputs = [ opencl-clhpp ocl-icd ];
+  buildInputs = [
+    opencl-clhpp
+    ocl-icd
+  ];
 
   NIX_LDFLAGS = "-lOpenCL";
 

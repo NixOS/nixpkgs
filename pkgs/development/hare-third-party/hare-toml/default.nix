@@ -1,9 +1,10 @@
-{ stdenv
-, hare
-, scdoc
-, lib
-, fetchFromGitea
-, nix-update-script
+{
+  stdenv,
+  hare,
+  scdoc,
+  lib,
+  fetchFromGitea,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-toml";

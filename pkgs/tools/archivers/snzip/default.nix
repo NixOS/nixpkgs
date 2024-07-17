@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, snappy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  snappy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    snappy
-  ];
+  buildInputs = [ snappy ];
 
   meta = with lib; {
     description = "A compression/decompression tool based on snappy";
@@ -36,4 +35,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
   };
 })
-

@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, fetchurl
-, rpmextract
-, libnotify
-, libuuid
-, cairo
-, cups
-, pango
-, fontconfig
-, udev
-, dbus
-, gtk3
-, atk
-, at-spi2-atk
-, expat
-, gdk-pixbuf
-, freetype
-, nspr
-, glib
-, nss
-, libX11
-, libXrandr
-, libXrender
-, libXtst
-, libXdamage
-, libxcb
-, libXcursor
-, libXi
-, libXext
-, libXfixes
-, libXft
-, libXcomposite
-, libXScrnSaver
-, alsa-lib
-, pulseaudio
-, makeWrapper
-, xdg-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  rpmextract,
+  libnotify,
+  libuuid,
+  cairo,
+  cups,
+  pango,
+  fontconfig,
+  udev,
+  dbus,
+  gtk3,
+  atk,
+  at-spi2-atk,
+  expat,
+  gdk-pixbuf,
+  freetype,
+  nspr,
+  glib,
+  nss,
+  libX11,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libXdamage,
+  libxcb,
+  libXcursor,
+  libXi,
+  libXext,
+  libXfixes,
+  libXft,
+  libXcomposite,
+  libXScrnSaver,
+  alsa-lib,
+  pulseaudio,
+  makeWrapper,
+  xdg-utils,
 }:
 
 let
@@ -51,45 +52,46 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lsUS7JymCMOa5wlWJOwLFm4KRnAYixi9Kk5CYHB17Ac=";
   };
 
-  nativeBuildInputs = [ rpmextract makeWrapper ];
+  nativeBuildInputs = [
+    rpmextract
+    makeWrapper
+  ];
 
-  libPath =
-    lib.makeLibraryPath
-      [
-        libnotify
-        libuuid
-        cairo
-        cups
-        pango
-        fontconfig
-        gtk3
-        atk
-        at-spi2-atk
-        expat
-        gdk-pixbuf
-        dbus
-        (lib.getLib udev)
-        freetype
-        nspr
-        glib
-        stdenv.cc.cc.lib
-        nss
-        libX11
-        libXrandr
-        libXrender
-        libXtst
-        libXdamage
-        libxcb
-        libXcursor
-        libXi
-        libXext
-        libXfixes
-        libXft
-        libXcomposite
-        libXScrnSaver
-        alsa-lib
-        pulseaudio
-      ];
+  libPath = lib.makeLibraryPath [
+    libnotify
+    libuuid
+    cairo
+    cups
+    pango
+    fontconfig
+    gtk3
+    atk
+    at-spi2-atk
+    expat
+    gdk-pixbuf
+    dbus
+    (lib.getLib udev)
+    freetype
+    nspr
+    glib
+    stdenv.cc.cc.lib
+    nss
+    libX11
+    libXrandr
+    libXrender
+    libXtst
+    libXdamage
+    libxcb
+    libXcursor
+    libXi
+    libXext
+    libXfixes
+    libXft
+    libXcomposite
+    libXScrnSaver
+    alsa-lib
+    pulseaudio
+  ];
 
   localtime64_stub = ./localtime64_stub.c;
 
@@ -134,4 +136,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
-

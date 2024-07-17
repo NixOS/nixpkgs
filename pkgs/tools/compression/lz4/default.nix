@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, valgrind
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  valgrind,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # https://github.com/lz4/lz4/pull/1162
+    (fetchpatch {
+      # https://github.com/lz4/lz4/pull/1162
       name = "build-shared-no.patch";
       url = "https://github.com/lz4/lz4/commit/851ef4b23c7cbf4ceb2ba1099666a8b5ec4fa195.patch";
       sha256 = "sha256-P+/uz3m7EAmHgXF/1Vncc0uKKxNVq6HNIsElx0rGxpw=";
@@ -23,23 +29,27 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO(@Ericson2314): Separate binaries and libraries
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   buildInputs = lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "INCLUDEDIR=$(dev)/include"
-    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
-    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
-    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
-  ]
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "INCLUDEDIR=$(dev)/include"
+      "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+      "BUILD_SHARED=${if enableShared then "yes" else "no"}"
+      "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
+    ]
     # TODO make full dictionary
     ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
-    ++ lib.optional stdenv.hostPlatform.isLinux "TARGET_OS=Linux"
-    ;
+    ++ lib.optional stdenv.hostPlatform.isLinux "TARGET_OS=Linux";
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
@@ -64,7 +74,10 @@ stdenv.mkDerivation rec {
       multi-core systems.
     '';
     homepage = "https://lz4.github.io/lz4/";
-    license = with licenses; [ bsd2 gpl2Plus ];
+    license = with licenses; [
+      bsd2
+      gpl2Plus
+    ];
     platforms = platforms.all;
   };
 }

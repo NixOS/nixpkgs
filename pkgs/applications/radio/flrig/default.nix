@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, eudev
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  libjpeg,
+  eudev,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     eudev
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = {
     description = "Digital modem rig control program";

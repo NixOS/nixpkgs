@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, callPackage
-, wl-clipboard
-, xclip
-, makeWrapper
-, withXclip ? true
-, withWlclip ? true
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  callPackage,
+  wl-clipboard,
+  xclip,
+  makeWrapper,
+  withXclip ? true,
+  withWlclip ? true,
 }:
 let
-  clipboardPkgs = if stdenv.isLinux then
-    lib.optional withXclip xclip ++
-    lib.optional withWlclip wl-clipboard
-    else [ ];
+  clipboardPkgs =
+    if stdenv.isLinux then
+      lib.optional withXclip xclip ++ lib.optional withWlclip wl-clipboard
+    else
+      [ ];
 in
 buildGoModule rec {
   pname = "micro";
@@ -29,16 +31,23 @@ buildGoModule rec {
 
   vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   subPackages = [ "cmd/micro" ];
 
-  ldflags = let t = "github.com/zyedidia/micro/v2/internal"; in [
-    "-s"
-    "-w"
-    "-X ${t}/util.Version=${version}"
-    "-X ${t}/util.CommitHash=${src.rev}"
-  ];
+  ldflags =
+    let
+      t = "github.com/zyedidia/micro/v2/internal";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}/util.Version=${version}"
+      "-X ${t}/util.CommitHash=${src.rev}"
+    ];
 
   preBuild = ''
     GOOS= GOARCH= go generate ./runtime

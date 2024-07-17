@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libxcrypt-legacy # TODO: switch to libxcrypt for NixOS 24.11 (cf. same note on nixos/modules/services/misc/portunus.nix)
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libxcrypt-legacy, # TODO: switch to libxcrypt for NixOS 24.11 (cf. same note on nixos/modules/services/misc/portunus.nix)
 }:
 
 buildGoModule rec {

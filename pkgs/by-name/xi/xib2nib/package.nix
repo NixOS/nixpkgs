@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, plistcpp
-, pugixml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  plistcpp,
+  pugixml,
 }:
 
 stdenv.mkDerivation {
@@ -23,9 +24,7 @@ stdenv.mkDerivation {
     pugixml
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];

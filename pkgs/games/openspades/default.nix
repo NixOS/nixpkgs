@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
-, curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
-, openal , opusfile, libogg
-, Cocoa, libXext
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  unzip,
+  zip,
+  file,
+  curl,
+  glew,
+  libGL,
+  SDL2,
+  SDL2_image,
+  zlib,
+  freetype,
+  imagemagick,
+  openal,
+  opusfile,
+  libogg,
+  Cocoa,
+  libXext,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +35,27 @@ stdenv.mkDerivation rec {
     sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
   };
 
-  nativeBuildInputs = [ cmake imagemagick unzip zip file ];
+  nativeBuildInputs = [
+    cmake
+    imagemagick
+    unzip
+    zip
+    file
+  ];
 
   buildInputs = [
-    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg libXext
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+    freetype
+    SDL2
+    SDL2_image
+    libGL
+    zlib
+    curl
+    glew
+    opusfile
+    openal
+    libogg
+    libXext
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   patches = [
     # https://github.com/yvt/openspades/pull/793 fix Darwin build
@@ -32,9 +65,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [
-    "-DOPENSPADES_INSTALL_BINARY=bin"
-  ];
+  cmakeFlags = [ "-DOPENSPADES_INSTALL_BINARY=bin" ];
 
   devPak = fetchurl {
     url = "https://github.com/yvt/openspades-paks/releases/download/r${devPakVersion}/OpenSpadesDevPackage-r${devPakVersion}.zip";
@@ -60,10 +91,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A compatible client of Ace of Spades 0.75";
     mainProgram = "openspades";
-    homepage    = "https://github.com/yvt/openspades/";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ abbradar azahi ];
+    homepage = "https://github.com/yvt/openspades/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      abbradar
+      azahi
+    ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
   };

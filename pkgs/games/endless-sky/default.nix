@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, libpng
-, libjpeg
-, glew
-, openal
-, scons
-, libmad
-, libuuid
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  libpng,
+  libjpeg,
+  glew,
+  openal,
+  scons,
+  libmad,
+  libuuid,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3mprmW6K8pYs7J2q71fohsh9fZEP2RZjN1rSWUAwbhg=";
   };
 
-  patches = [
-    ./fixes.patch
-  ];
+  patches = [ ./fixes.patch ];
 
   postPatch = ''
     # the trailing slash is important!!
@@ -63,7 +62,10 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ lheckemann _360ied ];
+    maintainers = with maintainers; [
+      lheckemann
+      _360ied
+    ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

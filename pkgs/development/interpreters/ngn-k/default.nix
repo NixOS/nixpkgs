@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, stdenvNoLibs
-, fetchFromGitea
-, runtimeShell
-, doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform
-, withLibc ? true
+{
+  lib,
+  stdenv,
+  stdenvNoLibs,
+  fetchFromGitea,
+  runtimeShell,
+  doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform,
+  withLibc ? true,
 }:
 
 let
@@ -25,9 +26,7 @@ useStdenv.mkDerivation {
     sha256 = "1pn416znrdndb8iccprzx4zicmsx8c6i9dm3wq5z3jg8nan53p69";
   };
 
-  patches = [
-    ./repl-license-path.patch
-  ];
+  patches = [ ./repl-license-path.patch ];
 
   postPatch = ''
     patchShebangs --build a19/a.sh a20/a.sh a21/a.sh dy/a.sh e/a.sh
@@ -46,7 +45,11 @@ useStdenv.mkDerivation {
   checkTarget = "t";
   inherit doCheck;
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   # TODO(@sternenseemann): package bulgarian translation
   installPhase = ''
@@ -65,6 +68,9 @@ useStdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [ "x86_64-linux" "x86_64-freebsd" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-freebsd"
+    ];
   };
 }

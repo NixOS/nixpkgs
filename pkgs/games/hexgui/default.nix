@@ -1,9 +1,10 @@
-{ ant
-, fetchFromGitHub
-, jdk
-, lib
-, makeWrapper
-, stdenv
+{
+  ant,
+  fetchFromGitHub,
+  jdk,
+  lib,
+  makeWrapper,
+  stdenv,
 }:
 stdenv.mkDerivation {
   pname = "hexgui";
@@ -16,7 +17,11 @@ stdenv.mkDerivation {
     hash = "sha256-yEdZs9HUt3lcrdNO1OH8M8g71+2Ltf+v1RR1fKRDV0o=";
   };
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+  ];
   buildPhase = ''
     ant
   '';

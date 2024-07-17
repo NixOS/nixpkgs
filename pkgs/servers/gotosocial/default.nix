@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
 }:
 let
   owner = "superseriousbusiness";

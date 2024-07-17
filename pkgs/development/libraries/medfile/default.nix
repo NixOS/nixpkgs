@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, hdf5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  hdf5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "medfile";
@@ -9,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3CtdVOvwZm4/8ul0BB0qsNqQYGEyNTcCOrFl1XM4ndA=";
   };
 
-  patches = [
-    ./hdf5-1.14.patch
-  ];
+  patches = [ ./hdf5-1.14.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ hdf5 ];

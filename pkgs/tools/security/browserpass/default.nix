@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, gnupg
-, makeWrapper
-, autoPatchelfHook
-, testers
-, browserpass
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  gnupg,
+  makeWrapper,
+  autoPatchelfHook,
+  testers,
+  browserpass,
 }:
 
 buildGoModule rec {

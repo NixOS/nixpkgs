@@ -1,11 +1,11 @@
 {
-  lib
-  , stdenv
-  , fetchFromGitHub
-  , makeWrapper
-  , bash
-  , subversion
-  , gnome
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  subversion,
+  gnome,
 }:
 stdenv.mkDerivation {
   pname = "thcrap-proton";

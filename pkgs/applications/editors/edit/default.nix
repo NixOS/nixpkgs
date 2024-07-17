@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, cwebbin
-, libX11
-, libXft
-, ncurses
-, pkg-config
-, unzip
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cwebbin,
+  libX11,
+  libXft,
+  ncurses,
+  pkg-config,
+  unzip,
 }:
 
 stdenv.mkDerivation {
@@ -47,7 +48,10 @@ stdenv.mkDerivation {
     description = "A relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ AndersonTorres vrthra ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      vrthra
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "edit";
   };

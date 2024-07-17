@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, flit
-, aiohttp
-, beautifulsoup4
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  flit,
+  aiohttp,
+  beautifulsoup4,
 }:
 
 buildPythonApplication rec {
@@ -18,9 +19,7 @@ buildPythonApplication rec {
     hash = "sha256-wDcvpKAY/6lBjO5h3qKH3+Y2G2gm7spcKCXFMt/bAtE=";
   };
 
-  nativeBuildInputs = [
-    flit
-  ];
+  nativeBuildInputs = [ flit ];
 
   propagatedBuildInputs = [
     aiohttp

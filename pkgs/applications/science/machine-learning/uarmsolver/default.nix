@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,10 +10,10 @@ stdenv.mkDerivation rec {
   version = "0.2.6";
 
   src = fetchFromGitHub {
-   owner = "firefly-cpp";
-   repo = "uARMSolver";
-   rev = version;
-   sha256 = "sha256-E8hc7qoIDaNERMUhVlh+iBvQX1odzd/szeMSh8TCNFo=";
+    owner = "firefly-cpp";
+    repo = "uARMSolver";
+    rev = version;
+    sha256 = "sha256-E8hc7qoIDaNERMUhVlh+iBvQX1odzd/szeMSh8TCNFo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,9 +25,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "universal Association Rule Mining Solver";
     mainProgram = "uARMSolver";
-    homepage    = "https://github.com/firefly-cpp/uARMSolver";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/firefly-cpp/uARMSolver";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ firefly-cpp ];
   };
 }

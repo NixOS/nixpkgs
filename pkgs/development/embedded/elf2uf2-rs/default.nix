@@ -1,4 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, udev, CoreFoundation, DiskArbitration, Foundation }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  udev,
+  CoreFoundation,
+  DiskArbitration,
+  Foundation,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
@@ -9,11 +19,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optional stdenv.isLinux udev
+  buildInputs =
+    lib.optional stdenv.isLinux udev
     ++ lib.optionals stdenv.isDarwin [
       CoreFoundation
       DiskArbitration
@@ -28,6 +37,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/JoNil/elf2uf2-rs";
     license = with licenses; [ bsd0 ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ polygon moni ];
+    maintainers = with maintainers; [
+      polygon
+      moni
+    ];
   };
 }

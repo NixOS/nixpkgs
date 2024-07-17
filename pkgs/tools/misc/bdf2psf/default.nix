@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, dpkg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  dpkg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
@@ -35,7 +41,10 @@ stdenv.mkDerivation rec {
       Font converter to generate console fonts from BDF source fonts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj vrthra ];
+    maintainers = with maintainers; [
+      rnhmjoj
+      vrthra
+    ];
     platforms = platforms.all;
     mainProgram = "bdf2psf";
   };

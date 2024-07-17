@@ -1,19 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, libsoup_3
-, libxml2
-, meson
-, ninja
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  libsoup_3,
+  libxml2,
+  meson,
+  ninja,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "phodav";
   version = "3.0";
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/phodav/${version}/phodav-${version}.tar.xz";
@@ -41,9 +46,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   # We need to do this in pre-configure before the data/ folder disappears.

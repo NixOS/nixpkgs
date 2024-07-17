@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  jre_headless,
+  version,
+  url,
+  sha1,
+}:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   inherit version;
@@ -22,7 +31,9 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   passthru = {
-    tests = { inherit (nixosTests) minecraft-server; };
+    tests = {
+      inherit (nixosTests) minecraft-server;
+    };
     updateScript = ./update.py;
   };
 
@@ -32,6 +43,11 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc joelkoen ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      tomberek
+      costrouc
+      joelkoen
+    ];
   };
 }

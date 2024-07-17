@@ -1,7 +1,29 @@
-{ lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff
-, libwebp, pkg-config, librsvg, glib, gtk2, libXext, libXxf86vm, poppler, vlc
-, ghostscript, makeWrapper, tzdata, makeDesktopItem, copyDesktopItems
-, directoryListingUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  libX11,
+  libXinerama,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  pkg-config,
+  librsvg,
+  glib,
+  gtk2,
+  libXext,
+  libXxf86vm,
+  poppler,
+  vlc,
+  ghostscript,
+  makeWrapper,
+  tzdata,
+  makeDesktopItem,
+  copyDesktopItems,
+  directoryListingUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eaglemode";
@@ -17,9 +39,28 @@ stdenv.mkDerivation rec {
     substituteInPlace src/emClock/emTimeZonesModel.cpp --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];
-  buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff libwebp
-    librsvg glib gtk2 libXxf86vm libXext poppler vlc ghostscript ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    copyDesktopItems
+  ];
+  buildInputs = [
+    perl
+    libX11
+    libXinerama
+    libjpeg
+    libpng
+    libtiff
+    libwebp
+    librsvg
+    glib
+    gtk2
+    libXxf86vm
+    libXext
+    poppler
+    vlc
+    ghostscript
+  ];
 
   # The program tries to dlopen Xxf86vm, Xext and Xinerama, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
@@ -32,7 +73,10 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
   # eaglemode expects doc to be in the root directory
-  forceShare = [ "man" "info" ];
+  forceShare = [
+    "man"
+    "info"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -52,7 +96,12 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "Eagle Mode";
       genericName = meta.description;
-      categories = [ "Game" "Graphics" "System" "Utility" ];
+      categories = [
+        "Game"
+        "Graphics"
+        "System"
+        "Utility"
+      ];
     })
   ];
 
@@ -66,7 +115,10 @@ stdenv.mkDerivation rec {
     description = "Zoomable User Interface";
     changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ chuangzhu ehmry ];
+    maintainers = with maintainers; [
+      chuangzhu
+      ehmry
+    ];
     platforms = platforms.linux;
   };
 }

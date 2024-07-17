@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libvorbis
-, ffmpeg
-, libeb
-, hunspell
-, opencc
-, xapian
-, libzim
-, lzo
-, xz
-, tomlplusplus
-, fmt
-, bzip2
-, libiconv
-, libXtst
-, qtbase
-, qtsvg
-, qtwebengine
-, qttools
-, qtwayland
-, qt5compat
-, qtmultimedia
-, qtspeech
-, wrapQtAppsHook
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libvorbis,
+  ffmpeg,
+  libeb,
+  hunspell,
+  opencc,
+  xapian,
+  libzim,
+  lzo,
+  xz,
+  tomlplusplus,
+  fmt,
+  bzip2,
+  libiconv,
+  libXtst,
+  qtbase,
+  qtsvg,
+  qtwebengine,
+  qttools,
+  qtwayland,
+  qt5compat,
+  qtmultimedia,
+  qtspeech,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C/0FUFLE3R+tZyCL88BiSFOHPTanILD/fIIQ/OQBSfk=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     qtbase
     qtsvg
@@ -87,7 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "An advanced multi-dictionary lookup program";
     platforms = platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ slbtty michojel ];
+    maintainers = with maintainers; [
+      slbtty
+      michojel
+    ];
     license = licenses.gpl3Plus;
   };
 })

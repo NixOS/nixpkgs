@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, devspace
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  devspace,
 }:
 
 buildGoModule rec {
@@ -28,9 +29,7 @@ buildGoModule rec {
   # TODO: add a nixosTest to be able to perform the package check
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = devspace;
-  };
+  passthru.tests.version = testers.testVersion { package = devspace; };
 
   meta = with lib; {
     description = "An open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster";

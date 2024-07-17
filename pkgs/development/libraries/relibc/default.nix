@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, buildPackages }:
+{
+  lib,
+  stdenvNoCC,
+  buildPackages,
+}:
 
 let
   rpath = lib.makeLibraryPath [

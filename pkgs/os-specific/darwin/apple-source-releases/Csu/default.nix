@@ -1,4 +1,8 @@
-{ lib, appleDerivation', stdenv }:
+{
+  lib,
+  appleDerivation',
+  stdenv,
+}:
 
 appleDerivation' stdenv {
 
@@ -23,7 +27,7 @@ appleDerivation' stdenv {
   meta = with lib; {
     description = "Apple's common startup stubs for darwin";
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apple-psl20;
+    platforms = platforms.darwin;
+    license = licenses.apple-psl20;
   };
 }

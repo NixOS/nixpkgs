@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, pkg-config
-, cabextract ? null
-, cdrkit ? null
-, mtools ? null
-, fuse3 ? null
-, ntfs3g ? null
-, syslinux ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  cabextract ? null,
+  cdrkit ? null,
+  mtools ? null,
+  fuse3 ? null,
+  ntfs3g ? null,
+  syslinux ? null,
 }:
 
 stdenv.mkDerivation rec {
   version = "1.14.4";
   pname = "wimlib";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
   buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ fuse3 ];
 
   src = fetchurl {
@@ -27,13 +34,26 @@ stdenv.mkDerivation rec {
       --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
-  postInstall = let
-    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux fuse3 ]);
-  in ''
-    for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : $out/bin:${path}
-    done
-  '';
+  postInstall =
+    let
+      path = lib.makeBinPath (
+        [
+          cabextract
+          mtools
+          ntfs3g
+        ]
+        ++ lib.optionals (!stdenv.isDarwin) [
+          cdrkit
+          syslinux
+          fuse3
+        ]
+      );
+    in
+    ''
+      for prog in $out/bin/*; do
+        wrapProgram $prog --prefix PATH : $out/bin:${path}
+      done
+    '';
 
   doCheck = (!stdenv.isDarwin);
 
@@ -46,6 +66,10 @@ stdenv.mkDerivation rec {
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
-    license = with licenses; [ gpl3 lgpl3 mit ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+      mit
+    ];
   };
 }

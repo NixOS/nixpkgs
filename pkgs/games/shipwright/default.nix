@@ -1,29 +1,30 @@
-{ stdenv
-, cmake
-, lsb-release
-, ninja
-, lib
-, fetchFromGitHub
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, python3
-, libX11
-, libXrandr
-, libXinerama
-, libXcursor
-, libXi
-, libXext
-, glew
-, boost
-, SDL2
-, SDL2_net
-, pkg-config
-, libpulseaudio
-, libpng
-, imagemagick
-, gnome
-, makeWrapper
+{
+  stdenv,
+  cmake,
+  lsb-release,
+  ninja,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  python3,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  libXi,
+  libXext,
+  glew,
+  boost,
+  SDL2,
+  SDL2_net,
+  pkg-config,
+  libpulseaudio,
+  libpng,
+  imagemagick,
+  gnome,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

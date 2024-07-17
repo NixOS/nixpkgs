@@ -1,4 +1,8 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "systemd-wait";
@@ -12,7 +16,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dbus-python pygobject3
+    dbus-python
+    pygobject3
   ];
 
   meta = {

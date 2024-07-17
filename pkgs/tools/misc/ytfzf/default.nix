@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, curl
-, dmenu
-, fzf
-, gnused
-, jq
-, mpv
-, ueberzugpp
-, yt-dlp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  curl,
+  dmenu,
+  fzf,
+  gnused,
+  jq,
+  mpv,
+  ueberzugpp,
+  yt-dlp,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +38,19 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" \
-      --prefix PATH : ${lib.makeBinPath [
-        coreutils curl dmenu fzf gnused jq mpv ueberzugpp yt-dlp
-      ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          curl
+          dmenu
+          fzf
+          gnused
+          jq
+          mpv
+          ueberzugpp
+          yt-dlp
+        ]
+      } \
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 

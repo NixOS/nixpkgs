@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, boost
-, libpng
-, libiconv
-, libjpeg
-, zlib
-, openssl
-, libwebp
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  boost,
+  libpng,
+  libiconv,
+  libjpeg,
+  zlib,
+  openssl,
+  libwebp,
+  catch2,
 }:
 
 stdenv.mkDerivation {

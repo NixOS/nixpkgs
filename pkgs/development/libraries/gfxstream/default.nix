@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitiles, fetchpatch, meson, ninja, pkg-config, python3
-, aemu, darwin, libdrm, libglvnd, vulkan-headers, vulkan-loader, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitiles,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  aemu,
+  darwin,
+  libdrm,
+  libglvnd,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -27,8 +41,20 @@ stdenv.mkDerivation {
       --replace-fail "project('gfxstream_backend', 'cpp', 'c'" "project('gfxstream_backend', 'cpp', 'c', 'objc'"
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config python3 ];
-  buildInputs = [ aemu libglvnd vulkan-headers vulkan-loader xorg.libX11 ]
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
+  buildInputs =
+    [
+      aemu
+      libglvnd
+      vulkan-headers
+      vulkan-loader
+      xorg.libX11
+    ]
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Cocoa

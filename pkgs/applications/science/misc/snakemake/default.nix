@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, runtimeShell
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  runtimeShell,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -70,17 +71,11 @@ python3.pkgs.buildPythonApplication rec {
     snakemake-executor-plugin-cluster-generic
   ];
 
-  disabledTestPaths = [
-    "tests/test_conda_python_3_7_script/test_script.py"
-  ];
+  disabledTestPaths = [ "tests/test_conda_python_3_7_script/test_script.py" ];
 
-  disabledTests = [
-    "test_deploy_sources"
-  ];
+  disabledTests = [ "test_deploy_sources" ];
 
-  pythonImportsCheck = [
-    "snakemake"
-  ];
+  pythonImportsCheck = [ "snakemake" ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -98,6 +93,10 @@ python3.pkgs.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
+    maintainers = with maintainers; [
+      helkafen
+      renatoGarcia
+      veprbl
+    ];
   };
 }

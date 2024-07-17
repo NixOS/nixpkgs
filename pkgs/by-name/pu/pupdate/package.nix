@@ -1,13 +1,14 @@
-{ pkgs
-, stdenv
-, lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, openssl
-, zlib
-, hostPlatform
-, nix-update-script
+{
+  pkgs,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  openssl,
+  zlib,
+  hostPlatform,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {

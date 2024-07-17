@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildDartApplication
-, buf
-, protoc-gen-dart
-, testers
-, dart-sass
-, runCommand
-, writeText
+{
+  lib,
+  fetchFromGitHub,
+  buildDartApplication,
+  buf,
+  protoc-gen-dart,
+  testers,
+  dart-sass,
+  runCommand,
+  writeText,
 }:
 
 let
@@ -67,20 +68,22 @@ buildDartApplication rec {
         expected = writeText "expected" ''
           body h1{color:#123}
         '';
-        actual = runCommand "actual"
-          {
-            nativeBuildInputs = [ dart-sass ];
-            base = writeText "base" ''
-              body {
-                $color: #123;
-                h1 {
-                  color: $color;
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [ dart-sass ];
+              base = writeText "base" ''
+                body {
+                  $color: #123;
+                  h1 {
+                    color: $color;
+                  }
                 }
-              }
+              '';
+            }
+            ''
+              dart-sass --style=compressed $base > $out
             '';
-          } ''
-          dart-sass --style=compressed $base > $out
-        '';
       };
     };
   };

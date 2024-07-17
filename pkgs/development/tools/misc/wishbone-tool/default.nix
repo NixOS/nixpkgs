@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, libusb-compat-0_1 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libusb-compat-0_1,
+}:
 
 let
   version = "0.6.9";

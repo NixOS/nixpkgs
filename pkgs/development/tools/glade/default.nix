@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, gettext
-, fetchurl
-, python3
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, gjs
-, enableWebkit2gtk ? stdenv.isLinux
-, webkitgtk_4_1
-, gobject-introspection
-, wrapGAppsHook3
-, itstool
-, libxml2
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, gnome
-, gdk-pixbuf
-, libxslt
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  gettext,
+  fetchurl,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  glib,
+  gjs,
+  enableWebkit2gtk ? stdenv.isLinux,
+  webkitgtk_4_1,
+  gobject-introspection,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  gnome,
+  gdk-pixbuf,
+  libxslt,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,13 +57,9 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gdk-pixbuf
     gnome.adwaita-icon-theme
-  ] ++ lib.optionals enableWebkit2gtk [
-    webkitgtk_4_1
-  ];
+  ] ++ lib.optionals enableWebkit2gtk [ webkitgtk_4_1 ];
 
-  mesonFlags = [
-    (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)
-  ];
+  mesonFlags = [ (lib.mesonEnable "webkit2gtk" enableWebkit2gtk) ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -70,9 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

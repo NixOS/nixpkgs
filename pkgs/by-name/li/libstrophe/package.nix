@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, openssl
-, expat
-, pkg-config
-, check
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  openssl,
+  expat,
+  pkg-config,
+  check,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +22,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-JMuvWspgXs+1dVWoo6kJVaf6cVvYj8lhyyu4ZILKeOg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ openssl expat libtool check zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+    expat
+    libtool
+    check
+    zlib
+  ];
 
   dontDisableStatic = true;
 
@@ -37,9 +48,14 @@ stdenv.mkDerivation rec {
       runs well on both Linux, Unix, and Windows based platforms.
     '';
     homepage = "https://strophe.im/libstrophe/";
-    license = with licenses; [ gpl3Only mit ];
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ devhell flosse ];
+    maintainers = with maintainers; [
+      devhell
+      flosse
+    ];
   };
 }
-

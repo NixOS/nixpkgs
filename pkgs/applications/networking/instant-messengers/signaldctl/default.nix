@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitLab
-, gitUpdater
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  gitUpdater,
 }:
 
 buildGoModule rec {
@@ -27,9 +28,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "A golang library for communicating with signald";

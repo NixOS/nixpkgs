@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, python3
-, ruby
-, rake
-, git
-, curl
-, fetchFromGitHub
-, libGL
-, libGLU
-, alsa-lib
-, libX11
-, xorgproto
-, libICE
-, libXi
-, libXScrnSaver
-, libXcursor
-, libXinerama
-, libXext
-, libXxf86vm
-, libXrandr
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wayland-scanner
-, dbus
-, udev
-, libdecor
-, pipewire
-, libpulseaudio
-, libiconv
-# Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
-# that enables some additional features. It is, however, fully open source.
-, withPro ? false
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  python3,
+  ruby,
+  rake,
+  git,
+  curl,
+  fetchFromGitHub,
+  libGL,
+  libGLU,
+  alsa-lib,
+  libX11,
+  xorgproto,
+  libICE,
+  libXi,
+  libXScrnSaver,
+  libXcursor,
+  libXinerama,
+  libXext,
+  libXxf86vm,
+  libXrandr,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  dbus,
+  udev,
+  libdecor,
+  pipewire,
+  libpulseaudio,
+  libiconv,
+  # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
+  # that enables some additional features. It is, however, fully open source.
+  withPro ? false,
 }:
 let
   major = "1";
@@ -133,8 +134,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description =
-      "A free and open source fantasy computer for making, playing and sharing tiny games";
+    description = "A free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
       sharing tiny games.

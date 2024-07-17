@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, perl
-, python3
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  perl,
+  python3,
+  sqlite,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,9 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ejAcCwrOWGX0zsMw224f9GTWlozNYC0gU6LdTk0XqH0=";
   };
 
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   propagatedBuildInputs = with python3.pkgs; [
     alembic
@@ -29,7 +28,10 @@ python3.pkgs.buildPythonApplication rec {
     sqlalchemy
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   preBuild = ''
     export PREFIX=$out
@@ -52,7 +54,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    outputsToInstall = [ "out" "man" ];
+    outputsToInstall = [
+      "out"
+      "man"
+    ];
     mainProgram = "fabsys";
     description = "Flexible AFS Backup System for the OpenAFS distributed file system";
     homepage = "https://github.com/openafs-contrib/fabs";

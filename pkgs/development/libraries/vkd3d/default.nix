@@ -1,12 +1,33 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, wine, flex, bison
-, vulkan-headers, spirv-headers, vulkan-loader }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  wine,
+  flex,
+  bison,
+  vulkan-headers,
+  spirv-headers,
+  vulkan-loader,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vkd3d";
   version = "1.10";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wine flex bison ];
-  buildInputs = [ vulkan-loader vulkan-headers spirv-headers ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wine
+    flex
+    bison
+  ];
+  buildInputs = [
+    vulkan-loader
+    vulkan-headers
+    spirv-headers
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.winehq.org";

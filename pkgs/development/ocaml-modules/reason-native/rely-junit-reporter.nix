@@ -1,15 +1,19 @@
-{ atdgen, junit, re, reason, pastel, rely, ... }:
+{
+  atdgen,
+  junit,
+  re,
+  reason,
+  pastel,
+  rely,
+  ...
+}:
 
 {
   pname = "rely-junit-reporter";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
-  buildInputs = [
-    atdgen
-  ];
+  buildInputs = [ atdgen ];
 
   propagatedBuildInputs = [
     junit

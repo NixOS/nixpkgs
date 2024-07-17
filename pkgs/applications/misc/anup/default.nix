@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, sqlite, xdg-utils}:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+  sqlite,
+  xdg-utils,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "anup";
@@ -14,9 +22,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

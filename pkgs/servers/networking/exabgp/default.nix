@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, exabgp
-, testers
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  exabgp,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,22 +18,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-NlGE3yHUXPdxAMGhSaXMT2P1e7P+4AWg4lReP3f6Zx8=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
-  pythonImportsCheck = [
-    "exabgp"
-  ];
+  pythonImportsCheck = [ "exabgp" ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = exabgp;
-    };
+    version = testers.testVersion { package = exabgp; };
   };
 
   meta = with lib; {
@@ -40,6 +33,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Exa-Networks/exabgp";
     changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa raitobezarius ];
+    maintainers = with maintainers; [
+      hexa
+      raitobezarius
+    ];
   };
 }

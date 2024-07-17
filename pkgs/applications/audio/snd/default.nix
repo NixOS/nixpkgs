@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config
-, alsa-lib, fftw, gsl, motif, xorg
-, CoreServices, CoreMIDI
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  alsa-lib,
+  fftw,
+  gsl,
+  motif,
+  xorg,
+  CoreServices,
+  CoreMIDI,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +23,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ fftw gsl motif ]
+  buildInputs =
+    [
+      fftw
+      gsl
+      motif
+    ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices CoreMIDI ]
-    ++ (with xorg; [ libXext libXft libXpm libXt ]);
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      CoreMIDI
+    ]
+    ++ (with xorg; [
+      libXext
+      libXft
+      libXpm
+      libXt
+    ]);
 
   configureFlags = [ "--with-motif" ];
 

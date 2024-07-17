@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, cfitsio
-, hdf5
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  cfitsio,
+  hdf5,
+  pkg-config,
 }:
 
 buildOctavePackage rec {
@@ -20,17 +21,11 @@ buildOctavePackage rec {
     sed -i -s -e 's/D_NINT/octave::math::x_nint/g' src/*.cc
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    hdf5
-  ];
+  buildInputs = [ hdf5 ];
 
-  propagatedBuildInputs = [
-    cfitsio
-  ];
+  propagatedBuildInputs = [ cfitsio ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/fits/index.html";

@@ -1,22 +1,23 @@
-{ stdenv
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, lib
-, alsa-lib
-, libGL
-, libX11
-, libXinerama
-, libXi
-, zlib
-, rtaudio
-, rapidjson
-, ilmbase
-, glm
-, glfw3
-, libpng
-, opencolorio_1
-, freetype
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXinerama,
+  libXi,
+  zlib,
+  rtaudio,
+  rapidjson,
+  ilmbase,
+  glm,
+  glfw3,
+  libpng,
+  opencolorio_1,
+  freetype,
 }:
 
 let
@@ -59,9 +60,7 @@ let
     sourceRoot = "${src.name}/etc/SuperBuild";
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [
-      libGL
-    ];
+    buildInputs = [ libGL ];
 
     postPatch = ''
       chmod -R +w .

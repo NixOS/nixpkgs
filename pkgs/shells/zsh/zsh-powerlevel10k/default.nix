@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, gitstatus
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  gitstatus,
+  bash,
 }:
-
 
 let
   # match gitstatus version with given `gitstatus_version`:

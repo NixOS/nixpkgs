@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, libmd
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  libmd,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Vf36Jpb7TVWlkvqa0Uqd+JfHsACN2zswxBmRSEH4XzM=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   enableParallelBuilding = true;
 
@@ -38,7 +43,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Common functions found on BSD systems";
     homepage = "https://libbsd.freedesktop.org/";
-    license = with licenses; [ beerware bsd2 bsd3 bsdOriginal isc mit ];
+    license = with licenses; [
+      beerware
+      bsd2
+      bsd3
+      bsdOriginal
+      isc
+      mit
+    ];
     platforms = platforms.unix;
     # See architectures defined in src/local-elf.h.
     badPlatforms = lib.platforms.microblaze;

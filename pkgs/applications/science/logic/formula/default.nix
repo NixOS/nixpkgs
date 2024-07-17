@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  unstableGitUpdater,
+}:
 
 buildDotnetModule rec {
   pname = "formula-dotnet";
@@ -14,13 +21,17 @@ buildDotnetModule rec {
   nugetDeps = ./nuget.nix;
   projectFile = "Src/CommandLine/CommandLine.csproj";
 
-  postFixup = if stdenv.isLinux then ''
-    mv $out/bin/CommandLine $out/bin/formula
-  '' else lib.optionalString stdenv.isDarwin ''
-    makeWrapper ${dotnetCorePackages.runtime_6_0}/bin/dotnet $out/bin/formula \
-      --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
-      --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
-  '';
+  postFixup =
+    if stdenv.isLinux then
+      ''
+        mv $out/bin/CommandLine $out/bin/formula
+      ''
+    else
+      lib.optionalString stdenv.isDarwin ''
+        makeWrapper ${dotnetCorePackages.runtime_6_0}/bin/dotnet $out/bin/formula \
+          --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
+          --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
+      '';
 
   passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
 

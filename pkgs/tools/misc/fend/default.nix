@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, pandoc
-, pkg-config
-, openssl
-, installShellFiles
-, copyDesktopItems
-, makeDesktopItem
-, nix-update-script
-, testers
-, writeText
-, runCommand
-, fend
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  pandoc,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
+  testers,
+  writeText,
+  runCommand,
+  fend,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,8 +30,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Xwf3Mxvso9mb1YYTuKMzLhtJNX5b2dmGi05TZ111cMc=";
 
-  nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
-  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    pandoc
+    installShellFiles
+    pkg-config
+    copyDesktopItems
+  ];
+  buildInputs = [
+    pkg-config
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
@@ -60,7 +69,11 @@ rustPlatform.buildRustPackage rec {
       icon = "fend";
       exec = "fend";
       terminal = true;
-      categories = [ "Utility" "Calculator" "ConsoleOnly" ];
+      categories = [
+        "Utility"
+        "Calculator"
+        "ConsoleOnly"
+      ];
     })
   ];
 
@@ -85,7 +98,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/printfn/fend";
     changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ djanatyn liff ];
+    maintainers = with maintainers; [
+      djanatyn
+      liff
+    ];
     mainProgram = "fend";
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aml";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
 
   meta = with lib; {
     description = "Another main loop";

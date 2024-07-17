@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, freetype, libtool, flex, bison, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  freetype,
+  libtool,
+  flex,
+  bison,
+  pkg-config,
+}:
 
 stdenv.mkDerivation {
   pname = "ttf-mkfontdir";
@@ -11,14 +20,14 @@ stdenv.mkDerivation {
 
   # all the patches up from ttmkfdir-3.0.9/Makefile should be reviewed by someone
   # who knows more about C/C++ ..
-  patches =
-    [ (fetchurl {
-        url = "http://mirror.fsf.org/trisquel/pool/main/t/ttmkfdir/ttmkfdir_3.0.9-6.diff.gz";
-        sha256 = "141kxaf2by8nf87hqyszaxi0n7nnmswr1nh2i5r5bsvxxmaj9633";
-      })
+  patches = [
+    (fetchurl {
+      url = "http://mirror.fsf.org/trisquel/pool/main/t/ttmkfdir/ttmkfdir_3.0.9-6.diff.gz";
+      sha256 = "141kxaf2by8nf87hqyszaxi0n7nnmswr1nh2i5r5bsvxxmaj9633";
+    })
 
-      ./cstring.patch # also fixes some other compilation issues (freetype includes)
-    ];
+    ./cstring.patch # also fixes some other compilation issues (freetype includes)
+  ];
 
   # cross-compilation fixes:
   # - fix libtool, the reason it does not work in nativeBuildInputs is complicated
@@ -31,9 +40,17 @@ stdenv.mkDerivation {
       --replace "freetype-config" "${stdenv.cc.targetPrefix}pkg-config freetype2"
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "BINDIR=/bin" "CXX=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "BINDIR=/bin"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
-  nativeBuildInputs = [ flex bison pkg-config ];
+  nativeBuildInputs = [
+    flex
+    bison
+    pkg-config
+  ];
   buildInputs = [ freetype ];
 
   meta = {

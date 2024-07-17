@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,9 +22,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "README" "README.md"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cryptography
@@ -33,11 +32,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Project has no test
-  doCheck= false;
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "sslstrip"
-  ];
+  pythonImportsCheck = [ "sslstrip" ];
 
   meta = with lib; {
     description = "Tool for exploiting SSL stripping attacks";

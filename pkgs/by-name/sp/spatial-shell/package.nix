@@ -1,7 +1,8 @@
-{ lib
-, ocamlPackages
-, fetchFromGitHub
-, scdoc
+{
+  lib,
+  ocamlPackages,
+  fetchFromGitHub,
+  scdoc,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -15,9 +16,7 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-OeNBP/jea1ABh/WpvCP7We+L20WoTfLZH71raH7bKPI=";
   };
 
-  nativeBuildInputs = [
-    scdoc
-  ];
+  nativeBuildInputs = [ scdoc ];
 
   buildInputs = with ocamlPackages; [
     cmdliner

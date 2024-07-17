@@ -1,9 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
-, glew, gettext, libsndfile, libvorbis, libogg, physfs, openal
-, xmlstarlet, doxygen, python3, callPackage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  libpng,
+  glew,
+  gettext,
+  libsndfile,
+  libvorbis,
+  libogg,
+  physfs,
+  openal,
+  xmlstarlet,
+  doxygen,
+  python3,
+  callPackage,
+}:
 
 let
-  colobot-data = callPackage ./data.nix {};
+  colobot-data = callPackage ./data.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "colobot";
@@ -18,8 +38,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
 
-  nativeBuildInputs = [ cmake xmlstarlet doxygen python3 ];
-  buildInputs = [ boost SDL2 SDL2_image SDL2_ttf libpng glew gettext libsndfile libvorbis libogg physfs openal ];
+  nativeBuildInputs = [
+    cmake
+    xmlstarlet
+    doxygen
+    python3
+  ];
+  buildInputs = [
+    boost
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    libpng
+    glew
+    gettext
+    libsndfile
+    libvorbis
+    libogg
+    physfs
+    openal
+  ];
 
   enableParallelBuilding = false;
 

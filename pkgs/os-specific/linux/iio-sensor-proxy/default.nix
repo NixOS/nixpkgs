@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, glib
-, cmake
-, libxml2
-, meson
-, ninja
-, pkg-config
-, libgudev
-, systemd
-, polkit
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  cmake,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  libgudev,
+  systemd,
+  polkit,
 }:
 
 stdenv.mkDerivation rec {

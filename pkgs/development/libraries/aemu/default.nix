@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitiles, cmake, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitiles,
+  cmake,
+  darwin,
+}:
 
 stdenv.mkDerivation {
   pname = "aemu";
@@ -11,9 +17,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   cmakeFlags = [
     "-DAEMU_COMMON_GEN_PKGCONFIG=ON"
@@ -27,8 +31,17 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ];
     # The BSD license comes from host-common/VpxFrameParser.cpp, which
     # incorporates some code from libvpx, which uses the 3-clause BSD license.
-    license = with licenses; [ asl20 mit bsd3 ];
+    license = with licenses; [
+      asl20
+      mit
+      bsd3
+    ];
     # See base/include/aemu/base/synchronization/Lock.h
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

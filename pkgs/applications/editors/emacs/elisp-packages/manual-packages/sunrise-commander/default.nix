@@ -1,7 +1,8 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
 }:
 
 trivialBuild {
@@ -15,9 +16,7 @@ trivialBuild {
     hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
   };
 
-  buildInputs = [
-    emacs
-  ];
+  buildInputs = [ emacs ];
 
   meta = {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, meson
-, ninja
-, cmake
-, pkg-config
-, wayland-scanner
-, wayland-protocols
-, wayland
-, cairo
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  wayland-protocols,
+  wayland,
+  cairo,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aHA4kXHYH+KvAJSep5X3DqsiK6WFpXr3rGQl/KNiUcY=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson

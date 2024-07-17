@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, e2fsprogs
-, fuse
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  e2fsprogs,
+  fuse,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin-no-installer.patch
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     e2fsprogs

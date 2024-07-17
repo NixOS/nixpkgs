@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-NcDW1SLeP2BVH+TQp1M03Otg75axSFXfwQzlEJ1JOxo=";
   };
 
-  patches = [
-    ./unwrap-subprocess.patch
-  ];
+  patches = [ ./unwrap-subprocess.patch ];
 
   nativeCheckInputs = with python3Packages; [
     mock
@@ -35,13 +34,15 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
   ];
 
-  disabledTests = [
-    # Assertion error
-    "test_help_output"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # FsOperationFailed
-    "test_get_file_mode"
-  ];
+  disabledTests =
+    [
+      # Assertion error
+      "test_help_output"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # FsOperationFailed
+      "test_get_file_mode"
+    ];
 
   meta = with lib; {
     homepage = "https://www.pgbarman.org/";

@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchPypi
-, git
-, git-lfs
+{
+  lib,
+  python3,
+  fetchPypi,
+  git,
+  git-lfs,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,12 +16,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-wn2JRMLfqhhTREeYM+mcs68xlkRWKMlxKXToa83pu2g=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      git-lfs
+    ])
   ];
 
   # has no unit tests

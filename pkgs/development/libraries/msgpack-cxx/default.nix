@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,21 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
   cmakeFlags = [
     "-DMSGPACK_BUILD_DOCS=OFF" # docs are not installed even if built
   ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DMSGPACK_BUILD_TESTS=ON";
 
-  checkInputs = [
-    zlib
-  ];
+  checkInputs = [ zlib ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

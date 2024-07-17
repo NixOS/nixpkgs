@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, iptables, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  iptables,
+  nixosTests,
+}:
 
 let
   inherit (lib.versions) majorMinor;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "2.7";
   pname = "ferm";
 
@@ -11,12 +20,13 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-wA2RDVOU5pZ1YI617g9QTVz9pB6ZCi2akbqsbfk+P5I=";
   };
 
-  patches = [
-    ./import-ferm-wrapped.patch
-  ];
+  patches = [ ./import-ferm-wrapped.patch ];
 
   # perl is used at build time to gather the ferm version.
-  nativeBuildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
   buildInputs = [ perl ];
 
   makeFlags = [
@@ -44,7 +54,7 @@ in stdenv.mkDerivation rec {
       language, which can contain levels and lists.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [mic92];
+    maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
 }

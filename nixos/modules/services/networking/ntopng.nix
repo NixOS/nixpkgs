@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -14,26 +20,38 @@ let
     else
       "redis-${cfg.redis.createInstance}.service";
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "ntopng.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "ntopng.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "ntopng.conf" ''
-      ${concatStringsSep "\n" (map (e: "--interface=${e}") cfg.interfaces)}
-      --http-port=${toString cfg.httpPort}
-      --redis=${cfg.redis.address}
-      --data-dir=/var/lib/ntopng
-      --user=ntopng
-      ${cfg.extraConfig}
-    '';
+      pkgs.writeText "ntopng.conf" ''
+        ${concatStringsSep "\n" (map (e: "--interface=${e}") cfg.interfaces)}
+        --http-port=${toString cfg.httpPort}
+        --redis=${cfg.redis.address}
+        --data-dir=/var/lib/ntopng
+        --user=ntopng
+        ${cfg.extraConfig}
+      '';
 
 in
 
 {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "ntopng" "http-port" ] [ "services" "ntopng" "httpPort" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "ntopng"
+        "http-port"
+      ]
+      [
+        "services"
+        "ntopng"
+        "httpPort"
+      ]
+    )
   ];
 
   options = {
@@ -61,7 +79,10 @@ in
 
       interfaces = mkOption {
         default = [ "any" ];
-        example = [ "eth0" "wlan0" ];
+        example = [
+          "eth0"
+          "wlan0"
+        ];
         type = types.listOf types.str;
         description = ''
           List of interfaces to monitor. Use "any" to monitor all interfaces.
@@ -126,7 +147,8 @@ in
 
     # ntopng uses redis for data storage
     services.ntopng.redis.address =
-      mkIf createRedis config.services.redis.servers.${cfg.redis.createInstance}.unixSocket;
+      mkIf createRedis
+        config.services.redis.servers.${cfg.redis.createInstance}.unixSocket;
 
     services.redis.servers = mkIf createRedis {
       ${cfg.redis.createInstance} = {

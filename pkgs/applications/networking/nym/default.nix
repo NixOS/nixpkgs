@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, CoreServices
-, nix-update-script
-, rustc
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  CoreServices,
+  nix-update-script,
+  rustc,
 }:
 
 let
@@ -45,7 +46,12 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      CoreServices
+    ];
 
   checkType = "debug";
 

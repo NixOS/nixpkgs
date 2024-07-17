@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -22,9 +23,7 @@ buildGoModule rec {
     "-X=github.com/ktock/container2wasm/version.Version=${version}"
   ];
 
-  subPackages = [
-    "cmd/c2w"
-  ];
+  subPackages = [ "cmd/c2w" ];
 
   meta = with lib; {
     description = "Container to WASM converter";

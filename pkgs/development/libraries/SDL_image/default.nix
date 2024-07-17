@@ -1,11 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, giflib, libXpm, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  SDL,
+  libpng,
+  libjpeg,
+  libtiff,
+  giflib,
+  libXpm,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";
   version = "1.2.12";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
     sha256 = "16an9slbb8ci7d89wakkmyfvp7c0cval8xw4hkg0842nhhlp540b";
   };
 
@@ -26,13 +38,20 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL libpng libjpeg libtiff giflib libXpm ];
+  buildInputs = [
+    SDL
+    libpng
+    libjpeg
+    libtiff
+    giflib
+    libXpm
+  ];
 
   meta = with lib; {
     description = "SDL image library";
-    homepage    = "http://www.libsdl.org/projects/SDL_image/";
+    homepage = "http://www.libsdl.org/projects/SDL_image/";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.zlib;
+    platforms = platforms.unix;
+    license = licenses.zlib;
   };
 }

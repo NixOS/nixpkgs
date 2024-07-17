@@ -1,14 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-cfg = config.services.canto-daemon;
+  cfg = config.services.canto-daemon;
 
-in {
+in
+{
 
-##### interface
+  ##### interface
 
   options = {
 
@@ -22,7 +28,7 @@ in {
 
   };
 
-##### implementation
+  ##### implementation
 
   config = mkIf cfg.enable {
 

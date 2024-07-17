@@ -1,4 +1,10 @@
-{ clang_15, lib, rustPlatform, fetchFromGitHub, stdenv }:
+{
+  clang_15,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrscan";
@@ -11,11 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nAUZUE7NppsCAV8UyR8+OkikT4nJtnamsSVeyNz21EQ=";
   };
 
-  nativeBuildInputs = [
-    (rustPlatform.bindgenHook.overrideAttrs {
-      libclang = clang_15.cc.lib;
-    })
-  ];
+  nativeBuildInputs = [ (rustPlatform.bindgenHook.overrideAttrs { libclang = clang_15.cc.lib; }) ];
 
   cargoHash = "sha256-P40IwFRtEQp6BGRgmt1x3UXtAKtWaMjR3kqhYq+p7wQ=";
 

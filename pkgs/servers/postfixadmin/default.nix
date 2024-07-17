@@ -1,4 +1,8 @@
-{ fetchFromGitHub, stdenv, lib }:
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "postfixadmin";

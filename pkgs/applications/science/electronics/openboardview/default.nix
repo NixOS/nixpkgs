@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, cmake
-, pkg-config
-, python3
-, SDL2
-, fontconfig
-, gtk3
-, wrapGAppsHook3
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  cmake,
+  pkg-config,
+  python3,
+  SDL2,
+  fontconfig,
+  gtk3,
+  wrapGAppsHook3,
+  darwin,
 }:
 
 let
@@ -37,10 +38,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook3 ];
-  buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    wrapGAppsHook3
   ];
+  buildInputs = [
+    SDL2
+    fontconfig
+    gtk3
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   postPatch = ''
     substituteInPlace src/openboardview/CMakeLists.txt \
@@ -48,22 +56,20 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "fixup_bundle" "#fixup_bundle"
   '';
 
-  cmakeFlags = [
-    "-DGLAD_REPRODUCIBLE=On"
-  ];
+  cmakeFlags = [ "-DGLAD_REPRODUCIBLE=On" ];
 
   dontWrapGApps = true;
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup =
+    lib.optionalString stdenv.isDarwin ''
       mkdir -p "$out/Applications"
       mv "$out/openboardview.app" "$out/Applications/OpenBoardView.app"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
       wrapGApp "$out/bin/${pname}" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
-  '';
+    '';
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = ''.*\.90\..*'';
-  };
+  passthru.updateScript = gitUpdater { ignoredVersions = ''.*\.90\..*''; };
 
   meta = with lib; {
     description = "Linux SDL/ImGui edition software for viewing .brd files";

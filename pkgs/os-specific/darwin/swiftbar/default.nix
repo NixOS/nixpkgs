@@ -1,7 +1,8 @@
-{ lib
-, fetchzip
-, stdenvNoCC
-, makeWrapper
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenvNoCC.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall

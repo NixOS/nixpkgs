@@ -1,13 +1,14 @@
-{ copyDesktopItems
-, fetchurl
-, glib
-, gnome
-, gtk3
-, jre
-, lib
-, makeDesktopItem
-, stdenv
-, wrapGAppsHook3
+{
+  copyDesktopItems,
+  fetchurl,
+  glib,
+  gnome,
+  gtk3,
+  jre,
+  lib,
+  makeDesktopItem,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
   version = "4.4";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${lib.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
+    url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.tar.gz";
     hash = "sha256-ILqwXDyW7/hZzoSxxaxv4bF5xsB/JFaOBYAJFb7xmdk=";
   };
 
@@ -32,31 +35,38 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk3 ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          glib
+          gtk3
+        ]
+      }
       --set DEEPGIT_JAVA_HOME ${jre}
     )
     patchShebangs bin/deepgit.sh
   '';
 
-  desktopItems = [(makeDesktopItem rec {
-    name = pname;
-    desktopName = "DeepGit";
-    keywords = [ "git" ];
-    comment = "Git-Client";
-    categories = [
-      "Development"
-      "RevisionControl"
-    ];
-    terminal = false;
-    startupNotify = true;
-    startupWMClass = desktopName;
-    exec = pname;
-    mimeTypes = [
-      "x-scheme-handler/${pname}"
-      "x-scheme-handler/sourcetree"
-    ];
-    icon = pname;
-  })];
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = pname;
+      desktopName = "DeepGit";
+      keywords = [ "git" ];
+      comment = "Git-Client";
+      categories = [
+        "Development"
+        "RevisionControl"
+      ];
+      terminal = false;
+      startupNotify = true;
+      startupWMClass = desktopName;
+      exec = pname;
+      mimeTypes = [
+        "x-scheme-handler/${pname}"
+        "x-scheme-handler/sourcetree"
+      ];
+      icon = pname;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

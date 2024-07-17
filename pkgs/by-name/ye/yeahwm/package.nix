@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
-, lesstif
-, libX11
-, libXext
-, libXinerama
-, libXmu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  lesstif,
+  libX11,
+  libXext,
+  libXinerama,
+  libXmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ySzpiEjIuI2bZ8Eo4wcQlEwEpkVDECVFNcECsrb87gU=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     lesstif
@@ -32,20 +31,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  preBuild = let
-    includes = builtins.concatStringsSep " "
-      (builtins.map (l: "-I${lib.getDev l}/include")
-        finalAttrs.buildInputs);
-    ldpath = builtins.concatStringsSep " "
-      (builtins.map (l: "-L${lib.getLib l}/lib")
-        finalAttrs.buildInputs);
-  in ''
-    makeFlagsArray+=( CC="${stdenv.cc}/bin/cc" \
-                      XROOT="${libX11}" \
-                      INCLUDES="${includes}" \
-                      LDPATH="${ldpath}" \
-                      prefix="${placeholder "out"}" )
-  '';
+  preBuild =
+    let
+      includes = builtins.concatStringsSep " " (
+        builtins.map (l: "-I${lib.getDev l}/include") finalAttrs.buildInputs
+      );
+      ldpath = builtins.concatStringsSep " " (
+        builtins.map (l: "-L${lib.getLib l}/lib") finalAttrs.buildInputs
+      );
+    in
+    ''
+      makeFlagsArray+=( CC="${stdenv.cc}/bin/cc" \
+                        XROOT="${libX11}" \
+                        INCLUDES="${includes}" \
+                        LDPATH="${ldpath}" \
+                        prefix="${placeholder "out"}" )
+    '';
 
   # Workaround build failure on -fno-common toolchains like upstream gcc-10.
   # Otherwise build fails as:

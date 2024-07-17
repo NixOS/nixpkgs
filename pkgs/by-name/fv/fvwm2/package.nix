@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cairo
-, fontconfig
-, freetype
-, fribidi
-, libXcursor
-, libXft
-, libXinerama
-, libXpm
-, libXt
-, libpng
-, librsvg
-, libstroke
-, libxslt
-, perl
-, pkg-config
-, python3Packages
-, readline
-, enableGestures ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cairo,
+  fontconfig,
+  freetype,
+  fribidi,
+  libXcursor,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXt,
+  libpng,
+  librsvg,
+  libstroke,
+  libxslt,
+  perl,
+  pkg-config,
+  python3Packages,
+  readline,
+  enableGestures ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,9 +58,7 @@ stdenv.mkDerivation rec {
     readline
   ] ++ lib.optional enableGestures libstroke;
 
-  pythonPath = [
-    python3Packages.pyxdg
-  ];
+  pythonPath = [ python3Packages.pyxdg ];
 
   configureFlags = [
     "--enable-mandoc"

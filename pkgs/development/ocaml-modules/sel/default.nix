@@ -1,4 +1,10 @@
-{ lib, fetchurl, ppxlib, ppx_deriving, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  ppxlib,
+  ppx_deriving,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "sel";
@@ -11,13 +17,9 @@ buildDunePackage rec {
     hash = "sha256-Sp0eSeKyFmMvOQrebqLKP+HbHQB0D0eAmEjDzxnFL1I=";
   };
 
-  buildInputs = [
-    ppxlib
-  ];
+  buildInputs = [ ppxlib ];
 
-  propagatedBuildInputs = [
-    ppx_deriving
-  ];
+  propagatedBuildInputs = [ ppx_deriving ];
 
   meta = {
     description = "A simple event library";

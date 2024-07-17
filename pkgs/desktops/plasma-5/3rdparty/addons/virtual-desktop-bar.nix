@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
-, kwindowsystem
-, plasma-framework
-, qtx11extras
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  kwindowsystem,
+  plasma-framework,
+  qtx11extras,
 }:
 
 mkDerivation rec {
@@ -24,13 +25,9 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
-  cmakeFlags = [
-    "-Wno-dev"
-  ];
+  cmakeFlags = [ "-Wno-dev" ];
 
   meta = with lib; {
     description = "Manage virtual desktops dynamically in a convenient way";

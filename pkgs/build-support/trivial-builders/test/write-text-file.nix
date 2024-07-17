@@ -9,7 +9,12 @@
       cd nixpkgs
       nix-build -A tests.trivial-builders.writeTextFile.foo
 */
-{ lib, runCommand, runtimeShell, writeTextFile }:
+{
+  lib,
+  runCommand,
+  runtimeShell,
+  writeTextFile,
+}:
 let
   veryWeirdName = ''here's a name with some "bad" characters, like spaces and quotes'';
 in
@@ -27,15 +32,15 @@ lib.recurseIntoAttrs {
         '';
       };
     in
-      assert pkg.meta.mainProgram == "foo";
-      assert baseNameOf (lib.getExe pkg) == "foo";
-      assert pkg.name == "bar";
-      runCommand "test-writeTextFile-different-exe-name" {} ''
-        PATH="${lib.makeBinPath [ pkg ]}:$PATH"
-        x=$(foo)
-        [[ "$x" == hi ]]
-        touch $out
-      '';
+    assert pkg.meta.mainProgram == "foo";
+    assert baseNameOf (lib.getExe pkg) == "foo";
+    assert pkg.name == "bar";
+    runCommand "test-writeTextFile-different-exe-name" { } ''
+      PATH="${lib.makeBinPath [ pkg ]}:$PATH"
+      x=$(foo)
+      [[ "$x" == hi ]]
+      touch $out
+    '';
 
   weird-name = writeTextFile {
     name = "weird-names";

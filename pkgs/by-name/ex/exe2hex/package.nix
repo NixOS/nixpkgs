@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, expect
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  expect,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,9 +18,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-wriB1k45QWNCIsSb30Z3IilTGZqnc+X1+qkRrxgDxzU=";
   };
 
-  propagatedBuildInputs = [
-    expect
-  ];
+  propagatedBuildInputs = [ expect ];
 
   postPatch = ''
     substituteInPlace exe2hex.py \

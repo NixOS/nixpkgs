@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +16,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-tWV7HnIeTao3IbT2xxsu+//4aLQLKP/+ySqrvzU139c=";
   };
 
-  outputs = [ "out" "bin" "dev" ];
-
-  nativeBuildInputs = [
-    cmake
+  outputs = [
+    "out"
+    "bin"
+    "dev"
   ];
+
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     homepage = "https://www.genivia.com/doc/reflex/html";

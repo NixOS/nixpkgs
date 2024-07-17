@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildNpmPackage
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildNpmPackage,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -29,7 +30,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "a modern web frontend making aria2 easier to use";

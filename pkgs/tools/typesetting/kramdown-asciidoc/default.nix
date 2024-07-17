@@ -1,7 +1,10 @@
-{ lib, bundlerApp, makeWrapper,
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
   # Optional dependencies, can be null
   epubcheck,
-  bundlerUpdateScript
+  bundlerUpdateScript,
 }:
 
 let
@@ -9,9 +12,7 @@ let
     pname = "kramdown-asciidoc";
     gemdir = ./.;
 
-    exes = [
-      "kramdoc"
-    ];
+    exes = [ "kramdoc" ];
 
     # nativeBuildInputs = [ makeWrapper ];
 
@@ -34,4 +35,4 @@ let
     };
   };
 in
-  app
+app

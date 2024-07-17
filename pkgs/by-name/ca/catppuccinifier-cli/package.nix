@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lighttigerXIV/catppuccinifier";
     license = lib.licenses.mit;
     mainProgram = "catppuccinifier-cli";
-    maintainers = with lib.maintainers; [ aleksana isabelroses ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      isabelroses
+    ];
     platforms = with lib.platforms; linux ++ windows;
   };
 }

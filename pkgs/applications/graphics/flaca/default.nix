@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, fetchurl
-, runCommand
-, lndir
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  fetchurl,
+  runCommand,
+  lndir,
 }:
 
 rustPlatform.buildRustPackage rec {

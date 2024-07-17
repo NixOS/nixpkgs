@@ -1,36 +1,44 @@
-{ lib
-, avahi
-, bc
-, coreutils
-, cups
-, dbus
-, dejavu_fonts
-, fetchurl
-, fetchpatch
-, fontconfig
-, gawk
-, ghostscript
-, gnugrep
-, gnused
-, ijs
-, libexif
-, libjpeg
-, liblouis
-, libpng
-, makeWrapper
-, mupdf
-, perl
-, pkg-config
-, poppler
-, poppler_utils
-, qpdf
-, stdenv
-, which
-, withAvahi ? true
+{
+  lib,
+  avahi,
+  bc,
+  coreutils,
+  cups,
+  dbus,
+  dejavu_fonts,
+  fetchurl,
+  fetchpatch,
+  fontconfig,
+  gawk,
+  ghostscript,
+  gnugrep,
+  gnused,
+  ijs,
+  libexif,
+  libjpeg,
+  liblouis,
+  libpng,
+  makeWrapper,
+  mupdf,
+  perl,
+  pkg-config,
+  poppler,
+  poppler_utils,
+  qpdf,
+  stdenv,
+  which,
+  withAvahi ? true,
 }:
 
 let
-  binPath = lib.makeBinPath [ bc coreutils gawk gnused gnugrep which ];
+  binPath = lib.makeBinPath [
+    bc
+    coreutils
+    gawk
+    gnused
+    gnugrep
+    which
+  ];
 
 in
 stdenv.mkDerivation rec {
@@ -50,7 +58,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [
     cups
@@ -84,31 +95,33 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ] ++ lib.optionals (!withAvahi) [ "--disable-avahi" ];
 
-  makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];
+  makeFlags = [
+    "CUPS_SERVERBIN=$(out)/lib/cups"
+    "CUPS_DATADIR=$(out)/share/cups"
+    "CUPS_SERVERROOT=$(out)/etc/cups"
+  ];
 
   # https://github.com/OpenPrinting/cups-filters/issues/512
   env.NIX_CFLAGS_COMPILE = "-std=c++17";
 
-  postConfigure =
-    ''
-      # Ensure that bannertopdf can find the PDF templates in
-      # $out. (By default, it assumes that cups and cups-filters are
-      # installed in the same prefix.)
-      substituteInPlace config.h --replace ${cups.out}/share/cups/data $out/share/cups/data
+  postConfigure = ''
+    # Ensure that bannertopdf can find the PDF templates in
+    # $out. (By default, it assumes that cups and cups-filters are
+    # installed in the same prefix.)
+    substituteInPlace config.h --replace ${cups.out}/share/cups/data $out/share/cups/data
 
-      # Ensure that gstoraster can find gs in $PATH.
-      substituteInPlace filter/gstoraster.c --replace execve execvpe
+    # Ensure that gstoraster can find gs in $PATH.
+    substituteInPlace filter/gstoraster.c --replace execve execvpe
 
-      # Patch shebangs of generated build scripts
-      patchShebangs filter
-    '';
+    # Patch shebangs of generated build scripts
+    patchShebangs filter
+  '';
 
-  postInstall =
-    ''
-      for i in $out/lib/cups/filter/*; do
-        wrapProgram "$i" --prefix PATH ':' ${binPath}
-      done
-    '';
+  postInstall = ''
+    for i in $out/lib/cups/filter/*; do
+      wrapProgram "$i" --prefix PATH ':' ${binPath}
+    done
+  '';
 
   enableParallelBuilding = true;
   doCheck = true;

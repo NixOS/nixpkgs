@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, perl
-, gettext
-, gtk3
-, glib
-, libnotify
-, libgnomekbd
-, libpulseaudio
-, alsa-lib
-, libcanberra-gtk3
-, upower
-, colord
-, libgweather
-, polkit
-, gsettings-desktop-schemas
-, geoclue2
-, systemd
-, libgudev
-, libwacom
-, libxslt
-, libxml2
-, modemmanager
-, networkmanager
-, gnome-desktop
-, geocode-glib_2
-, docbook_xsl
-, wrapGAppsHook3
-, python3
-, tzdata
-, gcr_4
-, gnome-session-ctl
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  perl,
+  gettext,
+  gtk3,
+  glib,
+  libnotify,
+  libgnomekbd,
+  libpulseaudio,
+  alsa-lib,
+  libcanberra-gtk3,
+  upower,
+  colord,
+  libgweather,
+  polkit,
+  gsettings-desktop-schemas,
+  geoclue2,
+  systemd,
+  libgudev,
+  libwacom,
+  libxslt,
+  libxml2,
+  modemmanager,
+  networkmanager,
+  gnome-desktop,
+  geocode-glib_2,
+  docbook_xsl,
+  wrapGAppsHook3,
+  python3,
+  tzdata,
+  gcr_4,
+  gnome-session-ctl,
 }:
 
 stdenv.mkDerivation rec {
@@ -102,7 +103,6 @@ stdenv.mkDerivation rec {
   # Default for release buildtype but passed manually because
   # we're using plain
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
-
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -64,9 +69,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8787 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 8787 ]; };
 
     users.users = mkIf (cfg.user == "readarr") {
       readarr = {
@@ -77,8 +80,6 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "readarr") {
-      readarr = { };
-    };
+    users.groups = mkIf (cfg.group == "readarr") { readarr = { }; };
   };
 }

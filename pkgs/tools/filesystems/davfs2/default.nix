@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, neon
-, procps
-, substituteAll
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  neon,
+  procps,
+  substituteAll,
+  zlib,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,13 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-JR23Wic4DMoTMLG5cXAMXl3MDJDlpHYiKF8BQO3+Oi8=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   patches = [
     ./fix-sysconfdir.patch

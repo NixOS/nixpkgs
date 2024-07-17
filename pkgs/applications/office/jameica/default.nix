@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook3
-, stripJavaArchivesHook
-, ant
-, jdk
-, jre
-, gtk2
-, glib
-, libXtst
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  makeWrapper,
+  wrapGAppsHook3,
+  stripJavaArchivesHook,
+  ant,
+  jdk,
+  jre,
+  gtk2,
+  glib,
+  libXtst,
+  Cocoa,
 }:
 
 let
@@ -20,11 +21,16 @@ let
   version = "${_version}-${_build}";
 
   swtSystem =
-    if stdenv.hostPlatform.system == "i686-linux" then "linux"
-    else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "linux-arm64"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
-    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "i686-linux" then
+      "linux"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
+      "linux64"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "linux-arm64"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      "macos64"
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "jameica";
@@ -43,12 +49,23 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
+    rev = "V_${builtins.replaceStrings [ "." ] [ "_" ] _version}_BUILD_${_build}";
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
-  nativeBuildInputs = [ ant jdk wrapGAppsHook3 makeWrapper stripJavaArchivesHook ];
-  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
+  nativeBuildInputs = [
+    ant
+    jdk
+    wrapGAppsHook3
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      gtk2
+      glib
+      libXtst
+    ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 
   dontWrapGApps = true;
@@ -81,9 +98,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
-      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
-        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
-      } de.willuhn.jameica.Main" \
+      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''} de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
       --chdir "$out/share/java/" \
       "''${gappsWrapperArgs[@]}"
@@ -101,8 +116,16 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
-    maintainers = with maintainers; [ flokli r3dl3g ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      flokli
+      r3dl3g
+    ];
     mainProgram = "jameica";
   };
 }

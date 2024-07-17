@@ -1,4 +1,10 @@
-{ buildDunePackage, dns, mirage-crypto, base64, alcotest }:
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto,
+  base64,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "dns-tsig";
@@ -13,9 +19,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   meta = dns.meta // {
     description = "TSIG support for DNS";

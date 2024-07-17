@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeWrapper
-, openjdk17
-, gnused
-, autoPatchelfHook
-, wrapGAppsHook3
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  openjdk17,
+  gnused,
+  autoPatchelfHook,
+  wrapGAppsHook3,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -77,7 +78,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gepbird mkg20001 ];
+    maintainers = with maintainers; [
+      gepbird
+      mkg20001
+    ];
     mainProgram = "dbeaver";
   };
 })

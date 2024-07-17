@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
-, zlib
-, enableGtk2 ? false, gtk2
-, enableJPEG ? true, libjpeg
-, enablePNG ? true, libpng
-, enableTIFF ? true, libtiff
-, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableFfmpeg ? false, ffmpeg
-, enableGStreamer ? false, gst_all_1
-, enableEigen ? true, eigen
-, enableUnfree ? false
-, AVFoundation, Cocoa, QTKit, Accelerate
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  unzip,
+  zlib,
+  enableGtk2 ? false,
+  gtk2,
+  enableJPEG ? true,
+  libjpeg,
+  enablePNG ? true,
+  libpng,
+  enableTIFF ? true,
+  libtiff,
+  enableEXR ? (!stdenv.isDarwin),
+  openexr,
+  ilmbase,
+  enableFfmpeg ? false,
+  ffmpeg,
+  enableGStreamer ? false,
+  gst_all_1,
+  enableEigen ? true,
+  eigen,
+  enableUnfree ? false,
+  AVFoundation,
+  Cocoa,
+  QTKit,
+  Accelerate,
 }:
 
 let
@@ -28,33 +46,53 @@ stdenv.mkDerivation rec {
     sha256 = "062js7zhh4ixi2wk61wyi23qp9zsk5vw24iz2i5fab2hp97y5zq3";
   };
 
-  patches =
-    [ # Don't include a copy of the CMake status output in the
-      # build. This causes a runtime dependency on GCC.
-      ./no-build-info.patch
-    ];
+  patches = [
+    # Don't include a copy of the CMake status output in the
+    # build. This causes a runtime dependency on GCC.
+    ./no-build-info.patch
+  ];
 
   # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs =
-       [ zlib ]
+    [ zlib ]
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [
+      openexr
+      ilmbase
+    ]
     ++ lib.optional enableFfmpeg ffmpeg
-    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optionals enableGStreamer (
+      with gst_all_1;
+      [
+        gstreamer
+        gst-plugins-base
+      ]
+    )
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit Accelerate ]
-    ;
+    ++ lib.optionals stdenv.isDarwin [
+      AVFoundation
+      Cocoa
+      QTKit
+      Accelerate
+    ];
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    unzip
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -66,7 +104,10 @@ stdenv.mkDerivation rec {
     (opencvFlag "GSTREAMER" enableGStreamer)
   ] ++ lib.optional (!enableUnfree) "-DBUILD_opencv_nonfree=OFF";
 
-  hardeningDisable = [ "bindnow" "relro" ];
+  hardeningDisable = [
+    "bindnow"
+    "relro"
+  ];
 
   # Fix pkg-config file that gets broken with multiple outputs
   postFixup = ''

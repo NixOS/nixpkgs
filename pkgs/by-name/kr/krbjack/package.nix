@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-rvK0I8WlXqJtau9f+6ximfzYCjX21dPIyDN56IMI0gE=";
   };
 
-  pythonRelaxDeps = [
-    "impacket"
-  ];
+  pythonRelaxDeps = [ "impacket" ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -34,9 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "krbjack"
-  ];
+  pythonImportsCheck = [ "krbjack" ];
 
   meta = with lib; {
     description = "Kerberos AP-REQ hijacking tool with DNS unsecure updates abuse";

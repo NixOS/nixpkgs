@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, testers
-, opensupaplex
-, SDL2
-, SDL2_mixer
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  testers,
+  opensupaplex,
+  SDL2,
+  SDL2_mixer,
 }:
 
 let
@@ -68,14 +69,19 @@ stdenv.mkDerivation rec {
     version = "v${version}";
   };
 
-  desktopItems = [(makeDesktopItem {
-    name = "opensupaplex";
-    exec = meta.mainProgram;
-    icon = "open-supaplex";
-    desktopName = "OpenSupaplex";
-    comment = meta.description;
-    categories = [ "Application" "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "opensupaplex";
+      exec = meta.mainProgram;
+      icon = "open-supaplex";
+      desktopName = "OpenSupaplex";
+      comment = meta.description;
+      categories = [
+        "Application"
+        "Game"
+      ];
+    })
+  ];
 
   meta = with lib; {
     description = "A decompilation of Supaplex in C and SDL";

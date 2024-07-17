@@ -1,6 +1,4 @@
-{ qtModule
-, qtbase
-}:
+{ qtModule, qtbase }:
 
 qtModule {
   pname = "qtlanguageserver";

@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages
-, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  asciidoc,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  libxslt,
+  libxml2,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -14,7 +22,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
+    asciidoc
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxslt
+    libxml2
   ];
   propagatedBuildInputs = with python3Packages; [ mercurial ];
 

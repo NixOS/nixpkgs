@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, pkg-config
-, meson
-, ninja
-, exiv2
-, libheif
-, libjpeg
-, libtiff
-, gst_all_1
-, libraw
-, libsoup
-, libsecret
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, libchamplain
-, librsvg
-, libwebp
-, libX11
-, json-glib
-, webkitgtk
-, lcms2
-, bison
-, flex
-, clutter-gtk
-, wrapGAppsHook3
-, shared-mime-info
-, python3
-, desktop-file-utils
-, itstool
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  exiv2,
+  libheif,
+  libjpeg,
+  libtiff,
+  gst_all_1,
+  libraw,
+  libsoup,
+  libsecret,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  libchamplain,
+  librsvg,
+  libwebp,
+  libX11,
+  json-glib,
+  webkitgtk,
+  lcms2,
+  bison,
+  flex,
+  clutter-gtk,
+  wrapGAppsHook3,
+  shared-mime-info,
+  python3,
+  desktop-file-utils,
+  itstool,
 }:
 
 stdenv.mkDerivation rec {
@@ -81,9 +82,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  mesonFlags = [
-    "-Dlibchamplain=true"
-  ];
+  mesonFlags = [ "-Dlibchamplain=true" ];
 
   postPatch = ''
     chmod +x gthumb/make-gthumb-h.py

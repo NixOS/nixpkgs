@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passh";

@@ -58,9 +58,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--localstatedir=/var" ];
 
   enableParallelBuilding = true;
 

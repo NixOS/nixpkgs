@@ -1,4 +1,11 @@
-{lib, stdenv, fetchFromGitHub, cmake, eigen, boost}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  boost,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.1.1";
@@ -12,11 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen boost ];
-
-  cmakeFlags = [
-    "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
+  buildInputs = [
+    eigen
+    boost
   ];
+
+  cmakeFlags = [ "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3" ];
 
   doCheck = true;
   checkTarget = "test";
@@ -25,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "A fast K Nearest Neighbor library for low-dimensional spaces";
     license = licenses.bsd3;
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ cryptix ];
   };
 }

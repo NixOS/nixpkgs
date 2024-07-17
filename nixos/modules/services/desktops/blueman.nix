@@ -1,11 +1,17 @@
 # blueman service
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.blueman;
-in {
+in
+{
   ###### interface
   options = {
     services.blueman = {

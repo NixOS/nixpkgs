@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, libxml2
-, zlib
-, coreutils
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  libxml2,
+  zlib,
+  coreutils,
+  callPackage,
 }@args:
 
 import ./generic.nix args {
@@ -14,7 +15,10 @@ import ./generic.nix args {
 
   hash = "sha256-RNZiUZtaKXoab5kFrDij6YCAospeVvlLWheTc3FGMks=";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH

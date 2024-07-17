@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +16,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-ctEd8doXMKq3L9/T+jOcWqlBQN0pVhsu9DjBXsg/u/4=";
   };
 
-  nativeBuildInputs = [
-    zig_0_11.hook
-  ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
-  zigBuildFlags = [
-    "cli"
-  ];
+  zigBuildFlags = [ "cli" ];
 
   env = {
     COMMIT = lib.substring 0 7 src.rev;

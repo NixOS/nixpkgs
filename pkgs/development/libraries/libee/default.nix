@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libestr }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libestr,
+}:
 stdenv.mkDerivation rec {
   pname = "libee";
   version = "0.4.1";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libestr];
+  buildInputs = [ libestr ];
 
   meta = {
     description = "An Event Expression Library inspired by CEE";

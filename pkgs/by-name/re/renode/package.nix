@@ -1,33 +1,36 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, nix-update-script
-, glibcLocales
-, python3Packages
-, gtk-sharp-2_0
-, gtk2-x11
-, screen
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  nix-update-script,
+  glibcLocales,
+  python3Packages,
+  gtk-sharp-2_0,
+  gtk2-x11,
+  screen,
 }:
 
 let
-  pythonLibs = with python3Packages; makePythonPath [
-    construct
-    psutil
-    pyyaml
-    requests
+  pythonLibs =
+    with python3Packages;
+    makePythonPath [
+      construct
+      psutil
+      pyyaml
+      requests
 
-    (robotframework.overrideDerivation (oldAttrs: {
-      src = fetchFromGitHub {
-        owner = "robotframework";
-        repo = "robotframework";
-        rev = "v6.1";
-        hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
-      };
-    }))
-  ];
+      (robotframework.overrideDerivation (oldAttrs: {
+        src = fetchFromGitHub {
+          owner = "robotframework";
+          repo = "robotframework";
+          rev = "v6.1";
+          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
+        };
+      }))
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";

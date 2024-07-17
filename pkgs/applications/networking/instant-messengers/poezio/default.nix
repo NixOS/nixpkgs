@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitLab
-, pkg-config
-, python3
+{
+  lib,
+  fetchFromGitLab,
+  pkg-config,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,9 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-3pUegEfhQxEv/7Htw6b2BN1lXtDockyANmi1xW4wPhA=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
@@ -34,13 +33,9 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "poezio"
-  ];
+  pythonImportsCheck = [ "poezio" ];
 
   meta = with lib; {
     description = "Free console XMPP client";

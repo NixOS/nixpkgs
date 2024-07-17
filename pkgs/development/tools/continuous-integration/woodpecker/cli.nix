@@ -4,7 +4,13 @@ let
 in
 buildGoModule {
   pname = "woodpecker-cli";
-  inherit (common) version src ldflags postInstall vendorHash;
+  inherit (common)
+    version
+    src
+    ldflags
+    postInstall
+    vendorHash
+    ;
 
   subPackages = "cmd/cli";
 

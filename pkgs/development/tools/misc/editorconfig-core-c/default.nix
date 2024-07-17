@@ -1,16 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pcre2
-, doxygen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pcre2,
+  doxygen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editorconfig-core-c";
   version = "0.12.7";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "editorconfig";
@@ -25,9 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
   ];
 
-  buildInputs = [
-    pcre2
-  ];
+  buildInputs = [ pcre2 ];
 
   # Multiple doxygen can not generate man pages in the same base directory in
   # parallel: https://github.com/doxygen/doxygen/issues/6293
@@ -45,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       editors, see the EditorConfig website.
     '';
     downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
-    license = with licenses; [ bsd2 bsd3 ];
+    license = with licenses; [
+      bsd2
+      bsd3
+    ];
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
     mainProgram = "editorconfig";

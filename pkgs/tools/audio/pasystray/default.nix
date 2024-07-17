@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook, wrapGAppsHook3
-, gnome, avahi, gtk3, libayatana-appindicator, libnotify, libpulseaudio
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  wrapGAppsHook3,
+  gnome,
+  avahi,
+  gtk3,
+  libayatana-appindicator,
+  libnotify,
+  libpulseaudio,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,12 +39,20 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0002-Require-X11-backend.patch";
       sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
     })
-   ];
+  ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gnome.adwaita-icon-theme
-    avahi gtk3 libayatana-appindicator libnotify libpulseaudio
+    avahi
+    gtk3
+    libayatana-appindicator
+    libnotify
+    libpulseaudio
     gsettings-desktop-schemas
   ];
 
@@ -40,7 +60,10 @@ stdenv.mkDerivation rec {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ exlevan kamilchm ];
+    maintainers = with maintainers; [
+      exlevan
+      kamilchm
+    ];
     platforms = platforms.linux;
     mainProgram = "pasystray";
   };

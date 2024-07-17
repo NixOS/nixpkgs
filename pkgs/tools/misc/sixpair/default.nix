@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation {
   pname = "sixpair";
   version = "unstable-2007-04-18";

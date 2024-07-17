@@ -1,11 +1,12 @@
-{ buildDunePackage
-, lib
-, stdenv
-, dune-configurator
-, eio
-, fmt
-, logs
-, iomux
+{
+  buildDunePackage,
+  lib,
+  stdenv,
+  dune-configurator,
+  eio,
+  fmt,
+  logs,
+  iomux,
 }:
 
 buildDunePackage {
@@ -20,9 +21,7 @@ buildDunePackage {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 
-  buildInputs = [
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     eio

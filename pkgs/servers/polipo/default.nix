@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "polipo";
@@ -10,7 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ];
-  makeFlags = [ "PREFIX=$(out)" "LOCAL_ROOT=$(out)/share/polipo/www" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LOCAL_ROOT=$(out)/share/polipo/www"
+  ];
 
   meta = with lib; {
     homepage = "http://www.pps.jussieu.fr/~jch/software/polipo/";

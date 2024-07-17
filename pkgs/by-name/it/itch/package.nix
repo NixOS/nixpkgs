@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, fetchFromGitHub
-, butler
-, electron
-, steam-run
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  fetchFromGitHub,
+  butler,
+  electron,
+  steam-run,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
@@ -26,16 +27,23 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
 
-  icons = let sparseCheckout = "/release/images/itch-icons"; in
+  icons =
+    let
+      sparseCheckout = "/release/images/itch-icons";
+    in
     fetchFromGitHub {
-        owner = "itchio";
-        repo = "itch";
-        rev = "v${version}-canary";
-        hash = "sha256-0AMyDZ5oI7/pSvudoEqXnMZJtpcKVlUSR6YVm+s4xv0=";
-        sparseCheckout = [ sparseCheckout ];
-      } + sparseCheckout;
+      owner = "itchio";
+      repo = "itch";
+      rev = "v${version}-canary";
+      hash = "sha256-0AMyDZ5oI7/pSvudoEqXnMZJtpcKVlUSR6YVm+s4xv0=";
+      sparseCheckout = [ sparseCheckout ];
+    }
+    + sparseCheckout;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -44,7 +52,10 @@ stdenvNoCC.mkDerivation rec {
       tryExec = "itch";
       icon = "itch";
       desktopName = "itch";
-      mimeTypes = [ "x-scheme-handler/itchio" "x-scheme-handler/itch" ];
+      mimeTypes = [
+        "x-scheme-handler/itchio"
+        "x-scheme-handler/itch"
+      ];
       comment = "Install and play itch.io games easily";
       categories = [ "Game" ];
     })

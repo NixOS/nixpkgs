@@ -1,3 +1,1 @@
-{
-  config.enable = throw "oops";
-}
+{ config.enable = throw "oops"; }

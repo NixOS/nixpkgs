@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, vala
-, pkg-config
-, gtk3
-, glib
-, gpgme
-, json-glib
-, wrapGAppsHook3
-, libpeas
-, bash
-, gobject-introspection
-, gtksourceview4
-, gsettings-desktop-schemas
-, gnome
-, gspell
-, gvfs
-, shared-mime-info
-, libgee
-, libgit2-glib
-, libhandy
-, libsecret
-, libxml2
-, meson
-, ninja
-, python3
-, libdazzle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vala,
+  pkg-config,
+  gtk3,
+  glib,
+  gpgme,
+  json-glib,
+  wrapGAppsHook3,
+  libpeas,
+  bash,
+  gobject-introspection,
+  gtksourceview4,
+  gsettings-desktop-schemas,
+  gnome,
+  gspell,
+  gvfs,
+  shared-mime-info,
+  libgee,
+  libgit2-glib,
+  libhandy,
+  libsecret,
+  libxml2,
+  meson,
+  ninja,
+  python3,
+  libdazzle,
 }:
 
 stdenv.mkDerivation rec {
@@ -81,9 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   strictDeps = true;
@@ -92,7 +91,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gitg";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
-    maintainers = with maintainers; [ domenkozar Luflosi ];
+    maintainers = with maintainers; [
+      domenkozar
+      Luflosi
+    ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

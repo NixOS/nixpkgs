@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jdk
-, makeWrapper
-, buildNativeImage ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  makeWrapper,
+  buildNativeImage ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,39 +29,52 @@ stdenv.mkDerivation rec {
     patchShebangs --build ./build
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    ''
+      runHook preBuild
 
-    ./build
-  '' + lib.optionalString buildNativeImage ''
-    native-image --report-unsupported-elements-at-runtime \
-      -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
-      -jar APL.jar dapl
-  '' + ''
-    runHook postBuild
-  '';
+      ./build
+    ''
+    + lib.optionalString buildNativeImage ''
+      native-image --report-unsupported-elements-at-runtime \
+        -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
+        -jar APL.jar dapl
+    ''
+    + ''
+      runHook postBuild
+    '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin
-  '' + (if buildNativeImage then ''
-    mv dapl $out/bin
-  '' else ''
-    mkdir -p $out/share/${pname}
-    mv APL.jar $out/share/${pname}/
+      mkdir -p $out/bin
+    ''
+    + (
+      if buildNativeImage then
+        ''
+          mv dapl $out/bin
+        ''
+      else
+        ''
+          mkdir -p $out/share/${pname}
+          mv APL.jar $out/share/${pname}/
 
-    makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
-      --add-flags "-jar $out/share/${pname}/APL.jar"
-  '') + ''
-    ln -s $out/bin/dapl $out/bin/apl
+          makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
+            --add-flags "-jar $out/share/${pname}/APL.jar"
+        ''
+    )
+    + ''
+      ln -s $out/bin/dapl $out/bin/apl
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/APL";
-    description = "An APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    description =
+      "An APL implementation in Java"
+      + lib.optionalString buildNativeImage ", compiled as a native image";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (jdk.meta) platforms;

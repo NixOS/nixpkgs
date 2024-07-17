@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  readline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mrbayes";

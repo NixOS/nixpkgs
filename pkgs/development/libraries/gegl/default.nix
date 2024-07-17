@@ -1,43 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, vala
-, gi-docgen
-, gobject-introspection
-, glib
-, babl
-, libpng
-, llvmPackages
-, cairo
-, libjpeg
-, librsvg
-, lensfun
-, libspiro
-, maxflow
-, netsurf
-, pango
-, poly2tri-c
-, poppler
-, bzip2
-, json-glib
-, gettext
-, meson
-, ninja
-, libraw
-, gexiv2
-, libwebp
-, luajit
-, openexr
-, OpenCL
-, suitesparse
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  vala,
+  gi-docgen,
+  gobject-introspection,
+  glib,
+  babl,
+  libpng,
+  llvmPackages,
+  cairo,
+  libjpeg,
+  librsvg,
+  lensfun,
+  libspiro,
+  maxflow,
+  netsurf,
+  pango,
+  poly2tri-c,
+  poppler,
+  bzip2,
+  json-glib,
+  gettext,
+  meson,
+  ninja,
+  libraw,
+  gexiv2,
+  libwebp,
+  luajit,
+  openexr,
+  OpenCL,
+  suitesparse,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
   version = "0.4.48";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -55,30 +60,29 @@ stdenv.mkDerivation rec {
     gi-docgen
   ];
 
-  buildInputs = [
-    libpng
-    cairo
-    libjpeg
-    librsvg
-    lensfun
-    libspiro
-    maxflow
-    netsurf.libnsgif
-    pango
-    poly2tri-c
-    poppler
-    bzip2
-    libraw
-    libwebp
-    gexiv2
-    luajit
-    openexr
-    suitesparse
-  ] ++ lib.optionals stdenv.isDarwin [
-    OpenCL
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      libpng
+      cairo
+      libjpeg
+      librsvg
+      lensfun
+      libspiro
+      maxflow
+      netsurf.libnsgif
+      pango
+      poly2tri-c
+      poppler
+      bzip2
+      libraw
+      libwebp
+      gexiv2
+      luajit
+      openexr
+      suitesparse
+    ]
+    ++ lib.optionals stdenv.isDarwin [ OpenCL ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [

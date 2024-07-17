@@ -1,39 +1,40 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
+{
+  stdenv,
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  extra-cmake-modules,
 
-# common deps
-, karchive
+  # common deps
+  karchive,
 
-# client deps
-, qtbase
-, qtkeychain
-, qtmultimedia
-, qtsvg
-, qttools
-, libsecret
+  # client deps
+  qtbase,
+  qtkeychain,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  libsecret,
 
-# optional client deps
-, giflib
-, kdnssd
-, libvpx
-, miniupnpc
-, qtx11extras # kis
+  # optional client deps
+  giflib,
+  kdnssd,
+  libvpx,
+  miniupnpc,
+  qtx11extras, # kis
 
-# optional server deps
-, libmicrohttpd
-, libsodium
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd ? null
+  # optional server deps
+  libmicrohttpd,
+  libsodium,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd ? null,
 
-# options
-, buildClient ? true
-, buildServer ? true
-, buildServerGui ? true # if false builds a headless server
-, buildExtraTools ? false
-, enableKisTablet ? false # enable improved graphics tablet support
+  # options
+  buildClient ? true,
+  buildServer ? true,
+  buildServerGui ? true, # if false builds a headless server
+  buildExtraTools ? false,
+  enableKisTablet ? false, # enable improved graphics tablet support
 }:
 
 with lib;
@@ -59,14 +60,12 @@ let
     libsodium # ext-auth support
   ] ++ optional withSystemd systemd;
 
-  kisDeps = [
-    qtx11extras
-  ];
+  kisDeps = [ qtx11extras ];
 
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
+  boolToFlag = bool: if bool then "ON" else "OFF";
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "drawpile";
   version = "2.1.20";
 
@@ -79,12 +78,11 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [
-    karchive
-  ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  buildInputs =
+    [ karchive ]
+    ++ optionals buildClient clientDeps
+    ++ optionals buildServer serverDeps
+    ++ optionals enableKisTablet kisDeps;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -107,4 +105,3 @@ in mkDerivation rec {
     broken = stdenv.isDarwin;
   };
 }
-

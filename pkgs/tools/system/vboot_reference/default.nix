@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitiles, pkg-config, libuuid, openssl, libyaml, xz }:
+{
+  lib,
+  stdenv,
+  fetchFromGitiles,
+  pkg-config,
+  libuuid,
+  openssl,
+  libyaml,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   version = "111.15329";
@@ -12,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libuuid libyaml openssl xz ];
+  buildInputs = [
+    libuuid
+    libyaml
+    openssl
+    xz
+  ];
 
   enableParallelBuilding = true;
 
@@ -56,6 +70,9 @@ stdenv.mkDerivation rec {
     description = "Chrome OS partitioning and kernel signing tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann samueldr ];
+    maintainers = with maintainers; [
+      lheckemann
+      samueldr
+    ];
   };
 }

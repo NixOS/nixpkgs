@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, fetchurl, python3Packages, installShellFiles, gitUpdater }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  python3Packages,
+  installShellFiles,
+  gitUpdater,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
@@ -27,9 +34,7 @@ python3Packages.buildPythonApplication rec {
     installManPage paracode.1 unicode.1
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Display unicode character properties";

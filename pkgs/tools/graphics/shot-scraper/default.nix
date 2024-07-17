@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   # skip tests due to network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "shot_scraper"
-  ];
+  pythonImportsCheck = [ "shot_scraper" ];
 
   meta = with lib; {
     description = "A command-line utility for taking automated screenshots of websites";

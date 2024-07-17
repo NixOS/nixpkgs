@@ -1,13 +1,14 @@
-{ lib
-, buildPythonApplication
-, pythonOlder
-, fetchFromGitHub
-, pdm-backend
-, cmake-format
-, pygls
-, cmake
-, pytest-datadir
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  pythonOlder,
+  fetchFromGitHub,
+  pdm-backend,
+  cmake-format,
+  pygls,
+  cmake,
+  pytest-datadir,
+  pytestCheckHook,
 }:
 
 buildPythonApplication rec {
@@ -29,9 +30,7 @@ buildPythonApplication rec {
     ./disable-test-timeouts.patch
   ];
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     cmake-format
@@ -57,9 +56,7 @@ buildPythonApplication rec {
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "cmake_language_server"
-  ];
+  pythonImportsCheck = [ "cmake_language_server" ];
 
   meta = with lib; {
     description = "CMake LSP Implementation";

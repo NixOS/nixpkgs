@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchgit
-, flex, bison, fig2dev, imagemagick, netpbm, gtk2
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchgit,
+  flex,
+  bison,
+  fig2dev,
+  imagemagick,
+  netpbm,
+  gtk2,
+  pkg-config,
 }:
 
 with lib;
@@ -35,9 +43,7 @@ stdenv.mkDerivation {
     netpbm
   ];
 
-  buildInputs = [
-    gtk2
-  ];
+  buildInputs = [ gtk2 ];
 
   meta = {
     description = "An editor that allows the interactive creation of footprints electronic components";

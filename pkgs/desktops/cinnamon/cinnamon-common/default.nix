@@ -1,74 +1,77 @@
-{ atk
-, cacert
-, dbus
-, cinnamon-control-center
-, cinnamon-desktop
-, cinnamon-menus
-, cinnamon-session
-, cinnamon-translations
-, cjs
-, evolution-data-server
-, fetchFromGitHub
-, fetchpatch
-, gdk-pixbuf
-, gettext
-, libgnomekbd
-, glib
-, gobject-introspection
-, gsound
-, gtk3
-, intltool
-, json-glib
-, callPackage
-, libstartup_notification
-, libXtst
-, libXdamage
-, mesa
-, muffin
-, networkmanager
-, pkg-config
-, polkit
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk-doc
-, gnome
-, python3
-, keybinder3
-, cairo
-, xapp
-, upower
-, nemo
-, libnotify
-, accountsservice
-, gnome-online-accounts
-, glib-networking
-, pciutils
-, timezonemap
-, libnma
-, meson
-, ninja
-, gst_all_1
-, perl
+{
+  atk,
+  cacert,
+  dbus,
+  cinnamon-control-center,
+  cinnamon-desktop,
+  cinnamon-menus,
+  cinnamon-session,
+  cinnamon-translations,
+  cjs,
+  evolution-data-server,
+  fetchFromGitHub,
+  fetchpatch,
+  gdk-pixbuf,
+  gettext,
+  libgnomekbd,
+  glib,
+  gobject-introspection,
+  gsound,
+  gtk3,
+  intltool,
+  json-glib,
+  callPackage,
+  libstartup_notification,
+  libXtst,
+  libXdamage,
+  mesa,
+  muffin,
+  networkmanager,
+  pkg-config,
+  polkit,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxml2,
+  gtk-doc,
+  gnome,
+  python3,
+  keybinder3,
+  cairo,
+  xapp,
+  upower,
+  nemo,
+  libnotify,
+  accountsservice,
+  gnome-online-accounts,
+  glib-networking,
+  pciutils,
+  timezonemap,
+  libnma,
+  meson,
+  ninja,
+  gst_all_1,
+  perl,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    dbus-python
-    setproctitle
-    pygobject3
-    pycairo
-    pp.xapp # don't omit `pp.`, see #213561
-    pillow
-    pyinotify # for looking-glass
-    pytz
-    tinycss2
-    python-pam
-    pexpect
-    distro
-    requests
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      dbus-python
+      setproctitle
+      pygobject3
+      pycairo
+      pp.xapp # don't omit `pp.`, see #213561
+      pillow
+      pyinotify # for looking-glass
+      pytz
+      tinycss2
+      python-pam
+      pexpect
+      distro
+      requests
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
@@ -209,7 +212,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
+    providedSessions = [
+      "cinnamon"
+      "cinnamon2d"
+      "cinnamon-wayland"
+    ];
   };
 
   meta = with lib; {

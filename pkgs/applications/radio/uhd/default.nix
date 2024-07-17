@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, pkg-config
-# See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
-, boost
-, ncurses
-, enableCApi ? true
-, enablePythonApi ? true
-, python3
-, enableExamples ? false
-, enableUtils ? true
-, libusb1
-# Disable dpdk for now due to compilation issues.
-, enableDpdk ? false
-, dpdk
-# Devices
-, enableOctoClock ? true
-, enableMpmd ? true
-, enableB100 ? true
-, enableB200 ? true
-, enableUsrp1 ? true
-, enableUsrp2 ? true
-, enableX300 ? true
-, enableN300 ? true
-, enableN320 ? true
-, enableE300 ? true
-, enableE320 ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
+  boost,
+  ncurses,
+  enableCApi ? true,
+  enablePythonApi ? true,
+  python3,
+  enableExamples ? false,
+  enableUtils ? true,
+  libusb1,
+  # Disable dpdk for now due to compilation issues.
+  enableDpdk ? false,
+  dpdk,
+  # Devices
+  enableOctoClock ? true,
+  enableMpmd ? true,
+  enableB100 ? true,
+  enableB200 ? true,
+  enableUsrp1 ? true,
+  enableUsrp2 ? true,
+  enableX300 ? true,
+  enableN300 ? true,
+  enableN320 ? true,
+  enableE300 ? true,
+  enableE320 ? true,
 }:
 
 let
@@ -42,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   #
   version = "4.6.0.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
@@ -62,25 +66,27 @@ stdenv.mkDerivation (finalAttrs: {
   # This are the minimum required Python dependencies, this attribute might
   # be useful if you want to build a development environment with a python
   # interpreter able to import the uhd module.
-  pythonPath = optionals (enablePythonApi || enableUtils) [
-    python3.pkgs.numpy
-    python3.pkgs.setuptools
-  ] ++ optionals (enableUtils) [
-    python3.pkgs.requests
-    python3.pkgs.six
+  pythonPath =
+    optionals (enablePythonApi || enableUtils) [
+      python3.pkgs.numpy
+      python3.pkgs.setuptools
+    ]
+    ++ optionals (enableUtils) [
+      python3.pkgs.requests
+      python3.pkgs.six
 
-    /* These deps are needed for the usrp_hwd.py utility, however even if they
-    would have been added here, the utility wouldn't have worked because it
-    depends on an old python library mprpc that is not supported for Python >
-    3.8. See also report upstream:
-    https://github.com/EttusResearch/uhd/issues/744
+      /*
+        These deps are needed for the usrp_hwd.py utility, however even if they
+        would have been added here, the utility wouldn't have worked because it
+        depends on an old python library mprpc that is not supported for Python >
+        3.8. See also report upstream:
+        https://github.com/EttusResearch/uhd/issues/744
 
-    python3.pkgs.gevent
-    python3.pkgs.pyudev
-    python3.pkgs.pyroute2
-
-    */
-  ];
+        python3.pkgs.gevent
+        python3.pkgs.pyudev
+        python3.pkgs.pyroute2
+      */
+    ];
   passthru = {
     runtimePython = python3.withPackages (ps: finalAttrs.pythonPath);
     updateScript = [
@@ -101,26 +107,24 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_C_API" enableCApi)
     (cmakeBool "ENABLE_PYTHON_API" enablePythonApi)
     /*
+      Otherwise python tests fail. Using a dedicated pythonEnv for either or both
+      nativeBuildInputs and buildInputs makes upstream's cmake scripts fail to
+      install the Python API as reported on our end at [1] (we don't want
+      upstream to think we are in a virtual environment because we use
+      python3.withPackages...).
 
-    Otherwise python tests fail. Using a dedicated pythonEnv for either or both
-    nativeBuildInputs and buildInputs makes upstream's cmake scripts fail to
-    install the Python API as reported on our end at [1] (we don't want
-    upstream to think we are in a virtual environment because we use
-    python3.withPackages...).
+      Putting simply the python dependencies in the nativeBuildInputs and
+      buildInputs as they are now from some reason makes the `python` in the
+      checkPhase fail to find the python dependencies, as reported at [2]. Even
+      using nativeCheckInputs with the python dependencies, or using a
+      `python3.withPackages` wrapper in nativeCheckInputs, doesn't help, as the
+      `python` found in $PATH first is the one from nativeBuildInputs.
 
-    Putting simply the python dependencies in the nativeBuildInputs and
-    buildInputs as they are now from some reason makes the `python` in the
-    checkPhase fail to find the python dependencies, as reported at [2]. Even
-    using nativeCheckInputs with the python dependencies, or using a
-    `python3.withPackages` wrapper in nativeCheckInputs, doesn't help, as the
-    `python` found in $PATH first is the one from nativeBuildInputs.
+      [1]: https://github.com/NixOS/nixpkgs/pull/307435
+      [2]: https://discourse.nixos.org/t/missing-python-package-in-checkphase/9168/
 
-    [1]: https://github.com/NixOS/nixpkgs/pull/307435
-    [2]: https://discourse.nixos.org/t/missing-python-package-in-checkphase/9168/
-
-    Hence we use upstream's provided cmake flag to control which python
-    interpreter they will use to run the the python tests.
-
+      Hence we use upstream's provided cmake flag to control which python
+      interpreter they will use to run the the python tests.
     */
     "-DRUNTIME_PYTHON_EXECUTABLE=${lib.getExe finalAttrs.passthru.runtimePython}"
     (cmakeBool "ENABLE_DPDK" enableDpdk)
@@ -139,9 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-  ] ++ optionals stdenv.isAarch32 [
-    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
-  ];
+  ] ++ optionals stdenv.isAarch32 [ "-DCMAKE_CXX_FLAGS=-Wno-psabi" ];
 
   nativeBuildInputs = [
     cmake
@@ -153,14 +155,17 @@ stdenv.mkDerivation (finalAttrs: {
     # python utilities are enabled
     python3.pkgs.wrapPython
   ];
-  buildInputs = finalAttrs.pythonPath ++ [
-    boost
-    libusb1
-  ] ++ optionals (enableExamples) [
-    ncurses ncurses.dev
-  ] ++ optionals (enableDpdk) [
-    dpdk
-  ];
+  buildInputs =
+    finalAttrs.pythonPath
+    ++ [
+      boost
+      libusb1
+    ]
+    ++ optionals (enableExamples) [
+      ncurses
+      ncurses.dev
+    ]
+    ++ optionals (enableDpdk) [ dpdk ];
 
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.isDarwin;
@@ -175,9 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPhases = [
     "installFirmware"
     "removeInstalledTests"
-  ] ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
-    "moveUdevRules"
-  ];
+  ] ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ];
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
@@ -201,9 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (enablePythonApi && enableUtils) ''
     wrapPythonPrograms
   '';
-  disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
-    python3
-  ];
+  disallowedReferences = optionals (!enablePythonApi && !enableUtils) [ python3 ];
 
   meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";
@@ -217,6 +218,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://uhd.ettus.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz tomberek doronbehar ];
+    maintainers = with maintainers; [
+      bjornfor
+      fpletz
+      tomberek
+      doronbehar
+    ];
   };
 })

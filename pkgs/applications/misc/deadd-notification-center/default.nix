@@ -1,4 +1,9 @@
-{ mkDerivation, haskellPackages, fetchFromGitHub, lib }:
+{
+  mkDerivation,
+  haskellPackages,
+  fetchFromGitHub,
+  lib,
+}:
 
 let
   # deadd-notification-center.service
@@ -15,7 +20,8 @@ let
     [Install]
     WantedBy=graphical-session.target
   '';
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "deadd-notification-center";
   version = "2.1.1";
 
@@ -31,11 +37,42 @@ in mkDerivation rec {
   isExecutable = true;
 
   libraryHaskellDepends = with haskellPackages; [
-    aeson base bytestring ConfigFile containers dbus directory env-locale
-    filepath gi-cairo gi-gdk gi-gdkpixbuf gi-gio gi-glib gi-gobject
-    gi-gtk gi-pango haskell-gettext haskell-gi haskell-gi-base
-    hdaemonize here lens mtl process regex-tdfa setlocale split stm
-    tagsoup text time transformers tuple unix yaml
+    aeson
+    base
+    bytestring
+    ConfigFile
+    containers
+    dbus
+    directory
+    env-locale
+    filepath
+    gi-cairo
+    gi-gdk
+    gi-gdkpixbuf
+    gi-gio
+    gi-glib
+    gi-gobject
+    gi-gtk
+    gi-pango
+    haskell-gettext
+    haskell-gi
+    haskell-gi-base
+    hdaemonize
+    here
+    lens
+    mtl
+    process
+    regex-tdfa
+    setlocale
+    split
+    stm
+    tagsoup
+    text
+    time
+    transformers
+    tuple
+    unix
+    yaml
   ];
 
   executableHaskellDepends = with haskellPackages; [ base ];
@@ -58,7 +95,10 @@ in mkDerivation rec {
   description = "A haskell-written notification center for users that like a desktop with style";
   homepage = "https://github.com/phuhl/linux_notification_center";
   license = lib.licenses.bsd3;
-  maintainers = with lib.maintainers; [ melkor333 sna ];
+  maintainers = with lib.maintainers; [
+    melkor333
+    sna
+  ];
   platforms = lib.platforms.linux;
   mainProgram = "deadd-notification-center";
 }

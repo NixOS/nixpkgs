@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "infotagger";
   namespace = "script.module.infotagger";
@@ -14,9 +19,7 @@ buildKodiAddon rec {
   passthru = {
     # Unusual Python path.
     pythonPath = "resources/modules";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.infotagger";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.infotagger"; };
   };
 
   meta = with lib; {

@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeBinaryWrapper
-, pkg-config
-, oniguruma
-, ffmpeg
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  pkg-config,
+  oniguruma,
+  ffmpeg,
+  git,
 }:
 
 rustPlatform.buildRustPackage {
@@ -26,9 +27,7 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    oniguruma
-  ];
+  buildInputs = [ oniguruma ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
@@ -36,7 +35,12 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     wrapProgram $out/bin/codemov \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg git ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          git
+        ]
+      }
   '';
 
   meta = with lib; {

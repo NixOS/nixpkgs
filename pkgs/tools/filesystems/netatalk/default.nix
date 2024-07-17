@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, acl
-, autoreconfHook
-, avahi
-, db
-, libevent
-, libgcrypt
-, libiconv
-, openssl
-, pam
-, perl
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  acl,
+  autoreconfHook,
+  avahi,
+  db,
+  libevent,
+  libgcrypt,
+  libiconv,
+  openssl,
+  pam,
+  perl,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

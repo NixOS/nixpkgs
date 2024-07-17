@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, ncurses
-, notmuch
-, scdoc
-, python3
-, w3m
-, dante
-, gawk
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  ncurses,
+  notmuch,
+  scdoc,
+  python3,
+  w3m,
+  dante,
+  gawk,
 }:
 
 buildGoModule rec {
@@ -29,9 +30,7 @@ buildGoModule rec {
     python3.pkgs.wrapPython
   ];
 
-  patches = [
-    ./runtime-libexec.patch
-  ];
+  patches = [ ./runtime-libexec.patch ];
 
   postPatch = ''
     substituteAllInPlace config/aerc.conf
@@ -44,11 +43,13 @@ buildGoModule rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  pythonPath = [
-    python3.pkgs.vobject
-  ];
+  pythonPath = [ python3.pkgs.vobject ];
 
-  buildInputs = [ python3 notmuch gawk ];
+  buildInputs = [
+    python3
+    notmuch
+    gawk
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -62,9 +63,19 @@ buildGoModule rec {
     wrapProgram $out/bin/aerc \
       --prefix PATH ":" "${lib.makeBinPath [ ncurses ]}"
     wrapProgram $out/libexec/aerc/filters/html \
-      --prefix PATH ":"  ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH ":"  ${
+        lib.makeBinPath [
+          w3m
+          dante
+        ]
+      }
     wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          w3m
+          dante
+        ]
+      }
     patchShebangs $out/libexec/aerc/filters
   '';
 

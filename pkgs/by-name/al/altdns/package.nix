@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -22,9 +23,7 @@ python3.pkgs.buildPythonApplication {
       --replace-fail "argparse" ""
   '';
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     dnspython
@@ -39,9 +38,7 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "altdns"
-  ];
+  pythonImportsCheck = [ "altdns" ];
 
   meta = with lib; {
     description = "Generates permutations, alterations and mutations of subdomains and then resolves them";

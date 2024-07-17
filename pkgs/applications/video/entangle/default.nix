@@ -1,43 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, itstool
-, libxml2
-, meson
-, ninja
-, perl
-, python3
-, pkgconf
-, wrapGAppsHook3
-, at-spi2-core
-, dbus
-, elfutils
-, libepoxy
-, gexiv2
-, glib
-, gobject-introspection
-, gst-plugins-base
-, gstreamer
-, gtk3
-, lcms2
-, libdatrie
-, libgphoto2
-, libgudev
-, libpeas
-, libraw
-, libselinux
-, libsepol
-, libthai
-, libunwind
-, libxkbcommon
-, orc
-, pcre
-, pcre2
-, udev
-, util-linux
-, xorg
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  perl,
+  python3,
+  pkgconf,
+  wrapGAppsHook3,
+  at-spi2-core,
+  dbus,
+  elfutils,
+  libepoxy,
+  gexiv2,
+  glib,
+  gobject-introspection,
+  gst-plugins-base,
+  gstreamer,
+  gtk3,
+  lcms2,
+  libdatrie,
+  libgphoto2,
+  libgudev,
+  libpeas,
+  libraw,
+  libselinux,
+  libsepol,
+  libthai,
+  libunwind,
+  libxkbcommon,
+  orc,
+  pcre,
+  pcre2,
+  udev,
+  util-linux,
+  xorg,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -73,37 +74,39 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    at-spi2-core
-    dbus
-    libepoxy
-    elfutils
-    gexiv2
-    glib
-    gst-plugins-base
-    gstreamer
-    gtk3
-    lcms2
-    libdatrie
-    libgphoto2
-    libgudev
-    libpeas
-    libraw
-    libselinux
-    libsepol
-    libthai
-    libunwind
-    libxkbcommon
-    orc
-    pcre # required by libselinux before we USE_PCRE2
-    pcre2 # required by glib-2.0
-    udev
-    util-linux
-    zstd
-  ] ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+  buildInputs =
+    [
+      at-spi2-core
+      dbus
+      libepoxy
+      elfutils
+      gexiv2
+      glib
+      gst-plugins-base
+      gstreamer
+      gtk3
+      lcms2
+      libdatrie
+      libgphoto2
+      libgudev
+      libpeas
+      libraw
+      libselinux
+      libsepol
+      libthai
+      libunwind
+      libxkbcommon
+      orc
+      pcre # required by libselinux before we USE_PCRE2
+      pcre2 # required by glib-2.0
+      udev
+      util-linux
+      zstd
+    ]
+    ++ (with xorg; [
+      libXdmcp
+      libXtst
+    ]);
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML
   # Patch build script shebangs

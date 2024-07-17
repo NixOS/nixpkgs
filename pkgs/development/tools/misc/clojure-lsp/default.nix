@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildGraalvmNativeImage
-, babashka
-, fetchurl
-, fetchFromGitHub
-, clojure
-, writeScript
-, testers
-, clojure-lsp
+{
+  lib,
+  stdenv,
+  buildGraalvmNativeImage,
+  babashka,
+  fetchurl,
+  fetchFromGitHub,
+  clojure,
+  writeScript,
+  testers,
+  clojure-lsp,
 }:
 
 buildGraalvmNativeImage rec {
@@ -32,17 +33,18 @@ buildGraalvmNativeImage rec {
   ];
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    ''
+      runHook preCheck
 
-    export HOME="$(mktemp -d)"
-    ./${pname} --version | fgrep -q '${version}'
-  ''
-  # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-  #${babashka}/bin/bb integration-test ./${pname}
-  + ''
-    runHook postCheck
-  '';
+      export HOME="$(mktemp -d)"
+      ./${pname} --version | fgrep -q '${version}'
+    ''
+    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+    #${babashka}/bin/bb integration-test ./${pname}
+    + ''
+      runHook postCheck
+    '';
 
   passthru.tests.version = testers.testVersion {
     inherit version;
@@ -76,6 +78,9 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo babariviere ];
+    maintainers = with maintainers; [
+      ericdallo
+      babariviere
+    ];
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, desktop-file-utils
-, glib
-, gtk3
-, json-glib
-, libgee
-, librsvg
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  json-glib,
+  libgee,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

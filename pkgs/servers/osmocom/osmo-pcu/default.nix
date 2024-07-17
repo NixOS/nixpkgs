@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
 }:
 
 let
@@ -26,15 +26,12 @@ stdenv.mkDerivation rec {
     echo "${version}" > .tarball-version
   '';
 
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  buildInputs = [
-    libosmocore
-  ];
+  buildInputs = [ libosmocore ];
 
   enableParallelBuilding = true;
 

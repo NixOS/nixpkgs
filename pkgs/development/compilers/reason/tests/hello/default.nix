@@ -1,4 +1,8 @@
-{ buildDunePackage, ppxlib, reason }:
+{
+  buildDunePackage,
+  ppxlib,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "helloreason";
@@ -6,9 +10,7 @@ buildDunePackage rec {
 
   src = ./.;
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   buildInputs = [
     ppxlib

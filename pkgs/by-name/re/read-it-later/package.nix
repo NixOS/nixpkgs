@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libxml2
-, libadwaita
-, openssl
-, libsoup_3
-, webkitgtk_6_0
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libxml2,
+  libadwaita,
+  openssl,
+  libsoup_3,
+  webkitgtk_6_0,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     cargo
     wrapGAppsHook4
     desktop-file-utils
-    libxml2.bin #xmllint
+    libxml2.bin # xmllint
   ];
 
   buildInputs = [

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, brotli
-, hatchling
-, certifi
-, ffmpeg
-, rtmpdump
-, atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, pythonRelaxDepsHook
-, requests
-, secretstorage
-, urllib3
-, atomicparsleySupport ? true
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, withAlias ? false # Provides bin/youtube-dl for backcompat
-, update-python-libraries
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  brotli,
+  hatchling,
+  certifi,
+  ffmpeg,
+  rtmpdump,
+  atomicparsley,
+  pycryptodomex,
+  websockets,
+  mutagen,
+  pythonRelaxDepsHook,
+  requests,
+  secretstorage,
+  urllib3,
+  atomicparsleySupport ? true,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  withAlias ? false, # Provides bin/youtube-dl for backcompat
+  update-python-libraries,
 }:
 
 buildPythonPackage rec {
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     mutagen
     pycryptodomex
     requests
-    secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
+    secretstorage # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
     urllib3
     websockets
   ];
@@ -59,16 +60,17 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = []
+      packagesToBinPath =
+        [ ]
         ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump;
-    in lib.optionals (packagesToBinPath != [])
-    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+    in
+    lib.optionals (packagesToBinPath != [ ]) [
+      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+    ];
 
-  setupPyBuildFlags = [
-    "build_lazy_extractors"
-  ];
+  setupPyBuildFlags = [ "build_lazy_extractors" ];
 
   # Requires network
   doCheck = false;
@@ -77,7 +79,10 @@ buildPythonPackage rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = [ update-python-libraries (toString ./.) ];
+  passthru.updateScript = [
+    update-python-libraries
+    (toString ./.)
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
@@ -92,7 +97,10 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 SuperSandro2000 ];
+    maintainers = with maintainers; [
+      mkg20001
+      SuperSandro2000
+    ];
     mainProgram = "yt-dlp";
   };
 }

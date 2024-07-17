@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "bitcoin-prometheus-exporter";
@@ -17,7 +22,11 @@ python3Packages.buildPythonApplication rec {
   # The makefile builds docker containers.
   dontBuild = true;
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client bitcoinlib riprova ];
+  propagatedBuildInputs = with python3Packages; [
+    prometheus-client
+    bitcoinlib
+    riprova
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

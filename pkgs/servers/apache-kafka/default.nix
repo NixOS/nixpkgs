@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
-  majorVersion ? "1.0" }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk17_headless,
+  jdk11_headless,
+  makeWrapper,
+  bash,
+  coreutils,
+  gnugrep,
+  gnused,
+  ps,
+  majorVersion ? "1.0",
+}:
 
 let
   versionMap = {
@@ -61,7 +73,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre bash gnugrep gnused coreutils ps ];
+  buildInputs = [
+    jre
+    bash
+    gnugrep
+    gnused
+    coreutils
+    ps
+  ];
 
   installPhase = ''
     mkdir -p $out

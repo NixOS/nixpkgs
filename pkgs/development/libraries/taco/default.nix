@@ -1,15 +1,23 @@
-{ stdenv
-, lib
-, fetchgit
-, cmake
-, llvmPackages
-, enablePython ? false
-, python ? null
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cmake,
+  llvmPackages,
+  enablePython ? false,
+  python ? null,
 }:
 
-let pyEnv = python.withPackages (p: with p; [ numpy scipy ]);
+let
+  pyEnv = python.withPackages (
+    p: with p; [
+      numpy
+      scipy
+    ]
+  );
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "taco";
   version = "unstable-2022-08-02";
 
@@ -29,9 +37,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enablePython pyEnv;
 
-  cmakeFlags = [
-    "-DOPENMP=ON"
-  ] ++ lib.optional enablePython "-DPYTHON=ON" ;
+  cmakeFlags = [ "-DOPENMP=ON" ] ++ lib.optional enablePython "-DPYTHON=ON";
 
   postInstall = lib.strings.optionalString enablePython ''
     mkdir -p $out/${python.sitePackages}

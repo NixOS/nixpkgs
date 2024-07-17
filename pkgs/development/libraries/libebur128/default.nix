@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, speexdsp, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  speexdsp,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.6";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ speexdsp ];
 
   # https://github.com/jiixyj/libebur128/issues/121

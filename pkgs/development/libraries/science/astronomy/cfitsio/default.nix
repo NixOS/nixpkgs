@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, bzip2
-, curl
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  bzip2,
+  curl,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lZAM+VrnYIOefLlninsvrQhY1qwSI0+TS9HLa/wka6k=";
   };
 
-  patches = [
-    ./darwin-rpath-universal.patch
-  ];
+  patches = [ ./darwin-rpath-universal.patch ];
 
   buildInputs = [
     bzip2
@@ -53,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xbreak hjones2199 ];
+    maintainers = with lib.maintainers; [
+      xbreak
+      hjones2199
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

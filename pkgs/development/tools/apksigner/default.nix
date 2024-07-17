@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, jdk_headless
-, gradle
-, perl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchgit,
+  jdk_headless,
+  gradle,
+  perl,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,10 @@ stdenv.mkDerivation rec {
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version postPatch;
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [
+      gradle
+      perl
+    ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
@@ -75,7 +79,10 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   installPhase = ''
     install -Dm444 build/libs/apksigner.jar -t $out/lib

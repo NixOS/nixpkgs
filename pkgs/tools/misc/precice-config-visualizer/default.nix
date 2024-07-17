@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -14,7 +15,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-2dnpkec9hN4oAqwu+1WmDJrfeu+JbfqZ6guv3bC4H1c=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ lxml pydot ];
+  propagatedBuildInputs = with python3Packages; [
+    lxml
+    pydot
+  ];
 
   doCheck = false;
 

@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchzip
-, autoreconfHook
-, pkg-config
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  qtbase,
 }:
 
 mkDerivation {
@@ -20,9 +21,7 @@ mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   makeFlags = [
     "MOC=${qtbase.dev}/bin/moc"

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, fftw ? null
-, gettext
-, libintl
-, ncurses
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fftw ? null,
+  gettext,
+  libintl,
+  ncurses,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
   buildInputs = [
     fftw
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
       latency of the webserver + network. It supports IPv6.
     '';
     license = licenses.agpl3Only;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "httping";
   };

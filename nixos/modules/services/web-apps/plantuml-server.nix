@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -17,7 +22,11 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
+    (mkRemovedOptionModule [
+      "services"
+      "plantuml-server"
+      "allowPlantumlInclude"
+    ] "This option has been removed from PlantUML.")
   ];
 
   options = {
@@ -106,13 +115,13 @@ in
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
       };
       script = ''
-      ${cfg.packages.jdk}/bin/java \
-        -jar ${cfg.packages.jetty}/start.jar \
-          --module=deploy,http,jsp \
-          jetty.home=${cfg.packages.jetty} \
-          jetty.base=${cfg.package} \
-          jetty.http.host=${cfg.listenHost} \
-          jetty.http.port=${builtins.toString cfg.listenPort}
+        ${cfg.packages.jdk}/bin/java \
+          -jar ${cfg.packages.jetty}/start.jar \
+            --module=deploy,http,jsp \
+            jetty.home=${cfg.packages.jetty} \
+            jetty.base=${cfg.package} \
+            jetty.http.host=${cfg.listenHost} \
+            jetty.http.port=${builtins.toString cfg.listenPort}
       '';
 
       serviceConfig = {
@@ -139,7 +148,11 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -149,5 +162,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ truh anthonyroussel ];
+  meta.maintainers = with lib.maintainers; [
+    truh
+    anthonyroussel
+  ];
 }

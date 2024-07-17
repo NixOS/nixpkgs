@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, wireshark-cli
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  wireshark-cli,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,23 +17,20 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    fnvhash
-    python-magic
-  ] ++ [
-    wireshark-cli
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      fnvhash
+      python-magic
+    ]
+    ++ [ wireshark-cli ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hfinger"
-  ];
+  pythonImportsCheck = [ "hfinger" ];
 
   meta = with lib; {
     description = "Fingerprinting tool for HTTP requests";

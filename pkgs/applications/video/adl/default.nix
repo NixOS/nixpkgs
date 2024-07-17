@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, makeWrapper, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+  makeWrapper,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "adl";

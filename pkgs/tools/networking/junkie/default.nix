@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libpcap, guile_2_2, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libpcap,
+  guile_2_2,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -25,8 +35,15 @@ stdenv.mkDerivation rec {
     sed -i '10i#undef IP_DONTFRAG' include/junkie/proto/ip.h
   '';
 
-  buildInputs = [ libpcap guile_2_2 openssl ];
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    libpcap
+    guile_2_2
+    openssl
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   configureFlags = [
     "GUILELIBDIR=\${out}/${guile_2_2.siteDir}"
     "GUILECACHEDIR=\${out}/${guile_2_2.siteCcacheDir}"

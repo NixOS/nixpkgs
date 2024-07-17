@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitLab
-, perlPackages
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perlPackages,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

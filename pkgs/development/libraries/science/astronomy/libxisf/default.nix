@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, pkg-config
-, lz4
-, pugixml
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  pkg-config,
+  lz4,
+  pugixml,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QhshgKyf9s5U5JMa5TZelIo1tpJGlsOQePPG1kEfbq8=";
   };
 
-  patches = [
-    ./0001-Fix-pkg-config-paths.patch
-  ];
+  patches = [ ./0001-Fix-pkg-config-paths.patch ];
 
   nativeBuildInputs = [
     cmake

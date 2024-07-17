@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, testers
-, node-manta
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  node-manta,
 }:
 
 buildNpmPackage rec {
@@ -42,9 +43,7 @@ buildNpmPackage rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = node-manta;
-    };
+    tests.version = testers.testVersion { package = node-manta; };
   };
 
   meta = with lib; {

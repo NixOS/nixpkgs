@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, catch2, fmt, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  cmake,
+  catch2,
+  fmt,
+  python3,
+}:
 
 let
   ucd-version = "15.0.0";
@@ -8,7 +17,8 @@ let
     hash = "sha256-jj6bX46VcnH7vpc9GwM9gArG+hSPbOGL6E4SaVd0s60=";
     stripRoot = false;
   };
-in stdenv.mkDerivation (final: {
+in
+stdenv.mkDerivation (final: {
   pname = "libunicode";
   version = "0.4.0";
 
@@ -22,8 +32,14 @@ in stdenv.mkDerivation (final: {
   # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.
   patches = [ ./remove-target-properties.diff ];
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ catch2 fmt ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
+  buildInputs = [
+    catch2
+    fmt
+  ];
 
   cmakeFlags = [ "-DLIBUNICODE_UCD_DIR=${ucd-src}" ];
 

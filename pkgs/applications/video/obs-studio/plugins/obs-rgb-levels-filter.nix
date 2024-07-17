@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,15 +20,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  cmakeFlags = [
-    "-DOBS_SRC_DIR=${obs-studio.src}"
-  ];
+  cmakeFlags = [ "-DOBS_SRC_DIR=${obs-studio.src}" ];
 
   meta = with lib; {
     description = "A simple OBS Studio filter to adjust RGB levels.";
     homepage = "https://github.com/wimpysworld/obs-rgb-levels-filter";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

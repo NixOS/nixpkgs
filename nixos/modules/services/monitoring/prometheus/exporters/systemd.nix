@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.systemd;
   inherit (lib) concatStringsSep;
-in {
+in
+{
   port = 9558;
 
   serviceOpts = {

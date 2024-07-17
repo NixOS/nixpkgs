@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, formats
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, pkg-config
-, udev
-, openssl
-, sqlite
-, pam
-, bashInteractive
-, rust-jemalloc-sys
+{
+  stdenv,
+  lib,
+  formats,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  pkg-config,
+  udev,
+  openssl,
+  sqlite,
+  pam,
+  bashInteractive,
+  rust-jemalloc-sys,
 }:
 
 let
@@ -95,6 +96,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
+    maintainers = with maintainers; [
+      adamcstephens
+      erictapen
+      Flakebi
+    ];
   };
 }

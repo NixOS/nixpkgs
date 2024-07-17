@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libbpf
-, elfutils
-, zlib
-, libpcap
-, bpftools
-, llvmPackages
-, pkg-config
-, m4
-, emacs-nox
-, wireshark-cli
-, nukeReferences
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libbpf,
+  elfutils,
+  zlib,
+  libpcap,
+  bpftools,
+  llvmPackages,
+  pkg-config,
+  m4,
+  emacs-nox,
+  wireshark-cli,
+  nukeReferences,
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-kWgjt7mYwHtf8I4sXPzzrQJkWQyC8AC85ulGOWmQNZI=";
   };
 
-  outputs = [ "out" "lib" ];
+  outputs = [
+    "out"
+    "lib"
+  ];
 
   buildInputs = [
     libbpf
@@ -56,7 +60,10 @@ stdenv.mkDerivation rec {
   FORCE_SYSTEM_LIBBPF = 1;
   FORCE_EMACS = 1;
 
-  makeFlags = [ "PREFIX=$(out)" "LIBDIR=$(lib)/lib" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LIBDIR=$(lib)/lib"
+  ];
 
   postInstall = ''
     # Note that even the static libxdp would refer to BPF_OBJECT_DIR ?=$(LIBDIR)/bpf
@@ -68,8 +75,16 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [ gpl2Only lgpl21 bsd2 ];
-    maintainers = with maintainers; [ tirex vcunat vifino ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21
+      bsd2
+    ];
+    maintainers = with maintainers; [
+      tirex
+      vcunat
+      vifino
+    ];
     platforms = platforms.linux;
   };
 }

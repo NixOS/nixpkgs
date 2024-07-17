@@ -1,28 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, tcl-8_6
-, tcllib
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  tcl-8_6,
+  tcllib,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation {
   pname = "xfs_undelete";
   version = "unstable-2023-04-12";
 
-  src =  fetchFromGitHub {
+  src = fetchFromGitHub {
     repo = "xfs_undelete";
     owner = "ianka";
     rev = "9e2f7abf0d3a466328e335d251c567ce4194e473";
     sha256 = "0n1718bmr2lfpwx57hajancda51fyrgyk9rbybbadvd8gypvzmhh";
   };
 
-  buildInputs = [ tcl-8_6 tcllib coreutils ];
-  nativeBuildInputs = [ makeWrapper tcl-8_6.tclPackageHook installShellFiles ];
+  buildInputs = [
+    tcl-8_6
+    tcllib
+    coreutils
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    tcl-8_6.tclPackageHook
+    installShellFiles
+  ];
 
-  tclWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ tcl-8_6 ]) ];
+  tclWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tcl-8_6 ])
+  ];
 
   installPhase = ''
     runHook preInstall

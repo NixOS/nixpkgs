@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, breeze-icons
-, gtk3
-, gnome-icon-theme
-, hicolor-icon-theme
-, mint-x-icons
-, pantheon
-, jdupes
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  breeze-icons,
+  gtk3,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  mint-x-icons,
+  pantheon,
+  jdupes,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -18,15 +19,16 @@ stdenvNoCC.mkDerivation rec {
     owner = "gvolpe";
     repo = pname;
     rev = version;
-    sparseCheckout = [
-      "BeautyLine-V3"
-    ];
+    sparseCheckout = [ "BeautyLine-V3" ];
     sha256 = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
   };
 
   sourceRoot = "${src.name}/BeautyLine-V3";
 
-  nativeBuildInputs = [ jdupes gtk3 ];
+  nativeBuildInputs = [
+    jdupes
+    gtk3
+  ];
 
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [

@@ -1,15 +1,33 @@
-{ stdenv, lib
-, fetchurl
-, pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, elfutils, jansson, openssl, libpcap, rdma-core
-, doxygen, python3, pciutils
-, withExamples ? []
-, shared ? false
-, machine ? (
-    if stdenv.isx86_64 then "nehalem"
-    else if stdenv.isAarch64 then "generic"
-    else null
-  )
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  makeWrapper,
+  libbsd,
+  numactl,
+  libbpf,
+  zlib,
+  elfutils,
+  jansson,
+  openssl,
+  libpcap,
+  rdma-core,
+  doxygen,
+  python3,
+  pciutils,
+  withExamples ? [ ],
+  shared ? false,
+  machine ? (
+    if stdenv.isx86_64 then
+      "nehalem"
+    else if stdenv.isAarch64 then
+      "generic"
+    else
+      null
+  ),
 }:
 
 stdenv.mkDerivation rec {
@@ -54,36 +72,49 @@ stdenv.mkDerivation rec {
     patchShebangs config/arm buildtools
   '';
 
-  mesonFlags = [
-    "-Dtests=false"
-    "-Denable_docs=true"
-    "-Ddeveloper_mode=disabled"
-  ]
-  ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
-  ++ lib.optional (machine != null) "-Dmachine=${machine}"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  mesonFlags =
+    [
+      "-Dtests=false"
+      "-Denable_docs=true"
+      "-Ddeveloper_mode=disabled"
+    ]
+    ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
+    ++ lib.optional (machine != null) "-Dmachine=${machine}"
+    ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
-  postInstall = ''
-    # Remove Sphinx cache files. Not only are they not useful, but they also
-    # contain store paths causing spurious dependencies.
-    rm -rf $out/share/doc/dpdk/html/.doctrees
+  postInstall =
+    ''
+      # Remove Sphinx cache files. Not only are they not useful, but they also
+      # contain store paths causing spurious dependencies.
+      rm -rf $out/share/doc/dpdk/html/.doctrees
 
-    wrapProgram $out/bin/dpdk-devbind.py \
-      --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-  '' + lib.optionalString (withExamples != []) ''
-    mkdir -p $examples/bin
-    find examples -type f -executable -exec install {} $examples/bin \;
-  '';
+      wrapProgram $out/bin/dpdk-devbind.py \
+        --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
+    ''
+    + lib.optionalString (withExamples != [ ]) ''
+      mkdir -p $examples/bin
+      find examples -type f -executable -exec install {} $examples/bin \;
+    '';
 
-  outputs =
-    [ "out" "doc" ]
-    ++ lib.optional (withExamples != []) "examples";
+  outputs = [
+    "out"
+    "doc"
+  ] ++ lib.optional (withExamples != [ ]) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
-    license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  platforms.linux;
-    maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
+    license = with licenses; [
+      lgpl21
+      gpl2
+      bsd2
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      magenbluten
+      orivej
+      mic92
+      zhaofengli
+    ];
   };
 }

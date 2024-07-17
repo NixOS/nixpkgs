@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  cyrus_sasl,
-}:
+{ mkKdeDerivation, cyrus_sasl }:
 mkKdeDerivation {
   pname = "kimap";
 
-  extraBuildInputs = [cyrus_sasl];
+  extraBuildInputs = [ cyrus_sasl ];
 }

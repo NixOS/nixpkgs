@@ -1,20 +1,19 @@
-{ lib
-, stdenv
-, sassc
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, librsvg
-, gtk3
-, python3
-, fetchFromGitHub
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  sassc,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  librsvg,
+  gtk3,
+  python3,
+  fetchFromGitHub,
+  wrapGAppsHook3,
 }:
 
 let
-  py = python3.withPackages (p: [
-    p.pygobject3
-  ]);
+  py = python3.withPackages (p: [ p.pygobject3 ]);
   pname = "themix-gui";
   version = "1.15.1";
 in

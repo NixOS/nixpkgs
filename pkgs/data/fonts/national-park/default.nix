@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "national-park-typeface";
@@ -19,8 +23,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''Typeface designed to mimic the national park service
-    signs that are carved using a router bit'';
+    description = ''
+      Typeface designed to mimic the national park service
+          signs that are carved using a router bit'';
     homepage = "https://nationalparktypeface.com/";
     license = licenses.ofl;
     maintainers = with maintainers; [ dtzWill ];

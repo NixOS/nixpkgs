@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
@@ -11,9 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Id5pdFzjA9q67okfESO3LZH8jIz93mVgIEEuBbPjuGI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   configureFlags = [ "--disable-network" ];
 
@@ -23,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test
   '';
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "Fully feature complete YAML parser and emitter, supporting the latest YAML spec and passing the full YAML testsuite";

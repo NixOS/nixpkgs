@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,8 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0y94dywligcsqs01d228w454ssrzg31p4j8mni9flcr4v29z3rwp";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   # package does not contain tests as of v0.3.3
   docCheck = false;
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool to download saved media from Reddit";
     homepage = "https://github.com/manojkarthick/reddsaver";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = [ maintainers.manojkarthick ];
     mainProgram = "reddsaver";
   };

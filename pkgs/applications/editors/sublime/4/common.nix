@@ -58,9 +58,7 @@ let
     cairo
     pango
     curl
-  ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
-    sqlite
-  ];
+  ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [ sqlite ];
 in
 let
   binaryPackage = stdenv.mkDerivation rec {
@@ -144,9 +142,7 @@ stdenv.mkDerivation (rec {
 
   ${primaryBinary} = binaryPackage;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     ''

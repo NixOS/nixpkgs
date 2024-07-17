@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mprocs";
@@ -23,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     description = "A TUI tool to run multiple commands in parallel and show the output of each command separately";
     homepage = "https://github.com/pvolok/mprocs";
     license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage pyrox0 ];
+    maintainers = with maintainers; [
+      GaetanLepage
+      pyrox0
+    ];
     mainProgram = "mprocs";
   };
 }

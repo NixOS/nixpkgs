@@ -41,15 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pcre2
     zlib
-  ] ++ (if with_boost_asio then [
-    boost
-  ] else [
-    asio
-  ]);
+  ] ++ (if with_boost_asio then [ boost ] else [ asio ]);
 
-  checkInputs = [
-    catch2_3
-  ];
+  checkInputs = [ catch2_3 ];
 
   cmakeDir = "../dev";
   cmakeFlags = [

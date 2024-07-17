@@ -1,4 +1,9 @@
-{ lib, stdenv, perl, fetchurl }:
+{
+  lib,
+  stdenv,
+  perl,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "davtest";
@@ -15,9 +20,7 @@ stdenv.mkDerivation rec {
       --replace "tests/" "$out/share/davtest/tests/"
   '';
 
-  buildInputs = [
-    (perl.withPackages (p: with p; [ HTTPDAV ]))
-  ];
+  buildInputs = [ (perl.withPackages (p: with p; [ HTTPDAV ])) ];
 
   installPhase = ''
     runHook preInstall

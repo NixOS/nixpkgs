@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  dbus,
+  sqlite,
+  file,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,9 +34,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  nativeCheckInputs = [
-    file
-  ];
+  nativeCheckInputs = [ file ];
 
   meta = with lib; {
     description = "A CLI helper to manage, package and publish Nextcloud apps";

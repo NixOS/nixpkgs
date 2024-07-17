@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, glib
-, gnome
-, gsettings-desktop-schemas
-, gtk3
-, xorg
-, libcanberra-gtk3
-, libgtop
-, libstartup_notification
-, libxml2
-, pkg-config
-, substituteAll
-, wrapGAppsHook3
-, zenity
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  glib,
+  gnome,
+  gsettings-desktop-schemas,
+  gtk3,
+  xorg,
+  libcanberra-gtk3,
+  libgtop,
+  libstartup_notification,
+  libxml2,
+  pkg-config,
+  substituteAll,
+  wrapGAppsHook3,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub, nix-update-script
-, buildDunePackage
-, core
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  buildDunePackage,
+  core,
 }:
 
 buildDunePackage rec {
@@ -16,9 +19,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [
-    core
-  ];
+  propagatedBuildInputs = [ core ];
 
   passthru.updateScript = nix-update-script { };
 

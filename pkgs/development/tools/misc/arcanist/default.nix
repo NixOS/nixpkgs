@@ -1,26 +1,29 @@
-{ bison
-, cacert
-, fetchFromGitHub
-, flex
-, php
-, lib, stdenv
-, installShellFiles
-, which
-, python3
+{
+  bison,
+  cacert,
+  fetchFromGitHub,
+  flex,
+  php,
+  lib,
+  stdenv,
+  installShellFiles,
+  which,
+  python3,
 }:
 
 # Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
 # invoked and complains about it being an unknown toolset. We could use `makeWrapper`, but
 # then we’d need to still craft a script that does the `php libexec/arcanist/bin/...` dance
 # anyway... So just do everything at once.
-let makeArcWrapper = toolset: ''
-  cat << WRAPPER > $out/bin/${toolset}
-  #!$shell -e
-  export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
-  exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
-  WRAPPER
-  chmod +x $out/bin/${toolset}
-'';
+let
+  makeArcWrapper = toolset: ''
+    cat << WRAPPER > $out/bin/${toolset}
+    #!$shell -e
+    export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
+    exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
+    WRAPPER
+    chmod +x $out/bin/${toolset}
+  '';
 
 in
 stdenv.mkDerivation {
@@ -39,9 +42,16 @@ stdenv.mkDerivation {
     ./shellcomplete-strlen-null.patch
   ];
 
-  buildInputs = [ php python3 ];
+  buildInputs = [
+    php
+    python3
+  ];
 
-  nativeBuildInputs = [ bison flex installShellFiles ];
+  nativeBuildInputs = [
+    bison
+    flex
+    installShellFiles
+  ];
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace support/xhpast/Makefile \

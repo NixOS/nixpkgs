@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "CoinMP";
@@ -11,9 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    CXXFLAGS = "-std=c++14";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++14"; };
 
   hardeningDisable = [ "format" ];
 

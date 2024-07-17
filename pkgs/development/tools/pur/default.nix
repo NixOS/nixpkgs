@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,17 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-W6otdj1C3Nn3DUvwp9MPqMo2y4ITqgYrqlW/uxIj2YA=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    click
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ click ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pur"
-  ];
+  pythonImportsCheck = [ "pur" ];
 
   meta = with lib; {
     description = "Python library for update and track the requirements";

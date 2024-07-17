@@ -1,4 +1,11 @@
-{ fetchurl, bash, glibc, lib, stdenv, installShellFiles }:
+{
+  fetchurl,
+  bash,
+  glibc,
+  lib,
+  stdenv,
+  installShellFiles,
+}:
 
 let
   man-pages = fetchurl {
@@ -17,7 +24,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-nix-usernamespace-build.patch ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

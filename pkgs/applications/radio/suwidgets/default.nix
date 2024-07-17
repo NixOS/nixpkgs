@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, qtbase
-, pkg-config
-, sigutils
-, fftwSinglePrec
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  pkg-config,
+  sigutils,
+  fftwSinglePrec,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,15 +38,16 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
   ];
 
-  qmakeFlags = [
-    "SuWidgetsLib.pro"
-  ];
+  qmakeFlags = [ "SuWidgetsLib.pro" ];
 
   meta = with lib; {
     description = "Sigutils-related widgets";
     homepage = "https://github.com/BatchDrake/SuWidgets";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ polygon oxapentane ];
+    maintainers = with maintainers; [
+      polygon
+      oxapentane
+    ];
   };
 }

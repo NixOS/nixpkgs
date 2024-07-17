@@ -1,4 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, pcre, perl }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  pcre,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maildrop";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre perl ];
+  buildInputs = [
+    pcre
+    perl
+  ];
 
   patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot
 

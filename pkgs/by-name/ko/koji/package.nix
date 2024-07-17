@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, perl
-, udev
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  perl,
+  udev,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  buildInputs = [
-    openssl.dev
-  ];
+  buildInputs = [ openssl.dev ];
 
   meta = with lib; {
     description = "An interactive CLI for creating conventional commits";

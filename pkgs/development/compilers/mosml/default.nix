@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, gmp, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mosml";
   version = "2.10.1";
 
-  buildInputs = [ gmp perl ];
+  buildInputs = [
+    gmp
+    perl
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   src = fetchFromGitHub {
     owner = "kfl";

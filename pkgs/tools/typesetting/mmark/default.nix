@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, mmark }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  mmark,
+}:
 
 buildGoModule rec {
   pname = "mmark";
@@ -16,11 +22,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-GjR9cOGLB6URHQi+qcyNbP7rm0+y4wypvgUxgJzIgGQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = mmark;
-  };
+  passthru.tests.version = testers.testVersion { package = mmark; };
 
   meta = {
     description = "A powerful markdown processor in Go geared towards the IETF";

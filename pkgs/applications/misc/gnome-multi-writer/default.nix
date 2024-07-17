@@ -1,20 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gnome
-, gtk3
-, gusb
-, libcanberra-gtk3
-, libgudev
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, polkit
-, udisks
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gnome,
+  gtk3,
+  gusb,
+  libcanberra-gtk3,
+  libgudev,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  polkit,
+  udisks,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

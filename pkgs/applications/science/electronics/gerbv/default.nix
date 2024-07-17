@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, autoreconfHook
-, cairo
-, fetchFromGitHub
-, gettext
-, gtk2-x11
-, libtool
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  autoreconfHook,
+  cairo,
+  fetchFromGitHub,
+  gettext,
+  gtk2-x11,
+  libtool,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +41,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  configureFlags = [
-    "--disable-update-desktop-database"
-  ];
+  configureFlags = [ "--disable-update-desktop-database" ];
 
   meta = with lib; {
     description = "A Gerber (RS-274X) viewer";

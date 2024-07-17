@@ -1,9 +1,20 @@
-{ lib, stdenv, buildGoModule, fetchFromGitea, mandoc, tup, nixosTests }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitea,
+  mandoc,
+  tup,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "eris-go";
   version = "20240128";
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -15,7 +26,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-pA/fz7JpDwdTRFfLDY0M6p9TeBOK68byhy/0Cw53p4M=";
 
-  nativeBuildInputs = [ mandoc tup ];
+  nativeBuildInputs = [
+    mandoc
+    tup
+  ];
 
   postConfigure = ''
     rm -f *.md
@@ -28,7 +42,9 @@ buildGoModule rec {
 
   env.skipNetworkTests = true;
 
-  passthru.tests = { inherit (nixosTests) eris-server; };
+  passthru.tests = {
+    inherit (nixosTests) eris-server;
+  };
 
   meta = src.meta // {
     description = "Implementation of ERIS for Go";

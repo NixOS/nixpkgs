@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libxcrypt
-, pam
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libxcrypt,
+  pam,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,11 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "man" ];
-
-  nativeBuildInputs = [
-    pkg-config
+  outputs = [
+    "out"
+    "man"
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libxcrypt

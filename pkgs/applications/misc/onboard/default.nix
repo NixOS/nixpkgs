@@ -1,38 +1,37 @@
-{ fetchurl
-, lib
-, substituteAll
-, aspellWithDicts
-, at-spi2-core ? null
-, atspiSupport ? true
-, bash
-, glib
-, dconf
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk3
-, hunspell
-, hunspellDicts
-, hunspellWithDicts
-, intltool
-, isocodes
-, libappindicator-gtk3
-, libcanberra-gtk3
-, mousetweaks
-, udev
-, libxkbcommon
-, pkg-config
-, procps
-, python3
-, wrapGAppsHook3
-, xorg
-, yelp
+{
+  fetchurl,
+  lib,
+  substituteAll,
+  aspellWithDicts,
+  at-spi2-core ? null,
+  atspiSupport ? true,
+  bash,
+  glib,
+  dconf,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk3,
+  hunspell,
+  hunspellDicts,
+  hunspellWithDicts,
+  intltool,
+  isocodes,
+  libappindicator-gtk3,
+  libcanberra-gtk3,
+  mousetweaks,
+  udev,
+  libxkbcommon,
+  pkg-config,
+  procps,
+  python3,
+  wrapGAppsHook3,
+  xorg,
+  yelp,
 }:
 
 let
 
-  customHunspell = hunspellWithDicts [
-    hunspellDicts.en-us
-  ];
+  customHunspell = hunspellWithDicts [ hunspellDicts.en-us ];
 
   majorVersion = "1.4";
 
@@ -89,9 +88,7 @@ python3.pkgs.buildPythonApplication rec {
     systemd
   ];
 
-  propagatedUserEnvPkgs = [
-    dconf
-  ];
+  propagatedUserEnvPkgs = [ dconf ];
 
   nativeCheckInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests

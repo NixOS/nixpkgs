@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitLab, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "glab";

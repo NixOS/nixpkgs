@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, gdb
-, python3
-, bintools-unwrapped
-, file
-, ps
-, git
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  gdb,
+  python3,
+  bintools-unwrapped,
+  file,
+  ps,
+  git,
+  coreutils,
 }:
 
 let
-  pythonPath = with python3.pkgs; makePythonPath [
-    keystone-engine
-    unicorn
-    capstone
-    ropper
-  ];
+  pythonPath =
+    with python3.pkgs;
+    makePythonPath [
+      keystone-engine
+      unicorn
+      capstone
+      ropper
+    ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gef";
   version = "2024.01";
 
@@ -40,12 +44,14 @@ in stdenv.mkDerivation rec {
     makeWrapper ${gdb}/bin/gdb $out/bin/gef \
       --add-flags "-q -x $out/share/gef/gef.py" \
       --set NIX_PYTHONPATH ${pythonPath} \
-      --prefix PATH : ${lib.makeBinPath [
-        python3
-        bintools-unwrapped # for readelf
-        file
-        ps
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          python3
+          bintools-unwrapped # for readelf
+          file
+          ps
+        ]
+      }
   '';
 
   nativeCheckInputs = [

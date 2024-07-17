@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, freeglut
-, libGLU
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  freeglut,
+  libGLU,
+  libGL,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +20,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ freeglut libGL libGLU ];
+  buildInputs = [
+    freeglut
+    libGL
+    libGLU
+  ];
 
   patchPhase = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c

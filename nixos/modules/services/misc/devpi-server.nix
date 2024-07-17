@@ -74,9 +74,9 @@ in
       # have 0600 permissions.
       preStart =
         ''
-          ${optionalString (!isNull cfg.secretFile)
-            "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"
-          }
+          ${optionalString (
+            !isNull cfg.secretFile
+          ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
 
           if [ -f ${serverDir}/.nodeinfo ]; then
             # already initialized the package index, exit gracefully
@@ -86,9 +86,7 @@ in
         + strings.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
-        LoadCredential = lib.mkIf (! isNull cfg.secretFile) [
-          "devpi-secret:${cfg.secretFile}"
-        ];
+        LoadCredential = lib.mkIf (!isNull cfg.secretFile) [ "devpi-secret:${cfg.secretFile}" ];
         Restart = "always";
         ExecStart =
           let
@@ -99,9 +97,7 @@ in
                 "--host=${cfg.host}"
                 "--port=${builtins.toString cfg.port}"
               ]
-              ++ lib.optionals (! isNull cfg.secretFile) [
-                "--secretfile=${runtimeDir}/${secretsFileName}"
-              ]
+              ++ lib.optionals (!isNull cfg.secretFile) [ "--secretfile=${runtimeDir}/${secretsFileName}" ]
               ++ (
                 if cfg.replica then
                   [
@@ -123,9 +119,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     meta.maintainers = [ cafkafk ];
   };

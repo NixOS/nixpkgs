@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.podgrab;
 
@@ -47,7 +52,9 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.tmpfiles.settings."10-pyload" = {
-      ${cfg.dataDirectory}.d = { inherit (cfg) user group; };
+      ${cfg.dataDirectory}.d = {
+        inherit (cfg) user group;
+      };
     };
 
     systemd.services.podgrab = {
@@ -62,9 +69,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        EnvironmentFile = lib.optionals (cfg.passwordFile != null) [
-          cfg.passwordFile
-        ];
+        EnvironmentFile = lib.optionals (cfg.passwordFile != null) [ cfg.passwordFile ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";
         WorkingDirectory = "${pkgs.podgrab}/share";
         StateDirectory = [ "podgrab/config" ];

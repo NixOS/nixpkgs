@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
@@ -47,7 +55,10 @@ stdenv.mkDerivation rec {
     description = "An Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
+    maintainers = with maintainers; [
+      ryneeverett
+      alyaeanyx
+    ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";
   };

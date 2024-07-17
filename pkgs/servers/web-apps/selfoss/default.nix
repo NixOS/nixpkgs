@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "selfoss";
@@ -9,9 +14,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "5JxHUOlyMneWPKaZtgLwn5FI4rnyWPzmsUQpSYrw5Pw=";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +33,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jtojnar regnat ];
+    maintainers = with maintainers; [
+      jtojnar
+      regnat
+    ];
     platforms = platforms.all;
   };
 }

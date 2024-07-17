@@ -2,10 +2,11 @@
 # The `library` derivation exposes a .nupkg, which is then consumed by the `application` derivation.
 # https://nixos.org/manual/nixpkgs/unstable/index.html#packaging-a-dotnet-application
 
-{ lib
-, dotnet-sdk
-, buildDotnetModule
-, runCommand
+{
+  lib,
+  dotnet-sdk,
+  buildDotnetModule,
+  runCommand,
 }:
 
 let

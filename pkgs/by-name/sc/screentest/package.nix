@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, intltool
-, pkg-config
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  intltool,
+  pkg-config,
+  gtk2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2 # for autoconf macros
   ];
 
-  buildInputs = [
-    gtk2
-  ];
+  buildInputs = [ gtk2 ];
 
   meta = with lib; {
     description = "A simple screen testing tool";

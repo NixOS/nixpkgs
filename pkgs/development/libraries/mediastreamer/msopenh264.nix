@@ -1,12 +1,13 @@
-{ autoreconfHook
-, cmake
-, fetchFromGitLab
-, fetchpatch
-, mediastreamer
-, openh264
-, pkg-config
-, lib
-, stdenv
+{
+  autoreconfHook,
+  cmake,
+  fetchFromGitLab,
+  fetchpatch,
+  mediastreamer,
+  openh264,
+  pkg-config,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ mediastreamer openh264 ];
+  buildInputs = [
+    mediastreamer
+    openh264
+  ];
 
   # Do not build static libraries
   cmakeFlags = [

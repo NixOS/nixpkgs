@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, libffi
-, libxml2
-, CoreFoundation
-, SystemConfiguration
-, Security
-, withLLVM ? !stdenv.isDarwin
-, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+  libffi,
+  libxml2,
+  CoreFoundation,
+  SystemConfiguration,
+  Security,
+  withLLVM ? !stdenv.isDarwin,
+  withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64),
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,19 +26,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EpHM8YaT2Ty9IBX/gXEa9n8006A9Y5/fq/ueODxHlnc=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals withLLVM [
-    llvmPackages.llvm
-    libffi
-    libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    SystemConfiguration
-    Security
-  ];
+  buildInputs =
+    lib.optionals withLLVM [
+      llvmPackages.llvm
+      libffi
+      libxml2
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      SystemConfiguration
+      Security
+    ];
 
   # check references to `compiler_features` in Makefile on update
   buildFeatures = [
@@ -46,11 +47,14 @@ rustPlatform.buildRustPackage rec {
     "static-artifact-create"
     "wasmer-artifact-load"
     "static-artifact-load"
-  ]
-  ++ lib.optional withLLVM "llvm"
-  ++ lib.optional withSinglepass "singlepass";
+  ] ++ lib.optional withLLVM "llvm" ++ lib.optional withSinglepass "singlepass";
 
-  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
+  cargoBuildFlags = [
+    "--manifest-path"
+    "lib/cli/Cargo.toml"
+    "--bin"
+    "wasmer"
+  ];
 
   env.LLVM_SYS_150_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
@@ -68,6 +72,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      shamilton
+      nickcao
+    ];
   };
 }

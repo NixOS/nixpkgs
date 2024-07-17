@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  e2fsprogs,
+  openldap,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   version = "4.09";
@@ -9,10 +16,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nNrKFUvJKvwxF/Dl9bMgjdX4RYOvHPBhw5uqCiuxQvk=";
   };
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ e2fsprogs openldap ];
+  buildInputs = [
+    e2fsprogs
+    openldap
+  ];
 
   meta = with lib; {
     description = "Tools to manage kernel-level quotas in Linux";

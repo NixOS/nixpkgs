@@ -1,34 +1,37 @@
-{ lib, stdenv, fetchFromGitHub
-, addOpenGLRunpath
-, wrapGAppsHook3
-, cmake
-, glslang
-, nasm
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  addOpenGLRunpath,
+  wrapGAppsHook3,
+  cmake,
+  glslang,
+  nasm,
+  pkg-config,
 
-, SDL2
-, boost
-, cubeb
-, curl
-, fmt_9
-, glm
-, gtk3
-, hidapi
-, imgui
-, libpng
-, libusb1
-, libzip
-, libXrender
-, pugixml
-, rapidjson
-, vulkan-headers
-, wayland
-, wxGTK32
-, zarchive
-, gamemode
-, vulkan-loader
+  SDL2,
+  boost,
+  cubeb,
+  curl,
+  fmt_9,
+  glm,
+  gtk3,
+  hidapi,
+  imgui,
+  libpng,
+  libusb1,
+  libzip,
+  libXrender,
+  pugixml,
+  rapidjson,
+  vulkan-headers,
+  wayland,
+  wxGTK32,
+  zarchive,
+  gamemode,
+  vulkan-loader,
 
-, nix-update-script
+  nix-update-script,
 }:
 
 let
@@ -44,7 +47,8 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cemu";
   version = "2.0-82";
 
@@ -104,14 +108,17 @@ in stdenv.mkDerivation rec {
     "-DPORTABLE=OFF"
   ];
 
-  preConfigure = with lib; let
-    tag = last (splitString "-" version);
-  in ''
-    rm -rf dependencies/imgui
-    ln -s ${imgui'}/include/imgui dependencies/imgui
-    substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
-    substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
-  '';
+  preConfigure =
+    with lib;
+    let
+      tag = last (splitString "-" version);
+    in
+    ''
+      rm -rf dependencies/imgui
+      ln -s ${imgui'}/include/imgui dependencies/imgui
+      substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
+      substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -129,13 +136,15 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = let
-    libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
-  in ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
-    )
-  '';
+  preFixup =
+    let
+      libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+      )
+    '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -144,7 +153,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://cemu.info";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zhaofengli baduhai ];
+    maintainers = with maintainers; [
+      zhaofengli
+      baduhai
+    ];
     mainProgram = "cemu";
   };
 }

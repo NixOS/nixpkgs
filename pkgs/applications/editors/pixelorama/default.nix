@@ -1,30 +1,33 @@
-{ lib
-, stdenv
-, alsa-lib
-, autoPatchelfHook
-, fetchFromGitHub
-, godot3-headless
-, godot3-export-templates
-, libGLU
-, libpulseaudio
-, libX11
-, libXcursor
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, nix-update-script
-, udev
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  godot3-headless,
+  godot3-export-templates,
+  libGLU,
+  libpulseaudio,
+  libX11,
+  libXcursor,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  nix-update-script,
+  udev,
 }:
 
 let
   preset =
     if stdenv.isLinux then
-      if stdenv.is64bit then "Linux/X11 64-bit"
-      else "Linux/X11 32-bit"
-    else if stdenv.isDarwin then "Mac OSX"
-    else throw "unsupported platform";
-in stdenv.mkDerivation (finalAttrs: {
+      if stdenv.is64bit then "Linux/X11 64-bit" else "Linux/X11 32-bit"
+    else if stdenv.isDarwin then
+      "Mac OSX"
+    else
+      throw "unsupported platform";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
   version = "0.11.4";
 
@@ -89,7 +92,10 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "A free & open-source 2D sprite editor, made with the Godot Engine!";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ felschr ];
     mainProgram = "pixelorama";
   };

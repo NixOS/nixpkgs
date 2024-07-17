@@ -1,38 +1,44 @@
-{ lib
-, buildNpmPackage
-, copyDesktopItems
-, electron
-, buildGoModule
-, esbuild
-, fetchFromGitHub
-, jq
-, deltachat-rpc-server
-, libdeltachat
-, makeDesktopItem
-, makeWrapper
-, noto-fonts-color-emoji
-, pkg-config
-, python3
-, roboto
-, sqlcipher
-, stdenv
-, CoreServices
-, testers
-, deltachat-desktop
+{
+  lib,
+  buildNpmPackage,
+  copyDesktopItems,
+  electron,
+  buildGoModule,
+  esbuild,
+  fetchFromGitHub,
+  jq,
+  deltachat-rpc-server,
+  libdeltachat,
+  makeDesktopItem,
+  makeWrapper,
+  noto-fonts-color-emoji,
+  pkg-config,
+  python3,
+  roboto,
+  sqlcipher,
+  stdenv,
+  CoreServices,
+  testers,
+  deltachat-desktop,
 }:
 
 let
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.19.8";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.19.8";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 in
 buildNpmPackage rec {
@@ -60,16 +66,12 @@ buildNpmPackage rec {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isLinux [
-    copyDesktopItems
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ copyDesktopItems ];
 
   buildInputs = [
     deltachat-rpc-server
     libdeltachat
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -123,7 +125,11 @@ buildNpmPackage rec {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"
@@ -134,9 +140,7 @@ buildNpmPackage rec {
   });
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = deltachat-desktop;
-    };
+    version = testers.testVersion { package = deltachat-desktop; };
   };
 
   meta = with lib; {

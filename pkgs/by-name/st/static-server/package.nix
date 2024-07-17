@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, curl
-, stdenv
-, testers
-, static-server
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  curl,
+  stdenv,
+  testers,
+  static-server,
+  substituteAll,
 }:
 
 buildGoModule rec {
@@ -29,19 +30,18 @@ buildGoModule rec {
     })
   ];
 
-  nativeCheckInputs = [
-    curl
-  ];
+  nativeCheckInputs = [ curl ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # tests sometimes fail with SIGQUIT on darwin
   doCheck = !stdenv.isDarwin;
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = static-server;
-    };
+    version = testers.testVersion { package = static-server; };
   };
 
   __darwinAllowLocalNetworking = true;

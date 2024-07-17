@@ -1,8 +1,46 @@
-{lib, stdenv, fetchFromGitHub, fuse, bison, flex, openssl, python3, ncurses, readline,
- autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  bison,
+  flex,
+  openssl,
+  python3,
+  ncurses,
+  readline,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  zlib,
+  libaio,
+  libxml2,
+  acl,
+  sqlite,
+  liburcu,
+  liburing,
+  attr,
+  makeWrapper,
+  coreutils,
+  gnused,
+  gnugrep,
+  which,
+  openssh,
+  gawk,
+  findutils,
+  util-linux,
+  lvm2,
+  btrfs-progs,
+  e2fsprogs,
+  xfsprogs,
+  systemd,
+  rsync,
+  getent,
+  rpcsvc-proto,
+  libtirpc,
+  gperftools,
+  nixosTests,
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -14,9 +52,20 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse openssl ncurses readline
-    zlib libaio libxml2
-    acl sqlite liburcu attr util-linux libtirpc gperftools
+    fuse
+    openssl
+    ncurses
+    readline
+    zlib
+    libaio
+    libxml2
+    acl
+    sqlite
+    liburcu
+    attr
+    util-linux
+    libtirpc
+    gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -30,9 +79,7 @@ let
     python3
   ];
   # Some of the headers reference acl
-  propagatedBuildInputs = [
-    acl
-  ];
+  propagatedBuildInputs = [ acl ];
   # Packages from which GlusterFS calls binaries at run-time from PATH,
   # with comments on which commands are known to be called by it.
   runtimePATHdeps = [
@@ -53,7 +100,8 @@ let
     which # which
     xfsprogs # xfs_info
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "glusterfs";
   version = "11.1";
 
@@ -102,11 +150,18 @@ in stdenv.mkDerivation rec {
     export PYTHON=${python3}/bin/python
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--localstatedir=/var" ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config bison flex makeWrapper rpcsvc-proto ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    bison
+    flex
+    makeWrapper
+    rpcsvc-proto
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

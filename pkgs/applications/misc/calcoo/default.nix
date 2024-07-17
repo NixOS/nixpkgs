@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, ant
-, stripJavaArchivesHook
-, jdk
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ant,
+  stripJavaArchivesHook,
+  jdk,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

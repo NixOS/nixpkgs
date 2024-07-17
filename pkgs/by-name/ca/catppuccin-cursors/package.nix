@@ -1,16 +1,39 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, inkscape
-, just
-, xcursorgen
-, hyprcursor
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  inkscape,
+  just,
+  xcursorgen,
+  hyprcursor,
 }:
 
 let
   dimensions = {
-    palette = [ "frappe" "latte" "macchiato" "mocha" ];
-    color = [ "Blue" "Dark" "Flamingo" "Green" "Lavender" "Light" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow" ];
+    palette = [
+      "frappe"
+      "latte"
+      "macchiato"
+      "mocha"
+    ];
+    color = [
+      "Blue"
+      "Dark"
+      "Flamingo"
+      "Green"
+      "Lavender"
+      "Light"
+      "Maroon"
+      "Mauve"
+      "Peach"
+      "Pink"
+      "Red"
+      "Rosewater"
+      "Sapphire"
+      "Sky"
+      "Teal"
+      "Yellow"
+    ];
   };
   variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
@@ -27,11 +50,16 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-LJyBnXDUGBLOD4qPI7l0YC0CcqYTtgoMJc1H2yLqk9g=";
   };
 
-  nativeBuildInputs = [ just inkscape xcursorgen hyprcursor ];
+  nativeBuildInputs = [
+    just
+    inkscape
+    xcursorgen
+    hyprcursor
+  ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
 
-  outputsToInstall = [];
+  outputsToInstall = [ ];
 
   buildPhase = ''
     runHook preBuild

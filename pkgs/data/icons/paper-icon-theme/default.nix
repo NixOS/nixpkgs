@@ -1,4 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme, jdupes }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gtk3,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  jdupes,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -41,7 +52,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
     homepage = "https://snwh.org/paper";
-    license = with licenses; [ cc-by-sa-40 lgpl3 ];
+    license = with licenses; [
+      cc-by-sa-40
+      lgpl3
+    ];
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

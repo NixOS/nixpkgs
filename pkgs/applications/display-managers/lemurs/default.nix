@@ -22,19 +22,18 @@ rustPlatform.buildRustPackage rec {
   # Fixes a lock issue
   preConfigure = "cargo update --offline";
 
-  buildInputs = [
-    linux-pam
-  ];
+  buildInputs = [ linux-pam ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lemurs;
-  };
+  passthru.tests.version = testers.testVersion { package = lemurs; };
 
   meta = with lib; {
     description = "A customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [asl20 mit];
-    maintainers = with maintainers; [jeremiahs];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ jeremiahs ];
     mainProgram = "lemurs";
   };
 }

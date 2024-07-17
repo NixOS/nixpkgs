@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, writeShellScriptBin
-, fetchurl
-, ant
-, jdk
-, jre
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  writeShellScriptBin,
+  fetchurl,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 let
@@ -50,9 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${jre}/bin/java $out/bin/abcl \
       --add-flags "-classpath $out/lib/abcl/\*" \
-      ${lib.optionalString (lib.versionAtLeast jre.version "17")
-        # Fix for https://github.com/armedbear/abcl/issues/484
-        "--add-flags --add-opens=java.base/java.util.jar=ALL-UNNAMED \\"
+      ${
+        lib.optionalString (lib.versionAtLeast jre.version "17")
+          # Fix for https://github.com/armedbear/abcl/issues/484
+          "--add-flags --add-opens=java.base/java.util.jar=ALL-UNNAMED \\"
       }
       --add-flags org.armedbear.lisp.Main
 

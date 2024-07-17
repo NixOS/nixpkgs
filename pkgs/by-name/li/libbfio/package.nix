@@ -1,10 +1,11 @@
-{ lib
-, fetchzip
-, fetchpatch
-, stdenv
-, gettext
-, libtool
-, pkg-config
+{
+  lib,
+  fetchzip,
+  fetchpatch,
+  stdenv,
+  gettext,
+  libtool,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,12 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gettext libtool ];
+  buildInputs = [
+    gettext
+    libtool
+  ];
 
   meta = {
     description = "Library to provide basic file input/output abstraction";
     homepage = "https://github.com/libyal/libbfio";
-    license = with lib.licenses; [ gpl3Plus lgpl3Plus ];
+    license = with lib.licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = with lib.platforms; unix ++ windows;
   };

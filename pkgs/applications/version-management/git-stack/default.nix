@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-, testers
-, git-stack
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  testers,
+  git-stack,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,16 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MEhUmy4ijR/zHm/qMt4PqNGYnCfIgjNaL9SlMmXCMmc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   # Many tests try to access the file system.
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = git-stack;
-  };
+  passthru.tests.version = testers.testVersion { package = git-stack; };
 
   meta = with lib; {
     description = "Stacked branch management for Git";

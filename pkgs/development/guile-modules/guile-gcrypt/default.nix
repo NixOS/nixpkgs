@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, guile
-, libgcrypt
-, autoreconfHook
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  guile,
+  libgcrypt,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,14 +23,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook guile libgcrypt pkg-config texinfo
-  ];
-  buildInputs = [
+    autoreconfHook
     guile
-  ];
-  propagatedBuildInputs = [
     libgcrypt
+    pkg-config
+    texinfo
   ];
+  buildInputs = [ guile ];
+  propagatedBuildInputs = [ libgcrypt ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   doCheck = true;
 

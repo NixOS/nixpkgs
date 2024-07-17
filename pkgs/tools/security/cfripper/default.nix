@@ -1,16 +1,13 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic = self.pydantic_1;
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+  python = python3.override { packageOverrides = self: super: { pydantic = self.pydantic_1; }; };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
   version = "1.15.6";
   pyproject = true;
@@ -22,9 +19,7 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-h/NNTE5u1coyD4owiGjsK6SIuvDq1SQOPW4RM4yJtno=";
   };
 
-  pythonRelaxDeps = [
-    "pluggy"
-  ];
+  pythonRelaxDeps = [ "pluggy" ];
 
   nativeBuildInputs = with python.pkgs; [
     pythonRelaxDepsHook
@@ -59,9 +54,7 @@ in python.pkgs.buildPythonApplication rec {
     "test_multiple_resources_with_wildcard_resources_are_detected"
   ];
 
-  pythonImportsCheck = [
-    "cfripper"
-  ];
+  pythonImportsCheck = [ "cfripper" ];
 
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";

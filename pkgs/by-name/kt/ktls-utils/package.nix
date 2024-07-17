@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gnutls
-, keyutils
-, glib
-, libnl
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gnutls,
+  keyutils,
+  glib,
+  libnl,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
     libnl
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   configureFlags = lib.optional withSystemd [ "--with-systemd" ];
 
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "TLS handshake utilities for in-kernel TLS consumers";

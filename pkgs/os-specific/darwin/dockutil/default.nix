@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchurl, libarchive, p7zip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+  p7zip,
+}:
 stdenv.mkDerivation rec {
   pname = "dockutil";
   version = "3.0.2";
 
   src = fetchurl {
-    url =
-      "https://github.com/kcrawford/dockutil/releases/download/${version}/dockutil-${version}.pkg";
+    url = "https://github.com/kcrawford/dockutil/releases/download/${version}/dockutil-${version}.pkg";
     sha256 = "175137ea747e83ed221d60b18b712b256ed31531534cde84f679487d337668fd";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ libarchive p7zip ];
+  nativeBuildInputs = [
+    libarchive
+    p7zip
+  ];
 
   unpackPhase = ''
     7z x $src

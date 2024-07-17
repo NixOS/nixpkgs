@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "fits-cloudctl";
   version = "0.12.19"; # also update these 3 vars:
   gitversion = "tags/v0.12.19-0-g0a0d89a"; # git describe --long --all
-  gitsha = "0a0d89a8";                     # git rev-parse --short=8 HEAD
-  gittime = "2024-05-15T17:34:46+02:00";   # date --iso-8601=seconds
+  gitsha = "0a0d89a8"; # git rev-parse --short=8 HEAD
+  gittime = "2024-05-15T17:34:46+02:00"; # date --iso-8601=seconds
 
   src = fetchFromGitHub {
     owner = "fi-ts";

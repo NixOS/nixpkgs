@@ -1,9 +1,10 @@
-{ rustPlatform
-, lib
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, pkg-config
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iGOj0a4+wLd8QlM1tr+NYfd2tuwgHV+u5dt0zf+WscY=";
   };
 
-  cargoPatches = [
-    ./dont-vendor-openssl.diff
-  ];
+  cargoPatches = [ ./dont-vendor-openssl.diff ];
 
   patches = [
     # update test fixtures https://github.com/wez/govee2mqtt/pull/120

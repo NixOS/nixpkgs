@@ -1,20 +1,24 @@
-{ fetchFromGitHub
-, makeWrapper
-, stdenvNoCC
-, lib
-, gnugrep
-, gnused
-, curl
-, catt
-, syncplay
-, ffmpeg
-, fzf
-, aria2
-, withMpv ? true, mpv
-, withVlc ? false, vlc
-, withIina ? false, iina
-, chromecastSupport ? false
-, syncSupport ? false
+{
+  fetchFromGitHub,
+  makeWrapper,
+  stdenvNoCC,
+  lib,
+  gnugrep,
+  gnused,
+  curl,
+  catt,
+  syncplay,
+  ffmpeg,
+  fzf,
+  aria2,
+  withMpv ? true,
+  mpv,
+  withVlc ? false,
+  vlc,
+  withIina ? false,
+  iina,
+  chromecastSupport ? false,
+  syncSupport ? false,
 }:
 
 assert withMpv || withVlc || withIina;
@@ -32,14 +36,20 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeDependencies =
-    let player = []
-        ++ lib.optional withMpv mpv
-        ++ lib.optional withVlc vlc
-        ++ lib.optional withIina iina;
-    in [ gnugrep gnused curl fzf ffmpeg aria2 ]
-      ++ player
-      ++ lib.optional chromecastSupport catt
-      ++ lib.optional syncSupport syncplay;
+    let
+      player = [ ] ++ lib.optional withMpv mpv ++ lib.optional withVlc vlc ++ lib.optional withIina iina;
+    in
+    [
+      gnugrep
+      gnused
+      curl
+      fzf
+      ffmpeg
+      aria2
+    ]
+    ++ player
+    ++ lib.optional chromecastSupport catt
+    ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  testers,
+  smartdns,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
@@ -31,8 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description =
-      "A local DNS server to obtain the fastest website IP for the best Internet experience";
+    description = "A local DNS server to obtain the fastest website IP for the best Internet experience";
     longDescription = ''
       SmartDNS is a local DNS server. SmartDNS accepts DNS query requests from local clients, obtains DNS query results from multiple upstream DNS servers, and returns the fastest access results to clients.
       Avoiding DNS pollution and improving network access speed, supports high-performance ad filtering.

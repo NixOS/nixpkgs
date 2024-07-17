@@ -1,4 +1,8 @@
-{ lib, appleDerivation, makeWrapper }:
+{
+  lib,
+  appleDerivation,
+  makeWrapper,
+}:
 
 appleDerivation {
   nativeBuildInputs = [ makeWrapper ];

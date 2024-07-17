@@ -1,5 +1,4 @@
-{ mattermost
-}:
+{ mattermost }:
 
 mattermost.overrideAttrs (o: {
   pname = "mmctl";

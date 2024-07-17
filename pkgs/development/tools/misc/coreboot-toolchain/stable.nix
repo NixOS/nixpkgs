@@ -1,4 +1,5 @@
-{ fetchurl }: [
+{ fetchurl }:
+[
   {
     name = "gmp-6.3.0.tar.xz";
     archive = fetchurl {

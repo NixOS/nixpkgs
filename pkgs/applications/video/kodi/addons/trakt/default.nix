@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, trakt-module, dateutil }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  trakt-module,
+  dateutil,
+}:
 buildKodiAddon rec {
   pname = "trakt";
   namespace = "script.trakt";
@@ -16,9 +24,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.trakt";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.trakt"; };
   };
 
   meta = with lib; {

@@ -1,7 +1,8 @@
-{ lib
-, writeText
-, flutter
-, fetchFromGitHub
+{
+  lib,
+  writeText,
+  flutter,
+  fetchFromGitHub,
 }:
 
 flutter.buildFlutterApplication rec {
@@ -10,9 +11,7 @@ flutter.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  patches = [
-    ./upgrade-file.patch
-  ];
+  patches = [ ./upgrade-file.patch ];
 
   sourceRoot = "./source/packages/firmware_updater";
 

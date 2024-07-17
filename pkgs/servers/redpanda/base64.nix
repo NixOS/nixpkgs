@@ -1,7 +1,8 @@
-{ clangStdenv
-, cmake
-, fetchFromGitHub
-, lib
+{
+  clangStdenv,
+  cmake,
+  fetchFromGitHub,
+  lib,
 }:
 let
   pname = "base64";

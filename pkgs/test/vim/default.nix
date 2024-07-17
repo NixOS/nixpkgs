@@ -1,6 +1,11 @@
-{ vimUtils, vim-full, writeText, vimPlugins
-, lib, fetchFromGitHub
-, pkgs
+{
+  vimUtils,
+  vim-full,
+  writeText,
+  vimPlugins,
+  lib,
+  fetchFromGitHub,
+  pkgs,
 }:
 let
   inherit (vimUtils) buildVimPlugin;
@@ -8,8 +13,11 @@ let
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
 in
-  pkgs.recurseIntoAttrs (rec {
-  vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
+pkgs.recurseIntoAttrs (rec {
+  vim_empty_config = vimUtils.vimrcFile {
+    beforePlugins = "";
+    customRC = "";
+  };
 
   ### vim tests
   ##################

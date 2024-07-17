@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitea
-, gtk3
-, libhandy_0
-, lightdm
-, lightdm-mobile-greeter
-, linkFarm
-, pkg-config
-, rustPlatform
+{
+  lib,
+  fetchFromGitea,
+  gtk3,
+  libhandy_0,
+  lightdm,
+  lightdm-mobile-greeter,
+  linkFarm,
+  pkg-config,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,9 +33,7 @@ rustPlatform.buildRustPackage rec {
     libhandy_0
     lightdm
   ];
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/share/xgreeters
@@ -43,10 +42,12 @@ rustPlatform.buildRustPackage rec {
       --replace lightdm-mobile-greeter $out/bin/lightdm-mobile-greeter
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-mobile-greeter-xgreeters" [{
-    path = "${lightdm-mobile-greeter}/share/xgreeters/lightdm-mobile-greeter.desktop";
-    name = "lightdm-mobile-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-mobile-greeter-xgreeters" [
+    {
+      path = "${lightdm-mobile-greeter}/share/xgreeters/lightdm-mobile-greeter.desktop";
+      name = "lightdm-mobile-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     description = "A simple log in screen for use on touch screens";

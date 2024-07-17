@@ -1,8 +1,31 @@
-{ config, stdenv, lib, fetchFromGitHub, cmake, gtest, doCheck ? true
-, cudaSupport ? config.cudaSupport or false, openclSupport ? false
-, mpiSupport ? false, javaWrapper ? false, hdfsSupport ? false, pythonLibrary ? false
-, rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost
-, llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages, pandoc }:
+{
+  config,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  doCheck ? true,
+  cudaSupport ? config.cudaSupport or false,
+  openclSupport ? false,
+  mpiSupport ? false,
+  javaWrapper ? false,
+  hdfsSupport ? false,
+  pythonLibrary ? false,
+  rLibrary ? false,
+  cudaPackages,
+  opencl-headers,
+  ocl-icd,
+  boost,
+  llvmPackages,
+  openmpi,
+  openjdk,
+  swig,
+  hadoop,
+  R,
+  rPackages,
+  pandoc,
+}:
 
 assert doCheck -> mpiSupport != true;
 assert openclSupport -> cudaSupport != true;
@@ -33,17 +56,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-hEoGdzC6n8t14ZUFWFrdljEkQRo9qaDGYTamvIAgrbg=";
   };
 
-  nativeBuildInputs = [ cmake ]
+  nativeBuildInputs =
+    [ cmake ]
     ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals openclSupport [ opencl-headers ocl-icd boost ]
+    ++ lib.optionals openclSupport [
+      opencl-headers
+      ocl-icd
+      boost
+    ]
     ++ lib.optionals mpiSupport [ openmpi ]
     ++ lib.optionals hdfsSupport [ hadoop ]
     ++ lib.optionals (hdfsSupport || javaWrapper) [ openjdk ]
     ++ lib.optionals javaWrapper [ swig ]
-    ++ lib.optionals rLibrary [ R pandoc ];
+    ++ lib.optionals rLibrary [
+      R
+      pandoc
+    ];
 
-  buildInputs = [ gtest ]
-    ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
+  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
@@ -76,18 +106,24 @@ stdenv.mkDerivation rec {
     rm tests/cpp_tests/test_arrow.cpp
   '';
 
-  cmakeFlags = lib.optionals doCheck [ "-DBUILD_CPP_TEST=ON" ]
-    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=1" "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/cc" ]
+  cmakeFlags =
+    lib.optionals doCheck [ "-DBUILD_CPP_TEST=ON" ]
+    ++ lib.optionals cudaSupport [
+      "-DUSE_CUDA=1"
+      "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/cc"
+    ]
     ++ lib.optionals openclSupport [ "-DUSE_GPU=ON" ]
     ++ lib.optionals mpiSupport [ "-DUSE_MPI=ON" ]
     ++ lib.optionals hdfsSupport [
       "-DUSE_HDFS=ON"
       "-DHDFS_LIB=${hadoop}/lib/hadoop-${hadoop.version}/lib/native/libhdfs.so"
-      "-DHDFS_INCLUDE_DIR=${hadoop}/lib/hadoop-${hadoop.version}/include" ]
+      "-DHDFS_INCLUDE_DIR=${hadoop}/lib/hadoop-${hadoop.version}/include"
+    ]
     ++ lib.optionals javaWrapper [
       "-DUSE_SWIG=ON"
       # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-      "-DCMAKE_SKIP_BUILD_RPATH=ON" ]
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    ]
     ++ lib.optionals rLibrary [ "-D__BUILD_FOR_R=ON" ]
     ++ lib.optionals pythonLibrary [ "-D__BUILD_FOR_PYTHON=ON" ];
 
@@ -97,43 +133,50 @@ stdenv.mkDerivation rec {
 
   # set the R package buildPhase to null because lightgbm has a
   # custom builder script that builds and installs in one step
-  buildPhase = lib.optionals rLibrary ''
-  '';
+  buildPhase = lib.optionals rLibrary '''';
 
   inherit doCheck;
 
-  installPhase = ''
+  installPhase =
+    ''
       runHook preInstall
-    '' + lib.optionalString (!rLibrary) ''
+    ''
+    + lib.optionalString (!rLibrary) ''
       mkdir -p $out
       mkdir -p $out/lib
       mkdir -p $out/bin
       cp -r ../include $out
       install -Dm755 ../lib_lightgbm.so $out/lib/lib_lightgbm.so
-    '' + lib.optionalString (!rLibrary && !pythonLibrary) ''
+    ''
+    + lib.optionalString (!rLibrary && !pythonLibrary) ''
       install -Dm755 ../lightgbm $out/bin/lightgbm
-    '' + lib.optionalString javaWrapper ''
+    ''
+    + lib.optionalString javaWrapper ''
       cp -r java $out
       cp -r com $out
       cp -r lightgbmlib.jar $out
-    '' + ''
-    '' + lib.optionalString rLibrary ''
+    ''
+    + ''''
+    + lib.optionalString rLibrary ''
       mkdir $out
       mkdir $out/tmp
       mkdir $out/library
       mkdir $out/library/lightgbm
-    '' + lib.optionalString (rLibrary && (!openclSupport)) ''
+    ''
+    + lib.optionalString (rLibrary && (!openclSupport)) ''
       Rscript build_r.R \
         -j$NIX_BUILD_CORES
       rm -rf $out/tmp
-    '' + lib.optionalString (rLibrary && openclSupport) ''
+    ''
+    + lib.optionalString (rLibrary && openclSupport) ''
       Rscript build_r.R --use-gpu \
         --opencl-library=${ocl-icd}/lib/libOpenCL.so \
         --opencl-include-dir=${opencl-headers}/include \
         --boost-librarydir=${boost} \
         -j$NIX_BUILD_CORES
       rm -rf $out/tmp
-    '' + ''
+    ''
+    + ''
       runHook postInstall
     '';
 
@@ -144,8 +187,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "LightGBM is a gradient boosting framework that uses tree based learning algorithms.";
+    description = "LightGBM is a gradient boosting framework that uses tree based learning algorithms.";
     mainProgram = "lightgbm";
     homepage = "https://github.com/microsoft/LightGBM";
     license = licenses.mit;

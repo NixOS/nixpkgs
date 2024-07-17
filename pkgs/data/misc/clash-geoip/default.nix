@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, nix-update-script }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nix-update-script,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "clash-geoip";
@@ -26,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     description = "A GeoLite2 data created by MaxMind";
     homepage = "https://github.com/Dreamacro/maxmind-geoip";
     license = licenses.unfree;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

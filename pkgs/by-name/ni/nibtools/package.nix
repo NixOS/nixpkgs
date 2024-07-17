@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, opencbm
-, cc65
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencbm,
+  cc65,
 }:
 
 stdenv.mkDerivation {
@@ -18,16 +19,16 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
-  nativeBuildInputs = [
-    cc65
-  ];
+  nativeBuildInputs = [ cc65 ];
 
-  buildInputs = [
-    opencbm
-  ];
+  buildInputs = [ opencbm ];
 
   preBuild = "mkdir build";
-  makeFlags = [ "-f" "GNU/Makefile" "linux" ];
+  makeFlags = [
+    "-f"
+    "GNU/Makefile"
+    "linux"
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, git
-, gfortran
-, mpi
-, blas
-, liblapack
-, pkg-config
-, libGL
-, libGLU
-, opencascade-occt_7_6
-, libsForQt5
-, tbb
-, vtkWithQt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  gfortran,
+  mpi,
+  blas,
+  liblapack,
+  pkg-config,
+  libGL,
+  libGLU,
+  opencascade-occt_7_6,
+  libsForQt5,
+  tbb,
+  vtkWithQt5,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -59,23 +60,26 @@ stdenv.mkDerivation rec {
   storepath = placeholder "out";
 
   cmakeFlags = [
-  "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
-  "-DWITH_OpenMP:BOOLEAN=TRUE"
-  "-DWITH_MPI:BOOLEAN=TRUE"
-  "-DWITH_QT5:BOOLEAN=TRUE"
-  "-DWITH_OCC:BOOLEAN=TRUE"
-  "-DWITH_VTK:BOOLEAN=TRUE"
-  "-DWITH_ELMERGUI:BOOLEAN=TRUE"
-  "-DCMAKE_INSTALL_LIBDIR=lib"
-  "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
+    "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
+    "-DWITH_OpenMP:BOOLEAN=TRUE"
+    "-DWITH_MPI:BOOLEAN=TRUE"
+    "-DWITH_QT5:BOOLEAN=TRUE"
+    "-DWITH_OCC:BOOLEAN=TRUE"
+    "-DWITH_VTK:BOOLEAN=TRUE"
+    "-DWITH_ELMERGUI:BOOLEAN=TRUE"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
   ];
 
   meta = with lib; {
     homepage = "https://elmerfem.org";
     description = "A finite element software for multiphysical problems";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wulfsta broke ];
+    maintainers = with maintainers; [
+      wulfsta
+      broke
+    ];
     license = licenses.lgpl21;
   };
 

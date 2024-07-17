@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,17 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-/SLaRuO06rF7aLV7zY7tfIxkJRzsx+/Z+mc562RX2OQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    prettytable
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ prettytable ];
 
-  pythonImportsCheck = [
-    "nucleiparser"
-  ];
+  pythonImportsCheck = [ "nucleiparser" ];
 
   meta = with lib; {
     description = "A Nuclei output parser for CLI";

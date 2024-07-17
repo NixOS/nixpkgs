@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, runCommandLocal
-, buildEnv
-, writeText
-, writeShellScriptBin
-, pkgs
-, pkgsi686Linux
+{
+  lib,
+  stdenv,
+  runCommandLocal,
+  buildEnv,
+  writeText,
+  writeShellScriptBin,
+  pkgs,
+  pkgsi686Linux,
 }:
 
-{ profile ? ""
-, targetPkgs ? pkgs: []
-, multiPkgs ? pkgs: []
-, multiArch ? false # Whether to include 32bit packages
-, extraBuildCommands ? ""
-, extraBuildCommandsMulti ? ""
-, extraOutputsToInstall ? []
-, ... # for name, or pname+version
-} @ args:
+{
+  profile ? "",
+  targetPkgs ? pkgs: [ ],
+  multiPkgs ? pkgs: [ ],
+  multiArch ? false, # Whether to include 32bit packages
+  extraBuildCommands ? "",
+  extraBuildCommandsMulti ? "",
+  extraOutputsToInstall ? [ ],
+  ... # for name, or pname+version
+}@args:
 
 # HOWTO:
 # All packages (most likely programs) returned from targetPkgs will only be
@@ -36,9 +38,7 @@
 let
   inherit (stdenv) is64bit;
 
-  name = if (args ? pname && args ? version)
-    then "${args.pname}-${args.version}"
-    else args.name;
+  name = if (args ? pname && args ? version) then "${args.pname}-${args.version}" else args.name;
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
@@ -46,7 +46,7 @@ let
 
   # list of packages (usually programs) which match the host's architecture
   # (which includes stuff from multiPkgs)
-  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [] else multiPkgs pkgs);
+  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [ ] else multiPkgs pkgs);
 
   # list of packages which are for x86 (only multiPkgs, only for x86_64 hosts)
   multiPaths = multiPkgs pkgsi686Linux;
@@ -74,13 +74,13 @@ let
     bzip2
     xz
   ];
-  baseMultiPaths = with pkgsi686Linux; [
-    (toString gcc.cc.lib)
-  ];
+  baseMultiPaths = with pkgsi686Linux; [ (toString gcc.cc.lib) ];
 
   ldconfig = writeShellScriptBin "ldconfig" ''
     # due to a glibc bug, 64-bit ldconfig complains about patchelf'd 32-bit libraries, so we use 32-bit ldconfig when we have them
-    exec ${if isMultiBuild then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+    exec ${
+      if isMultiBuild then pkgsi686Linux.glibc.bin else pkgs.glibc.bin
+    }/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
 
   etcProfile = writeText "profile" ''
@@ -139,8 +139,15 @@ let
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     # ldconfig wrapper must come first so it overrides the original ldconfig
-    paths = [ etcPkg ldconfig ] ++ baseTargetPaths ++ targetPaths;
-    extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
+    paths = [
+      etcPkg
+      ldconfig
+    ] ++ baseTargetPaths ++ targetPaths;
+    extraOutputsToInstall = [
+      "out"
+      "lib"
+      "bin"
+    ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
     postBuild = ''
       if [[ -d  $out/share/gsettings-schemas/ ]]; then
@@ -176,7 +183,10 @@ let
   staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
     paths = baseMultiPaths ++ multiPaths;
-    extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [
+      "out"
+      "lib"
+    ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
@@ -211,60 +221,71 @@ let
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
-  setupLibDirs = if isTargetBuild
-                 then setupLibDirsTarget
-                 else setupLibDirsMulti;
+  setupLibDirs = if isTargetBuild then setupLibDirsTarget else setupLibDirsMulti;
 
   # the target profile is the actual profile that will be used for the chroot
-  setupTargetProfile = ''
-    mkdir -m0755 usr
-    pushd usr
+  setupTargetProfile =
+    ''
+      mkdir -m0755 usr
+      pushd usr
 
-    ${setupLibDirs}
+      ${setupLibDirs}
 
-    '' + lib.optionalString isMultiBuild ''
-    if [ -d "${staticUsrProfileMulti}/share" ]; then
-      cp -rLf ${staticUsrProfileMulti}/share share
-    fi
-    '' + ''
-    if [ -d "${staticUsrProfileTarget}/share" ]; then
-      if [ -d share ]; then
-        chmod -R 755 share
-        cp -rLTf ${staticUsrProfileTarget}/share share
-      else
-        cp -rsHf ${staticUsrProfileTarget}/share share
+    ''
+    + lib.optionalString isMultiBuild ''
+      if [ -d "${staticUsrProfileMulti}/share" ]; then
+        cp -rLf ${staticUsrProfileMulti}/share share
       fi
-    fi
-    for i in bin sbin include; do
-      if [ -d "${staticUsrProfileTarget}/$i" ]; then
-        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
+    ''
+    + ''
+      if [ -d "${staticUsrProfileTarget}/share" ]; then
+        if [ -d share ]; then
+          chmod -R 755 share
+          cp -rLTf ${staticUsrProfileTarget}/share share
+        else
+          cp -rsHf ${staticUsrProfileTarget}/share share
+        fi
       fi
-    done
-    cd ..
+      for i in bin sbin include; do
+        if [ -d "${staticUsrProfileTarget}/$i" ]; then
+          cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
+        fi
+      done
+      cd ..
 
-    for i in var etc opt; do
-      if [ -d "${staticUsrProfileTarget}/$i" ]; then
-        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
-      fi
-    done
-    for i in usr/{bin,sbin,lib,lib32,lib64}; do
-      if [ -d "$i" ]; then
-        ln -s "$i"
-      fi
-    done
+      for i in var etc opt; do
+        if [ -d "${staticUsrProfileTarget}/$i" ]; then
+          cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
+        fi
+      done
+      for i in usr/{bin,sbin,lib,lib32,lib64}; do
+        if [ -d "$i" ]; then
+          ln -s "$i"
+        fi
+      done
 
-    popd
-  '';
+      popd
+    '';
 
-in runCommandLocal "${name}-fhs" {
-  passthru = {
-    inherit args baseTargetPaths targetPaths baseMultiPaths ldconfig isMultiBuild;
-  };
-} ''
-  mkdir -p $out
-  pushd $out
+in
+runCommandLocal "${name}-fhs"
+  {
+    passthru = {
+      inherit
+        args
+        baseTargetPaths
+        targetPaths
+        baseMultiPaths
+        ldconfig
+        isMultiBuild
+        ;
+    };
+  }
+  ''
+    mkdir -p $out
+    pushd $out
 
-  ${setupTargetProfile}
-  ${extraBuildCommands}
-  ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
-''
+    ${setupTargetProfile}
+    ${extraBuildCommands}
+    ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
+  ''

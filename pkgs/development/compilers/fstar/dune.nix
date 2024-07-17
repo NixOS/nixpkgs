@@ -1,19 +1,20 @@
-{ batteries
-, buildDunePackage
-, memtrace
-, menhir
-, menhirLib
-, pprint
-, ppx_deriving
-, ppx_deriving_yojson
-, ppxlib
-, process
-, sedlex
-, src
-, stdint
-, version
-, yojson
-, zarith
+{
+  batteries,
+  buildDunePackage,
+  memtrace,
+  menhir,
+  menhirLib,
+  pprint,
+  ppx_deriving,
+  ppx_deriving_yojson,
+  ppxlib,
+  process,
+  sedlex,
+  src,
+  stdint,
+  version,
+  yojson,
+  zarith,
 }:
 
 buildDunePackage {
@@ -25,13 +26,9 @@ buildDunePackage {
     cd ocaml
   '';
 
-  nativeBuildInputs = [
-    menhir
-  ];
+  nativeBuildInputs = [ menhir ];
 
-  buildInputs = [
-    memtrace
-  ];
+  buildInputs = [ memtrace ];
 
   propagatedBuildInputs = [
     batteries

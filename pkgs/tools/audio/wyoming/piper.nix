@@ -1,7 +1,8 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,17 +22,11 @@ python3Packages.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "wyoming"
-  ];
+  pythonRelaxDeps = [ "wyoming" ];
 
-  propagatedBuildInputs = with python3Packages; [
-    wyoming
-  ];
+  propagatedBuildInputs = with python3Packages; [ wyoming ];
 
-  pythonImportsCheck = [
-    "wyoming_piper"
-  ];
+  pythonImportsCheck = [ "wyoming_piper" ];
 
   doCheck = false;
 

@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -28,7 +29,9 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.BuildDate=unknown"
   ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) influxdb; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) influxdb;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter that accepts InfluxDB metrics";

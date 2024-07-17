@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bison, libressl, libevent }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  libressl,
+  libevent,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gmid";
@@ -13,11 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison ];
 
-  buildInputs = [ libressl libevent ];
-
-  configureFlags = [
-    "PREFIX=${placeholder "out"}"
+  buildInputs = [
+    libressl
+    libevent
   ];
+
+  configureFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Simple and secure Gemini server";

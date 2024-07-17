@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, toKodiAddon, addonDir }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  toKodiAddon,
+  addonDir,
+}:
 let
   drv = stdenv.mkDerivation {
     pname = "controller-topology-project";
@@ -34,4 +40,4 @@ let
     };
   };
 in
-  toKodiAddon drv
+toKodiAddon drv

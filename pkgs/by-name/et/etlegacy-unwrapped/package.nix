@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, writeShellApplication
-, fetchFromGitHub
-, cjson
-, cmake
-, git
-, makeBinaryWrapper
-, unzip
-, curl
-, freetype
-, glew
-, libjpeg
-, libogg
-, libpng
-, libtheora
-, lua5_4
-, minizip
-, openal
-, SDL2
-, sqlite
-, zlib
+{
+  lib,
+  stdenv,
+  writeShellApplication,
+  fetchFromGitHub,
+  cjson,
+  cmake,
+  git,
+  makeBinaryWrapper,
+  unzip,
+  curl,
+  freetype,
+  glew,
+  libjpeg,
+  libogg,
+  libpng,
+  libtheora,
+  lua5_4,
+  minizip,
+  openal,
+  SDL2,
+  sqlite,
+  zlib,
 }:
 let
   version = "2.82.1";
@@ -103,7 +104,10 @@ stdenv.mkDerivation {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ ashleyghooper drupol ];
+    maintainers = with lib.maintainers; [
+      ashleyghooper
+      drupol
+    ];
     platforms = lib.platforms.linux;
   };
 }

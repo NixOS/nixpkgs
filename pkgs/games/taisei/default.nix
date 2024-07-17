@@ -1,9 +1,23 @@
-{ lib, stdenv, fetchurl
-# Build depends
-, docutils, meson, ninja, pkg-config, python3
-# Runtime depends
-, glfw, SDL2, SDL2_mixer
-, cglm, freetype, libpng, libwebp, libzip, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # Build depends
+  docutils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  # Runtime depends
+  glfw,
+  SDL2,
+  SDL2_mixer,
+  cglm,
+  freetype,
+  libpng,
+  libwebp,
+  libzip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +30,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    docutils meson ninja pkg-config python3
+    docutils
+    meson
+    ninja
+    pkg-config
+    python3
   ];
 
   buildInputs = [
-    glfw SDL2 SDL2_mixer
-    cglm freetype libpng libwebp libzip zlib
+    glfw
+    SDL2
+    SDL2_mixer
+    cglm
+    freetype
+    libpng
+    libwebp
+    libzip
+    zlib
   ];
 
   patches = [ ./0001-lto-fix.patch ];
@@ -40,7 +65,10 @@ stdenv.mkDerivation rec {
       folklore.
     '';
     homepage = "https://taisei-project.org/";
-    license = [ licenses.mit licenses.cc-by-40 ];
+    license = [
+      licenses.mit
+      licenses.cc-by-40
+    ];
     maintainers = [ maintainers.lambda-11235 ];
     platforms = platforms.all;
   };

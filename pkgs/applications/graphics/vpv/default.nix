@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libpng
-, libtiff
-, libjpeg
-, SDL2
-, gdal
-, octave
-, rustPlatform
-, cargo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libpng,
+  libtiff,
+  libjpeg,
+  SDL2,
+  gdal,
+  octave,
+  rustPlatform,
+  cargo,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpv";

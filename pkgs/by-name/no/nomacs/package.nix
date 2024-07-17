@@ -1,13 +1,14 @@
-{ lib
-, cmake
-, exiv2
-, fetchFromGitHub
-, libraw
-, libsForQt5
-, libtiff
-, opencv4
-, pkg-config
-, stdenv
+{
+  lib,
+  cmake,
+  exiv2,
+  fetchFromGitHub,
+  libraw,
+  libsForQt5,
+  libtiff,
+  opencv4,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jHr7J0X1v2n/ZK0y3b/XPDISk7e08VWS6nicJU4fKKY=";
   };
 
-  outputs = [ "out" ]
+  outputs =
+    [ "out" ]
     # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
     ++ lib.optionals (!stdenv.isDarwin) [ "man" ];
 
@@ -34,18 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    exiv2
-    libraw
-    libtiff
-    opencv4
-  ] ++ (with libsForQt5; [
-    qtbase
-    qtimageformats
-    qtsvg
-    qttools
-    quazip
-  ]);
+  buildInputs =
+    [
+      exiv2
+      libraw
+      libtiff
+      opencv4
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qtimageformats
+      qtsvg
+      qttools
+      quazip
+    ]);
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -84,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      mindavi
+    ];
     inherit (libsForQt5.qtbase.meta) platforms;
   };
 })

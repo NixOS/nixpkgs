@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, desktop-file-utils
-, glib
-, gtk4
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, gtksourceview5
-, libadwaita
-, libpanel
-, vte-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  gtksourceview5,
+  libadwaita,
+  libpanel,
+  vte-gtk4,
 }:
 
 stdenv.mkDerivation rec {

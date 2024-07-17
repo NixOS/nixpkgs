@@ -1,56 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, callPackage
-, cmake
-, espeak-ng
-, ffmpeg
-, file
-, freetype
-, glib
-, gumbo
-, harfbuzz
-, jbig2dec
-, leptonica
-, libGL
-, libX11
-, libXau
-, libXcomposite
-, libXdmcp
-, libXfixes
-, libdrm
-, libffi
-, libjpeg
-, libusb1
-, libuvc
-, libvlc
-, libvncserver
-, libxcb
-, libxkbcommon
-, makeWrapper
-, mesa
-, mupdf
-, openal
-, openjpeg
-, pcre2
-, pkg-config
-, ruby
-, sqlite
-, tesseract
-, valgrind
-, wayland
-, wayland-protocols
-, xcbutil
-, xcbutilwm
-, xz
-, buildManPages ? true
-, useBuiltinLua ? true
-, useEspeak ? !stdenv.isDarwin
-, useStaticLibuvc ? true
-, useStaticOpenAL ? true
-, useStaticSqlite ? true
-, useTracy ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  callPackage,
+  cmake,
+  espeak-ng,
+  ffmpeg,
+  file,
+  freetype,
+  glib,
+  gumbo,
+  harfbuzz,
+  jbig2dec,
+  leptonica,
+  libGL,
+  libX11,
+  libXau,
+  libXcomposite,
+  libXdmcp,
+  libXfixes,
+  libdrm,
+  libffi,
+  libjpeg,
+  libusb1,
+  libuvc,
+  libvlc,
+  libvncserver,
+  libxcb,
+  libxkbcommon,
+  makeWrapper,
+  mesa,
+  mupdf,
+  openal,
+  openjpeg,
+  pcre2,
+  pkg-config,
+  ruby,
+  sqlite,
+  tesseract,
+  valgrind,
+  wayland,
+  wayland-protocols,
+  xcbutil,
+  xcbutilwm,
+  xz,
+  buildManPages ? true,
+  useBuiltinLua ? true,
+  useEspeak ? !stdenv.isDarwin,
+  useStaticLibuvc ? true,
+  useStaticOpenAL ? true,
+  useStaticSqlite ? true,
+  useTracy ? true,
 }:
 
 let
@@ -98,9 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
-  ] ++ lib.optionals buildManPages [
-    ruby
-  ];
+  ] ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -140,21 +139,24 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     xz
-  ]
-  ++ lib.optionals useEspeak [
-    espeak-ng
-  ];
+  ] ++ lib.optionals useEspeak [ espeak-ng ];
 
   # Emulate external/git/clone.sh
-  postUnpack = let
-    inherit (allSources)
-      letoram-openal-src libuvc-src luajit-src tracy-src;
-    prepareSource = flag: source: destination:
-      lib.optionalString flag ''
-        cp -va ${source}/ ${destination}
-        chmod --recursive 744 ${destination}
-      '';
-  in
+  postUnpack =
+    let
+      inherit (allSources)
+        letoram-openal-src
+        libuvc-src
+        luajit-src
+        tracy-src
+        ;
+      prepareSource =
+        flag: source: destination:
+        lib.optionalString flag ''
+          cp -va ${source}/ ${destination}
+          chmod --recursive 744 ${destination}
+        '';
+    in
     ''
       pushd $sourceRoot/external/git/
     ''
@@ -195,9 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     "../src"
   ];
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
   passthru = {
     wrapper = callPackage ./wrapper.nix { };
@@ -212,7 +212,11 @@ stdenv.mkDerivation (finalAttrs: {
       e.g. game development, real-time streaming video, monitoring and
       surveillance, up to and including desktop compositors and window managers.
     '';
-    license = with lib.licenses; [ bsd3 gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [
+      bsd3
+      gpl2Plus
+      lgpl2Plus
+    ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };

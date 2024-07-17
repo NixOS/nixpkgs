@@ -55,21 +55,24 @@ stdenv.mkDerivation (finalAttrs: {
     timidity
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
   configureFlags = [
-   (lib.enableFeature false "music-ogg-shared")
-   (lib.enableFeature false "music-flac-shared")
-   (lib.enableFeature false "music-mod-modplug-shared")
-   (lib.enableFeature false "music-mp3-mpg123-shared")
-   (lib.enableFeature false "music-opus-shared")
-   (lib.enableFeature false "music-midi-fluidsynth-shared")
-   (lib.enableFeature (!stdenv.isDarwin) "sdltest")
-   (lib.enableFeature (!stdenv.isDarwin) "smpegtest")
-   # override default path to allow MIDI files to be played
-   (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
+    (lib.enableFeature false "music-ogg-shared")
+    (lib.enableFeature false "music-flac-shared")
+    (lib.enableFeature false "music-mod-modplug-shared")
+    (lib.enableFeature false "music-mp3-mpg123-shared")
+    (lib.enableFeature false "music-opus-shared")
+    (lib.enableFeature false "music-midi-fluidsynth-shared")
+    (lib.enableFeature (!stdenv.isDarwin) "sdltest")
+    (lib.enableFeature (!stdenv.isDarwin) "smpegtest")
+    # override default path to allow MIDI files to be played
+    (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
   ];
 
   meta = {

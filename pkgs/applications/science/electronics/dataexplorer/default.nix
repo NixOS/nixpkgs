@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, ant
-, jdk
-, makeWrapper
-, strip-nondeterminism
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jdk,
+  makeWrapper,
+  strip-nondeterminism,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # contains RXTXcomm (JNI library with *.so files)
-      binaryBytecode    # contains thirdparty jar files, e.g. javax.json, org.glassfish.json
+      binaryNativeCode # contains RXTXcomm (JNI library with *.so files)
+      binaryBytecode # contains thirdparty jar files, e.g. javax.json, org.glassfish.json
     ];
   };
 })

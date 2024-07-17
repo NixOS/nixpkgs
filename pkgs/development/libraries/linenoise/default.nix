@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, validatePkgConfig
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation {
@@ -42,7 +43,10 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/antirez/linenoise";
     description = "A minimal, zero-config, BSD licensed, readline replacement";
-    maintainers = with lib.maintainers; [ fstamour remexre ];
+    maintainers = with lib.maintainers; [
+      fstamour
+      remexre
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
   };
