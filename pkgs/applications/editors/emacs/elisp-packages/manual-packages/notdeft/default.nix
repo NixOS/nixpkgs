@@ -65,6 +65,7 @@ melpaBuild {
     homepage = "https://tero.hasu.is/notdeft/";
     description = "Fork of Deft that uses Xapian as a search engine";
     maintainers = [ lib.maintainers.nessdoor ];
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
 }
