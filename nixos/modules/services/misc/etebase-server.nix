@@ -45,7 +45,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.python3.pkgs.etebase-server;
+        default = pkgs.etebase-server;
         defaultText = literalExpression "pkgs.python3.pkgs.etebase-server";
         description = "etebase-server package to use.";
       };
