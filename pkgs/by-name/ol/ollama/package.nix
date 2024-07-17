@@ -32,17 +32,17 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-hzB/sS+6vsMuJfCPZucTQerytnq+TBzTtiWwwd+H+bE=";
+    hash = "sha256-IuSWybyHjewxpLKZxDROqtdyIAWB61+mn4nfvRAyyw0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-LNH3mpxIrPMe5emfum1W10jvXIjKC6GkGcjq1HhpJQo=";
+  vendorHash = "sha256-hSxcREAujhvzHVNwnRTfhi0MKI3s8HNavER2VLz6SYk=";
 
   # ollama's patches of llama.cpp's example server
   # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
@@ -214,6 +214,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     };
   } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
+    service-cuda = nixosTests.ollama-cuda;
+    service-rocm = nixosTests.ollama-rocm;
   };
 
   meta = {

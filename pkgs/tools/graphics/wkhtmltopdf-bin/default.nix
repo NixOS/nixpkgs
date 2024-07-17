@@ -5,8 +5,9 @@
 , zlib
 , openssl
 , fetchurl
+, dpkg
 , gcc-unwrapped
-, libjpeg8
+, libjpeg
 , libpng
 , fontconfig
 , stdenv
@@ -39,13 +40,13 @@ let
   };
 
   linuxAttrs = rec {
-    version = "0.12.6-3";
+    version = "0.12.6.1-3";
     src = fetchurl {
-      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.archlinux-x86_64.pkg.tar.xz";
-      sha256 = "sha256-6Ewu8sPRbqvYWj27mBlQYpEN+mb+vKT46ljrdEUxckI=";
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
+      hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
     buildInputs = [
       xorg.libXext
@@ -57,16 +58,24 @@ let
 
       (lib.getLib fontconfig)
       (lib.getLib gcc-unwrapped)
-      (lib.getLib libjpeg8)
+      (lib.getLib libjpeg)
       (lib.getLib libpng)
     ];
 
-    unpackPhase = "tar -xf $src";
+    unpackPhase = ''
+      runHook preUnpack
+
+      mkdir pkg
+      dpkg-deb -x $src pkg
+
+      runHook postUnpack
+    '';
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out
-      cp -r usr/bin usr/include usr/lib usr/share $out/
+
+      cp -r pkg/usr/local $out
+
       runHook postInstall
     '';
   };

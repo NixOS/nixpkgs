@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ah0678iNfy0c5NhHhjn0roY6RoM8OE0hWyEt+qEGKRQ=";
   };
 
@@ -492,7 +492,7 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" version)
+    (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
@@ -524,8 +524,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
-    (lib.mesonOption "sbat-distro-pkgname" pname)
-    (lib.mesonOption "sbat-distro-version" version)
+    (lib.mesonOption "sbat-distro-pkgname" finalAttrs.pname)
+    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, flutter313
-, makeDesktopItem
-, nixosTests
-, pkg-config
-, libayatana-appindicator
-, undmg
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  flutter313,
+  makeDesktopItem,
+  nixosTests,
+  pkg-config,
+  libayatana-appindicator,
+  undmg,
+  makeBinaryWrapper,
 }:
 
 let
   pname = "localsend";
-  version = "1.14.0";
+  version = "1.15.0";
 
   linux = flutter313.buildFlutterApplication rec {
     inherit pname version;
@@ -22,7 +23,7 @@ let
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
+      hash = "sha256-u/vPVuY2YX+LQGzqiohtaYcUu7lEmGkcsWDMBIaXKok=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -74,10 +75,13 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
+      hash = "sha256-45IV2rDaL5tAOLLqPrMHHHFJaiFqmDyTyro6RilI0Zo=";
     };
 
-    nativeBuildInputs = [ undmg makeBinaryWrapper ];
+    nativeBuildInputs = [
+      undmg
+      makeBinaryWrapper
+    ];
 
     sourceRoot = ".";
 
@@ -89,7 +93,10 @@ let
 
     meta = metaCommon // {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+      platforms = [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
     };
   };
 
@@ -98,9 +105,11 @@ let
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [ sikmir linsui pandapip1 ];
+    maintainers = with maintainers; [
+      sikmir
+      linsui
+      pandapip1
+    ];
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+if stdenv.isDarwin then darwin else linux
