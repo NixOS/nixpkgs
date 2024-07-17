@@ -30884,7 +30884,7 @@ with pkgs;
   gum = callPackage ../applications/misc/gum { };
   pop = callPackage ../applications/misc/pop { };
 
-  popping-dikr = callPackage ../by-name/po/popping-dikr { };
+  popping-dikr = callPackage ../by-name/po/popping-dikr/package.nix { };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc swftools;
