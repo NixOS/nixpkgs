@@ -1,4 +1,8 @@
-{ lib, melpaBuild, fetchurl }:
+{
+  lib,
+  melpaBuild,
+  fetchurl,
+}:
 
 melpaBuild {
   pname = "prolog-mode";
