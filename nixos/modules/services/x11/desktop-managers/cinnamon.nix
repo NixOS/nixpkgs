@@ -66,9 +66,9 @@ in
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+        theme = mkIf (notExcluded pkgs.mint-themes) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-themes;
+          package = mkDefault pkgs.mint-themes;
         };
         iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
