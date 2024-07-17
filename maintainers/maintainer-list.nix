@@ -9470,6 +9470,11 @@
     githubId = 9866621;
     name = "Jack";
   };
+  jkachmar = {
+    github = "jkachmar";
+    githubId = 8461423;
+    name = "jkachmar";
+  };
   jkarlson = {
     email = "jekarlson@gmail.com";
     github = "ethorsoe";

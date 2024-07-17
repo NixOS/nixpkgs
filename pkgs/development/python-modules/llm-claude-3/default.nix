@@ -43,7 +43,6 @@ buildPythonPackage rec {
     description = "LLM plugin for interacting with the Claude 3 family of models";
     homepage = "https://github.com/simonw/llm-claude-3";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ jkachmar ];
   };
 }
-
