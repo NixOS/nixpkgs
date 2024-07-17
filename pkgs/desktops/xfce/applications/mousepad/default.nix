@@ -1,15 +1,16 @@
-{ lib
-, mkXfceDerivation
-, fetchpatch2
-, gobject-introspection
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, libxfce4ui
-, xfconf
-, enablePolkit ? true
-, polkit
+{
+  lib,
+  mkXfceDerivation,
+  fetchpatch2,
+  gobject-introspection,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  libxfce4ui,
+  xfconf,
+  enablePolkit ? true,
+  polkit,
 }:
 
 mkXfceDerivation {
@@ -38,9 +39,7 @@ mkXfceDerivation {
     gspell
     libxfce4ui # for shortcut plugin
     xfconf # required by libxfce4kbd-private-3
-  ] ++ lib.optionals enablePolkit [
-    polkit
-  ];
+  ] ++ lib.optionals enablePolkit [ polkit ];
 
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];

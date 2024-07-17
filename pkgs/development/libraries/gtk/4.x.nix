@@ -1,61 +1,62 @@
-{ lib
-, stdenv
-, buildPackages
-, substituteAll
-, fetchurl
-, pkg-config
-, gettext
-, graphene
-, gi-docgen
-, meson
-, mesonEmulatorHook
-, ninja
-, python3
-, makeWrapper
-, shared-mime-info
-, isocodes
-, glib
-, cairo
-, pango
-, pandoc
-, gdk-pixbuf
-, gobject-introspection
-, fribidi
-, harfbuzz
-, xorg
-, libepoxy
-, libxkbcommon
-, libpng
-, libtiff
-, libjpeg
-, libxml2
-, gnome
-, gsettings-desktop-schemas
-, gst_all_1
-, sassc
-, trackerSupport ? stdenv.isLinux
-, tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
-, libGL
-# experimental and can cause crashes in inspector
-, vulkanSupport ? stdenv.isLinux
-, shaderc
-, vulkan-loader
-, vulkan-headers
-, libdrm
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
-, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
-, cups
-, AppKit
-, Cocoa
-, libexecinfo
-, broadwaySupport ? true
-, testers
+{
+  lib,
+  stdenv,
+  buildPackages,
+  substituteAll,
+  fetchurl,
+  pkg-config,
+  gettext,
+  graphene,
+  gi-docgen,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  python3,
+  makeWrapper,
+  shared-mime-info,
+  isocodes,
+  glib,
+  cairo,
+  pango,
+  pandoc,
+  gdk-pixbuf,
+  gobject-introspection,
+  fribidi,
+  harfbuzz,
+  xorg,
+  libepoxy,
+  libxkbcommon,
+  libpng,
+  libtiff,
+  libjpeg,
+  libxml2,
+  gnome,
+  gsettings-desktop-schemas,
+  gst_all_1,
+  sassc,
+  trackerSupport ? stdenv.isLinux,
+  tracker,
+  x11Support ? stdenv.isLinux,
+  waylandSupport ? stdenv.isLinux,
+  libGL,
+  # experimental and can cause crashes in inspector
+  vulkanSupport ? stdenv.isLinux,
+  shaderc,
+  vulkan-loader,
+  vulkan-headers,
+  libdrm,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xineramaSupport ? stdenv.isLinux,
+  cupsSupport ? stdenv.isLinux,
+  compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
+  cups,
+  AppKit,
+  Cocoa,
+  libexecinfo,
+  broadwaySupport ? true,
+  testers,
 }:
 
 let
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
   version = "4.14.4";
 
-  outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
 
   setupHooks = [
@@ -81,104 +85,108 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
     hash = "sha256-RDUYuX6DSPn2QwrENbEBD5psUgf03Gp81dJOOCDO5jM=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-    python3
-    sassc
-    gi-docgen
-    libxml2 # for xmllint
-  ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ] ++ lib.optionals waylandSupport [
-    wayland-scanner
-  ] ++ lib.optionals vulkanSupport [
-    shaderc # for glslc
-  ] ++ finalAttrs.setupHooks;
+  nativeBuildInputs =
+    [
+      gettext
+      gobject-introspection
+      makeWrapper
+      meson
+      ninja
+      pkg-config
+      python3
+      sassc
+      gi-docgen
+      libxml2 # for xmllint
+    ]
+    ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ]
+    ++ lib.optionals vulkanSupport [
+      shaderc # for glslc
+    ]
+    ++ finalAttrs.setupHooks;
 
-  buildInputs = [
-    libxkbcommon
-    libpng
-    libtiff
-    libjpeg
-    (libepoxy.override { inherit x11Support; })
-    isocodes
-  ] ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    libdrm
-  ] ++ [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    fribidi
-    harfbuzz
-  ] ++ (with xorg; [
-    libICE
-    libSM
-    libXcursor
-    libXdamage
-    libXi
-    libXrandr
-    libXrender
-  ]) ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ] ++ lib.optionals trackerSupport [
-    tracker
-  ] ++ lib.optionals waylandSupport [
-    libGL
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
-  ] ++ lib.optionals cupsSupport [
-    cups
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    libexecinfo
-  ];
+  buildInputs =
+    [
+      libxkbcommon
+      libpng
+      libtiff
+      libjpeg
+      (libepoxy.override { inherit x11Support; })
+      isocodes
+    ]
+    ++ lib.optionals vulkanSupport [
+      vulkan-headers
+      libdrm
+    ]
+    ++ [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      fribidi
+      harfbuzz
+    ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libXcursor
+      libXdamage
+      libXi
+      libXrandr
+      libXrender
+    ])
+    ++ lib.optionals stdenv.isDarwin [ AppKit ]
+    ++ lib.optionals trackerSupport [ tracker ]
+    ++ lib.optionals waylandSupport [
+      libGL
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optionals xineramaSupport [ xorg.libXinerama ]
+    ++ lib.optionals cupsSupport [ cups ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ];
   #TODO: colord?
 
-  propagatedBuildInputs = [
-    # Required by pkg-config files.
-    cairo
-    gdk-pixbuf
-    glib
-    graphene
-    pango
-  ] ++ lib.optionals waylandSupport [
-    wayland
-  ] ++ lib.optionals vulkanSupport [
-    vulkan-loader
-  ] ++ [
-    # Required for GSettings schemas at runtime.
-    # Will be picked up by wrapGAppsHook4.
-    gsettings-desktop-schemas
-  ];
+  propagatedBuildInputs =
+    [
+      # Required by pkg-config files.
+      cairo
+      gdk-pixbuf
+      glib
+      graphene
+      pango
+    ]
+    ++ lib.optionals waylandSupport [ wayland ]
+    ++ lib.optionals vulkanSupport [ vulkan-loader ]
+    ++ [
+      # Required for GSettings schemas at runtime.
+      # Will be picked up by wrapGAppsHook4.
+      gsettings-desktop-schemas
+    ];
 
-  mesonFlags = [
-    # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    (lib.mesonBool "documentation" x11Support)
-    "-Dbuild-tests=false"
-    (lib.mesonEnable "tracker" trackerSupport)
-    (lib.mesonBool "broadway-backend" broadwaySupport)
-    (lib.mesonEnable "vulkan" vulkanSupport)
-    (lib.mesonEnable "print-cups" cupsSupport)
-    (lib.mesonBool "x11-backend" x11Support)
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
-    "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
-  ];
+  mesonFlags =
+    [
+      # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
+      (lib.mesonBool "documentation" x11Support)
+      "-Dbuild-tests=false"
+      (lib.mesonEnable "tracker" trackerSupport)
+      (lib.mesonBool "broadway-backend" broadwaySupport)
+      (lib.mesonEnable "vulkan" vulkanSupport)
+      (lib.mesonEnable "print-cups" cupsSupport)
+      (lib.mesonBool "x11-backend" x11Support)
+    ]
+    ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+      "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
+    ];
 
   doCheck = false; # needs X11
 
@@ -188,9 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
   env = {
     NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
-  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
-    NIX_LDFLAGS = "-lexecinfo";
-  };
+  } // lib.optionalAttrs stdenv.hostPlatform.isMusl { NIX_LDFLAGS = "-lexecinfo"; };
 
   postPatch = ''
     # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
@@ -217,35 +223,40 @@ stdenv.mkDerivation (finalAttrs: {
     PATH="$PATH:$dev/bin" # so the install script finds gtk4-update-icon-cache
   '';
 
-  postInstall = ''
-    PATH="$OLD_PATH"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    # The updater is needed for nixos env and it's tiny.
-    moveToOutput bin/gtk4-update-icon-cache "$out"
-    # Launcher
-    moveToOutput bin/gtk-launch "$out"
+  postInstall =
+    ''
+      PATH="$OLD_PATH"
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      # The updater is needed for nixos env and it's tiny.
+      moveToOutput bin/gtk4-update-icon-cache "$out"
+      # Launcher
+      moveToOutput bin/gtk-launch "$out"
 
-    # TODO: patch glib directly
-    for f in $dev/bin/gtk4-encode-symbolic-svg; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-    done
-  '' + lib.optionalString broadwaySupport ''
-    # Broadway daemon
-    moveToOutput bin/gtk4-broadwayd "$out"
-  '';
+      # TODO: patch glib directly
+      for f in $dev/bin/gtk4-encode-symbolic-svg; do
+        wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      done
+    ''
+    + lib.optionalString broadwaySupport ''
+      # Broadway daemon
+      moveToOutput bin/gtk4-broadwayd "$out"
+    '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
-    demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
+  postFixup =
+    lib.optionalString (!stdenv.isDarwin) ''
+      demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
-    for program in ''${demos[@]}; do
-      wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
-    done
-  '' + lib.optionalString x11Support ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
+      for program in ''${demos[@]}; do
+        wrapProgram $dev/bin/$program \
+          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
+      done
+    ''
+    + lib.optionalString x11Support ''
+      # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+      moveToOutput "share/doc" "$devdoc"
+    '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -254,9 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
       attrPath = "gtk4";
     };
     tests = {
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
   };
 
@@ -277,16 +286,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
-    pkgConfigModules = [
-      "gtk4"
-    ] ++ lib.optionals broadwaySupport [
-      "gtk4-broadway"
-    ] ++ lib.optionals stdenv.hostPlatform.isUnix [
-      "gtk4-unix-print"
-    ] ++ lib.optionals waylandSupport [
-      "gtk4-wayland"
-    ] ++ lib.optionals x11Support [
-      "gtk4-x11"
-    ];
+    pkgConfigModules =
+      [ "gtk4" ]
+      ++ lib.optionals broadwaySupport [ "gtk4-broadway" ]
+      ++ lib.optionals stdenv.hostPlatform.isUnix [ "gtk4-unix-print" ]
+      ++ lib.optionals waylandSupport [ "gtk4-wayland" ]
+      ++ lib.optionals x11Support [ "gtk4-x11" ];
   };
 })

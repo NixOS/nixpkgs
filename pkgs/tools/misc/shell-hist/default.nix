@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "shell-hist";
@@ -16,7 +20,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Inspect your shell history";
     homepage = "https://github.com/jamesmunns/shell-hist";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = [ maintainers.spacekookie ];
     mainProgram = "shell-hist";
   };

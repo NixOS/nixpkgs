@@ -1,12 +1,13 @@
-{ lib
-, beam
-, callPackage
-, wxGTK32
-, buildPackages
-, stdenv
-, wxSupport ? true
-, systemd
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  lib,
+  beam,
+  callPackage,
+  wxGTK32,
+  buildPackages,
+  stdenv,
+  wxSupport ? true,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 let
@@ -61,12 +62,23 @@ in
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
-      elixir elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
+      elixir
+      elixir_1_17
+      elixir_1_16
+      elixir_1_15
+      elixir_1_14
+      elixir_1_13
+      elixir_1_12
+      elixir_1_11
+      elixir_1_10
+      elixir-ls
+      lfe
+      lfe_2_1
+      ;
   };
 
   # Helper function to generate package set with a specific Erlang version.
-  packagesWith = erlang:
-    callPackage ../development/beam-modules { inherit erlang; };
+  packagesWith = erlang: callPackage ../development/beam-modules { inherit erlang; };
 
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.

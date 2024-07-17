@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, mlton }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  mlton,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlfmt";

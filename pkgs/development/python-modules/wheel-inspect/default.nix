@@ -39,9 +39,7 @@ buildPythonPackage rec {
     "headerparser"
   ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     attrs

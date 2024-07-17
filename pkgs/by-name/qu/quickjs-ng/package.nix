@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, testers
-, texinfo
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  testers,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4CC7IxA5t+L99H4Rvkx0xkXFHuqNP3HTmS46JEuy7Vs=";
   };
 
-  outputs = [ "bin" "out" "dev" "doc" "info" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "doc"
+    "info"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -29,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    "-Wno-error=stringop-overflow"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "-Wno-error=stringop-overflow" ]
+  );
 
   postInstall = ''
     (cd ../doc

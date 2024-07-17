@@ -30,9 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
     ipython = [ graphviz ];

@@ -15,10 +15,19 @@
 }:
 let
   common = import ./common.nix { inherit lib fetchurl; };
-in stdenv.mkDerivation {
-  inherit (common) pname version src meta;
+in
+stdenv.mkDerivation {
+  inherit (common)
+    pname
+    version
+    src
+    meta
+    ;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     bison

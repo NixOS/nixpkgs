@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, libglvnd
-, libxkbcommon
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  libglvnd,
+  libxkbcommon,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -52,9 +53,7 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
-  cargoTestFlags = [
-    "--all"
-  ];
+  cargoTestFlags = [ "--all" ];
 
   checkFlags = [
     # Requires a game dump of Breath of the Wild

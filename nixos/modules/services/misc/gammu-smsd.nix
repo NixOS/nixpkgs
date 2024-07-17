@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 let
@@ -31,25 +36,30 @@ let
     ''}
 
     ${optionalString (cfg.backend.service == "sql" && cfg.backend.sql.driver == "native_pgsql") (
-      with cfg.backend; ''
+      with cfg.backend;
+      ''
         Driver = ${sql.driver}
-        ${optionalString (sql.database!= null) "Database = ${sql.database}"}
+        ${optionalString (sql.database != null) "Database = ${sql.database}"}
         ${optionalString (sql.host != null) "Host = ${sql.host}"}
         ${optionalString (sql.user != null) "User = ${sql.user}"}
         ${optionalString (sql.password != null) "Password = ${sql.password}"}
-      '')}
+      ''
+    )}
 
     ${cfg.extraConfig.smsd}
   '';
 
   initDBDir = "share/doc/gammu/examples/sql";
 
-  gammuPackage = with cfg.backend; (pkgs.gammu.override {
-    dbiSupport = service == "sql" && sql.driver == "sqlite";
-    postgresSupport = service == "sql" && sql.driver == "native_pgsql";
-  });
+  gammuPackage =
+    with cfg.backend;
+    (pkgs.gammu.override {
+      dbiSupport = service == "sql" && sql.driver == "sqlite";
+      postgresSupport = service == "sql" && sql.driver == "native_pgsql";
+    });
 
-in {
+in
+{
   options = {
     services.gammu-smsd = {
 
@@ -94,7 +104,6 @@ in {
         };
       };
 
-
       log = {
         file = mkOption {
           type = types.str;
@@ -103,12 +112,19 @@ in {
         };
 
         format = mkOption {
-          type = types.enum [ "nothing" "text" "textall" "textalldate" "errors" "errorsdate" "binary" ];
+          type = types.enum [
+            "nothing"
+            "text"
+            "textall"
+            "textalldate"
+            "errors"
+            "errorsdate"
+            "binary"
+          ];
           default = "errors";
           description = "Determines what will be logged to the LogFile";
         };
       };
-
 
       extraConfig = {
         gammu = mkOption {
@@ -117,7 +133,6 @@ in {
           description = "Extra config lines to be added into [gammu] section";
         };
 
-
         smsd = mkOption {
           type = types.lines;
           default = "";
@@ -125,10 +140,13 @@ in {
         };
       };
 
-
       backend = {
         service = mkOption {
-          type = types.enum [ "null" "files" "sql" ];
+          type = types.enum [
+            "null"
+            "files"
+            "sql"
+          ];
           default = "null";
           description = "Service to use to store sms data.";
         };
@@ -161,7 +179,12 @@ in {
 
         sql = {
           driver = mkOption {
-            type = types.enum [ "native_mysql" "native_pgsql" "odbc" "dbi" ];
+            type = types.enum [
+              "native_mysql"
+              "native_pgsql"
+              "odbc"
+              "dbi"
+            ];
             description = "DB driver to use";
           };
 
@@ -206,40 +229,53 @@ in {
       group = cfg.device.group;
     };
 
-    environment.systemPackages = with cfg.backend; [ gammuPackage ]
-    ++ optionals (service == "sql" && sql.driver == "sqlite")  [ pkgs.sqlite ];
+    environment.systemPackages =
+      with cfg.backend;
+      [ gammuPackage ] ++ optionals (service == "sql" && sql.driver == "sqlite") [ pkgs.sqlite ];
 
     systemd.services.gammu-smsd = {
       description = "gammu-smsd daemon";
 
       wantedBy = [ "multi-user.target" ];
 
-      wants = with cfg.backend; [ ]
-      ++ optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
+      wants =
+        with cfg.backend;
+        [ ] ++ optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
 
-      preStart = with cfg.backend;
+      preStart =
+        with cfg.backend;
 
-        optionalString (service == "files") (with files; ''
-          mkdir -m 755 -p ${inboxPath} ${outboxPath} ${sentSMSPath} ${errorSMSPath}
-          chown ${cfg.user} -R ${inboxPath}
-          chown ${cfg.user} -R ${outboxPath}
-          chown ${cfg.user} -R ${sentSMSPath}
-          chown ${cfg.user} -R ${errorSMSPath}
-        '')
-      + optionalString (service == "sql" && sql.driver == "sqlite") ''
-         cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
-         | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}
+        optionalString (service == "files") (
+          with files;
+          ''
+            mkdir -m 755 -p ${inboxPath} ${outboxPath} ${sentSMSPath} ${errorSMSPath}
+            chown ${cfg.user} -R ${inboxPath}
+            chown ${cfg.user} -R ${outboxPath}
+            chown ${cfg.user} -R ${sentSMSPath}
+            chown ${cfg.user} -R ${errorSMSPath}
+          ''
+        )
+        + optionalString (service == "sql" && sql.driver == "sqlite") ''
+          cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
+          | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}
         ''
-      + (let execPsql = extraArgs: concatStringsSep " " [
-          (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
-          "${config.services.postgresql.package}/bin/psql"
-          (optionalString (sql.host != null) "-h ${sql.host}")
-          (optionalString (sql.user != null) "-U ${sql.user}")
-          "$extraArgs"
-          "${sql.database}"
-        ]; in optionalString (service == "sql" && sql.driver == "native_pgsql") ''
-         echo '\i '"${gammuPackage}/${initDBDir}/pgsql.sql" | ${execPsql ""}
-       '');
+        + (
+          let
+            execPsql =
+              extraArgs:
+              concatStringsSep " " [
+                (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
+                "${config.services.postgresql.package}/bin/psql"
+                (optionalString (sql.host != null) "-h ${sql.host}")
+                (optionalString (sql.user != null) "-U ${sql.user}")
+                "$extraArgs"
+                "${sql.database}"
+              ];
+          in
+          optionalString (service == "sql" && sql.driver == "native_pgsql") ''
+            echo '\i '"${gammuPackage}/${initDBDir}/pgsql.sql" | ${execPsql ""}
+          ''
+        );
 
       serviceConfig = {
         User = "${cfg.user}";

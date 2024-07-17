@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
-, tarsnap
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+  tarsnap,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,9 +26,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     pyyaml
@@ -37,9 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = python3Packages.pythonOlder "3.12";
 
-  nativeCheckInputs = with python3Packages; [
-    nose
-  ];
+  nativeCheckInputs = with python3Packages; [ nose ];
 
   # Remove standard module argparse from requirements
   pythonRemoveDeps = [ "argparse" ];

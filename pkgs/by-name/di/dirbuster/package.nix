@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, unzip
-, jdk8
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  unzip,
+  jdk8,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

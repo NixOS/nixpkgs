@@ -1,13 +1,15 @@
-{ rustPlatform
-, buildNpmPackage
-, testers
-, coolercontrol
-, runtimeShell
+{
+  rustPlatform,
+  buildNpmPackage,
+  testers,
+  coolercontrol,
+  runtimeShell,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {

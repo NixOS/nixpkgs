@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "pet";
@@ -14,16 +19,16 @@ buildGoModule rec {
   vendorHash = "sha256-XvSg7EhFdK7wt1Eei56pj/emiE4qsVJkOpgPNsnDNc4=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/knqyf263/pet/cmd.version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/knqyf263/pet/cmd.version=${version}"
   ];
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd pet \

@@ -1,4 +1,10 @@
-{ lib, libusb1, buildGoModule, fetchFromGitHub, pkg-config }:
+{
+  lib,
+  libusb1,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+}:
 
 buildGoModule rec {
   pname = "yubihsm-connector";
@@ -13,15 +19,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-XW7rEHY3S+M3b6QjmINgrCak+BqCEV3PJP90jz7J47A=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libusb1
-  ];
+  buildInputs = [ libusb1 ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preBuild = ''
     GOOS= GOARCH= go generate

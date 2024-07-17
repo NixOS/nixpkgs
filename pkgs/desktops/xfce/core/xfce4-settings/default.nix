@@ -1,19 +1,20 @@
-{ lib
-, mkXfceDerivation
-, exo
-, garcon
-, gtk3
-, glib
-, libnotify
-, libxfce4ui
-, libxfce4util
-, libxklavier
-, upower
-, withUpower ? true
-, xfconf
-, xf86inputlibinput
-, colord
-, withColord ? true
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  garcon,
+  gtk3,
+  glib,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  upower,
+  withUpower ? true,
+  xfconf,
+  xf86inputlibinput,
+  colord,
+  withColord ? true,
 }:
 
 mkXfceDerivation {
@@ -34,16 +35,15 @@ mkXfceDerivation {
     libxklavier
     xf86inputlibinput
     xfconf
-  ]
-  ++ lib.optionals withUpower [ upower ]
-  ++ lib.optionals withColord [ colord ];
+  ] ++ lib.optionals withUpower [ upower ] ++ lib.optionals withColord [ colord ];
 
-  configureFlags = [
-    "--enable-pluggable-dialogs"
-    "--enable-sound-settings"
-  ]
-  ++ lib.optionals withUpower [ "--enable-upower-glib" ]
-  ++ lib.optionals withColord [ "--enable-colord" ];
+  configureFlags =
+    [
+      "--enable-pluggable-dialogs"
+      "--enable-sound-settings"
+    ]
+    ++ lib.optionals withUpower [ "--enable-upower-glib" ]
+    ++ lib.optionals withColord [ "--enable-colord" ];
 
   meta = with lib; {
     description = "Settings manager for Xfce";

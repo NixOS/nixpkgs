@@ -9,25 +9,34 @@
   nltk-data,
 }:
 let
-  pythonEnv = python3.withPackages (packages: with packages; [
-    unstructured-api-tools
-    unstructured
-    pydantic
-    click
-    ratelimit
-    requests
-    pypdf
-    pycryptodome
-    safetensors
-    uvicorn
-  ] ++ packages.unstructured.optional-dependencies.local-inference);
+  pythonEnv = python3.withPackages (
+    packages:
+    with packages;
+    [
+      unstructured-api-tools
+      unstructured
+      pydantic
+      click
+      ratelimit
+      requests
+      pypdf
+      pycryptodome
+      safetensors
+      uvicorn
+    ]
+    ++ packages.unstructured.optional-dependencies.local-inference
+  );
   version = "0.0.61";
   unstructured_api_nltk_data = symlinkJoin {
     name = "unstructured_api_nltk_data";
 
-    paths = [ nltk-data.punkt nltk-data.averaged_perceptron_tagger ];
+    paths = [
+      nltk-data.punkt
+      nltk-data.averaged_perceptron_tagger
+    ];
   };
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "unstructured-api";
   inherit version;
 

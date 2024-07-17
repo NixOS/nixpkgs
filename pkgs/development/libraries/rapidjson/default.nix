@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, gtest
-, valgrind
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  gtest,
+  valgrind,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +39,10 @@ stdenv.mkDerivation rec {
       sed -i -e "s/-Werror//g" -e "s/-march=native//g"
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   # for tests, adding gtest to checkInputs does not work
   # https://github.com/NixOS/nixpkgs/pull/212200

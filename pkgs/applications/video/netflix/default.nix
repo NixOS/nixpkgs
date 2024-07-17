@@ -1,13 +1,14 @@
-{ fetchurl
-, google-chrome
-, lib
-, makeDesktopItem
-, runtimeShell
-, symlinkJoin
-, writeScriptBin
+{
+  fetchurl,
+  google-chrome,
+  lib,
+  makeDesktopItem,
+  runtimeShell,
+  symlinkJoin,
+  writeScriptBin,
 
   # command line arguments which are always set e.g "--disable-gpu"
-, commandLineArgs ? [ ]
+  commandLineArgs ? [ ],
 }:
 
 let
@@ -40,7 +41,11 @@ let
     };
     desktopName = "Netflix via Google Chrome";
     genericName = "A video streaming service providing films and exclusive TV series";
-    categories = [ "TV" "AudioVideo" "Network" ];
+    categories = [
+      "TV"
+      "AudioVideo"
+      "Network"
+    ];
     startupNotify = true;
   };
 
@@ -58,5 +63,8 @@ in
 
 symlinkJoin {
   inherit name meta;
-  paths = [ script desktopItem ];
+  paths = [
+    script
+    desktopItem
+  ];
 }

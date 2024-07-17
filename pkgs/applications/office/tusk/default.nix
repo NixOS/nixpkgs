@@ -1,4 +1,9 @@
-{ appimageTools, fetchurl, lib, makeDesktopItem }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeDesktopItem,
+}:
 
 let
   pname = "tusk";
@@ -18,14 +23,14 @@ let
     categories = [ "Application" ];
   };
 
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/klaussinani/tusk/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";
     sha256 = "02q7wsnhlyq8z74avflrm7805ny8fzlmsmz4bmafp4b4pghjh5ky";
   };
-
 
   profile = ''
     export LC_ALL=C.UTF-8

@@ -1,4 +1,8 @@
-{ appimageTools, lib, fetchurl }:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+}:
 let
   pname = "sozi";
   version = "23.7.25-1690311612";
@@ -8,13 +12,16 @@ let
     hash = "sha256-QHvgevv60ZTkkdt+IWaCuXt0XVnhe5Q5oROwa2LFie8=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit version pname src;
-  };
-in appimageTools.wrapType2 {
+  appimageContents = appimageTools.extract { inherit version pname src; };
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ polkit udev ];
+  extraPkgs =
+    pkgs: with pkgs; [
+      polkit
+      udev
+    ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/sozi.desktop -t $out/share/applications

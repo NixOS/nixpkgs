@@ -1,16 +1,25 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.snmpd;
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "snmpd.cfg" ''
-      ${cfg.configText}
-    '' else null;
-in {
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "snmpd.cfg" ''
+        ${cfg.configText}
+      ''
+    else
+      null;
+in
+{
   options.services.snmpd = {
     enable = lib.mkEnableOption "snmpd";
 
-    package = lib.mkPackageOption pkgs "net-snmp" {};
+    package = lib.mkPackageOption pkgs "net-snmp" { };
 
     listenAddress = lib.mkOption {
       type = lib.types.str;
@@ -73,9 +82,7 @@ in {
       };
     };
 
-    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [
-      cfg.port
-    ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
 
   meta.maintainers = [ lib.maintainers.eliandoran ];

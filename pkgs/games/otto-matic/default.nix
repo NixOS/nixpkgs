@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
@@ -17,9 +24,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
   installPhase = ''
     runHook preInstall

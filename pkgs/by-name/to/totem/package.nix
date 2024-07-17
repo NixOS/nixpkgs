@@ -1,33 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, gettext
-, gst_all_1
-, python3Packages
-, shared-mime-info
-, pkg-config
-, gtk3
-, glib
-, gobject-introspection
-, totem-pl-parser
-, wrapGAppsHook3
-, itstool
-, libxml2
-, vala
-, gnome
-, grilo
-, grilo-plugins
-, libpeas
-, libportal-gtk3
-, libhandy
-, adwaita-icon-theme
-, gnome-desktop
-, gsettings-desktop-schemas
-, gdk-pixbuf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  gettext,
+  gst_all_1,
+  python3Packages,
+  shared-mime-info,
+  pkg-config,
+  gtk3,
+  glib,
+  gobject-introspection,
+  totem-pl-parser,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  vala,
+  gnome,
+  grilo,
+  grilo-plugins,
+  libpeas,
+  libportal-gtk3,
+  libhandy,
+  adwaita-icon-theme,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gdk-pixbuf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
@@ -94,9 +95,7 @@ stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  nativeCheckInputs = [
-    xvfb-run
-  ];
+  nativeCheckInputs = [ xvfb-run ];
 
   mesonFlags = [
     # TODO: https://github.com/NixOS/nixpkgs/issues/36468
@@ -123,9 +122,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "totem";
-    };
+    updateScript = gnome.updateScript { packageName = "totem"; };
   };
 
   meta = with lib; {

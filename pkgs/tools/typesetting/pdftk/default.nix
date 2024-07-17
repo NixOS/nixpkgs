@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, gradle, jre, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gradle,
+  jre,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdftk";
@@ -42,10 +49,13 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/pdftk-java/pdftk";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin averelld ];
+    maintainers = with maintainers; [
+      raskin
+      averelld
+    ];
     platforms = platforms.unix;
     mainProgram = "pdftk";
   };

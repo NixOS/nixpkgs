@@ -1,33 +1,34 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-translations
-, colord
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, lcms2
-, libcanberra-gtk3
-, libgnomekbd
-, libnotify
-, libxklavier
-, wrapGAppsHook3
-, pkg-config
-, lib
-, stdenv
-, systemd
-, upower
-, dconf
-, cups
-, polkit
-, librsvg
-, libwacom
-, xorg
-, fontconfig
-, tzdata
-, nss
-, libgudev
-, meson
-, ninja
+{
+  fetchFromGitHub,
+  cinnamon-desktop,
+  cinnamon-translations,
+  colord,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  lcms2,
+  libcanberra-gtk3,
+  libgnomekbd,
+  libnotify,
+  libxklavier,
+  wrapGAppsHook3,
+  pkg-config,
+  lib,
+  stdenv,
+  systemd,
+  upower,
+  dconf,
+  cups,
+  polkit,
+  librsvg,
+  libwacom,
+  xorg,
+  fontconfig,
+  tzdata,
+  nss,
+  libgudev,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-OAG5Tes+0bi+vKqm77Y7OykTpUkMdRaXIJYLuomIDMo=";
   };
 
-  patches = [
-    ./csd-backlight-helper-fix.patch
-  ];
+  patches = [ ./csd-backlight-helper-fix.patch ];
 
   buildInputs = [
     cinnamon-desktop
@@ -79,7 +78,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     sed "s|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g" -i plugins/datetime/system-timezone.h

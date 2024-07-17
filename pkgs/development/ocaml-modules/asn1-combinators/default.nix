@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, zarith, bigarray-compat, stdlib-shims, ptime, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  zarith,
+  bigarray-compat,
+  stdlib-shims,
+  ptime,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -14,7 +22,13 @@ buildDunePackage rec {
     sha256 = "sha256-ASreDYhp72IQY3UsHPjqAm9rxwL+0Q35r1ZojikbGpE=";
   };
 
-  propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];
+  propagatedBuildInputs = [
+    cstruct
+    zarith
+    bigarray-compat
+    stdlib-shims
+    ptime
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

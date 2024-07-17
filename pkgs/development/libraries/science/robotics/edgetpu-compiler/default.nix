@@ -1,9 +1,10 @@
-{ autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, libcxx
-, stdenv
+{
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  lib,
+  libcxx,
+  stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "edgetpu-compiler";
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     dpkg
   ];
 
-  buildInputs = [
-    libcxx
-  ];
+  buildInputs = [ libcxx ];
 
   unpackPhase = ''
     mkdir bin pkg

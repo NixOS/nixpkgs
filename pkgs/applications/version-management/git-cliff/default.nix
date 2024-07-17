@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security SystemConfiguration
+    Security
+    SystemConfiguration
   ];
 
   meta = with lib; {

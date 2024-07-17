@@ -1,4 +1,9 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+}:
 
 let
   pname = "framesh";
@@ -8,9 +13,7 @@ let
     hash = "sha256-SsQIAg5DttvNJk1z+GJq4+e0Qa/j+VEKPV2bPA6+V8A=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

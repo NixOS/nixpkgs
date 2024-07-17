@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, fpc
-, lazarus
-, xorg
-, libqt5pas
-, runCommand
-, _7zz
-, archiver
-, brotli
-, upx
-, zpaq
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  fpc,
+  lazarus,
+  xorg,
+  libqt5pas,
+  runCommand,
+  _7zz,
+  archiver,
+  brotli,
+  upx,
+  zpaq,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   # peazip looks for the "7z", not "7zz"
-  _7z = runCommand "7z" {} ''
+  _7z = runCommand "7z" { } ''
     mkdir -p $out/bin
     ln -s ${_7zz}/bin/7zz $out/bin/7z
   '';
@@ -65,14 +66,16 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D dev/{pea,peazip} -t $out/lib/peazip
-    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${lib.makeBinPath [
-      _7z
-      archiver
-      brotli
-      upx
-      zpaq
-      zstd
-    ]}
+    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
+      lib.makeBinPath [
+        _7z
+        archiver
+        brotli
+        upx
+        zpaq
+        zstd
+      ]
+    }
     mkdir -p $out/bin
     ln -s $out/lib/peazip/{pea,peazip} $out/bin/
 

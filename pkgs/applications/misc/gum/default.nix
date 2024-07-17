@@ -1,4 +1,9 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  installShellFiles,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gum";
@@ -13,11 +18,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-pkQ8UvWLIWH8gXux/dd0HLdiz7RDrmFJ8SX63Q+nNyw=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
   postInstall = ''
     $out/bin/gum man > gum.1

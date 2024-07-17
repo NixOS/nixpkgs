@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, eks-node-viewer }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  eks-node-viewer,
+}:
 
 buildGoModule rec {
   pname = "eks-node-viewer";
@@ -22,9 +28,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = eks-node-viewer;
-    };
+    version = testers.testVersion { package = eks-node-viewer; };
   };
 
   meta = with lib; {

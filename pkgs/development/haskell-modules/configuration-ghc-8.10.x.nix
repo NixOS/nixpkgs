@@ -11,9 +11,7 @@ self: super: {
 
   # ghcjs does not use `llvmPackages` and exposes `null` attribute.
   llvmPackages =
-    if self.ghc.llvmPackages != null
-    then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages
-    else null;
+    if self.ghc.llvmPackages != null then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages else null;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -44,7 +42,11 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -65,9 +67,7 @@ self: super: {
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] (super.hashable.override {
-    os-string = null;
-  });
+  ] (super.hashable.override { os-string = null; });
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
   # Too strict lower bounds on base
@@ -92,13 +92,14 @@ self: super: {
   shower = doJailbreak super.shower;
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
-    (overrideCabal (drv: {
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (
+    overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
-      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }) super.hnix);
+      executableHaskellDepends = drv.executableToolDepends or [ ] ++ [ self.repline ];
+    }) super.hnix
+  );
 
-  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
+  haskell-language-server = throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
 
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
@@ -113,11 +114,13 @@ self: super: {
   # weeder 2.3.* no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
   # Unnecessarily strict upper bound on lens
-  weeder_2_2_0 = doJailbreak (super.weeder_2_2_0.override {
-    # weeder < 2.6 only supports algebraic-graphs < 0.7
-    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
-    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  });
+  weeder_2_2_0 = doJailbreak (
+    super.weeder_2_2_0.override {
+      # weeder < 2.6 only supports algebraic-graphs < 0.7
+      # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+      algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+    }
+  );
 
   # Uses haddock placement that isn't supported by the versions of haddock
   # bundled with GHC < 9.0.
@@ -131,9 +134,7 @@ self: super: {
 
   # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
-  mysql-simple = addBuildDepends [
-    self.blaze-textual
-  ] super.mysql-simple;
+  mysql-simple = addBuildDepends [ self.blaze-textual ] super.mysql-simple;
 
   taffybar = markUnbroken (doDistribute super.taffybar);
 
@@ -171,13 +172,10 @@ self: super: {
   http-types = dontCheck super.http-types;
 
   # Packages which need compat library for GHC < 9.6
-  inherit
-    (lib.mapAttrs
-      (_: addBuildDepends [ self.foldable1-classes-compat ])
-      super)
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
     these
-  ;
+    ;
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple
@@ -187,7 +185,5 @@ self: super: {
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
     self.base-orphans
-  ] (super.OneTuple.override {
-    ghc-prim = self.hashable;
-  });
+  ] (super.OneTuple.override { ghc-prim = self.hashable; });
 }

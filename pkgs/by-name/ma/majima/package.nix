@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage {
   pname = "majima";
   version = "0.5.0";

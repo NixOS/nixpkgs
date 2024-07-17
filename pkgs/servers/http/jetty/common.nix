@@ -1,6 +1,11 @@
 { version, hash }:
 
-{ lib, stdenvNoCC, fetchurl, gitUpdater }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gitUpdater,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "jetty";
@@ -32,7 +37,13 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://jetty.org/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [ asl20 epl10 ];
-    maintainers = with maintainers; [ emmanuelrosa anthonyroussel ];
+    license = with licenses; [
+      asl20
+      epl10
+    ];
+    maintainers = with maintainers; [
+      emmanuelrosa
+      anthonyroussel
+    ];
   };
 }

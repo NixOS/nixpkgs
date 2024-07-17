@@ -1,11 +1,12 @@
-{ lib
-, python3
-, fetchPypi
-, nix-update-script
-, runtimeShell
-, installShellFiles
-, testers
-, pdm
+{
+  lib,
+  python3,
+  fetchPypi,
+  nix-update-script,
+  runtimeShell,
+  installShellFiles,
+  testers,
+  pdm,
 }:
 
 with python3.pkgs;
@@ -21,48 +22,38 @@ buildPythonApplication rec {
     hash = "sha256-WOIlhQVn3K3OQkGNtGOJlt8rE3jNCDDNSK/aG0VdnHI=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  dependencies = [
-    blinker
-    dep-logic
-    filelock
-    findpython
-    hishel
-    httpx
-    installer
-    msgpack
-    packaging
-    pbs-installer
-    platformdirs
-    pyproject-hooks
-    python-dotenv
-    resolvelib
-    rich
-    shellingham
-    tomlkit
-    unearth
-    virtualenv
-  ] ++ httpx.optional-dependencies.socks
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ]
-  ++ lib.optionals (pythonAtLeast "3.10") [
-    truststore
-  ];
+  dependencies =
+    [
+      blinker
+      dep-logic
+      filelock
+      findpython
+      hishel
+      httpx
+      installer
+      msgpack
+      packaging
+      pbs-installer
+      platformdirs
+      pyproject-hooks
+      python-dotenv
+      resolvelib
+      rich
+      shellingham
+      tomlkit
+      unearth
+      virtualenv
+    ]
+    ++ httpx.optional-dependencies.socks
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonAtLeast "3.10") [ truststore ];
 
-  makeWrapperArgs = [
-    "--set PDM_CHECK_UPDATE 0"
-  ];
+  makeWrapperArgs = [ "--set PDM_CHECK_UPDATE 0" ];
 
   preInstall = ''
     # Silence network warning during pypaInstallPhase
@@ -87,9 +78,7 @@ buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -111,9 +100,7 @@ buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = pdm;
-  };
+  passthru.tests.version = testers.testVersion { package = pdm; };
 
   passthru.updateScript = nix-update-script { };
 

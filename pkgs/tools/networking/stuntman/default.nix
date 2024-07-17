@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, openssl, boost }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+  boost,
+}:
 
 stdenv.mkDerivation {
   pname = "stuntman";

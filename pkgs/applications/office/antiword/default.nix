@@ -1,6 +1,10 @@
-{ lib, fetchurl, stdenv }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "antiword";
   version = "0.37";
 
@@ -16,9 +20,7 @@ stdenv.mkDerivation rec{
 
   patches = [ ./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installTargets = [ "global_install" ];
 

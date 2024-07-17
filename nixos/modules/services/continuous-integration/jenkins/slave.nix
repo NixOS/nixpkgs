@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
-in {
+in
+{
   options = {
     services.jenkinsSlave = {
       # todo:
@@ -52,9 +58,7 @@ in {
   };
 
   config = mkIf (cfg.enable && !masterCfg.enable) {
-    users.groups = optionalAttrs (cfg.group == "jenkins") {
-      jenkins.gid = config.ids.gids.jenkins;
-    };
+    users.groups = optionalAttrs (cfg.group == "jenkins") { jenkins.gid = config.ids.gids.jenkins; };
 
     users.users = optionalAttrs (cfg.user == "jenkins") {
       jenkins = {

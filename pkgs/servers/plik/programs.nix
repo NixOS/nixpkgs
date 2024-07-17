@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  runCommand,
+}:
 
 let
   version = "1.3.8";
@@ -30,7 +36,13 @@ in
 
   plik = buildGoModule {
     pname = "plik";
-    inherit version meta src vendorHash postPatch;
+    inherit
+      version
+      meta
+      src
+      vendorHash
+      postPatch
+      ;
 
     subPackages = [ "client" ];
     postInstall = ''
@@ -40,7 +52,12 @@ in
 
   plikd-unwrapped = buildGoModule {
     pname = "plikd-unwrapped";
-    inherit version src vendorHash postPatch;
+    inherit
+      version
+      src
+      vendorHash
+      postPatch
+      ;
 
     subPackages = [ "server" ];
     postFixup = ''

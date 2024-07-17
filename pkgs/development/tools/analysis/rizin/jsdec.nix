@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, rizin
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  rizin,
+  openssl,
 }:
 
 let
@@ -35,14 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
     cp subprojects/packagefiles/libquickjs/* subprojects/libquickjs
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ openssl rizin ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+    rizin
+  ];
 
   meta = with lib; {
     description = "Simple decompiler for Rizin";
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
-    license = with licenses; [ asl20 bsd3 mit ];
+    license = with licenses; [
+      asl20
+      bsd3
+      mit
+    ];
     maintainers = with maintainers; [ chayleaf ];
   };
 })

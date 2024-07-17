@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
@@ -23,9 +27,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   nativeCheckInputs = with python3Packages; [
     pytest

@@ -1,7 +1,8 @@
-{ runtimeShell
-, symlinkJoin
-, writeShellScriptBin
-, npush
+{
+  runtimeShell,
+  symlinkJoin,
+  writeShellScriptBin,
+  npush,
 }:
 
 let

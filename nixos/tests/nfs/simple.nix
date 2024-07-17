@@ -1,46 +1,51 @@
-import ../make-test-python.nix ({ pkgs, version ? 4, ... }:
+import ../make-test-python.nix (
+  {
+    pkgs,
+    version ? 4,
+    ...
+  }:
 
-let
+  let
 
-  client =
-    { pkgs, ... }:
-    { virtualisation.fileSystems =
-        { "/data" =
-           { # nfs4 exports the export with fsid=0 as a virtual root directory
-             device = if (version == 4) then "server:/" else "server:/data";
-             fsType = "nfs";
-             options = [ "vers=${toString version}" ];
-           };
+    client =
+      { pkgs, ... }:
+      {
+        virtualisation.fileSystems = {
+          "/data" = {
+            # nfs4 exports the export with fsid=0 as a virtual root directory
+            device = if (version == 4) then "server:/" else "server:/data";
+            fsType = "nfs";
+            options = [ "vers=${toString version}" ];
+          };
         };
-      networking.firewall.enable = false; # FIXME: only open statd
+        networking.firewall.enable = false; # FIXME: only open statd
+      };
+
+  in
+
+  {
+    name = "nfs";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-in
-
-{
-  name = "nfs";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
-
-  nodes =
-    { client1 = client;
+    nodes = {
+      client1 = client;
       client2 = client;
 
       server =
         { ... }:
-        { services.nfs.server.enable = true;
-          services.nfs.server.exports =
-            ''
-              /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
-            '';
+        {
+          services.nfs.server.enable = true;
+          services.nfs.server.exports = ''
+            /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
+          '';
           services.nfs.server.createMountPoints = true;
           networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
         };
     };
 
-  testScript =
-    ''
+    testScript = ''
       import time
 
       server.wait_for_unit("nfs-server")
@@ -92,4 +97,5 @@ in
           # FIXME: regressed in kernel 6.1.28, temporarily disabled while investigating
           # assert duration < 30, f"shutdown took too long ({duration} seconds)"
     '';
-})
+  }
+)

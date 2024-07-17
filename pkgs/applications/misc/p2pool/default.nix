@@ -1,17 +1,18 @@
-{ stdenv
-, cmake
-, curl
-, fetchFromGitHub
-, gss
-, hwloc
-, lib
-, libsodium
-, libuv
-, nix-update-script
-, openssl
-, pkg-config
-, zeromq
-, darwin
+{
+  stdenv,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  gss,
+  hwloc,
+  lib,
+  libsodium,
+  libuv,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  zeromq,
+  darwin,
 }:
 
 let
@@ -29,15 +30,27 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libuv
+    zeromq
+    libsodium
+    gss
+    hwloc
+    openssl
+    curl
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
-  cmakeFlags = ["-DWITH_LTO=OFF"];
+  cmakeFlags = [ "-DWITH_LTO=OFF" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-faligned-allocation"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+      "-faligned-allocation"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall

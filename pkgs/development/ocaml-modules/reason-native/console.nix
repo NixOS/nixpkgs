@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, callPackage, reason, console, src }:
+{
+  lib,
+  buildDunePackage,
+  callPackage,
+  reason,
+  console,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,9 +13,7 @@ buildDunePackage {
   pname = "console";
   version = "0.1.0-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   passthru.tests = {
     console = callPackage ./tests/console { };

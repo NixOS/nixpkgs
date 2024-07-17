@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, jasper
-, libpng
-, libjpeg
-, zlib
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jasper,
+  libpng,
+  libjpeg,
+  zlib,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-06koJM7jNVFqVgqg6BmOZ74foqk6yjUIFnwULzPZ4go=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   buildInputs = [
     jasper

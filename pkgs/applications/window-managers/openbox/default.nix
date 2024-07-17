@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, python3
-, libxml2, libXinerama, libXcursor, libXau, libXrandr, libICE, libSM
-, imlib2, pango, libstartup_notification, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  libxml2,
+  libXinerama,
+  libXcursor,
+  libXau,
+  libXrandr,
+  libICE,
+  libSM,
+  imlib2,
+  pango,
+  libstartup_notification,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openbox";
@@ -15,18 +32,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libXinerama libXcursor libXau libXrandr libICE libSM
+    libXinerama
+    libXcursor
+    libXau
+    libXrandr
+    libICE
+    libSM
     libstartup_notification
     python3
   ];
 
   propagatedBuildInputs = [
-    pango imlib2
+    pango
+    imlib2
   ];
 
-  pythonPath = with python3.pkgs; [
-    pyxdg
-  ];
+  pythonPath = with python3.pkgs; [ pyxdg ];
 
   src = fetchurl {
     url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";

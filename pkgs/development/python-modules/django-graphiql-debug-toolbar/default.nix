@@ -15,7 +15,7 @@
   # tests
   python,
   pytest-django,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

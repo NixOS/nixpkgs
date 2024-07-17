@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitLab, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  python3,
+}:
 let
-  pythonEnv = python3.withPackages (p: with p; [ dbus-python pygobject3 ]);
+  pythonEnv = python3.withPackages (
+    p: with p; [
+      dbus-python
+      pygobject3
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "krunner-ssh";
@@ -17,9 +27,7 @@ stdenv.mkDerivation rec {
     sed -e "s|Exec=.*|Exec=$out/libexec/runner.py|" -i ssh-runner.service
   '';
 
-  nativeBuildInputs = [
-    pythonEnv
-  ];
+  nativeBuildInputs = [ pythonEnv ];
 
   installPhase = ''
     runHook preInstall

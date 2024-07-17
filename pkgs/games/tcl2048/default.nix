@@ -1,4 +1,10 @@
-{ lib, fetchurl, tcl, tcllib, runtimeShell }:
+{
+  lib,
+  fetchurl,
+  tcl,
+  tcllib,
+  runtimeShell,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tcl2048";

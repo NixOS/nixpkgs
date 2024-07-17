@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, libiconv
-, buildGoModule
-, pkg-config
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  libiconv,
+  buildGoModule,
+  pkg-config,
 }:
 
 let
@@ -51,14 +52,16 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall = ''
-      mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
-    '' + lib.optionalString stdenv.isDarwin ''
-      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-    '';
+    postInstall =
+      ''
+        mkdir -p $out/include $out/pkgconfig
+        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+          --replace /out $out
+      ''
+      + lib.optionalString stdenv.isDarwin ''
+        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+      '';
   };
 in
 buildGoModule rec {
@@ -104,6 +107,9 @@ buildGoModule rec {
     downloadPage = "https://github.com/influxdata/kapacitor/releases";
     license = licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [ offline totoroot ];
+    maintainers = with maintainers; [
+      offline
+      totoroot
+    ];
   };
 }

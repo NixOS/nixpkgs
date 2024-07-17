@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,7 +14,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    six click requests requests-hawk pytz tabulate
+    six
+    click
+    requests
+    requests-hawk
+    pytz
+    tabulate
   ];
 
   doCheck = false;

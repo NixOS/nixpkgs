@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  shared-mime-info,
-}:
+{ mkKdeDerivation, shared-mime-info }:
 mkKdeDerivation {
   pname = "kpkpass";
 
-  extraNativeBuildInputs = [shared-mime-info];
+  extraNativeBuildInputs = [ shared-mime-info ];
 }

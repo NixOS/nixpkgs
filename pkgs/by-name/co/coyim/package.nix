@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, cairo
-, gdk-pixbuf
-, glib
-, adwaita-icon-theme
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  adwaita-icon-theme,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 buildGoModule {
@@ -24,16 +25,28 @@ buildGoModule {
 
   vendorHash = "sha256-zG7r/Db6XiwKoHRduGj3tEh/KT1hsuBoSGLYaZ+qO0Y=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [ glib cairo gdk-pixbuf gtk3 adwaita-icon-theme ];
+  buildInputs = [
+    glib
+    cairo
+    gdk-pixbuf
+    gtk3
+    adwaita-icon-theme
+  ];
 
   meta = {
     description = "Safe and secure chat client";
     mainProgram = "coyim";
     homepage = "https://coy.im/";
     license = lib.licenses.gpl3;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     broken = stdenv.isDarwin;
   };
 }

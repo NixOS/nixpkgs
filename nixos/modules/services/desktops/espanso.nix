@@ -1,17 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.services.espanso;
-in {
-  meta = { maintainers = with lib.maintainers; [ numkem ]; };
+let
+  cfg = config.services.espanso;
+in
+{
+  meta = {
+    maintainers = with lib.maintainers; [ numkem ];
+  };
 
   options = {
     services.espanso = {
       enable = mkEnableOption "Espanso";
       wayland = mkEnableOption "use the Wayland compatible espanso package";
-      package = mkPackageOption pkgs "espanso" {
-        example = "pkgs.espanso-wayland";
-      };
+      package = mkPackageOption pkgs "espanso" { example = "pkgs.espanso-wayland"; };
     };
   };
 

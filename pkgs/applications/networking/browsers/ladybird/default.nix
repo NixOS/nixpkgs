@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, fetchurl
-, cacert
-, tzdata
-, unicode-emoji
-, unicode-character-database
-, darwin
-, cmake
-, ninja
-, pkg-config
-, libavif
-, libxcrypt
-, python3
-, qt6Packages
-, woff2
-, ffmpeg
-, skia
-, nixosTests
-, AppKit
-, Cocoa
-, Foundation
-, OpenGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  fetchurl,
+  cacert,
+  tzdata,
+  unicode-emoji,
+  unicode-character-database,
+  darwin,
+  cmake,
+  ninja,
+  pkg-config,
+  libavif,
+  libxcrypt,
+  python3,
+  qt6Packages,
+  woff2,
+  ffmpeg,
+  skia,
+  nixosTests,
+  AppKit,
+  Cocoa,
+  Foundation,
+  OpenGL,
 }:
 
 let
@@ -118,30 +119,30 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = with qt6Packages; [
-    ffmpeg
-    libavif
-    libxcrypt
-    qtbase
-    qtmultimedia
-    skia
-    woff2
-  ] ++ lib.optional stdenv.isLinux [
-    qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
-  ];
+  buildInputs =
+    with qt6Packages;
+    [
+      ffmpeg
+      libavif
+      libxcrypt
+      qtbase
+      qtmultimedia
+      skia
+      woff2
+    ]
+    ++ lib.optional stdenv.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+      OpenGL
+    ];
 
   cmakeFlags = [
     # Disable network operations
     "-DSERENITY_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ "-DCMAKE_INSTALL_LIBEXECDIR=libexec" ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
   # FIXME: Add an option to enable PulseAudio rather than using Qt multimedia on non-macOS
@@ -166,7 +167,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ladybird.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "Ladybird";
     # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
     broken = stdenv.isDarwin;

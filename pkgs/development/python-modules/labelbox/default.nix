@@ -48,7 +48,6 @@ buildPythonPackage rec {
       --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
-
   pythonRelaxDeps = [ "python-dateutil" ];
 
   build-system = [ setuptools ];

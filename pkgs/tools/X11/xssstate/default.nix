@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchgit
-, libX11
-, libXScrnSaver
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libX11,
+  libXScrnSaver,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xssstate";

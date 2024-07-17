@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, darwin
-, protobuf
-, nix-update-script
-, testers
-, sozu
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
+  protobuf,
+  nix-update-script,
+  testers,
+  sozu,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  buildInputs =
-    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   doCheck = false;
 
@@ -39,12 +39,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description =
-      "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
+    description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      gaelreyrol
+    ];
     mainProgram = "sozu";
     # error[E0432]: unresolved import `std::arch::x86_64`
     broken = !stdenv.isx86_64;

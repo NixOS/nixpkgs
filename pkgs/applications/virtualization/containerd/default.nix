@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, btrfs-progs
-, go-md2man
-, installShellFiles
-, util-linux
-, nixosTests
-, kubernetes
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  btrfs-progs,
+  go-md2man,
+  installShellFiles,
+  util-linux,
+  nixosTests,
+  kubernetes,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    util-linux
+  ];
 
   buildInputs = [ btrfs-progs ];
 
@@ -43,14 +48,19 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; } // kubernetes.tests;
+  passthru.tests = {
+    inherit (nixosTests) docker;
+  } // kubernetes.tests;
 
   meta = with lib; {
     changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
     description = "Daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [
+      offline
+      vdemeester
+    ];
     platforms = platforms.linux;
   };
 }

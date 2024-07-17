@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, openssh
-, tmux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  openssh,
+  tmux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-odN7QFsU3MsWW8VabVjZH+8+AUFOUio8eF9ORv9iPEA=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     openssh

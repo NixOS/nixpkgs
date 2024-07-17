@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocsparse
-, clr
-, gfortran
-, git
-, gtest
-, openmp
-, buildTests ? false
-, buildSamples ? false
-, gpuTargets ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocsparse,
+  clr,
+  gfortran,
+  git,
+  gtest,
+  openmp,
+  buildTests ? false,
+  buildSamples ? false,
+  gpuTargets ? [ ],
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
@@ -22,11 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ] ++ lib.optionals buildSamples [
-    "sample"
-  ];
+  ] ++ lib.optionals buildTests [ "test" ] ++ lib.optionals buildSamples [ "sample" ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -45,26 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rocsparse
     git
-  ] ++ lib.optionals buildTests [
-    gtest
-  ] ++ lib.optionals (buildTests || buildSamples) [
-    openmp
-  ];
+  ] ++ lib.optionals buildTests [ gtest ] ++ lib.optionals (buildTests || buildSamples) [ openmp ];
 
-  cmakeFlags = [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_CLIENTS_TESTS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_C_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [ "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}" ]
+    ++ lib.optionals buildTests [ "-DBUILD_CLIENTS_TESTS=ON" ];
 
   # We have to manually generate the matrices
   # CMAKE_MATRICES_DIR seems to be reset in clients/tests/CMakeLists.txt
@@ -107,17 +99,26 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "\''${PROJECT_BINARY_DIR}/matrices" "/build/source/matrices"
   '';
 
-  postInstall = lib.optionalString buildTests ''
-    mkdir -p $test/bin
-    mv $out/bin/hipsparse-test $test/bin
-    mv /build/source/matrices $test
-    rmdir $out/bin
-  '' + lib.optionalString buildSamples ''
-    mkdir -p $sample/bin
-    mv clients/staging/example_* $sample/bin
-    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
-      finalAttrs.buildInputs ++ [ clr gfortran.cc ])} $sample/bin/example_*
-  '';
+  postInstall =
+    lib.optionalString buildTests ''
+      mkdir -p $test/bin
+      mv $out/bin/hipsparse-test $test/bin
+      mv /build/source/matrices $test
+      rmdir $out/bin
+    ''
+    + lib.optionalString buildSamples ''
+      mkdir -p $sample/bin
+      mv clients/staging/example_* $sample/bin
+      patchelf --set-rpath $out/lib:${
+        lib.makeLibraryPath (
+          finalAttrs.buildInputs
+          ++ [
+            clr
+            gfortran.cc
+          ]
+        )
+      } $sample/bin/example_*
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -131,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

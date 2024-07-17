@@ -1,15 +1,16 @@
-{ stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gnome
-, gnome-themes-extra
-, gtk-engine-murrine
-, gtk3
-, inkscape
-, lib
-, optipng
-, pkg-config
-, sassc
+{
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gnome,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  gtk3,
+  inkscape,
+  lib,
+  optipng,
+  pkg-config,
+  sassc,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,4 +67,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovesegfault ];
   };
 }
-

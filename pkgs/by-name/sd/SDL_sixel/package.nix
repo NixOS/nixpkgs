@@ -21,9 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libsixel ];
 
-  configureFlags = [
-    (lib.enableFeature true "video-sixel")
-  ];
+  configureFlags = [ (lib.enableFeature true "video-sixel") ];
 
   strictDeps = true;
 
@@ -32,8 +30,7 @@ stdenv.mkDerivation {
     description = "SDL 1.2 patched with libsixel support";
     license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.linux;
   };
 }

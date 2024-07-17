@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, unzip, jre }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  jre,
+}:
 
 let
 
@@ -15,11 +21,15 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit version;
   pname = "sonar-scanner-cli";
 
-  src = fetchurl sonarScannerArchPackage.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  src =
+    fetchurl
+      sonarScannerArchPackage.${stdenv.hostPlatform.system}
+        or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ unzip ];
 

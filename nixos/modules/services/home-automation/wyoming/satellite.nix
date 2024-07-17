@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -19,15 +20,16 @@ let
     optional
     optionals
     types
-  ;
+    ;
 
   finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
-    propagatedBuildInputs = oldAttrs.propagatedBuildInputs
+    propagatedBuildInputs =
+      oldAttrs.propagatedBuildInputs
       # for audio enhancements like auto-gain, noise suppression
       ++ cfg.package.optional-dependencies.webrtc
       # vad is currently optional, because it is broken on aarch64-linux
       ++ optionals cfg.vad.enable cfg.package.optional-dependencies.silerovad;
-    });
+  });
 in
 
 {
@@ -174,33 +176,47 @@ in
         "network-online.target"
         "sound.target"
       ];
-      wantedBy = [
-        "multi-user.target"
-      ];
-      path = with pkgs; [
-        alsa-utils
-      ];
-      script = let
-        optionalParam = param: argument: optionals (!elem argument [ null 0 false ]) [
-          param argument
-        ];
-      in ''
-        export XDG_RUNTIME_DIR=/run/user/$UID
-        ${escapeShellArgs ([
-          (getExe finalPackage)
-          "--uri" cfg.uri
-          "--name" cfg.name
-          "--mic-command" cfg.microphone.command
-        ]
-        ++ optionalParam "--mic-auto-gain" cfg.microphone.autoGain
-        ++ optionalParam "--mic-noise-suppression" cfg.microphone.noiseSuppression
-        ++ optionalParam "--area" cfg.area
-        ++ optionalParam "--snd-command" cfg.sound.command
-        ++ optionalParam "--awake-wav" cfg.sounds.awake
-        ++ optionalParam "--done-wav" cfg.sounds.done
-        ++ optional cfg.vad.enable "--vad"
-        ++ cfg.extraArgs)}
-      '';
+      wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ alsa-utils ];
+      script =
+        let
+          optionalParam =
+            param: argument:
+            optionals
+              (
+                !elem argument [
+                  null
+                  0
+                  false
+                ]
+              )
+              [
+                param
+                argument
+              ];
+        in
+        ''
+          export XDG_RUNTIME_DIR=/run/user/$UID
+          ${escapeShellArgs (
+            [
+              (getExe finalPackage)
+              "--uri"
+              cfg.uri
+              "--name"
+              cfg.name
+              "--mic-command"
+              cfg.microphone.command
+            ]
+            ++ optionalParam "--mic-auto-gain" cfg.microphone.autoGain
+            ++ optionalParam "--mic-noise-suppression" cfg.microphone.noiseSuppression
+            ++ optionalParam "--area" cfg.area
+            ++ optionalParam "--snd-command" cfg.sound.command
+            ++ optionalParam "--awake-wav" cfg.sounds.awake
+            ++ optionalParam "--done-wav" cfg.sounds.done
+            ++ optional cfg.vad.enable "--vad"
+            ++ cfg.extraArgs
+          )}
+        '';
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -229,9 +245,7 @@ in
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        SupplementaryGroups = [
-          "audio"
-        ];
+        SupplementaryGroups = [ "audio" ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"

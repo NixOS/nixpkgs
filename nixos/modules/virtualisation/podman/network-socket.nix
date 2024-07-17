@@ -1,17 +1,17 @@
-{ config, lib, pkg, ... }:
+{
+  config,
+  lib,
+  pkg,
+  ...
+}:
 let
-  inherit (lib)
-    mkOption
-    types
-    ;
+  inherit (lib) mkOption types;
 
   cfg = config.virtualisation.podman.networkSocket;
 
 in
 {
-  imports = [
-    ./network-socket-ghostunnel.nix
-  ];
+  imports = [ ./network-socket-ghostunnel.nix ];
 
   options.virtualisation.podman.networkSocket = {
     enable = mkOption {
@@ -87,8 +87,7 @@ in
   };
 
   config = {
-    networking.firewall.allowedTCPPorts =
-      lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
+    networking.firewall.allowedTCPPorts = lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
   };
 
   meta.maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];

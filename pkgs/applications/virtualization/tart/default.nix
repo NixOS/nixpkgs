@@ -1,20 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeWrapper
-# Softnet support ("--net-softnet") is disabled by default as it requires
-# passwordless-sudo when installed through nix. Alternatively users may install
-# softnet through other means with "setuid"-bit enabled.
-# See https://github.com/cirruslabs/softnet#installing
-, enableSoftnet ? false, softnet
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  # Softnet support ("--net-softnet") is disabled by default as it requires
+  # passwordless-sudo when installed through nix. Alternatively users may install
+  # softnet through other means with "setuid"-bit enabled.
+  # See https://github.com/cirruslabs/softnet#installing
+  enableSoftnet ? false,
+  softnet,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
   version = "2.13.0";
 
   src = fetchurl {
-      url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-arm64.tar.gz";
-      hash = "sha256-aR28Q5eQwcEfk65on4kgA+bko6uEThHsgZZU+fExzus=";
+    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-arm64.tar.gz";
+    hash = "sha256-aR28Q5eQwcEfk65on4kgA+bko6uEThHsgZZU+fExzus=";
   };
   sourceRoot = ".";
 
@@ -39,7 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
     license = licenses.fairsource09;
-    maintainers = with maintainers; [ emilytrau aduh95 ];
+    maintainers = with maintainers; [
+      emilytrau
+      aduh95
+    ];
     mainProgram = finalAttrs.pname;
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitLab
-, python3
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, desktop-file-utils
-, shared-mime-info
-, wrapGAppsHook4
-, glib
-, gtk3
-, gtk4
-, gtksourceview5
-, libadwaita
-, libhandy
-, webkitgtk_4_1
-, webkitgtk_6_0
-, nix-update-script
+{
+  lib,
+  fetchFromGitLab,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  desktop-file-utils,
+  shared-mime-info,
+  wrapGAppsHook4,
+  glib,
+  gtk3,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libhandy,
+  webkitgtk_4_1,
+  webkitgtk_6_0,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -77,7 +78,12 @@ python3.pkgs.buildPythonApplication rec {
     # Let python wrapper use GNOME flags.
     makeWrapperArgs+=(
       # For broadway daemons
-      --prefix PATH : "${lib.makeBinPath [ gtk3 gtk4 ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gtk3
+          gtk4
+        ]
+      }"
       "''${gappsWrapperArgs[@]}"
     )
   '';

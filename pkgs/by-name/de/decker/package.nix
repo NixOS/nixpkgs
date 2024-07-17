@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, unixtools
-, multimarkdown
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  unixtools,
+  multimarkdown,
 }:
 
 stdenv.mkDerivation rec {

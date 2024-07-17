@@ -24,19 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-lL+CQGZMK+rxjw2kTNE6kK3FCt6ARsAD6ROMsXWwDCs=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     inkex
     lxml
   ];
 
-  pythonRelaxDeps = [
-    "lxml"
-  ];
-
+  pythonRelaxDeps = [ "lxml" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

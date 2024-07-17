@@ -1,6 +1,12 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-let version = "2.4.0";
-in rustPlatform.buildRustPackage {
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
+let
+  version = "2.4.0";
+in
+rustPlatform.buildRustPackage {
   pname = "catppuccin-whiskers";
   inherit version;
 

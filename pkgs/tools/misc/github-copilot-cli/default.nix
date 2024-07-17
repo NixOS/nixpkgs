@@ -1,4 +1,8 @@
-{ lib, buildNpmPackage, fetchzip }:
+{
+  lib,
+  buildNpmPackage,
+  fetchzip,
+}:
 
 buildNpmPackage rec {
   pname = "github-copilot-cli";
@@ -26,4 +30,3 @@ buildNpmPackage rec {
     mainProgram = "github-copilot-cli";
   };
 }
-

@@ -1,18 +1,19 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, writeScript
-, nix
-, runtimeShell
-, curl
-, cacert
-, jq
-, yq
-, gnupg
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  writeScript,
+  nix,
+  runtimeShell,
+  curl,
+  cacert,
+  jq,
+  yq,
+  gnupg,
 
-, releaseManifestFile
-, releaseInfoFile
-, allowPrerelease
+  releaseManifestFile,
+  releaseInfoFile,
+  allowPrerelease,
 }:
 
 let
@@ -38,7 +39,8 @@ let
 
   drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
 
-in writeScript "update-dotnet-vmr.sh" ''
+in
+writeScript "update-dotnet-vmr.sh" ''
   #! ${nix}/bin/nix-shell
   #! nix-shell -i ${runtimeShell} --pure ${drv}
   set -euo pipefail

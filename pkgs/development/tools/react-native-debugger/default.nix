@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, cairo
-, xorg
-, gdk-pixbuf
-, fontconfig
-, pango
-, gnome
-, atk
-, at-spi2-atk
-, at-spi2-core
-, gtk3
-, glib
-, freetype
-, dbus
-, nss
-, nspr
-, alsa-lib
-, cups
-, expat
-, udev
-, makeDesktopItem
-, libdrm
-, libxkbcommon
-, mesa
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  cairo,
+  xorg,
+  gdk-pixbuf,
+  fontconfig,
+  pango,
+  gnome,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  gtk3,
+  glib,
+  freetype,
+  dbus,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  expat,
+  udev,
+  makeDesktopItem,
+  libdrm,
+  libxkbcommon,
+  mesa,
+  makeWrapper,
 }:
 
 let
@@ -74,7 +75,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RioBe0MAR47M84aavFaTJikGsJtcZDak8Tkg3WtX2l0=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
   buildCommand = ''
     shopt -s extglob
     mkdir -p $out
@@ -103,7 +107,10 @@ stdenv.mkDerivation rec {
     exec = "react-native-debugger";
     desktopName = "React Native Debugger";
     genericName = "React Native Debugger";
-    categories = [ "Development" "Debugger" ];
+    categories = [
+      "Development"
+      "Debugger"
+    ];
   };
 
   meta = with lib; {

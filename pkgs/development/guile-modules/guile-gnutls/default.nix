@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, gnutls
-, guile
-, libtool
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  gnutls,
+  guile,
+  libtool,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     gnutls

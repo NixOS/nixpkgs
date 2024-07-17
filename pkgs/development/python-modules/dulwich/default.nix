@@ -46,9 +46,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  propagatedBuildInputs = [
-    urllib3
-  ];
+  propagatedBuildInputs = [ urllib3 ];
 
   optional-dependencies = {
     fastimport = [ fastimport ];
@@ -60,15 +58,13 @@ buildPythonPackage rec {
     paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs =
-    [
-      gevent
-      geventhttpclient
-      git
-      glibcLocales
-      unittestCheckHook
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    unittestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # requires swift config file

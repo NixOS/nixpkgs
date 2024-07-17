@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +41,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
   meta = with lib; {
     description = "Your plan for improving personal life and workflow";

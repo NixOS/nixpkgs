@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, chez, chez-srfi }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  chez,
+  chez-srfi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chez-mit";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YM4/Sj8otuWJCrUBsglVnihxRGI32F6tSbODFM0a8TA=";
   };
 
-  buildInputs = [ chez chez-srfi ];
+  buildInputs = [
+    chez
+    chez-srfi
+  ];
 
   makeFlags = [ "CHEZ=${lib.getExe chez}" ];
 

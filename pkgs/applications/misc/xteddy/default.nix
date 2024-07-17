@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  xorg,
+  imlib2,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xteddy";
@@ -11,10 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ imlib2 xorg.libX11 xorg.libXext ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    imlib2
+    xorg.libX11
+    xorg.libXext
+  ];
 
-  patches = [ "${src}/debian/patches/10_libXext.patch" "${src}/debian/patches/wrong-man-page-section.patch" ];
+  patches = [
+    "${src}/debian/patches/10_libXext.patch"
+    "${src}/debian/patches/wrong-man-page-section.patch"
+  ];
 
   postPatch = ''
     sed -i "s:/usr/games/xteddy:$out/bin/xteddy:" xtoys

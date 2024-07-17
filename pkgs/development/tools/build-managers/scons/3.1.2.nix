@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 let
   pname = "scons";
@@ -13,7 +17,10 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   preConfigure = ''
     python bootstrap.py

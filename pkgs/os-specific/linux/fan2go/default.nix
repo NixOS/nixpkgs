@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, lm_sensors }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  lm_sensors,
+}:
 
 buildGoModule rec {
   pname = "fan2go";

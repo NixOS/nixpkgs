@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, kissfft
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kissfft,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    kissfft
-  ];
+  buildInputs = [ kissfft ];
 
   makefile = "build/linux/Makefile.linux32";
 

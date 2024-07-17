@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, reason, re, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  re,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,9 +13,7 @@ buildDunePackage {
   pname = "file-context-printer";
   version = "0.0.3-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   propagatedBuildInputs = [
     re

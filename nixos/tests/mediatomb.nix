@@ -27,7 +27,7 @@ import ./make-test-python.nix {
       ];
     };
 
-    client = {};
+    client = { };
   };
 
   testScript = ''

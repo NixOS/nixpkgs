@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL, alsa-lib, autoreconfHook, gtk2, libjack2, ladspaH
-, ladspaPlugins, libsamplerate, libsndfile, pkg-config, libpulseaudio, lame
-, vorbis-tools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  SDL,
+  alsa-lib,
+  autoreconfHook,
+  gtk2,
+  libjack2,
+  ladspaH,
+  ladspaPlugins,
+  libsamplerate,
+  libsndfile,
+  pkg-config,
+  libpulseaudio,
+  lame,
+  vorbis-tools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mhwaveedit";
@@ -13,12 +29,23 @@ stdenv.mkDerivation rec {
     sha256 = "037pbq23kh8hsih994x2sv483imglwcrqrx6m8visq9c46fi0j1y";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
 
   preAutoreconf = "(cd docgen && sh gendocs.sh)";
 
   buildInputs = [
-    SDL alsa-lib gtk2 libjack2 ladspaH libsamplerate libsndfile libpulseaudio
+    SDL
+    alsa-lib
+    gtk2
+    libjack2
+    ladspaH
+    libsamplerate
+    libsndfile
+    libpulseaudio
   ];
 
   configureFlags = [ "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa" ];

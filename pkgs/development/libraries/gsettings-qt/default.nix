@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
-, qmake, qtbase, qtdeclarative, wrapQtAppsHook
-, glib, gobject-introspection
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtdeclarative,
+  wrapQtAppsHook,
+  glib,
+  gobject-introspection,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,9 +63,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Library to access GSettings from Qt";

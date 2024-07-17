@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,9 +22,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'netaddr = "^0.8.0"' 'netaddr = "*"'
   '';
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-  ];
+  nativeBuildInputs = [ python3.pkgs.poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dash
@@ -38,9 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     tinydb
   ];
 
-  pythonImportsCheck = [
-    "das"
-  ];
+  pythonImportsCheck = [ "das" ];
 
   meta = with lib; {
     description = "Divide full port scan results and use it for targeted Nmap runs";

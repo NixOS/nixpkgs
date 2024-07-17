@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,16 +17,15 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "pyproject";
 
-  buildInputs = [
-    python3.pkgs.setuptools
-  ];
+  buildInputs = [ python3.pkgs.setuptools ];
 
   meta = with lib; {
     homepage = "https://github.com/akuukis/beancount_share";
     description = "Beancount plugin to share expenses with external partners within one ledger";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ matthiasbeyer ];
-    broken = true; # At 2024-06-29, missing unpacked dependency
-                   # https://hydra.nixos.org/build/262800507/nixlog/1
+    broken = true;
+    # At 2024-06-29, missing unpacked dependency
+    # https://hydra.nixos.org/build/262800507/nixlog/1
   };
 }

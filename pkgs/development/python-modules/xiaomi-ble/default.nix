@@ -36,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   pythonRelaxDeps = [ "pycryptodomex" ];
 
   dependencies = [

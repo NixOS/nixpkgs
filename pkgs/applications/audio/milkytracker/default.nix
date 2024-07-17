@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, alsa-lib
-, cmake
-, Cocoa
-, CoreAudio
-, Foundation
-, libjack2
-, lhasa
-, makeWrapper
-, perl
-, pkg-config
-, rtmidi
-, SDL2
-, zlib
-, zziplib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  alsa-lib,
+  cmake,
+  Cocoa,
+  CoreAudio,
+  Foundation,
+  libjack2,
+  lhasa,
+  makeWrapper,
+  perl,
+  pkg-config,
+  rtmidi,
+  SDL2,
+  zlib,
+  zziplib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,21 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    lhasa
-    libjack2
-    perl
-    rtmidi
-    SDL2
-    zlib
-    zziplib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    CoreAudio
-    Foundation
-  ];
+  buildInputs =
+    [
+      lhasa
+      libjack2
+      perl
+      rtmidi
+      SDL2
+      zlib
+      zziplib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+      CoreAudio
+      Foundation
+    ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
@@ -69,9 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";

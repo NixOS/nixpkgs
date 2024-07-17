@@ -1,4 +1,12 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, stdenv}:
+{
+  deployAndroidPackage,
+  lib,
+  package,
+  os,
+  autoPatchelfHook,
+  pkgs,
+  stdenv,
+}:
 
 deployAndroidPackage {
   inherit package os;

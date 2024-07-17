@@ -1,9 +1,9 @@
-{ python3
-}:
+{ python3 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -12,9 +12,7 @@ python3.pkgs.buildPythonApplication {
   sourceRoot = "${src.name}/coolercontrol-liqctld";
   format = "pyproject";
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     liquidctl

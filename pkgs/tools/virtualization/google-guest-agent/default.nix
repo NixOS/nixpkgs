@@ -1,12 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, coreutils
-, makeWrapper
-, google-guest-configs
-, google-guest-oslogin
-, iproute2
-, procps
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  coreutils,
+  makeWrapper,
+  google-guest-configs,
+  google-guest-oslogin,
+  iproute2,
+  procps,
 }:
 
 buildGoModule rec {

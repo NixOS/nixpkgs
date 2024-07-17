@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "crimson-pro";
   version = "unstable-2022-08-30";
 
-  outputs = [ "out" "woff2" ];
+  outputs = [
+    "out"
+    "woff2"
+  ];
 
   src = fetchFromGitHub {
     owner = "Fonthausen";

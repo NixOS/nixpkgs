@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, appstream-glib
-, libxslt
-, libxml2
-, gettext
-, itstool
-, wrapGAppsHook3
-, docbook_xsl
-, docbook_xml_dtd_43
-, gnome
-, adwaita-icon-theme
-, gtk3
-, glib
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
+  libxslt,
+  libxml2,
+  gettext,
+  itstool,
+  wrapGAppsHook3,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  glib,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,9 +71,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-dictionary";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-dictionary"; };
   };
 
   meta = with lib; {

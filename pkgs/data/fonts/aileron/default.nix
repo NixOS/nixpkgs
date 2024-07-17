@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 let
   majorVersion = "0";
@@ -26,7 +30,10 @@ stdenvNoCC.mkDerivation {
     homepage = "http://dotcolon.net/font/aileron/";
     description = "Helvetica font in nine weights";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars minijackson ];
+    maintainers = with maintainers; [
+      leenaars
+      minijackson
+    ];
     license = licenses.cc0;
   };
 }

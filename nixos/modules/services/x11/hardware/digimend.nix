@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -22,7 +27,6 @@ in
 
   };
 
-
   config = mkIf cfg.enable {
 
     # digimend drivers use xsetwacom and wacom X11 drivers
@@ -30,8 +34,7 @@ in
 
     boot.extraModulePackages = [ pkg ];
 
-    environment.etc."X11/xorg.conf.d/50-digimend.conf".source =
-      "${pkg}/usr/share/X11/xorg.conf.d/50-digimend.conf";
+    environment.etc."X11/xorg.conf.d/50-digimend.conf".source = "${pkg}/usr/share/X11/xorg.conf.d/50-digimend.conf";
 
   };
 

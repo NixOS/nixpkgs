@@ -42,7 +42,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "structlog" ];
 
-
   build-system = [ poetry-core ];
 
   dependencies = [

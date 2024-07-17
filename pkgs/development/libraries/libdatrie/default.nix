@@ -1,13 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, autoreconfHook, autoconf-archive
-, installShellFiles, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  autoreconfHook,
+  autoconf-archive,
+  installShellFiles,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
 
   pname = "libdatrie";
   version = "2019-12-20";
 
-  outputs = [ "bin" "out" "lib" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "tlwg";
@@ -24,13 +36,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
-  preAutoreconf = let
-    reports = "https://github.com/tlwg/libdatrie/issues";
-  in
-  ''
-    sed -i -e "/AC_INIT/,+3d" configure.ac
-    sed -i "5iAC_INIT(${pname},${version},[${reports}])" configure.ac
-  '';
+  preAutoreconf =
+    let
+      reports = "https://github.com/tlwg/libdatrie/issues";
+    in
+    ''
+      sed -i -e "/AC_INIT/,+3d" configure.ac
+      sed -i "5iAC_INIT(${pname},${version},[${reports}])" configure.ac
+    '';
 
   postInstall = ''
     installManPage man/trietool.1

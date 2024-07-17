@@ -1,16 +1,17 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, writeText
-, jq
-, python3
-, pkg-config
-, pixman
-, cairo
-, pango
-, stdenv
-, darwin
-, conf ? { }
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  writeText,
+  jq,
+  python3,
+  pkg-config,
+  pixman,
+  cairo,
+  pango,
+  stdenv,
+  darwin,
+  conf ? { },
 }:
 
 let
@@ -44,9 +45,7 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreText
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
 
   installPhase = ''
     runHook preInstall

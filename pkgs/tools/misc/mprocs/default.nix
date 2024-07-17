@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, nix-update-script, testers, mprocs }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  testers,
+  mprocs,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mprocs";
@@ -23,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pvolok/mprocs";
     changelog = "https://github.com/pvolok/mprocs/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage pyrox0 ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      pyrox0
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mprocs";
   };

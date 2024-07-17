@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  coreutils,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.117.1";
@@ -17,7 +25,14 @@ stdenv.mkDerivation rec {
     cp -r . $out
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
-      --set PATH ${lib.makeBinPath [ (placeholder "out") coreutils jdk curl ]}
+      --set PATH ${
+        lib.makeBinPath [
+          (placeholder "out")
+          coreutils
+          jdk
+          curl
+        ]
+      }
     runHook postInstall
   '';
 

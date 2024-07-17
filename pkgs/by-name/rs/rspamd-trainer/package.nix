@@ -1,10 +1,11 @@
-{ lib
-, python3
-, python3Packages
-, fetchFromGitLab
-, makeWrapper
-, fetchpatch
-, rspamd
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitLab,
+  makeWrapper,
+  fetchpatch,
+  rspamd,
 }:
 
 python3Packages.buildPythonApplication {
@@ -40,9 +41,7 @@ python3Packages.buildPythonApplication {
     sed -i "s|/usr/bin/rspamc|${rspamd}/bin/rspamc|" src/rspamd_trainer/run.py
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     python-dotenv

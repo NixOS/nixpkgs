@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, signal
-, hdf5
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  signal,
+  hdf5,
 }:
 
 buildOctavePackage rec {
@@ -14,13 +15,9 @@ buildOctavePackage rec {
     sha256 = "sha256-psQuiBOI1mXXZaH4EesVO91r2ViCc0KrKxKM7Xw+gts=";
   };
 
-  buildInputs = [
-    hdf5
-  ];
+  buildInputs = [ hdf5 ];
 
-  requiredOctavePackages = [
-    signal
-  ];
+  requiredOctavePackages = [ signal ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/communications/index.html";

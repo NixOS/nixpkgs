@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-}:
+{ mkKdeDerivation, qtdeclarative }:
 mkKdeDerivation {
   pname = "kpeople";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

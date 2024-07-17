@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, udev, protobuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  udev,
+  protobuf,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    udev
-  ];
+  buildInputs = [ udev ];
 
   propagatedBuildInputs = [ protobuf ];
 

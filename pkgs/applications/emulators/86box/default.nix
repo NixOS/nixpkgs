@@ -42,27 +42,34 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-    qt5.wrapQtAppsHook
-  ] ++ lib.optionals enableWayland [ extra-cmake-modules wayland-scanner ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      makeWrapper
+      qt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals enableWayland [
+      extra-cmake-modules
+      wayland-scanner
+    ];
 
-  buildInputs = [
-    freetype
-    fluidsynth
-    SDL2
-    glib
-    openal
-    rtmidi
-    pcre2
-    jack2
-    libpcap
-    libslirp
-    qt5.qtbase
-    qt5.qttools
-  ] ++ lib.optional stdenv.isLinux alsa-lib
+  buildInputs =
+    [
+      freetype
+      fluidsynth
+      SDL2
+      glib
+      openal
+      rtmidi
+      pcre2
+      jack2
+      libpcap
+      libslirp
+      qt5.qtbase
+      qt5.qttools
+    ]
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableVncRenderer libvncserver;
 

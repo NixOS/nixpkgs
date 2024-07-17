@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, fftw
-, zita-convolver
-, fftwFloat
-, libsndfile
-, ffmpeg
-, alsa-lib
-, libao
-, libmad
-, ladspaH
-, libtool
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  fftw,
+  zita-convolver,
+  fftwFloat,
+  libsndfile,
+  ffmpeg,
+  alsa-lib,
+  libao,
+  libmad,
+  ladspaH,
+  libtool,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "upnext";
@@ -12,9 +18,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "resources/lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.upnext";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.upnext"; };
   };
 
   meta = with lib; {

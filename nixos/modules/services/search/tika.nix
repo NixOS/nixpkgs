@@ -72,7 +72,9 @@ in
       serviceConfig = {
         Type = "simple";
 
-        ExecStart = "${getExe cfg.package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"}";
+        ExecStart = "${getExe cfg.package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
+          lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
+        }";
         DynamicUser = true;
         StateDirectory = "tika";
         CacheDirectory = "tika";

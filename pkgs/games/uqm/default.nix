@@ -1,32 +1,58 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
-, SDL2, libpng, libvorbis, libogg, libmikmod
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  pkg-config,
+  libGLU,
+  libGL,
+  SDL2,
+  libpng,
+  libvorbis,
+  libogg,
+  libmikmod,
 
-, use3DOVideos ? false, requireFile ? null, writeText ? null
-, haskellPackages ? null
+  use3DOVideos ? false,
+  requireFile ? null,
+  writeText ? null,
+  haskellPackages ? null,
 
-, useRemixPacks ? false
+  useRemixPacks ? false,
 }:
 
-assert use3DOVideos -> requireFile != null && writeText != null
-                    && haskellPackages != null;
+assert use3DOVideos -> requireFile != null && writeText != null && haskellPackages != null;
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv lib requireFile writeText fetchFromGitHub haskellPackages;
+    inherit
+      stdenv
+      lib
+      requireFile
+      writeText
+      fetchFromGitHub
+      haskellPackages
+      ;
   };
 
-  remixPacks = lib.imap1 (num: sha256: fetchurl rec {
-    name = "uqm-remix-disc${toString num}.uqm";
-    url = "mirror://sourceforge/sc2/${name}";
-    inherit sha256;
-  }) [
-    "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
-    "1pmsq65k8gk4jcbyk3qjgi9yqlm0dlaimc2r8hz2fc9f2124gfvz"
-    "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
-    "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
-  ];
+  remixPacks =
+    lib.imap1
+      (
+        num: sha256:
+        fetchurl rec {
+          name = "uqm-remix-disc${toString num}.uqm";
+          url = "mirror://sourceforge/sc2/${name}";
+          inherit sha256;
+        }
+      )
+      [
+        "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
+        "1pmsq65k8gk4jcbyk3qjgi9yqlm0dlaimc2r8hz2fc9f2124gfvz"
+        "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
+        "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
+      ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "uqm";
   version = "0.8.0";
 
@@ -51,19 +77,32 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 libpng libvorbis libogg libmikmod libGLU libGL ];
+  buildInputs = [
+    SDL2
+    libpng
+    libvorbis
+    libogg
+    libmikmod
+    libGLU
+    libGL
+  ];
 
-  postUnpack = ''
-    mkdir -p uqm-${version}/content/packages
-    mkdir -p uqm-${version}/content/addons
-    ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
-    ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
-    ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
-  '' + lib.optionalString useRemixPacks (lib.concatMapStrings (disc: ''
-    ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
-  '') remixPacks) + lib.optionalString use3DOVideos ''
-    ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
-  '';
+  postUnpack =
+    ''
+      mkdir -p uqm-${version}/content/packages
+      mkdir -p uqm-${version}/content/addons
+      ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
+      ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
+      ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
+    ''
+    + lib.optionalString useRemixPacks (
+      lib.concatMapStrings (disc: ''
+        ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
+      '') remixPacks
+    )
+    + lib.optionalString use3DOVideos ''
+      ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
+    '';
 
   postPatch = ''
     # Using _STRINGS_H as include guard conflicts with glibc.
@@ -104,7 +143,10 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://sc2.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jcumming aszlig ];
+    maintainers = with lib.maintainers; [
+      jcumming
+      aszlig
+    ];
     platforms = with lib.platforms; linux;
   };
 }

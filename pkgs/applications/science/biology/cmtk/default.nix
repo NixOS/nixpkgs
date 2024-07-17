@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, bzip2
-, cmake
-, fetchurl
-, fftw
-, llvmPackages
-, zlib
+{
+  lib,
+  stdenv,
+  bzip2,
+  cmake,
+  fetchurl,
+  fftw,
+  llvmPackages,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     fftw
     zlib
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     (lib.optionalString stdenv.cc.isGNU "-std=c++11")
@@ -37,9 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Computational Morphometry Toolkit";
     mainProgram = "cmtk";
-    longDescription = ''A software toolkit for computational morphometry of
-      biomedical images, CMTK comprises a set of command line tools and a
-      back-end general-purpose library for processing and I/O'';
+    longDescription = ''
+      A software toolkit for computational morphometry of
+            biomedical images, CMTK comprises a set of command line tools and a
+            back-end general-purpose library for processing and I/O'';
     maintainers = with maintainers; [ tbenst ];
     platforms = platforms.all;
     license = licenses.gpl3Plus;

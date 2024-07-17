@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "kxmlgui";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, stdlib-shims }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
   pname = "ocamlgraph";
@@ -11,14 +16,12 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [
-    stdlib-shims
-  ];
+  propagatedBuildInputs = [ stdlib-shims ];
 
   meta = with lib; {
-      homepage = "https://github.com/backtracking/ocamlgraph";
-      description = "Graph library for OCaml";
-      license = licenses.gpl2Oss;
-      maintainers = with maintainers; [ ];
+    homepage = "https://github.com/backtracking/ocamlgraph";
+    description = "Graph library for OCaml";
+    license = licenses.gpl2Oss;
+    maintainers = with maintainers; [ ];
   };
 }

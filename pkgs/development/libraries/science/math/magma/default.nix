@@ -1,7 +1,4 @@
-args@{ callPackage
-, lib
-, ...
-}:
+args@{ callPackage, lib, ... }:
 
 # Type aliases
 # Release = {
@@ -16,11 +13,11 @@ let
   computeName = version: "magma_${strings.replaceStrings [ "." ] [ "_" ] version}";
 
   # buildMagmaPackage :: Release -> Derivation
-  buildMagmaPackage = magmaRelease: callPackage ./generic.nix (
-    (builtins.removeAttrs args [ "callPackage" ]) // {
-      inherit magmaRelease;
-    }
-  );
+  buildMagmaPackage =
+    magmaRelease:
+    callPackage ./generic.nix (
+      (builtins.removeAttrs args [ "callPackage" ]) // { inherit magmaRelease; }
+    );
 
   # Reverse the list to have the latest release first
   # magmaReleases :: List Release
@@ -50,4 +47,3 @@ let
 in
 
 builds
-

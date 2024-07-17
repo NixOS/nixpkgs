@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 let
@@ -23,8 +24,8 @@ let
 
     # copied from upstream Dockerfile
     npmInstallFlags = [ "--legacy-peer-deps" ];
-    TSX_COMPILE_ON_ERROR="true";
-    ESLINT_NO_DEV_ERRORS="true";
+    TSX_COMPILE_ON_ERROR = "true";
+    ESLINT_NO_DEV_ERRORS = "true";
 
     # override npmInstallHook, we only care about the build/ directory
     installPhase = ''
@@ -55,7 +56,10 @@ buildGoModule rec {
     description = "Capital management tool for lightning network nodes";
     license = licenses.mit;
     homepage = "https://github.com/lncapital/torq";
-    maintainers = with maintainers; [ mmilata prusnak ];
+    maintainers = with maintainers; [
+      mmilata
+      prusnak
+    ];
     mainProgram = "torq";
   };
 }

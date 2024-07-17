@@ -1,10 +1,11 @@
-{ lib
-, copyDesktopItems
-, fetchFromGitHub
-, makeDesktopItem
-, python3
-, libsForQt5
-, ffmpeg
+{
+  lib,
+  copyDesktopItems,
+  fetchFromGitHub,
+  makeDesktopItem,
+  python3,
+  libsForQt5,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {

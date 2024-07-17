@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, reason, re, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  re,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,9 +13,7 @@ buildDunePackage {
   pname = "frame";
   version = "0.0.1-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   propagatedBuildInputs = [
     pastel

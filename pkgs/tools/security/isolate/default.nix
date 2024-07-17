@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, asciidoc
-, libcap
-, pkg-config
-, systemdLibs
-, installShellFiles
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoc,
+  libcap,
+  pkg-config,
+  systemdLibs,
+  installShellFiles,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +32,7 @@ stdenv.mkDerivation rec {
     systemdLibs.dev
   ];
 
-  patches = [
-    ./take-config-file-from-env.patch
-  ];
+  patches = [ ./take-config-file-from-env.patch ];
 
   installPhase = ''
     runHook preInstall

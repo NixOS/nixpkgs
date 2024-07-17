@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, installShellFiles }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  installShellFiles,
+}:
 
 let
   pname = "tmuxp";
@@ -9,9 +14,7 @@ python3Packages.buildPythonApplication {
   inherit pname version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version hash;
-  };
+  src = fetchPypi { inherit pname version hash; };
 
   nativeBuildInputs = [
     python3Packages.poetry-core

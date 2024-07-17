@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, kio
-, cmake
-, extra-cmake-modules
-, libvlc
-, libv4l
-, libX11
-, kidletime
-, kdelibs4support
-, libXScrnSaver
-, wrapQtAppsHook
-, qtx11extras
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  kio,
+  cmake,
+  extra-cmake-modules,
+  libvlc,
+  libv4l,
+  libX11,
+  kidletime,
+  kdelibs4support,
+  libXScrnSaver,
+  wrapQtAppsHook,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {

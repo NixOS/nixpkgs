@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-}:
+{ mkKdeDerivation, qtdeclarative }:
 mkKdeDerivation {
   pname = "ktexttemplate";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

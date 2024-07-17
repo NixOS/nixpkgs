@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.mackerel-agent;
-  settingsFmt = pkgs.formats.toml {};
-in {
+  settingsFmt = pkgs.formats.toml { };
+in
+{
   options.services.mackerel-agent = {
     enable = mkEnableOption "mackerel.io agent";
 
@@ -36,7 +42,7 @@ in {
         <https://mackerel.io/docs/entry/spec/agent>
       '';
 
-      default = {};
+      default = { };
       example = {
         verbose = false;
         silent = false;
@@ -47,19 +53,28 @@ in {
 
         options.host_status = {
           on_start = mkOption {
-            type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
+            type = types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent startup.";
             default = "working";
           };
           on_stop = mkOption {
-            type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
+            type = types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent shutdown.";
             default = "poweroff";
           };
         };
 
-        options.diagnostic =
-          mkEnableOption "collecting memory usage for the agent itself";
+        options.diagnostic = mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };
@@ -68,8 +83,7 @@ in {
     environment.systemPackages = with pkgs; [ mackerel-agent ];
 
     environment.etc = {
-      "mackerel-agent/mackerel-agent.conf".source =
-        settingsFmt.generate "mackerel-agent.conf" cfg.settings;
+      "mackerel-agent/mackerel-agent.conf".source = settingsFmt.generate "mackerel-agent.conf" cfg.settings;
       "mackerel-agent/conf.d/api-key.conf".source = cfg.apiKeyFile;
     };
 
@@ -85,7 +99,10 @@ in {
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "nss-lookup.target" ];
+      after = [
+        "network-online.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       environment = {
         MACKEREL_PLUGIN_WORKDIR = mkDefault "%C/mackerel-agent";
@@ -103,9 +120,7 @@ in {
         LimitNOFILE = mkDefault 65536;
         LimitNPROC = mkDefault 65536;
       };
-      restartTriggers = [
-        config.environment.etc."mackerel-agent/mackerel-agent.conf".source
-      ];
+      restartTriggers = [ config.environment.etc."mackerel-agent/mackerel-agent.conf".source ];
     };
   };
 }

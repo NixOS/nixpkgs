@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, unstableGitUpdater }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libutp";
@@ -15,9 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      branch = "post-3.4-transmission";
-    };
+    updateScript = unstableGitUpdater { branch = "post-3.4-transmission"; };
   };
 
   meta = with lib; {

@@ -1,4 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase, unstableGitUpdater }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  gtk2,
+  pkg-config,
+  qmake,
+  qtbase,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "qt6gtk2";
@@ -11,14 +20,18 @@ stdenv.mkDerivation {
     hash = "sha256-j1PFJEGCd2snQ6bAcsmFNrupoZg+ib/08Xs1oJyWyN0=";
   };
 
-  buildInputs = [ gtk2 qtbase ];
-  nativeBuildInputs = [ pkg-config qmake ];
+  buildInputs = [
+    gtk2
+    qtbase
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
 
   dontWrapQtApps = true;
 
-  qmakeFlags = [
-    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-  ];
+  qmakeFlags = [ "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}" ];
 
   passthru.updateScript = unstableGitUpdater { };
 

@@ -34,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-nZjJBbdBvmywmtgowdIqn/kkTdCII+KSavjd0YccPGU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "rcssmin"

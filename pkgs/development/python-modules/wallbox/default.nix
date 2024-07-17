@@ -21,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-8taZpC1N5ZsVurh10WosZvg7WDmord+PDfhHpRlfqBE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aenum

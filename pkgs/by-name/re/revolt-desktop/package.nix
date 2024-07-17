@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, fetchzip
-, appimageTools
-, makeWrapper
-, electron
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  fetchzip,
+  appimageTools,
+  makeWrapper,
+  electron,
 }:
 (stdenvNoCC.mkDerivation {
   pname = "revolt-desktop";

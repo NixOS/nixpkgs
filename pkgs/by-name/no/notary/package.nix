@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 buildGoModule rec {
   pname = "notary";
@@ -15,13 +16,9 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  tags = [
-    "pkcs11"
-  ];
+  tags = [ "pkcs11" ];
 
-  ldflags = [
-    "-X github.com/theupdateframework/notary/version.NotaryVersion=${version}"
-  ];
+  ldflags = [ "-X github.com/theupdateframework/notary/version.NotaryVersion=${version}" ];
 
   # Tests try to use network.
   doCheck = false;

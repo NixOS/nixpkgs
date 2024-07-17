@@ -3,67 +3,85 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    lib,
+    withFirewall,
+    nftables ? false,
+    ...
+  }:
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
-    routerBase =
-      lib.mkMerge [
-        { virtualisation.vlans = [ 2 1 ];
-          networking.firewall.enable = withFirewall;
-          networking.firewall.filterForward = nftables;
-          networking.nftables.enable = nftables;
-          networking.nat.internalIPs = [ "192.168.1.0/24" ];
-          networking.nat.externalInterface = "eth1";
-        }
-      ];
+    routerBase = lib.mkMerge [
+      {
+        virtualisation.vlans = [
+          2
+          1
+        ];
+        networking.firewall.enable = withFirewall;
+        networking.firewall.filterForward = nftables;
+        networking.nftables.enable = nftables;
+        networking.nat.internalIPs = [ "192.168.1.0/24" ];
+        networking.nat.externalInterface = "eth1";
+      }
+    ];
   in
   {
-    name = "nat" + (lib.optionalString nftables "Nftables")
-                 + (if withFirewall then "WithFirewall" else "Standalone");
+    name =
+      "nat"
+      + (lib.optionalString nftables "Nftables")
+      + (if withFirewall then "WithFirewall" else "Standalone");
     meta = with pkgs.lib.maintainers; {
       maintainers = [ rob ];
     };
 
-    nodes =
-      { client =
-          { pkgs, nodes, ... }:
-          lib.mkMerge [
-            { virtualisation.vlans = [ 1 ];
-              networking.defaultGateway =
-                (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
-              networking.nftables.enable = nftables;
-            }
-          ];
+    nodes = {
+      client =
+        { pkgs, nodes, ... }:
+        lib.mkMerge [
+          {
+            virtualisation.vlans = [ 1 ];
+            networking.defaultGateway =
+              (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
+            networking.nftables.enable = nftables;
+          }
+        ];
 
-        router =
-        { ... }: lib.mkMerge [
+      router =
+        { ... }:
+        lib.mkMerge [
           routerBase
           { networking.nat.enable = true; }
         ];
 
-        routerDummyNoNat =
-        { ... }: lib.mkMerge [
+      routerDummyNoNat =
+        { ... }:
+        lib.mkMerge [
           routerBase
           { networking.nat.enable = false; }
         ];
 
-        server =
-          { ... }:
-          { virtualisation.vlans = [ 2 ];
-            networking.firewall.enable = false;
-            services.httpd.enable = true;
-            services.httpd.adminAddr = "foo@example.org";
-            services.vsftpd.enable = true;
-            services.vsftpd.anonymousUser = true;
-          };
-      };
+      server =
+        { ... }:
+        {
+          virtualisation.vlans = [ 2 ];
+          networking.firewall.enable = false;
+          services.httpd.enable = true;
+          services.httpd.adminAddr = "foo@example.org";
+          services.vsftpd.enable = true;
+          services.vsftpd.anonymousUser = true;
+        };
+    };
 
     testScript =
-      { nodes, ... }: let
+      { nodes, ... }:
+      let
         routerDummyNoNatClosure = nodes.routerDummyNoNat.config.system.build.toplevel;
         routerClosure = nodes.router.config.system.build.toplevel;
-      in ''
+      in
+      ''
         client.start()
         router.start()
         server.start()
@@ -112,4 +130,5 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
         client.succeed("curl --fail http://server/ >&2")
         client.succeed("ping -c 1 server >&2")
       '';
-  })
+  }
+)

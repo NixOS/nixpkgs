@@ -1,17 +1,16 @@
-{ fstar-dune
-, src
-, stdenv
-, version
-, z3
+{
+  fstar-dune,
+  src,
+  stdenv,
+  version,
+  z3,
 }:
 
 stdenv.mkDerivation {
   pname = "fstar-ulib";
   inherit version src;
 
-  nativeBuildInputs = [
-    z3
-  ];
+  nativeBuildInputs = [ z3 ];
 
   postPatch = ''
     mkdir -p bin

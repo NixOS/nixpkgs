@@ -89,7 +89,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     httpx
     deprecated

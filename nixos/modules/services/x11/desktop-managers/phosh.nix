@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +15,10 @@ let
     name = "sm.puri.OSK0";
     desktopName = "On-screen keyboard";
     exec = "${pkgs.squeekboard}/bin/squeekboard";
-    categories = [ "GNOME" "Core" ];
+    categories = [
+      "GNOME"
+      "Core"
+    ];
     onlyShowIn = [ "GNOME" ];
     noDisplay = true;
     extraConfig = {
@@ -29,7 +37,11 @@ let
 
           To start XWayland immediately, use `immediate`.
         '';
-        type = types.enum [ "true" "false" "immediate" ];
+        type = types.enum [
+          "true"
+          "false"
+          "immediate"
+        ];
         default = "false";
       };
       cursorTheme = mkOption {
@@ -60,7 +72,7 @@ let
           One or more modelines.
         '';
         type = types.either types.str (types.listOf types.str);
-        default = [];
+        default = [ ];
         example = [
           "87.25 720 776 848  976 1440 1443 1453 1493 -hsync +vsync"
           "65.13 768 816 896 1024 1024 1025 1028 1060 -HSync +VSync"
@@ -78,11 +90,7 @@ let
         description = ''
           Display scaling factor.
         '';
-        type = types.nullOr (
-          types.addCheck
-          (types.either types.int types.float)
-          (x : x > 0)
-        ) // {
+        type = types.nullOr (types.addCheck (types.either types.int types.float) (x: x > 0)) // {
           description = "null or positive integer or float";
         };
         default = null;
@@ -93,7 +101,14 @@ let
           Screen transformation.
         '';
         type = types.enum [
-          "90" "180" "270" "flipped" "flipped-90" "flipped-180" "flipped-270" null
+          "90"
+          "180"
+          "270"
+          "flipped"
+          "flipped-90"
+          "flipped-180"
+          "flipped-270"
+          null
         ];
         default = null;
       };
@@ -102,28 +117,32 @@ let
 
   optionalKV = k: v: optionalString (v != null) "${k} = ${builtins.toString v}";
 
-  renderPhocOutput = name: output: let
-    modelines = if builtins.isList output.modeline
-      then output.modeline
-      else [ output.modeline ];
-    renderModeline = l: "modeline = ${l}";
-  in ''
-    [output:${name}]
-    ${concatStringsSep "\n" (map renderModeline modelines)}
-    ${optionalKV "mode" output.mode}
-    ${optionalKV "scale" output.scale}
-    ${optionalKV "rotate" output.rotate}
-  '';
+  renderPhocOutput =
+    name: output:
+    let
+      modelines = if builtins.isList output.modeline then output.modeline else [ output.modeline ];
+      renderModeline = l: "modeline = ${l}";
+    in
+    ''
+      [output:${name}]
+      ${concatStringsSep "\n" (map renderModeline modelines)}
+      ${optionalKV "mode" output.mode}
+      ${optionalKV "scale" output.scale}
+      ${optionalKV "rotate" output.rotate}
+    '';
 
-  renderPhocConfig = phoc: let
-    outputs = mapAttrsToList renderPhocOutput phoc.outputs;
-  in ''
-    [core]
-    xwayland = ${phoc.xwayland}
-    ${concatStringsSep "\n" outputs}
-    [cursor]
-    theme = ${phoc.cursorTheme}
-  '';
+  renderPhocConfig =
+    phoc:
+    let
+      outputs = mapAttrsToList renderPhocOutput phoc.outputs;
+    in
+    ''
+      [core]
+      xwayland = ${phoc.xwayland}
+      ${concatStringsSep "\n" outputs}
+      [cursor]
+      theme = ${phoc.cursorTheme}
+    '';
 in
 
 {
@@ -153,8 +172,12 @@ in
         description = ''
           Configurations for the Phoc compositor.
         '';
-        type = types.oneOf [ types.lines types.path phocConfigType ];
-        default = {};
+        type = types.oneOf [
+          types.lines
+          types.path
+          phocConfigType
+        ];
+        default = { };
       };
     };
   };
@@ -214,7 +237,7 @@ in
 
     programs.feedbackd.enable = true;
 
-    security.pam.services.phosh = {};
+    security.pam.services.phosh = { };
 
     hardware.graphics.enable = mkDefault true;
 
@@ -223,8 +246,11 @@ in
     services.displayManager.sessionPackages = [ cfg.package ];
 
     environment.etc."phosh/phoc.ini".source =
-      if builtins.isPath cfg.phocConfig then cfg.phocConfig
-      else if builtins.isString cfg.phocConfig then pkgs.writeText "phoc.ini" cfg.phocConfig
-      else pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
+      if builtins.isPath cfg.phocConfig then
+        cfg.phocConfig
+      else if builtins.isString cfg.phocConfig then
+        pkgs.writeText "phoc.ini" cfg.phocConfig
+      else
+        pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
   };
 }

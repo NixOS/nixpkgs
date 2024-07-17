@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, pkg-config
-, libssh
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  pkg-config,
+  libssh,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pentix/qjournalctl";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill srgom romildo ];
+    maintainers = with maintainers; [
+      dtzWill
+      srgom
+      romildo
+    ];
   };
 }

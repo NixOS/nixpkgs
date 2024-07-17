@@ -1,5 +1,15 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config
-, cairo, gdk-pixbuf, glib, libinput, libxml2, pango, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  libinput,
+  libxml2,
+  pango,
+  udev,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,7 +26,15 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-q0yx4QT6L1G+5PvstXjA4aa0kZPhQTpM8h69dd/1Mcw=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    libinput
+    libxml2
+    pango
+    udev
+  ];
 
   postConfigure = ''
     substituteInPlace etc/systemd/system/tiny-dfr.service \
@@ -32,7 +50,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
-    license = [ licenses.asl20 licenses.mit ];
+    license = [
+      licenses.asl20
+      licenses.mit
+    ];
     mainProgram = "tiny-dfr";
     maintainers = [ maintainers.qyliss ];
     platforms = platforms.linux;

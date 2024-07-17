@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, pkg-config
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  pkg-config,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  cmakeFlags = [
-    "-DBUILD_CODE_GEN=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_CODE_GEN=ON" ];
 
   meta = {
     homepage = "https://github.com/Kistler-Group/sdbus-cpp";

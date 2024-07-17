@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nlojet++";
@@ -9,20 +13,20 @@ stdenv.mkDerivation rec {
     sha256 = "18qfn5kjzvnyh29x40zm2maqzfmrnay9r58n8pfpq5lcphdhhv8p";
   };
 
-  patches = [
-    ./nlojet_clang_fix.patch
-  ];
+  patches = [ ./nlojet_clang_fix.patch ];
 
-  env.CXXFLAGS="-std=c++11";
+  env.CXXFLAGS = "-std=c++11";
 
   # error: no member named 'finite' in the global namespace; did you mean simply 'finite'?
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.isDarwin && stdenv.isAarch64
+  ) "-Dfinite=isfinite";
 
   meta = {
-    homepage    = "http://www.desy.de/~znagy/Site/NLOJet++.html";
-    license     = lib.licenses.gpl2;
+    homepage = "http://www.desy.de/~znagy/Site/NLOJet++.html";
+    license = lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

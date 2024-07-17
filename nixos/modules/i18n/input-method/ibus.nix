@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,9 +12,15 @@ let
   cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = lib.types.mkOptionType {
-    name  = "ibus-engine";
+    name = "ibus-engine";
     inherit (lib.types.package) descriptionClass merge;
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
+    check =
+      x:
+      (lib.types.package.check x)
+      && (attrByPath [
+        "meta"
+        "isIbusEngine"
+      ] false x);
   };
 
   impanel = optionalString (cfg.panel != null) "--panel=${cfg.panel}";
@@ -29,21 +40,33 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (mkRenamedOptionModule
+      [
+        "programs"
+        "ibus"
+        "plugins"
+      ]
+      [
+        "i18n"
+        "inputMethod"
+        "ibus"
+        "engines"
+      ]
+    )
   ];
 
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
-        type    = with types; listOf ibusEngine;
-        default = [];
+        type = with types; listOf ibusEngine;
+        default = [ ];
         example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
-            engines = concatStringsSep ", "
-              (map (name: "`${name}`") (attrNames enginesDrv));
-          in "Enabled IBus engines. Available engines are: ${engines}.";
+            engines = concatStringsSep ", " (map (name: "`${name}`") (attrNames enginesDrv));
+          in
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
@@ -57,18 +80,14 @@ in
   config = mkIf (imcfg.enable && imcfg.type == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
-    environment.systemPackages = [
-      ibusAutostart
-    ];
+    environment.systemPackages = [ ibusAutostart ];
 
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
     programs.dconf.packages = [ ibusPackage ];
 
-    services.dbus.packages = [
-      ibusPackage
-    ];
+    services.dbus.packages = [ ibusPackage ];
 
     environment.variables = {
       GTK_IM_MODULE = "ibus";
@@ -76,9 +95,7 @@ in
       XMODIFIERS = "@im=ibus";
     };
 
-    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
-      ibusPackage
-    ];
+    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [ ibusPackage ];
   };
 
   # uses attributes of the linked package

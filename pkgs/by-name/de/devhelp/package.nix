@@ -1,28 +1,32 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, glib
-, gobject-introspection
-, gi-docgen
-, webkitgtk_4_1
-, gettext
-, itstool
-, gsettings-desktop-schemas
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  glib,
+  gobject-introspection,
+  gi-docgen,
+  webkitgtk_4_1,
+  gettext,
+  itstool,
+  gsettings-desktop-schemas,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
   version = "43.0";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -51,9 +55,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   doCheck = true;
 
@@ -71,9 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "devhelp";
-    };
+    updateScript = gnome.updateScript { packageName = "devhelp"; };
   };
 
   meta = with lib; {

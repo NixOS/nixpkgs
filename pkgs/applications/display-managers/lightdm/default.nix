@@ -1,40 +1,45 @@
-{ lib, stdenv
-, buildPackages
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, plymouth
-, pam
-, pkg-config
-, autoconf
-, automake
-, libtool
-, libxcb
-, glib
-, libXdmcp
-, itstool
-, intltool
-, libxklavier
-, libgcrypt
-, audit
-, busybox
-, polkit
-, accountsservice
-, gtk-doc
-, gobject-introspection
-, vala
-, fetchpatch
-, withQt5 ? false
-, qtbase
-, yelp-tools
-, yelp-xsl
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  nix-update-script,
+  substituteAll,
+  plymouth,
+  pam,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  libxcb,
+  glib,
+  libXdmcp,
+  itstool,
+  intltool,
+  libxklavier,
+  libgcrypt,
+  audit,
+  busybox,
+  polkit,
+  accountsservice,
+  gtk-doc,
+  gobject-introspection,
+  vala,
+  fetchpatch,
+  withQt5 ? false,
+  qtbase,
+  yelp-tools,
+  yelp-xsl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
   version = "1.32.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -116,7 +121,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = nix-update-script { };
   };
-
 
   meta = with lib; {
     homepage = "https://github.com/canonical/lightdm";

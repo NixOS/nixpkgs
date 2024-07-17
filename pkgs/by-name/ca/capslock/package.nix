@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-WTbHcVARbz7cvAY7IZnACTrN5h9NXWXfxxEWq4hssOM=";
 
-  subPackages = [
-    "cmd/capslock"
-  ];
+  subPackages = [ "cmd/capslock" ];
 
   CGO_ENABLED = "0";
 

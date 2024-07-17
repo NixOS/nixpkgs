@@ -29,9 +29,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "aiofiles" ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     aiosqlite

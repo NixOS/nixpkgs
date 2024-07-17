@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, curl, openssl, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  curl,
+  openssl,
+  Security,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhv";
@@ -23,7 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ curl openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    curl
+    openssl
+  ] ++ lib.optional stdenv.isDarwin Security;
 
   cmakeFlags = [
     "-DENABLE_UDS=ON"

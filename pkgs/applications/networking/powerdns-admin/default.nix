@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, nixosTests, writeText, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  nixosTests,
+  writeText,
+  python3,
+}:
 
 let
   pname = "powerdns-admin";
@@ -13,16 +22,52 @@ let
   python = python3;
 
   pythonDeps = with python.pkgs; [
-    flask flask-assets flask-login flask-sqlalchemy flask-migrate flask-seasurf flask-mail flask-session flask-session-captcha flask-sslify
-    mysqlclient psycopg2 sqlalchemy
-    certifi cffi configobj cryptography bcrypt requests python-ldap pyotp qrcode dnspython
-    gunicorn itsdangerous python3-saml pytz rcssmin rjsmin authlib bravado-core
-    lima lxml passlib pyasn1 pytimeparse pyyaml jinja2 itsdangerous webcolors werkzeug zipp zxcvbn
+    flask
+    flask-assets
+    flask-login
+    flask-sqlalchemy
+    flask-migrate
+    flask-seasurf
+    flask-mail
+    flask-session
+    flask-session-captcha
+    flask-sslify
+    mysqlclient
+    psycopg2
+    sqlalchemy
+    certifi
+    cffi
+    configobj
+    cryptography
+    bcrypt
+    requests
+    python-ldap
+    pyotp
+    qrcode
+    dnspython
+    gunicorn
+    itsdangerous
+    python3-saml
+    pytz
+    rcssmin
+    rjsmin
+    authlib
+    bravado-core
+    lima
+    lxml
+    passlib
+    pyasn1
+    pytimeparse
+    pyyaml
+    jinja2
+    itsdangerous
+    webcolors
+    werkzeug
+    zipp
+    zxcvbn
   ];
 
-  all_patches = [
-    ./0001-Fix-flask-2.3-issue.patch
-  ];
+  all_patches = [ ./0001-Fix-flask-2.3-issue.patch ];
 
   assets = stdenv.mkDerivation {
     pname = "${pname}-assets";
@@ -33,12 +78,8 @@ let
       hash = "sha256-rXIts+dgOuZQGyiSke1NIG7b4lFlR/Gfu3J6T3wP3aY=";
     };
 
-    nativeBuildInputs = [
-      yarnConfigHook
-    ] ++ pythonDeps;
-    patches = all_patches ++ [
-      ./0002-Remove-cssrewrite-filter.patch
-    ];
+    nativeBuildInputs = [ yarnConfigHook ] ++ pythonDeps;
+    patches = all_patches ++ [ ./0002-Remove-cssrewrite-filter.patch ];
     buildPhase = ''
       SESSION_TYPE=filesystem FLASK_APP=./powerdnsadmin/__init__.py flask assets build
     '';
@@ -61,7 +102,8 @@ let
     assets.register('js_main', 'generated/main.js')
     assets.register('css_main', 'generated/main.css')
   '';
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ python.pkgs.wrapPython ];
@@ -120,6 +162,9 @@ in stdenv.mkDerivation {
     mainProgram = "powerdns-admin";
     homepage = "https://github.com/PowerDNS-Admin/PowerDNS-Admin";
     license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi zhaofengli ];
+    maintainers = with maintainers; [
+      Flakebi
+      zhaofengli
+    ];
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -21,9 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-warn 'LANGUAGES CXX' 'LANGUAGES NONE'
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   strictDeps = true;
 

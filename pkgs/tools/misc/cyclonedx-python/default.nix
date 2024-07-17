@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -34,9 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-jU/0FkQCyph59TnEE+lckJXsU9whfvWp7dkdfzprYw8=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with py.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with py.pkgs; [
     chardet
@@ -50,9 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   # The tests want access to the cyclonedx binary
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
+  pythonImportsCheck = [ "cyclonedx" ];
 
   meta = with lib; {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";

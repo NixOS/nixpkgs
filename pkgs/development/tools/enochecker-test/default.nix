@@ -1,22 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
 
-, certifi
-, charset-normalizer
-, enochecker-core
-, exceptiongroup
-, idna
-, iniconfig
-, jsons
-, packaging
-, pluggy
-, pytest
-, requests
-, tomli
-, typish
-, urllib3
+  certifi,
+  charset-normalizer,
+  enochecker-core,
+  exceptiongroup,
+  idna,
+  iniconfig,
+  jsons,
+  packaging,
+  pluggy,
+  pytest,
+  requests,
+  tomli,
+  typish,
+  urllib3,
 }:
 
 buildPythonApplication rec {
@@ -32,8 +33,7 @@ buildPythonApplication rec {
     hash = "sha256-M0RTstFePU7O51YVEncVDuuR6F7R8mfdKbO0j7k/o8Q=";
   };
 
-  nativeBuildInputs = [
-  ];
+  nativeBuildInputs = [ ];
 
   pythonRelaxDeps = true;
 

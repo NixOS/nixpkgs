@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, python3Packages, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  python3Packages,
+  texinfo,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "rubber";
@@ -48,7 +54,10 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/latex-rubber/rubber";
-    maintainers = with maintainers; [ ttuegel peterhoeg ];
+    maintainers = with maintainers; [
+      ttuegel
+      peterhoeg
+    ];
     platforms = platforms.unix;
     mainProgram = "rubber";
   };

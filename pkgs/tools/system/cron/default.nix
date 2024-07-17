@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail"}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vim,
+  sendmailPath ? "/usr/sbin/sendmail",
+}:
 
 stdenv.mkDerivation rec {
   pname = "cron";

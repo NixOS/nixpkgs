@@ -1,9 +1,10 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, writeText
-, writeScript
-, gzip
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  writeText,
+  writeScript,
+  gzip,
 }:
 
 let

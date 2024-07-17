@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python,
+}:
 
 python.pkgs.buildPythonApplication rec {
   pname = "brotab";
@@ -37,9 +42,7 @@ python.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/balta2ar/brotab";

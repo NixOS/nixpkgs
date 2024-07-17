@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cudd";
@@ -14,9 +19,7 @@ stdenv.mkDerivation rec {
     "--enable-obj"
   ];
 
-  patches = [
-    ./cudd.patch
-  ];
+  patches = [ ./cudd.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

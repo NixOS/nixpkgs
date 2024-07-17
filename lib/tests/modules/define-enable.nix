@@ -1,3 +1,1 @@
-{
-  enable = true;
-}
+{ enable = true; }

@@ -1,4 +1,10 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, bundlerUpdateScript }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  makeWrapper,
+  bundlerUpdateScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jsduck";
@@ -26,9 +32,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple JavaScript Duckumentation generator";
     mainProgram = "jsduck";
-    homepage    = "https://github.com/senchalabs/jsduck";
-    license     = with licenses; gpl3;
-    maintainers = with maintainers; [ periklis nicknovitski ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/senchalabs/jsduck";
+    license = with licenses; gpl3;
+    maintainers = with maintainers; [
+      periklis
+      nicknovitski
+    ];
+    platforms = platforms.unix;
   };
 }

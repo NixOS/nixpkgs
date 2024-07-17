@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, vala
-, gobject-introspection
-, wrapGAppsHook3
-, gsettings-desktop-schemas
-, gspell
-, libgedit-gtksourceview
-, libgedit-tepl
-, libgee
-, adwaita-icon-theme
-, gnome
-, glib
-, pkg-config
-, gettext
-, itstool
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  vala,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  gspell,
+  libgedit-gtksourceview,
+  libgedit-tepl,
+  libgee,
+  adwaita-icon-theme,
+  gnome,
+  glib,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,9 +61,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  configureFlags = [
-    "--disable-dconf-migration"
-  ];
+  configureFlags = [ "--disable-dconf-migration" ];
 
   doCheck = true;
 
@@ -76,7 +75,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
     description = "LaTeX editor for the GNOME desktop";
-    maintainers = with maintainers; [ manveru bobby285271 ];
+    maintainers = with maintainers; [
+      manveru
+      bobby285271
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "gnome-latex";

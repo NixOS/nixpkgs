@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gradle_7
-, makeWrapper
-, jdk
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle_7,
+  makeWrapper,
+  jdk,
+  gsettings-desktop-schemas,
 }:
 
 let
@@ -28,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "revision = git.head().id" "revision = '${finalAttrs.version}'"
   '';
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;

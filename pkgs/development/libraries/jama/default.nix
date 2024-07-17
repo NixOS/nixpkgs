@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, unzip, tnt}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  tnt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jama";
@@ -13,12 +19,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ tnt ];
 
   unpackPhase = ''
-      mkdir "${pname}-${version}"
-      unzip "$src"
+    mkdir "${pname}-${version}"
+    unzip "$src"
   '';
   installPhase = ''
-      mkdir -p $out/include
-      cp *.h $out/include
+    mkdir -p $out/include
+    cp *.h $out/include
   '';
 
   meta = with lib; {

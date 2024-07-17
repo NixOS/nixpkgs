@@ -1,16 +1,17 @@
-{ lib
-, unstableGitUpdater
-, buildPythonApplication
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, requests
-, protobuf
-, pycryptodome
-, zstandard
-, json5
-, platformdirs
-, cacert
+{
+  lib,
+  unstableGitUpdater,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
+  protobuf,
+  pycryptodome,
+  zstandard,
+  json5,
+  platformdirs,
+  cacert,
 }:
 
 buildPythonApplication rec {
@@ -56,7 +57,5 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 }

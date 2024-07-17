@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-XRN5zQgyBbMxDKAutW3XNIAbBVdAeXZtxsNbmjLyKRc=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     colorama
@@ -30,9 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     termcolor
   ];
 
-  pythonImportsCheck = [
-    "forbidden"
-  ];
+  pythonImportsCheck = [ "forbidden" ];
 
   meta = with lib; {
     description = "Tool to bypass 4xx HTTP response status code";

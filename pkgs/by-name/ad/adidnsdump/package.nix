@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,18 +16,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-dIbnUyV3gdWHHoyzD0ME2fXlMoiQkdrqQ7qQ6Ab6qs0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     impacket
     ldap3
   ];
 
-  pythonImportsCheck = [
-    "adidnsdump"
-  ];
+  pythonImportsCheck = [ "adidnsdump" ];
 
   meta = with lib; {
     description = "Active Directory Integrated DNS dumping by any authenticated user";

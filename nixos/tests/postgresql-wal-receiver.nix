@@ -1,7 +1,8 @@
-{ system ? builtins.currentSystem,
-  config ? {},
+{
+  system ? builtins.currentSystem,
+  config ? { },
   pkgs ? import ../.. { inherit system config; },
-  package ? null
+  package ? null,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -10,13 +11,13 @@ let
   lib = pkgs.lib;
 
   # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
-  makeTestAttribute = name:
-  {
+  makeTestAttribute = name: {
     inherit name;
     value = makePostgresqlWalReceiverTest pkgs."${name}";
   };
 
-  makePostgresqlWalReceiverTest = pkg:
+  makePostgresqlWalReceiverTest =
+    pkg:
     let
       postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
       replicationUser = "wal_receiver_user";
@@ -27,40 +28,43 @@ let
 
       recoveryFile = pkgs.writeTextDir "recovery.signal" "";
 
-    in makeTest {
+    in
+    makeTest {
       name = "postgresql-wal-receiver-${pkg.name}";
       meta.maintainers = with lib.maintainers; [ pacien ];
 
-      nodes.machine = { ... }: {
-        services.postgresql = {
-          package = pkg;
-          enable = true;
-          settings = {
-            max_replication_slots = 10;
-            max_wal_senders = 10;
-            recovery_end_command = "touch recovery.done";
-            restore_command = "cp ${walBackupDir}/%f %p";
-            wal_level = "archive"; # alias for replica on pg >= 9.6
+      nodes.machine =
+        { ... }:
+        {
+          services.postgresql = {
+            package = pkg;
+            enable = true;
+            settings = {
+              max_replication_slots = 10;
+              max_wal_senders = 10;
+              recovery_end_command = "touch recovery.done";
+              restore_command = "cp ${walBackupDir}/%f %p";
+              wal_level = "archive"; # alias for replica on pg >= 9.6
+            };
+            authentication = ''
+              host replication ${replicationUser} all trust
+            '';
+            initialScript = pkgs.writeText "init.sql" ''
+              create user ${replicationUser} replication;
+              select * from pg_create_physical_replication_slot('${replicationSlot}');
+            '';
           };
-          authentication = ''
-            host replication ${replicationUser} all trust
-          '';
-          initialScript = pkgs.writeText "init.sql" ''
-            create user ${replicationUser} replication;
-            select * from pg_create_physical_replication_slot('${replicationSlot}');
-          '';
-        };
 
-        services.postgresqlWalReceiver.receivers.main = {
-          postgresqlPackage = pkg;
-          connection = replicationConn;
-          slot = replicationSlot;
-          directory = walBackupDir;
+          services.postgresqlWalReceiver.receivers.main = {
+            postgresqlPackage = pkg;
+            connection = replicationConn;
+            slot = replicationSlot;
+            directory = walBackupDir;
+          };
+          # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
+          # default 60sec is fine for real system, but is too much for a test
+          systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = lib.mkForce 5;
         };
-        # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
-        # default 60sec is fine for real system, but is too much for a test
-        systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = lib.mkForce 5;
-      };
 
       testScript = ''
         # make an initial base backup
@@ -113,7 +117,9 @@ let
 in
 if package == null then
   # all-tests.nix: Maps the generic function over all attributes of PostgreSQL packages
-  builtins.listToAttrs (map makeTestAttribute (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs)))
+  builtins.listToAttrs (
+    map makeTestAttribute (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs))
+  )
 else
   # Called directly from <package>.tests
   makePostgresqlWalReceiverTest package

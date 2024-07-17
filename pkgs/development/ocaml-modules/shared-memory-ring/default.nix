@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_cstruct
-, cstruct
-, lwt
-, ounit
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  cstruct,
+  lwt,
+  ounit,
 }:
 
 buildDunePackage rec {
@@ -18,13 +19,9 @@ buildDunePackage rec {
     hash = "sha256-qSdntsPQo0/8JlbOoO6NAYtoa86HJy5yWHUsWi/PGDM=";
   };
 
-  buildInputs = [
-    ppx_cstruct
-  ];
+  buildInputs = [ ppx_cstruct ];
 
-  propagatedBuildInputs = [
-    cstruct
-  ];
+  propagatedBuildInputs = [ cstruct ];
 
   doCheck = true;
   checkInputs = [

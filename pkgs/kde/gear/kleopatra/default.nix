@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kleopatra";
 
-  extraNativeBuildInputs = [shared-mime-info];
-  extraBuildInputs = [akonadi-mime];
+  extraNativeBuildInputs = [ shared-mime-info ];
+  extraBuildInputs = [ akonadi-mime ];
 }

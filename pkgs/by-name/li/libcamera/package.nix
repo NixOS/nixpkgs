@@ -1,26 +1,27 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, pkg-config
-, makeFontsConf
-, openssl
-, libdrm
-, libevent
-, libyaml
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-, systemd # for libudev
-, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
-, lttng-ust # withTracing
-, withQcam ? false
-, qt5 # withQcam
-, libtiff # withQcam
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  makeFontsConf,
+  openssl,
+  libdrm,
+  libevent,
+  libyaml,
+  gst_all_1,
+  gtest,
+  graphviz,
+  doxygen,
+  python3,
+  python3Packages,
+  systemd, # for libudev
+  withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
+  lttng-ust, # withTracing
+  withQcam ? false,
+  qt5, # withQcam
+  libtiff, # withQcam
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-eCtOtdjpwn0S56ZyRVdG1QCBk1KGPh8YTXD50xev7Bc=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs src/py/ utils/
@@ -53,27 +57,33 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    systemd
+      # hotplugging
+      systemd
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ] ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+      gtest
+    ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt5.qtbase
+      qt5.qttools
+    ];
 
   nativeBuildInputs = [
     meson

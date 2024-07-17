@@ -2,20 +2,33 @@
 
 let
   inherit (lib)
-    attrNames concatMap concatMapStrings flip forEach head
-    listToAttrs mkDefault mkOption nameValuePair optionalString
-    range toLower types zipListsWith zipLists
+    attrNames
+    concatMap
+    concatMapStrings
+    flip
+    forEach
+    head
+    listToAttrs
+    mkDefault
+    mkOption
+    nameValuePair
+    optionalString
+    range
+    toLower
+    types
+    zipListsWith
+    zipLists
     ;
 
-  nodeNumbers =
-    listToAttrs
-      (zipListsWith
-        nameValuePair
-        (attrNames nodes)
-        (range 1 254)
-      );
+  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodes) (range 1 254));
 
-  networkModule = { config, nodes, pkgs, ... }:
+  networkModule =
+    {
+      config,
+      nodes,
+      pkgs,
+      ...
+    }:
     let
       qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
 
@@ -31,45 +44,60 @@ let
 
       # Automatically assign IP addresses to requested interfaces.
       assignIPs = lib.filter (i: i.assignIP) interfaces;
-      ipInterfaces = forEach assignIPs (i:
-        nameValuePair i.name { ipv4.addresses =
-          [ { address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
+      ipInterfaces = forEach assignIPs (
+        i:
+        nameValuePair i.name {
+          ipv4.addresses = [
+            {
+              address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
               prefixLength = 24;
-            }];
-        });
+            }
+          ];
+        }
+      );
 
-      qemuOptions = lib.flatten (forEach interfacesNumbered ({ fst, snd }:
-        qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber));
-      udevRules = forEach interfacesNumbered ({ fst, snd }:
+      qemuOptions = lib.flatten (
+        forEach interfacesNumbered (
+          { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
+        )
+      );
+      udevRules = forEach interfacesNumbered (
+        { fst, snd }:
         # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower(qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"'');
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"''
+      );
 
-      networkConfig =
-        {
-          networking.hostName = mkDefault config.virtualisation.test.nodeName;
+      networkConfig = {
+        networking.hostName = mkDefault config.virtualisation.test.nodeName;
 
-          networking.interfaces = listToAttrs ipInterfaces;
+        networking.interfaces = listToAttrs ipInterfaces;
 
-          networking.primaryIPAddress =
-            optionalString (ipInterfaces != [ ]) (head (head ipInterfaces).value.ipv4.addresses).address;
+        networking.primaryIPAddress =
+          optionalString (ipInterfaces != [ ])
+            (head (head ipInterfaces).value.ipv4.addresses).address;
 
-          # Put the IP addresses of all VMs in this machine's
-          # /etc/hosts file.  If a machine has multiple
-          # interfaces, use the IP address corresponding to
-          # the first interface (i.e. the first network in its
-          # virtualisation.vlans option).
-          networking.extraHosts = flip concatMapStrings (attrNames nodes)
-            (m':
-              let config = nodes.${m'}; in
-              optionalString (config.networking.primaryIPAddress != "")
-                ("${config.networking.primaryIPAddress} " +
-                  optionalString (config.networking.domain != null)
-                    "${config.networking.hostName}.${config.networking.domain} " +
-                  "${config.networking.hostName}\n"));
+        # Put the IP addresses of all VMs in this machine's
+        # /etc/hosts file.  If a machine has multiple
+        # interfaces, use the IP address corresponding to
+        # the first interface (i.e. the first network in its
+        # virtualisation.vlans option).
+        networking.extraHosts = flip concatMapStrings (attrNames nodes) (
+          m':
+          let
+            config = nodes.${m'};
+          in
+          optionalString (config.networking.primaryIPAddress != "") (
+            "${config.networking.primaryIPAddress} "
+            + optionalString (
+              config.networking.domain != null
+            ) "${config.networking.hostName}.${config.networking.domain} "
+            + "${config.networking.hostName}\n"
+          )
+        );
 
-          virtualisation.qemu.options = qemuOptions;
-          boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
-        };
+        virtualisation.qemu.options = qemuOptions;
+        boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+      };
 
     in
     {
@@ -81,50 +109,60 @@ let
       };
     };
 
-  nodeNumberModule = (regular@{ config, name, ... }: {
-    options = {
-      virtualisation.test.nodeName = mkOption {
-        internal = true;
-        default = name;
-        # We need to force this in specilisations, otherwise it'd be
-        # readOnly = true;
-        description = ''
-          The `name` in `nodes.<name>`; stable across `specialisations`.
-        '';
-      };
-      virtualisation.test.nodeNumber = mkOption {
-        internal = true;
-        type = types.int;
-        readOnly = true;
-        default = nodeNumbers.${config.virtualisation.test.nodeName};
-        description = ''
-          A unique number assigned for each node in `nodes`.
-        '';
-      };
+  nodeNumberModule = (
+    regular@{ config, name, ... }:
+    {
+      options = {
+        virtualisation.test.nodeName = mkOption {
+          internal = true;
+          default = name;
+          # We need to force this in specilisations, otherwise it'd be
+          # readOnly = true;
+          description = ''
+            The `name` in `nodes.<name>`; stable across `specialisations`.
+          '';
+        };
+        virtualisation.test.nodeNumber = mkOption {
+          internal = true;
+          type = types.int;
+          readOnly = true;
+          default = nodeNumbers.${config.virtualisation.test.nodeName};
+          description = ''
+            A unique number assigned for each node in `nodes`.
+          '';
+        };
 
-      # specialisations override the `name` module argument,
-      # so we push the real `virtualisation.test.nodeName`.
-      specialisation = mkOption {
-        type = types.attrsOf (types.submodule {
-          options.configuration = mkOption {
-            type = types.submoduleWith {
-              modules = [
-                {
-                  config.virtualisation.test.nodeName =
-                    # assert regular.config.virtualisation.test.nodeName != "configuration";
-                    regular.config.virtualisation.test.nodeName;
-                }
-              ];
-            };
-          };
-        });
+        # specialisations override the `name` module argument,
+        # so we push the real `virtualisation.test.nodeName`.
+        specialisation = mkOption {
+          type = types.attrsOf (
+            types.submodule {
+              options.configuration = mkOption {
+                type = types.submoduleWith {
+                  modules = [
+                    {
+                      config.virtualisation.test.nodeName =
+                        # assert regular.config.virtualisation.test.nodeName != "configuration";
+                        regular.config.virtualisation.test.nodeName;
+                    }
+                  ];
+                };
+              };
+            }
+          );
+        };
       };
-    };
-  });
+    }
+  );
 
 in
 {
   config = {
-    extraBaseModules = { imports = [ networkModule nodeNumberModule ]; };
+    extraBaseModules = {
+      imports = [
+        networkModule
+        nodeNumberModule
+      ];
+    };
   };
 }

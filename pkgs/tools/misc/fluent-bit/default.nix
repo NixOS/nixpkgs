@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, flex
-, bison
-, systemd
-, postgresql
-, openssl
-, libyaml
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  flex,
+  bison,
+  systemd,
+  postgresql,
+  openssl,
+  libyaml,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,19 +26,30 @@ stdenv.mkDerivation (finalAttrs: {
   # optional only to avoid linux rebuild
   patches = lib.optionals stdenv.isDarwin [ ./macos-11-sdk-compat.patch ];
 
-  nativeBuildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [
+    cmake
+    flex
+    bison
+  ];
 
-  buildInputs = [ openssl libyaml postgresql ]
+  buildInputs =
+    [
+      openssl
+      libyaml
+      postgresql
+    ]
     ++ lib.optionals stdenv.isLinux [ systemd ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.IOKit darwin.apple_sdk_11_0.frameworks.Foundation ];
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.IOKit
+      darwin.apple_sdk_11_0.frameworks.Foundation
+    ];
 
   cmakeFlags = [
     "-DFLB_RELEASE=ON"
     "-DFLB_METRICS=ON"
     "-DFLB_HTTP_SERVER=ON"
     "-DFLB_OUT_PGSQL=ON"
-  ]
-  ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Used by the embedded luajit, but is not predefined on older mac SDKs.
@@ -47,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
   );
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -59,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
+    maintainers = [
+      lib.maintainers.samrose
+      lib.maintainers.fpletz
+    ];
     platforms = lib.platforms.unix;
   };
 })

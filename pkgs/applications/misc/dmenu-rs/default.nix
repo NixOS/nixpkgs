@@ -1,15 +1,16 @@
-{ stdenv
-, rustPlatform
-, lib
-, fetchFromGitHub
-, cargo
-, expat
-, fontconfig
-, libXft
-, libXinerama
-, m4
-, pkg-config
-, python3
+{
+  stdenv,
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  expat,
+  fontconfig,
+  libXft,
+  libXinerama,
+  m4,
+  pkg-config,
+  python3,
 }:
 
 # The dmenu-rs package has extensive plugin support. However, this derivation
@@ -47,9 +48,7 @@ stdenv.mkDerivation rec {
   # dynamic build and plugin support. Generating it with make and checking it
   # in to nixpkgs here was the easiest way to supply it to rustPlatform.
   # See: https://github.com/Shizcow/dmenu-rs/issues/34#issuecomment-757415584
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   # Copy the Cargo.lock stored here in nixpkgs into the build directory.
   postPatch = ''

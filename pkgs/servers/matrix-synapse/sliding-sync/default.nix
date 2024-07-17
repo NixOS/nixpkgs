@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -31,7 +32,10 @@ buildGoModule rec {
     description = "Sliding sync implementation of MSC3575 for matrix";
     homepage = "https://github.com/matrix-org/sliding-sync";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ emilylange yayayayaka ];
+    maintainers = with maintainers; [
+      emilylange
+      yayayayaka
+    ];
     mainProgram = "syncv3";
   };
 }

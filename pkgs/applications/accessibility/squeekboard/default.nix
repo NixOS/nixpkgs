@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cargo
-, meson
-, ninja
-, pkg-config
-, gnome
-, gnome-desktop
-, glib
-, gtk3
-, wayland
-, wayland-protocols
-, libbsd
-, libxml2
-, libxkbcommon
-, rustPlatform
-, rustc
-, feedbackd
-, wrapGAppsHook3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gnome-desktop,
+  glib,
+  gtk3,
+  wayland,
+  wayland-protocols,
+  libbsd,
+  libxml2,
+  libxkbcommon,
+  rustPlatform,
+  rustc,
+  feedbackd,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

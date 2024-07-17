@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, sassc
-, pkg-config
-, glib
-, ninja
-, python3
-, gtk3
-, gnome-themes-extra
-, gtk-engine-murrine
-, humanity-icon-theme
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  sassc,
+  pkg-config,
+  glib,
+  ninja,
+  python3,
+  gtk3,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  humanity-icon-theme,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-Z0qW3hW5Sije5Hn6OB9f5M6xnmMmRnP76p0kjiQZznw=";
   };
 
-  nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
-  buildInputs = [ gtk3 gnome-themes-extra ];
-  propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
+  nativeBuildInputs = [
+    meson
+    sassc
+    pkg-config
+    glib
+    ninja
+    python3
+  ];
+  buildInputs = [
+    gtk3
+    gnome-themes-extra
+  ];
+  propagatedBuildInputs = [
+    humanity-icon-theme
+    hicolor-icon-theme
+  ];
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontDropIconThemeCache = true;
@@ -37,7 +51,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
-    license = with licenses; [ cc-by-sa-40 gpl3Plus lgpl21Only lgpl3Only ];
+    license = with licenses; [
+      cc-by-sa-40
+      gpl3Plus
+      lgpl21Only
+      lgpl3Only
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ moni ];
   };

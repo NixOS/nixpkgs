@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, distrobox
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  distrobox,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,9 +34,7 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
   postInstall = ''
     cp icons/* ./

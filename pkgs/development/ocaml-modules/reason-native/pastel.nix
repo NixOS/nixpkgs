@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, reason, re, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  re,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -8,13 +14,9 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.05";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
-  propagatedBuildInputs = [
-    re
-  ];
+  propagatedBuildInputs = [ re ];
 
   meta = {
     description = "Text formatting library that harnesses Reason JSX to provide intuitive terminal output. Like React but for CLI";

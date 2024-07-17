@@ -1,4 +1,11 @@
-{ stdenv, lib, kotatogram-desktop, glib-networking, webkitgtk_6_0, makeWrapper }:
+{
+  stdenv,
+  lib,
+  kotatogram-desktop,
+  glib-networking,
+  webkitgtk_6_0,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation {
   pname = "${kotatogram-desktop.pname}-with-webkit";

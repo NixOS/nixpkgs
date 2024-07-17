@@ -20,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-XmAQXu9YkkMUvpf/QVk4u1p8UyNfRb0NeoLxC1evCT4=";
   };
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   pythonRemoveDeps = [
     "pytest-runner"

@@ -1,6 +1,11 @@
 # Seahorse.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -16,20 +21,15 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.programs.seahorse.enable {
 
     programs.ssh.askPassword = lib.mkDefault "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
 
-    environment.systemPackages = [
-      pkgs.seahorse
-    ];
+    environment.systemPackages = [ pkgs.seahorse ];
 
-    services.dbus.packages = [
-      pkgs.seahorse
-    ];
+    services.dbus.packages = [ pkgs.seahorse ];
 
   };
 

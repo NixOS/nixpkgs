@@ -29,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-Sr7L3ioeofyADHb1NSgs0GmVbzX7rro7yhhG9Gq6GJE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonRelaxDeps = [ "django-phonenumber-field" ];
 

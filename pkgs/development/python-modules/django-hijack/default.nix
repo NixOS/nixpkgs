@@ -32,10 +32,10 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/addopts/d" pyproject.toml
+      sed -i "/addopts/d" pyproject.toml
 
-  # missing integrity hashes for yocto-queue, yargs-parser
-    cp ${./package-lock.json} package-lock.json
+    # missing integrity hashes for yocto-queue, yargs-parser
+      cp ${./package-lock.json} package-lock.json
   '';
 
   npmDeps = fetchNpmDeps {

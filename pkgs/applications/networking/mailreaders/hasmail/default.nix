@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, pango
-, cairo
-, gtk2
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  pango,
+  cairo,
+  gtk2,
 }:
 
 buildGoModule rec {
@@ -22,9 +23,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     pango

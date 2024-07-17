@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, dune-configurator }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "parmap";
@@ -13,9 +18,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
-  buildInputs = [
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
 
   doCheck = false; # prevent running slow benchmarks
 

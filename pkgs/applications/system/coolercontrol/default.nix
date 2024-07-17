@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitLab
-, callPackage
+{
+  lib,
+  fetchFromGitLab,
+  callPackage,
 }:
 
 let
@@ -18,7 +19,10 @@ let
     homepage = "https://gitlab.com/coolercontrol/coolercontrol";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ codifryed OPNA2608 ];
+    maintainers = with maintainers; [
+      codifryed
+      OPNA2608
+    ];
   };
 
   applySharedDetails = drv: drv { inherit version src meta; };

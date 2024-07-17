@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, bzip2
-, db
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  bzip2,
+  db,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
   buildInputs = [
     bzip2

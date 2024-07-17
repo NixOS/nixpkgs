@@ -1,4 +1,9 @@
-{ buildGoModule, lib, installShellFiles, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  installShellFiles,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "deck";

@@ -47,17 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./qodem-fix-miniupnpc-2.2.8.patch
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     ncurses
     SDL
     miniupnpc
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
-    gpm
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [ gpm ];
 
   configureFlags = lib.optionals (!(lib.meta.availableOn stdenv.hostPlatform gpm)) [
     "--disable-gpm"

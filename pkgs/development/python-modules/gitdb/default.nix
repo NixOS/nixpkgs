@@ -20,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-v1QhEmE21tCvVbwefBrxw5ejT1t71553bNPol4XCsEs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [ "smmap" ];
 

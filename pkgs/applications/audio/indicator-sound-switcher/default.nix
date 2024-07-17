@@ -1,15 +1,18 @@
-{ python3Packages
-, lib
-, fetchFromGitHub
-, gettext
-, gtk3
-, gobject-introspection
-, intltool, wrapGAppsHook3, glib
-, librsvg
-, libayatana-appindicator
-, libpulseaudio
-, keybinder3
-, gdk-pixbuf
+{
+  python3Packages,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  gtk3,
+  gobject-introspection,
+  intltool,
+  wrapGAppsHook3,
+  glib,
+  librsvg,
+  libayatana-appindicator,
+  libpulseaudio,
+  keybinder3,
+  gdk-pixbuf,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -37,9 +40,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    librsvg
-  ];
+  buildInputs = [ librsvg ];
 
   propagatedBuildInputs = [
     python3Packages.setuptools

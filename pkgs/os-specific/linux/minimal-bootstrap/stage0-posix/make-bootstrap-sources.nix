@@ -11,10 +11,11 @@
 #   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
 #
 
-{ lib
-, hostPlatform
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  hostPlatform,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 let
@@ -42,10 +43,12 @@ fetchFromGitHub {
 
     # aarch64: syscall: mkdir -> mkdirat
     # https://github.com/oriansj/M2libc/pull/17
-    patch -Np1 -d $out/M2libc -i ${(fetchpatch {
-      url = "https://github.com/oriansj/M2libc/commit/ff7c3023b3ab6cfcffc5364620b25f8d0279e96b.patch";
-      hash = "sha256-QAKddv4TixIQHpFa9SVu9fAkeKbzhQaxjaWzW2yJy7A=";
-    })}
+    patch -Np1 -d $out/M2libc -i ${
+      (fetchpatch {
+        url = "https://github.com/oriansj/M2libc/commit/ff7c3023b3ab6cfcffc5364620b25f8d0279e96b.patch";
+        hash = "sha256-QAKddv4TixIQHpFa9SVu9fAkeKbzhQaxjaWzW2yJy7A=";
+      })
+    }
   '';
 
   meta = with lib; {

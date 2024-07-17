@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, vulkan-headers
-, vulkan-loader
-, fmt
-, glslang
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  vulkan-headers,
+  vulkan-loader,
+  fmt,
+  glslang,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,16 @@ stdenv.mkDerivation rec {
     "-DKOMPUTE_ENABLE_SPDLOG=1"
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
   buildInputs = [ fmt ];
-  propagatedBuildInputs = [ glslang vulkan-headers vulkan-loader ];
+  propagatedBuildInputs = [
+    glslang
+    vulkan-headers
+    vulkan-loader
+  ];
 
   meta = with lib; {
     description = "General purpose GPU compute framework built on Vulkan";

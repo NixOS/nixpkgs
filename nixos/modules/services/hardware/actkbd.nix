@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,42 +12,57 @@ let
   cfg = config.services.actkbd;
 
   configFile = pkgs.writeText "actkbd.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, events, attributes, command, ... }:
-        ''${concatMapStringsSep "+" toString keys}:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
-      )
-      cfg.bindings}
+    ${concatMapStringsSep "\n" (
+      {
+        keys,
+        events,
+        attributes,
+        command,
+        ...
+      }:
+      ''${
+        concatMapStringsSep "+" toString keys
+      }:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
+    ) cfg.bindings}
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { ... }: {
-    options = {
+  bindingCfg =
+    { ... }:
+    {
+      options = {
 
-      keys = mkOption {
-        type = types.listOf types.int;
-        description = "List of keycodes to match.";
+        keys = mkOption {
+          type = types.listOf types.int;
+          description = "List of keycodes to match.";
+        };
+
+        events = mkOption {
+          type = types.listOf (
+            types.enum [
+              "key"
+              "rep"
+              "rel"
+            ]
+          );
+          default = [ "key" ];
+          description = "List of events to match.";
+        };
+
+        attributes = mkOption {
+          type = types.listOf types.str;
+          default = [ "exec" ];
+          description = "List of attributes.";
+        };
+
+        command = mkOption {
+          type = types.str;
+          default = "";
+          description = "What to run.";
+        };
+
       };
-
-      events = mkOption {
-        type = types.listOf (types.enum ["key" "rep" "rel"]);
-        default = [ "key" ];
-        description = "List of events to match.";
-      };
-
-      attributes = mkOption {
-        type = types.listOf types.str;
-        default = [ "exec" ];
-        description = "List of attributes.";
-      };
-
-      command = mkOption {
-        type = types.str;
-        default = "";
-        description = "What to run.";
-      };
-
     };
-  };
 
 in
 
@@ -73,7 +93,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
@@ -99,18 +119,19 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "actkbd-udev-rules";
-      destination = "/etc/udev/rules.d/61-actkbd.rules";
-      text = ''
-        ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ENV{ID_INPUT_KEY}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="actkbd@$env{DEVNAME}.service"
-      '';
-    });
+    services.udev.packages = lib.singleton (
+      pkgs.writeTextFile {
+        name = "actkbd-udev-rules";
+        destination = "/etc/udev/rules.d/61-actkbd.rules";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ENV{ID_INPUT_KEY}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="actkbd@$env{DEVNAME}.service"
+        '';
+      }
+    );
 
     systemd.services."actkbd@" = {
       enable = true;

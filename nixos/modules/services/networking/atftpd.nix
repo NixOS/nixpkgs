@@ -1,6 +1,11 @@
 # NixOS module for atftpd TFTP server
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -26,7 +31,7 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example = literalExpression ''
           [ "--bind-address 192.168.9.1"

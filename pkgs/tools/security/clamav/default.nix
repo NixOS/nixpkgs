@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd, Foundation, json_c, check
-, rustc, rust-bindgen, rustfmt, cargo, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  zlib,
+  bzip2,
+  libiconv,
+  libxml2,
+  openssl,
+  ncurses,
+  curl,
+  libmilter,
+  pcre2,
+  libmspack,
+  systemd,
+  Foundation,
+  json_c,
+  check,
+  rustc,
+  rust-bindgen,
+  rustfmt,
+  cargo,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +41,29 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustc
+    rust-bindgen
+    rustfmt
+    cargo
+    python3
+  ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
-  ] ++ lib.optional stdenv.isLinux systemd
-    ++ lib.optional stdenv.isDarwin Foundation;
+    zlib
+    bzip2
+    libxml2
+    openssl
+    ncurses
+    curl
+    libiconv
+    libmilter
+    pcre2
+    libmspack
+    json_c
+    check
+  ] ++ lib.optional stdenv.isLinux systemd ++ lib.optional stdenv.isDarwin Foundation;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
@@ -33,15 +72,17 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
-    python3.pkgs.pytest
-  ];
+  checkInputs = [ python3.pkgs.pytest ];
 
   meta = with lib; {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ robberer qknight globin ];
+    maintainers = with maintainers; [
+      robberer
+      qknight
+      globin
+    ];
     platforms = platforms.unix;
   };
 }

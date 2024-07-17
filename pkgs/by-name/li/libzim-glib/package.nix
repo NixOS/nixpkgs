@@ -22,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C1f/ULTJIHvt/LCSRw3dsGAWUkb1i4xaCmW1+QBZd2c=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson

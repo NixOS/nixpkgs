@@ -23,9 +23,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "llama-parse" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     llama-parse

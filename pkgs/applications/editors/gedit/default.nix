@@ -1,38 +1,42 @@
-{ stdenv
-, lib
-, meson
-, mesonEmulatorHook
-, fetchurl
-, python3
-, python3Packages
-, pkg-config
-, gtk3
-, gtk-mac-integration
-, glib
-, libgedit-amtk
-, libgedit-gtksourceview
-, libgedit-tepl
-, libpeas
-, libxml2
-, gsettings-desktop-schemas
-, wrapGAppsHook3
-, gtk-doc
-, gobject-introspection
-, docbook-xsl-nons
-, ninja
-, gnome
-, gspell
-, perl
-, itstool
-, desktop-file-utils
-, vala
+{
+  stdenv,
+  lib,
+  meson,
+  mesonEmulatorHook,
+  fetchurl,
+  python3,
+  python3Packages,
+  pkg-config,
+  gtk3,
+  gtk-mac-integration,
+  glib,
+  libgedit-amtk,
+  libgedit-gtksourceview,
+  libgedit-tepl,
+  libpeas,
+  libxml2,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
+  gtk-doc,
+  gobject-introspection,
+  docbook-xsl-nons,
+  ninja,
+  gnome,
+  gspell,
+  perl,
+  itstool,
+  desktop-file-utils,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
   version = "47.0";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
@@ -60,9 +64,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gobject-introspection
     docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     glib
@@ -73,9 +75,7 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
     libgedit-tepl
     libpeas
-  ] ++ lib.optionals stdenv.isDarwin [
-    gtk-mac-integration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ gtk-mac-integration ];
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
@@ -98,9 +98,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gedit";
-    };
+    updateScript = gnome.updateScript { packageName = "gedit"; };
   };
 
   meta = with lib; {

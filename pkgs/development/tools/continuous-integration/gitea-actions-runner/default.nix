@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitea
-, buildGoModule
-, testers
-, gitea-actions-runner
+{
+  lib,
+  fetchFromGitea,
+  buildGoModule,
+  testers,
+  gitea-actions-runner,
 }:
 
 buildGoModule rec {

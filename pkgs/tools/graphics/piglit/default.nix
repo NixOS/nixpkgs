@@ -1,21 +1,22 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, cmake
-, libglut
-, libGL
-, libGLU
-, libglvnd
-, makeWrapper
-, ninja
-, pkg-config
-, python3
-, waffle
-, wayland
-, libX11
-, libXrender
-, libxcb
-, libxkbcommon
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  cmake,
+  libglut,
+  libGL,
+  libGLU,
+  libglvnd,
+  makeWrapper,
+  ninja,
+  pkg-config,
+  python3,
+  waffle,
+  wayland,
+  libX11,
+  libXrender,
+  libxcb,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,10 +40,12 @@ stdenv.mkDerivation rec {
     libXrender
     libxcb
     libxkbcommon
-    (python3.withPackages (ps: with ps; [
-      mako
-      numpy
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        mako
+        numpy
+      ]
+    ))
     waffle
     wayland
   ];
@@ -63,7 +66,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/piglit \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libglvnd
+        ]
+      } \
       --prefix PATH : "${waffle}/bin"
   '';
 

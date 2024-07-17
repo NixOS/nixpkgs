@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, kodi, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+  kodi,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "sendtokodi";
@@ -19,9 +26,7 @@ buildKodiAddon rec {
     ./use-packaged-yt-dlp.patch
   ];
 
-  propagatedBuildInputs = [
-    inputstreamhelper
-  ];
+  propagatedBuildInputs = [ inputstreamhelper ];
 
   postPatch = ''
     # Remove vendored youtube-dl and yt-dlp libraries.

@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, pkg-config, libdvdread}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libdvdread,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libdvdread];
+  buildInputs = [ libdvdread ];
 
   # The upstream supports two configuration workflow:
   # one is to generate ./configure via `autoconf`,
@@ -46,5 +52,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 
-  passthru = { inherit libdvdread; };
+  passthru = {
+    inherit libdvdread;
+  };
 }

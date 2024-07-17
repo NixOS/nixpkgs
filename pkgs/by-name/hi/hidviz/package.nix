@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, stdenv
-# Package dependencies
-, qt6
-, libusb1
-, protobuf
-, asio
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  stdenv,
+  # Package dependencies
+  qt6,
+  libusb1,
+  protobuf,
+  asio,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "GUI application for in-depth analysis of USB HID class devices";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

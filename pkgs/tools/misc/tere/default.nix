@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, ncurses, stdenv, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  ncurses,
+  stdenv,
+  python3,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "tere";
@@ -29,7 +36,7 @@ rustPlatform.buildRustPackage {
   # See https://github.com/NixOS/nixpkgs/issues/145726#issuecomment-971331986
   preBuild =
     let
-      python-with-toml = python3.withPackages (ps: [ps.toml]);
+      python-with-toml = python3.withPackages (ps: [ ps.toml ]);
       script = builtins.toFile "clear_linkers.py" ''
         from os import path
         import toml
@@ -47,7 +54,7 @@ rustPlatform.buildRustPackage {
           exit(1)
       '';
     in
-      "${python-with-toml}/bin/python3 ${script}";
+    "${python-with-toml}/bin/python3 ${script}";
 
   meta = with lib; {
     description = "Faster alternative to cd + ls";

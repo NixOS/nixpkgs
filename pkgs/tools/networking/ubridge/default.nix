@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, testers
-, ubridge
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  testers,
+  ubridge,
 }:
 
 stdenv.mkDerivation rec {

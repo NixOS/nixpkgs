@@ -4,10 +4,15 @@ let
   inherit (lib) boolToString optionals;
 
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
-  cpuFamily = platform: with platform;
-    /**/ if isAarch32 then "arm"
-    else if isx86_32  then "x86"
-    else platform.uname.processor;
+  cpuFamily =
+    platform:
+    with platform;
+    if isAarch32 then
+      "arm"
+    else if isx86_32 then
+      "x86"
+    else
+      platform.uname.processor;
 
   crossFile = builtins.toFile "cross-file.conf" ''
     [properties]
@@ -29,9 +34,16 @@ let
     cmake = 'cmake'
   '';
 
-  crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+  crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-file=${crossFile}"
+  ];
 
-  makeMesonFlags = { mesonFlags ? [], ... }: crossFlags ++ mesonFlags;
+  makeMesonFlags =
+    {
+      mesonFlags ? [ ],
+      ...
+    }:
+    crossFlags ++ mesonFlags;
 
 in
 {

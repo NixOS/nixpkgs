@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, reason, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,9 +11,7 @@ buildDunePackage {
   pname = "fp";
   version = "0.0.1-unstable-2024-05-07";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
   meta = {
     description = "Library for creating and operating on file paths consistently on multiple platforms";

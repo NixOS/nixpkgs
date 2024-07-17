@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, redocly
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  redocly,
+  testers,
 }:
 
 buildNpmPackage rec {
@@ -43,9 +44,7 @@ buildNpmPackage rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = redocly;
-    };
+    tests.version = testers.testVersion { package = redocly; };
   };
 
   meta = {

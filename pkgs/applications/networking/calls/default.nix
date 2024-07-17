@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libhandy
-, libsecret
-, modemmanager
-, gtk3
-, gom
-, gsound
-, feedbackd
-, callaudiod
-, evolution-data-server
-, glib
-, folks
-, desktop-file-utils
-, appstream-glib
-, libpeas
-, libgdata
-, dbus
-, vala
-, wrapGAppsHook3
-, xvfb-run
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docutils
-, gobject-introspection
-, gst_all_1
-, sofia_sip
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  libhandy,
+  libsecret,
+  modemmanager,
+  gtk3,
+  gom,
+  gsound,
+  feedbackd,
+  callaudiod,
+  evolution-data-server,
+  glib,
+  folks,
+  desktop-file-utils,
+  appstream-glib,
+  libpeas,
+  libgdata,
+  dbus,
+  vala,
+  wrapGAppsHook3,
+  xvfb-run,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  docutils,
+  gobject-introspection,
+  gst_all_1,
+  sofia_sip,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-J1wuhAXPCvLWzPqMU4alVFFpHoCAzX3wVOP3Bw0wW/o=";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -88,9 +92,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   # Disable until tests are fixed upstream https://gitlab.gnome.org/GNOME/calls/-/issues/258
   doCheck = false;

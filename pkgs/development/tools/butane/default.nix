@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "butane";
@@ -17,9 +21,7 @@ buildGoModule rec {
 
   subPackages = [ "internal" ];
 
-  ldflags = [
-    "-X github.com/coreos/butane/internal/version.Raw=v${version}"
-  ];
+  ldflags = [ "-X github.com/coreos/butane/internal/version.Raw=v${version}" ];
 
   postInstall = ''
     mv $out/bin/{internal,butane}
@@ -30,6 +32,9 @@ buildGoModule rec {
     mainProgram = "butane";
     license = licenses.asl20;
     homepage = "https://github.com/coreos/butane";
-    maintainers = with maintainers; [ elijahcaine ruuda ];
+    maintainers = with maintainers; [
+      elijahcaine
+      ruuda
+    ];
   };
 }

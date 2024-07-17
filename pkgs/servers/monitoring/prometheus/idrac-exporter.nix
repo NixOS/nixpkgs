@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "idrac_exporter";
@@ -15,11 +20,16 @@ buildGoModule rec {
 
   patches = [ ./idrac-exporter/config-from-environment.patch ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) idrac; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) idrac;
+  };
 
   meta = with lib; {
     inherit (src.meta) homepage;

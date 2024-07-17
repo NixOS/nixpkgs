@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchPypi
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchPypi,
+  python3,
 }:
 
 let
@@ -15,12 +16,8 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
         };
-        nativeBuildInputs = with pySelf; [
-          setuptools
-        ];
-        pythonRelaxDeps = [
-          "werkzeug"
-        ];
+        nativeBuildInputs = with pySelf; [ setuptools ];
+        pythonRelaxDeps = [ "werkzeug" ];
         propagatedBuildInputs = with pySelf; [
           aiohttp
           aiohttp-jinja2
@@ -55,9 +52,7 @@ let
           inherit version;
           hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
         };
-        nativeBuildInputs = (o.nativeBuildInputs or []) ++ [
-          pySelf.setuptools
-        ];
+        nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ pySelf.setuptools ];
       });
       # flask-appbuilder doesn't work with sqlalchemy 2.x, flask-appbuilder 3.x
       # https://github.com/dpgaspar/Flask-AppBuilder/issues/2038
@@ -101,7 +96,8 @@ let
 in
 # See note in ./python-package.nix for
 # instructions on manually testing the web UI
-with python.pkgs; (toPythonApplication apache-airflow).overrideAttrs (previousAttrs: {
+with python.pkgs;
+(toPythonApplication apache-airflow).overrideAttrs (previousAttrs: {
   # Provide access to airflow's modified python package set
   # for the cases where external scripts need to import
   # airflow modules, though *caveat emptor* because many of

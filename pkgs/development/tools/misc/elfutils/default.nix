@@ -1,8 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
-, musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
-, argp-standalone
-, enableDebuginfod ? true, sqlite, curl, libmicrohttpd, libarchive
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  musl-fts,
+  musl-obstack,
+  m4,
+  zlib,
+  zstd,
+  bzip2,
+  bison,
+  flex,
+  gettext,
+  xz,
+  setupDebugInfoDirs,
+  argp-standalone,
+  enableDebuginfod ? true,
+  sqlite,
+  curl,
+  libmicrohttpd,
+  libarchive,
+  gitUpdater,
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
@@ -39,32 +58,51 @@ stdenv.mkDerivation rec {
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
-  postPatch = ''
-    patchShebangs tests/*.sh
-  '' + lib.optionalString stdenv.hostPlatform.isRiscV ''
-    # disable failing test:
-    #
-    # > dwfl_thread_getframes: No DWARF information found
-    sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
-  '';
+  postPatch =
+    ''
+      patchShebangs tests/*.sh
+    ''
+    + lib.optionalString stdenv.hostPlatform.isRiscV ''
+      # disable failing test:
+      #
+      # > dwfl_thread_getframes: No DWARF information found
+      sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
+    '';
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
-  nativeBuildInputs = [ m4 bison flex gettext bzip2 ]
-    ++ lib.optional enableDebuginfod pkg-config;
-  buildInputs = [ zlib zstd bzip2 xz ]
+  nativeBuildInputs = [
+    m4
+    bison
+    flex
+    gettext
+    bzip2
+  ] ++ lib.optional enableDebuginfod pkg-config;
+  buildInputs =
+    [
+      zlib
+      zstd
+      bzip2
+      xz
+    ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
-    argp-standalone
-    musl-fts
-    musl-obstack
-  ] ++ lib.optionals enableDebuginfod [
-    sqlite
-    curl
-    libmicrohttpd
-    libarchive
-  ];
+      argp-standalone
+      musl-fts
+      musl-obstack
+    ]
+    ++ lib.optionals enableDebuginfod [
+      sqlite
+      curl
+      libmicrohttpd
+      libarchive
+    ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -77,7 +115,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-
   doCheck =
     # Backtrace unwinding tests rely on glibc-internal symbol names.
     # Musl provides slightly different forms and fails.
@@ -86,8 +123,7 @@ stdenv.mkDerivation rec {
     # Test suite tries using `uname` to determine whether certain tests
     # can be executed, so we need to match build and host platform exactly.
     && (stdenv.hostPlatform == stdenv.buildPlatform);
-  doInstallCheck = !stdenv.hostPlatform.isMusl
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+  doInstallCheck = !stdenv.hostPlatform.isMusl && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   passthru.updateScript = gitUpdater {
     url = "https://sourceware.org/git/elfutils.git";
@@ -102,7 +138,14 @@ stdenv.mkDerivation rec {
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
-    license = with licenses; [ gpl2Only lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ eelco r-burns ];
+    license = with licenses; [
+      gpl2Only
+      lgpl3Plus
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [
+      eelco
+      r-burns
+    ];
   };
 }

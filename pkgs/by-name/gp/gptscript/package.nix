@@ -18,8 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-oI2agy8FOyoNl0zQzvXMsHY5tG1QNvkQf+n2GVGyNz8=";
 
-  propagatedBuildInputs = with darwin;
-    lib.optionals stdenv.isDarwin [Security];
+  propagatedBuildInputs = with darwin; lib.optionals stdenv.isDarwin [ Security ];
 
   ldflags = [
     "-s"

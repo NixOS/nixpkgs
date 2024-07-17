@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,9 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-l9T0LlDslxCgZYf8NrbsRly7bREOTGwptLteeg3TNRg=";
   };
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

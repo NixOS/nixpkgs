@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, autoconf, automake, libtool, xmlto, docbook_xml_dtd_412, docbook_xsl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  libtool,
+  xmlto,
+  docbook_xml_dtd_412,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +39,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
-  configureFlags = [
-    "--without-python"
-  ];
+  configureFlags = [ "--without-python" ];
 
   prePatch = ''
     ./bootstrap

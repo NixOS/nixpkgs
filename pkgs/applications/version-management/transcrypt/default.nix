@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk, testers, transcrypt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  openssl,
+  coreutils,
+  util-linux,
+  gnugrep,
+  gnused,
+  gawk,
+  testers,
+  transcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
@@ -12,7 +26,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ git openssl coreutils util-linux gnugrep gnused gawk ];
+  buildInputs = [
+    git
+    openssl
+    coreutils
+    util-linux
+    gnugrep
+    gnused
+    gawk
+  ];
 
   installPhase = ''
     install -m 755 -D transcrypt $out/bin/transcrypt
@@ -21,11 +43,28 @@ stdenv.mkDerivation rec {
     install -m 644 -D contrib/zsh/_transcrypt $out/share/zsh/site-functions/_transcrypt
 
     wrapProgram $out/bin/transcrypt \
-      --prefix PATH : "${lib.makeBinPath [ git openssl coreutils util-linux gnugrep gnused gawk ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          git
+          openssl
+          coreutils
+          util-linux
+          gnugrep
+          gnused
+          gawk
+        ]
+      }"
 
     cat > $out/bin/transcrypt-depspathprefix << EOF
     #!${stdenv.shell}
-    echo "${lib.makeBinPath [ git openssl coreutils gawk ]}:"
+    echo "${
+      lib.makeBinPath [
+        git
+        openssl
+        coreutils
+        gawk
+      ]
+    }:"
     EOF
     chmod +x $out/bin/transcrypt-depspathprefix
   '';

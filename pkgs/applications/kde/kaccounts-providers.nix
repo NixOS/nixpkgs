@@ -1,18 +1,19 @@
-{ mkDerivation
-, lib
-, accounts-qt
-, extra-cmake-modules
-, intltool
-, kaccounts-integration
-, kcmutils
-, kcoreaddons
-, kdeclarative
-, kdoctools
-, kio
-, kpackage
-, kwallet
-, qtwebengine
-, signond
+{
+  mkDerivation,
+  lib,
+  accounts-qt,
+  extra-cmake-modules,
+  intltool,
+  kaccounts-integration,
+  kcmutils,
+  kcoreaddons,
+  kdeclarative,
+  kdoctools,
+  kio,
+  kpackage,
+  kwallet,
+  qtwebengine,
+  signond,
 }:
 
 mkDerivation {

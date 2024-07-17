@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gumbo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gumbo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,13 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "find_dependency(gumbo)" ""
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    gumbo
-  ];
+  buildInputs = [ gumbo ];
 
   cmakeFlags = [
     "-DEXTERNAL_GUMBO=ON"

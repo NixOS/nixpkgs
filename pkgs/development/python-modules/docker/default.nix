@@ -49,15 +49,13 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     ssh = [ paramiko ];
-    tls = [];
+    tls = [ ];
     websockets = [ websocket-client ];
   };
 
   pythonImportsCheck = [ "docker" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests/unit" ];
 

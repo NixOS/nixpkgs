@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,7 @@ let
   pkg = pkgs.haste-server;
   cfg = config.services.haste-server;
 
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 in
 {
   options.services.haste-server = {
@@ -44,9 +49,7 @@ in
           }
         ];
 
-        keyGenerator = mkDefault {
-          type = "phonetic";
-        };
+        keyGenerator = mkDefault { type = "phonetic"; };
 
         rateLimits = {
           categories = {
@@ -57,9 +60,7 @@ in
           };
         };
 
-        storage = mkDefault {
-          type = "file";
-        };
+        storage = mkDefault { type = "file"; };
 
         documents = {
           about = mkDefault "${pkg}/share/haste-server/about.md";
@@ -80,7 +81,10 @@ in
         ExecStart = "${pkg}/bin/haste-server ${format.generate "config.json" cfg.settings}";
       };
 
-      path = with pkgs; [ pkg coreutils ];
+      path = with pkgs; [
+        pkg
+        coreutils
+      ];
     };
   };
 }

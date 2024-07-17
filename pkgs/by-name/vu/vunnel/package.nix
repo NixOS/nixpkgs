@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
     "sqlalchemy"
   ];
 
-
   build-system = with python3.pkgs; [
     poetry-core
     poetry-dynamic-versioning

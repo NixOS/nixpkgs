@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-
   dependencies = with python3Packages; [
     daemonocle
     dnspython

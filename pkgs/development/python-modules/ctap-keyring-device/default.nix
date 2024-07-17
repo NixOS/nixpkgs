@@ -38,9 +38,7 @@ buildPythonPackage rec {
       --replace "--flake8 --black --cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonRemoveDeps = [
     # This is a darwin requirement missing pyobjc

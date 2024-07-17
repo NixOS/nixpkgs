@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 with lib;
 stdenvNoCC.mkDerivation {
   pname = "rtl8192su";

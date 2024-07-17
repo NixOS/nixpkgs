@@ -1,46 +1,48 @@
-{ chromaprint
-, cmake
-, docbook_xml_dtd_45
-, docbook_xsl
-, fetchurl
-, ffmpeg
-, flac
-, id3lib
-, kdePackages
-, lib
-, libogg
-, libvorbis
-, libxslt
-, mp4v2
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qttools
-, readline
-, stdenv
-, taglib
-, wrapQtAppsHook
-, zlib
-, withCLI ? true
-, withKDE ? true
-, withQt ? false
+{
+  chromaprint,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchurl,
+  ffmpeg,
+  flac,
+  id3lib,
+  kdePackages,
+  lib,
+  libogg,
+  libvorbis,
+  libxslt,
+  mp4v2,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qttools,
+  readline,
+  stdenv,
+  taglib,
+  wrapQtAppsHook,
+  zlib,
+  withCLI ? true,
+  withKDE ? true,
+  withQt ? false,
 }:
 
 let
   inherit (lib) optionals;
 
   apps = lib.concatStringsSep ";" (
-    optionals withCLI [ "CLI" ]
-    ++ optionals withKDE [ "KDE" ]
-    ++ optionals withQt [ "Qt" ]
+    optionals withCLI [ "CLI" ] ++ optionals withKDE [ "KDE" ] ++ optionals withQt [ "Qt" ]
   );
 
   mainProgram =
-    if withQt then "kid3-qt"
-    else if withKDE then "kid3"
-    else "kid3-cli";
+    if withQt then
+      "kid3-qt"
+    else if withKDE then
+      "kid3"
+    else
+      "kid3-cli";
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -62,29 +64,34 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    chromaprint
-    ffmpeg
-    flac
-    id3lib
-    libogg
-    libvorbis
-    libxslt
-    mp4v2
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    readline
-    taglib
-    zlib
-  ] ++ lib.optionals withKDE (with kdePackages; [
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kio
-    kxmlgui
-    phonon
-  ]);
+  buildInputs =
+    [
+      chromaprint
+      ffmpeg
+      flac
+      id3lib
+      libogg
+      libvorbis
+      libxslt
+      mp4v2
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      readline
+      taglib
+      zlib
+    ]
+    ++ lib.optionals withKDE (
+      with kdePackages;
+      [
+        kconfig
+        kconfigwidgets
+        kcoreaddons
+        kio
+        kxmlgui
+        phonon
+      ]
+    );
 
   cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
 

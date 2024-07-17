@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "peg";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 
-  preBuild="makeFlagsArray+=( PREFIX=$out )";
+  preBuild = "makeFlagsArray+=( PREFIX=$out )";
 
   meta = with lib; {
     homepage = "http://piumarta.com/software/peg/";

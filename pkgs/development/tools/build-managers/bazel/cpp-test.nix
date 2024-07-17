@@ -1,17 +1,17 @@
 {
-  bazel
-, bazelTest
-, bazel-examples
-, stdenv
-, darwin
-, extraBazelArgs ? ""
-, lib
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-, Foundation ? null
+  bazel,
+  bazelTest,
+  bazel-examples,
+  stdenv,
+  darwin,
+  extraBazelArgs ? "",
+  lib,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
+  Foundation ? null,
 }:
 
 let
@@ -31,32 +31,38 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
-    cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
-    find $out -type d -exec chmod 755 {} \;
-  ''
-  + (lib.optionalString stdenv.isDarwin ''
-    mkdir $out/tools
-    cp ${toolsBazel} $out/tools/bazel
-  ''));
+  workspaceDir = runLocal "our_workspace" { } (
+    ''
+      cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
+      find $out -type d -exec chmod 755 {} \;
+    ''
+    + (lib.optionalString stdenv.isDarwin ''
+      mkdir $out/tools
+      cp ${toolsBazel} $out/tools/bazel
+    '')
+  );
 
   testBazel = bazelTest {
     name = "${bazel.pname}-test-cpp";
     inherit workspaceDir;
     bazelPkg = bazel;
-    bazelScript = ''
-      ${bazel}/bin/bazel build //... \
-        --verbose_failures \
-        --distdir=${distDir} \
-        --curses=no \
-        ${extraBazelArgs} \
-    '' + lib.optionalString (stdenv.isDarwin) ''
+    bazelScript =
+      ''
+        ${bazel}/bin/bazel build //... \
+          --verbose_failures \
+          --distdir=${distDir} \
+          --curses=no \
+          ${extraBazelArgs} \
+      ''
+      + lib.optionalString (stdenv.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
         --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
-    '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
+      ''
+      + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
         --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
         --linkopt=-L${darwin.libobjc}/lib \
-    '';
+      '';
   };
 
-in testBazel
+in
+testBazel

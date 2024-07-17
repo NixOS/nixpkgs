@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, fuse
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fuse,
 }:
 
 let
@@ -20,7 +21,10 @@ let
 
     buildInputs = [ fuse ];
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
 
     subPackages = [ "pkg/main" ];
   };
@@ -36,9 +40,7 @@ buildGoModule rec {
     hash = "sha256-hszaYU0bKd6gtQE57YaorAIZ4IKqoa2+PAgENUCBoVA=";
   };
 
-  propagatedBuildInputs = [
-    fuseftp
-  ];
+  propagatedBuildInputs = [ fuseftp ];
 
   # telepresence depends on fuseftp existing as a built binary, as it gets embedded
   # CGO gets disabled to match their build process as that is how it's done upstream
@@ -50,7 +52,9 @@ buildGoModule rec {
   vendorHash = "sha256-MMI44rfOk8BXxyxhb/OLKjwwe0Zc6UY3xkCbbBL4MS8=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/telepresence" ];
@@ -59,7 +63,10 @@ buildGoModule rec {
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://telepresence.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch vilsol ];
+    maintainers = with maintainers; [
+      mausch
+      vilsol
+    ];
     mainProgram = "telepresence";
   };
 }

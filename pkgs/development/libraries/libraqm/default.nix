@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, freetype
-, harfbuzz
-, fribidi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  freetype,
+  harfbuzz,
+  fribidi,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-H9W+7Mob3o5ctxfp5UhIxatSdXqqvkpyEibJx9TO7a8=";
   };
 
-  buildInputs = [ freetype harfbuzz fribidi ];
+  buildInputs = [
+    freetype
+    harfbuzz
+    fribidi
+  ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
 
   doCheck = true;
 

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-# for passthru.tests
-, intel-compute-runtime
-, intel-media-driver
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  # for passthru.tests
+  intel-compute-runtime,
+  intel-media-driver,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
       and buffer management for the Intel(R) Graphics Compute Runtime for
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

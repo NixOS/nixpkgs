@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, meson
-, ninja
-, python3
-, gnome
-, wrapGAppsNoGuiHook
-, gobject-introspection
+{
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gnome,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
 }:
 
 let
@@ -29,13 +30,9 @@ buildPythonApplication rec {
     gobject-introspection # for setup-hook
   ];
 
-  buildInputs = [
-    gnome.gnome-shell
-  ];
+  buildInputs = [ gnome.gnome-shell ];
 
-  pythonPath = [
-    pygobject3
-  ];
+  pythonPath = [ pygobject3 ];
 
   postPatch = ''
     patchShebangs contrib/merge_json.py
@@ -49,9 +46,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-browser-connector";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-browser-connector"; };
   };
 
   meta = with lib; {

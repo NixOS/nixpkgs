@@ -1,19 +1,36 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    ;
 
   cfg = config.services.c2fmzq-server;
 
   argsFormat = {
-    type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
+    type =
+      with lib.types;
+      attrsOf (
+        nullOr (oneOf [
+          bool
+          int
+          str
+        ])
+      );
     generate = lib.cli.toGNUCommandLineShell {
-      mkBool = k: v: [
-        "--${k}=${if v then "true" else "false"}"
-      ];
+      mkBool = k: v: [ "--${k}=${if v then "true" else "false"}" ];
     };
   };
-in {
+in
+{
   options.services.c2fmzq-server = {
     enable = mkEnableOption "c2fmzq-server";
 
@@ -81,7 +98,10 @@ in {
       documentation = [ "https://github.com/c2FmZQ/c2FmZQ/blob/main/README.md" ];
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} ${argsFormat.generate cfg.settings}";
@@ -110,7 +130,10 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -118,7 +141,10 @@ in {
         SocketBindDeny = "any";
         StateDirectory = "c2fmzq-server";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @obsolete" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @obsolete"
+        ];
       };
     };
   };

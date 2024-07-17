@@ -47,7 +47,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-
   dependencies = [
     asn1crypto
     certifi

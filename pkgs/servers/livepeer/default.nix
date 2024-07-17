@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule
-, pkg-config, ffmpeg, gnutls
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  ffmpeg,
+  gnutls,
 }:
 
 buildGoModule rec {
@@ -21,7 +26,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ffmpeg gnutls ];
+  buildInputs = [
+    ffmpeg
+    gnutls
+  ];
 
   meta = with lib; {
     description = "Official Go implementation of the Livepeer protocol";

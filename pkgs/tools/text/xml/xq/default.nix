@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, xq-xml
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  xq-xml,
 }:
 
 buildGoModule rec {
@@ -26,9 +27,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = xq-xml;
-    };
+    version = testers.testVersion { package = xq-xml; };
   };
 
   meta = with lib; {

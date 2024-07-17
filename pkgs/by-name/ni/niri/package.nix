@@ -1,21 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, libxkbcommon
-, pango
-, pipewire
-, seatd
-, stdenv
-, wayland
-, systemd
-, libinput
-, mesa
-, fontconfig
-, libglvnd
-, autoPatchelfHook
-, clang
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  libxkbcommon,
+  pango,
+  pipewire,
+  seatd,
+  stdenv,
+  wayland,
+  systemd,
+  libinput,
+  mesa,
+  fontconfig,
+  libglvnd,
+  autoPatchelfHook,
+  clang,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd # For libEGL
   ];
 
-  passthru.providedSessions = ["niri"];
+  passthru.providedSessions = [ "niri" ];
 
   postPatch = ''
     patchShebangs ./resources/niri-session
@@ -83,7 +84,11 @@ rustPlatform.buildRustPackage rec {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];
+    maintainers = with maintainers; [
+      iogamaster
+      foo-dogsquared
+      sodiboo
+    ];
     mainProgram = "niri";
     platforms = platforms.linux;
   };

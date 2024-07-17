@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, cmake
-, vulkan-headers
-, vulkan-loader
-, glslang
-, libwebp
-, ncnn
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchFromGitHub,
+  cmake,
+  vulkan-headers,
+  vulkan-loader,
+  glslang,
+  libwebp,
+  ncnn,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ vulkan-headers vulkan-loader glslang libwebp ncnn ];
+  buildInputs = [
+    vulkan-headers
+    vulkan-loader
+    glslang
+    libwebp
+    ncnn
+  ];
 
   postPatch = ''
     substituteInPlace main.cpp --replace REPLACE_MODELS $out/share/models
@@ -63,7 +70,10 @@ stdenv.mkDerivation rec {
     description = "NCNN implementation of Real-ESRGAN. Real-ESRGAN aims at developing Practical Algorithms for General Image Restoration";
     homepage = "https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan";
     license = licenses.mit;
-    maintainers = with maintainers; [ tilcreator iynaix ];
+    maintainers = with maintainers; [
+      tilcreator
+      iynaix
+    ];
     platforms = platforms.all;
     mainProgram = "realesrgan-ncnn-vulkan";
   };

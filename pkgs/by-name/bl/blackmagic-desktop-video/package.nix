@@ -1,12 +1,13 @@
-{ stdenv
-, cacert
-, curl
-, runCommandLocal
-, lib
-, autoPatchelfHook
-, libcxx
-, libGL
-, gcc7
+{
+  stdenv,
+  cacert,
+  curl,
+  runCommandLocal,
+  lib,
+  autoPatchelfHook,
+  libcxx,
+  libGL,
+  gcc7,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   # blame blackmagicdesign.
   src =
     let
-    # from the URL that the POST happens to, see browser console
+      # from the URL that the POST happens to, see browser console
       DOWNLOADID = "d73a63095b6a4a189916fb2baa5a0ef3";
     in
     runCommandLocal "${finalAttrs.pname}-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
@@ -58,21 +59,22 @@ stdenv.mkDerivation (finalAttrs: {
           "policy" = true;
         };
 
-      } ''
-      RESOLVEURL=$(curl \
-        -s \
-        -H "$USERAGENT" \
-        -H 'Content-Type: application/json;charset=UTF-8' \
-        -H "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
-        --data-ascii "$REQJSON" \
-        --compressed \
-        "$SITEURL")
-      curl \
-        --retry 3 --retry-delay 3 \
-        --compressed \
-        "$RESOLVEURL" \
-        > $out
-    '';
+      }
+      ''
+        RESOLVEURL=$(curl \
+          -s \
+          -H "$USERAGENT" \
+          -H 'Content-Type: application/json;charset=UTF-8' \
+          -H "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
+          --data-ascii "$REQJSON" \
+          --compressed \
+          "$SITEURL")
+        curl \
+          --retry 3 --retry-delay 3 \
+          --compressed \
+          "$RESOLVEURL" \
+          > $out
+      '';
 
   postUnpack =
     let

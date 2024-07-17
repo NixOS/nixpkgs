@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  coreutils,
 
-, perl
-, pkg-config
+  perl,
+  pkg-config,
 
-, json_c
-, libaio
-, liburcu
-, linuxHeaders
-, lvm2
-, readline
-, systemd
-, util-linuxMinimal
+  json_c,
+  libaio,
+  liburcu,
+  linuxHeaders,
+  lvm2,
+  readline,
+  systemd,
+  util-linuxMinimal,
 
-, cmocka
-, nixosTests
+  cmocka,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +80,9 @@ stdenv.mkDerivation rec {
   '';
   nativeCheckInputs = [ cmocka ];
 
-  passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
+  passthru.tests = {
+    inherit (nixosTests) iscsi-multipath-root;
+  };
 
   meta = with lib; {
     description = "Tools for the Linux multipathing storage driver";

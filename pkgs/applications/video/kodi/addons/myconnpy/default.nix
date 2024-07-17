@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "myconnpy";
   namespace = "script.module.myconnpy";
@@ -11,9 +17,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.myconnpy";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.myconnpy"; };
   };
 
   meta = with lib; {

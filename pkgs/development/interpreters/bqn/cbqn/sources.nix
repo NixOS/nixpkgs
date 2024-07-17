@@ -2,24 +2,23 @@
 # Update them all at the same time, or else misbuilds will happen!
 # TODO: automate the update of this file
 
-{
-  fetchFromGitHub,
-}:
+{ fetchFromGitHub }:
 
 {
-  cbqn = let
-    self = {
-      pname = "cbqn";
-      version = "0.7.0";
+  cbqn =
+    let
+      self = {
+        pname = "cbqn";
+        version = "0.7.0";
 
-      src = fetchFromGitHub {
-        owner = "dzaima";
-        repo = "CBQN";
-        rev = "v${self.version}";
-        hash = "sha256-TUK0HrJ1IyiVi9Y3S1IrK/d4/EZxdRdWyxsAwj79KEc=";
+        src = fetchFromGitHub {
+          owner = "dzaima";
+          repo = "CBQN";
+          rev = "v${self.version}";
+          hash = "sha256-TUK0HrJ1IyiVi9Y3S1IrK/d4/EZxdRdWyxsAwj79KEc=";
+        };
       };
-    };
-  in
+    in
     self;
 
   cbqn-bytecode = {

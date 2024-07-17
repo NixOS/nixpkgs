@@ -1,9 +1,18 @@
-{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
-, autoPatchelfHook, gcc
-, version
-, src
-, platform
-, versionType
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  wrapRustc,
+  bash,
+  curl,
+  darwin,
+  zlib,
+  autoPatchelfHook,
+  gcc,
+  version,
+  src,
+  platform,
+  versionType,
 }:
 
 let
@@ -12,10 +21,7 @@ let
 
   bootstrapping = versionType == "bootstrap";
 
-  installComponents
-    = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",cargo")
-    ;
+  installComponents = "rustc,rust-std-${platform}" + (optionalString bootstrapping ",cargo");
 in
 
 rec {
@@ -30,11 +36,15 @@ rec {
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
-      license = [ licenses.mit licenses.asl20 ];
+      license = [
+        licenses.mit
+        licenses.asl20
+      ];
     };
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-    buildInputs = [ bash ]
+    buildInputs =
+      [ bash ]
       ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
       ++ lib.optional (!stdenv.isDarwin) zlib
       ++ lib.optional stdenv.isDarwin Security;
@@ -76,12 +86,15 @@ rec {
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "Rust package manager";
       maintainers = with maintainers; [ qknight ];
-      license = [ licenses.mit licenses.asl20 ];
+      license = [
+        licenses.mit
+        licenses.asl20
+      ];
     };
 
-    nativeBuildInputs = [ makeWrapper ]
-      ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-    buildInputs = [ bash ]
+    nativeBuildInputs = [ makeWrapper ] ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    buildInputs =
+      [ bash ]
       ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
       ++ lib.optional stdenv.isDarwin Security;
 

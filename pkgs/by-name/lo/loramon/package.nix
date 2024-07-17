@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,13 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-94tXhuAoaS1y/zGz63PPqOayRylGK0Ei2a6H4/BCB30";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pyserial
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pyserial ];
 
   meta = with lib; {
     description = "LoRa packet sniffer for RNode hardware";

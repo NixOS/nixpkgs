@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libHX";
@@ -9,9 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "18w39j528lyg2026dr11f2xxxphy91cg870nx182wbd8cjlqf86c";
   };
 
-  patches = [];
+  patches = [ ];
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
 
   preConfigure = ''
     sh autogen.sh
@@ -23,9 +34,13 @@ stdenv.mkDerivation rec {
       libHX is a C library (with some C++ bindings available) that provides data structures
       and functions commonly needed, such as maps, deques, linked lists, string formatting
       and autoresizing, option and config file parsing, type checking casts and more.
-      '';
+    '';
     maintainers = [ ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl3 lgpl21Plus wtfpl ];
+    license = with licenses; [
+      gpl3
+      lgpl21Plus
+      wtfpl
+    ];
   };
 }

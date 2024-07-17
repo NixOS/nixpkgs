@@ -3,8 +3,9 @@
   mkYarnPackage,
   fetchYarnDeps,
   fetchFromGitHub,
-  nix-update-script
-}: mkYarnPackage rec {
+  nix-update-script,
+}:
+mkYarnPackage rec {
   pname = "dotenv-cli";
   version = "7.4.3";
 

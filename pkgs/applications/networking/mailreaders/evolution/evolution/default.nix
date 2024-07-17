@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, cmake
-, ninja
-, intltool
-, fetchurl
-, libxml2
-, webkitgtk_4_1
-, highlight
-, pkg-config
-, gtk3
-, glib
-, libnotify
-, libpst
-, gspell
-, evolution-data-server
-, libgweather
-, glib-networking
-, gsettings-desktop-schemas
-, wrapGAppsHook3
-, itstool
-, shared-mime-info
-, libical
-, db
-, sqlite
-, adwaita-icon-theme
-, gnome
-, gnome-desktop
-, librsvg
-, gdk-pixbuf
-, libsecret
-, nss
-, nspr
-, icu
-, libcanberra-gtk3
-, geocode-glib_2
-, cmark
-, bogofilter
-, gst_all_1
-, procps
-, p11-kit
-, openldap
-, spamassassin
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  intltool,
+  fetchurl,
+  libxml2,
+  webkitgtk_4_1,
+  highlight,
+  pkg-config,
+  gtk3,
+  glib,
+  libnotify,
+  libpst,
+  gspell,
+  evolution-data-server,
+  libgweather,
+  glib-networking,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
+  itstool,
+  shared-mime-info,
+  libical,
+  db,
+  sqlite,
+  adwaita-icon-theme,
+  gnome,
+  gnome-desktop,
+  librsvg,
+  gdk-pixbuf,
+  libsecret,
+  nss,
+  nspr,
+  icu,
+  libcanberra-gtk3,
+  geocode-glib_2,
+  cmark,
+  bogofilter,
+  gst_all_1,
+  procps,
+  p11-kit,
+  openldap,
+  spamassassin,
 }:
 
 stdenv.mkDerivation rec {
@@ -97,9 +98,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  propagatedUserEnvPkgs = [
-    evolution-data-server
-  ];
+  propagatedUserEnvPkgs = [ evolution-data-server ];
 
   cmakeFlags = [
     "-DENABLE_AUTOAR=OFF"
@@ -110,9 +109,7 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENLDAP=${openldap}"
   ];
 
-  requiredSystemFeatures = [
-    "big-parallel"
-  ];
+  requiredSystemFeatures = [ "big-parallel" ];
 
   doCheck = true;
 

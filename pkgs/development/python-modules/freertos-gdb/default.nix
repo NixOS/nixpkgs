@@ -1,4 +1,9 @@
-{ lib, pkg-config, fetchPypi, buildPythonPackage }:
+{
+  lib,
+  pkg-config,
+  fetchPypi,
+  buildPythonPackage,
+}:
 
 buildPythonPackage rec {
   pname = "freertos-gdb";
@@ -16,8 +21,6 @@ buildPythonPackage rec {
     description = "User-friendly view of FreeRTOS kernel objects in GDB";
     homepage = "https://github.com/espressif/freertos-gdb";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      danc86
-    ];
+    maintainers = with maintainers; [ danc86 ];
   };
 }

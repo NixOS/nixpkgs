@@ -1,14 +1,15 @@
-{ fetchFromGitHub
-, installShellFiles
-, lib
-, pkg-config
-, rustPlatform
-, stdenv
-, withSixel ? false
-, libsixel
-, xorg
-, AppKit
-, withSki ? true
+{
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  withSixel ? false,
+  libsixel,
+  xorg,
+  AppKit,
+  withSki ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-NtXjlGkX8AzSw98xHPymzdnTipMIunyDbpSr4eVowa0=";
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optional stdenv.isLinux pkg-config;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optional withSixel libsixel
-    ++ lib.optionals stdenv.isLinux (with xorg; [ libX11 libXrandr ])
+  buildInputs =
+    lib.optional withSixel libsixel
+    ++ lib.optionals stdenv.isLinux (
+      with xorg;
+      [
+        libX11
+        libXrandr
+      ]
+    )
     ++ lib.optional stdenv.isDarwin AppKit;
 
   buildNoDefaultFeatures = !withSki;

@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  camlp4,
+  config-file,
+  lablgtk,
+  xmlm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-lablgtk-extras";
@@ -11,8 +21,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib camlp4 ];
-  propagatedBuildInputs = [ config-file lablgtk xmlm ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    camlp4
+  ];
+  propagatedBuildInputs = [
+    config-file
+    lablgtk
+    xmlm
+  ];
 
   createFindlibDestdir = true;
 

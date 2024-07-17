@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, pcsclite
-, pkg-config
-, libusb1
-, perl
-, zlib
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  pcsclite,
+  pkg-config,
+  libusb1,
+  perl,
+  zlib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,11 +58,9 @@ stdenv.mkDerivation rec {
 
   # The resulting shared object ends up outside of the default paths which are
   # usually getting stripped.
-  stripDebugList = ["pcsc"];
+  stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/CCID.git";
-  };
+  passthru.updateScript = gitUpdater { url = "https://salsa.debian.org/rousseau/CCID.git"; };
 
   meta = with lib; {
     description = "PC/SC driver for USB CCID smart card readers";

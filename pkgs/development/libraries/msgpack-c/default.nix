@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     (lib.cmakeBool "MSGPACK_BUILD_EXAMPLES" false) # examples are not installed even if built

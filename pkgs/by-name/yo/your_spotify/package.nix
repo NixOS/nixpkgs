@@ -61,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     client = callPackage ./client.nix {
-      inherit (finalAttrs) src version offlineCache meta;
+      inherit (finalAttrs)
+        src
+        version
+        offlineCache
+        meta
+        ;
     };
   };
 

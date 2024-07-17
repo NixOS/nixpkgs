@@ -1,4 +1,11 @@
-{lib, stdenv, fetchFromGitHub, gmp, cmake, python3}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  cmake,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpoly";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gmp python3 ];
+  buildInputs = [
+    gmp
+    python3
+  ];
 
   strictDeps = true;
 

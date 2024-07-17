@@ -1,4 +1,12 @@
-{ lib, buildGoModule, buildNpmPackage, fetchFromGitHub, moreutils, jq, git }:
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  moreutils,
+  jq,
+  git,
+}:
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
   # https://github.com/NixOS/nixpkgs/issues/273815
@@ -14,7 +22,10 @@ let
     pname = "opengist-frontend";
     inherit version src;
 
-    nativeBuildInputs = [ moreutils jq ];
+    nativeBuildInputs = [
+      moreutils
+      jq
+    ];
 
     # npm complains of "invalid package". shrug. we can give it a version.
     preBuild = ''
@@ -40,14 +51,10 @@ buildGoModule {
   pname = "opengist";
   inherit version src;
   vendorHash = "sha256-IorqXJKzUTUL5zfKRipZaJtRlwVOmTwolJXFG/34Ais=";
-  tags = [
-    "fs_embed"
-  ];
+  tags = [ "fs_embed" ];
 
   # required for tests
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   # required for tests to not try to write into $HOME and fail
   preCheck = ''

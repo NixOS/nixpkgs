@@ -1,18 +1,19 @@
-{ lib
-, cppzmq
-, curl
-, fetchFromGitHub
-, glm
-, gtkmm3
-, libarchive
-, libepoxy
-, libgit2
-, librsvg
-, libuuid
-, opencascade-occt_7_6
-, pkg-config
-, podofo
-, sqlite
+{
+  lib,
+  cppzmq,
+  curl,
+  fetchFromGitHub,
+  glm,
+  gtkmm3,
+  libarchive,
+  libepoxy,
+  libgit2,
+  librsvg,
+  libuuid,
+  opencascade-occt_7_6,
+  pkg-config,
+  podofo,
+  sqlite,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -29,9 +30,7 @@ rec {
     hash = "sha256-UcjbDJR6shyETpanNkRoH8LF8r6gFjsyNHVSCMHKqS8=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     cppzmq
@@ -53,7 +52,10 @@ rec {
   meta = with lib; {
     description = "Free EDA software to develop printed circuit boards";
     homepage = "https://horizon-eda.org";
-    maintainers = with maintainers; [ guserav jue89 ];
+    maintainers = with maintainers; [
+      guserav
+      jue89
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

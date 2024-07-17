@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchzip
-, pugixml
-, updfparser
-, curl
-, openssl
-, libzip
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pugixml,
+  updfparser,
+  curl,
+  openssl,
+  libzip,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +30,18 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ pugixml updfparser curl openssl libzip ];
+  buildInputs = [
+    pugixml
+    updfparser
+    curl
+    openssl
+    libzip
+  ];
 
-  makeFlags = [ "BUILD_STATIC=1" "BUILD_SHARED=1" ];
+  makeFlags = [
+    "BUILD_STATIC=1"
+    "BUILD_SHARED=1"
+  ];
 
   installPhase = ''
     runHook preInstall

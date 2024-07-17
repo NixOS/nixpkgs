@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, alsa-lib
-, coreutils
-, file
-, freetype
-, gnugrep
-, libpulseaudio
-, libtool
-, libuuid
-, openssl
-, pango
-, pkg-config
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  alsa-lib,
+  coreutils,
+  file,
+  freetype,
+  gnugrep,
+  libpulseaudio,
+  libtool,
+  libuuid,
+  openssl,
+  pango,
+  pkg-config,
+  xorg,
 }:
 let
   buildVM =
     {
       # VM-specific information, manually extracted from building/<platformDir>/<vmName>/build/mvm
-      platformDir
-    , vmName
-    , scriptName
-    , configureFlagsArray
-    , configureFlags
+      platformDir,
+      vmName,
+      scriptName,
+      configureFlagsArray,
+      configureFlags,
     }:
     let
       src = fetchFromGitHub {
@@ -35,29 +36,30 @@ let
     in
     stdenv.mkDerivation {
       pname =
-        let vmNameNoDots = builtins.replaceStrings [ "." ] [ "-" ] vmName;
-        in "opensmalltalk-vm-${platformDir}-${vmNameNoDots}";
+        let
+          vmNameNoDots = builtins.replaceStrings [ "." ] [ "-" ] vmName;
+        in
+        "opensmalltalk-vm-${platformDir}-${vmNameNoDots}";
       version = src.rev;
 
       inherit src;
 
-      postPatch =
-        ''
-          vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
-          for vmVersionFile in $vmVersionFiles; do
-            substituteInPlace "$vmVersionFile" \
-              --replace "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
-              --replace "\$URL\$" "\$URL: ${src.url} \$" \
-              --replace "\$Rev\$" "\$Rev: ${src.rev} \$" \
-              --replace "\$CommitHash\$" "\$CommitHash: 000000000000 \$"
-          done
-          patchShebangs --build ./building/${platformDir} scripts
-          substituteInPlace ./platforms/unix/config/mkmf \
-            --replace "/bin/rm" "rm"
-          substituteInPlace ./platforms/unix/config/configure \
-            --replace "/usr/bin/file" "file" \
-            --replace "/usr/bin/pkg-config" "pkg-config" \
-        '';
+      postPatch = ''
+        vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
+        for vmVersionFile in $vmVersionFiles; do
+          substituteInPlace "$vmVersionFile" \
+            --replace "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
+            --replace "\$URL\$" "\$URL: ${src.url} \$" \
+            --replace "\$Rev\$" "\$Rev: ${src.rev} \$" \
+            --replace "\$CommitHash\$" "\$CommitHash: 000000000000 \$"
+        done
+        patchShebangs --build ./building/${platformDir} scripts
+        substituteInPlace ./platforms/unix/config/mkmf \
+          --replace "/bin/rm" "rm"
+        substituteInPlace ./platforms/unix/config/configure \
+          --replace "/usr/bin/file" "file" \
+          --replace "/usr/bin/pkg-config" "pkg-config" \
+      '';
 
       preConfigure = ''
         cd building/${platformDir}/${vmName}/build
@@ -118,10 +120,11 @@ let
         platformDir = "linux64ARMv8";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
-          LIBS="-lrt"
-        )'';
+        configureFlagsArray = ''
+          (
+                    CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+                    LIBS="-lrt"
+                  )'';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"
@@ -134,9 +137,10 @@ let
         platformDir = "linux64ARMv8";
         vmName = "squeak.stack.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
-        )'';
+        configureFlagsArray = ''
+          (
+                    CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+                  )'';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.stack"
@@ -151,9 +155,10 @@ let
         platformDir = "linux64x64";
         vmName = "newspeak.cog.spur";
         scriptName = "newspeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0"
-        )'';
+        configureFlagsArray = ''
+          (
+                    CFLAGS="-DNDEBUG -DDEBUGVM=0"
+                  )'';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog.newspeak"
@@ -166,9 +171,10 @@ let
         platformDir = "linux64x64";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
-        )'';
+        configureFlagsArray = ''
+          (
+                    CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
+                  )'';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"
@@ -180,7 +186,7 @@ let
 
   platform = stdenv.targetPlatform.system;
 in
-  vmsByPlatform.${platform} or (throw (
-    "Unsupported platform ${platform}: only the following platforms are supported: " +
-    builtins.toString (builtins.attrNames vmsByPlatform)
-  ))
+vmsByPlatform.${platform} or (throw (
+  "Unsupported platform ${platform}: only the following platforms are supported: "
+  + builtins.toString (builtins.attrNames vmsByPlatform)
+))

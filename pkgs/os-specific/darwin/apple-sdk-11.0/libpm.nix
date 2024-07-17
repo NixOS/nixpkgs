@@ -1,4 +1,8 @@
-{ stdenvNoCC, MacOSX-SDK, checkReexportsHook }:
+{
+  stdenvNoCC,
+  MacOSX-SDK,
+  checkReexportsHook,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "libpm";

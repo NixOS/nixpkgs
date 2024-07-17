@@ -1,20 +1,27 @@
-{ lib
-, callPackage
-, CoreFoundation
-, fetchFromGitHub
-, fetchpatch
-, pkgs
-, wrapCDDA
-, attachPkgs
-, tiles ? true
-, Cocoa
-, debug ? false
-, useXdgDir ? false
+{
+  lib,
+  callPackage,
+  CoreFoundation,
+  fetchFromGitHub,
+  fetchpatch,
+  pkgs,
+  wrapCDDA,
+  attachPkgs,
+  tiles ? true,
+  Cocoa,
+  debug ? false,
+  useXdgDir ? false,
 }:
 
 let
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+    inherit
+      CoreFoundation
+      tiles
+      Cocoa
+      debug
+      useXdgDir
+      ;
   };
 
   self = common.overrideAttrs (common: rec {
@@ -59,8 +66,7 @@ let
     ];
 
     meta = common.meta // {
-      maintainers = with lib.maintainers;
-        common.meta.maintainers;
+      maintainers = with lib.maintainers; common.meta.maintainers;
       changelog = "https://github.com/CleverRaven/Cataclysm-DDA/blob/${version}/data/changelog.txt";
     };
   });

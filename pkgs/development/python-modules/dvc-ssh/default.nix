@@ -23,9 +23,7 @@ buildPythonPackage rec {
     "dvc"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     bcrypt

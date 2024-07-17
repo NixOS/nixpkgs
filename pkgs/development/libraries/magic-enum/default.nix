@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, nix-update-script
-, testers
-, magic-enum
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  nix-update-script,
+  testers,
+  magic-enum,
 }:
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "magic-enum";
   version = "0.9.6";
 

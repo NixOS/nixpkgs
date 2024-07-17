@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-XDB1i2b1reMCM6i1uK3IzTnsoLXO7jldYtNlYUo1AoQ=";
   };
 
-
   propagatedBuildInputs = with python3.pkgs; [
     pygit2
     argcomplete
@@ -25,9 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitless"
-  ];
+  pythonImportsCheck = [ "gitless" ];
 
   meta = with lib; {
     description = "Version control system built on top of Git";

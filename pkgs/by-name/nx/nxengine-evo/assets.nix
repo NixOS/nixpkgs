@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -27,9 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/nxengine/nxengine-evo";
     description = "Assets for nxengine-evo";
-    license = with lib.licenses; [
-      unfreeRedistributable
-    ];
+    license = with lib.licenses; [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

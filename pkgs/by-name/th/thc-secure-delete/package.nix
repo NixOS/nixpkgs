@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hvWuxFkzhOSCplPtyjRtn36bIk6KdPBcpr3lAmiAyfE=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
   ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

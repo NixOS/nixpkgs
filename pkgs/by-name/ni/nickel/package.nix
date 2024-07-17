@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, python3
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,13 +19,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JwuBjCWETIlBX5xswdznOAmzkL0Rn6cv7pxM6DwAkOs=";
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
-
-  nativeBuildInputs = [
-    python3
+  cargoBuildFlags = [
+    "-p nickel-lang-cli"
+    "-p nickel-lang-lsp"
   ];
 
-  outputs = [ "out" "nls" ];
+  nativeBuildInputs = [ python3 ];
+
+  outputs = [
+    "out"
+    "nls"
+  ];
 
   postInstall = ''
     mkdir -p $nls/bin
@@ -46,7 +51,11 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      felschr
+      matthiasbeyer
+    ];
     mainProgram = "nickel";
   };
 }

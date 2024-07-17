@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
 }:
 
 buildPythonPackage {
@@ -18,17 +19,13 @@ buildPythonPackage {
     hash = "sha256-4IZ+qzhERJIhLcIq9FvVml+xAFJ8R4QpUjFRw2DZl2U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    nixops
-  ];
+  buildInputs = [ nixops ];
 
   pythonImportsCheck = [ "nixops_hercules_ci" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Use Hercules CI as a NixOps backend";

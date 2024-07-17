@@ -23,9 +23,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "google-generativeai" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     google-generativeai

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, fftwSinglePrec }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
+  fftwSinglePrec,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hackrf";
@@ -21,7 +29,10 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
   ];
 
-  cmakeFlags = [ "-DUDEV_RULES_GROUP=plugdev" "-DUDEV_RULES_PATH=lib/udev/rules.d" ];
+  cmakeFlags = [
+    "-DUDEV_RULES_GROUP=plugdev"
+    "-DUDEV_RULES_PATH=lib/udev/rules.d"
+  ];
 
   preConfigure = ''
     cd host

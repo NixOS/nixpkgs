@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, iptables
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  iptables,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -58,7 +62,9 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) wg-access-server; };
+    tests = {
+      inherit (nixosTests) wg-access-server;
+    };
   };
 
   meta = with lib; {

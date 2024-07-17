@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -8,13 +14,17 @@ let
   gid = config.ids.gids.gpsd;
   cfg = config.services.gpsd;
 
-in {
+in
+{
 
   ###### interface
 
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "gpsd" "device" ]
-      "Use `services.gpsd.devices` instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gpsd"
+      "device"
+    ] "Use `services.gpsd.devices` instead.")
   ];
 
   options = {
@@ -95,7 +105,11 @@ in {
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "-r" "-s" "19200" ];
+        example = [
+          "-r"
+          "-s"
+          "19200"
+        ];
         description = ''
           A list of extra command line arguments to pass to gpsd.
           Check gpsd(8) mangpage for possible arguments.
@@ -117,7 +131,9 @@ in {
       home = "/var/empty";
     };
 
-    users.groups.gpsd = { inherit gid; };
+    users.groups.gpsd = {
+      inherit gid;
+    };
 
     systemd.services.gpsd = {
       description = "GPSD daemon";
@@ -125,18 +141,20 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = let
-          devices = utils.escapeSystemdExecArgs cfg.devices;
-          extraArgs = utils.escapeSystemdExecArgs cfg.extraArgs;
-        in ''
-          ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
-            -S "${toString cfg.port}"                             \
-            ${optionalString cfg.readonly "-b"}                   \
-            ${optionalString cfg.nowait "-n"}                     \
-            ${optionalString cfg.listenany "-G"}                  \
-            ${extraArgs}                                          \
-            ${devices}
-        '';
+        ExecStart =
+          let
+            devices = utils.escapeSystemdExecArgs cfg.devices;
+            extraArgs = utils.escapeSystemdExecArgs cfg.extraArgs;
+          in
+          ''
+            ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
+              -S "${toString cfg.port}"                             \
+              ${optionalString cfg.readonly "-b"}                   \
+              ${optionalString cfg.nowait "-n"}                     \
+              ${optionalString cfg.listenany "-G"}                  \
+              ${extraArgs}                                          \
+              ${devices}
+          '';
       };
     };
 

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ivsc-driver
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ivsc-driver,
+  kernel,
 }:
 
 stdenv.mkDerivation {
@@ -37,9 +38,7 @@ stdenv.mkDerivation {
     sed -i -e "s,INSTALL_MOD_DIR=,INSTALL_MOD_PATH=$out INSTALL_MOD_DIR=," Makefile
   '';
 
-  installTargets = [
-    "modules_install"
-  ];
+  installTargets = [ "modules_install" ];
 
   meta = {
     homepage = "https://github.com/intel/ipu6-drivers";

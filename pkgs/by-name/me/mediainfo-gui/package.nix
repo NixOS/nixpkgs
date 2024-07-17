@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libmediainfo, wxGTK32
-, desktop-file-utils, libSM, imagemagick, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libmediainfo,
+  wxGTK32,
+  desktop-file-utils,
+  libSM,
+  imagemagick,
+  darwin,
+}:
 
 let
   inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -13,10 +24,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-MvSoKjHjhuF3/fbkwjcFPkdbUBCJJpqyxylFKgkxNSA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [
+    libmediainfo
+    wxGTK32
+    desktop-file-utils
+    libSM
+    imagemagick
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   sourceRoot = "MediaInfo/Project/GNU/GUI";
 

@@ -1,7 +1,8 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,9 +17,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-f2Bjv7Z7+FZejS5plUGKTlGUixgF2pGN1SeszTDh4Ko=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     dbus-client-gen
@@ -30,9 +29,7 @@ python3Packages.buildPythonApplication rec {
     wcwidth
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   disabledTestPaths = [
     # tests below require dbus daemon

@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, extra-cmake-modules
-, kcoreaddons
-, kdeclarative
-, kdecoration
-, plasma-framework
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  kcoreaddons,
+  kdeclarative,
+  kdecoration,
+  plasma-framework,
 }:
 
 mkDerivation rec {

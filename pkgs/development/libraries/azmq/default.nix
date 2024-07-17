@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, ninja
-, zeromq
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  ninja,
+  zeromq,
+  catch2,
 }:
 
 stdenv.mkDerivation {

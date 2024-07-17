@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libspnav, jq }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  libspnav,
+  jq,
+}:
 
 let
 
@@ -15,9 +22,7 @@ let
         sha256 = "057b2f5f49p96lkh2wsr9w6yh2003x4a85irqsgbzp6igmk8imdn";
       };
 
-      propagatedBuildInputs = with python3Packages; [
-        netifaces
-      ];
+      propagatedBuildInputs = with python3Packages; [ netifaces ];
 
       installPhase = ''
         mkdir -p $out/lib/cura/plugins/OctoPrintPlugin
@@ -45,9 +50,7 @@ let
 
       nativeBuildInputs = [ jq ];
 
-      propagatedBuildInputs = with python3Packages; [
-        hidapi
-      ];
+      propagatedBuildInputs = with python3Packages; [ hidapi ];
 
       buildPhase = ''
         jq 'del(.devices) | .libspnav="${libspnav}/lib/libspnav.so"' \
@@ -73,4 +76,5 @@ let
 
   };
 
-in self
+in
+self

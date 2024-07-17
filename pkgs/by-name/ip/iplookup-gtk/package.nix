@@ -32,13 +32,9 @@ python3Packages.buildPythonPackage rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
-  dependencies = with python3Packages; [
-    pygobject3
-  ];
+  dependencies = with python3Packages; [ pygobject3 ];
 
   dontWrapGApps = true;
 

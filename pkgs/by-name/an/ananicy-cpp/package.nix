@@ -1,17 +1,18 @@
-{ lib
-, clangStdenv
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, pkg-config
-, spdlog
-, nlohmann_json
-, systemd
-, libbpf
-, elfutils
-, bpftools
-, pcre2
-, zlib
+{
+  lib,
+  clangStdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  spdlog,
+  nlohmann_json,
+  systemd,
+  libbpf,
+  elfutils,
+  bpftools,
+  pcre2,
+  zlib,
 }:
 
 clangStdenv.mkDerivation rec {
@@ -55,7 +56,10 @@ clangStdenv.mkDerivation rec {
   ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
-  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_JSON=ON"

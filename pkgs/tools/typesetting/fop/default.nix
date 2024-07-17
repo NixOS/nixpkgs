@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, ant
-, jdk
-, jre
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xmlgraphics.apache.org/fop/";
     license = lib.licenses.asl20;
     mainProgram = "fop";
-    maintainers = with lib.maintainers; [ bjornfor tomasajt ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      tomasajt
+    ];
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [
       fromSource

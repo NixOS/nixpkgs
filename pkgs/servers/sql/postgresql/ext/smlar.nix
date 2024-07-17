@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  postgresql,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlar-unstable";

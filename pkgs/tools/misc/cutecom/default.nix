@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitLab, qtserialport, cmake, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  qtserialport,
+  cmake,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cutecom";
@@ -17,17 +24,24 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ qtserialport ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-  '' else ''
-    cd ..
-    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps,man/man1}
-    cp cutecom.desktop "$out/share/applications"
-    cp images/cutecom.svg "$out/share/icons/hicolor/scalable/apps"
-    cp cutecom.1 "$out/share/man/man1"
-  '';
+  postInstall =
+    if stdenv.isDarwin then
+      ''
+        mkdir -p $out/Applications
+      ''
+    else
+      ''
+        cd ..
+        mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps,man/man1}
+        cp cutecom.desktop "$out/share/applications"
+        cp images/cutecom.svg "$out/share/icons/hicolor/scalable/apps"
+        cp cutecom.1 "$out/share/man/man1"
+      '';
 
   meta = with lib; {
     description = "Graphical serial terminal";

@@ -10,12 +10,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
-    repo  = "JWasm";
+    repo = "JWasm";
     rev = "v${finalAttrs.version}";
     hash = "sha256-xbiyGBTzIkAfUy45JdAl77gbvArzVUQNPOxa+H2uGFo=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   dontConfigure = true;
 

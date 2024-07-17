@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-hEN0xqZUNfMOIrw3q+x4kEFhYoqmyn7W3f2w8AGw2wI=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Implementation of the FreeDesktop specifications to be used in c++ projects";

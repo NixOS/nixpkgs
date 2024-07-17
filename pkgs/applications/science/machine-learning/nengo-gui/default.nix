@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
@@ -19,8 +23,8 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Nengo interactive visualizer";
-    homepage    = "https://nengo.ai/";
-    license     = licenses.unfreeRedistributable;
+    homepage = "https://nengo.ai/";
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ arjix ];
   };
 }

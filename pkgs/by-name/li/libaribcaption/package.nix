@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 
-, fontconfig
-, freetype
+  fontconfig,
+  freetype,
 
-, ApplicationServices
-, CoreFoundation
-, CoreGraphics
-, CoreText
+  ApplicationServices,
+  CoreFoundation,
+  CoreGraphics,
+  CoreText,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,15 +28,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
-    fontconfig
-    freetype
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    CoreText
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [
+      fontconfig
+      freetype
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      CoreFoundation
+      CoreGraphics
+      CoreText
+    ];
 
   meta = with lib; {
     description = "Portable ARIB STD-B24 Caption Decoder/Renderer";

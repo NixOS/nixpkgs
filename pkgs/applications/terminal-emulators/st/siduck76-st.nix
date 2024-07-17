@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, harfbuzz
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  harfbuzz,
+  libX11,
+  libXext,
+  libXft,
+  ncurses,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5n+QkSlVhhku7adtl7TuWhDl3zdwFaXc7Ot1RaIN54A=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     fontconfig
     harfbuzz

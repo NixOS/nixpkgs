@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libmrss, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libmrss,
+  libiconv,
+}:
 
 stdenv.mkDerivation {
   pname = "rsstail";

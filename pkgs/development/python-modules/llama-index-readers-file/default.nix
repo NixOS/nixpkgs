@@ -31,7 +31,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     beautifulsoup4
     llama-index-core

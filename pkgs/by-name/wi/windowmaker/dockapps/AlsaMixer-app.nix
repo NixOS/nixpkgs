@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, alsa-lib
-, dockapps-sources
-, libX11
-, libXext
-, libXpm
-, pkg-config
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  dockapps-sources,
+  libX11,
+  libXext,
+  libXpm,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/AlsaMixer.app";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     alsa-lib

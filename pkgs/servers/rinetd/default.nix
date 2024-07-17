@@ -1,9 +1,10 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, rinetd
-, stdenv
-, testers
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  rinetd,
+  stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-W8PLGd3RwmBTh1kw3k8+ZfP6AzRhZORCkxZzQ9ZbPN4=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   preConfigure = ''
     ./bootstrap

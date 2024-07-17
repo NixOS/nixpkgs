@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, curl
-, p7zip
-, glibc
-, ncurses
-, openssl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  curl,
+  p7zip,
+  glibc,
+  ncurses,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=";
   };
 
-  nativeBuildInputs = [
-    p7zip
-  ];
+  nativeBuildInputs = [ p7zip ];
 
   buildInputs = [
     curl
@@ -41,7 +40,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf $out/bin/vk-cli \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ curl glibc ]}"
+      --set-rpath "${
+        lib.makeLibraryPath [
+          curl
+          glibc
+        ]
+      }"
   '';
 
   meta = with lib; {

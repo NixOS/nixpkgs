@@ -1,11 +1,12 @@
-{ lib
-, channel ? "stable"
-, fetchurl
-, installShellFiles
-, makeBinaryWrapper
-, terraform
-, stdenvNoCC
-, unzip
+{
+  lib,
+  channel ? "stable",
+  fetchurl,
+  installShellFiles,
+  makeBinaryWrapper,
+  terraform,
+  stdenvNoCC,
+  unzip,
 }:
 
 let
@@ -40,19 +41,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     url =
       let
-        systemName = {
-          x86_64-linux = "linux_amd64";
-          aarch64-linux = "linux_arm64";
-          x86_64-darwin = "darwin_amd64";
-          aarch64-darwin = "darwin_arm64";
-        }.${system};
+        systemName =
+          {
+            x86_64-linux = "linux_amd64";
+            aarch64-linux = "linux_arm64";
+            x86_64-darwin = "darwin_amd64";
+            aarch64-darwin = "darwin_arm64";
+          }
+          .${system};
 
-        ext = {
-          x86_64-linux = "tar.gz";
-          aarch64-linux = "tar.gz";
-          x86_64-darwin = "zip";
-          aarch64-darwin = "zip";
-        }.${system};
+        ext =
+          {
+            x86_64-linux = "tar.gz";
+            aarch64-linux = "tar.gz";
+            x86_64-darwin = "zip";
+            aarch64-darwin = "zip";
+          }
+          .${system};
       in
       "https://github.com/coder/coder/releases/download/v${finalAttrs.version}/coder_${finalAttrs.version}_${systemName}.${ext}";
   };
@@ -100,7 +105,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "coder";
-    maintainers = with lib.maintainers; [ ghuntley kylecarbs urandom ];
+    maintainers = with lib.maintainers; [
+      ghuntley
+      kylecarbs
+      urandom
+    ];
   };
 
   passthru = {

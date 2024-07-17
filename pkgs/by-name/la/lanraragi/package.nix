@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, makeBinaryWrapper
-, perl
-, ghostscript
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  perl,
+  ghostscript,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -27,41 +28,47 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-RAjZGuK0C6R22fVFq82GPQoD1HpRs3MYMluUAV5ZEc8=";
 
-  nativeBuildInputs = [ perl makeBinaryWrapper ];
-
-  buildInputs = with perl.pkgs; [
+  nativeBuildInputs = [
     perl
-    ImageMagick
-    locallib
-    Redis
-    Encode
-    ArchiveLibarchiveExtract
-    ArchiveLibarchivePeek
-    ListMoreUtils
-    NetDNSNative
-    SortNaturally
-    AuthenPassphrase
-    FileReadBackwards
-    URI
-    LogfileRotate
-    Mojolicious
-    MojoliciousPluginTemplateToolkit
-    MojoliciousPluginRenderFile
-    MojoliciousPluginStatus
-    IOSocketSocks
-    IOSocketSSL
-    CpanelJSONXS
-    Minion
-    MinionBackendRedis
-    ProcSimple
-    ParallelLoops
-    SysCpuAffinity
-    FileChangeNotify
-    ModulePluggable
-    TimeLocal
-    YAMLPP
-    StringSimilarity
-  ] ++ lib.optionals stdenv.isLinux [ LinuxInotify2 ];
+    makeBinaryWrapper
+  ];
+
+  buildInputs =
+    with perl.pkgs;
+    [
+      perl
+      ImageMagick
+      locallib
+      Redis
+      Encode
+      ArchiveLibarchiveExtract
+      ArchiveLibarchivePeek
+      ListMoreUtils
+      NetDNSNative
+      SortNaturally
+      AuthenPassphrase
+      FileReadBackwards
+      URI
+      LogfileRotate
+      Mojolicious
+      MojoliciousPluginTemplateToolkit
+      MojoliciousPluginRenderFile
+      MojoliciousPluginStatus
+      IOSocketSocks
+      IOSocketSSL
+      CpanelJSONXS
+      Minion
+      MinionBackendRedis
+      ProcSimple
+      ParallelLoops
+      SysCpuAffinity
+      FileChangeNotify
+      ModulePluggable
+      TimeLocal
+      YAMLPP
+      StringSimilarity
+    ]
+    ++ lib.optionals stdenv.isLinux [ LinuxInotify2 ];
 
   buildPhase = ''
     runHook preBuild

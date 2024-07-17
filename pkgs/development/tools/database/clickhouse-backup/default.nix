@@ -1,8 +1,9 @@
-{ buildGoModule
-, clickhouse-backup
-, fetchFromGitHub
-, lib
-, testers
+{
+  buildGoModule,
+  clickhouse-backup,
+  fetchFromGitHub,
+  lib,
+  testers,
 }:
 
 buildGoModule rec {
@@ -18,17 +19,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-sMhcEFRqIROnXSdZA+NjHGAZLicFjU7swJK9RBV/EpQ=";
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   postConfigure = ''
     export CGO_ENABLED=0
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = clickhouse-backup;
-  };
+  passthru.tests.version = testers.testVersion { package = clickhouse-backup; };
 
   meta = with lib; {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";

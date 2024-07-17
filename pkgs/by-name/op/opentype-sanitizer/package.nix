@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, freetype
-, gtest
-, lz4
-, meson
-, ninja
-, pkg-config
-, woff2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freetype,
+  gtest,
+  lz4,
+  meson,
+  ninja,
+  pkg-config,
+  woff2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

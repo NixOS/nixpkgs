@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, help2man
-, meson
-, ninja
-, pkg-config
-, libxml2
-, gnome
-, gtk4
-, gettext
-, libadwaita
-, itstool
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  help2man,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  gnome,
+  gtk4,
+  gettext,
+  libadwaita,
+  itstool,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "zenity";
-    };
+    updateScript = gnome.updateScript { packageName = "zenity"; };
   };
 
   meta = with lib; {

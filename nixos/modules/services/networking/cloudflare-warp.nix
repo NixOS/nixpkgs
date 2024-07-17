@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cloudflare-warp;
 in
@@ -34,9 +39,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedUDPPorts = [ cfg.udpPort ];
-    };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedUDPPorts = [ cfg.udpPort ]; };
 
     systemd.tmpfiles.rules = [
       "d ${cfg.rootDir}    - root root"
@@ -64,7 +67,10 @@ in
         {
           Type = "simple";
           ExecStart = "${cfg.package}/bin/warp-svc";
-          ReadWritePaths = [ "${cfg.rootDir}" "/etc/resolv.conf" ];
+          ReadWritePaths = [
+            "${cfg.rootDir}"
+            "/etc/resolv.conf"
+          ];
           CapabilityBoundingSet = caps;
           AmbientCapabilities = caps;
           Restart = "always";

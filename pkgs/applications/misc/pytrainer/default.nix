@@ -1,30 +1,30 @@
-{ lib
-, python310
-, fetchFromGitHub
-, gdk-pixbuf
-, adwaita-icon-theme
-, gpsbabel
-, glib-networking
-, glibcLocales
-, gobject-introspection
-, gtk3
-, perl
-, sqlite
-, tzdata
-, webkitgtk
-, wrapGAppsHook3
-, xvfb-run
+{
+  lib,
+  python310,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  adwaita-icon-theme,
+  gpsbabel,
+  glib-networking,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  perl,
+  sqlite,
+  tzdata,
+  webkitgtk,
+  wrapGAppsHook3,
+  xvfb-run,
 }:
 
 let
   python = python310.override {
-    packageOverrides = (self: super: {
-      matplotlib = super.matplotlib.override {
-        enableGtk3 = true;
-      };
-    });
+    packageOverrides = (
+      self: super: { matplotlib = super.matplotlib.override { enableGtk3 = true; }; }
+    );
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.2.1";
 
@@ -60,17 +60,25 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      perl
+      gpsbabel
+    ])
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    perl
-    xvfb-run
-  ] ++ (with python.pkgs; [
-    mysqlclient
-    psycopg2
-  ]);
+  nativeCheckInputs =
+    [
+      glibcLocales
+      perl
+      xvfb-run
+    ]
+    ++ (with python.pkgs; [
+      mysqlclient
+      psycopg2
+    ]);
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
@@ -91,7 +99,10 @@ in python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";
-    maintainers = with maintainers; [ rycee dotlambda ];
+    maintainers = with maintainers; [
+      rycee
+      dotlambda
+    ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

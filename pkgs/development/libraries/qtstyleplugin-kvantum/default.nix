@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, qmake
-, qtbase
-, qtsvg
-, qtx11extras ? null
-, kwindowsystem ? null
-, qtwayland
-, libX11
-, libXext
-, qttools
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qmake,
+  qtbase,
+  qtsvg,
+  qtx11extras ? null,
+  kwindowsystem ? null,
+  qtwayland,
+  libX11,
+  libXext,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 
-, qt6Kvantum ? null
+  qt6Kvantum ? null,
 }:
 let
   isQt5 = lib.versionOlder qtbase.version "6";
@@ -44,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXext
     kwindowsystem
-  ] ++ lib.optionals isQt5 [ qtx11extras ]
-    ++ lib.optionals (!isQt5) [ qtwayland ];
+  ] ++ lib.optionals isQt5 [ qtx11extras ] ++ lib.optionals (!isQt5) [ qtwayland ];
 
   sourceRoot = "${finalAttrs.src.name}/Kvantum";
 
@@ -64,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"''${_Qt5_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/"
   '';
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT5" isQt5)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_QT5" isQt5) ];
 
   postInstall = lib.optionalString isQt5 ''
     # make default Kvantum themes available for Qt 5 apps
@@ -74,15 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${qt6Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "V";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "V"; };
 
   meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo Scrumplex ];
+    maintainers = with maintainers; [
+      romildo
+      Scrumplex
+    ];
   };
 })

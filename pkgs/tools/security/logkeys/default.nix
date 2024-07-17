@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, which, procps, kbd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  which,
+  procps,
+  kbd,
+}:
 
 stdenv.mkDerivation {
   pname = "logkeys";
@@ -11,14 +20,21 @@ stdenv.mkDerivation {
     sha256 = "1k6kj0913imwh53lh6hrhqmrpygqg2h462raafjsn7gbd3vkgx8n";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ which procps kbd ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    which
+    procps
+    kbd
+  ];
 
   postPatch = ''
     substituteInPlace src/Makefile.am --replace 'root' '$(id -u)'
     substituteInPlace configure.ac --replace '/dev/input' '/tmp'
     sed -i '/chmod u+s/d' src/Makefile.am
- '';
+  '';
 
   preConfigure = "./autogen.sh";
 
@@ -26,7 +42,10 @@ stdenv.mkDerivation {
     description = "GNU/Linux keylogger that works";
     license = licenses.gpl3;
     homepage = "https://github.com/kernc/logkeys";
-    maintainers = with maintainers; [mikoim offline];
+    maintainers = with maintainers; [
+      mikoim
+      offline
+    ];
     platforms = platforms.linux;
   };
 }

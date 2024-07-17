@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "kunitconversion";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "kunitconversion"; }

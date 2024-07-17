@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-PUcfE7LQQh2ftiOiOoucSfxYnTI4zRNmmSqqmvvvs7g=";
 
-  subPackages = [ "cmd/upterm" "cmd/uptermd" ];
+  subPackages = [
+    "cmd/upterm"
+    "cmd/uptermd"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,7 +36,9 @@ buildGoModule rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) uptermd; };
+  passthru.tests = {
+    inherit (nixosTests) uptermd;
+  };
 
   __darwinAllowLocalNetworking = true;
 

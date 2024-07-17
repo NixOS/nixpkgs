@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, callPackage
-, fetchpatch
-, fetchurl
-, testers
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchpatch,
+  fetchurl,
+  testers,
 
-, cmake
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

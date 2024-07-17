@@ -35,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     click
     dataclasses-json

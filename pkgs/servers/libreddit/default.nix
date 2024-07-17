@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-42xtt5dCcV6+TcssFjufkVtDSRiDGaatAaiP6K8DT8I=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests = {
     inherit (nixosTests) libreddit;
@@ -33,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/libreddit/libreddit";
     changelog = "https://github.com/libreddit/libreddit/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab jojosch ];
+    maintainers = with maintainers; [
+      fab
+      jojosch
+    ];
   };
 }

@@ -19,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-p3nM80fOMtRmeKvOXuX40Fu9xH8gPgYyneXbUS678fE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     emoji

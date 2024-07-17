@@ -1,15 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonApplication
-, poetry-core
-, colorama
-, packaging
-, pydantic
-, requests
-, pygobject3
-, tqdm
-, gobject-introspection
-, wrapGAppsNoGuiHook
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+  poetry-core,
+  colorama,
+  packaging,
+  pydantic,
+  requests,
+  pygobject3,
+  tqdm,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {
@@ -43,9 +44,7 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "gnome_extensions_cli"
-  ];
+  pythonImportsCheck = [ "gnome_extensions_cli" ];
 
   meta = with lib; {
     homepage = "https://github.com/essembeh/gnome-extensions-cli";

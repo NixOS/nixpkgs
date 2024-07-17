@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-}:
+{ mkKdeDerivation, qtdeclarative }:
 mkKdeDerivation {
   pname = "khealthcertificate";
 
-  extraNativeBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [ qtdeclarative ];
 }

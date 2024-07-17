@@ -1,8 +1,9 @@
-{ darwin
-, fetchCrate
-, lib
-, rustPlatform
-, stdenv
+{
+  darwin,
+  fetchCrate,
+  lib,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,9 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Cdup65w31wF1RZu0g4/msHfLESrNTcuCU5kxkk0gnW8=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoHash = "sha256-U8CG0GqnUwya+ZK0qXtOFZ/MbbqSvB5egX7XJKtl88g=";
 
@@ -38,4 +37,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phip1611 ];
   };
 }
-

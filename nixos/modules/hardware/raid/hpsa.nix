@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -43,7 +48,8 @@ let
       maintainers = with maintainers; [ ];
     };
   };
-in {
+in
+{
   ###### interface
 
   options = {
@@ -56,7 +62,7 @@ in {
 
   config = mkIf config.hardware.raid.HPSmartArray.enable {
 
-    boot.initrd.kernelModules = [ "sg" ]; /* hpssacli wants it */
+    boot.initrd.kernelModules = [ "sg" ]; # hpssacli wants it
     boot.initrd.availableKernelModules = [ "hpsa" ];
 
     environment.systemPackages = [ hpssacli ];

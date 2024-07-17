@@ -1,7 +1,4 @@
-{
-  lib,
-  makeSetupHook,
-}:
+{ lib, makeSetupHook }:
 
 makeSetupHook {
   name = "version-check-hook";

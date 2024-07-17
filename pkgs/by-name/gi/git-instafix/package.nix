@@ -1,17 +1,14 @@
-{ git
-, lib
-, libgit2
-, makeWrapper
-, rustPlatform
-, stdenv
-, fetchFromGitHub
+{
+  git,
+  lib,
+  libgit2,
+  makeWrapper,
+  rustPlatform,
+  stdenv,
+  fetchFromGitHub,
 }:
 let
-  inherit
-    (lib)
-    licenses
-    maintainers
-    ;
+  inherit (lib) licenses maintainers;
 
   version = "0.2.7";
 in
@@ -35,8 +32,14 @@ rustPlatform.buildRustPackage {
     description = "Quickly fix up an old commit using your currently-staged changes";
     mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ mightyiam quodlibetor ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      mightyiam
+      quodlibetor
+    ];
     changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${version}";
     broken = stdenv.isDarwin;
   };

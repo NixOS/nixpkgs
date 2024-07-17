@@ -1,4 +1,13 @@
-{ lib, stdenv, libsForQt5, makeDesktopItem, copyDesktopItems, fetchFromGitHub, cmake, kmod }:
+{
+  lib,
+  stdenv,
+  libsForQt5,
+  makeDesktopItem,
+  copyDesktopItems,
+  fetchFromGitHub,
+  cmake,
+  kmod,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcontrolcenter";

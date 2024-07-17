@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, base_quickcheck ? null
-, capnproto
-, ocplib-endian
-, ounit2
-, res
-, result
-, stdint
-, stdio
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  base_quickcheck ? null,
+  capnproto,
+  ocplib-endian,
+  ounit2,
+  res,
+  result,
+  stdint,
+  stdio,
 }:
 
 buildDunePackage rec {
@@ -24,13 +25,9 @@ buildDunePackage rec {
     hash = "sha256-G4B1llsHnGcuGIarDB248QMaRBvS47IEQB5B93wY7nA=";
   };
 
-  nativeBuildInputs = [
-    capnproto
-  ];
+  nativeBuildInputs = [ capnproto ];
 
-  buildInputs = [
-    stdio
-  ];
+  buildInputs = [ stdio ];
 
   propagatedBuildInputs = [
     ocplib-endian

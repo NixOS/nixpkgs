@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitLab
-, glm
-, glslang
-, meson
-, ninja
-, openxr-loader
-, pkg-config
-, vulkan-headers
-, vulkan-loader
-, xxd
-, SDL2
-, makeWrapper
-, libGL
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glm,
+  glslang,
+  meson,
+  ninja,
+  openxr-loader,
+  pkg-config,
+  vulkan-headers,
+  vulkan-loader,
+  xxd,
+  SDL2,
+  makeWrapper,
+  libGL,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +48,12 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     wrapProgram $out/bin/xrgears \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          SDL2
+          libGL
+        ]
+      }
   '';
 
   meta = with lib; {

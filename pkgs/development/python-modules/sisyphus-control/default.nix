@@ -28,7 +28,6 @@ buildPythonPackage rec {
     "python-socketio"
   ];
 
-
   propagatedBuildInputs = [
     aiohttp
     netifaces

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, cmake
-, ninja
-, pkg-config
-, gtk2
-, gtk3
-, gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  cmake,
+  ninja,
+  pkg-config,
+  gtk2,
+  gtk3,
+  gtk4,
 }:
 
 let
@@ -31,9 +32,18 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = [ meson cmake ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    cmake
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ gtk2 gtk3 gtk4 ];
+  buildInputs = [
+    gtk2
+    gtk3
+    gtk4
+  ];
 
   postPatch = ''
     substituteInPlace subprojects/funchook-helper/subprojects/funchook/CMakeLists.txt \

@@ -1,21 +1,26 @@
-{ lib
-, check
-, cmake
-, doxygen
-, expat
-, fetchFromGitHub
-, libxml2
-, python
-, sphinx
-, stdenv
-, zlib
+{
+  lib,
+  check,
+  cmake,
+  doxygen,
+  expat,
+  fetchFromGitHub,
+  libxml2,
+  python,
+  sphinx,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcomps";
   version = "0.1.21";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -24,9 +29,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-2ZxU1g5HDWnSxTabnmfyQwz1ZCXK+7kJXLofeFBiwn0=";
   };
 
-  patches = [
-    ./fix-python-install-dir.patch
-  ];
+  patches = [ ./fix-python-install-dir.patch ];
 
   postPatch = ''
     substituteInPlace libcomps/src/python/src/CMakeLists.txt \

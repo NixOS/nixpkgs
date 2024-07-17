@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, libxml2
-, gettext
-, itstool
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  libxml2,
+  gettext,
+  itstool,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,9 +52,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

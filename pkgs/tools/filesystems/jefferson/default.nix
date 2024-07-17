@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-PGtrvZ0cQvdiswn2Bk43c3LbIZqJyvNe5rnTPw/ipUM=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -25,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     lzallright
   ];
 
-  pythonImportsCheck = [
-    "jefferson"
-  ];
+  pythonImportsCheck = [ "jefferson" ];
 
   # upstream has no tests
   doCheck = false;
@@ -36,7 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
     license = licenses.mit;
-    maintainers = with maintainers; [ tnias vlaci ];
+    maintainers = with maintainers; [
+      tnias
+      vlaci
+    ];
     mainProgram = "jefferson";
   };
 }

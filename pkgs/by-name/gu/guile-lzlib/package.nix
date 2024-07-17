@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
-, lzlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
+  lzlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook guile pkg-config texinfo ];
-  propagatedBuildInputs = [ guile lzlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    guile
+    pkg-config
+    texinfo
+  ];
+  propagatedBuildInputs = [
+    guile
+    lzlib
+  ];
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.npm;
@@ -11,9 +16,10 @@ in
     programs.npm = {
       enable = lib.mkEnableOption "{command}`npm` global config";
 
-      package = lib.mkPackageOption pkgs [ "nodePackages" "npm" ] {
-        example = "nodePackages_13_x.npm";
-      };
+      package = lib.mkPackageOption pkgs [
+        "nodePackages"
+        "npm"
+      ] { example = "nodePackages_13_x.npm"; };
 
       npmrc = lib.mkOption {
         type = lib.types.lines;

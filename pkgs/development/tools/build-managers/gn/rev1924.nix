@@ -1,4 +1,4 @@
-{ callPackage, ... } @ args:
+{ callPackage, ... }@args:
 
 callPackage ./generic.nix args {
   rev = "24e2f7df92641de0351a96096fb2c490b2436bb8";

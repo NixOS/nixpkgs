@@ -44,7 +44,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     jsonpatch
     langsmith

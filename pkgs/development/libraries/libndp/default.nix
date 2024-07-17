@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libndp";

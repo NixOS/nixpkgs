@@ -52,11 +52,7 @@
 }@inputs:
 
 let
-  inherit (cudaPackages)
-    cudaFlags
-    cudaVersion
-    nccl
-    ;
+  inherit (cudaPackages) cudaFlags cudaVersion nccl;
 
   pname = "jaxlib";
   version = "0.4.28";
@@ -393,12 +389,12 @@ let
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
 
-        # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
-        preInstall = ''
-          cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
-          []
-          EOF
-        '';
+      # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
+      preInstall = ''
+        cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
+        []
+        EOF
+      '';
     };
 
     buildAttrs = {

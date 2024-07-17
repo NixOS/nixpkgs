@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, makeWrapper
-, nodejs
-, prefetch-yarn-deps
-, yarn
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  makeWrapper,
+  nodejs,
+  prefetch-yarn-deps,
+  yarn,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,16 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
     changelog = "https://github.com/typescript-language-server/typescript-language-server/releases/tag/v${finalAttrs.version}";
     description = "Language Server Protocol implementation for TypeScript using tsserver";
     homepage = "https://github.com/typescript-language-server/typescript-language-server";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "typescript-language-server";
     maintainers = with lib.maintainers; [ marcel ];
   };

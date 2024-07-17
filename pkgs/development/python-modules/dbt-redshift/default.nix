@@ -31,7 +31,6 @@ buildPythonPackage rec {
     "redshift-connector"
   ];
 
-
   build-system = [ setuptools ];
 
   dependencies = [

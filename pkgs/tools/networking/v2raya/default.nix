@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, mkYarnPackage
-, buildGoModule
-, makeWrapper
-, v2ray
-, v2ray-geoip
-, v2ray-domain-list-community
-, symlinkJoin
-, fetchYarnDeps
+{
+  lib,
+  fetchFromGitHub,
+  mkYarnPackage,
+  buildGoModule,
+  makeWrapper,
+  v2ray,
+  v2ray-geoip,
+  v2ray-domain-list-community,
+  symlinkJoin,
+  fetchYarnDeps,
 }:
 let
   pname = "v2raya";
@@ -54,7 +55,10 @@ let
 
   assetsDir = symlinkJoin {
     name = "assets";
-    paths = [ v2ray-geoip v2ray-domain-list-community ];
+    paths = [
+      v2ray-geoip
+      v2ray-domain-list-community
+    ];
   };
 
 in

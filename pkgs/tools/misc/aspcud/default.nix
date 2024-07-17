@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, catch2
-, cmake
-, clingo
-, re2c
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  catch2,
+  cmake,
+  clingo,
+  re2c,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost clingo re2c ];
+  buildInputs = [
+    boost
+    clingo
+    re2c
+  ];
 
   cmakeFlags = [
     "-DASPCUD_GRINGO_PATH=${clingo}/bin/gringo"

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+  jdk,
+  rlwrap,
+  gnupg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
@@ -43,7 +51,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/lein \
       --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
     wrapProgram $out/bin/lein \
-      --prefix PATH ":" "${lib.makeBinPath [ rlwrap coreutils ]}" \
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          rlwrap
+          coreutils
+        ]
+      }" \
       --set LEIN_GPG ${gnupg}/bin/gpg \
       --set JAVA_CMD ${jdk}/bin/java
 

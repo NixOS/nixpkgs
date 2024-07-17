@@ -1,11 +1,12 @@
-{ lib
-, pkg-config
-, boost
-, readline
-, libxml2
-, openmodelica
-, mkOpenModelicaDerivation
-, fetchpatch
+{
+  lib,
+  pkg-config,
+  boost,
+  readline,
+  libxml2,
+  openmodelica,
+  mkOpenModelicaDerivation,
+  fetchpatch,
 }:
 
 mkOpenModelicaDerivation rec {
@@ -24,17 +25,22 @@ mkOpenModelicaDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ readline libxml2 boost ];
-
-  env.CFLAGS = toString [
-    "-Wno-error=implicit-function-declaration"
+  buildInputs = [
+    readline
+    libxml2
+    boost
   ];
+
+  env.CFLAGS = toString [ "-Wno-error=implicit-function-declaration" ];
 
   meta = with lib; {
     description = "OpenModelica FMI & SSP-based co-simulation environment";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ balodja smironov ];
+    maintainers = with maintainers; [
+      balodja
+      smironov
+    ];
     platforms = platforms.linux;
   };
 }

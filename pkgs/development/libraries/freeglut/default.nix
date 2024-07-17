@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGLX, libGLU, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libICE,
+  libXext,
+  libXi,
+  libXrandr,
+  libXxf86vm,
+  libGLX,
+  libGLU,
+  cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,18 +22,28 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-PAvLkV2bGAqX7a69ARt6HeVFg6g4ZE3NQrsOoMbz6uw=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGLU ];
+  buildInputs = [
+    libICE
+    libXext
+    libXi
+    libXrandr
+    libXxf86vm
+    libGLU
+  ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
-                 "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
-                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
-                 "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
-                 "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
-                 "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
-               ];
+    "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
+    "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+    "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
+    "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
+  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

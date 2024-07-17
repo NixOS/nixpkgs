@@ -1,25 +1,39 @@
-{ lib, stdenv, fetchurl
-, meson, ninja
-, pkg-config, libGLX
-, testers
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  libGLX,
+  testers,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glu";
   version = "9.0.3";
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "https://mesa.freedesktop.org/archive/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-vUP+EvN0sRkusV/iDkX/RWubwmq1fw7ukZ+Wyg+KMw8=";
-  };
+  src =
+    let
+      inherit (finalAttrs) pname version;
+    in
+    fetchurl {
+      url = "https://mesa.freedesktop.org/archive/${pname}/${pname}-${version}.tar.xz";
+      hash = "sha256-vUP+EvN0sRkusV/iDkX/RWubwmq1fw7ukZ+Wyg+KMw8=";
+    };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   propagatedBuildInputs = [ libGLX ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   mesonFlags = lib.optionals stdenv.isDarwin [
     "-Dgl_provider=gl" # glvnd is default

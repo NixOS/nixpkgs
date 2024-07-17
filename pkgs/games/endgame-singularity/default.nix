@@ -1,9 +1,10 @@
-{ lib
-, fetchurl
-, fetchFromGitHub
-, unzip
-, python3
-, enableDefaultMusicPack ? true
+{
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  unzip,
+  python3,
+  enableDefaultMusicPack ? true,
 }:
 
 let
@@ -30,7 +31,11 @@ python3.pkgs.buildPythonApplication rec {
   sourceRoot = main_src.name;
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
-  propagatedBuildInputs = with python3.pkgs; [ pygame numpy polib ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pygame
+    numpy
+    polib
+  ];
 
   # Add the music
   postInstall = lib.optionalString enableDefaultMusicPack ''

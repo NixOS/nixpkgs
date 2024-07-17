@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
-, libglvnd, mesa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  attr,
+  judy,
+  keyutils,
+  libaio,
+  libapparmor,
+  libbsd,
+  libcap,
+  libgcrypt,
+  lksctp-tools,
+  zlib,
+  libglvnd,
+  mesa,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs = [ judy libbsd libgcrypt zlib ]
+  buildInputs =
+    [
+      judy
+      libbsd
+      libgcrypt
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd mesa
+      attr
+      keyutils
+      libaio
+      libapparmor
+      libcap
+      lksctp-tools
+      libglvnd
+      mesa
     ];
 
   makeFlags = [

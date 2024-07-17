@@ -1,11 +1,12 @@
-{ lib
-, aircrack-ng
-, fetchFromGitHub
-, iproute2
-, networkmanager
-, python3
-, tshark
-, wirelesstools
+{
+  lib,
+  aircrack-ng,
+  fetchFromGitHub,
+  iproute2,
+  networkmanager,
+  python3,
+  tshark,
+  wirelesstools,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     networkmanager
     tshark
     wirelesstools
-  ] ++ (with python3.pkgs; [
-    matplotlib
-  ]);
+  ] ++ (with python3.pkgs; [ matplotlib ]);
 
   dontBuild = true;
 

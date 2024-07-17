@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchurl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchurl,
 }:
 
 let
@@ -40,7 +41,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lichess-org/fishnet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tu-maurice ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "fishnet";
   };
 }

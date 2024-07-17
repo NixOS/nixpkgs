@@ -109,9 +109,7 @@ buildPythonPackage rec {
     air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   pythonRelaxDeps = [
     "click"

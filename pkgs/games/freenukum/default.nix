@@ -1,12 +1,14 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitLab
-, makeDesktopItem
-, installShellFiles
-, dejavu_fonts
-, SDL2
-, SDL2_ttf
-, SDL2_image
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  makeDesktopItem,
+  installShellFiles,
+  dejavu_fonts,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
 }:
 let
   pname = "freenukum";
@@ -18,7 +20,11 @@ let
     exec = pname;
     icon = pname;
     comment = description;
-    categories = [ "Game" "ArcadeGame" "ActionGame" ];
+    categories = [
+      "Game"
+      "ArcadeGame"
+      "ActionGame"
+    ];
     genericName = pname;
   };
 
@@ -37,9 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-8RfiObWDqZJg+sjjDBk+sRoS5CiECIdNPH79T+O8e8M=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     SDL2

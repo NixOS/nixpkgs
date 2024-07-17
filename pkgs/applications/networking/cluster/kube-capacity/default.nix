@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kube-capacity";
@@ -14,8 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-YME4AXpHvr1bNuc/HoHxam+7ZkwLzjhIvFSfD4hga1A=";
 
   meta = with lib; {
-    description =
-      "A simple CLI that provides an overview of the resource requests, limits, and utilization in a Kubernetes cluster";
+    description = "A simple CLI that provides an overview of the resource requests, limits, and utilization in a Kubernetes cluster";
     mainProgram = "kube-capacity";
     homepage = "https://github.com/robscott/kube-capacity";
     changelog = "https://github.com/robscott/kube-capacity/releases/tag/v${version}";

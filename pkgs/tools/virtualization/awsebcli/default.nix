@@ -1,12 +1,18 @@
-{ lib, python3, fetchFromGitHub, glibcLocales, git }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  glibcLocales,
+  git,
+}:
 
 let
-  changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
-    inherit version;
-    src = oldAttrs.src.override {
-      inherit version hash;
-    };
-  });
+  changeVersion =
+    overrideFunc: version: hash:
+    overrideFunc (oldAttrs: rec {
+      inherit version;
+      src = oldAttrs.src.override { inherit version hash; };
+    });
 
   localPython = python3.override {
     self = localPython;
@@ -36,12 +42,9 @@ localPython.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
   '';
 
-  nativeBuildInputs = with localPython.pkgs; [
-  ];
+  nativeBuildInputs = with localPython.pkgs; [ ];
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   propagatedBuildInputs = with localPython.pkgs; [
     blessed
@@ -75,9 +78,7 @@ localPython.pkgs.buildPythonApplication rec {
     git
   ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # Needs docker installed to run.
@@ -95,7 +96,10 @@ localPython.pkgs.buildPythonApplication rec {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "Command line interface for Elastic Beanstalk";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    maintainers = with maintainers; [ eqyiel kirillrdy ];
+    maintainers = with maintainers; [
+      eqyiel
+      kirillrdy
+    ];
     license = licenses.asl20;
     mainProgram = "eb";
   };

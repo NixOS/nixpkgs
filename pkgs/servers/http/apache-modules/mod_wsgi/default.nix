@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, apacheHttpd, python3, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  apacheHttpd,
+  python3,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
@@ -11,15 +18,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-/4swm4AYCN3xyz2+OH7XqH/dFC53wqGPZgEAdxZQvbs=";
   };
 
-  buildInputs = [ apacheHttpd python3 ncurses ];
+  buildInputs = [
+    apacheHttpd
+    python3
+    ncurses
+  ];
 
   postPatch = ''
     substituteInPlace configure --replace '/usr/bin/lipo' 'lipo'
   '';
 
-  makeFlags = [
-    "LIBEXECDIR=$(out)/modules"
-  ];
+  makeFlags = [ "LIBEXECDIR=$(out)/modules" ];
 
   meta = {
     homepage = "https://github.com/GrahamDumpleton/mod_wsgi";

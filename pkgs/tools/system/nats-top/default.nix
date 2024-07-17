@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, nats-top
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  nats-top,
 }:
 
 buildGoModule rec {

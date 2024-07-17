@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl , taktuk}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  taktuk,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.2";
@@ -10,8 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-      substituteInPlace ./kanif --replace "/usr/bin/perl" "${perl}/bin/perl"
-      substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
+    substituteInPlace ./kanif --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
   '';
 
   meta = {
@@ -32,4 +38,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

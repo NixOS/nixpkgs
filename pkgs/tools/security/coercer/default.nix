@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,22 +16,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-WeaKToKYIB+jjTNIQvAUQQNb25TsNWALYZwIZuBjkPE=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "impacket"
-  ];
+  pythonRelaxDeps = [ "impacket" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     impacket
     xlsxwriter
   ];
 
-  pythonImportsCheck = [
-    "coercer"
-  ];
+  pythonImportsCheck = [ "coercer" ];
 
   # this file runs into issues on case-insensitive filesystems
   # ValueError: Both <...>/coercer and <...>/coercer.py exist

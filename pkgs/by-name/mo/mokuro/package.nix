@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication rec {
         --replace-fail 'opencv-python' 'opencv'
   '';
 
-
   pythonRelaxDeps = [ "torchvision" ];
 
   build-system = with python3Packages; [ setuptools ];

@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
@@ -14,9 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-02ZbeUw+O7tBQwauklaPPcgNasG+mYrSnw9TGJqtJfk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [
     open-clip-torch
@@ -29,7 +28,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pythonRelaxDeps = [ "torch" "torchvision" ];
+  pythonRelaxDeps = [
+    "torch"
+    "torchvision"
+  ];
 
   pythonImportsCheck = [ "rclip" ];
 

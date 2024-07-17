@@ -37,9 +37,7 @@ let
     "ssh-askpass-sublime"
   ];
   primaryBinary = "sublime_merge";
-  primaryBinaryAliases = [
-    "smerge"
-  ];
+  primaryBinaryAliases = [ "smerge" ];
   crashHandlerBinary =
     if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
   downloadUrl =
@@ -147,9 +145,7 @@ stdenv.mkDerivation (rec {
 
   ${primaryBinary} = binaryPackage;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     ''

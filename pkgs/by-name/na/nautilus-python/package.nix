@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-python";
   version = "4.0.1";
 
@@ -56,9 +56,7 @@ stdenv.mkDerivation (finalAttrs:{
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "nautilus-python";
-    };
+    updateScript = gnome.updateScript { packageName = "nautilus-python"; };
   };
 
   meta = with lib; {

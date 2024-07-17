@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, gprbuild-boot
-, which
-, gnat
-, xmlada
+{
+  lib,
+  stdenv,
+  gprbuild-boot,
+  which,
+  gnat,
+  xmlada,
 }:
 
 stdenv.mkDerivation {
@@ -25,9 +26,7 @@ stdenv.mkDerivation {
     which
   ];
 
-  propagatedBuildInputs = [
-    xmlada
-  ];
+  propagatedBuildInputs = [ xmlada ];
 
   makeFlags = [
     "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
@@ -35,9 +34,7 @@ stdenv.mkDerivation {
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-    "LIBRARY_TYPE=relocatable"
-  ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ "LIBRARY_TYPE=relocatable" ];
 
   env = lib.optionalAttrs stdenv.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
@@ -47,13 +44,17 @@ stdenv.mkDerivation {
 
   # Fixes gprbuild being linked statically always. Based on the AUR's patch:
   # https://aur.archlinux.org/cgit/aur.git/plain/0001-Makefile-build-relocatable-instead-of-static-binary.patch?h=gprbuild&id=bac524c76cd59c68fb91ef4dfcbe427357b9f850
-  patches = lib.optionals (!stdenv.hostPlatform.isStatic) [
-    ./gprbuild-relocatable-build.patch
+  patches = lib.optionals (!stdenv.hostPlatform.isStatic) [ ./gprbuild-relocatable-build.patch ];
+
+  buildFlags = [
+    "all"
+    "libgpr.build"
   ];
 
-  buildFlags = [ "all" "libgpr.build" ];
-
-  installFlags = [ "all" "libgpr.install" ];
+  installFlags = [
+    "all"
+    "libgpr.install"
+  ];
 
   # link gprconfig_kb db from gprbuild-boot into build dir,
   # the install process copies its contents to $out

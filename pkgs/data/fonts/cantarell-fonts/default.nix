@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, python3
-, gettext
-, appstream-glib
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gettext,
+  appstream-glib,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
   outputHash = "XeqHVdTQ7PTzxkjwfzS/BTR7+k/M69sfUKdRXGOTmZE=";
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = {

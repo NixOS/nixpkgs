@@ -1,9 +1,10 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, utop
-, python3
-, stdcompat
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  utop,
+  python3,
+  stdcompat,
 }:
 
 buildDunePackage rec {
@@ -17,9 +18,7 @@ buildDunePackage rec {
     sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 
-  buildInputs = [
-    utop
-  ];
+  buildInputs = [ utop ];
 
   propagatedBuildInputs = [
     python3

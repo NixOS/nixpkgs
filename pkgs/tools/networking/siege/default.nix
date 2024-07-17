@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MJ1Ym/yBm28V0uXoWRs8DG9pNiT1Bg7qwGek2ad1fek=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux [
-    "-lgcc_s"
-  ];
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux [ "-lgcc_s" ];
 
   buildInputs = [
     openssl

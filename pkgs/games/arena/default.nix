@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2-x11,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gdk-pixbuf,
+  libX11,
+}:
 
 # Arena is free software in the sense of "free beer" but not as in "free
 # speech". We can install it as we please, but we cannot re-distribute it in
@@ -16,12 +27,23 @@ stdenv.mkDerivation rec {
   version = "3.10-beta";
 
   src = fetchurl {
-    url = "http://www.playwitharena.de/downloads/arenalinux_64bit_${lib.replaceStrings ["-"] [""] version}.tar.gz";
+    url = "http://www.playwitharena.de/downloads/arenalinux_64bit_${
+      lib.replaceStrings [ "-" ] [ "" ] version
+    }.tar.gz";
     sha256 = "1pzb9sg4lzbbi4gbldvlb85p8xyl9xnplxwyb9pkk2mwzvvxkf0d";
   };
 
   # stdenv.cc.cc.lib is in that list to pick up libstdc++.so. Is there a better way?
-  buildInputs = [gtk2-x11 glib pango cairo atk gdk-pixbuf libX11 stdenv.cc.cc.lib];
+  buildInputs = [
+    gtk2-x11
+    glib
+    pango
+    cairo
+    atk
+    gdk-pixbuf
+    libX11
+    stdenv.cc.cc.lib
+  ];
 
   unpackPhase = ''
     # This is is a tar bomb, i.e. it extract a dozen files and directories to
@@ -70,7 +92,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.playwitharena.de";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 
 }

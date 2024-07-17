@@ -1,35 +1,36 @@
-{ stdenv
-, lib
-, bash
-, cmake
-, coreutils
-, cfitsio
-, libusb1
-, zlib
-, boost
-, libnova
-, curl
-, libjpeg
-, gsl
-, fftw
-, indilib
-, libgphoto2
-, libraw
-, libftdi1
-, libdc1394
-, gpsd
-, ffmpeg
-, limesuite
-, pkg-config
-, zeromq
-, version
-, src
-, withFirmware ? false
-, firmware ? null
+{
+  stdenv,
+  lib,
+  bash,
+  cmake,
+  coreutils,
+  cfitsio,
+  libusb1,
+  zlib,
+  boost,
+  libnova,
+  curl,
+  libjpeg,
+  gsl,
+  fftw,
+  indilib,
+  libgphoto2,
+  libraw,
+  libftdi1,
+  libdc1394,
+  gpsd,
+  ffmpeg,
+  limesuite,
+  pkg-config,
+  zeromq,
+  version,
+  src,
+  withFirmware ? false,
+  firmware ? null,
 }:
 
 let
-  libusb-with-fxload = libusb1.override { withExamples = true;};
+  libusb-with-fxload = libusb1.override { withExamples = true; };
 in
 
 stdenv.mkDerivation rec {
@@ -37,15 +38,31 @@ stdenv.mkDerivation rec {
 
   inherit version src;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
-    indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
-    limesuite zeromq
-  ] ++ lib.optionals withFirmware [
-    firmware
-  ];
+    indilib
+    libnova
+    curl
+    cfitsio
+    libusb1
+    zlib
+    boost
+    gsl
+    gpsd
+    libjpeg
+    libgphoto2
+    libraw
+    libftdi1
+    libdc1394
+    ffmpeg
+    fftw
+    limesuite
+    zeromq
+  ] ++ lib.optionals withFirmware [ firmware ];
 
   postPatch = ''
     for f in $(find . -name "CMakeLists.txt"); do
@@ -61,20 +78,22 @@ stdenv.mkDerivation rec {
     sed '1i#include <ctime>' -i indi-duino/libfirmata/src/firmata.cpp # gcc12
   '';
 
-  cmakeFlags = [
-    "-DINDI_DATA_DIR=share/indi"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-    "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-  ] ++ lib.optionals (!withFirmware) [
-    "-DWITH_ATIK=off"
-    "-DWITH_APOGEE=off"
-    "-DWITH_DSI=off"
-    "-DWITH_QHY=off"
-    "-DWITH_ARMADILLO=off"
-    "-DWITH_FISHCAMP=off"
-    "-DWITH_SBIG=off"
-  ];
+  cmakeFlags =
+    [
+      "-DINDI_DATA_DIR=share/indi"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+      "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+    ]
+    ++ lib.optionals (!withFirmware) [
+      "-DWITH_ATIK=off"
+      "-DWITH_APOGEE=off"
+      "-DWITH_DSI=off"
+      "-DWITH_QHY=off"
+      "-DWITH_ARMADILLO=off"
+      "-DWITH_FISHCAMP=off"
+      "-DWITH_SBIG=off"
+    ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
@@ -88,13 +107,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Third party drivers for the INDI astronomical software suite";
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce ];
+    maintainers = with maintainers; [
+      hjones2199
+      sheepforce
+    ];
     platforms = platforms.linux;
   };
 }

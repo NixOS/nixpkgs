@@ -32,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-TKo1lanZNM+XrOKZ0ZmtlhEPoAYQUspkyHXZm1wNTFE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils

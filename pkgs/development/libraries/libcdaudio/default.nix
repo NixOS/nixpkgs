@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcdaudio";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/libcdaudio/libcdaudio-${version}.tar.gz";
-    sha256 = "1fsy6dlzxrx177qc877qhajm9l4g28mvh06h2l15rxy4bapzknjz" ;
+    sha256 = "1fsy6dlzxrx177qc877qhajm9l4g28mvh06h2l15rxy4bapzknjz";
   };
 
   meta = {

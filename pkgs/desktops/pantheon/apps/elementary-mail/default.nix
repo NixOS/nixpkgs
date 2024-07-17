@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, libxml2
-, libhandy
-, libportal-gtk3
-, webkitgtk_4_1
-, elementary-gtk-theme
-, elementary-icon-theme
-, folks
-, glib-networking
-, granite
-, evolution-data-server
-, wrapGAppsHook3
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  libxml2,
+  libhandy,
+  libportal-gtk3,
+  webkitgtk_4_1,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  folks,
+  glib-networking,
+  granite,
+  evolution-data-server,
+  wrapGAppsHook3,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {

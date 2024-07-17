@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 let
@@ -55,7 +56,10 @@ rustPlatform.buildRustPackage rec {
     description = "Native messaging host for ff2mpv written in Rust";
     homepage = "https://github.com/ryze312/ff2mpv-rust";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ arthsmn ryze ];
+    maintainers = with maintainers; [
+      arthsmn
+      ryze
+    ];
     mainProgram = "ff2mpv-rust";
   };
 }

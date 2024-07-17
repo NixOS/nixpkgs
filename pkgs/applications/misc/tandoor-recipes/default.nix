@@ -1,7 +1,8 @@
-{ callPackage
-, nixosTests
-, python311
-, fetchFromGitHub
+{
+  callPackage,
+  nixosTests,
+  python311,
+  fetchFromGitHub,
 }:
 let
   # python-ldap-3.4.4 does not work with python3(12)
@@ -15,7 +16,10 @@ let
           rev = version;
           hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
-        propagatedBuildInputs = [ super.decorator super.six ];
+        propagatedBuildInputs = [
+          super.decorator
+          super.six
+        ];
       });
 
       djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {

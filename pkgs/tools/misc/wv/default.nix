@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, zlib, imagemagick, libpng, glib, pkg-config, libgsf
-, libxml2, bzip2
-, autoreconfHook
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  imagemagick,
+  libpng,
+  glib,
+  pkg-config,
+  libgsf,
+  libxml2,
+  bzip2,
+  autoreconfHook,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,12 +21,23 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AbiWord";
     repo = "wv";
-    rev = "wv-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}";
+    rev = "wv-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-xcC+/M1EzFqQFeF5Dw9qd8VIy7r8JdKMp2X/GHkFiPA=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ zlib imagemagick libpng glib libgsf libxml2 bzip2 ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    zlib
+    imagemagick
+    libpng
+    glib
+    libgsf
+    libxml2
+    bzip2
+  ];
 
   configureFlags = [
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"

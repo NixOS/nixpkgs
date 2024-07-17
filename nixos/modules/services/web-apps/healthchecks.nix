@@ -1,4 +1,11 @@
-{ config, lib, options, pkgs, buildEnv, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  buildEnv,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +20,9 @@ let
     STATIC_ROOT = cfg.dataDir + "/static";
   } // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
 
-  environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
+  environmentFile = pkgs.writeText "healthchecks-environment" (
+    lib.generators.toKeyValue { } environment
+  );
 
   healthchecksManageScript = pkgs.writeShellScriptBin "healthchecks-manage" ''
     sudo=exec
@@ -157,17 +166,18 @@ in
           };
 
           DB = mkOption {
-            type = types.enum [ "sqlite" "postgres" "mysql" ];
+            type = types.enum [
+              "sqlite"
+              "postgres"
+              "mysql"
+            ];
             default = "sqlite";
             description = "Database engine to use.";
           };
 
           DB_NAME = mkOption {
             type = types.str;
-            default =
-              if settings.config.DB == "sqlite"
-              then "${cfg.dataDir}/healthchecks.sqlite"
-              else "hc";
+            default = if settings.config.DB == "sqlite" then "${cfg.dataDir}/healthchecks.sqlite" else "hc";
             defaultText = lib.literalExpression ''
               if config.${settings.options.DB} == "sqlite"
               then "''${config.${opt.dataDir}}/healthchecks.sqlite"
@@ -187,7 +197,10 @@ in
       description = "Target for all Healthchecks services";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
     };
 
     systemd.services =
@@ -196,9 +209,7 @@ in
           WorkingDirectory = cfg.dataDir;
           User = cfg.user;
           Group = cfg.group;
-          EnvironmentFile = [
-            environmentFile
-          ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
+          EnvironmentFile = [ environmentFile ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
@@ -222,10 +233,12 @@ in
           wantedBy = [ "healthchecks.target" ];
           after = [ "healthchecks-migration.service" ];
 
-          preStart = ''
-            ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
-            ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
-          '' + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
+          preStart =
+            ''
+              ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
+              ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
+            ''
+            + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
 
           serviceConfig = commonConfig // {
             Restart = "always";
@@ -265,19 +278,17 @@ in
       };
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-        {
-          description = "healthchecks service owner";
-          isSystemUser = true;
-          group = defaultUser;
-        };
+      ${defaultUser} = {
+        description = "healthchecks service owner";
+        isSystemUser = true;
+        group = defaultUser;
+      };
     };
 
     users.groups = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-        {
-          members = [ defaultUser ];
-        };
+      ${defaultUser} = {
+        members = [ defaultUser ];
+      };
     };
   };
 }

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config
-, yosys, readline, zlib, bluespec
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  yosys,
+  readline,
+  zlib,
+  bluespec,
 }:
 
 stdenv.mkDerivation {
@@ -8,13 +15,18 @@ stdenv.mkDerivation {
   plugin = "bluespec";
 
   src = fetchFromGitHub {
-    owner  = "thoughtpolice";
-    repo   = "yosys-bluespec";
-    rev    = "f6f4127a4e96e18080fd5362b6769fa3e24c76b1";
+    owner = "thoughtpolice";
+    repo = "yosys-bluespec";
+    rev = "f6f4127a4e96e18080fd5362b6769fa3e24c76b1";
     sha256 = "sha256-3cNFP/k4JsgLyUQHWU10Htl2Rh0staAcA3R4piD6hDE=";
   };
 
-  buildInputs = [ yosys readline zlib bluespec ];
+  buildInputs = [
+    yosys
+    readline
+    zlib
+    bluespec
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
@@ -26,8 +38,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Bluespec plugin for Yosys";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

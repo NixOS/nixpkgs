@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, sfml, fribidi, taglib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGLU,
+  libGL,
+  sfml,
+  fribidi,
+  taglib,
+}:
 stdenv.mkDerivation rec {
   pname = "mars";
   version = "unstable-17.10.2021";
@@ -10,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SWLP926SyVTjn+UT1DCaJSo4Ue0RbyzImVnlNJQksS0=";
   };
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU libGL sfml fribidi taglib ];
+  buildInputs = [
+    libGLU
+    libGL
+    sfml
+    fribidi
+    taglib
+  ];
   installPhase = ''
     cd ..
     mkdir -p "$out/share/mars/"

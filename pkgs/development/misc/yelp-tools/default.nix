@@ -1,14 +1,15 @@
-{ lib
-, fetchurl
-, libxml2
-, libxslt
-, itstool
-, gnome
-, pkg-config
-, meson
-, ninja
-, python3
-, yelp-xsl
+{
+  lib,
+  fetchurl,
+  libxml2,
+  libxslt,
+  itstool,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  yelp-xsl,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,18 +39,14 @@ python3.pkgs.buildPythonApplication rec {
     yelp-xsl
   ];
 
-  pythonPath = [
-    python3.pkgs.lxml
-  ];
+  pythonPath = [ python3.pkgs.lxml ];
 
   strictDeps = false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
 
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

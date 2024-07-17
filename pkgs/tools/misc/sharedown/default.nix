@@ -1,19 +1,20 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, ffmpeg
-, yt-dlp
-, libsecret
-, python3
-, pkg-config
-, nodejs
-, electron
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, yarn2nix-moretea
-, fetchYarnDeps
-, chromium
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  ffmpeg,
+  yt-dlp,
+  libsecret,
+  python3,
+  pkg-config,
+  nodejs,
+  electron,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  yarn2nix-moretea,
+  fetchYarnDeps,
+  chromium,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -39,7 +40,10 @@ stdenvNoCC.mkDerivation rec {
       icon = "Sharedown";
       comment = "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
-      categories = [ "Network" "Archiving" ];
+      categories = [
+        "Network"
+        "Archiving"
+      ];
     })
   ];
 
@@ -64,9 +68,7 @@ stdenvNoCC.mkDerivation rec {
               python3
               pkg-config
             ];
-            buildInputs = [
-              libsecret
-            ];
+            buildInputs = [ libsecret ];
             postInstall = ''
               yarn --offline run build
               # Remove unnecessary store path references.
@@ -119,8 +121,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Application to save your Sharepoint videos for offline usage";
     homepage = "https://github.com/kylon/Sharedown";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-    ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "Sharedown";
   };

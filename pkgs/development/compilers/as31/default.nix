@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +30,7 @@ stdenv.mkDerivation rec {
     chmod +x configure
   '';
 
-  nativeBuildInputs = [
-    bison
-  ];
+  nativeBuildInputs = [ bison ];
 
   meta = with lib; {
     homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";

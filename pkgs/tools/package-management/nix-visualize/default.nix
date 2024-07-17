@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, nix
-, python
-, matplotlib
-, networkx
-, pandas
-, pygraphviz
-, setuptools
+{
+  lib,
+  fetchFromGitHub,
+  nix,
+  python,
+  matplotlib,
+  networkx,
+  pandas,
+  pygraphviz,
+  setuptools,
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -23,7 +24,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/nix-visualize \
-      --prefix PATH : ${lib.makeBinPath [nix]}
+      --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 
   nativeBuildInputs = [ setuptools ];

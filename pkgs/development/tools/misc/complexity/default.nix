@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, autogen }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  autogen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "complexity";
@@ -16,11 +21,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C code complexity measurement tool";
 
-    longDescription =
-      '' GNU Complexity is a tool designed for analyzing the complexity of C
-         program functions.  It is very similar to the McCabe scoring, but
-         addresses several issues not considered in that scoring scheme.
-      '';
+    longDescription = ''
+      GNU Complexity is a tool designed for analyzing the complexity of C
+              program functions.  It is very similar to the McCabe scoring, but
+              addresses several issues not considered in that scoring scheme.
+    '';
 
     license = lib.licenses.gpl3Plus;
 

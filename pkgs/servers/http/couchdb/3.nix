@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, erlang
-, icu
-, openssl
-, spidermonkey_91
-, python3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  erlang,
+  icu,
+  openssl,
+  spidermonkey_91,
+  python3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,36 +19,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-eiAHtfZz1L4iolyaER2QZpGdhy3bkTWn3OwBIimb054=";
   };
 
-  postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
-    substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
-    patchShebangs bin/rebar
-  '' + lib.optionalString stdenv.isDarwin ''
-    # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
-    # (There are warnings, but no hard errors, and it produces an empty dylib.)
-    substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
+      substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
+      patchShebangs bin/rebar
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
+      # (There are warnings, but no hard errors, and it produces an empty dylib.)
+      substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
+    '';
 
-  nativeBuildInputs = [
-    erlang
-  ];
+  nativeBuildInputs = [ erlang ];
 
   buildInputs = [
     icu
     openssl
     spidermonkey_91
-    (python3.withPackages(ps: with ps; [ requests ]))
+    (python3.withPackages (ps: with ps; [ requests ]))
   ];
 
-  dontAddPrefix= "True";
+  dontAddPrefix = "True";
 
-  configureFlags = [
-    "--spidermonkey-version=91"
-  ];
+  configureFlags = [ "--spidermonkey-version=91" ];
 
-  buildFlags = [
-    "release"
-  ];
+  buildFlags = [ "release" ];
 
   installPhase = ''
     runHook preInstall

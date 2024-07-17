@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -18,28 +23,59 @@ let
 
   sudoRule = {
     users = [ "ssm-user" ];
-    commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+    commands = [
+      {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }
+    ];
   };
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "services" "ssm-agent" "enable" ] [ "services" "amazon-ssm-agent" "enable" ])
-    (mkRenamedOptionModule [ "services" "ssm-agent" "package" ] [ "services" "amazon-ssm-agent" "package" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "ssm-agent"
+        "enable"
+      ]
+      [
+        "services"
+        "amazon-ssm-agent"
+        "enable"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "services"
+        "ssm-agent"
+        "package"
+      ]
+      [
+        "services"
+        "amazon-ssm-agent"
+        "package"
+      ]
+    )
   ];
 
   options.services.amazon-ssm-agent = {
     enable = mkEnableOption "Amazon SSM agent";
-    package = mkPackageOption pkgs "amazon-ssm-agent" {};
+    package = mkPackageOption pkgs "amazon-ssm-agent" { };
   };
 
   config = mkIf cfg.enable {
     # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
-      wants    = [ "network-online.target" ];
-      after    = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release pkgs.coreutils ];
+      path = [
+        fake-lsb-release
+        pkgs.coreutils
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
@@ -59,7 +95,7 @@ in {
 
     # On Amazon Linux 2 images, the ssm-user user is pretty much a
     # normal user with its own group. We do the same.
-    users.groups.ssm-user = {};
+    users.groups.ssm-user = { };
     users.users.ssm-user = {
       isNormalUser = true;
       group = "ssm-user";
@@ -67,7 +103,7 @@ in {
 
     environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/etc/amazon/ssm/seelog.xml.template";
 
-    environment.etc."amazon/ssm/amazon-ssm-agent.json".source =  "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
+    environment.etc."amazon/ssm/amazon-ssm-agent.json".source = "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
 
   };
 }

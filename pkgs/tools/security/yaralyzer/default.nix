@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     "rich"
   ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     chardet
@@ -32,9 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     yara-python
   ];
 
-  pythonImportsCheck = [
-    "yaralyzer"
-  ];
+  pythonImportsCheck = [ "yaralyzer" ];
 
   meta = {
     description = "Tool to visually inspect and force decode YARA and regex matches";

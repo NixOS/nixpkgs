@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-4V/2UOgGWgL+tFJO/k90bCDjWSVyIpxw3nYi9NU/OxA=";
   };
 
-  patches = [
-    ./canokey-qemu-memcpy.patch
-  ];
+  patches = [ ./canokey-qemu-memcpy.patch ];
 
   postPatch = ''
     substituteInPlace canokey-core/CMakeLists.txt \
@@ -29,16 +27,22 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cmakeFlagsArray+=(
-      -DCMAKE_C_FLAGS=${lib.escapeShellArg ([
-        "-Wno-error=unused-but-set-parameter"
-        "-Wno-error=unused-but-set-variable"
-      ] ++ lib.optionals stdenv.cc.isClang [
-        "-Wno-error=documentation"
-      ])}
+      -DCMAKE_C_FLAGS=${
+        lib.escapeShellArg (
+          [
+            "-Wno-error=unused-but-set-parameter"
+            "-Wno-error=unused-but-set-variable"
+          ]
+          ++ lib.optionals stdenv.cc.isClang [ "-Wno-error=documentation" ]
+        )
+      }
     )
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
 

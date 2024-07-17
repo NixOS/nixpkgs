@@ -1,6 +1,16 @@
-{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator
-, optint
-, fmt, rresult, bos, fpath, astring, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  dune-configurator,
+  optint,
+  fmt,
+  rresult,
+  bos,
+  fpath,
+  astring,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -15,9 +25,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [
-    optint
-  ];
+  propagatedBuildInputs = [ optint ];
 
   checkInputs = [
     alcotest

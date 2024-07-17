@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
     ankiSyncTest = pkgs.writeScript "anki-sync-test.py" ''
       #!${pkgs.python3}/bin/python
@@ -36,28 +37,30 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testPasswordFile = pkgs.writeText "anki-password" "passfilepassword";
   in
   {
-  name = "anki-sync-server";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ martinetd ];
-  };
-
-  nodes.machine = { pkgs, ...}: {
-    services.anki-sync-server = {
-      enable = true;
-      users = [
-        { username = "user";
-          password = "password";
-        }
-        { username = "passfileuser";
-          passwordFile = testPasswordFile;
-        }
-      ];
+    name = "anki-sync-server";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ martinetd ];
     };
-  };
 
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.anki-sync-server = {
+          enable = true;
+          users = [
+            {
+              username = "user";
+              password = "password";
+            }
+            {
+              username = "passfileuser";
+              passwordFile = testPasswordFile;
+            }
+          ];
+        };
+      };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       with subtest("Server starts successfully"):
@@ -68,4 +71,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
       with subtest("Can sync"):
           machine.succeed("${ankiSyncTest}")
     '';
-})
+  }
+)

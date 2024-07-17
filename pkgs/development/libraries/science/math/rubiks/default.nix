@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, coreutils
-, dos2unix
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  coreutils,
+  dos2unix,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +23,7 @@ stdenv.mkDerivation rec {
   # everything is done in `make install`
   buildPhase = "true";
 
-  installFlags = [
-    "PREFIX=$(out)"
-  ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   nativeBuildInputs = [ dos2unix ];
 

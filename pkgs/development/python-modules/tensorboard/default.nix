@@ -34,7 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-hZpJmpsftooFiFiWRIZicQC3H8shZGhhxh0xhGpkePs=";
   };
 
-
   pythonRelaxDeps = [
     "google-auth-oauthlib"
     "protobuf"

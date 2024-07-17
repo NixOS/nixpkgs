@@ -1,4 +1,10 @@
-{ config, pkgs, lib, utils, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -41,9 +47,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.sonarr = {
       description = "Sonarr";
@@ -63,9 +67,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8989 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 8989 ]; };
 
     users.users = mkIf (cfg.user == "sonarr") {
       sonarr = {
@@ -75,8 +77,6 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "sonarr") {
-      sonarr.gid = config.ids.gids.sonarr;
-    };
+    users.groups = mkIf (cfg.group == "sonarr") { sonarr.gid = config.ids.gids.sonarr; };
   };
 }

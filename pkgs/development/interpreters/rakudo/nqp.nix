@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, perl, lib, moarvm }:
+{
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  lib,
+  moarvm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nqp";
@@ -37,6 +43,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Raku/nqp";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice sgo ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      sgo
+    ];
   };
 }

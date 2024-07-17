@@ -93,9 +93,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   pythonRelaxDeps = [
     "collidoscope"

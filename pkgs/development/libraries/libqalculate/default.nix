@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, intltool
-, pkg-config
-, doxygen
-, autoreconfHook
-, buildPackages
-, curl
-, gettext
-, libiconv
-, readline
-, libxml2
-, mpfr
-, icu
-, gnuplot
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  intltool,
+  pkg-config,
+  doxygen,
+  autoreconfHook,
+  buildPackages,
+  curl,
+  gettext,
+  libiconv,
+  readline,
+  libxml2,
+  mpfr,
+  icu,
+  gnuplot,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-puNzw/3oWph76um4eNuEftvWPmjC1cZIXKU9pWB++jE=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     intltool
@@ -35,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     doxygen
   ];
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     curl
@@ -56,14 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     intltoolize -f
   '';
 
-  patchPhase = ''
-    substituteInPlace libqalculate/Calculator-plot.cc \
-      --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-      --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
-  '' + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/qalc.cc \
-      --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
-  '';
+  patchPhase =
+    ''
+      substituteInPlace libqalculate/Calculator-plot.cc \
+        --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+        --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace src/qalc.cc \
+        --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
+    '';
 
   preBuild = ''
     pushd docs/reference
@@ -75,7 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Advanced calculator library";
     homepage = "http://qalculate.github.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
+    maintainers = with maintainers; [
+      gebner
+      doronbehar
+      alyaeanyx
+    ];
     mainProgram = "qalc";
     platforms = platforms.all;
   };

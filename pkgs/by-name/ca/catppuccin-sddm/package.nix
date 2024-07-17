@@ -23,13 +23,9 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [
-    just
-  ];
+  nativeBuildInputs = [ just ];
 
-  propagatedBuildInputs = [
-    kdePackages.qtsvg
-  ];
+  propagatedBuildInputs = [ kdePackages.qtsvg ];
 
   buildPhase = ''
     runHook preBuild
@@ -74,7 +70,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Soothing pastel theme for SDDM";
     homepage = "https://github.com/catppuccin/sddm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [elysasrc];
+    maintainers = with lib.maintainers; [ elysasrc ];
     platforms = lib.platforms.linux;
   };
 }

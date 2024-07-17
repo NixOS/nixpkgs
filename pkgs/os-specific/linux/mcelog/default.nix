@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  util-linux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
   version = "180";
 
   src = fetchFromGitHub {
-    owner  = "andikleen";
-    repo   = "mcelog";
-    rev    = "v${version}";
+    owner = "andikleen";
+    repo = "mcelog";
+    rev = "v${version}";
     sha256 = "1xy1082c67yd48idg5vwvrw7yx74gn6jj2d9c67d0rh6yji091ki";
   };
 
@@ -26,7 +31,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "DESTDIR=$(out)" "prefix=" "DOCDIR=/share/doc" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "prefix="
+    "DOCDIR=/share/doc"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

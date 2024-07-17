@@ -52,7 +52,7 @@ let
 
       channels = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "nixos" ];
         description = ''
           IRC channels to join.
@@ -116,8 +116,16 @@ in
       confOptions = {
         modules = mkOption {
           type = types.listOf types.str;
-          default = [ "webadmin" "adminlog" ];
-          example = [ "partyline" "webadmin" "adminlog" "log" ];
+          default = [
+            "webadmin"
+            "adminlog"
+          ];
+          example = [
+            "partyline"
+            "webadmin"
+            "adminlog"
+            "log"
+          ];
           description = ''
             A list of modules to include in the `znc.conf` file.
           '';
@@ -125,8 +133,16 @@ in
 
         userModules = mkOption {
           type = types.listOf types.str;
-          default = [ "chansaver" "controlpanel" ];
-          example = [ "chansaver" "controlpanel" "fish" "push" ];
+          default = [
+            "chansaver"
+            "controlpanel"
+          ];
+          example = [
+            "chansaver"
+            "controlpanel"
+            "fish"
+            "push"
+          ];
           description = ''
             A list of user modules to include in the `znc.conf` file.
           '';
@@ -227,43 +243,53 @@ in
 
   config = mkIf cfg.useLegacyConfig {
 
-    services.znc.config = let
-      c = cfg.confOptions;
-      # defaults here should override defaults set in the non-legacy part
-      mkDefault = mkOverride 900;
-    in {
-      LoadModule = mkDefault c.modules;
-      Listener.l = {
-        Port = mkDefault c.port;
-        IPv4 = mkDefault true;
-        IPv6 = mkDefault true;
-        SSL = mkDefault c.useSSL;
-        URIPrefix = c.uriPrefix;
+    services.znc.config =
+      let
+        c = cfg.confOptions;
+        # defaults here should override defaults set in the non-legacy part
+        mkDefault = mkOverride 900;
+      in
+      {
+        LoadModule = mkDefault c.modules;
+        Listener.l = {
+          Port = mkDefault c.port;
+          IPv4 = mkDefault true;
+          IPv6 = mkDefault true;
+          SSL = mkDefault c.useSSL;
+          URIPrefix = c.uriPrefix;
+        };
+        User.${c.userName} = {
+          Admin = mkDefault true;
+          Nick = mkDefault c.nick;
+          AltNick = mkDefault "${c.nick}_";
+          Ident = mkDefault c.nick;
+          RealName = mkDefault c.nick;
+          LoadModule = mkDefault c.userModules;
+          Network = mapAttrs (name: net: {
+            LoadModule = mkDefault net.modules;
+            Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+            Chan =
+              optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault { }; }
+              // listToAttrs (map (n: nameValuePair "#${n}" (mkDefault { })) net.channels);
+            extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
+          }) c.networks;
+          extraConfig = [ c.passBlock ];
+        };
+        extraConfig = optional (c.extraZncConf != "") c.extraZncConf;
       };
-      User.${c.userName} = {
-        Admin = mkDefault true;
-        Nick = mkDefault c.nick;
-        AltNick = mkDefault "${c.nick}_";
-        Ident = mkDefault c.nick;
-        RealName = mkDefault c.nick;
-        LoadModule = mkDefault c.userModules;
-        Network = mapAttrs (name: net: {
-          LoadModule = mkDefault net.modules;
-          Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-          Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault {}; } //
-            listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
-          extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
-        }) c.networks;
-        extraConfig = [ c.passBlock ];
-      };
-      extraConfig = optional (c.extraZncConf != "") c.extraZncConf;
-    };
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "znc" "zncConf"] ''
-      Instead of `services.znc.zncConf = "... foo ...";`, use
-      `services.znc.configFile = pkgs.writeText "znc.conf" "... foo ...";`.
-    '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "znc"
+        "zncConf"
+      ]
+      ''
+        Instead of `services.znc.zncConf = "... foo ...";`, use
+        `services.znc.configFile = pkgs.writeText "znc.conf" "... foo ...";`.
+      ''
+    )
   ];
 }

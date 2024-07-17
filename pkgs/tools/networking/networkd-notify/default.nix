@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitLab
-, buildPythonApplication
-, dbus-python
-, pygobject3
-, systemd
-, wirelesstools
-, wrapGAppsNoGuiHook
+{
+  lib,
+  fetchFromGitLab,
+  buildPythonApplication,
+  dbus-python,
+  pygobject3,
+  systemd,
+  wirelesstools,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {
@@ -21,9 +22,7 @@ buildPythonApplication rec {
     hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsNoGuiHook
-  ];
+  nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
   propagatedBuildInputs = [
     dbus-python

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, openssl, libnetfilter_queue, libnfnetlink }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  openssl,
+  libnetfilter_queue,
+  libnfnetlink,
+}:
 stdenv.mkDerivation rec {
   pname = "thc-ipv6";
   version = "3.8";
@@ -17,9 +25,7 @@ stdenv.mkDerivation rec {
     libnfnetlink
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "IPv6 attack toolkit";

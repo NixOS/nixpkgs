@@ -1,10 +1,7 @@
-{
-  mkKdeDerivation,
-  qgpgme,
-}:
+{ mkKdeDerivation, qgpgme }:
 mkKdeDerivation {
   pname = "isoimagewriter";
 
-  extraBuildInputs = [qgpgme];
+  extraBuildInputs = [ qgpgme ];
   meta.mainProgram = "isoimagewriter";
 }

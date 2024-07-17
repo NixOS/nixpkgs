@@ -24,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
   strictDeps = true;
 
@@ -52,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
     license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

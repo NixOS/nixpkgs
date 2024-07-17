@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nixosTests
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nixosTests,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -23,9 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "Serif";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "Serif"; };
 
   meta = with lib; {
     description = "Beautiful and free fonts for CJK languages";
@@ -44,6 +43,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mathnerd314 emily ];
+    maintainers = with maintainers; [
+      mathnerd314
+      emily
+    ];
   };
 }

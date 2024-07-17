@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, xmrig
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  xmrig,
 }:
 
 xmrig.overrideAttrs (oldAttrs: rec {

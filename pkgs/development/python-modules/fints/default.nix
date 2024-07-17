@@ -52,8 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      dotlambda
-    ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

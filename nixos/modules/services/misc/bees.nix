@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,16 @@ let
 
   cfg = config.services.beesd;
 
-  logLevels = { emerg = 0; alert = 1; crit = 2; err = 3; warning = 4; notice = 5; info = 6; debug = 7; };
+  logLevels = {
+    emerg = 0;
+    alert = 1;
+    crit = 2;
+    err = 3;
+    warning = 4;
+    notice = 5;
+    info = 6;
+    debug = 7;
+  };
 
   fsOptions = with types; {
     options.spec = mkOption {
@@ -87,8 +101,9 @@ in
     };
   };
   config = {
-    systemd.services = mapAttrs'
-      (name: fs: nameValuePair "beesd@${name}" {
+    systemd.services = mapAttrs' (
+      name: fs:
+      nameValuePair "beesd@${name}" {
         description = "Block-level BTRFS deduplication for %i";
         after = [ "sysinit.target" ];
 
@@ -123,7 +138,7 @@ in
           };
         unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
-      })
-      cfg.filesystems;
+      }
+    ) cfg.filesystems;
   };
 }

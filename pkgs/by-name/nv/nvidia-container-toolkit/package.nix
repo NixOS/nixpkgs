@@ -1,20 +1,22 @@
-{ lib
-, glibc
-, fetchFromGitLab
-, makeWrapper
-, buildGoModule
-, linkFarm
-, writeShellScript
-, formats
-, containerRuntimePath ? null
-, configTemplate ? null
-, configTemplatePath ? null
-, libnvidia-container
-, autoAddDriverRunpath
+{
+  lib,
+  glibc,
+  fetchFromGitLab,
+  makeWrapper,
+  buildGoModule,
+  linkFarm,
+  writeShellScript,
+  formats,
+  containerRuntimePath ? null,
+  configTemplate ? null,
+  configTemplatePath ? null,
+  libnvidia-container,
+  autoAddDriverRunpath,
 }:
 
 assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
-assert configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
+assert
+  configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
 
 let
   isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
@@ -31,7 +33,11 @@ let
     fi
   '';
 
-  configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
+  configToml =
+    if configTemplatePath != null then
+      configTemplatePath
+    else
+      (formats.toml { }).generate "config.toml" configTemplate;
 
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
@@ -107,7 +113,10 @@ buildGoModule rec {
         "TestDuplicateHook"
       ];
     in
-    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+    [
+      "-skip"
+      "${builtins.concatStringsSep "|" skippedTests}"
+    ];
 
   postInstall = lib.optionalString (containerRuntimePath != null) ''
     mkdir -p $out/etc/nvidia-container-runtime

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, wrapGAppsHook3
-, pkg-config
-, cmake
-, meson
-, ninja
-, gtk3
-, gtk-layer-shell
-, json_c
-, librsvg
-, scdoc
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  wrapGAppsHook3,
+  pkg-config,
+  cmake,
+  meson,
+  ninja,
+  gtk3,
+  gtk-layer-shell,
+  json_c,
+  librsvg,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +41,7 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  mesonFlags = [
-    "-Dlayershell=enabled"
-  ];
+  mesonFlags = [ "-Dlayershell=enabled" ];
 
   # G_APPLICATION_FLAGS_NONE is deprecated in GLib 2.73.3+.
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";

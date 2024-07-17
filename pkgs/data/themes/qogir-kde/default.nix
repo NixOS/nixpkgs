@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  kdeclarative,
+  plasma-framework,
+  plasma-workspace,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,12 +1,13 @@
-{ lib
-, argcomplete
-, jinja2
-, meraki
-, rich
-, fetchPypi
-, buildPythonApplication
-, pytestCheckHook
-, requests-mock
+{
+  lib,
+  argcomplete,
+  jinja2,
+  meraki,
+  rich,
+  fetchPypi,
+  buildPythonApplication,
+  pytestCheckHook,
+  requests-mock,
 }:
 
 buildPythonApplication rec {
@@ -35,17 +36,11 @@ buildPythonApplication rec {
     rich
   ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    requests-mock
-  ];
+  nativeCheckInputs = [ requests-mock ];
 
-  pythonImportsCheck = [
-    "meraki_cli"
-  ];
+  pythonImportsCheck = [ "meraki_cli" ];
 
   meta = with lib; {
     homepage = "https://github.com/PackeTsar/meraki-cli";

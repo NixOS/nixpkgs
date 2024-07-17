@@ -1,21 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkgs
-, pkg-config
-, perl
-, libitl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkgs,
+  pkg-config,
+  perl,
+  libitl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "itools";
   version = "1.1";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ libitl perl ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    libitl
+    perl
+  ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "arabeyes-org";

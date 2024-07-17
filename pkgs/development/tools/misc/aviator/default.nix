@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "aviator";
@@ -11,9 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-Oa4z8n+q7LKWMnwk+xj9UunzOa3ChaPBCTo828yYJGQ=";
   };
 
-  patches = [
-    ./bump-golang-x-sys.patch
-  ];
+  patches = [ ./bump-golang-x-sys.patch ];
 
   deleteVendor = true;
   vendorHash = "sha256-AJyxCE4DdAXRS+2sY4Zzu8NTEFKJoV1bopfOqOFKZfI=";

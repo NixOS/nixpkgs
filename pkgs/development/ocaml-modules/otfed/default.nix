@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, base
-, ppx_deriving
-, ppx_inline_test
-, uutf
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  base,
+  ppx_deriving,
+  ppx_inline_test,
+  uutf,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -21,9 +22,7 @@ buildDunePackage rec {
     hash = "sha256-6QCom9nrz0B5vCmuBzqsM0zCs8tBLJC6peig+vCgMVA=";
   };
 
-  buildInputs = [
-    uutf
-  ];
+  buildInputs = [ uutf ];
 
   propagatedBuildInputs = [
     base
@@ -31,9 +30,7 @@ buildDunePackage rec {
     ppx_inline_test
   ];
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

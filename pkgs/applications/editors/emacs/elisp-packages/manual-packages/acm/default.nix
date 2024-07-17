@@ -1,8 +1,9 @@
-{ lib
-, melpaBuild
-, lsp-bridge
-, yasnippet
-, writeText
+{
+  lib,
+  melpaBuild,
+  lsp-bridge,
+  yasnippet,
+  writeText,
 }:
 
 melpaBuild {
@@ -12,9 +13,7 @@ melpaBuild {
   src = lsp-bridge.src;
   commit = lsp-bridge.src.rev;
 
-  packageRequires = [
-    yasnippet
-  ];
+  packageRequires = [ yasnippet ];
 
   recipe = writeText "recipe" ''
     (acm
@@ -27,6 +26,9 @@ melpaBuild {
     description = "Asynchronous Completion Menu";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fxttr kira-bruneau ];
+    maintainers = with maintainers; [
+      fxttr
+      kira-bruneau
+    ];
   };
 }

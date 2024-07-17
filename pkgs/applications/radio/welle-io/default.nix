@@ -1,7 +1,23 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
-, faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123
-} :
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtcharts,
+  qtmultimedia,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  faad2,
+  rtl-sdr,
+  soapysdr-with-plugins,
+  libusb-compat-0_1,
+  fftwSinglePrec,
+  lame,
+  mpg123,
+}:
 
 mkDerivation rec {
   pname = "welle-io";
@@ -14,7 +30,10 @@ mkDerivation rec {
     sha256 = "sha256-xXiCL/A2SwCSr5SA4AQQEdieRzBksXx9Z78bHtlFiW4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     faad2
@@ -33,14 +52,21 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DRTLSDR=true" "-DSOAPYSDR=true"
+    "-DRTLSDR=true"
+    "-DSOAPYSDR=true"
   ];
 
   meta = with lib; {
     description = "DAB/DAB+ Software Radio";
     homepage = "https://www.welle.io/";
-    maintainers = with maintainers; [ ck3d markuskowa ];
+    maintainers = with maintainers; [
+      ck3d
+      markuskowa
+    ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ] ++ platforms.darwin;
   };
 }

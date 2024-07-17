@@ -1,21 +1,20 @@
-{
-  fetchFromGitHub,
-}:
+{ fetchFromGitHub }:
 
 {
-  letoram-arcan = let
-    self = {
-      pname = "arcan";
-      version = "0.6.3";
+  letoram-arcan =
+    let
+      self = {
+        pname = "arcan";
+        version = "0.6.3";
 
-      src = fetchFromGitHub {
-        owner = "letoram";
-        repo = "arcan";
-        rev = self.version;
-        hash = "sha256-ZSKOkNrFa2QgmXmmXnLkB1pehmVJbEFVeNs43Z2DSKo=";
+        src = fetchFromGitHub {
+          owner = "letoram";
+          repo = "arcan";
+          rev = self.version;
+          hash = "sha256-ZSKOkNrFa2QgmXmmXnLkB1pehmVJbEFVeNs43Z2DSKo=";
+        };
       };
-    };
-  in
+    in
     self;
 
   letoram-openal = {

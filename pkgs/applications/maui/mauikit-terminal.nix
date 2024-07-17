@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, kconfig
-, kcoreaddons
-, ki18n
-, mauikit
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  kcoreaddons,
+  ki18n,
+  mauikit,
 }:
 
 mkDerivation {

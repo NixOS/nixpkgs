@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gtk3
-, openssl
-, alsa-lib
-, pkg-config
-, ffmpeg
-, dbus
-, libpulseaudio
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gtk3,
+  openssl,
+  alsa-lib,
+  pkg-config,
+  ffmpeg,
+  dbus,
+  libpulseaudio,
 }:
 
 rustPlatform.buildRustPackage rec {

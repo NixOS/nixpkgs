@@ -1,29 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, cudatoolkit
-, libdrm
-, ncurses
-, testers
-, udev
-, addOpenGLRunpath
-, amd ? false
-, intel ? false
-, msm ? false
-, nvidia ? false
-, apple ? false
-, panfrost ? false
-, panthor ? false
-, ascend ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  cudatoolkit,
+  libdrm,
+  ncurses,
+  testers,
+  udev,
+  addOpenGLRunpath,
+  amd ? false,
+  intel ? false,
+  msm ? false,
+  nvidia ? false,
+  apple ? false,
+  panfrost ? false,
+  panthor ? false,
+  ascend ? false,
 }:
 
 let
   drm-postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ libdrm ncurses udev ]}" \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libdrm
+          ncurses
+          udev
+        ]
+      }" \
       $out/bin/nvtop
   '';
   needDrm = (amd || msm || panfrost || panthor);
@@ -51,18 +58,27 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
   ];
-  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ] ++ lib.optional nvidia addOpenGLRunpath;
 
-  buildInputs = with lib; [ ncurses udev ]
+  buildInputs =
+    with lib;
+    [
+      ncurses
+      udev
+    ]
     ++ optional nvidia cudatoolkit
-    ++ optional needDrm libdrm
-  ;
+    ++ optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
 
   # ordering of fixups is important
-  postFixup = (lib.optionalString needDrm drm-postFixup) + (lib.optionalString nvidia "addOpenGLRunpath $out/bin/nvtop");
+  postFixup =
+    (lib.optionalString needDrm drm-postFixup)
+    + (lib.optionalString nvidia "addOpenGLRunpath $out/bin/nvtop");
 
   doCheck = true;
 
@@ -84,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb anthonyroussel ];
+    maintainers = with maintainers; [
+      willibutz
+      gbtb
+      anthonyroussel
+    ];
     mainProgram = "nvtop";
   };
 })

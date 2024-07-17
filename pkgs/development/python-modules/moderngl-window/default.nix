@@ -35,9 +35,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "pillow" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy

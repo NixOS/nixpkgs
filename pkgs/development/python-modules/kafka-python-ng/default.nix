@@ -31,7 +31,7 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   passthru.optional-dependencies = {
-    crc32c =  [ crc32c ];
+    crc32c = [ crc32c ];
     lz4 = [ lz4 ];
     snappy = [ python-snappy ];
     zstd = [ zstandard ];

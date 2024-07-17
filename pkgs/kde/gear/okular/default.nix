@@ -14,7 +14,7 @@
 mkKdeDerivation {
   pname = "okular";
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtspeech
     qtsvg

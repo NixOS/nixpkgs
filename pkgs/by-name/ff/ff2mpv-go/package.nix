@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchgit
-, makeWrapper
-, mpv
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  makeWrapper,
+  mpv,
 }:
 buildGoModule rec {
   pname = "ff2mpv-go";
@@ -14,9 +15,7 @@ buildGoModule rec {
     hash = "sha256-e/AuOA3isFTyBf97Zwtr16yo49UdYzvktV5PKB/eH/s=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   vendorHash = null;
 

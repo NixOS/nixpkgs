@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, libX11
-, libXfixes
-, zig
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libX11,
+  libXfixes,
+  zig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

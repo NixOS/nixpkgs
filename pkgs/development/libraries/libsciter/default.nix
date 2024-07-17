@@ -1,12 +1,13 @@
-{ lib
-, glib
-, cairo
-, libuuid
-, pango
-, gtk3
-, stdenv
-, fetchurl
-, autoPatchelfHook
+{
+  lib,
+  glib,
+  cairo,
+  libuuid,
+  pango,
+  gtk3,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation {
@@ -18,11 +19,15 @@ stdenv.mkDerivation {
     sha256 = "a1682fbf55e004f1862d6ace31b5220121d20906bdbf308d0a9237b451e4db86";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ glib cairo libuuid pango gtk3 ];
+  buildInputs = [
+    glib
+    cairo
+    libuuid
+    pango
+    gtk3
+  ];
 
   dontUnpack = true;
 

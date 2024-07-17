@@ -1,11 +1,12 @@
-{ faust
-, jack2
-, qtbase
-, libsndfile
-, alsa-lib
-, writeText
-, buildPackages
-, which
+{
+  faust,
+  jack2,
+  qtbase,
+  libsndfile,
+  alsa-lib,
+  writeText,
+  buildPackages,
+  which,
 }:
 let
   # Wrap the binary coming out of the the compilation script, so it knows QT_PLUGIN_PATH
@@ -38,7 +39,6 @@ faust.wrapWithBuildEnv {
     alsa-lib
     which
   ];
-
 
   dontWrapQtApps = true;
 

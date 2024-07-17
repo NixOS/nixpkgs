@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, libcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  libcap,
 }:
 
 let

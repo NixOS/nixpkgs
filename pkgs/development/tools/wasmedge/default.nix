@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, llvmPackages
-, boost
-, cmake
-, spdlog
-, libxml2
-, libffi
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages,
+  boost,
+  cmake,
+  spdlog,
+  libxml2,
+  libffi,
+  Foundation,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,24 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.llvm
     libxml2
     libffi
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   cmakeFlags = [
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DWASMEDGE_FORCE_DISABLE_LTO=ON" ];
 
   postPatch = ''
     echo -n $version > VERSION
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

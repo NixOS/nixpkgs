@@ -1,8 +1,9 @@
-{ lib
-, config
-, options
-, pkgs
-, ...
+{
+  lib,
+  config,
+  options,
+  pkgs,
+  ...
 }:
 
 let
@@ -17,7 +18,7 @@ let
   cfg = config.services.go2rtc;
   opt = options.services.go2rtc;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "go2rtc.yaml" cfg.settings;
 in
 
@@ -30,7 +31,7 @@ in
     package = mkPackageOption pkgs "go2rtc" { };
 
     settings = mkOption {
-      default = {};
+      default = { };
       description = ''
         go2rtc configuration as a Nix attribute set.
 
@@ -64,12 +65,11 @@ in
           };
 
           # TODO: https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#module-rtsp
-          rtsp = {
-          };
+          rtsp = { };
 
           streams = mkOption {
             type = attrsOf (either str (listOf str));
-            default = {};
+            default = { };
             example = literalExpression ''
               {
                 cam1 = "onvif://admin:password@192.168.1.123:2020";
@@ -84,8 +84,7 @@ in
           };
 
           # TODO: https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#module-webrtc
-          webrtc = {
-          };
+          webrtc = { };
         };
       };
     };
@@ -94,12 +93,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.go2rtc = {
       wants = [ "network-online.target" ];
-      after = [
-        "network-online.target"
-      ];
-      wantedBy = [
-        "multi-user.target"
-      ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
         User = "go2rtc";

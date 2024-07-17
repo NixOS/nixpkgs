@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "galerio";
@@ -17,7 +21,10 @@ rustPlatform.buildRustPackage rec {
     description = " A simple generator for self-contained HTML flexbox galleries";
     homepage = "https://github.com/dbrgn/galerio";
     maintainers = with maintainers; [ dbrgn ];
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "galerio";
   };
 }

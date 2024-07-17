@@ -1,47 +1,88 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchzip
-, rustPlatform
-, bootstrap_cmds
-, DiskArbitration
-, Foundation
-, cmake
-, libiconv
-, openssl
-, perl
-, pkg-config
-, protobuf
-, libclang
-, rdkafka
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  rustPlatform,
+  bootstrap_cmds,
+  DiskArbitration,
+  Foundation,
+  cmake,
+  libiconv,
+  openssl,
+  perl,
+  pkg-config,
+  protobuf,
+  libclang,
+  rdkafka,
 }:
 
 let
-  fetchNpmPackage = {name, version, hash, js_prod_file, js_dev_file, ...} @ args:
-  let
-    package = fetchzip {
-      url = "https://registry.npmjs.org/${name}/-/${baseNameOf name}-${version}.tgz";
-      inherit hash;
-    };
+  fetchNpmPackage =
+    {
+      name,
+      version,
+      hash,
+      js_prod_file,
+      js_dev_file,
+      ...
+    }@args:
+    let
+      package = fetchzip {
+        url = "https://registry.npmjs.org/${name}/-/${baseNameOf name}-${version}.tgz";
+        inherit hash;
+      };
 
-    files = with args; [
-      { src = js_prod_file; dst = "./src/environmentd/src/http/static/js/vendor/${name}.js"; }
-      { src = js_prod_file; dst = "./src/prof-http/src/http/static/js/vendor/${name}.js"; }
-      { src = js_dev_file;  dst = "./src/environmentd/src/http/static-dev/js/vendor/${name}.js"; }
-      { src = js_dev_file;  dst = "./src/prof-http/src/http/static-dev/js/vendor/${name}.js"; }
-    ] ++ lib.optionals (args ? css_file) [
-     { src = css_file; dst = "./src/environmentd/src/http/static/css/vendor/${name}.css"; }
-     { src = css_file; dst = "./src/prof-http/src/http/static/css/vendor/${name}.css"; }
-    ]
-      ++ lib.optionals (args ? extra_file) [
-      { src = extra_file.src; dst = "./src/environmentd/src/http/static/${extra_file.dst}";}
-      { src = extra_file.src; dst = "./src/prof-http/src/http/static/${extra_file.dst}";}
-    ];
-  in
-    lib.concatStringsSep "\n" (lib.forEach files ({src, dst}: ''
-      mkdir -p "${dirOf dst}"
-      cp "${package}/${src}" "${dst}"
-    ''));
+      files =
+        with args;
+        [
+          {
+            src = js_prod_file;
+            dst = "./src/environmentd/src/http/static/js/vendor/${name}.js";
+          }
+          {
+            src = js_prod_file;
+            dst = "./src/prof-http/src/http/static/js/vendor/${name}.js";
+          }
+          {
+            src = js_dev_file;
+            dst = "./src/environmentd/src/http/static-dev/js/vendor/${name}.js";
+          }
+          {
+            src = js_dev_file;
+            dst = "./src/prof-http/src/http/static-dev/js/vendor/${name}.js";
+          }
+        ]
+        ++ lib.optionals (args ? css_file) [
+          {
+            src = css_file;
+            dst = "./src/environmentd/src/http/static/css/vendor/${name}.css";
+          }
+          {
+            src = css_file;
+            dst = "./src/prof-http/src/http/static/css/vendor/${name}.css";
+          }
+        ]
+        ++ lib.optionals (args ? extra_file) [
+          {
+            src = extra_file.src;
+            dst = "./src/environmentd/src/http/static/${extra_file.dst}";
+          }
+          {
+            src = extra_file.src;
+            dst = "./src/prof-http/src/http/static/${extra_file.dst}";
+          }
+        ];
+    in
+    lib.concatStringsSep "\n" (
+      lib.forEach files (
+        { src, dst }:
+        ''
+          mkdir -p "${dirOf dst}"
+          cp "${package}/${src}" "${dst}"
+        ''
+      )
+    );
 
   npmPackages = import ./npm_deps.nix;
 in
@@ -71,7 +112,7 @@ rustPlatform.buildRustPackage rec {
   env.PROTOC = "${protobuf}/bin/protoc";
   env.PROTOC_INCLUDE = "${protobuf}/include";
   # needed to dynamically link rdkafka
-  env.CARGO_FEATURE_DYNAMIC_LINKING=1;
+  env.CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -94,20 +135,30 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-    rustPlatform.bindgenHook
-  ]
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      pkg-config
+      rustPlatform.bindgenHook
+    ]
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl rdkafka libclang ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
+  buildInputs =
+    [
+      openssl
+      rdkafka
+      libclang
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      DiskArbitration
+      Foundation
+    ];
 
   # the check phase requires linking with rocksdb which can be a problem since
   # the rust rocksdb crate is not updated very often.
@@ -132,10 +183,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://materialize.com";
+    homepage = "https://materialize.com";
     description = "Streaming SQL materialized view engine for real-time applications";
-    license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    license = licenses.bsl11;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.petrosagg ];
   };
 }

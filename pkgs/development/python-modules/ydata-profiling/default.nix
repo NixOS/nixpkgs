@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, dacite
-, htmlmin
-, imagehash
-, jinja2
-, matplotlib
-, multimethod
-, numba
-, numpy
-, pandas
-, phik
-, pyarrow
-, pydantic
-, pyyaml
-, requests
-, scipy
-, seaborn
-, statsmodels
-, tqdm
-, typeguard
-, visions
-, wordcloud
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  dacite,
+  htmlmin,
+  imagehash,
+  jinja2,
+  matplotlib,
+  multimethod,
+  numba,
+  numpy,
+  pandas,
+  phik,
+  pyarrow,
+  pydantic,
+  pyyaml,
+  requests,
+  scipy,
+  seaborn,
+  statsmodels,
+  tqdm,
+  typeguard,
+  visions,
+  wordcloud,
 }:
 
 buildPythonPackage rec {
@@ -88,9 +89,7 @@ buildPythonPackage rec {
     "test_urls"
   ];
 
-  pythonImportsCheck = [
-    "ydata_profiling"
-  ];
+  pythonImportsCheck = [ "ydata_profiling" ];
 
   meta = with lib; {
     description = "Create HTML profiling reports from Pandas DataFrames";

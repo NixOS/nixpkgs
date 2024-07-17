@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, ... }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ...
+}:
 let
   inherit (stdenv.hostPlatform) system;
 in
@@ -10,17 +15,21 @@ stdenv.mkDerivation rec {
     # Photoprism-packaged libtensorflow tarball (with pre-built libs for both arm64 and amd64)
     # We need this specific version because of https://github.com/photoprism/photoprism/issues/222
     (fetchurl {
-      sha256 = {
-        x86_64-linux = "sha256-bZAC3PJxqcjuGM4RcNtzYtkg3FD3SrO5beDsPoKenzc=";
-        aarch64-linux = "sha256-qnj4vhSWgrk8SIjzIH1/4waMxMsxMUvqdYZPaSaUJRk=";
-      }.${system};
+      sha256 =
+        {
+          x86_64-linux = "sha256-bZAC3PJxqcjuGM4RcNtzYtkg3FD3SrO5beDsPoKenzc=";
+          aarch64-linux = "sha256-qnj4vhSWgrk8SIjzIH1/4waMxMsxMUvqdYZPaSaUJRk=";
+        }
+        .${system};
 
       url =
         let
-          systemName = {
-            x86_64-linux = "amd64";
-            aarch64-linux = "arm64";
-          }.${system};
+          systemName =
+            {
+              x86_64-linux = "amd64";
+              aarch64-linux = "arm64";
+            }
+            .${system};
         in
         "https://dl.photoprism.app/tensorflow/${systemName}/libtensorflow-${systemName}-${version}.tar.gz";
     })
@@ -53,7 +62,10 @@ stdenv.mkDerivation rec {
   # Patch library to use our libc, libstdc++ and others
   patchPhase =
     let
-      rpath = lib.makeLibraryPath [ stdenv.cc.libc stdenv.cc.cc.lib ];
+      rpath = lib.makeLibraryPath [
+        stdenv.cc.libc
+        stdenv.cc.cc.lib
+      ];
     in
     ''
       chmod -R +w lib
@@ -82,7 +94,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dl.photoprism.app/tensorflow/";
     description = "Libtensorflow version for usage with photoprism backend";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ benesim ];
   };

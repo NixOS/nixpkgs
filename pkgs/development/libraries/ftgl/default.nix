@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, libglut
-, freetype
-, libGL
-, libGLU
-, pkg-config
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  libglut,
+  freetype,
+  libGL,
+  libGLU,
+  pkg-config,
+  darwin,
 }:
 
 let
@@ -38,20 +39,23 @@ stdenv.mkDerivation rec {
     doxygen
     pkg-config
   ];
-  buildInputs = [
-    freetype
-  ] ++ (if stdenv.isDarwin then [
-    OpenGL
-    GLUT
-  ] else [
-    libGL
-    libGLU
-    libglut
-  ]);
+  buildInputs =
+    [ freetype ]
+    ++ (
+      if stdenv.isDarwin then
+        [
+          OpenGL
+          GLUT
+        ]
+      else
+        [
+          libGL
+          libGLU
+          libglut
+        ]
+    );
 
-  configureFlags = [
-    "--with-ft-prefix=${lib.getDev freetype}"
-  ];
+  configureFlags = [ "--with-ft-prefix=${lib.getDev freetype}" ];
 
   enableParallelBuilding = true;
 

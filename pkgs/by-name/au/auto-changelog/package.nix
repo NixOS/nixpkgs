@@ -2,8 +2,9 @@
   lib,
   mkYarnPackage,
   fetchYarnDeps,
-  fetchFromGitHub
-}: mkYarnPackage rec {
+  fetchFromGitHub,
+}:
+mkYarnPackage rec {
   pname = "auto-changelog";
   version = "2.4.0";
 

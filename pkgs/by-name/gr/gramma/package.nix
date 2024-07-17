@@ -3,8 +3,9 @@
   mkYarnPackage,
   fetchYarnDeps,
   fetchFromGitHub,
-  nix-update-script
-}: mkYarnPackage rec {
+  nix-update-script,
+}:
+mkYarnPackage rec {
   pname = "gramma";
   version = "1.6.0";
 

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  substituteAll,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "General platform for complex network analysis and visualization";
     mainProgram = "cytoscape";
     license = lib.licenses.lgpl21;
-    maintainers = [lib.maintainers.mimame];
+    maintainers = [ lib.maintainers.mimame ];
     platforms = lib.platforms.unix;
   };
 }

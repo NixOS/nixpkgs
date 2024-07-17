@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, pam
-, lib
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  pam,
+  lib,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "uber";
     repo = "pam-ussh";
-    rev = "e9524bda90ba19d3b9eb24f49cb63a6a56a19193";  # HEAD as of 2022-03-13
+    rev = "e9524bda90ba19d3b9eb24f49cb63a6a56a19193"; # HEAD as of 2022-03-13
     sha256 = "0nb9hpqbghgi3zvq41kabydzyc6ffaaw9b4jkc5jrwn1klpw1xk8";
   };
 
@@ -23,9 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
 
-  buildInputs = [
-    pam
-  ];
+  buildInputs = [ pam ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,7 +52,9 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) pam-ussh; };
+  passthru.tests = {
+    inherit (nixosTests) pam-ussh;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/uber/pam-ussh";

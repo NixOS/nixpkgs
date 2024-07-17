@@ -1,4 +1,11 @@
-{lib, stdenv, autoreconfHook, fetchurl, gmp, blas}:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  gmp,
+  blas,
+}:
 stdenv.mkDerivation rec {
   pname = "iml";
   version = "1.0.5";
@@ -10,9 +17,7 @@ stdenv.mkDerivation rec {
     gmp
     blas
   ];
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
   configureFlags = [
     "--with-gmp-include=${gmp.dev}/include"
     "--with-gmp-lib=${gmp}/lib"
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Algorithms for computing exact solutions to dense systems of linear equations over the integers";
     license = lib.licenses.gpl2Plus;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
   };

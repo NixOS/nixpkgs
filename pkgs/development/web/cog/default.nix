@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, libwpe
-, libwpe-fdo
-, glib-networking
-, webkitgtk
-, makeWrapper
-, wrapGAppsHook3
-, adwaita-icon-theme
-, gdk-pixbuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  libwpe,
+  libwpe-fdo,
+  glib-networking,
+  webkitgtk,
+  makeWrapper,
+  wrapGAppsHook3,
+  adwaita-icon-theme,
+  gdk-pixbuf,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,13 +46,9 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  depsBuildsBuild = [
-    pkg-config
-  ];
+  depsBuildsBuild = [ pkg-config ];
 
-  cmakeFlags = [
-    "-DCOG_USE_WEBKITGTK=ON"
-  ];
+  cmakeFlags = [ "-DCOG_USE_WEBKITGTK=ON" ];
 
   # https://github.com/Igalia/cog/issues/438
   postPatch = ''

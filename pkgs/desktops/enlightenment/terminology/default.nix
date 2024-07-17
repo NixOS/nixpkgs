@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, efl
-, nixosTests
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  efl,
+  nixosTests,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    efl
-  ];
+  buildInputs = [ efl ];
 
   postPatch = ''
     patchShebangs data/colorschemes/*.py
@@ -43,6 +42,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org/about-terminology";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

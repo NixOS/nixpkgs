@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 with python3Packages;
 
@@ -12,7 +16,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    alembic beautifulsoup4 click natsort requests sqlalchemy
+    alembic
+    beautifulsoup4
+    click
+    natsort
+    requests
+    sqlalchemy
   ];
 
   # tests seem to fail for `config` not being defined,

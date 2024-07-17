@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, extras ? [ "all" ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  extras ? [ "all" ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,35 +17,32 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-V5B+/zfUlpF0TMTHqzyjapW93/DoJKgbJkTMX2NZyIQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    hatchling
-  ];
+  nativeBuildInputs = with python3.pkgs; [ hatchling ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    art
-    click
-    pandas
-    pillow
-    pymupdf
-    pyperclip
-    rich
-    rich-click
-    rich-pixels
-    textual
-    textual-universal-directorytree
-  ] ++ lib.attrVals extras passthru.optional-dependencies;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      art
+      click
+      pandas
+      pillow
+      pymupdf
+      pyperclip
+      rich
+      rich-click
+      rich-pixels
+      textual
+      textual-universal-directorytree
+    ]
+    ++ lib.attrVals extras passthru.optional-dependencies;
 
   passthru.optional-dependencies = with python3.pkgs; {
     all = [
       pyarrow
       textual-universal-directorytree.optional-dependencies.remote
     ];
-    parquet = [
-      pyarrow
-    ];
-    remote = [
-      textual-universal-directorytree.optional-dependencies.remote
-    ];
+    parquet = [ pyarrow ];
+    remote = [ textual-universal-directorytree.optional-dependencies.remote ];
   };
 
   nativeCheckInputs = with python3.pkgs; [
@@ -62,13 +60,9 @@ python3.pkgs.buildPythonApplication rec {
     "textual"
   ];
 
-  pythonImportsCheck = [
-    "browsr"
-  ];
+  pythonImportsCheck = [ "browsr" ];
 
-  pytestFlagsArray = [
-    "--snapshot-update"
-  ];
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   disabledTests = [
     # Tests require internet access

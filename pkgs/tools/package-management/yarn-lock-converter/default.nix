@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, nodejs
-, testers
-, yarn-lock-converter
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  nodejs,
+  testers,
+  yarn-lock-converter,
 }:
 
 let
@@ -34,9 +35,7 @@ buildNpmPackage rec {
     rmdir $out/bin/@vht
   '';
   passthru = {
-    tests.version = testers.testVersion {
-      package = yarn-lock-converter;
-    };
+    tests.version = testers.testVersion { package = yarn-lock-converter; };
     updateScript = ./update.sh;
   };
 

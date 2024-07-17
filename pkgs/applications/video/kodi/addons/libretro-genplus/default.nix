@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, genesis-plus-gx }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  genesis-plus-gx,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-genplus";
@@ -17,9 +23,7 @@ buildKodiBinaryAddon rec {
   ];
 
   extraBuildInputs = [ genesis-plus-gx ];
-  propagatedBuildInputs = [
-    libretro
-  ];
+  propagatedBuildInputs = [ libretro ];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-game/game.libretro.genplus";

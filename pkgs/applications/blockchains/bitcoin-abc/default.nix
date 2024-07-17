@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch2
-, pkg-config
-, cmake
-, openssl
-, db53
-, boost
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, util-linux
-, protobuf
-, qrencode
-, libevent
-, libnatpmp
-, sqlite
-, withGui
-, python3
-, jemalloc
-, zeromq4
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  cmake,
+  openssl,
+  db53,
+  boost,
+  zlib,
+  miniupnpc,
+  qtbase ? null,
+  qttools ? null,
+  util-linux,
+  protobuf,
+  qrencode,
+  libevent,
+  libnatpmp,
+  sqlite,
+  withGui,
+  python3,
+  jemalloc,
+  zeromq4,
 }:
 
 mkDerivation rec {
@@ -43,26 +44,33 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    openssl
-    db53
-    boost
-    zlib
-    python3
-    jemalloc
-    libnatpmp
-    zeromq4
-    miniupnpc
-    util-linux
-    protobuf
-    libevent
-    sqlite
-  ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
-
-  cmakeFlags = lib.optionals (!withGui) [
-    "-DBUILD_BITCOIN_QT=OFF"
+  nativeBuildInputs = [
+    pkg-config
+    cmake
   ];
+  buildInputs =
+    [
+      openssl
+      db53
+      boost
+      zlib
+      python3
+      jemalloc
+      libnatpmp
+      zeromq4
+      miniupnpc
+      util-linux
+      protobuf
+      libevent
+      sqlite
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      qrencode
+    ];
+
+  cmakeFlags = lib.optionals (!withGui) [ "-DBUILD_BITCOIN_QT=OFF" ];
 
   # many of the generated scripts lack execute permissions
   postConfigure = ''

@@ -1,5 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, gaucheBootstrap, pkg-config, texinfo
-, libiconv, gdbm, openssl, zlib, mbedtls, cacert, CoreServices }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  gaucheBootstrap,
+  pkg-config,
+  texinfo,
+  libiconv,
+  gdbm,
+  openssl,
+  zlib,
+  mbedtls,
+  cacert,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gauche";
@@ -12,9 +26,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-XD4zJzCktGi/E9sA6BVm9JVQBVrG5119EjZNbP1pVJU=";
   };
 
-  nativeBuildInputs = [ gaucheBootstrap pkg-config texinfo autoreconfHook ];
+  nativeBuildInputs = [
+    gaucheBootstrap
+    pkg-config
+    texinfo
+    autoreconfHook
+  ];
 
-  buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = [
+    libiconv
+    gdbm
+    openssl
+    zlib
+    mbedtls
+    cacert
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   autoreconfPhase = ''
     ./DIST gen

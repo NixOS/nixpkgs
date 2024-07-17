@@ -1,8 +1,9 @@
-{ stdenvNoCC
-, fetchzip
-, lib
-, rdfind
-, which
+{
+  stdenvNoCC,
+  fetchzip,
+  lib,
+  rdfind,
+  which,
 }:
 
 stdenvNoCC.mkDerivation rec {

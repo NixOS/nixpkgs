@@ -1,45 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, faad2
-, faac
-, a52dec
-, alsa-lib
-, fftw
-, lame
-, libavc1394
-, libiec61883
-, libraw1394
-, libsndfile
-, libvorbis
-, libogg
-, libjpeg
-, libtiff
-, freetype
-, mjpegtools
-, x264
-, gettext
-, openexr
-, libXext
-, libXxf86vm
-, libXv
-, libXi
-, libX11
-, libXft
-, xorgproto
-, libtheora
-, libpng
-, libdv
-, libuuid
-, file
-, nasm
-, perl
-, fontconfig
-, intltool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  faad2,
+  faac,
+  a52dec,
+  alsa-lib,
+  fftw,
+  lame,
+  libavc1394,
+  libiec61883,
+  libraw1394,
+  libsndfile,
+  libvorbis,
+  libogg,
+  libjpeg,
+  libtiff,
+  freetype,
+  mjpegtools,
+  x264,
+  gettext,
+  openexr,
+  libXext,
+  libXxf86vm,
+  libXv,
+  libXi,
+  libX11,
+  libXft,
+  xorgproto,
+  libtheora,
+  libpng,
+  libdv,
+  libuuid,
+  file,
+  nasm,
+  perl,
+  fontconfig,
+  intltool,
 }:
 
 stdenv.mkDerivation {
@@ -66,7 +67,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ automake autoconf libtool pkg-config file intltool ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+    pkg-config
+    file
+    intltool
+  ];
 
   buildInputs = [
     faad2

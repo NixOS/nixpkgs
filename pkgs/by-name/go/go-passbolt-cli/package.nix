@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, stdenv }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "go-passbolt-cli";
@@ -21,9 +27,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall

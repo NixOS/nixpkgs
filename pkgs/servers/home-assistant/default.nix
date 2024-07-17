@@ -1,29 +1,31 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, fetchPypi
-, python312
-, substituteAll
-, ffmpeg-headless
-, inetutils
-, nixosTests
-, home-assistant
-, testers
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  python312,
+  substituteAll,
+  ffmpeg-headless,
+  inetutils,
+  nixosTests,
+  home-assistant,
+  testers,
 
-# Look up dependencies of specified components in component-packages.nix
-, extraComponents ? [ ]
+  # Look up dependencies of specified components in component-packages.nix
+  extraComponents ? [ ],
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+  extraPackages ? ps: [ ],
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
-, packageOverrides ? self: super: {}
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
+  packageOverrides ? self: super: { },
 
-# Skip pip install of required packages on startup
-, skipPip ? true }:
+  # Skip pip install of required packages on startup
+  skipPip ? true,
+}:
 
 let
   defaultOverrides = [
@@ -38,9 +40,7 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
         };
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
+        nativeCheckInputs = with self; [ aresponses ];
       });
 
       aiolyric = super.aiolyric.overridePythonAttrs (oldAttrs: rec {
@@ -105,9 +105,7 @@ let
             --replace-fail "poetry>=1.0.0b1" "poetry-core" \
             --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
-          self.pytz
-        ];
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.pytz ];
       });
 
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
@@ -145,9 +143,7 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
         };
-        dependencies = with self; [
-          requests
-        ];
+        dependencies = with self; [ requests ];
       });
 
       ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
@@ -168,9 +164,7 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
         };
-        nativeBuildInputs = with self; [
-          setuptools
-        ];
+        nativeBuildInputs = with self; [ setuptools ];
         propagatedBuildInputs = with self; [
           aenum
           aiohttp
@@ -210,13 +204,9 @@ let
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
-        nativeBuildInputs = with self; [
-          setuptools
-        ];
+        nativeBuildInputs = with self; [ setuptools ];
 
-        propagatedBuildInputs = with self; [
-          requests
-        ];
+        propagatedBuildInputs = with self; [ requests ];
 
         doCheck = false; # no tests
       });
@@ -360,12 +350,8 @@ let
           version = "0.1.0";
           hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
         };
-        nativeBuildInputs = with self; [
-          flit-core
-        ];
-        pythonRelaxDeps = [
-          "betterproto"
-        ];
+        nativeBuildInputs = with self; [ flit-core ];
+        pythonRelaxDeps = [ "betterproto" ];
       };
 
       slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {
@@ -392,14 +378,10 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-MdPctAZuKn/YAwpMJ5gWU7PXJD3iK7bYprLXV52wNQQ=";
         };
-        disabledTests = [
-          "test_sign_failures"
-        ];
+        disabledTests = [ "test_sign_failures" ];
       };
 
-      versioningit = super.versioningit.overridePythonAttrs {
-        doCheck = false;
-      };
+      versioningit = super.versioningit.overridePythonAttrs { doCheck = false; };
 
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
         version = "0.13.1";
@@ -440,9 +422,7 @@ let
           pydantic
           ecdsa
         ];
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
+        nativeCheckInputs = with self; [ aresponses ];
       });
 
       youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
@@ -478,9 +458,12 @@ let
   # Don't forget to run update-component-packages.py after updating
   hassVersion = "2024.7.2";
 
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
-  version = assert (componentPackages.version == hassVersion); hassVersion;
+  version =
+    assert (componentPackages.version == hassVersion);
+    hassVersion;
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
@@ -503,9 +486,7 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-okukdAbBXJCaDpnOCDY91dsLQdm5pMJ1SKXV9A68eoQ=";
   };
 
-  build-system = with python.pkgs; [
-    setuptools
-  ];
+  build-system = with python.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [
     "aiohttp"
@@ -605,35 +586,38 @@ in python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
-  nativeCheckInputs = with python.pkgs; [
-    # test infrastructure (selectively from requirement_test.txt)
-    freezegun
-    pytest-asyncio
-    pytest-aiohttp
-    pytest-freezer
-    pytest-mock
-    pytest-rerunfailures
-    pytest-socket
-    pytest-timeout
-    pytest-unordered
-    pytest-xdist
-    pytestCheckHook
-    requests-mock
-    respx
-    syrupy
-    tomli
-    # Sneakily imported in tests/conftest.py
-    paho-mqtt
-    # Used in tests/non_packaged_scripts/test_alexa_locales.py
-    beautifulsoup4
-  ] ++ lib.concatMap (component: getPackages component python.pkgs) [
-    # some components are needed even if tests in tests/components are disabled
-    "default_config"
-    "debugpy"
-    "hue"
-    "qwikswitch"
-    "sentry"
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      # test infrastructure (selectively from requirement_test.txt)
+      freezegun
+      pytest-asyncio
+      pytest-aiohttp
+      pytest-freezer
+      pytest-mock
+      pytest-rerunfailures
+      pytest-socket
+      pytest-timeout
+      pytest-unordered
+      pytest-xdist
+      pytestCheckHook
+      requests-mock
+      respx
+      syrupy
+      tomli
+      # Sneakily imported in tests/conftest.py
+      paho-mqtt
+      # Used in tests/non_packaged_scripts/test_alexa_locales.py
+      beautifulsoup4
+    ]
+    ++ lib.concatMap (component: getPackages component python.pkgs) [
+      # some components are needed even if tests in tests/components are disabled
+      "default_config"
+      "debugpy"
+      "hue"
+      "qwikswitch"
+      "sentry"
+    ];
 
   pytestFlagsArray = [
     # assign tests grouped by file to workers
@@ -678,7 +662,8 @@ in python.pkgs.buildPythonApplication rec {
       extraComponents
       getPackages
       python
-      supportedComponentsWithTests;
+      supportedComponentsWithTests
+      ;
     pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
     frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;

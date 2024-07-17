@@ -11,7 +11,7 @@
   pyarrow,
   distributed,
   pytestCheckHook,
-  xarray
+  xarray,
 }:
 
 buildPythonPackage rec {

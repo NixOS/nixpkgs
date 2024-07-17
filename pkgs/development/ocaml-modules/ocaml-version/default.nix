@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, alcotest }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "ocaml-version";

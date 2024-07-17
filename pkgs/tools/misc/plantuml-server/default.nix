@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 
 let
   version = "1.2024.6";

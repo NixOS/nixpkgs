@@ -2,8 +2,6 @@
 
 {
   options = {
-    value = lib.mkOption {
-      type = lib.types.ints.positive;
-    };
+    value = lib.mkOption { type = lib.types.ints.positive; };
   };
 }

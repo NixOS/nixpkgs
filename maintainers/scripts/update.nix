@@ -5,41 +5,44 @@
 
   See https://nixos.org/manual/nixpkgs/unstable/#var-passthru-updateScript
 */
-{ package ? null
-, maintainer ? null
-, predicate ? null
-, path ? null
-, max-workers ? null
-, include-overlays ? false
-, keep-going ? null
-, commit ? null
-, skip-prompt ? null
+{
+  package ? null,
+  maintainer ? null,
+  predicate ? null,
+  path ? null,
+  max-workers ? null,
+  include-overlays ? false,
+  keep-going ? null,
+  commit ? null,
+  skip-prompt ? null,
 }:
 
 let
   pkgs = import ./../../default.nix (
     if include-overlays == false then
-      { overlays = []; }
+      { overlays = [ ]; }
     else if include-overlays == true then
       { } # Let Nixpkgs include overlays impurely.
-    else { overlays = include-overlays; }
+    else
+      { overlays = include-overlays; }
   );
 
   inherit (pkgs) lib;
 
-  /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
-   */
-  nubOn = f: list:
-    if list == [] then
-      []
+  # Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
+  nubOn =
+    f: list:
+    if list == [ ] then
+      [ ]
     else
       let
         x = lib.head list;
         xs = lib.filter (p: f x != f p) (lib.drop 1 list);
       in
-        [x] ++ nubOn f xs;
+      [ x ] ++ nubOn f xs;
 
-  /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
+  /*
+    Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
 
     Type: packagesWithPath :: AttrPath → (AttrPath → derivation → bool) → AttrSet → List<AttrSet{attrPath :: str; package :: derivation; }>
           AttrPath :: [str]
@@ -47,15 +50,18 @@ let
     The packages will be returned as a list of named pairs comprising of:
       - attrPath: stringified attribute path (based on `rootPath`)
       - package: corresponding derivation
-   */
-  packagesWithPath = rootPath: cond: pkgs:
+  */
+  packagesWithPath =
+    rootPath: cond: pkgs:
     let
-      packagesWithPathInner = path: pathContent:
+      packagesWithPathInner =
+        path: pathContent:
         let
           result = builtins.tryEval pathContent;
 
           somewhatUniqueRepresentant =
-            { package, attrPath }: {
+            { package, attrPath }:
+            {
               inherit (package) updateScript;
               # Some updaters use the same `updateScript` value for all packages.
               # Also compare `meta.description`.
@@ -66,79 +72,95 @@ let
 
           dedupResults = lst: nubOn somewhatUniqueRepresentant (lib.concatLists lst);
         in
-          if result.success then
-            let
-              evaluatedPathContent = result.value;
-            in
-              if lib.isDerivation evaluatedPathContent then
-                lib.optional (cond path evaluatedPathContent) { attrPath = lib.concatStringsSep "." path; package = evaluatedPathContent; }
-              else if lib.isAttrs evaluatedPathContent then
-                # If user explicitly points to an attrSet or it is marked for recursion, we recur.
-                if path == rootPath || evaluatedPathContent.recurseForDerivations or false || evaluatedPathContent.recurseForRelease or false then
-                  dedupResults (lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [name]) elem) evaluatedPathContent)
-                else []
-              else []
-          else [];
+        if result.success then
+          let
+            evaluatedPathContent = result.value;
+          in
+          if lib.isDerivation evaluatedPathContent then
+            lib.optional (cond path evaluatedPathContent) {
+              attrPath = lib.concatStringsSep "." path;
+              package = evaluatedPathContent;
+            }
+          else if lib.isAttrs evaluatedPathContent then
+            # If user explicitly points to an attrSet or it is marked for recursion, we recur.
+            if
+              path == rootPath
+              || evaluatedPathContent.recurseForDerivations or false
+              || evaluatedPathContent.recurseForRelease or false
+            then
+              dedupResults (
+                lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [ name ]) elem) evaluatedPathContent
+              )
+            else
+              [ ]
+          else
+            [ ]
+        else
+          [ ];
     in
-      packagesWithPathInner rootPath pkgs;
+    packagesWithPathInner rootPath pkgs;
 
-  /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
-   */
-  packagesWith = packagesWithPath [];
+  # Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
+  packagesWith = packagesWithPath [ ];
 
-  /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
-   */
-  packagesWithUpdateScriptMatchingPredicate = cond:
-    packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
+  # Recursively find all packages in `pkgs` with updateScript matching given predicate.
+  packagesWithUpdateScriptMatchingPredicate =
+    cond: packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
 
-  /* Recursively find all packages in `pkgs` with updateScript by given maintainer.
-   */
-  packagesWithUpdateScriptAndMaintainer = maintainer':
+  # Recursively find all packages in `pkgs` with updateScript by given maintainer.
+  packagesWithUpdateScriptAndMaintainer =
+    maintainer':
     let
       maintainer =
-        if ! builtins.hasAttr maintainer' lib.maintainers then
+        if !builtins.hasAttr maintainer' lib.maintainers then
           builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
-      packagesWithUpdateScriptMatchingPredicate (path: pkg:
-                         (if builtins.hasAttr "maintainers" pkg.meta
-                           then (if builtins.isList pkg.meta.maintainers
-                                   then builtins.elem maintainer pkg.meta.maintainers
-                                   else maintainer == pkg.meta.maintainers
-                                )
-                           else false
-                         )
-                   );
+    packagesWithUpdateScriptMatchingPredicate (
+      path: pkg:
+      (
+        if builtins.hasAttr "maintainers" pkg.meta then
+          (
+            if builtins.isList pkg.meta.maintainers then
+              builtins.elem maintainer pkg.meta.maintainers
+            else
+              maintainer == pkg.meta.maintainers
+          )
+        else
+          false
+      )
+    );
 
-  /* Recursively find all packages under `path` in `pkgs` with updateScript.
-   */
-  packagesWithUpdateScript = path: pkgs:
+  # Recursively find all packages under `path` in `pkgs` with updateScript.
+  packagesWithUpdateScript =
+    path: pkgs:
     let
       prefix = lib.splitString "." path;
       pathContent = lib.attrByPath prefix null pkgs;
     in
-      if pathContent == null then
-        builtins.throw "Attribute path `${path}` does not exist."
-      else
-        packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
-                       pathContent;
+    if pathContent == null then
+      builtins.throw "Attribute path `${path}` does not exist."
+    else
+      packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg) pathContent;
 
-  /* Find a package under `path` in `pkgs` and require that it has an updateScript.
-   */
-  packageByName = path: pkgs:
+  # Find a package under `path` in `pkgs` and require that it has an updateScript.
+  packageByName =
+    path: pkgs:
     let
-        package = lib.attrByPath (lib.splitString "." path) null pkgs;
+      package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
-      if package == null then
-        builtins.throw "Package with an attribute name `${path}` does not exist."
-      else if ! builtins.hasAttr "updateScript" package then
-        builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
-      else
-        { attrPath = path; inherit package; };
+    if package == null then
+      builtins.throw "Package with an attribute name `${path}` does not exist."
+    else if !builtins.hasAttr "updateScript" package then
+      builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+    else
+      {
+        attrPath = path;
+        inherit package;
+      };
 
-  /* List of packages matched based on the CLI arguments.
-   */
+  # List of packages matched based on the CLI arguments.
   packages =
     if package != null then
       [ (packageByName package pkgs) ]
@@ -191,19 +213,21 @@ let
         --argstr skip-prompt true
   '';
 
-  /* Transform a matched package into an object for update.py.
-   */
-  packageData = { package, attrPath }: {
-    name = package.name;
-    pname = lib.getName package;
-    oldVersion = lib.getVersion package;
-    updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
-    supportedFeatures = package.updateScript.supportedFeatures or [];
-    attrPath = package.updateScript.attrPath or attrPath;
-  };
+  # Transform a matched package into an object for update.py.
+  packageData =
+    { package, attrPath }:
+    {
+      name = package.name;
+      pname = lib.getName package;
+      oldVersion = lib.getVersion package;
+      updateScript = map builtins.toString (
+        lib.toList (package.updateScript.command or package.updateScript)
+      );
+      supportedFeatures = package.updateScript.supportedFeatures or [ ];
+      attrPath = package.updateScript.attrPath or attrPath;
+    };
 
-  /* JSON file with data for update.py.
-   */
+  # JSON file with data for update.py.
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
   optionalArgs =
@@ -214,7 +238,8 @@ let
 
   args = [ packagesJson ] ++ optionalArgs;
 
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
   buildCommand = ''
     echo ""

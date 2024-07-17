@@ -25,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-ZNVBP/c1Q7635PbySk5Yxz7riYNLnBnJLG6AMxy/ZeA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     numpy

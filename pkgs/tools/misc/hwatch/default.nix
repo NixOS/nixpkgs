@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, hwatch, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  hwatch,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hwatch";
@@ -22,9 +29,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $src/completion/zsh/_hwatch \
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = hwatch;
-  };
+  passthru.tests.version = testers.testVersion { package = hwatch; };
 
   meta = with lib; {
     homepage = "https://github.com/blacknon/hwatch";

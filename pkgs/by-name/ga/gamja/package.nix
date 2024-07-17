@@ -23,7 +23,9 @@ buildNpmPackage rec {
     runHook preInstall
 
     cp -r dist $out
-    ${lib.optionalString (gamjaConfig != null) "cp ${writeText "gamja-config" (builtins.toJSON gamjaConfig)} $out/config.json"}
+    ${lib.optionalString (
+      gamjaConfig != null
+    ) "cp ${writeText "gamja-config" (builtins.toJSON gamjaConfig)} $out/config.json"}
 
     runHook postInstall
   '';
@@ -32,6 +34,9 @@ buildNpmPackage rec {
     description = "Simple IRC web client";
     homepage = "https://git.sr.ht/~emersion/gamja";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [motiejus apfelkuchen6];
+    maintainers = with maintainers; [
+      motiejus
+      apfelkuchen6
+    ];
   };
 }

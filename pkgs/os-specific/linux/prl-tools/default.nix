@@ -1,30 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, bbe
-, makeWrapper
-, p7zip
-, perl
-, undmg
-, dbus-glib
-, glib
-, xorg
-, zlib
-, kernel
-, bash
-, cups
-, gawk
-, netcat
-, timetrap
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bbe,
+  makeWrapper,
+  p7zip,
+  perl,
+  undmg,
+  dbus-glib,
+  glib,
+  xorg,
+  zlib,
+  kernel,
+  bash,
+  cups,
+  gawk,
+  netcat,
+  timetrap,
+  util-linux,
 }:
 
 let
   kernelVersion = kernel.modDirVersion;
   kernelDir = "${kernel.dev}/lib/modules/${kernelVersion}";
 
-  libPath = lib.concatStringsSep ":" [ "${glib.out}/lib" "${xorg.libXrandr}/lib" ];
+  libPath = lib.concatStringsSep ":" [
+    "${glib.out}/lib"
+    "${xorg.libXrandr}/lib"
+  ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
     "${cups}/sbin"
@@ -45,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VBHCsxaMI6mfmc/iQ4hJW/592rKck9HilTX2Hq7Hb5s=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -109,12 +116,18 @@ stdenv.mkDerivation (finalAttrs: {
       cp prl_fs/SharedFolders/Guest/Linux/prl_fs/prl_fs.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-      ${lib.optionalString stdenv.isAarch64
-      "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
+      ${lib.optionalString stdenv.isAarch64 "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
     )
 
     ( # tools
-      cd tools/tools${if stdenv.isAarch64 then "-arm64" else if stdenv.isx86_64 then "64" else "32"}
+      cd tools/tools${
+        if stdenv.isAarch64 then
+          "-arm64"
+        else if stdenv.isx86_64 then
+          "64"
+        else
+          "32"
+      }
       mkdir -p $out/lib
 
       # prltoolsd contains hardcoded /bin/bash path
@@ -170,7 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap wegank ];
+    maintainers = with maintainers; [
+      catap
+      wegank
+    ];
     platforms = platforms.linux;
   };
 })

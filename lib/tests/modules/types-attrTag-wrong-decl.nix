@@ -5,10 +5,10 @@ in
 {
   options = {
     opt = mkOption {
-      type = types.attrTag {
-        int = types.int;
+      type = types.attrTag { int = types.int; };
+      default = {
+        int = 1;
       };
-      default = { int = 1; };
     };
   };
 }

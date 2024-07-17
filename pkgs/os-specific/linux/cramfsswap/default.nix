@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, zlib}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cramfsswap";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'strip ' '$(STRIP) '
   '';
 
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   installPhase = ''
     install --target $out/bin -D cramfsswap

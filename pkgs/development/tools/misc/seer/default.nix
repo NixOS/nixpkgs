@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gdb, kdePackages, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gdb,
+  kdePackages,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "seer";
@@ -20,8 +28,15 @@ stdenv.mkDerivation rec {
       --replace-fail "/usr/bin/gdb" "${gdb}/bin/gdb"
   '';
 
-  buildInputs = with kdePackages; [ qtbase qtcharts qtsvg ];
-  nativeBuildInputs = [ cmake kdePackages.wrapQtAppsHook ];
+  buildInputs = with kdePackages; [
+    qtbase
+    qtcharts
+    qtsvg
+  ];
+  nativeBuildInputs = [
+    cmake
+    kdePackages.wrapQtAppsHook
+  ];
 
   meta = with lib; {
     description = "Qt gui frontend for GDB";

@@ -1,34 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, pandoc
-, gi-docgen
-, python3
-, libsoup_3
-, glib
-, gnome
-, gssdp-tools
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  pandoc,
+  gi-docgen,
+  python3,
+  libsoup_3,
+  glib,
+  gnome,
+  gssdp-tools,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
   version = "1.6.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -41,13 +44,9 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    libsoup_3
-  ];
+  buildInputs = [ libsoup_3 ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dgtk_doc=true"

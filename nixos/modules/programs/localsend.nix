@@ -12,9 +12,11 @@ in
   options.programs.localsend = {
     enable = lib.mkEnableOption "localsend, an open source cross-platform alternative to AirDrop";
 
-    openFirewall = lib.mkEnableOption "opening the firewall port ${toString firewallPort} for receiving files" // {
-      default = true;
-    };
+    openFirewall =
+      lib.mkEnableOption "opening the firewall port ${toString firewallPort} for receiving files"
+      // {
+        default = true;
+      };
   };
 
   config = lib.mkIf cfg.enable {

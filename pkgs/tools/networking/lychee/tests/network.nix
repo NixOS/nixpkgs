@@ -1,4 +1,9 @@
-{ config, hostPkgs, lib, ... }:
+{
+  config,
+  hostPkgs,
+  lib,
+  ...
+}:
 let
   sitePkg = hostPkgs.runCommand "site" { } ''
     dist=$out/dist
@@ -6,9 +11,7 @@ let
     echo "<html><body><a href=\"http://example/foo.html\">foo</a></body></html>" > $dist/index.html
     echo "<html><body><a href=\".\">index</a></body></html>" > $dist/foo.html
   '';
-  check = config.node.pkgs.testers.lycheeLinkCheck {
-    site = sitePkg;
-  };
+  check = config.node.pkgs.testers.lycheeLinkCheck { site = sitePkg; };
 in
 {
   name = "testers-lychee-link-check-run";

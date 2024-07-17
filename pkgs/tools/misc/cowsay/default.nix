@@ -1,10 +1,22 @@
-{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, makeWrapper, nix-update-script, testers }:
+{
+  lib,
+  stdenv,
+  perl,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  nix-update-script,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsay";
   version = "3.7.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "cowsay-org";
@@ -30,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix COWPATH : $out/share/cowsay/cows
   '';
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -48,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rob anthonyroussel ];
+    maintainers = with maintainers; [
+      rob
+      anthonyroussel
+    ];
   };
 })

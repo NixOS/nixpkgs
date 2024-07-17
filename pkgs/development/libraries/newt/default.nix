@@ -1,4 +1,11 @@
-{ lib, fetchurl, stdenv, slang, popt, python }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  slang,
+  popt,
+  python,
+}:
 
 let
   pythonIncludePath = "${lib.getDev python}/include/python";
@@ -26,7 +33,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python ];
-  buildInputs = [ slang popt ];
+  buildInputs = [
+    slang
+    popt
+  ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -36,9 +46,7 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  configureFlags = lib.optionals stdenv.isDarwin [
-    "--disable-nls"
-  ];
+  configureFlags = lib.optionals stdenv.isDarwin [ "--disable-nls" ];
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"

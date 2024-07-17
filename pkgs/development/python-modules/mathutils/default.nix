@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-c28kt2ADw4wHNLN0CBPcJU/kqm6g679QRaICk4WwaBc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "mathutils" ];
 

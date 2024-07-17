@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, bytestring
-, config
-, libc
-, rio
-, uri
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bytestring,
+  config,
+  libc,
+  rio,
+  uri,
 }:
 
 buildDunePackage rec {
@@ -19,9 +20,7 @@ buildDunePackage rec {
     hash = "sha256-YWJCPokY1A7TGqCGoxJl14oKDVeMNybEEB7KiK92WSo=";
   };
 
-  buildInputs = [
-    config
-  ];
+  buildInputs = [ config ];
 
   propagatedBuildInputs = [
     bytestring
@@ -38,5 +37,3 @@ buildDunePackage rec {
     maintainers = [ ];
   };
 }
-
-

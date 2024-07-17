@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, desktop-file-utils
-, libcanberra
-, gst_all_1
-, vala
-, gtk3
-, gom
-, sqlite
-, libxml2
-, glib
-, gobject-introspection
-, json-glib
-, libpeas
-, gsettings-desktop-schemas
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  libcanberra,
+  gst_all_1,
+  vala,
+  gtk3,
+  gom,
+  sqlite,
+  libxml2,
+  glib,
+  gobject-introspection,
+  json-glib,
+  libpeas,
+  gsettings-desktop-schemas,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {

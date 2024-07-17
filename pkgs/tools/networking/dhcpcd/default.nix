@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, udev
-, freebsd
-, runtimeShellPackage
-, runtimeShell
-, nixosTests
-, enablePrivSep ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
+  freebsd,
+  runtimeShellPackage,
+  runtimeShell,
+  nixosTests,
+  enablePrivSep ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,46 +23,56 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    freebsd.libcapsicum
-    freebsd.libcasper
-  ];
+  buildInputs =
+    [
+      runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+    ]
+    ++ lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals stdenv.isFreeBSD [
+      freebsd.libcapsicum
+      freebsd.libcasper
+    ];
 
   postPatch = ''
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
   '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ]
-  ++ (
-    if ! enablePrivSep
-    then [ "--disable-privsep" ]
-    else [
-      "--enable-privsep"
-      # dhcpcd disables privsep if it can't find the default user,
-      # so we explicitly specify a user.
-      "--privsepuser=dhcpcd"
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
     ]
-  );
+    ++ (
+      if !enablePrivSep then
+        [ "--disable-privsep" ]
+      else
+        [
+          "--enable-privsep"
+          # dhcpcd disables privsep if it can't find the default user,
+          # so we explicitly specify a user.
+          "--privsepuser=dhcpcd"
+        ]
+    );
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
   # at runtime.
-  installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
+  installFlags = [
+    "DBDIR=$(TMPDIR)/db"
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (udev != null && stdenv.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (
+    udev != null && stdenv.isLinux
+  ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru = {
     inherit enablePrivSep;
-    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+    tests = {
+      inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
+    };
   };
 
   meta = with lib; {

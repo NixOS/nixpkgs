@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -19,7 +24,7 @@ in
         '';
       };
 
-     ignoreCpuidCheck = mkOption {
+      ignoreCpuidCheck = mkOption {
         type = types.bool;
         default = false;
         description = "Whether to ignore the cpuid check to allow running on unsupported platforms";

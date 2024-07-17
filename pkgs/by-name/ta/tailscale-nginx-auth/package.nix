@@ -1,4 +1,9 @@
-{ lib, stdenv, buildGoModule, tailscale }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  tailscale,
+}:
 
 buildGoModule {
   pname = "tailscale-nginx-auth";

@@ -1,4 +1,8 @@
-{ fetchCrate, lib, rustPlatform }:
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo2junit";

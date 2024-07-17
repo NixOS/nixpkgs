@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtwebengine,
-}:
+{ mkKdeDerivation, qtwebengine }:
 mkKdeDerivation {
   pname = "akregator";
 
-  extraBuildInputs = [qtwebengine];
+  extraBuildInputs = [ qtwebengine ];
 }

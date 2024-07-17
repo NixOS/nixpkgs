@@ -1,11 +1,12 @@
-{ callPackage
-, lib
-, stdenv
-, fetchurl
-, nixos
-, testers
-, versionCheckHook
-, hello
+{
+  callPackage,
+  lib,
+  stdenv,
+  fetchurl,
+  nixos,
+  testers,
+  versionCheckHook,
+  hello,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,9 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Give hello some install checks for testing purpose.
   postInstallCheck = ''
@@ -33,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = hello; };
 
     invariant-under-noXlibs =
-      testers.testEqualDerivation
-        "hello must not be rebuilt when environment.noXlibs is set."
-        hello
+      testers.testEqualDerivation "hello must not be rebuilt when environment.noXlibs is set." hello
         (nixos { environment.noXlibs = true; }).pkgs.hello;
   };
 

@@ -1,15 +1,16 @@
-{ lib
-, autoreconfHook
-, bc
-, fetchFromGitHub
-, gettext
-, makeWrapper
-, perl
-, python3
-, screen
-, stdenv
-, vim
-, tmux
+{
+  lib,
+  autoreconfHook,
+  bc,
+  fetchFromGitHub,
+  gettext,
+  makeWrapper,
+  perl,
+  python3,
+  screen,
+  stdenv,
+  vim,
+  tmux,
 }:
 
 let
@@ -72,7 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper "$out/bin/.$bname" "$out/bin/$bname" \
         --argv0 $bname \
         --prefix PATH ":" "$out/bin" \
-        --set BYOBU_PATH ${lib.makeBinPath [ vim bc ]} \
+        --set BYOBU_PATH ${
+          lib.makeBinPath [
+            vim
+            bc
+          ]
+        } \
         --set BYOBU_PYTHON "${pythonEnv}/bin/python"
     done
   '';

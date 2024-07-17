@@ -23,7 +23,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "semver" ];
 
-
   propagatedBuildInputs = [ semver ];
 
   nativeCheckInputs = [ nose3 ];

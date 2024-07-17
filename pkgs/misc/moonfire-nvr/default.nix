@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, ncurses
-, sqlite
-, testers
-, moonfire-nvr
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  sqlite,
+  testers,
+  moonfire-nvr,
+  darwin,
 }:
 
 let
@@ -33,7 +34,8 @@ let
       runHook postInstall
     '';
   };
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   inherit pname version src;
 
   sourceRoot = "${src.name}/server";
@@ -47,16 +49,12 @@ in rustPlatform.buildRustPackage {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     ncurses
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-  ]);
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
 
   postInstall = ''
     mkdir -p $out/lib/ui

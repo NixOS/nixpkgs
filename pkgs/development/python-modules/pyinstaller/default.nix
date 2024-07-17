@@ -1,17 +1,17 @@
 {
-  lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zlib
-, altgraph
-, packaging
-, pyinstaller-hooks-contrib
-, testers
-, pyinstaller
-, glibc
-, binutils
-, installShellFiles
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zlib,
+  altgraph,
+  packaging,
+  pyinstaller-hooks-contrib,
+  testers,
+  pyinstaller,
+  glibc,
+  binutils,
+  installShellFiles,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-P0tlIPRCP+GbzC/WOrcjiFGuK9y8mPJbxdL5fMYgEuk=";
   };
-
 
   build-system = [ setuptools ];
 
@@ -38,7 +37,13 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":"  (lib.makeBinPath [ glibc binutils ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      glibc
+      binutils
+    ])
   ];
 
   postInstall = ''
@@ -47,9 +52,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyInstaller" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pyinstaller;
-  };
+  passthru.tests.version = testers.testVersion { package = pyinstaller; };
 
   meta = {
     description = "A tool to bundle a python application with dependencies into a single package";

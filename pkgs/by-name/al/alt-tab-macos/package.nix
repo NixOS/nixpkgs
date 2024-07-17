@@ -34,7 +34,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Windows alt-tab on macOS";
     homepage = "https://alt-tab-macos.netlify.app";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ donteatoreo emilytrau ];
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

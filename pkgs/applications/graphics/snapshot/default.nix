@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchurl
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, pipewire
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  pipewire,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,9 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = "snapshot";
-  };
+  passthru.updateScript = gnome.updateScript { packageName = "snapshot"; };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";

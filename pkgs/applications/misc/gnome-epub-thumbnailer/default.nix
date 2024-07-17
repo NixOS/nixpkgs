@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, wrapGAppsNoGuiHook
-, meson
-, ninja
-, pkg-config
-, gnome
-, gdk-pixbuf
-, glib
-, libarchive
-, librsvg
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  wrapGAppsNoGuiHook,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gdk-pixbuf,
+  glib,
+  libarchive,
+  librsvg,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-epub-thumbnailer";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-epub-thumbnailer"; };
   };
 
   meta = with lib; {

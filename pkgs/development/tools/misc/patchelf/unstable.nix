@@ -1,4 +1,10 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
@@ -25,9 +31,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      url = "https://github.com/NixOS/patchelf.git";
-    };
+    updateScript = unstableGitUpdater { url = "https://github.com/NixOS/patchelf.git"; };
   };
 
   meta = with lib; {

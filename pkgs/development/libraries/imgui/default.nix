@@ -30,8 +30,7 @@
   IMGUI_BUILD_OPENGL3_BINDING ?
     IMGUI_BUILD_SDL2_BINDING || IMGUI_BUILD_GLFW_BINDING || IMGUI_BUILD_GLUT_BINDING,
   IMGUI_BUILD_OSX_BINDING ? stdenv.isDarwin,
-  IMGUI_BUILD_SDL2_BINDING ?
-    !IMGUI_BUILD_GLFW_BINDING && !stdenv.isDarwin,
+  IMGUI_BUILD_SDL2_BINDING ? !IMGUI_BUILD_GLFW_BINDING && !stdenv.isDarwin,
   IMGUI_BUILD_SDL2_RENDERER_BINDING ? IMGUI_BUILD_SDL2_BINDING,
   IMGUI_BUILD_VULKAN_BINDING ? false,
   IMGUI_BUILD_WIN32_BINDING ? false,
@@ -137,9 +136,7 @@ stdenv.mkDerivation rec {
     description = "Bloat-free Graphical User interface for C++ with minimal dependencies";
     homepage = "https://github.com/ocornut/imgui";
     license = lib.licenses.mit; # vcpkg licensed as MIT too
-    maintainers = with lib.maintainers; [
-      SomeoneSerge
-    ];
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     platforms = lib.platforms.all;
   };
 }

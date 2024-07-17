@@ -1,7 +1,8 @@
-{ lib
-, clangStdenv
-, fetchurl
-, gnustep
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep,
 }:
 
 clangStdenv.mkDerivation rec {

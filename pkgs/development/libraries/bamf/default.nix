@@ -1,30 +1,35 @@
-{ stdenv
-, lib
-, autoreconfHook
-, gitUpdater
-, gnome-common
-, which
-, fetchgit
-, libgtop
-, libwnck
-, glib
-, vala
-, pkg-config
-, libstartup_notification
-, gobject-introspection
-, gtk-doc
-, docbook_xsl
-, xorgserver
-, dbus
-, python3
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  gitUpdater,
+  gnome-common,
+  which,
+  fetchgit,
+  libgtop,
+  libwnck,
+  glib,
+  vala,
+  pkg-config,
+  libstartup_notification,
+  gobject-introspection,
+  gtk-doc,
+  docbook_xsl,
+  xorgserver,
+  dbus,
+  python3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
   version = "0.5.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
@@ -78,9 +83,7 @@ stdenv.mkDerivation rec {
   # Ignore deprecation errors
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = ".ubuntu.*";
-  };
+  passthru.updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
 
   meta = with lib; {
     description = "Application matching framework";

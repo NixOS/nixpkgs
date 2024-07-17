@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5aLT0JfeFj0fZP/1sHXulCQtoquHYriapMdPtN+fxko=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   # cargo test has an x86-only dependency
   doCheck = stdenv.hostPlatform.isx86;
@@ -42,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     description = "Simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
     changelog = "https://github.com/str4d/rage/blob/v${version}/rage/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ]; # either at your option
+    license = with licenses; [
+      asl20
+      mit
+    ]; # either at your option
     maintainers = with maintainers; [ ryantm ];
     mainProgram = "rage";
   };

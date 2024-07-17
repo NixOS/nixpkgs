@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-mommy";
@@ -15,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo wrapper that encourages you after running commands";
     mainProgram = "cargo-mommy";
     homepage = "https://github.com/Gankra/cargo-mommy";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ GoldsteinE ];
   };
 }

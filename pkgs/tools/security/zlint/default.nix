@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, zlint
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  zlint,
 }:
 
 buildGoModule rec {
@@ -25,9 +26,7 @@ buildGoModule rec {
     rm -rf v3/cmd/genTestCerts
   '';
 
-  excludedPackages = [
-    "lints"
-  ];
+  excludedPackages = [ "lints" ];
 
   ldflags = [
     "-s"

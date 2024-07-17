@@ -37,9 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     wireplumber
   ];
 
-  makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-  ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   # populate version info used by `syshud -v`:
   configurePhase = ''
@@ -52,7 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "branch" ];
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
   };
 
   meta = {

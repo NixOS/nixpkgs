@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, blas, lapack, gfortran, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  blas,
+  lapack,
+  gfortran,
+  fixDarwinDylibNames,
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -22,7 +30,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ blas lapack gfortran.cc.lib ];
+  buildInputs = [
+    blas
+    lapack
+    gfortran.cc.lib
+  ];
 
   doCheck = true;
 

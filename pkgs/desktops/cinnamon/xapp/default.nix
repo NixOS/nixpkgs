@@ -1,30 +1,34 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, libgnomekbd
-, gdk-pixbuf
-, cairo
-, xorg
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, vala
-, wrapGAppsHook3
-, inxi
-, mate
-, dbus
-, libdbusmenu-gtk3
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libgnomekbd,
+  gdk-pixbuf,
+  cairo,
+  xorg,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  lib,
+  stdenv,
+  vala,
+  wrapGAppsHook3,
+  inxi,
+  mate,
+  dbus,
+  libdbusmenu-gtk3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xapp";
   version = "2.8.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -48,10 +52,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      setproctitle # mate applet
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        setproctitle # mate applet
+      ]
+    ))
     libgnomekbd
     gdk-pixbuf
     xorg.libxkbfile
@@ -68,9 +74,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = [
-    "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
-  ];
+  mesonFlags = [ "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides" ];
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
