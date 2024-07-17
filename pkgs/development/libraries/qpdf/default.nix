@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
     changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
+    mainProgram = "qpdf";
   };
 }
