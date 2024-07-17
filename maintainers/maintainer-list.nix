@@ -15040,10 +15040,10 @@
   };
   onemoresuza = {
     name = "Coutinho de Souza";
-    email = "dev@onemoresuza.mailer.me";
+    email = "dev@onemoresuza.com";
     github = "onemoresuza";
     githubId = 106456302;
-    keys = [ { fingerprint = "484F D3B8 BAD7 BF5D 8B68  2AEA A2ED 1159 935E 4D7E"; } ];
+    keys = [ { fingerprint = "6FD3 7E64 11C5 C659 2F34  EDBC 4352 D15F B177 F2A8"; } ];
   };
   onixie = {
     email = "onixie@gmail.com";
