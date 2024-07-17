@@ -4892,6 +4892,12 @@
     github = "Detegr";
     githubId = 724433;
   };
+  detroyejr = {
+    name = "Jonathan De Troye";
+    email = "detroyejr@outlook.com";
+    github = "detroyejr";
+    githubId = 12815411;
+  };
   Dettorer = {
     name = "Paul Hervot";
     email = "paul.hervot@dettorer.net";
@@ -14441,6 +14447,12 @@
     name = "Nicolas Goudry";
     keys = [ { fingerprint = "21B6 A59A 4E89 0B1B 83E3 0CDB 01C8 8C03 5450 9AA9"; } ];
   };
+  nicomem = {
+    email = "nix@nicomem.com";
+    github = "nicomem";
+    githubId = 24990385;
+    name = "Nicolas Mémeint";
+  };
   nicoo = {
     email = "nicoo@debian.org";
     github = "nbraud";
@@ -22010,6 +22022,13 @@
     matrix = "@xgwq:nerdberg.de";
     github = "peterablehmann";
     githubId = 36541313;
+  };
+  xinyangli = {
+    email = "lixinyang411@gmail.com";
+    matrix = "@me:xinyang.life";
+    github = "xinyangli";
+    githubId = 16359093;
+    name = "Xinyang Li";
   };
   xiorcale = {
     email = "quentin.vaucher@pm.me";

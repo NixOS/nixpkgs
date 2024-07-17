@@ -1,4 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  kyverno-chainsaw,
+  lib,
+  nix-update-script,
+  stdenv,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
@@ -14,13 +23,31 @@ buildGoModule rec {
   vendorHash = "sha256-UQCn5GKhhfHsHIOqYYVkKP76e2NTRtwjw2VvCwRPUB4=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${version}"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   doCheck = false; # requires running kubernetes
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd kyverno-chainsaw \
+        --$shell <($out/bin/chainsaw completion $shell)
+    done
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kyverno-chainsaw;
+    command = "chainsaw version";
+    version = "v${version}";
+  };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
