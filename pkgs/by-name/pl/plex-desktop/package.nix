@@ -128,7 +128,7 @@ buildFHSEnv {
       mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
       install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
       substituteInPlace $out/share/applications/plex-desktop.desktop \
-        --replace-warn \
+        --replace-fail \
         'Icon=''${SNAP}/meta/gui/icon.png' \
         'Icon=${plex-desktop}/meta/gui/icon.png' \
         --replace-fail \
