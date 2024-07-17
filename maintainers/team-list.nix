@@ -27,7 +27,6 @@
    * test the validity of the format with:
        nix-build lib/tests/teams.nix
 */
-
 { lib }:
 with lib.maintainers;
 {
