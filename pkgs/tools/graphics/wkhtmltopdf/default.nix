@@ -81,7 +81,7 @@ let
   };
 in
 stdenv.mkDerivation ({
-  pname = "wkhtmltopdf-bin";
+  pname = "wkhtmltopdf";
 
   dontStrip = true;
 
