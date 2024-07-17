@@ -675,6 +675,8 @@ self: super: with self; {
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
+  apeye-core = callPackage ../development/python-modules/apeye-core { };
+
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apischema = callPackage ../development/python-modules/apischema { };
@@ -2073,6 +2075,8 @@ self: super: with self; {
 
   commitizen = callPackage ../development/python-modules/commitizen { };
 
+  consolekit = callPackage ../development/python-modules/consolekit { };
+
   connect-box = callPackage ../development/python-modules/connect-box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -3069,6 +3073,8 @@ self: super: with self; {
 
   deprecation = callPackage ../development/python-modules/deprecation { };
 
+  deprecation-alias = callPackage ../development/python-modules/deprecation-alias { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
@@ -3218,6 +3224,8 @@ self: super: with self; {
   dissect-xfs = callPackage ../development/python-modules/dissect-xfs { };
 
   dissononce = callPackage ../development/python-modules/dissononce { };
+
+  dist-meta  = callPackage ../development/python-modules/dist-meta { };
 
   distlib = callPackage ../development/python-modules/distlib { };
 
@@ -3628,6 +3636,10 @@ self: super: with self; {
   doit-py = callPackage ../development/python-modules/doit-py { };
 
   dokuwiki = callPackage ../development/python-modules/dokuwiki { };
+
+  dom-toml = callPackage ../development/python-modules/dom-toml { };
+
+  domdf-python-tools = callPackage ../development/python-modules/domdf-python-tools { };
 
   domeneshop = callPackage ../development/python-modules/domeneshop { };
 
@@ -5500,6 +5512,8 @@ self: super: with self; {
   handout = callPackage ../development/python-modules/handout { };
 
   hankel = callPackage ../development/python-modules/hankel { };
+
+  handy-archives = callPackage ../development/python-modules/handy-archives { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
@@ -10185,6 +10199,8 @@ self: super: with self; {
 
   pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
 
+  pyproject-parser = callPackage ../development/python-modules/pyproject-parser { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
@@ -14434,6 +14450,8 @@ self: super: with self; {
 
   shippai = callPackage ../development/python-modules/shippai { };
 
+  shippinglabel = callPackage ../development/python-modules/shippinglabel { };
+
   shiv = callPackage ../development/python-modules/shiv { };
 
   shodan = callPackage ../development/python-modules/shodan { };
@@ -17579,6 +17597,10 @@ self: super: with self; {
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 
   whenever = callPackage ../development/python-modules/whenever { };
+
+  whey = callPackage ../development/python-modules/whey { };
+
+  whey-pth = callPackage ../development/python-modules/whey-pth { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
