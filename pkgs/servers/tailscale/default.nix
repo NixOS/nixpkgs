@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "1.68.2";
+  version = "1.70.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -23,7 +23,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-VI5k8PnPP8r2rIkW7AeQod7JmoHWuSLiaxkZXXv+0T8=";
+    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ buildGoModule {
     })
   ];
 
-  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
+  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
@@ -73,9 +73,10 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
+    description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
+    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ mbaillie jk mfrw ];
+    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
   };
 }
