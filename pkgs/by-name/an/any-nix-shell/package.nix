@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ bash ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r bin $out
     wrapProgram $out/bin/any-nix-shell --prefix PATH ":" ${
@@ -32,13 +37,15 @@ stdenv.mkDerivation rec {
         which
       ]
     }
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "fish, xonsh and zsh support for nix-shell";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
-    maintainers = with maintainers; [ haslersn ];
+    maintainers = with lib.maintainers; [ haslersn ];
     mainProgram = "any-nix-shell";
   };
 }
