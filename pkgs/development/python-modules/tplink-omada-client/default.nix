@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pytestCheckHook,
   pythonOlder,
 }:
 
