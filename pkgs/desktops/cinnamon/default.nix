@@ -1,12 +1,6 @@
 { config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs (p: p // {
-    buildPhase = "make png-country-320x240-fancy";
-    # installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png-320x420";
-    installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png";
-  });
-
   iso-flags-svg = pkgs.iso-flags.overrideAttrs (p: p // {
     buildPhase = "mkdir -p $out/share";
     installPhase = "mv svg $out/share/iso-flags-svg";
@@ -42,6 +36,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
+  iso-flags-png-320x420 = lib.warn "cinnamon.iso-flags-png-320x420 was moved to top-level and renamed to pkgs.iso-flags-png-320x240." pkgs.iso-flags-png-320x240; # Added on 2024-07-14
   folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
   mint-artwork = lib.warn "cinnamon.mint-artwork was moved to top-level. Please use pkgs.mint-artwork directly." pkgs.mint-artwork; # Added on 2024-07-14
   mint-cursor-themes = lib.warn "cinnamon.mint-cursor-themes was moved to top-level. Please use pkgs.mint-cursor-themes directly." pkgs.mint-cursor-themes; # Added on 2024-07-14
