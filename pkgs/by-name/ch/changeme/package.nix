@@ -59,13 +59,11 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-<<<<<<< 8a52b9e3ea4df263d4c5099a374bba007e6e6d15
   doCheck = false;
 
   checkPhase = ''
 =======
   preCheck = ''
->>>>>>> changeme: init at 1.2.3
     # allow to find the module helper during the test run
     export PYTHONPATH=$PYTHONPATH:$PWD/tests
   '';
