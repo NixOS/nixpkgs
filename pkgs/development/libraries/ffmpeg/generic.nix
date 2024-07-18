@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -723,7 +723,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config texinfo yasm ]
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config yasm ]
+  # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
+  ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = []
