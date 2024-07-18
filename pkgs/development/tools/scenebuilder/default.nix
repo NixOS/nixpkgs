@@ -13,11 +13,8 @@ let
   jdk = jdk21.override {
     enableJavaFX = true;
   };
-  maven' = maven.override {
-    inherit jdk;
-  };
 in
-maven'.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "scenebuilder";
   version = "21.0.1";
 
@@ -42,6 +39,7 @@ maven'.buildMavenPackage rec {
         --replace-fail "\''${maven.build.timestamp}" "$(date -d "@$SOURCE_DATE_EPOCH" '+%Y-%m-%d %H:%M:%S')"
   '';
 
+  mvnJdk = jdk;
   mvnParameters = toString [
     "-Dmaven.test.skip"
     "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
