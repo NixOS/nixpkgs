@@ -224,7 +224,7 @@ in
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 

@@ -991,6 +991,7 @@
   ./services/networking/dante.nix
   ./services/networking/deconz.nix
   ./services/networking/ddclient.nix
+  ./services/networking/ddns-updater.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy2.nix
@@ -1346,7 +1347,6 @@
   ./services/video/frigate.nix
   ./services/video/mirakurun.nix
   ./services/video/photonvision.nix
-  ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
