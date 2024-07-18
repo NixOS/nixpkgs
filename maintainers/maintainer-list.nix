@@ -18113,6 +18113,12 @@
     githubId = 15379000;
     name = "schneefux";
   };
+  schnow265 = {
+    email = "thesnowbox@icloud.com";
+    github = "schnow265";
+    githubId = 57457177;
+    name = "Luca Scalet";
+  };
   schnusch = {
     github = "schnusch";
     githubId = 5104601;
