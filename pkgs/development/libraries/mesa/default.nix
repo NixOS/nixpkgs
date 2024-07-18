@@ -93,9 +93,6 @@
 , makeSetupHook
 }:
 
-# When updating this package, please verify at least these build (assuming x86_64-linux):
-# nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
-
 let
   rustDeps = [
     {
