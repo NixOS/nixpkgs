@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, inih, lua, bash-completion, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  inih,
+  lua,
+  bash-completion,
+  darwin,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tio";
@@ -13,10 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  buildInputs = [ inih lua glib ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = [
+    inih
+    lua
+    glib
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
 
-  nativeBuildInputs = [ meson ninja pkg-config bash-completion ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    bash-completion
+  ];
 
   meta = with lib; {
     description = "Serial console TTY";
