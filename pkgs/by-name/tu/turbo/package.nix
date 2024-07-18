@@ -1,22 +1,42 @@
 {
   lib,
   symlinkJoin,
-  makeWrapper,
+  makeBinaryWrapper,
+  testers,
+  turbo,
   turbo-unwrapped,
+  # https://turbo.build/repo/docs/telemetry
   disableTelemetry ? true,
   disableUpdateNotifier ? true,
 }:
 
-symlinkJoin {
+symlinkJoin rec {
   pname = "turbo";
-  name = "turbo-${turbo-unwrapped.version}";
-  inherit (turbo-unwrapped) version meta;
-  nativeBuildInputs = [ makeWrapper ];
+  inherit (turbo-unwrapped) version;
+  name = "${pname}-${version}";
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   paths = [ turbo-unwrapped ];
+
   postBuild = ''
-    rm $out/bin/turbo
-    makeWrapper ${turbo-unwrapped}/bin/turbo $out/bin/turbo \
+    wrapProgram $out/bin/turbo \
       ${lib.optionalString disableTelemetry "--set TURBO_TELEMETRY_DISABLED 1"} \
-      ${lib.optionalString disableUpdateNotifier "--add-flags --no-update-notifier"}
+      ${lib.optionalString disableUpdateNotifier "--set TURBO_NO_UPDATE_NOTIFIER 1"}
   '';
+
+  passthru = {
+    tests.version = testers.testVersion { package = turbo; };
+  };
+
+  meta = {
+    inherit (turbo-unwrapped.meta)
+      description
+      homepage
+      changelog
+      license
+      mainProgram
+      maintainers
+      ;
+  };
 }
