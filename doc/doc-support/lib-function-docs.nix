@@ -4,24 +4,31 @@
 
 with pkgs;
 
-let
-  locationsJSON = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
-in
 stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
-  src = ../../lib;
+  src = pkgs.lib.fileset.toSource {
+    root = ../..;
+    fileset = ../../lib;
+  };
 
-  buildInputs = [ nixdoc ];
+  buildInputs = [ nixdoc nix ];
   installPhase = ''
+    export NIX_STATE_DIR=$(mktemp -d)
+    nix-instantiate --eval --strict --json ${./lib-function-locations.nix} \
+      --arg nixpkgsPath "./." \
+      --argstr revision ${nixpkgs.rev or "master"} \
+      --argstr libsetsJSON ${pkgs.lib.escapeShellArg (builtins.toJSON libsets)} \
+      > locations.json
+
     function docgen {
       name=$1
       baseName=$2
       description=$3
       # TODO: wrap lib.$name in <literal>, make nixdoc not escape it
-      if [[ -e "../lib/$baseName.nix" ]]; then
-        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName.nix" > "$out/$name.md"
+      if [[ -e "lib/$baseName.nix" ]]; then
+        nixdoc -c "$name" -d "lib.$name: $description" -l locations.json -f "lib/$baseName.nix" > "$out/$name.md"
       else
-        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName/default.nix" > "$out/$name.md"
+        nixdoc -c "$name" -d "lib.$name: $description" -l locations.json -f "lib/$baseName/default.nix" > "$out/$name.md"
       fi
       echo "$out/$name.md" >> "$out/index.md"
     }
