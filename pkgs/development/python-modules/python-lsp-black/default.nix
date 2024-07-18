@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/python-lsp/python-lsp-black";
     description = "Black plugin for the Python LSP Server";
-    changelog = "https://github.com/python-lsp/python-lsp-black/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/python-lsp/python-lsp-black/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
