@@ -59,10 +59,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  doCheck = false;
-
-  checkPhase = ''
-=======
   preCheck = ''
     # allow to find the module helper during the test run
     export PYTHONPATH=$PYTHONPATH:$PWD/tests
