@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, inih, lua, bash-completion, darwin }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tio";
   version = "3.5";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3d3TYHSERIQdw+Iw6qCydGpWRpWrhZwb4SnwV1nVtIk=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yana ];
-    platforms = platforms.unix;
     mainProgram = "tio";
+    platforms = platforms.unix;
   };
-}
+})
