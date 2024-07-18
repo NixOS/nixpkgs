@@ -87,6 +87,11 @@ in {
       environment.systemPackages = [ pkgs.thin-provisioning-tools ];
     })
     (mkIf cfg.boot.vdo.enable {
+      assertions = [{
+        assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.9";
+        message = "boot.vdo.enable requires at least kernel version 6.9";
+      }];
+
       boot = {
         initrd = {
           kernelModules = [ "dm-vdo" ];
