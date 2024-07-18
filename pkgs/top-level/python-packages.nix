@@ -6636,6 +6636,8 @@ self: super: with self; {
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
 
+  langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
+
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
