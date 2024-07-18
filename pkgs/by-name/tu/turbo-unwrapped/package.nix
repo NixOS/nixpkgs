@@ -87,7 +87,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://turbo.build/";
     changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ dlip ];
+    maintainers = with lib.maintainers; [
+      dlip
+      getchoo
+    ];
     mainProgram = "turbo";
   };
 }
