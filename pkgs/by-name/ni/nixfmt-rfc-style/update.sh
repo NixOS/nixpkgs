@@ -13,8 +13,8 @@ derivation_file="${script_dir}/generated-package.nix"
 date_file="${script_dir}/date.txt"
 
 # This is the latest version of nixfmt-rfc-style branch on GitHub.
-new_version=$(curl --silent https://api.github.com/repos/piegamesde/nixfmt/git/refs/heads/rfc101-style | jq '.object.sha' --raw-output)
-new_date=$(curl --silent https://api.github.com/repos/piegamesde/nixfmt/git/commits/"$new_version" | jq '.committer.date' --raw-output)
+new_version=$(curl --silent https://api.github.com/repos/nixos/nixfmt/git/refs/heads/master | jq '.object.sha' --raw-output)
+new_date=$(curl --silent https://api.github.com/repos/nixos/nixfmt/git/commits/"$new_version" | jq '.committer.date' --raw-output)
 
 echo "Updating nixfmt-rfc-style to version $new_date."
 echo "Running cabal2nix and outputting to ${derivation_file}..."
@@ -25,7 +25,7 @@ cat > "$derivation_file" << EOF
 EOF
 
 cabal2nix --jailbreak \
-  "https://github.com/piegamesde/nixfmt/archive/${new_version}.tar.gz" \
+  "https://github.com/nixos/nixfmt/archive/${new_version}.tar.gz" \
   >> "$derivation_file"
 
 date --date="$new_date" -I > "$date_file"
