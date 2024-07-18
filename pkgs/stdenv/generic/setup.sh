@@ -858,16 +858,28 @@ unset _HOST_PATH
 unset _XDG_DATA_DIRS
 
 
-# Normalize the NIX_BUILD_CORES variable. The value might be 0, which
-# means that we're supposed to try and auto-detect the number of
-# available CPU cores at run-time.
+# Normalize the NIX_BUILD_CORES and NIX_LOAD_LIMIT variables. The value
+# might be 0, which means that we're supposed to try and auto-detect
+# the number of available CPU cores at run-time.
+
+_guessCores() {
+    guess=$(nproc 2>/dev/null || true)
+    if test "$guess" -le 0; then
+        printf 1
+    else
+        printf '%d' "$guess"
+    fi
+}
 
 NIX_BUILD_CORES="${NIX_BUILD_CORES:-1}"
-if ((NIX_BUILD_CORES <= 0)); then
-  guess=$(nproc 2>/dev/null || true)
-  ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
+if test "$NIX_BUILD_CORES" -le 0; then
+    NIX_BUILD_CORES=$(_guessCores)
+fi
+if test "${NIX_LOAD_LIMIT:-1}" -le 0; then
+    NIX_LOAD_LIMIT=$(_guessCores)
 fi
 export NIX_BUILD_CORES
+export NIX_LOAD_LIMIT
 
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
@@ -1391,6 +1403,7 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
+            ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
         )
         _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
@@ -1429,6 +1442,7 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
+            ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
         )
 
         _accumFlagsArray makeFlags makeFlagsArray
@@ -1472,6 +1486,7 @@ installPhase() {
     local flagsArray=(
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
+        ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
     )
     _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
     if [ -n "$__structuredAttrs" ]; then
@@ -1560,6 +1575,7 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
+            ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
         )
 
         _accumFlagsArray makeFlags makeFlagsArray \

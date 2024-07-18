@@ -10,6 +10,7 @@ ninjaBuildPhase() {
 
     local flagsArray=(
         -j$buildCores
+        ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
 
@@ -39,6 +40,7 @@ ninjaCheckPhase() {
 
         local flagsArray=(
             -j$buildCores
+            ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
         )
@@ -63,6 +65,7 @@ ninjaInstallPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         -j$buildCores
+        ${NIX_LOAD_LIMIT:+-l${NIX_LOAD_LIMIT}}
         $ninjaFlags "${ninjaFlagsArray[@]}"
         ${installTargets:-install}
     )
