@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Keriew/augustus";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Thra11 ];
+    maintainers = with maintainers; [ Thra11 matteopacini ];
   };
 }
