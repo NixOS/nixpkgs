@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -13,8 +12,7 @@ buildPythonPackage rec {
   version = "0.20.0";
   pyproject = true;
 
-  # Still uses distutils
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
