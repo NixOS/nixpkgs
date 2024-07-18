@@ -120,7 +120,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
     paths = [
       self.binutils-unwrapped
-      (lib.getOutput "gas" self.cctools)
+      (lib.getOutput "gas" pkgs.cctools)
     ];
   };
 
@@ -132,10 +132,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
   };
-
-  cctools = self.cctools-port;
-
-  cctools-port = pkgs.cctools;
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
