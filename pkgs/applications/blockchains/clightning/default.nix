@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, cctools
 , darwin
 , fetchurl
 , autoconf
@@ -30,11 +31,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-FD7JFM80wrruqBWjYnJHZh2f2GZJ6XDQmUQ0XetnWBg=";
   };
 
-  # when building on darwin we need dawin.cctools to provide the correct libtool
+  # when building on darwin we need cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
   nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ];
+    ++ lib.optionals stdenv.isDarwin [ cctools darwin.autoSignDarwinBinariesHook ];
 
   buildInputs = [ gmp libsodium sqlite zlib jq ];
 
