@@ -2,79 +2,87 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  protobuf,
   rustPlatform,
-  pkg-config,
-  openssl,
+  capnproto,
+  darwin,
   extra-cmake-modules,
   fontconfig,
-  rust-jemalloc-sys,
-  testers,
-  turbo,
   nix-update-script,
-  darwin,
-  capnproto,
+  openssl,
+  pkg-config,
+  protobuf,
+  rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "turbo-unwrapped";
   version = "1.13.2";
+
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
     hash = "sha256-q1BxBAjfHyGDaH/IywPw9qnZJjzeU4tu2CyUWbnd6y8=";
   };
-  cargoBuildFlags = [
-    "--package"
-    "turbo"
-  ];
-  RELEASE_TURBO_CLI = "true";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes."tui-term-0.1.8" = "sha256-MNeVnF141uNWbjqXEbHwXnMTkCnvIteb5v40HpEK6D4=";
   };
 
-  RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
-    pkg-config
-    extra-cmake-modules
-    protobuf
     capnproto
+    extra-cmake-modules
+    pkg-config
+    protobuf
   ];
+
   buildInputs =
     [
-      openssl
       fontconfig
+      openssl
       rust-jemalloc-sys
     ]
     ++ lib.optionals stdenv.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
-        IOKit
-        CoreServices
         CoreFoundation
+        CoreServices
+        IOKit
       ]
     );
 
+  cargoBuildFlags = [
+    "--package"
+    "turbo"
+  ];
+
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  env = {
+    # TODO: do we need this?
+    # https://github.com/vercel/turbo/blob/8de0996c8fe310ff45c4583e9629abd9455bb350/.github/workflows/turborepo-release.yml#L18
+    RELEASE_TURBO_CLI = "true";
+
+    # nightly features are used
+    RUSTC_BOOTSTRAP = 1;
+  };
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^\d+\.\d+\.\d+$"
+        "'v(\d+\.\d+\.\d+)'"
       ];
     };
-    tests.version = testers.testVersion { package = turbo; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
-    mainProgram = "turbo";
     homepage = "https://turbo.build/";
-    maintainers = with maintainers; [ dlip ];
-    license = licenses.mpl20;
+    changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dlip ];
+    mainProgram = "turbo";
   };
 }
