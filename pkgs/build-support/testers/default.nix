@@ -1,12 +1,12 @@
 { pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
-# Documentation is in doc/builders/testers.chapter.md
+# Documentation is in doc/build-helpers/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   inherit (callPackage ./lychee.nix {}) lycheeLinkCheck;
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
@@ -16,11 +16,11 @@
   });
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualContents = {
     assertion,
     actual,
@@ -58,7 +58,7 @@
   '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
@@ -81,7 +81,7 @@
       fi
     '';
 
-  # See doc/builders/testers.chapter.md or
+  # See doc/build-helpers/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   invalidateFetcherByDrvHash = f: args:
     let
@@ -98,7 +98,7 @@
         else salted;
     in checked;
 
-  # See doc/builders/testers.chapter.md or
+  # See doc/build-helpers/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   runNixOSTest =
     let nixos = import ../../../nixos/lib {
@@ -114,7 +114,7 @@
           node.pkgs = pkgsLinux;
         };
 
-  # See doc/builders/testers.chapter.md or
+  # See doc/build-helpers/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   nixosTest =
     let

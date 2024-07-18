@@ -19,7 +19,7 @@ let
     '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   lycheeLinkCheck = {
     site,
     remap ? { },
