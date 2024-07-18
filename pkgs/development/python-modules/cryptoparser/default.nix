@@ -5,11 +5,9 @@
   buildPythonPackage,
   cryptodatahub,
   fetchPypi,
-  pytestCheckHook,
   python-dateutil,
   pythonOlder,
   setuptools,
-  unittestCheckHook,
   urllib3,
 }:
 

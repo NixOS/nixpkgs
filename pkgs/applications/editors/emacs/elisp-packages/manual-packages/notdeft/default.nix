@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, trivialBuild
-, fetchFromGitHub
-, emacs
-, hydra
-, ivy
-, pkg-config
-, tclap
-, xapian
+{
+  lib,
+  stdenv,
+  melpaBuild,
+  fetchFromGitHub,
+  hydra,
+  ivy,
+  pkg-config,
+  tclap,
+  xapian,
   # Include pre-configured hydras
-, withHydra ? false
+  withHydra ? false,
   # Include Ivy integration
-, withIvy ? false
+  withIvy ? false,
 }:
 
 let
   pname = "notdeft";
-  version = "20211204.0846";
+  version = "0-unstable-2021-12-04";
 
   src = fetchFromGitHub {
     owner = "hasu";
@@ -32,7 +32,11 @@ let
 
     sourceRoot = "${src.name}/xapian";
 
-    nativeBuildInputs = [ pkg-config tclap xapian ];
+    nativeBuildInputs = [
+      pkg-config
+      tclap
+      xapian
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -44,11 +48,10 @@ let
     '';
   };
 in
-trivialBuild {
+melpaBuild {
   inherit pname version src;
-  packageRequires = lib.optional withHydra hydra
-    ++ lib.optional withIvy ivy;
-  buildInputs = [ xapian ];
+
+  packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
 
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
@@ -56,20 +59,18 @@ trivialBuild {
                 "defcustom notdeft-xapian-program \"${notdeft-xapian}/bin/notdeft-xapian\""
   '';
 
-  # Extra modules are contained in the extras/ directory
-  preBuild = lib.optionalString withHydra ''
-    mv extras/notdeft-{mode-hydra,global-hydra}.el ./
-  '' +
-  lib.optionalString withIvy ''
-    mv extras/notdeft-ivy.el ./
-  '' + ''
-    rm -r extras/
+  files = ''
+    (:defaults
+     ${lib.optionalString withHydra ''"extras/notdeft-global-hydra.el"''}
+     ${lib.optionalString withHydra ''"extras/notdeft-mode-hydra.el"''}
+     ${lib.optionalString withIvy ''"extras/notdeft-ivy.el"''})
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tero.hasu.is/notdeft/";
     description = "Fork of Deft that uses Xapian as a search engine";
-    maintainers = [ maintainers.nessdoor ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.nessdoor ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

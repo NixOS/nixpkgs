@@ -1,5 +1,26 @@
+From 2e9c7bd146fbc3b4a62940140eafb47df16b6cb4 Mon Sep 17 00:00:00 2001
+From: aszlig <aszlig@redmoonstudios.org>
+Date: Tue, 18 Jul 2017 21:32:13 +0200
+Subject: [PATCH 07/16] linuxPackages.broadcom_sta: fix build for kernel 4.12+
+
+The patch is from Arch Linux at:
+
+https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
+
+Tested this by building against the following attributes:
+
+  * linuxPackages.broadcom_sta
+  * linuxPackages_latest.broadcom_sta
+  * pkgsI686Linux.linuxPackages.broadcom_sta
+  * pkgsI686Linux.linuxPackages_latest.broadcom_sta
+
+I have not tested whether this works at runtime, because I do not possess the hardware.
+---
+ src/wl/sys/wl_cfg80211_hybrid.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
+
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index da36405..d3741eb 100644
+index 9fd8ed1..1893a53 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
 @@ -53,7 +53,11 @@ u32 wl_dbg_level = WL_DBG_ERR;
@@ -66,3 +87,6 @@ index da36405..d3741eb 100644
  	WL_DBG(("Report roaming result\n"));
  
  	set_bit(WL_STATUS_CONNECTED, &wl->status);
+-- 
+2.45.1
+

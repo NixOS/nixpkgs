@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , letsencrypt
 , letsencrypt-dns
 , cmdliner

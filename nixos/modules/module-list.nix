@@ -741,6 +741,7 @@
   ./services/misc/gitweb.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
+  ./services/misc/gotenberg.nix
   ./services/misc/gpsd.nix
   ./services/misc/graphical-desktop.nix
   ./services/misc/greenclip.nix
@@ -802,6 +803,7 @@
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
+  ./services/misc/radicle.nix
   ./services/misc/readarr.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
@@ -989,6 +991,7 @@
   ./services/networking/dante.nix
   ./services/networking/deconz.nix
   ./services/networking/ddclient.nix
+  ./services/networking/ddns-updater.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy2.nix
@@ -1344,7 +1347,6 @@
   ./services/video/frigate.nix
   ./services/video/mirakurun.nix
   ./services/video/photonvision.nix
-  ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix

@@ -4266,6 +4266,23 @@ let
         };
       };
 
+      sswg.swift-lang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "swift-lang";
+          publisher = "sswg";
+          version = "1.10.4";
+          hash = "sha256-5NrWBuaNdDNF0ON0HUwdwPFsRO3Hfe0UW4AooJbjiA0=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/sswg.swift-lang/changelog";
+          description = "Swift Language Support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=sswg.swift-lang";
+          homepage = "https://github.com/swiftlang/vscode-swift";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       stefanjarina.vscode-eex-snippets = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-eex-snippets";

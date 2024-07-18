@@ -2,8 +2,6 @@
 , buildPythonApplication
 , fetchzip
 , pygobject3
-, pytestCheckHook
-, gdk-pixbuf
 , glib
 , gobject-introspection
 , gtk3

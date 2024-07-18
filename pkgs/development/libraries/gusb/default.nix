@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    ls -la "$out/share/doc"
     moveToOutput "share/doc" "$devdoc"
   '';
 

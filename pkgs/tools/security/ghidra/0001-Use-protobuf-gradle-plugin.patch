@@ -8,7 +8,7 @@ Subject: [PATCH] Use com.google.protobuf:protobuf-gradle-plugin
  Ghidra/Debug/Debugger-isf/build.gradle       |  8 +-
  Ghidra/Debug/Debugger-rmi-trace/build.gradle | 14 +--
  build.gradle                                 |  6 ++
- gradle/debugger/hasProtobuf.gradle           | 94 --------------------
+ gradle/hasProtobuf.gradle           | 94 --------------------
  5 files changed, 26 insertions(+), 103 deletions(-)
 
 diff --git a/Ghidra/Debug/Debugger-gadp/build.gradle b/Ghidra/Debug/Debugger-gadp/build.gradle
@@ -19,7 +19,7 @@ index 9e1c57faf..3a3242eb5 100644
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 +apply plugin: 'com.google.protobuf'
  
  apply plugin: 'eclipse'
@@ -41,7 +41,7 @@ index d135294a0..785681ca2 100644
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 -
 +apply plugin: 'com.google.protobuf'
  apply plugin: 'eclipse'
@@ -63,9 +63,9 @@ index 40fbc17ab..7517ffe6e 100644
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 +apply plugin: 'com.google.protobuf'
- apply from: "${rootProject.projectDir}/gradle/debugger/hasPythonPackage.gradle"
+ apply from: "${rootProject.projectDir}/gradle/hasPythonPackage.gradle"
  
  apply plugin: 'eclipse'
  eclipse.project.name = 'Debug Debugger-rmi-trace'
@@ -110,10 +110,10 @@ index b0c717fb1..5f56506a5 100644
  	}
  }
  else {	
-diff --git a/gradle/debugger/hasProtobuf.gradle b/gradle/debugger/hasProtobuf.gradle
+diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
 index 23b4ce74b..e69de29bb 100644
---- a/gradle/debugger/hasProtobuf.gradle
-+++ b/gradle/debugger/hasProtobuf.gradle
+--- a/gradle/hasProtobuf.gradle
++++ b/gradle/hasProtobuf.gradle
 @@ -1,94 +0,0 @@
 -/* ###
 - * IP: GHIDRA

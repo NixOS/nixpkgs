@@ -1,12 +1,21 @@
+From ae88c3c0c91d26ca5e4dc1e498a370747d2c3b03 Mon Sep 17 00:00:00 2001
+From: Yegor Timoshenko <yegortimoshenko@riseup.net>
+Date: Wed, 31 Jan 2018 22:59:09 +0000
+Subject: [PATCH 08/16] linuxPackages.broadcom_sta: fix build for kernel 4.15+
+
 See: https://lkml.org/lkml/2017/11/25/90
+---
+ src/wl/sys/wl_linux.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff -urNZ a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
---- a/src/wl/sys/wl_linux.c	2015-09-18 22:47:30.000000000 +0000
-+++ b/src/wl/sys/wl_linux.c	2018-01-31 22:52:10.859856221 +0000
-@@ -93,7 +93,11 @@
-
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index 18841d9..83b8859 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -93,7 +93,11 @@ struct iw_statistics *wl_get_wireless_stats(struct net_device *dev);
+ 
  #include <wlc_wowl.h>
-
+ 
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
 +static void wl_timer(struct timer_list *tl);
 +#else
@@ -14,10 +23,10 @@ diff -urNZ a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
 +#endif
  static void _wl_timer(wl_timer_t *t);
  static struct net_device *wl_alloc_linux_if(wl_if_t *wlif);
-
-@@ -2298,9 +2302,15 @@
+ 
+@@ -2303,9 +2307,15 @@ wl_timer_task(wl_task_t *task)
  }
-
+ 
  static void
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
 +wl_timer(struct timer_list *tl)
@@ -28,13 +37,13 @@ diff -urNZ a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  {
  	wl_timer_t *t = (wl_timer_t *)data;
 +#endif
-
+ 
  	if (!WL_ALL_PASSIVE_ENAB(t->wl))
  		_wl_timer(t);
-@@ -2352,9 +2362,13 @@
-
+@@ -2357,9 +2367,13 @@ wl_init_timer(wl_info_t *wl, void (*fn)(void *arg), void *arg, const char *tname
+ 
  	bzero(t, sizeof(wl_timer_t));
-
+ 
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
 +	timer_setup(&t->timer, wl_timer, 0);
 +#else
@@ -45,3 +54,6 @@ diff -urNZ a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  	t->wl = wl;
  	t->fn = fn;
  	t->arg = arg;
+-- 
+2.45.1
+
