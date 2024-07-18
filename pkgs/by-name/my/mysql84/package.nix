@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.0";
+  version = "8.4.1";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R6VDP83WOduDa5nhtUWcK4E8va0j/ytd1K0n95K6kY4=";
+    hash = "sha256-20Hxl9cXDFTX7cDQyaJzDCJfSvBeztD2S+z5u2wRAT4=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
