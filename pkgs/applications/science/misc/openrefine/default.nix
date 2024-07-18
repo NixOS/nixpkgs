@@ -7,14 +7,9 @@
 , jq
 , makeWrapper
 , maven
-, writeText
 }:
 
 let
-  maven' = maven.override {
-    inherit jdk;
-  };
-
   version = "3.8.1";
   src = fetchFromGitHub {
     owner = "openrefine";
@@ -47,7 +42,7 @@ let
     '';
   };
 
-in maven'.buildMavenPackage {
+in maven.buildMavenPackage {
   inherit src version;
 
   pname = "openrefine";
@@ -55,6 +50,8 @@ in maven'.buildMavenPackage {
   postPatch = ''
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
+
+  mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
   mvnHash = "sha256-FD4g0Mshz39N1h8MDAk907PhF5TguWTZ7AXKECHuhzQ=";
 
