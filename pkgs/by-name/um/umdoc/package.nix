@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   name = "umdoc";
-  version = "0.3.0-1";
+  version = "0.3.0-2";
   src = fetchGit {
 	url = "https://github.com/craflin/umdoc.git";
    	ref = "master";
