@@ -4966,10 +4966,7 @@ with pkgs;
   dvc = with python3.pkgs; toPythonApplication dvc;
 
   dvc-with-remotes = dvc.override {
-    enableGoogle = true;
-    enableAWS = true;
-    enableAzure = true;
-    enableSSH = true;
+    optional-dependencies = [ "gs" "s3" "azure" "ssh" ];
   };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
