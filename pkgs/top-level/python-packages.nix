@@ -7524,6 +7524,8 @@ self: super: with self; {
 
   memory-profiler = callPackage ../development/python-modules/memory-profiler { };
 
+  memory-tempfile = callPackage ../development/python-modules/memory-tempfile { };
+
   meraki = callPackage ../development/python-modules/meraki { };
 
   mercadopago = callPackage ../development/python-modules/mercadopago { };
@@ -9194,6 +9196,8 @@ self: super: with self; {
   py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
+
+  py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
