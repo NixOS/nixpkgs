@@ -18760,6 +18760,11 @@
     matrix = "@sents:matrix.org";
     name = "Finn Krein";
   };
+  Sepero = {
+    email = "sepero111@gmx.com";
+    github = "Sepero";
+    githubId = 1575546;
+  };
   sephalon = {
     email = "me@sephalon.net";
     github = "sephalon";
