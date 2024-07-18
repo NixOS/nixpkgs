@@ -13,7 +13,6 @@
   lz4,
   attr,
   udev,
-  nixosTests,
   fuse3,
   cargo,
   rustc,
@@ -21,7 +20,8 @@
   makeWrapper,
   nix-update-script,
   python3,
-  fetchpatch,
+  testers,
+  nixosTests,
   installShellFiles,
   fuseSupport ? false,
 }:
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     ''
       substituteInPlace $out/libexec/bcachefsck_all \
-        --replace-fail "/usr/bin/python3" "${python3}/bin/python3"
+        --replace-fail "/usr/bin/python3" "${python3.interpreter}"
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd bcachefs \
@@ -110,6 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "${finalAttrs.meta.mainProgram} version";
+        version = "${finalAttrs.version}";
+      };
       smoke-test = nixosTests.bcachefs;
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
@@ -129,5 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       Madouura
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "bcachefs";
   };
 })
