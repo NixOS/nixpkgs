@@ -30,7 +30,7 @@ let
   });
 in
 buildPythonPackage rec {
-  version = "1.16";
+  version = "1.18";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.8";
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Z8cNu6tK5/yAu6b9Vb/EdXQj+fQgeT0QIszTEUurVM=";
+    hash = "sha256-4gJm6EnT6YNg+EkkBPiPQ4TBGG/u+FZTK4bKWyqw1pM=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
