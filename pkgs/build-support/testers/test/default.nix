@@ -99,19 +99,35 @@ lib.recurseIntoAttrs {
   };
 
   testEqualContents = lib.recurseIntoAttrs {
-    happy = testers.testEqualContents {
+    equalDir = testers.testEqualContents {
       assertion = "The same directory contents at different paths are recognized as equal";
       expected = runCommand "expected" {} ''
         mkdir -p $out/c
         echo a >$out/a
         echo b >$out/b
         echo d >$out/c/d
+        echo e >$out/e
+        chmod a+x $out/e
       '';
       actual = runCommand "actual" {} ''
         mkdir -p $out/c
         echo a >$out/a
         echo b >$out/b
         echo d >$out/c/d
+        echo e >$out/e
+        chmod a+x $out/e
+      '';
+    };
+
+    equalExe = testers.testEqualContents {
+      assertion = "The same executable file contents at different paths are recognized as equal";
+      expected = runCommand "expected" { } ''
+        echo test >$out
+        chmod a+x $out
+      '';
+      actual = runCommand "actual" { } ''
+        echo test >$out
+        chmod a+x $out
       '';
     };
 
