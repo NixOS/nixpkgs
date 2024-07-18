@@ -29,8 +29,8 @@ let
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
-    rev = "main";
-    sha256 = "sha256-DoEyGA8HoIBHKJfxn67Rkjjus3eDXZLK4FkgHXZfrg0=";
+    rev = "83f5933c90b0a6532fdcef4ed57056d63c11a769";
+    sha256 = "sha256-eOd/Yej1iuWxhR/jKrAJ7+Zb2QpXuaVWhV008tKijag=";
   };
 
   # bitmask-root is only used on GNU/Linux
@@ -76,7 +76,7 @@ buildGoModule rec {
     })
 
     # Don't build the debug version
-    ./build-release.patch
+    ./build_release.patch
   ];
 
   postPatch = ''
