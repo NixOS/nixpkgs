@@ -18,6 +18,7 @@ let
 
     cd "$gemdir"
 
+    export BUNDLE_FORCE_RUBY_PLATFORM=1
     bundler lock --update
     bundix
   '';
