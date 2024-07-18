@@ -95,7 +95,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ejabberd";
-  version = "24.06";
+  version = "24.07";
 
   nativeBuildInputs = [
     makeWrapper
@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
-    hash = "sha256-NO9WNw05vcmjxY13daZaLB1OjFLmqoDneoQ11BTdqB4=";
+    hash = "sha256-wPt0asuoGl20Hel8A5aMH2gaE7G2waiVtxguM4IMGNk=";
     # remember to update rebar-deps.nix
   };
 
