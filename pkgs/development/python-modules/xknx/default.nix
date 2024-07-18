@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cryptography,
   ifaddr,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytestCheckHook
   ];
 
