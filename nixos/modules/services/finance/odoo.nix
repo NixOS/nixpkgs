@@ -123,9 +123,14 @@ in
             rmdir .local
           fi
           ''
-          + (lib.optionalString cfg.autoInit ''
-            echo "pre-start: auto-init"
-            ${cfg.package}/bin/odoo --init=INIT --database=odoo --db_user=odoo --stop-after-init
+          + (lib.optionalString cfg.autoInit
+          ''
+          echo "pre-start: auto-init"
+          INITIALIZED="${cfg.settings.options.data_dir}/.odoo.initialized"
+          if [ ! -e "$INITIALIZED" ]; then
+            ${cfg.package}/bin/odoo  --init=INIT --database=odoo --db_user=odoo --stop-after-init
+            touch "$INITIALIZED"
+          fi
           '')
           + "echo pre-start: OK"
         );
