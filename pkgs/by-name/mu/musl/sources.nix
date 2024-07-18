@@ -47,11 +47,11 @@
   musl = let
     self = {
       pname = "musl";
-      version = "1.2.3";
+      version = "1.2.5";
 
       src = fetchurl {
         url = "https://musl.libc.org/releases/musl-${self.version}.tar.gz";
-        hash = "sha256-fVsLYGJSHkYn4JnkydyCSNMqMChelZt+7Kp4DPjP1KQ=";
+        hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
       };
     };
   in

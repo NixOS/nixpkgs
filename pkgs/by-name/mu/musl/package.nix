@@ -20,21 +20,6 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.musl) pname version src;
 
-  patches = [
-    # Minor touchup to build system making dynamic linker symlink relative
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
-      hash = "sha256-VmCd+2+b1dvRTmMKAmF+OjGsHvPEL7OgqRqYxXxuykE=";
-    })
-
-    # fix parsing lines with optional fields in fstab etc.
-    # NOTE: Remove for the next release since it has been merged upstream
-    (fetchurl {
-      url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
-      sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
-    })
-  ];
-
   env = {
     NIX_DONT_SET_RPATH = true;
     CFLAGS = toString ([
