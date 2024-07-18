@@ -16,10 +16,13 @@ in
     enable = lib.mkEnableOption "libeufin core banking system and web interface";
     package = lib.mkPackageOption pkgs "libeufin" { };
     debug = lib.mkEnableOption "debug logging";
-    # TODO admin password option
 
     settings = lib.mkOption {
-      # TODO description
+      description = ''
+        Configuration options for the libeufin bank system config file.
+
+        For a list of all possible options, please see the man page [`libeufin-bank.conf(5)`](https://docs.taler.net/manpages/libeufin-bank.conf.5.html)
+      '';
       type = lib.types.submodule {
         inherit (options.services.libeufin.settings.type.nestedTypes) freeformType;
         options = {
