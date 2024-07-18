@@ -5,6 +5,7 @@
   fetchFromGitHub,
   python,
   wheel,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,13 @@ buildPythonPackage rec {
   patches = [
     ./tag-date.patch
     ./setuptools-distutils-C++.patch
+    (fetchpatch {
+      # PR: https://github.com/pypa/setuptools/pull/4484
+      # Fix error, ModuleNotFoundError: No module named 'distutils', for function byte_compile
+      name = "fix-byte-complie.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/pypa/setuptools/pull/4484.patch";
+      sha256 = "sha256-gVE/D/w8cTRh2GMFDs6XeNprtpVitMNNmgo0e0Zz33k=";
+    })
   ];
 
   nativeBuildInputs = [ wheel ];
