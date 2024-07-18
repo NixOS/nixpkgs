@@ -20,6 +20,7 @@ let
   inherit (qt6)
     qtbase
     qtmultimedia
+    qtwayland
     wrapQtAppsHook;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     wayland
+    qtwayland
   ];
 
   cmakeFlags = [
