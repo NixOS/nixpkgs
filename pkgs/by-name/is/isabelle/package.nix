@@ -4,7 +4,7 @@
 , coreutils
 , nettools
 , java
-, scala_3
+, scala
 , polyml
 , veriT
 , vampire
@@ -173,7 +173,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala}/lib/scala3-interfaces-${scala.version}.jar:${scala}/lib/scala3-compiler_3-${scala.version}.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 

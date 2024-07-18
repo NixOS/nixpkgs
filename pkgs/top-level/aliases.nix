@@ -305,7 +305,7 @@ mapAliases ({
   dolphinEmu = dolphin-emu; # Added 2021-11-10
   dolphinEmuMaster = dolphin-emu-beta; # Added 2021-11-10
   dot-http = throw "'dot-http' has been removed: abandoned by upstream. Use hurl instead."; # Added 2023-01-16
-  dotty = scala_3; # Added 2023-08-20
+  dotty = scala-latest; # Added 2023-08-20
   dotnet-netcore = dotnet-runtime; # Added 2021-10-07
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1; # Added 2020-01-19
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1; # Added 2020-01-19
@@ -1248,6 +1248,7 @@ mapAliases ({
   s2n = s2n-tls; # Added 2021-03-03
   sandboxfs = throw "'sandboxfs' has been removed due to being unmaintained, consider using linux namespaces for sandboxing instead"; # Added 2024-06-06
   sane-backends-git = sane-backends; # Added 2021-02-19
+  scala_3 = scala-latest; # Added 2024-07-18
   scantailor = scantailor-advanced; # Added 2022-05-26
   schildichat-web = throw ''
     schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.

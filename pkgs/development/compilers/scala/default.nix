@@ -1,24 +1,156 @@
-{ stdenv, fetchurl, makeWrapper, jre, callPackage }:
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
+, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion
+, ncurses
+}:
 
 let
-  bare = callPackage ./bare.nix {
-    inherit stdenv fetchurl makeWrapper jre;
+  repo = "git@github.com:scala/scala.git";
+
+  versionMap = {
+    "2.10" = {
+      version = "2.10.7";
+      sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
+      pname = "scala_2_10";
+    };
+
+    "2.11" = {
+      version = "2.11.12";
+      sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
+      pname = "scala_2_11";
+    };
+
+    "2.12" = {
+      version = "2.12.18";
+      sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
+      pname = "scala_2_12";
+    };
+
+    "2.13" = {
+      version = "2.13.12";
+      sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
+      pname = "scala_2_13";
+    };
+
+    "3.3" = {
+      version = "3.3.3";
+      sha256 = "61lAETEvqkEqr5pbDltFkh+Qvp+EnCDilXN9X67NFNE=";
+      pname = "scala_3_3";
+    };
+
+    "3.4" = {
+      version = "3.4.2";
+      sha256 = "JEfwlRJsZTKk0DAIlsh+U1Dozm4UQXwVeLSkNIGHMEs=";
+      pname = "scala_3_4";
+    };
   };
-in
 
-stdenv.mkDerivation {
-  pname = "scala";
-  inherit (bare) version;
+in with versionMap.${majorVersion};
 
-  dontUnpack = true;
+stdenv.mkDerivation rec {
+  inherit version;
+
+  name = "scala-${version}";
+
+  src = fetchurl {
+    inherit sha256;
+    url =
+      if (lib.strings.hasPrefix "2" majorVersion) then
+        "https://www.scala-lang.org/files/archive/scala-${version}.tgz"
+      else
+        "https://github.com/scala/scala3/releases/download/${version}/scala3-${version}.tar.gz";
+
+  };
+
+  propagatedBuildInputs = [ jre ] ++
+    lib.optional (lib.strings.hasPrefix "3" majorVersion) ncurses.dev;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    ln -s ${bare}/bin/scalac $out/bin/scalac
-    ln -s ${bare}/bin/scaladoc $out/bin/scaladoc
-    ln -s ${bare}/bin/scala $out/bin/scala
-    ln -s ${bare}/bin/common $out/bin/common
+    runHook preInstall
+    mkdir -p $out
+    rm bin/*.bat
+    mv * $out
+    if [ -d $out/doc ]; then
+      # put docs in correct subdirectory
+      mkdir -p $out/share/doc
+      mv $out/doc $out/share/doc/${name}
+    fi
+    if [ -d $out/man ]; then
+      mv $out/man $out/share/man
+    fi
+    runHook postInstall
   '';
 
-  inherit (bare) meta;
-} // { inherit bare; }
+  # Use preFixup instead of fixupPhase
+  # because we want the default fixupPhase as well
+  preFixup = ''
+        bin_files=$(find $out/bin -type f ! -name common ! -name common-shared)
+        for f in $bin_files ; do
+          wrapProgram $f \
+            --set JAVA_HOME ${jre} \
+            ${ if (lib.strings.hasPrefix "2" majorVersion) then
+                "--prefix PATH : ${coreutils}/bin " +
+                "--prefix PATH : ${gnugrep}/bin " +
+                "--prefix PATH : ${jre}/bin"
+               else
+                "--prefix PATH : '${ncurses.dev}/bin'"
+             }
+        done
+  '';
+
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/scalac -version 2>&1 | grep '^Scala compiler version ${version}'
+
+    ${ lib.strings.optionalString (lib.strings.hasPrefix "2" majorVersion)
+         "echo 'println(\"foo\"*3)' | $out/bin/scala 2>/dev/null | grep \"foofoofoo\""
+     }
+  '';
+
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          git
+          gnused
+          nix
+          nixfmt-classic
+        ]
+      }
+      versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
+      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+      latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
+      if [ "$oldVersion" != "$latestTag" ]; then
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        default_nix="$nixpkgs/pkgs/development/compilers/scala/2.x.nix"
+        update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+        nixfmt "$default_nix"
+      else
+        echo "${pname} is already up-to-date"
+      fi
+    '';
+  };
+
+  meta = with lib; {
+    description = "General purpose programming language";
+    longDescription = ''
+      Scala is a general purpose programming language designed to express
+      common programming patterns in a concise, elegant, and type-safe way.
+      It smoothly integrates features of object-oriented and functional
+      languages, enabling Java and other programmers to be more productive.
+      Code sizes are typically reduced by a factor of two to three when
+      compared to an equivalent Java application.
+    '';
+    homepage = "https://www.scala-lang.org/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    branch = versions.majorMinor version;
+    maintainers = with maintainers; [ nequissimus kashw2 karolchmist virusdave ];
+  };
+}
