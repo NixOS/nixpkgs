@@ -770,6 +770,45 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    outOfBand = outOfBand' "_secret";
+
+    outOfBand' = field: lib.types.submodule {
+      options = {
+        ${field} = lib.mkOption {
+          type = path;
+          description = "File that contains the value to be injected in the configuration file.";
+        };
+
+        prefix = lib.mkOption {
+          type = str;
+          description = "Prefix to add to the value that will be injected in the configuration file.";
+          default = "";
+          example = "base64:";
+        };
+
+        prefixIfNotPresent = lib.mkOption {
+          type = str;
+          description = "Like prefix option but only added if the value does not contain the prefix already.";
+          default = "";
+          example = "base64:";
+        };
+
+        suffix = lib.mkOption {
+          type = str;
+          description = "An optional suffix to add to the value that will be injected in the configuration file.";
+          default = "";
+          example = ":sha256";
+        };
+
+        suffixIfNotPresent = lib.mkOption {
+          type = str;
+          description = "Like suffix option but only added if the value does not contain the suffix already.";
+          default = "";
+          example = "base64:";
+        };
+      };
+    };
+
     # A submodule (like typed attribute set). See NixOS manual.
     submodule = modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
