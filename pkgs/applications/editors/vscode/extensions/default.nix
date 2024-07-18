@@ -1814,6 +1814,23 @@ let
         };
       };
 
+      fill-labs.dependi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dependi";
+          publisher = "fill-labs";
+          version = "0.7.2";
+          hash = "sha256-S3R1oLk7facP5Rn9czmHlffhMtLNrSaGYbaU3/x6/aM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
+          description = "VSCode extension for managing dependencies and address vulnerabilities in Rust, Go, JavaScript, and Python projects";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi";
+          homepage = "https://github.com/filllabs/dependi";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers._21CSM ];
+        };
+      };
+
       firefox-devtools.vscode-firefox-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-firefox-debug";

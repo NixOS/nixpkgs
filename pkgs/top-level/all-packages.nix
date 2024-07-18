@@ -2266,10 +2266,6 @@ with pkgs;
 
   git-backdate = callPackage ../applications/version-management/git-backdate { };
 
-  git-backup = callPackage ../applications/version-management/git-backup {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   git-big-picture = callPackage ../applications/version-management/git-big-picture { };
 
   git-bars = callPackage ../applications/version-management/git-bars { };
@@ -13891,8 +13887,6 @@ with pkgs;
   verco = callPackage ../applications/version-management/verco { };
 
   verilator = callPackage ../applications/science/electronics/verilator { };
-
-  verilog = callPackage ../applications/science/electronics/verilog { };
 
   versus = callPackage ../applications/networking/versus { };
 
@@ -26443,6 +26437,7 @@ with pkgs;
   };
 
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
+  zabbix64 = recurseIntoAttrs (zabbixFor "v64");
   zabbix50 = recurseIntoAttrs (zabbixFor "v50");
 
   zabbix = zabbix60;
