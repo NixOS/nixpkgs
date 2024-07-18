@@ -37,6 +37,8 @@ python3.pkgs.buildPythonApplication rec {
     qt-material
   ];
 
+  pythonRelaxDeps = [ "pynitrokey" ];
+
   pythonImportsCheck = [
     "nitrokeyapp"
   ];
