@@ -1,0 +1,13 @@
+diff --git a/crates/gitbutler-git/Cargo.toml b/crates/gitbutler-git/Cargo.toml
+index edbadedad..e7a7e586d 100644
+--- a/crates/gitbutler-git/Cargo.toml
++++ b/crates/gitbutler-git/Cargo.toml
+@@ -39,7 +39,7 @@ uuid = { workspace = true, features = ["v4", "fast-rng"] }
+ rand = "0.8.5"
+ futures = "0.3.30"
+ sysinfo = "0.30.12"
+-gix-path = "0.10.7"
++gix-path = { git = "https://github.com/Byron/gitoxide.git", rev = "55cbc1b9d6f210298a86502a7f20f9736c7e963e" }
+ 
+ [target."cfg(unix)".dependencies]
+ nix = { version = "0.29.0", features = ["process", "socket", "user"] }

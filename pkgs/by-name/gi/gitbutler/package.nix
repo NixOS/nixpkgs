@@ -1,11 +1,10 @@
 {
   lib,
-  rustPlatform,
-  buildGoModule,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  wrapGAppsHook3,
+  buildGoModule,
+  rustPlatform,
+  cacert,
   cargo-tauri,
   darwin,
   desktop-file-utils,
@@ -13,46 +12,59 @@
   git,
   glib-networking,
   jq,
-  nodejs,
-  pkg-config,
   libsoup,
   moreutils,
-  openssl,
-  webkitgtk,
+  nodejs,
   nix-update-script,
+  openssl,
+  pkg-config,
+  pnpm_9,
+  turbo,
+  webkitgtk,
+  wrapGAppsHook3,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.12.7";
+  version = "0.12.12";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     rev = "release/${version}";
-    hash = "sha256-TNaWLcdPECK1y04aYW4bFk7YKlW+z5kny4uyG0TA5ps=";
+    hash = "sha256-Ogi4AeS6bDW3qFj2jkmhHlf40C6mJEU5lOa0OqG2jSI=";
   };
+
+  patches = [
+    # https://discourse.nixos.org/t/rust-with-git-deps-symbolic-link-error-to-cargo-vendor-dep/28841
+    ./dedup_gix-path.patch
+  ];
 
   # deactivate the upstream updater in tauri configuration
   # TODO: use `tauri build`'s `--config` flag with the release configuration instead of manually merging
   # them. it doesn't seem to like using paths currently, even though it should.
   postPatch = ''
     jq --slurp ".[0] * .[1] | .tauri.updater.active = false" crates/gitbutler-tauri/tauri.conf{,.release}.json | sponge crates/gitbutler-tauri/tauri.conf.json
+
+    cp ${./Cargo.lock} Cargo.lock
   '';
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "gix-0.63.0" = "sha256-I4QPzvwOs/xJHMUQhkZZLLlhcEaCSRvfixe35jl4bRI=";
       "tauri-plugin-context-menu-0.7.1" = "sha256-vKfq20hrFLmfoXO94D8HwAE3UdGcuqVZf3+tOBhLqj0=";
-      "tauri-plugin-log-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
+      "tauri-plugin-log-0.0.0" = "sha256-iyJL4B6hvaEu7O7NmB/Bujd3kqB1gcNXH/yWD62b6EE=";
     };
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-HKsb+96YklgPoqc7bA6fMuRQzWFGmKSBOcF5I0BO3oQ=";
+    hash = "sha256-OaBPdQyTk/AWF1Cy1M4HRq2D4LxFZIOpu8xZO4pWH5Y=";
   };
 
   nativeBuildInputs = [
+    cacert # turbo wants TLS certs, but doesn't use them?
     cargo-tauri
     desktop-file-utils
     jq
@@ -61,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     pnpm_9.configHook
     wrapGAppsHook3
-  ];
+  ] ++ openssl.nativeBuildInputs; # for openssl-sys
 
   buildInputs =
     [ openssl ]
@@ -118,6 +130,8 @@ rustPlatform.buildRustPackage rec {
           );
       }
     );
+
+    TURBO_BINARY_PATH = lib.getExe turbo;
   };
 
   buildPhase = ''
@@ -169,9 +183,9 @@ rustPlatform.buildRustPackage rec {
     description = "Git client for simultaneous branches on top of your existing workflow";
     homepage = "https://gitbutler.com";
     changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
-    mainProgram = "git-butler";
     license = lib.licenses.fsl11Mit;
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "git-butler";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
