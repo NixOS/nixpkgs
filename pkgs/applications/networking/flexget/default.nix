@@ -1,11 +1,11 @@
 { lib
-, python3
+, python311
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python311.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.39";
+  version = "3.11.40";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-saNxs+Xdf6OTRRcMTceU8/ITcYzwtP8VqRKxsWyas+o=";
+    hash = "sha256-96f6NrU928BhhHZmA2vHIhOrczL6AifKvKcdxoV3ihI=";
   };
 
   postPatch = ''
@@ -21,12 +21,12 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  build-system = with python3.pkgs; [
+  build-system = with python311.pkgs; [
     setuptools
     wheel
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python311.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
     apscheduler
     beautifulsoup4
