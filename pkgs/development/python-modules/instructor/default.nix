@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.3.3";
+  version = "1.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     rev = "refs/tags/${version}";
-    hash = "sha256-ye6uNnwvJ3RXmKM8ix/sBiJgeCFQazNVgHZkBAnL0nw=";
+    hash = "sha256-CPtEzIJjqCxjpVQIVl0k3Tezltz2yS/8d6OfyZEcfzs=";
   };
 
   pythonRelaxDeps = [
