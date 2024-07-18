@@ -4,7 +4,6 @@
   addDriverRunpath,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   cmake,
   ninja,
@@ -30,24 +29,19 @@ let
 in
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.1.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "openai";
+    owner = "triton-lang";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8UTUwLH+SriiJnpejdrzz9qIquP2zBp1/uwLdHmv0XQ=";
+    # latest branch commit from https://github.com/triton-lang/triton/commits/release/3.0.x/
+    rev = "91f24d87e50cb748b121a6c24e65a01187699c22";
+    hash = "sha256-L5KqiR+TgSyKjEBlkE0yOU1pemMHFk2PhEmxLdbbxUU=";
   };
 
   patches =
     [
-      # fix overflow error
-      (fetchpatch {
-        url = "https://github.com/openai/triton/commit/52c146f66b79b6079bcd28c55312fc6ea1852519.patch";
-        hash = "sha256-098/TCQrzvrBAbQiaVGCMaF3o5Yc3yWDxzwSkzIuAtY=";
-      })
-
       # Upstream startded pinning CUDA version and falling back to downloading from Conda
       # in https://github.com/triton-lang/triton/pull/1574/files#diff-eb8b42d9346d0a5d371facf21a8bfa2d16fb49e213ae7c21f03863accebe0fcfR120-R123
       ./0000-dont-download-ptxas.patch
@@ -208,7 +202,7 @@ buildPythonPackage rec {
   };
 
   pythonRemoveDeps = [
-    # Circular dependency, cf. https://github.com/openai/triton/issues/1374
+    # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374
     "torch"
 
     # CLI tools without dist-info
@@ -218,12 +212,13 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
-    homepage = "https://github.com/openai/triton";
+    homepage = "https://github.com/triton-lang/triton";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [
       SomeoneSerge
       Madouura
+      derdennisop
     ];
   };
 }
