@@ -85,8 +85,7 @@ llvmPackages.stdenv.mkDerivation rec {
     # Should appear BEFORE lit, since lit passes through python rather
     # than the python environment we make.
     kleePython
-    (lit.override { python = kleePython; })
-  ];
+  ] ++ python3.pkgs.requiredPythonModules python3.pkgs.lit;
 
   cmakeBuildType = if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel";
 
