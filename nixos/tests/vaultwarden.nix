@@ -133,7 +133,7 @@ let
             enable = true;
             dbBackend = backend;
             config = {
-              rocketAddress = "0.0.0.0";
+              rocketAddress = "::";
               rocketPort = 8080;
             };
           };
