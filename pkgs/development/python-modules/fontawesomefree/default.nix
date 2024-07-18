@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "fontawesomefree";
-  version = "6.5.1";
+  version = "6.6.0";
   format = "wheel";
 
   # they only provide a wheel
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-jexKLuN7+OUzeeu/DTjO/sTgbHySJ/Wa8527exYygXs=";
+    hash = "sha256-WZtXRDHJvZLtX8BU0QRaB8QjNdo2wXiE8rk0dV7vkIk=";
   };
 
   pythonImportsCheck = [ "fontawesomefree" ];
