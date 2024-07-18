@@ -13,6 +13,7 @@
 , substituteAll
 , which
 , z3
+, cctools
 , darwin
 }:
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ cmake makeWrapper which python3 ]
-    ++ lib.optionals (stdenv.isDarwin) [ darwin.cctools ];
+    ++ lib.optionals (stdenv.isDarwin) [ cctools ];
   buildInputs = [ libxml2 z3 ];
 
   # Sandbox disallows network access, so disabling problematic networking tests

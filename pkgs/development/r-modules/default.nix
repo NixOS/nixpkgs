@@ -1256,7 +1256,7 @@ let
     pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {
       postPatch = lib.optionalString stdenv.isDarwin ''
         for file in R/*.{r,r.in}; do
-            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.cctools}/bin/\1"#g' $file
         done
       '';
     });
