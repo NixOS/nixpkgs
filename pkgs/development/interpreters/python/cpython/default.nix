@@ -368,7 +368,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   in [
     "${mingw-patch}/*.patch"
   ]) ++ optionals (pythonAtLeast "3.12" && (stdenv.hostPlatform != stdenv.buildPlatform) && (
-    stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV
+    stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isPower64
   )) [
     # backport fix for various platforms; armv7l, riscv64
     # https://github.com/python/cpython/pull/121178
