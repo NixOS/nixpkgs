@@ -11,8 +11,6 @@ in
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
 
-  agda-input = callPackage ./manual-packages/agda-input { };
-
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
   cask = callPackage ./manual-packages/cask { };
@@ -118,6 +116,7 @@ in
 }
 ### Aliases
 // lib.optionalAttrs pkgs.config.allowAliases {
+  agda-input = throw "emacsPackages.agda-input is contained in emacsPackages.agda2-mode, please use that instead."; # Added 2024-07-17
   ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
   ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
   haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17

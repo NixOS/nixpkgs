@@ -159,6 +159,12 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+  _21CSM = {
+    name = "21CSM";
+    email = "21CSM@tutanota.com";
+    github = "21CSM";
+    githubId = 81891917;
+  };
   _21eleven = {
     name = "Noah Lidell";
     email = "noahlidell@gmail.com";
@@ -10148,6 +10154,12 @@
     github = "jugendhacker";
     githubId = 12773748;
     matrix = "@j.r:chaos.jetzt";
+  };
+  jukremer = {
+    email = "nixpkgs@jankremer.eu";
+    github = "jukremer";
+    githubId = 79042825;
+    name = "Jan Kremer";
   };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";

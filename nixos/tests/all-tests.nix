@@ -245,6 +245,7 @@ in {
   davis = handleTest ./davis.nix {};
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
+  ddns-updater = handleTest ./ddns-updater.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
@@ -597,6 +598,7 @@ in {
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
+  music-assistant = runTest ./music-assistant.nix;
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
   mycelium = handleTest ./mycelium {};

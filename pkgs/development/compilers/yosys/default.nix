@@ -11,7 +11,7 @@
 , readline
 , symlinkJoin
 , tcl
-, verilog
+, iverilog
 , zlib
 , yosys
 , yosys-bluespec
@@ -147,7 +147,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
   doCheck = true;
-  nativeCheckInputs = [ verilog ];
+  nativeCheckInputs = [ iverilog ];
 
   setupHook = ./setup-hook.sh;
 

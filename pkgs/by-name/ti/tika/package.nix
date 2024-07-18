@@ -6,6 +6,8 @@
   fetchFromGitHub,
   makeWrapper,
   mvnDepsHash ? null,
+  enableOcr ? true,
+  tesseract,
   nixosTests,
 }:
 
@@ -52,21 +54,25 @@ maven'.buildMavenPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      binPath = lib.makeBinPath ([ jdk8.jre ] ++ lib.optionals enableOcr [ tesseract ]);
+    in
+    ''
+      runHook preInstall
 
-    # Note: using * instead of version would match multiple files
-    install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
-    install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
+      # Note: using * instead of version would match multiple files
+      install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
+      install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
 
-    makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
-        --add-flags "-jar $out/share/tika/tika-app.jar"
-    makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
-        --prefix PATH : ${lib.makeBinPath [ jdk8.jre ]} \
-        --add-flags "-jar $out/share/tika/tika-server.jar"
+      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
+          --add-flags "-jar $out/share/tika/tika-app.jar"
+      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
+          --prefix PATH : ${binPath} \
+          --add-flags "-jar $out/share/tika/tika-server.jar"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru.tests = {
     inherit (nixosTests) tika;

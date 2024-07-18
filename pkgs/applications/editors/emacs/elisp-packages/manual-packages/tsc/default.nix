@@ -3,9 +3,6 @@
 , melpaBuild
 , fetchFromGitHub
 , rustPlatform
-, writeText
-, clang
-, llvmPackages
 
 , runtimeShell
 , writeScript
@@ -26,15 +23,8 @@ let
     inherit version;
 
     pname = "tsc";
-    commit = version;
 
     sourceRoot = "${src.name}/core";
-
-    recipe = writeText "recipe" ''
-      (tsc
-      :repo "emacs-tree-sitter/elisp-tree-sitter"
-      :fetcher github)
-    '';
   };
 
   tsc-dyn = rustPlatform.buildRustPackage {
