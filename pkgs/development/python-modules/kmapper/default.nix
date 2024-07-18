@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "kmapper";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
-    rev = "v${version}";
-    sha256 = "1jqqrn7ig9kylcc8xbslxmchzghr9jgffaab3g3y3nyghk8azlgj";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
   };
 
   propagatedBuildInputs = [
