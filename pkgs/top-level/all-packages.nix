@@ -34270,6 +34270,8 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
+  tctl = temporal-cli.tctl;
+
   temporalite = callPackage ../applications/networking/cluster/temporalite { };
 
   tenacity = callPackage ../applications/audio/tenacity { };
