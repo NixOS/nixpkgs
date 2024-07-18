@@ -148,12 +148,17 @@ let
             somewhere within the specified `hostPort` range.
             Example: `1234-1236:1234/tcp`
 
+            Publishing a port bypasses the NixOS firewall. If the port is not
+            supposed to be shared on the network, make sure to publish the
+            port to localhost.
+            Example: `127.0.0.1:1234:1234`
+
             Refer to the
             [Docker engine documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) for full details.
           '';
           example = literalExpression ''
             [
-              "8080:9000"
+              "127.0.0.1:8080:9000"
             ]
           '';
         };
