@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString (stdenv.isLinux) ''
     # needs special setup on Linux, dunno if it can work on Darwin
-    # https://github.com/NixOS/nixpkgs/issues/19098
     # Also, I get issues with linking without that, not sure why
     sed -i -e '/juce::juce_recommended_lto_flags/d' CMakeLists.txt
     patchShebangs linux/install.sh

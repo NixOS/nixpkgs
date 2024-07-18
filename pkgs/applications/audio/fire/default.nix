@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # 1. Remove hardcoded LTO flags: needs extra setup on Linux,
     #    possibly broken on Darwin
-    #    https://github.com/NixOS/nixpkgs/issues/19098
     # 2. Disable automatic copying of built plugins during buildPhase, it defaults
     #    into user home and we want to have building & installing separated.
     sed -i \

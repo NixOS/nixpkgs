@@ -4,7 +4,7 @@
 , cmake
 , coreutils
 , libxml2
-, lto ? !stdenv.isDarwin
+, lto ? true
 , makeWrapper
 , openssl
 , pcre2
