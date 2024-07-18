@@ -186,12 +186,12 @@ in lib.makeExtensible (self: ({
 
   git = (common rec {
     version = "2.24.0";
-    suffix = "pre20240709_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240717_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "142e566adbce587a5ed97d1648a26352f0608ec5";
-      hash = "sha256-fYZGuB/4LOBoMSUNj/yRU1mWm9lhdTzXF0P+zmac0hw=";
+      rev = "464e5925cb21150e3c94f31224efabd3c1e74237";
+      hash = "sha256-C9pE0ghVURE3nLZmmgTG6CnGvWQ84g2lcyN7KKGCfN8=";
     };
     self_attribute_name = "git";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
