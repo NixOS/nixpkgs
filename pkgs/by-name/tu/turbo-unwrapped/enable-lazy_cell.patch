@@ -1,0 +1,12 @@
+diff --git a/crates/turborepo-lib/src/lib.rs b/crates/turborepo-lib/src/lib.rs
+index e8d41933da..26b8c7c92f 100644
+--- a/crates/turborepo-lib/src/lib.rs
++++ b/crates/turborepo-lib/src/lib.rs
+@@ -2,6 +2,7 @@
+ #![feature(box_patterns)]
+ #![feature(error_generic_member_access)]
+ #![feature(hash_extract_if)]
++#![feature(lazy_cell)]
+ #![feature(option_get_or_insert_default)]
+ #![feature(once_cell_try)]
+ #![feature(panic_info_message)]

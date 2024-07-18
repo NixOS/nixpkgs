@@ -4,44 +4,60 @@
   fetchFromGitHub,
   protobuf,
   rustPlatform,
+  autoPatchelfHook,
   capnproto,
   darwin,
   extra-cmake-modules,
   fontconfig,
+  lld,
   # see comment below
   # nix-update-script,
   openssl,
   pkg-config,
   rust-jemalloc-sys,
+  zlib,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "turbo-unwrapped";
-  version = "1.13.2";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    hash = "sha256-q1BxBAjfHyGDaH/IywPw9qnZJjzeU4tu2CyUWbnd6y8=";
+    hash = "sha256-N6tLRJGV1AuAUH3qm4y4DgYsWO7ItNDmBI+f/O2hWXw=";
   };
+
+  patches = [
+    # upstream uses nightly where lazy_cell is stable
+    ./enable-lazy_cell.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes."tui-term-0.1.8" = "sha256-MNeVnF141uNWbjqXEbHwXnMTkCnvIteb5v40HpEK6D4=";
+    outputHashes = {
+      "pathfinder_simd-0.5.3" = "sha256-94/qS5d0UKYXAdx+Lswj6clOTuuK2yxqWuhpYZ8x1nI=";
+    };
   };
 
-  nativeBuildInputs = [
-    capnproto
-    extra-cmake-modules
-    pkg-config
-    protobuf
-  ];
+  nativeBuildInputs =
+    [
+      capnproto
+      extra-cmake-modules
+      pkg-config
+      protobuf
+    ]
+    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+    ++ lib.optional stdenv.isLinux lld
+    ++ lib.optional stdenv.hostPlatform.isElf autoPatchelfHook;
 
   buildInputs =
     [
       fontconfig
       openssl
       rust-jemalloc-sys
+      zlib
     ]
     ++ lib.optionals stdenv.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
@@ -61,10 +77,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   env = {
-    # TODO: do we need this?
-    # https://github.com/vercel/turbo/blob/8de0996c8fe310ff45c4583e9629abd9455bb350/.github/workflows/turborepo-release.yml#L18
-    RELEASE_TURBO_CLI = "true";
-
     # nightly features are used
     RUSTC_BOOTSTRAP = 1;
   };
