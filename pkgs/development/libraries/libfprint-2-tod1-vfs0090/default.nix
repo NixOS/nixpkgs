@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitLab, pkg-config, libfprint, libfprint-tod, gusb, udev, nss, openssl, meson, pixman, ninja, glib }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec{
   pname = "libfprint-2-tod1-vfs0090";
-  version = "0.8.5";
+  version = "0.96.91";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "3v1n0";
     repo = "libfprint-tod-vfs0090";
-    rev = "6084a1545589beec0c741200b18b0902cca225ba";
-    sha256 = "sha256-tSML/8USd/LuHF/YGLvNgykixF6VYtfE4SXzeV47840=";
+    rev = "${version}";
+    sha256 = "sha256-Qy2GYyx5aG1HfeAMVsiI3wLbfaN0bfjAOG0Jd9OnCdU=";
   };
 
   patches = [
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
     ./0001-vfs0090-add-missing-explicit-dependencies-in-meson.b.patch
     # TODO remove once https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090/-/merge_requests/2 is merged
     ./0002-vfs0090-add-missing-linux-limits.h-include.patch
+    ./0003-Update-fpi_ssm_next_state_delayed-calls.patch
   ];
 
   nativeBuildInputs = [ pkg-config meson ninja ];
