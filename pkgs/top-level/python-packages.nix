@@ -2415,6 +2415,8 @@ self: super: with self; {
 
   colorful = callPackage ../development/python-modules/colorful { };
 
+  colorgram-py = callPackage ../development/python-modules/colorgram-py { };
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorlover = callPackage ../development/python-modules/colorlover { };
@@ -7154,6 +7156,8 @@ self: super: with self; {
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
+
+  locust = callPackage ../development/python-modules/locust { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
@@ -15452,6 +15456,8 @@ self: super: with self; {
   });
 
   tiny-proxy = callPackage ../development/python-modules/tiny-proxy { };
+
+  tinytag = callPackage ../development/python-modules/tinytag { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
