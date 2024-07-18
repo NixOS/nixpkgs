@@ -13595,10 +13595,6 @@ with pkgs;
 
   tuptime = callPackage ../tools/system/tuptime { };
 
-  turbo = callPackage ../tools/misc/turbo/wrapper.nix { };
-
-  turbo-unwrapped = callPackage ../tools/misc/turbo { };
-
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
   tutanota-desktop = callPackage ../applications/networking/mailreaders/tutanota-desktop { };
