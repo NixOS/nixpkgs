@@ -4244,6 +4244,8 @@ self: super: with self; {
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
+  fdt = callPackage ../development/python-modules/fdt { };
+
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feedfinder2 = callPackage ../development/python-modules/feedfinder2 { };
