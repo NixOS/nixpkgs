@@ -24561,9 +24561,7 @@ with pkgs;
 
   whereami = callPackage ../development/libraries/whereami { };
 
-  wildmidi = callPackage ../development/libraries/wildmidi {
-    inherit (darwin.apple_sdk.frameworks) OpenAL CoreAudioKit;
-  };
+  wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
