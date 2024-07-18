@@ -1,0 +1,13 @@
+diff --git a/beancount/tools/treeify_test.py b/beancount/tools/treeify_test.py
+index 851e7692..65f35916 100644
+--- a/beancount/tools/treeify_test.py
++++ b/beancount/tools/treeify_test.py
+@@ -20,7 +20,7 @@ def treeify(string, options=None):
+     Returns:
+       The treeified string.
+     """
+-    pipe = subprocess.Popen([PROGRAM] + (options or []),
++    pipe = subprocess.Popen(["python", PROGRAM] + (options or []),
+                             shell=False,
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
