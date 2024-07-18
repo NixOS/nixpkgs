@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "uplc";
-  version = "0.6.9";
+  version = "1.0.4";
 
   format = "pyproject";
 
@@ -23,9 +23,8 @@ buildPythonPackage rec {
     owner = "OpShin";
     repo = "uplc";
     rev = version;
-    hash = "sha256-djJMNXijMVzMVzw8NZSe3YFRGyAPqdvr0P374Za5XkU=";
+    hash = "sha256-Mio6VVgQKy1GMeHNk0DITks9Nhr3lA1t7zewu9734j4=";
   };
-
 
   propagatedBuildInputs = [
     setuptools
