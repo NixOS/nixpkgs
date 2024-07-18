@@ -11,9 +11,7 @@
 , testers
 , turbo
 , nix-update-script
-, IOKit
-, CoreServices
-, CoreFoundation
+, darwin
 , capnproto
 }:
 rustPlatform.buildRustPackage rec{
@@ -47,11 +45,11 @@ rustPlatform.buildRustPackage rec{
     openssl
     fontconfig
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
       IOKit
       CoreServices
       CoreFoundation
-  ];
+  ]);
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;

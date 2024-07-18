@@ -13597,9 +13597,7 @@ with pkgs;
 
   turbo = callPackage ../tools/misc/turbo/wrapper.nix { };
 
-  turbo-unwrapped = callPackage ../tools/misc/turbo {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreServices CoreFoundation;
-  };
+  turbo-unwrapped = callPackage ../tools/misc/turbo { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
