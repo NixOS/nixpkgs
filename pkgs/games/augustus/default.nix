@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, libpng, darwin, libicns, imagemagick }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  libpng,
+  darwin,
+  libicns,
+  imagemagick,
+}:
 
 stdenv.mkDerivation rec {
   pname = "augustus";
@@ -13,17 +24,19 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-fixes.patch ];
 
-  nativeBuildInputs = [ 
-    cmake 
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.sigtool
-    libicns
-    imagemagick
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.sigtool
+      libicns
+      imagemagick
+    ];
 
-  buildInputs = [ SDL2 SDL2_mixer libpng ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    libpng
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     runHook preInstall
@@ -38,6 +51,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Keriew/augustus";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Thra11 matteopacini ];
+    maintainers = with maintainers; [
+      Thra11
+      matteopacini
+    ];
   };
 }
