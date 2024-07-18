@@ -22,6 +22,15 @@ in
 
       autoInit = mkEnableOption "automatically initialize the DB";
 
+      autoInitExtraFlags = mkOption {
+        type = with types; listOf str;
+        default = [ ];
+        example = literalExpression /*nix*/ ''
+          [ "--without-demo=all" ]
+        '';
+        description = "Extra flags passed to odoo when run for the first time by autoInit";
+      };
+
       settings = mkOption {
         type = format.type;
         default = {};
@@ -128,7 +137,7 @@ in
           echo "pre-start: auto-init"
           INITIALIZED="${cfg.settings.options.data_dir}/.odoo.initialized"
           if [ ! -e "$INITIALIZED" ]; then
-            ${cfg.package}/bin/odoo  --init=INIT --database=odoo --db_user=odoo --stop-after-init
+            ${cfg.package}/bin/odoo  --init=INIT --database=odoo --db_user=odoo --stop-after-init ${concatStringsSep " " cfg.autoInitExtraFlags}
             touch "$INITIALIZED"
           fi
           '')
