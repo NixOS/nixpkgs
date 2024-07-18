@@ -40,7 +40,7 @@
   tabulate,
   tiktoken,
   transformers,
-  openai-triton,
+  triton,
   xformers,
 }:
 
@@ -117,7 +117,7 @@ buildPythonPackage rec {
       # auto-gptq
     ]; # ++ autogptq.optional-dependencies.triton;
     grpc = [ bentoml ] ++ bentoml.optional-dependencies.grpc;
-    mpt = [ openai-triton ];
+    mpt = [ triton ];
     openai = [
       openai
       tiktoken

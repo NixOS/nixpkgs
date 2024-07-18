@@ -36,7 +36,7 @@ let
   llvmTargetsToBuild' = [ "AMDGPU" "NVPTX" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 
   # This LLVM version can't seem to find pygments/pyyaml,
-  # but a later update will likely fix this (openai-triton-2.1.0)
+  # but a later update will likely fix this (triton-2.1.0)
   python =
     if buildTests
     then python3Packages.python.withPackages (p: with p; [ psutil pygments pyyaml ])
@@ -44,7 +44,7 @@ let
 
   isNative = stdenv.hostPlatform == stdenv.buildPlatform;
 in stdenv.mkDerivation (finalAttrs: {
-  pname = "openai-triton-llvm";
+  pname = "triton-llvm";
   version = "17.0.0-c5dede880d17";
 
   outputs = [
@@ -55,7 +55,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # See https://github.com/openai/triton/blob/main/python/setup.py
+  # See https://github.com/triton-lang/triton/blob/main/python/setup.py
   # and https://github.com/ptillet/triton-llvm-releases/releases
   src = fetchFromGitHub {
     owner = "llvm";

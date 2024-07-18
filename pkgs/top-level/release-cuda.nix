@@ -132,7 +132,7 @@ let
         mxnet = linux;
         numpy = linux; # Only affected by MKL?
         onnx = linux;
-        openai-triton = linux;
+        triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
         opensfm = linux;
