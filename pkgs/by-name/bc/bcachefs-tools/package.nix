@@ -13,7 +13,6 @@
   lz4,
   attr,
   udev,
-  nixosTests,
   fuse3,
   cargo,
   rustc,
@@ -21,7 +20,9 @@
   makeWrapper,
   nix-update-script,
   python3,
-  fetchpatch,
+  testers,
+  nixosTests,
+  installShellFiles,
   fuseSupport ? false,
 }:
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
@@ -94,18 +96,30 @@ stdenv.mkDerivation (finalAttrs: {
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ];
 
-  postInstall = ''
-    substituteInPlace $out/libexec/bcachefsck_all \
-      --replace-fail "/usr/bin/python3" "${python3}/bin/python3"
-  '';
+  postInstall =
+    ''
+      substituteInPlace $out/libexec/bcachefsck_all \
+        --replace-fail "/usr/bin/python3" "${python3.interpreter}"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd bcachefs \
+        --bash <($out/sbin/bcachefs completions bash) \
+        --zsh  <($out/sbin/bcachefs completions zsh) \
+        --fish <($out/sbin/bcachefs completions fish)
+    '';
 
   passthru = {
     tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "${finalAttrs.meta.mainProgram} version";
+        version = "${finalAttrs.version}";
+      };
       smoke-test = nixosTests.bcachefs;
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   enableParallelBuilding = true;
@@ -120,5 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       Madouura
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "bcachefs";
   };
 })
