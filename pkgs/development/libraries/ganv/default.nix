@@ -1,18 +1,45 @@
-{ lib, stdenv, fetchgit, graphviz, gtk2, gtkmm2, pkg-config, python3, wafHook }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  graphviz,
+  gtk2,
+  gtkmm2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ganv";
-  version = "unstable-2019-12-30";
+  version = "1.8.2";
 
   src = fetchgit {
     url = "https://gitlab.com/drobilla/${pname}.git";
     fetchSubmodules = true;
-    rev = "90bd022f8909f92cc5290fdcfc76c626749e1186";
-    sha256 = "01znnalirbqxpz62fbw2c14c8xn117jc92xv6dhb3hln92k9x37f";
+    rev = "v${version}";
+    hash = "sha256-u9U8uMgDAhvriq4xrzqcwDxtaTBhEROB4yyrI5G1PDg=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 gtk2 ];
-  buildInputs = [ graphviz gtkmm2 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    graphviz
+    gtk2
+    gtkmm2
+  ];
+
+  mesonFlags = [
+    # Can't figure out how to make meson find 'libintl'
+    # for native language support
+    (lib.mesonEnable "nls" false)
+  ];
 
   strictDeps = true;
 
@@ -24,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };
-  }
+}
