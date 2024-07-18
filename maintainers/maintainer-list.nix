@@ -9309,6 +9309,14 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jeidnx = {
+    email = "nixpkgs@spacegli.de";
+    matrix = "@jeidnx:spacegli.de";
+    name = "Jeidnx";
+    github = "Jeidnx";
+    githubId = 55414029;
+    keys = [ { fingerprint = "CB44 8F07 3F4E 8379 2BB7  8B94 105B 77A5 4C91 A746"; } ];
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
