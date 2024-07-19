@@ -31,7 +31,7 @@ let
     toList
     ;
 
-  inherit (lib.attrsets) removeAttrs;
+  inherit (lib.attrsets) removeAttrs mapAttrsToList;
 
   # returns default if env var is not set
   maybeEnv = name: default:
@@ -212,7 +212,8 @@ let
     else closePropagationSlow;
 
   # calls a function (f attr value ) for each record item. returns a list
-  mapAttrsFlatten = f: r: map (attr: f attr r.${attr}) (attrNames r);
+  # Renamed to lib.attrsets.mapAttrsToList.
+  mapAttrsFlatten = mapAttrsToList;
 
   # attribute set containing one attribute
   nvs = name: value: listToAttrs [ (nameValuePair name value) ];
