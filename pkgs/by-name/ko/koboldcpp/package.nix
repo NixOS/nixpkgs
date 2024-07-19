@@ -129,7 +129,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head cudaArches}")
+    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head cudaArches}")
   ];
 
   installPhase = ''
