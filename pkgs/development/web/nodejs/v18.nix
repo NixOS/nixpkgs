@@ -1,4 +1,4 @@
-{ callPackage, lib, overrideCC, pkgs, buildPackages, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python3, fetchpatch2, enableNpm ? true }:
 
 let
   # Clang 16+ cannot build Node v18 due to -Wenum-constexpr-conversion errors.
@@ -16,16 +16,25 @@ let
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    ./gyp-patches-pre-v22-import-sys.patch
+  ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.20.3";
-  sha256 = "sha256-SxRPn9auSx1itzLFsxYOe56EvkrwrgYse0hOiepBro0=";
+  version = "18.20.4";
+  sha256 = "sha256-p2x+oblq62ljoViAYmDICUtiRNZKaWUp0CBUe5qVyio=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
-  ];
+    ./use-correct-env-in-tests.patch
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
+      hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
+    })
+  ] ++ gypPatches;
 }

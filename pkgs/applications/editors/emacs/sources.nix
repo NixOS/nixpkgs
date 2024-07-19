@@ -104,10 +104,10 @@ in
 
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.3";
+    version = "29.4";
     variant = "mainline";
-    rev = "29.3";
-    hash = "sha256-4yN81djeKb9Hlr6MvaDdXqf4XOl0oolXEYGqkA+KUO0=";
+    rev = "29.4";
+    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {
