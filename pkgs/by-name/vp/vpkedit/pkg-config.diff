@@ -1,34 +1,44 @@
-diff --git a/src/lib/_lib.cmake b/src/lib/_lib.cmake
-index 1f3fa10..2ebf0d1 100644
---- a/src/lib/_lib.cmake
-+++ b/src/lib/_lib.cmake
-@@ -1,10 +1,6 @@
- # For various cryptographic algorithms
+diff --git a/ext/_ext.cmake b/ext/_ext.cmake
+index 280c276..be81ef6 100644
+--- a/src/shared/thirdparty/sourcepp/ext/_ext.cmake
++++ b/src/shared/thirdparty/sourcepp/ext/_ext.cmake
+@@ -9,11 +9,9 @@ add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/compressonator")
+ 
+ 
+ # cryptopp
 -if (NOT TARGET cryptopp::cryptopp)
--	set(CRYPTOPP_BUILD_TESTING OFF CACHE INTERNAL "")
--	set(CRYPTOPP_INSTALL       OFF CACHE INTERNAL "")
--	add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/thirdparty/cryptopp")
+-    set(CRYPTOPP_BUILD_TESTING OFF CACHE INTERNAL "")
+-    set(CRYPTOPP_INSTALL       OFF CACHE INTERNAL "")
+-    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/cryptopp")
 -endif()
--
 +include(FindPkgConfig)
 +pkg_search_module(cryptopp REQUIRED libcryptopp)
- # For parsing BSP pack lumps and very basic uncompressed/LZMA-compressed ZIP files
- if (NOT TARGET MINIZIP::minizip)
- 	set(MZ_COMPAT           OFF CACHE INTERNAL "")
-@@ -79,12 +75,15 @@ vpkedit_configure_target(lib${PROJECT_NAME})
- 
- set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
- 
--target_link_libraries(lib${PROJECT_NAME} PUBLIC cryptopp::cryptopp MINIZIP::minizip)
-+target_link_libraries(lib${PROJECT_NAME} PUBLIC ${cryptopp_LIBRARIES} MINIZIP::minizip)
- 
- target_include_directories(
- 		lib${PROJECT_NAME} PUBLIC
-+		"${cryptopp_INCLUDE_DIRS}"
- 		"${CMAKE_CURRENT_SOURCE_DIR}/include")
- 
-+target_compile_options(lib${PROJECT_NAME} PUBLIC ${cryptopp_CFLAGS_OTHER})
 +
- if(VPKEDIT_BUILD_FOR_STRATA_SOURCE)
- 	target_compile_definitions(lib${PROJECT_NAME} PUBLIC -DVPKEDIT_BUILD_FOR_STRATA_SOURCE)
- endif()
+ 
+ 
+ # ice
+diff --git a/src/sourcepp/_sourcepp.cmake b/src/sourcepp/_sourcepp.cmake
+index 2cf6081..d69a59f 100644
+--- a/src/shared/thirdparty/sourcepp/src/sourcepp/_sourcepp.cmake
++++ b/src/shared/thirdparty/sourcepp/src/sourcepp/_sourcepp.cmake
+@@ -23,6 +23,8 @@ add_library(${PROJECT_NAME} STATIC
+         "${CMAKE_CURRENT_LIST_DIR}/parser/Text.cpp"
+         "${CMAKE_CURRENT_LIST_DIR}/string/String.cpp")
+ 
+-target_link_libraries(${PROJECT_NAME} PUBLIC bufferstream cryptopp::cryptopp)
++target_link_libraries(${PROJECT_NAME} PUBLIC bufferstream ${cryptopp_LIBRARIES})
+ 
+-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
++target_include_directories(${PROJECT_NAME} PUBLIC "${cryptopp_INCLUDE_DIRS}" "${CMAKE_CURRENT_SOURCE_DIR}/include")
++
++target_compile_options(${PROJECT_NAME} PUBLIC ${cryptopp_CFLAGS_OTHER})
+diff --git a/src/vpkpp/_vpkpp.cmake b/src/vpkpp/_vpkpp.cmake
+index 418dc75..5658ecc 100644
+--- a/src/shared/thirdparty/sourcepp/src/vpkpp/_vpkpp.cmake
++++ b/src/shared/thirdparty/sourcepp/src/vpkpp/_vpkpp.cmake
+@@ -1,4 +1,4 @@
+-add_pretty_parser(vpkpp DEPS bsppp cryptopp::cryptopp kvpp MINIZIP::minizip SOURCES
++add_pretty_parser(vpkpp DEPS bsppp ${cryptopp_LIBRARIES} kvpp MINIZIP::minizip SOURCES
+         "${CMAKE_CURRENT_SOURCE_DIR}/include/vpkpp/format/BSP.h"
+         "${CMAKE_CURRENT_SOURCE_DIR}/include/vpkpp/format/FPX.h"
+         "${CMAKE_CURRENT_SOURCE_DIR}/include/vpkpp/format/GCF.h"

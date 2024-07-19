@@ -1,18 +1,16 @@
 diff --git a/src/installer/_installer.cmake b/src/installer/_installer.cmake
-index 5d617c9..d21274d 100644
+index 8596598..034cbe1 100644
 --- a/src/installer/_installer.cmake
 +++ b/src/installer/_installer.cmake
-@@ -1,94 +1,26 @@
+@@ -1,92 +1,24 @@
  # Set up install rules
- install(TARGETS ${PROJECT_NAME}
+ install(TARGETS ${PROJECT_NAME}cli
 -        DESTINATION .)
 +	DESTINATION "lib/${PROJECT_NAME}")
  
- if(VPKEDIT_BUILD_CLI)
-     install(TARGETS ${PROJECT_NAME}cli
--            DESTINATION .)
-+	    DESTINATION "lib/${PROJECT_NAME}")
- endif()
+ install(TARGETS ${PROJECT_NAME}
+-        DESTINATION .)
++	DESTINATION "lib/${PROJECT_NAME}")
  
  install(FILES
          "${CMAKE_CURRENT_SOURCE_DIR}/CREDITS.md"
@@ -102,7 +100,7 @@ index 5d617c9..d21274d 100644
              RENAME "${PROJECT_NAME}.png")
  
      # MIME type info
-@@ -96,81 +28,20 @@ elseif(UNIX)
+@@ -94,12 +26,11 @@ elseif(UNIX)
              "${CMAKE_CURRENT_LIST_DIR}/deb/mime-type.xml.in"
              "${CMAKE_CURRENT_LIST_DIR}/deb/generated/mime-type.xml")
      install(FILES "${CMAKE_CURRENT_LIST_DIR}/deb/generated/mime-type.xml"
@@ -114,85 +112,23 @@ index 5d617c9..d21274d 100644
 +            DESTINATION "share/icons/hicolor/128x128/mimetypes/"
              RENAME "application-x-vpkedit.png")
 -endif()
--
--# CPack stuff
--set(CPACK_PACKAGE_NAME ${PROJECT_NAME_PRETTY})
--set(CPACK_PACKAGE_VENDOR ${PROJECT_ORGANIZATION_NAME})
--set(CPACK_PACKAGE_CONTACT "lauralewisdev@gmail.com")
--set(CPACK_PACKAGE_DESCRIPTION ${CMAKE_PROJECT_DESCRIPTION})
--set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${CPACK_PACKAGE_DESCRIPTION})
--set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
--set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
--set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
--set(CPACK_MONOLITHIC_INSTALL ON)
--set(CPACK_PACKAGE_EXECUTABLES ${PROJECT_NAME} ${PROJECT_NAME_PRETTY})
--if(WIN32)
--    set(CPACK_GENERATOR "NSIS")
--    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
--    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
--    set(CPACK_NSIS_DISPLAY_NAME ${PROJECT_NAME_PRETTY})
--    set(CPACK_NSIS_PACKAGE_NAME ${PROJECT_NAME_PRETTY})
--    set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_LIST_DIR}/../shared/res/logo.ico")
--    set(CPACK_NSIS_INSTALLED_ICON_NAME "${PROJECT_NAME}.exe")
--    set(CPACK_NSIS_URL_INFO_ABOUT "${CMAKE_PROJECT_HOMEPAGE_URL}")
--    set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
--    set(HELP_QUOTE "\"") # CMake is shit
--    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
--            WriteRegStr HKCR '.bmz' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.bsp' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.fpx' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.gcf' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.gma' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.grp' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.pak' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.pck' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '.vpk' '' '${PROJECT_NAME_PRETTY}'
--            WriteRegStr HKCR '${PROJECT_NAME_PRETTY}' '' 'VPKEdit Pack File'
--            WriteRegStr HKCR '${PROJECT_NAME_PRETTY}\\\\shell' '' 'open'
--            WriteRegStr HKCR '${PROJECT_NAME_PRETTY}\\\\DefaultIcon' '' '$INSTDIR\\\\${PROJECT_NAME}.exe,0'
--            WriteRegStr HKCR '${PROJECT_NAME_PRETTY}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\${PROJECT_NAME}.exe \\${HELP_QUOTE}%1\\${HELP_QUOTE}'
--            System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
--        ")
--    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
--            DeleteRegKey HKCR '.bmz'
--            DeleteRegKey HKCR '.bsp'
--            DeleteRegKey HKCR '.fpx'
--            DeleteRegKey HKCR '.gcf'
--            DeleteRegKey HKCR '.gma'
--            DeleteRegKey HKCR '.grp'
--            DeleteRegKey HKCR '.pak'
--            DeleteRegKey HKCR '.pck'
--            DeleteRegKey HKCR '.vpk'
--            DeleteRegKey HKCR '${PROJECT_NAME_PRETTY}'
--        ")
--else()
--    set(CPACK_GENERATOR "DEB")
--    set(CPACK_STRIP_FILES ON)
--    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
--    set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/${PROJECT_NAME}")
--    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libxcb-cursor0")
--    set(CPACK_DEBIAN_COMPRESSION_TYPE "zstd")
+ 
+ # CPack stuff
+ set(CPACK_PACKAGE_NAME ${PROJECT_NAME_PRETTY})
+@@ -160,12 +91,12 @@ else()
+     set(CPACK_DEBIAN_COMPRESSION_TYPE "zstd")
  
      # Add symlinks so it can be ran from anywhere
--    if(VPKEDIT_BUILD_CLI)
--        install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink /opt/${PROJECT_NAME}/${PROJECT_NAME}cli ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli)")
--        install(FILES
--                "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli"
--                DESTINATION "/usr/bin")
--    endif()
--    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink /opt/${PROJECT_NAME}/${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME})")
--    install(FILES
--            "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}"
+-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink /opt/${PROJECT_NAME}/${PROJECT_NAME}cli ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli)")
++    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lib/${PROJECT_NAME}/${PROJECT_NAME}cli ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli)")
+     install(FILES "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli"
 -            DESTINATION "/usr/bin")
--endif()
--include(CPack)
-+    #if(VPKEDIT_BUILD_CLI)
-+    #    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lib/${PROJECT_NAME}/${PROJECT_NAME}cli ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli)")
-+    #    install(FILES
-+    #         "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}cli"
-+    #            DESTINATION "bin")
-+	#endif()
-+	#install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lib/${PROJECT_NAME}/${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME})")
-+	#install(FILES
-+	#   "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}"
-+	#   DESTINATION "bin")
++            DESTINATION "bin")
+ 
+-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink /opt/${PROJECT_NAME}/${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME})")
++    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lib/${PROJECT_NAME}/${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME})")
+     install(FILES "${CMAKE_CURRENT_LIST_DIR}/deb/generated/${PROJECT_NAME}"
+-            DESTINATION "/usr/bin")
++            DESTINATION "bin")
+ endif()
+ include(CPack)

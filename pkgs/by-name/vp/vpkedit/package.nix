@@ -2,18 +2,22 @@
 , pkg-config, rapidjson, }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpkedit";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "craftablescience";
     repo = "VPKEdit";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-akg8+bj1z2JAfdKOUMsN9zJF2HCae7DUg9S6w6cldTM=";
+    hash = "sha256-k5WP8U/rkhIHtb03dWZwE3813rPZEPMCy3FeBGLSbP0=";
     fetchSubmodules = true;
+    deepClone = true;
   };
 
-  cmakeFlags = [ "-DVPKEDIT_BUILD_LIBC=OFF" ];
   patches = [ ./pkg-config.diff ./install.diff ./desktop.diff ];
+
+  postPatch = ''
+    sed -i '5s/^/#include <algorithm>/' "src/shared/thirdparty/sourcepp/src/fgdpp/fgdpp.cpp"
+  '';
 
   buildInputs = with qt6;
     [ qtbase qttools ] ++ [ cryptopp minizip-ng pkg-config rapidjson ];
@@ -21,9 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper qt6.wrapQtAppsHook cmake ];
 
   postInstall = ''
-    mkdir "$out/bin"
-    ln -s "$out/lib/vpkedit/vpkedit" "$out/bin/vpkedit"
-    ln -s "$out/lib/vpkedit/vpkeditcli" "$out/bin/vpkeditcli"
+    ln -sf "$out/lib/vpkedit/vpkedit" "$out/bin/vpkedit"
+    ln -sf "$out/lib/vpkedit/vpkeditcli" "$out/bin/vpkeditcli"
   '';
 
   meta = {
