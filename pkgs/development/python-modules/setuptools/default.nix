@@ -30,6 +30,14 @@ buildPythonPackage rec {
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
 
+  postInstall = ''
+    # setuptools provides backward compatibility for distutils with a trick/hack
+    # that makes it importable/available. However, this does not work in nixpkgs.
+    # Solve this by symlinking distutils into site-packages to make setuptools
+    # behave as expected.
+    ln -s $out/${python.sitePackages}/setuptools/_distutils  $out/${python.sitePackages}/distutils
+  '';
+
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
