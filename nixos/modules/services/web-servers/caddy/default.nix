@@ -242,7 +242,7 @@ in
             serverAliases = [ "www.hydra.example.com" ];
             extraConfig = '''
               encode gzip
-              root /srv/http
+              root * /srv/http
             ''';
           };
         };
