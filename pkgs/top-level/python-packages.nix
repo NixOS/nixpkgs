@@ -10408,6 +10408,8 @@ self: super: with self; {
 
   plaster = callPackage ../development/python-modules/plaster { };
 
+  plasTeX = callPackage ../development/python-modules/plasTeX { };
+
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
 
   platformdirs = callPackage ../development/python-modules/platformdirs { };
