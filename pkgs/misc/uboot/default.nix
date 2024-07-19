@@ -461,6 +461,12 @@ in {
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 
+  ubootPinecube = buildUBoot {
+    defconfig = "pinecube_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
   ubootQemuAarch64 = buildUBoot {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
