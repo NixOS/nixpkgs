@@ -518,22 +518,10 @@ in
     overrides = prevStage: self: super: {
       __bootstrapArchive = bootstrapArchive;
       curl = prevStage.curlReal;
-      cacert = prevStage.cacert;
       inherit (prevStage) fetchurl;
       freebsd = super.freebsd.overrideScope (
         self': super': { localesPrev = prevStage.freebsd.localesReal; }
       );
-      haskellPackages = super.haskellPackages.override {
-        overrides = (
-          self: super: {
-            digest = super.digest.overrideAttrs {
-              postPatch = ''
-                sed -E -i -e 's/ && !os\(freebsd\)//' digest.cabal
-              '';
-            };
-          }
-        );
-      };
     };
   })
 ]
