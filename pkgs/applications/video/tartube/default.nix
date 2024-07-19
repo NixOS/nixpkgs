@@ -7,7 +7,7 @@
 , pango
 , python3Packages
 , wrapGAppsHook3
-, youtube-dl
+, yt-dlp
 , glib
 , ffmpeg
 , aria2
@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
+    "--prefix PATH : ${lib.makeBinPath [ yt-dlp ]}"
   ];
 
   meta = with lib; {
