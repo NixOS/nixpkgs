@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   '';
 
   patches = [
+    # Some changes the debian/ubuntu developers made over the original source code
     (fetchpatch {
       url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_0.0.53-0ubuntu4.diff.gz";
       sha256 = "sha256-X5ONNp9jeACxsulyowDQJ6REX6bty6L4in0/+rq8Wz4=";
