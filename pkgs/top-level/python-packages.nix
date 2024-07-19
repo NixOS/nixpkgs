@@ -157,6 +157,8 @@ self: super: with self; {
 
   aioapns = callPackage ../development/python-modules/aioapns { };
 
+  aioaquacell = callPackage ../development/python-modules/aioaquacell { };
+
   aiocron = callPackage ../development/python-modules/aiocron { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -945,6 +947,8 @@ self: super: with self; {
 
   attacut = callPackage ../development/python-modules/attacut { };
 
+  attr = callPackage ../development/python-modules/attr { };
+
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
@@ -1061,6 +1065,8 @@ self: super: with self; {
   aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
+  aws-request-signer = callPackage ../development/python-modules/aws-request-signer { };
 
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
