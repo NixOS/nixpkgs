@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, updateAutotoolsGnuConfigScriptsHook
 , pcre, windows ? null
 , variant ? null
 }:
@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
       hash = "sha256-pttmKwihLzKrAV6O4qVLp2pu4NwNJEFS/9Id8/b3nAU=";
     })
   ];
+
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   preCheck = ''
     patchShebangs RunGrepTest
