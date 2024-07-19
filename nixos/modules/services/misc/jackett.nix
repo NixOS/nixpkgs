@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
   cfg = config.services.jackett;
 
+  settingsFormat = pkgs.formats.json {};
 in
 {
   options = {
@@ -44,6 +45,60 @@ in
       };
 
       package = mkPackageOption pkgs "jackett" { };
+
+      settings = mkOption {
+        description = "Settings for Jackett";
+        default = {};
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            APIKey = mkOption {
+              type = types.outOfBand;
+              description = "Secret API Key.";
+            };
+            FlareSolverrUrl = mkOption {
+              type = types.nullOr lib.types.str;
+              description = "FlareSolverr endpoint.";
+              default = null;
+            };
+            OmdbApiKey = mkOption {
+              type = types.nullOr types.outOfBand;
+              description = "Open Movie Database API Key.";
+              default = null;
+            };
+            ProxyType = mkOption {
+              type = types.enum [ "-1" "0" "1" "2" ];
+              default = "-1";
+              description = ''
+                -1 = disabled
+                0 = HTTP
+                1 = SOCKS4
+                2 = SOCKS5
+                '';
+            };
+            ProxyUrl = mkOption {
+              type = types.nullOr lib.types.str;
+              description = "URL of the proxy. Ignored if ProxyType is set to -1";
+              default = null;
+            };
+            ProxyPort = mkOption {
+              type = types.nullOr lib.types.port;
+              description = "Port of the proxy. Ignored if ProxyType is set to -1";
+              default = null;
+            };
+            AllowExternal = mkOption {
+              type = types.bool;
+              description = "Allow external unprotected connection. Enable this if behind a reverse proxy that provides authentication.";
+              default = false;
+            };
+            UpdateDisabled = mkOption {
+              type = types.bool;
+              description = "Disable updates. Updates are done through NixOS so enabling them serves no purpose.";
+              default = true;
+            };
+          };
+        };
+      };
     };
   };
 
@@ -61,8 +116,16 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --Port ${toString cfg.port} --DataFolder '${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
+      };
+
+      preStart = utils.genConfigOutOfBand {
+        config = cfg.settings // {
+          Port = cfg.port;
+        };
+        configLocation = "${cfg.dataDir}/ServerConfig.json";
+        generator = utils.genConfigOutOfBandFormatAdapter settingsFormat;
       };
     };
 
