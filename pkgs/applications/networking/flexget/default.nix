@@ -12,7 +12,7 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.40";
+  version = "3.11.41";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-96f6NrU928BhhHZmA2vHIhOrczL6AifKvKcdxoV3ihI=";
+    hash = "sha256-ZSqkD53fdDnKulVPgM9NWXVFXDR0sZ94mRyV1iKS87o=";
   };
 
   postPatch = ''
