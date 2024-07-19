@@ -2066,6 +2066,13 @@
     githubId = 76545554;
     name = "Avery";
   };
+  averyanalex = {
+    name = "Alexander Averyanov";
+    email = "alex@averyan.ru";
+    github = "averyanalex";
+    githubId = 59499799;
+    keys = [ { fingerprint = "A0FF 4F26 6B80 0B86 726D  EA5B 3C23 C7BD 9945 2036"; } ];
+  };
   avh4 = {
     email = "gruen0aermel@gmail.com";
     github = "avh4";

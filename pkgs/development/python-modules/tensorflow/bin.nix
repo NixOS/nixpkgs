@@ -208,16 +208,16 @@ buildPythonPackage {
     "tensorflow.python.framework"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jyp
       abbradar
     ];
-    platforms = platforms.all;
+    badPlatforms = [ "x86_64-darwin" ];
     # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
     # ModuleNotFoundError: No module named 'distutils'
     # https://github.com/tensorflow/tensorflow/issues/58073

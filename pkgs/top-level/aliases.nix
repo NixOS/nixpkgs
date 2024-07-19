@@ -730,6 +730,7 @@ mapAliases ({
   librdf = lrdf; # Added 2020-03-22
   LibreArp = librearp; # Added 2024-06-12
   LibreArp-lv2 = librearp-lv2; # Added 2024-06-12
+  libreddit = throw "'libreddit' has been removed because it is unmaintained upstream. Consider using 'redlib', a maintained fork"; # Added 2024-07-17
   libressl_3_5 = throw "'libressl_3_5' has reached end-of-life "; # Added 2023-05-07
   librtlsdr = rtl-sdr; # Added 2023-02-18
   librewolf-wayland = librewolf; # Added 2022-11-15
