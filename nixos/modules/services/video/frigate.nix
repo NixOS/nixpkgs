@@ -39,7 +39,7 @@ let
                 '';
               };
               roles = mkOption {
-                type = listOf (enum [ "detect" "record" "rtmp" ]);
+                type = listOf (enum [ "detect" "record" "rtmp" "audio" ]);
                 example = literalExpression ''
                   [ "detect" "rtmp" ]
                 '';
