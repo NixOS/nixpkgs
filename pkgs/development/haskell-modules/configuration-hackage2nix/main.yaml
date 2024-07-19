@@ -129,6 +129,7 @@ extra-packages:
   - th-desugar == 1.16                  # 2024-06-28: preserve for GHC 9.8
   - singletons-th == 3.3                # 2024-06-28: preserve for GHC 9.8
   - singletons-base == 3.3              # 2024-06-28: preserve for GHC 9.8
+  - tls < 2.1.0                         # 2024-07-19: requested by darcs == 2.18.3
 
 package-maintainers:
   abbradar:
