@@ -983,6 +983,7 @@ with pkgs;
     prefetch-yarn-deps
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     fetchYarnDeps;
 
   find-cursor = callPackage ../tools/X11/find-cursor { };

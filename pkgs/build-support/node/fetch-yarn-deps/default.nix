@@ -2,9 +2,12 @@
   stdenv,
   lib,
   makeWrapper,
+  installShellFiles,
   coreutils,
   nix-prefetch-git,
   fetchurl,
+  jq,
+  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
@@ -175,4 +178,18 @@ in
       description = "Run yarn build in buildPhase";
     };
   } ./yarn-build-hook.sh;
+
+  yarnInstallHook = makeSetupHook
+    {
+      name = "yarn-install-hook";
+      propagatedBuildInputs = [
+        yarn
+        installShellFiles
+        makeWrapper
+      ];
+      substitutions = {
+        hostNode = "${nodejs}/bin/node";
+        jq = "${jq}/bin/jq";
+      };
+    } ./yarn-install-hook.sh;
 }
