@@ -625,13 +625,6 @@ in
       };
 
 
-    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
-      [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
-        "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
-        "CRYPTO_SHA256" "DMIID" "AUTOFS_FS" "TMPFS_POSIX_ACL"
-        "TMPFS_XATTR" "SECCOMP"
-      ];
-
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
       mapAttrs (name: service:

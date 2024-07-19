@@ -415,12 +415,6 @@ in
       "modprobe.d/firmware.conf".text = "options firmware_class path=${config.hardware.firmware}/lib/firmware";
     };
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isEnabled "UNIX")
-      (isYes "INOTIFY_USER")
-      (isYes "NET")
-    ];
-
     system.activationScripts.udevd = lib.mkIf config.boot.kernel.enable ''
       # The deprecated hotplug uevent helper is not used anymore
       if [ -e /proc/sys/kernel/hotplug ]; then

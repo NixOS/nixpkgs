@@ -15,9 +15,6 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "DEBUG")
-    ];
     boot.kernel.features.debug = true;
     environment.systemPackages = [
       config.boot.kernelPackages.systemtap

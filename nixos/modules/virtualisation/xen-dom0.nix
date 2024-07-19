@@ -705,27 +705,6 @@ in
       '';
     };
 
-    # Domain 0 requires a pvops-enabled kernel.
-    # All NixOS kernels come with this enabled by default; this is merely a sanity check.
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "XEN")
-      (isYes "X86_IO_APIC")
-      (isYes "ACPI")
-      (isYes "XEN_DOM0")
-      (isYes "PCI_XEN")
-      (isYes "XEN_DEV_EVTCHN")
-      (isYes "XENFS")
-      (isYes "XEN_COMPAT_XENFS")
-      (isYes "XEN_SYS_HYPERVISOR")
-      (isYes "XEN_GNTDEV")
-      (isYes "XEN_BACKEND")
-      (isModule "XEN_NETDEV_BACKEND")
-      (isModule "XEN_BLKDEV_BACKEND")
-      (isModule "XEN_PCIDEV_BACKEND")
-      (isYes "XEN_BALLOON")
-      (isYes "XEN_SCRUB_PAGES")
-    ];
-
     environment = {
       systemPackages = [
         cfg.package
