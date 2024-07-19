@@ -4,7 +4,7 @@
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
 let
-  handledArgs = [ "meta" ];
+  handledArgs = [ "meta" "preUnpack" "postUnpack" ];
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
 
   packageBuild = stdenv.mkDerivation {
@@ -66,6 +66,8 @@ in
     (${ename} :fetcher git :url ""
               ${lib.optionalString (files != null) ":files ${files}"})
   '')
+, preUnpack ? ""
+, postUnpack ? ""
 , meta ? {}
 , ...
 }@args:
@@ -99,12 +101,12 @@ genericBuild ({
     ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
     mkdir -p "$NIX_BUILD_TOP/packages"
-  '';
+  '' + preUnpack;
 
   postUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/working"
     ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
-  '';
+  '' + postUnpack;
 
   buildPhase = ''
     runHook preBuild
