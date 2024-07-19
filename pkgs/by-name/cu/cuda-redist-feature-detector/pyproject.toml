@@ -1,0 +1,41 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "cuda_redist_feature_detector"
+version = "0.1.0"
+authors = [{ name = "Connor Baker", email = "connorbaker@tweag.io" }]
+requires-python = ">=3.12"
+license = { text = "BSD-3-Clause" }
+description = "Library of functions for NVIDIA's redistributable manifests"
+dependencies = ["annotated-types", "cuda-redist-lib", "pydantic"]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+[project.scripts]
+cuda-redist-feature-detector = "cuda_redist_feature_detector:__main__.main"
+
+[project.urls]
+Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/cu/cuda-redist-feature-detector"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+preview = true
+
+[tool.ruff.lint]
+preview = true
+select = ["F", "E", "W", "I", "PL", "FURB", "LOG", "RUF", "G", "TID"]
+ignore = [
+  # Ignore functions with many arguments (I like currying)
+  "PLR0913",
+]
+
+[tool.pyright]
+include = ["./cuda_redist_feature_detector"]
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+typeCheckingMode = "strict"
