@@ -1,7 +1,7 @@
 { lib
 , substituteAll
 , mkDerivation
-, fetchFromGitLab
+, fetchFromGitHub
 , gitUpdater
 , mobile-broadband-provider-info
 , qmake
@@ -11,14 +11,13 @@
 
 mkDerivation rec {
   pname = "libqofono";
-  version = "0.103";
+  version = "0.123";
 
-  src = fetchFromGitLab {
-    domain = "git.sailfishos.org";
-    owner = "mer-core";
+  src = fetchFromGitHub {
+    owner = "sailfishos";
     repo = "libqofono";
     rev = version;
-    sha256 = "1ly5aj412ljcjvhqyry6nhiglbzzhczsy1a6w4i4fja60b2m1z45";
+    hash = "sha256-Ml86wHejSDyR2ibamuzg14GZ5S7zHBgPC9K5G+sgtC0=";
   };
 
   patches = [
