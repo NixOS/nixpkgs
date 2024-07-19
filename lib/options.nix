@@ -95,14 +95,14 @@ rec {
        mkEnableOption "foo"
        => { _type = "option"; default = false; description = "Whether to enable foo."; example = true; type = { ... }; }
   */
-  mkEnableOption =
-    # Name for the created option
-    name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
-  };
+  mkEnableOption = name:
+    if ! isString name then throw "mkEnableOption expects a string."
+    else mkOption {
+      default = false;
+      example = true;
+      description = "Whether to enable ${name}.";
+      type = lib.types.bool;
+    };
 
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
