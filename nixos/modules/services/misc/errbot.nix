@@ -30,6 +30,8 @@ in {
       description = "Errbot instance configs";
       type = types.attrsOf (types.submodule {
         options = {
+          package = mkPackageOption pkgs "errbot" { };
+
           dataDir = mkOption {
             type = types.nullOr types.path;
             default = null;
@@ -96,7 +98,7 @@ in {
       serviceConfig = {
         User = "errbot";
         Restart = "on-failure";
-        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
+        ExecStart = "${instanceCfg.package}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
         PermissionsStartOnly = true;
       };
     })) cfg.instances;
