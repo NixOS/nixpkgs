@@ -38,6 +38,8 @@ in
       type = lib.types.attrsOf (
         lib.types.submodule {
           options = {
+            package = lib.mkPackageOption pkgs "errbot" { };
+
             dataDir = lib.mkOption {
               type = lib.types.nullOr lib.types.path;
               default = null;
@@ -107,7 +109,7 @@ in
           serviceConfig = {
             User = "errbot";
             Restart = "on-failure";
-            ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
+            ExecStart = "${instanceCfg.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
             PermissionsStartOnly = true;
           };
         }
