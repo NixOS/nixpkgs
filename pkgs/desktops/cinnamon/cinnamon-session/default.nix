@@ -25,7 +25,7 @@
 
 let
   pythonEnv = python3.withPackages (pp: with pp; [
-    pp.xapp # don't omit `pp.`, see #213561
+    python-xapp
     pygobject3
     setproctitle
   ]);

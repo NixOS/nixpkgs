@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (pp: with pp; [
       pygobject3
       setproctitle
-      python3.pkgs.xapp # The scope prefix is required
+      python-xapp
       pycairo
     ]))
     xapp

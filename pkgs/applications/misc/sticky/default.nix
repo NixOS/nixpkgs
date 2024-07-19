@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3.pkgs; [
     pygobject3
-    xapp
+    python-xapp
   ];
 
   dontWrapGApps = true;

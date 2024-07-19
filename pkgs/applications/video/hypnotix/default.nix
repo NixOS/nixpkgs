@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     requests
     setproctitle
     unidecode
-    xapp
+    python-xapp
   ];
 
   installPhase = ''
