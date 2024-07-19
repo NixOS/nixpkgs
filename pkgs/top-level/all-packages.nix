@@ -17438,8 +17438,6 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
-
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
   supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
