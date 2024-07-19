@@ -39,7 +39,7 @@
 let
   makeBool = option: bool: (if bool then "${option}=1" else "");
 
-  makeWrapperArgs = lib.optionalString config.cudaSupport ''
+  libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
     --prefix LD_LIBRARY_PATH: "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
 
@@ -158,7 +158,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      --prefix PATH ${lib.makeBinPath [ tk ]} ${makeWrapperArgs}
+      --prefix PATH ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
