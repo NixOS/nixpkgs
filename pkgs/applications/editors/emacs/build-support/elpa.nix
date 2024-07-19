@@ -3,7 +3,7 @@
 { lib, stdenv, emacs, texinfo, writeText, gcc }:
 
 let
-  handledArgs = [ "files" "fileSpecs" "meta" ];
+  handledArgs = [ "meta" ];
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
 
 in
