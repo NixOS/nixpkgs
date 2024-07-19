@@ -24256,6 +24256,8 @@ with pkgs;
 
   subdl = callPackage ../applications/video/subdl { };
 
+  gaupol = callPackage ../applications/video/gaupol { };
+
   subtitleedit = callPackage ../applications/video/subtitleedit { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
