@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uBVDH7YYSuFv0r5T2+EAoL02ta+1hjaza/Ilu+a+k0k=";
 
+  buildFeatures = [ "client" ];
+
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
