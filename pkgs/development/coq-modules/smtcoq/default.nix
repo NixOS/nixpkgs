@@ -7,6 +7,7 @@
   zchaff,
   fetchurl,
   cvc5,
+  stdlib,
   version ? null,
 }:
 
@@ -80,6 +81,7 @@ mkCoqDerivation {
       cvc5
       veriT'
       zchaff
+      stdlib
     ]
     ++ (with coq.ocamlPackages; [
       findlib
