@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, fetchPypi
-, flask
-, poetry-core
-, progress
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, yt-dlp
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchPypi,
+  flask,
+  poetry-core,
+  progress,
+  pythonOlder,
+  requests,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -47,12 +46,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yark"
-  ];
+  pythonImportsCheck = [ "yark" ];
 
   meta = with lib; {
     description = "Module for YouTube archiving";
+    mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
     changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
     license = licenses.mit;

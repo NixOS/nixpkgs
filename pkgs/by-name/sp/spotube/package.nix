@@ -1,41 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, autoPatchelfHook
-, dpkg
-, makeWrapper
-, undmg
-, wrapGAppsHook
+  autoPatchelfHook,
+  dpkg,
+  makeBinaryWrapper,
+  makeWrapper,
+  undmg,
+  wrapGAppsHook3,
 
-, libappindicator
-, libnotify
-, libsecret
-, mpv-unwrapped
-, xdg-user-dirs
+  libappindicator,
+  libnotify,
+  libsecret,
+  mpv-unwrapped,
+  xdg-user-dirs,
 }:
 
 let
   pname = "spotube";
-  version = "3.5.0";
+  version = "3.7.1";
 
   meta = {
-    description = "An open source, cross-platform Spotify client compatible across multiple platforms";
+    description = "Open source, cross-platform Spotify client compatible across multiple platforms";
     longDescription = ''
       Spotube is an open source, cross-platform Spotify client compatible across
       multiple platforms utilizing Spotify's data API and YouTube (or Piped.video or JioSaavn)
       as an audio source, eliminating the need for Spotify Premium
     '';
     downloadPage = "https://github.com/KRTirtho/spotube/releases";
-    homepage = "https://spotube.netlify.app/";
+    homepage = "https://spotube.krtirtho.dev/";
     license = lib.licenses.bsdOriginal;
     mainProgram = "spotube";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  fetchArtifact = { filename, hash }:
+  fetchArtifact =
+    { filename, hash }:
     fetchurl {
       url = "https://github.com/KRTirtho/spotube/releases/download/v${version}/${filename}";
       inherit hash;
@@ -46,18 +53,21 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-omXhiH/hVxFef03GqmpYf65SfdLjLyeMyuAWuvSpYiI=";
+      hash = "sha256-EYgjVXO/ztIsVYzEHe14YgXbQTclQIht9Qqr8ewHU8w=";
     };
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [
+      undmg
+      makeBinaryWrapper
+    ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/Applications $out/bin
       cp -r spotube.app $out/Applications
-      ln -s $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
+      makeBinaryWrapper $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
       runHook postInstall
     '';
   };
@@ -67,14 +77,14 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-Rea4GvxdkUfZF8lCBzI9UrD9Iz9D5vq9oxYBn5bahZE=";
+      hash = "sha256-JKp2RMYNfdBzywqlBpTaHL1iD+E71EL8xY+nzkdA3us=";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

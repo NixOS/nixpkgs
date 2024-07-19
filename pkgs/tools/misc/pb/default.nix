@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pb";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ckRvtEtagyYpXJ0hh8jsgpE/16bu7b9IdNn2stvb2iI=";
+    hash = "sha256-ub4/ou0FprDPTdGarehUPVPov2kLl6SbIlhpPiEarE8=";
   };
 
-  vendorHash = "sha256-dNSr0bQz7XdC2fTD82TI8tfmwKBuAcbxjaMC9KAjxlI=";
+  vendorHash = "sha256-38lXffh3ZkMtvHi9roLHW0A6bzb+LRC91I3DdYyq1h0=";
 
   ldflags = [
     "-s"
@@ -30,7 +30,7 @@ buildGoModule rec {
     homepage = "https://github.com/parseablehq/pb";
     changelog = "https://github.com/parseablehq/pb/releases/tag/v${version}";
     description = "CLI client for Parseable server";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "pb";
   };

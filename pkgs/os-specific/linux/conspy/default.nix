@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux text console viewer";
+    mainProgram = "conspy";
     license = licenses.epl10;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

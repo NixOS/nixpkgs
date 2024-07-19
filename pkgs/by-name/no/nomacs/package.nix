@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.17.2295";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
     fetchSubmodules = false; # We'll use our own
-    hash = "sha256-jHr7J0X1v2n/ZK0y3b/XPDISk7e08VWS6nicJU4fKKY=";
+    hash = "sha256-lpmM2GfMDlIp1vnbHMaOdicFcKH6LwEoKSETMt7C1NY=";
   };
 
   outputs = [ "out" ]
@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     libraw
     libtiff
-    opencv4
+    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+    (lib.getOutput "cxxdev" opencv4)
   ] ++ (with libsForQt5; [
     qtbase
     qtimageformats

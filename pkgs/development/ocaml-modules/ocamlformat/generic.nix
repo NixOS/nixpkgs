@@ -1,4 +1,4 @@
-{ lib, fetchurl, version ? "0.26.1", astring, base, camlp-streams, cmdliner_1_0
+{ lib, fetchurl, version ? "0.26.2", astring, base, camlp-streams, cmdliner_1_0
 , cmdliner_1_1, csexp, dune-build-info, either, fix, fpath, menhirLib, menhirSdk
 , ocaml-version, ocp-indent, odoc-parser, result, stdio, uuseg, uutf, ... }:
 
@@ -24,6 +24,7 @@ rec {
       "0.25.1" = "sha256-3I8qMwyjkws2yssmI7s2Dti99uSorNKT29niJBpv0z0=";
       "0.26.0" = "sha256-AxSUq3cM7xCo9qocvrVmDkbDqmwM1FexEP7IWadeh30=";
       "0.26.1" = "sha256-2gBuQn8VuexhL7gI1EZZm9m3w+4lq+s9VVdHpw10xtc=";
+      "0.26.2" = "sha256-Lk9Za/eqNnqET+g7oPawvxSyplF53cCCNj/peT0DdcU=";
     }."${version}";
   };
 

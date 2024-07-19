@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A set of cuda-enabled texture tools and compressors";
+    description = "Set of cuda-enabled texture tools and compressors";
     homepage = "https://github.com/castano/nvidia-texture-tools";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

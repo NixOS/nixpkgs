@@ -1,4 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, nose, jinja2, mock, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  nose,
+  jinja2,
+  mock,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "webassets";
@@ -11,7 +20,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pyyaml ];
-  nativeCheckInputs = [ nose jinja2 mock pytest ];
+  nativeCheckInputs = [
+    nose
+    jinja2
+    mock
+    pytest
+  ];
 
   # Needs Babel CLI tool
   doCheck = false;
@@ -19,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Media asset management for Python, with glue code for various web frameworks";
+    mainProgram = "webassets";
     homepage = "https://github.com/miracle2k/webassets/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

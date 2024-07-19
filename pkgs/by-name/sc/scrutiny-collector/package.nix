@@ -4,9 +4,10 @@
 , smartmontools
 , nixosTests
 , lib
+, nix-update-script
 }:
 let
-  version = "0.7.3";
+  version = "0.8.1";
 in
 buildGoModule rec {
   inherit version;
@@ -16,7 +17,7 @@ buildGoModule rec {
     owner = "AnalogJ";
     repo = "scrutiny";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S7GW8z6EWB+5vntKew0+EDVqhun+Ae2//15dSIlfoSs=";
+    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
   subPackages = "collector/cmd/collector-metrics";
@@ -41,9 +42,10 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny-collector = nixosTests.scrutiny;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Hard disk metrics collector for Scrutiny.";
+    description = "Hard disk metrics collector for Scrutiny";
     homepage = "https://github.com/AnalogJ/scrutiny";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];

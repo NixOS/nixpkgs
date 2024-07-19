@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
-, python
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchFromGitHub,
+  python,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,21 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-WFQ/JvKh6gkUxPV27QBd2TzwFS8hfQGmcTInTnmh6iA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  checkInputs = [
-    djangorestframework
-  ];
+  checkInputs = [ djangorestframework ];
 
-  pythonImportsCheck = [
-    "login_required"
-  ];
+  pythonImportsCheck = [ "login_required" ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings tests.settings

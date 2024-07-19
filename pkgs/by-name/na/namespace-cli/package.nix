@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "namespace-cli";
-  version = "0.0.348";
+  version = "0.0.386";
 
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
     rev = "v${version}";
-    hash = "sha256-SEqiW3AdhvsIU9WEEcaRi8paMNgRvnZTFL874mSjUQE=";
+    hash = "sha256-UT5gCwMxnd/saK3n3jLJeF/ri9pq1KBP++T3lvAM7ng=";
   };
 
-  vendorHash = "sha256-a/e+xPOD9BDSlKknmfcX2tTMyIUrzKxqtUpFXcFIDSE=";
+  vendorHash = "sha256-VG21dKoMsZefSXUP/itFbt0RGWjlVDwJbeJDmhJ47PA=";
 
   subPackages = ["cmd/nsc" "cmd/ns" "cmd/docker-credential-nsc"];
 
@@ -30,6 +30,6 @@ buildGoModule rec {
     license = licenses.asl20;
     changelog = "https://github.com/namespacelabs/foundation/releases/tag/v${version}";
     homepage = "https://github.com/namespacelabs/foundation";
-    description = "A command line interface for the Namespaces platform";
+    description = "Command line interface for the Namespaces platform";
   };
 }

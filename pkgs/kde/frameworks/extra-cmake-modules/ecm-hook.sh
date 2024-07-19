@@ -6,7 +6,7 @@ ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
 }
-addEnvHooks "$targetOffset" ecmEnvHook
+addEnvHooks "$hostOffset" ecmEnvHook
 
 ecmPostHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.
@@ -41,7 +41,7 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_KCONFUPDATEDIR=${!outputBin}/share/kconf_update"
     cmakeFlags+=" -DKDE_INSTALL_KAPPTEMPLATESDIR=${!outputDev}/share/kdevappwizard/templates"
     cmakeFlags+=" -DKDE_INSTALL_KFILETEMPLATESDIR=${!outputDev}/share/kdevfiletemplates/templates"
-    cmakeFlags+=" -DKDE_INSTALL_KXMLGUIDIR=${!outputBin}/share/kxmlgui6"
+    cmakeFlags+=" -DKDE_INSTALL_KXMLGUIDIR=${!outputBin}/share/kxmlgui5"  # Yes, this needs to be 5 and not 6. Don't ask.
     cmakeFlags+=" -DKDE_INSTALL_KNOTIFYRCDIR=${!outputBin}/share/knotifications6"
     cmakeFlags+=" -DKDE_INSTALL_ICONDIR=${!outputBin}/share/icons"
     cmakeFlags+=" -DKDE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
@@ -69,10 +69,7 @@ ecmPostHook() {
 }
 postHooks+=(ecmPostHook)
 
-xdgDataSubdirs=( \
-    "config.kcfg" "kconf_update" "knotifications6" "icons" "locale" "sounds" "templates" \
-    "wallpapers" "applications" "desktop-directories" "mime" "appdata" "dbus-1" \
-)
+xdgDataSubdirs=("config.kcfg" "kconf_update" "knotifications6" "icons" "locale" "mime")
 
 # ecmHostPathsSeen is an associative array of the paths that have already been
 # seen by ecmHostPathHook.
@@ -108,21 +105,9 @@ ecmHostPathHook() {
         fi
     done
 
-    local manDir="$1/man"
-    if [ -d "$manDir" ]
-    then
-        qtWrapperArgs+=(--prefix MANPATH : "$manDir")
-    fi
-
-    local infoDir="$1/info"
-    if [ -d "$infoDir" ]
-    then
-        qtWrapperArgs+=(--prefix INFOPATH : "$infoDir")
-    fi
-
-    if [ -d "$1/dbus-1" ]
+    if [ -d "$1/share/dbus-1" ]
     then
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-addEnvHooks "$targetOffset" ecmHostPathHook
+addEnvHooks "$hostOffset" ecmHostPathHook

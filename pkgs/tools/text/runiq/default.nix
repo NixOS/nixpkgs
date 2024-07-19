@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-qcgPuJOpK2fCsHAgzoIKF7upb9B3ySIZkpu9xf4JnCc=";
+    hash = "sha256-qcgPuJOpK2fCsHAgzoIKF7upb9B3ySIZkpu9xf4JnCc=";
   };
 
   cargoHash = "sha256-WSMV0GNKNckN9uSPN647iDloGkNtaKcrZbeyglUappc=";
@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "An efficient way to filter duplicate lines from input, à la uniq";
+    description = "Efficient way to filter duplicate lines from input, à la uniq";
+    mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

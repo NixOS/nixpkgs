@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psutil,
+  pytestCheckHook,
 }:
-
 
 buildPythonPackage rec {
   pname = "psutil-home-assistant";
@@ -18,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-6bj1aaa/JYZFVwUAJfxISRoldgTmumCG8WrlKhkb6kM=";
   };
 
-  propagatedBuildInputs = [
-    psutil
-  ];
+  propagatedBuildInputs = [ psutil ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/psutil-home-assistant/releases/tag/${version}";

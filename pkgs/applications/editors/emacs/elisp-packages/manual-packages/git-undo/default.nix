@@ -6,7 +6,7 @@
 
 trivialBuild {
   pname = "git-undo";
-  version = "0.pre+unstable=2019-12-21";
+  version = "0-unstable-2019-12-21";
 
   src = fetchFromGitHub {
     owner = "jwiegley";

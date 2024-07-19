@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "FIFO based tox client";
+    mainProgram = "ratox";
     homepage = "http://ratox.2f30.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ ehmry ];

@@ -5,7 +5,7 @@
         "checksum": "5a65179c291bc480696ca323d2f8c4874985458303eff8f233e16cdca4e88e6f",
         "contents_checksum": "038c999c7a7d70d5133eab7dc5868c4c3d0358431dad250f9833306af63016c8",
         "size": 800,
-        "source": "components/google-cloud-sdk-alpha-20231025210228.tar.gz",
+        "source": "components/google-cloud-sdk-alpha-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -22,8 +22,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240628141907,
+        "version_string": "2024.06.28"
       }
     },
     {
@@ -56,15 +56,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.4.4"
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "f197d04a40be89731ecd7a653f83900dcc4dcd84e54e0833c529f9f8dfa4395c",
-        "contents_checksum": "fa1d4910c1ce188c5c450d655c5d15e59a146364ec46e3fda0791db76c2edd17",
-        "size": 20108065,
-        "source": "components/google-cloud-sdk-anthos-auth-darwin-arm-20220923141408.tar.gz",
+        "checksum": "37a7174a1716a9f4d84ee904940428ac424b4e20b1c4df7fe2e79704e554a8ce",
+        "contents_checksum": "21f1533ec191871a6677551d0d72687b03f1f2708fa900652875afa948a26df4",
+        "size": 21872436,
+        "source": "components/google-cloud-sdk-anthos-auth-darwin-arm-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -88,16 +88,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "5417a11523868f36d6b7c3199e3029cf9f43c8cb99c57dba016942db4141c939",
-        "contents_checksum": "06a661642cbd20bcb9965c7a4b505d4d72944c48c30b8ada71db7e53c898d505",
-        "size": 21183974,
-        "source": "components/google-cloud-sdk-anthos-auth-darwin-x86_64-20220923141408.tar.gz",
+        "checksum": "6f82815ca309a9f5a19bef98aad0a4f70393a66ce57383a4f6e4b0a8d6193a56",
+        "contents_checksum": "81a661e522f5c3b7fe610bad06a49e0a3a20fc9da69e0232150c4aa4fcaf962b",
+        "size": 22957602,
+        "source": "components/google-cloud-sdk-anthos-auth-darwin-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -121,16 +121,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "c9dee264071d169de081880019f2f6fdb14edc22cbd20c19de76bb7cfa196eae",
-        "contents_checksum": "80ae98f1bfd1bd5cce9cddd642a1505d5401908d8890a22afa723490132b4342",
-        "size": 19755666,
-        "source": "components/google-cloud-sdk-anthos-auth-linux-arm-20220923141408.tar.gz",
+        "checksum": "d9ad352bdfd50fef92ab1b917bb60be6b2e49bb8a4b49269bd2286570e02681f",
+        "contents_checksum": "c98b7c781c86e14e0dbb2a5f5a6ab9504013d005046fb52956ffb213a7d6f51a",
+        "size": 21399471,
+        "source": "components/google-cloud-sdk-anthos-auth-linux-arm-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -154,16 +154,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "b5efe7e9cd17f44905186242e663b97734183e14c66daed35553bc59bbf07a3a",
-        "contents_checksum": "57b753ecbde456973bed97af69aa7d1696694c1d30e9756d57658f79689fd925",
-        "size": 21362894,
-        "source": "components/google-cloud-sdk-anthos-auth-linux-x86_64-20220923141408.tar.gz",
+        "checksum": "c148f4a473afa336390f034d735283d6a4556c06e8e8b5bd0ecfa2f25dcfd184",
+        "contents_checksum": "4dbc4132c3126b53058c12c9113186436ac223018cf6d5e636dc0cf6b38ab1e3",
+        "size": 23109537,
+        "source": "components/google-cloud-sdk-anthos-auth-linux-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -187,16 +187,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "ab73e4c82e95a7b707f2298906a7a5fb9a2c1fe741c4584ab16e507bcf7b6d5b",
-        "contents_checksum": "38d10a97aa0e5fbf2c927acda1c853c25a2b729615bebd2ac8fce4eb77c2466a",
-        "size": 21470866,
-        "source": "components/google-cloud-sdk-anthos-auth-windows-x86_64-20220923141408.tar.gz",
+        "checksum": "7802808d020056ba132dc1aecda164d4979f057feff4a61071a6da850ef3e6bf",
+        "contents_checksum": "7b8a92cd15dfafa0969273ad9eca138d5f7c69fd5b54079bfd5dadf2141b103b",
+        "size": 23361404,
+        "source": "components/google-cloud-sdk-anthos-auth-windows-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -220,8 +220,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
@@ -258,15 +258,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "0.2.42"
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "47cc151c673943cbfee58321453f85b32d673b3e453724fff31374a8605992b6",
-        "contents_checksum": "3ff8b9ef0510722872095c6d027b78f45dce430eadf07fc219b7f435c503dcf1",
-        "size": 70015524,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-arm-20231023224440.tar.gz",
+        "checksum": "e1541d0f19866acd7f02ba9b730cd8baa79927214f51586785d22bd6dd9d96d0",
+        "contents_checksum": "37b07e4ab5884c8fc3163cf3f868b04de6b8fa65391d3f677f4638ed67bc6989",
+        "size": 70641868,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-arm-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -290,16 +290,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "e99a7d19c60cbab6f5ce8578133e1c30c545e89b6f768b457abd2d84722f9c4d",
-        "contents_checksum": "348b94e8d769713049f005663b17056668dc4e3429e682a6956dd7f624fccbbf",
-        "size": 72896092,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-x86-20231023224440.tar.gz",
+        "checksum": "a79426a22ede74645a49f4f6ea2ead54f4bbb978d297507f0a9cc827aca74d4a",
+        "contents_checksum": "9cc851b3b90a0148b2136d673ef3750a16337270ec8850f6ce5678975058a9d5",
+        "size": 74278294,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-x86-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -323,16 +323,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "f9e5e6e59e910787542ed59cd7a31f27774e7795989457689bb974238ea58312",
-        "contents_checksum": "348b94e8d769713049f005663b17056668dc4e3429e682a6956dd7f624fccbbf",
-        "size": 72896095,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-x86_64-20231023224440.tar.gz",
+        "checksum": "e0f65a9d0bcc4051d1cba885e4693ba002d868e8adcbfe860489836754db371c",
+        "contents_checksum": "9cc851b3b90a0148b2136d673ef3750a16337270ec8850f6ce5678975058a9d5",
+        "size": 74278297,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -356,16 +356,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "768b260e7477339405cd191e43b5bcdc96150af0f309b58c24e48827237542be",
-        "contents_checksum": "d3d2363c63df31848603536b8af09769ce6bb8a0fefbeaefd0336b2362d0ef31",
-        "size": 67245549,
-        "source": "components/google-cloud-sdk-anthoscli-linux-arm-20231023224440.tar.gz",
+        "checksum": "a2a7bc2c5b398f38b611b9fb7f4cea1fdfc9a730c27812423fadf76302536ecd",
+        "contents_checksum": "5ebfe3a26d5efed23f391e280010b1162a11e75b9b8369ae3c82980bd0dec1dd",
+        "size": 67807780,
+        "source": "components/google-cloud-sdk-anthoscli-linux-arm-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -389,16 +389,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "390124c5fec46fb6800ca03dd9caf7f75259a6bc28d5841dcc972900cec9a9ba",
-        "contents_checksum": "bf1c54e0b66c498b1d086940dee6ddd11aaa7ed745c65d03cd98f10ef1c49e83",
-        "size": 65298977,
-        "source": "components/google-cloud-sdk-anthoscli-linux-x86-20231023224440.tar.gz",
+        "checksum": "fc5bcbc677a7066d48686c2fc8962172f56f2795378b5b95b65342246a3e550a",
+        "contents_checksum": "0795a21686a22fc15bf78e6055ae1a64aa98f0309baec8ad3f6bad75aade8f60",
+        "size": 65502037,
+        "source": "components/google-cloud-sdk-anthoscli-linux-x86-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -422,16 +422,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "091730628a45921ef9f34db8b9fbc9568007b0a2a771c60ca786fbc45728b884",
-        "contents_checksum": "b30074343ee0a19121bf1163fccf5223b9e6125e744c00eef5c20977bcd3320a",
-        "size": 71982294,
-        "source": "components/google-cloud-sdk-anthoscli-linux-x86_64-20231023224440.tar.gz",
+        "checksum": "812d5fbea1d143efc81bb692e0868532a97f9a670043498961345c6a3bc2ebb8",
+        "contents_checksum": "6f1752f2e2fd0f524b35f6087029c44a7a4d1dca7fdd40de9cf375603eea3b0f",
+        "size": 72538768,
+        "source": "components/google-cloud-sdk-anthoscli-linux-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -455,16 +455,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "d6f16a6a028d3247de10be2cd63d523b954c4f76347d6a5c88a301c4cd35ddcb",
-        "contents_checksum": "2ad1786533a5cee19cddf36074f51726748422801d4417cb3793baff40ca9b0d",
-        "size": 67251009,
-        "source": "components/google-cloud-sdk-anthoscli-windows-x86-20231023224440.tar.gz",
+        "checksum": "45f187c48434cae0b00da5c210480e607bbf187f43a40b66683b47e19bbb373b",
+        "contents_checksum": "e160ef2c6526ad052dfa619298d44383c7f7502392a92b38929521a9ca858630",
+        "size": 67424078,
+        "source": "components/google-cloud-sdk-anthoscli-windows-x86-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -488,16 +488,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
       "data": {
-        "checksum": "de36bc756712c520d88572641ccd4810acb6d9342b055291a517e32eda2d9e25",
-        "contents_checksum": "686ac57e568ce4ae5b4ad352c3cc32643762e48d8c6009dae47eebb0fff7ae0d",
-        "size": 72608049,
-        "source": "components/google-cloud-sdk-anthoscli-windows-x86_64-20231023224440.tar.gz",
+        "checksum": "cb5f588dffbb5d629588ea15e6fb44536a477c6bf55c5ae02a0a4ef65f1e433a",
+        "contents_checksum": "c5ce5039556b91366d6ed1e35aeb57b796f0b73c135ac29178ee615e43805209",
+        "size": 73168252,
+        "source": "components/google-cloud-sdk-anthoscli-windows-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -521,8 +521,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "0.2.42"
+        "build_number": 20240510142152,
+        "version_string": "0.2.51"
       }
     },
     {
@@ -560,15 +560,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.9.75"
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "88f025a6822f74ffa4c34d23b656158f6191891abf9fbe244a4664077a45f57c",
-        "contents_checksum": "7a27fc4862491e5690c8158b915dd6c2c27c4fd1668f273057e059af4977a6e8",
-        "size": 4469651,
-        "source": "components/google-cloud-sdk-app-engine-go-darwin-arm-20230417163046.tar.gz",
+        "checksum": "b1a1821583b0831db76219711dd5c5502a31d5a3a9b2f22c95c36f5457b91b7f",
+        "contents_checksum": "fe65695e8101cb234a298f5129d6f93d3d113440eb42d5dd60690a5b0be941bd",
+        "size": 4673886,
+        "source": "components/google-cloud-sdk-app-engine-go-darwin-arm-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -594,16 +594,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "4a093245d248d58197ea5ec35a65b4b329fc7aed383df80dd9a9206700ca830e",
-        "contents_checksum": "f17f61e98b4f3221eae38212f727d736326ac5c803526067d2c0da965ade6000",
-        "size": 4658659,
-        "source": "components/google-cloud-sdk-app-engine-go-darwin-x86_64-20230417163046.tar.gz",
+        "checksum": "0e280be54d40ebfb84015f9238e3b58df562cecf9a1ba832ea87288f1d21b63b",
+        "contents_checksum": "b453bcc5bd1c9f4f0443462810dec6a4c31071b0e18c01f57e53cd6083306806",
+        "size": 4927378,
+        "source": "components/google-cloud-sdk-app-engine-go-darwin-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -629,16 +629,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "18e5f83a7ae30202e2794d5a46641319dba24d01ac43d1e427b906109ce9069a",
-        "contents_checksum": "22b5e43c2665f646b3b4c043ea8ce5d657576ba54392ffab81c64776ccb0e10e",
-        "size": 4426107,
-        "source": "components/google-cloud-sdk-app-engine-go-linux-arm-20230417163046.tar.gz",
+        "checksum": "fc68960029cfcb4e66a29e75e45ccf52459b9f25313f7e6a3cea995febf5b0d1",
+        "contents_checksum": "99a95e04cfa19eb3fed767ac461433d52c8cfd61dcc43f9c2a2b5be73c53a725",
+        "size": 4628999,
+        "source": "components/google-cloud-sdk-app-engine-go-linux-arm-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -664,16 +664,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "e6271bd8ecf5309c573cae3cf2386a51099517dbe8ec3a8563e96586d6b5beb2",
-        "contents_checksum": "dab30a813f4c0da5028b46ca3ca4675b708358cb4d983b1bc52e03d385f49cfb",
-        "size": 4798186,
-        "source": "components/google-cloud-sdk-app-engine-go-linux-x86-20230417163046.tar.gz",
+        "checksum": "492f92731d80bea2b5ef828276bf1fc54b7f32dbd52517f64fa6b211ca4684d8",
+        "contents_checksum": "6ea55d86c3fa493cb0cfc0c1edeb625493976944f92765ffcfcb72fdef46ee9c",
+        "size": 4811027,
+        "source": "components/google-cloud-sdk-app-engine-go-linux-x86-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -699,16 +699,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "1d5396984ff515be84c3bb526a802cfa9da49e677b46a23d192e09b063cad7d9",
-        "contents_checksum": "d4dce85cce2a173cdfac1e039f409c364b3db99624010cc0c38bcfbc96996cc3",
-        "size": 4731246,
-        "source": "components/google-cloud-sdk-app-engine-go-linux-x86_64-20230417163046.tar.gz",
+        "checksum": "aaf0cc3cb9782a103c36985f5dbcdde3fbfe50b3d18df580d298f9fd5fca3cc9",
+        "contents_checksum": "e5044222f13b99b75a7559425e2c397be40229803ba1e5480e63a7a66a68a6c8",
+        "size": 4957977,
+        "source": "components/google-cloud-sdk-app-engine-go-linux-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -734,16 +734,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "d1bbf796ff06580baeccc60c792c348cb1e466a3e6cc587ef6972ad0f67cd522",
-        "contents_checksum": "847ee7c88906720d640fbdb926b61105fd95e93d816fa5d1a83f1acf04ef8d74",
-        "size": 4900275,
-        "source": "components/google-cloud-sdk-app-engine-go-windows-x86-20230417163046.tar.gz",
+        "checksum": "190a523aa852a05e1d286936da6ee7e50f9f8e9f430813d08de42bc4b2266c57",
+        "contents_checksum": "c67be57a817917cb43238a4ebc5fe6f59cb80c8cad3debd4bca18d019d75ead8",
+        "size": 4901455,
+        "source": "components/google-cloud-sdk-app-engine-go-windows-x86-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -769,16 +769,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
       "data": {
-        "checksum": "4f2b7379f39b50a092cf158174b5966f9e14f7cd3ca1ac5732f1164ae60ba94e",
-        "contents_checksum": "9bd2d84c68d600bb3da84855996341596df3b8716d732fc9b7502db972dc5da3",
-        "size": 4784860,
-        "source": "components/google-cloud-sdk-app-engine-go-windows-x86_64-20230417163046.tar.gz",
+        "checksum": "1d3808bff8faf031d4f3dc0352cf5832a8fab0ff6fda44add456f3351604316d",
+        "contents_checksum": "2c2bb14f552ba67a01ee7344075cee7a253d839668bdbbb5928b19ef4257c758",
+        "size": 5030525,
+        "source": "components/google-cloud-sdk-app-engine-go-windows-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -804,8 +804,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230417163046,
-        "version_string": "1.9.75"
+        "build_number": 20231215195722,
+        "version_string": "1.9.76"
       }
     },
     {
@@ -1020,10 +1020,10 @@
     },
     {
       "data": {
-        "checksum": "38175db1182e07654ddef6ff8794d3ddf0d830c180920392342ea4ceff027a58",
-        "contents_checksum": "2fb9f245011b3b51c4173522e015f899dd2d6a4bc54ea12bff941c9265aba2e5",
-        "size": 129915384,
-        "source": "components/google-cloud-sdk-app-engine-java-20231023224440.tar.gz",
+        "checksum": "240d499b86cd1fcdd44475ea579b6af6ab258d9a69f7f3d64c3288e0311f02b2",
+        "contents_checksum": "d72e0f41dc3538983c78d6ee3c798f3f334da441a61205924ab2276748f70014",
+        "size": 133675565,
+        "source": "components/google-cloud-sdk-app-engine-java-20240607152945.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1041,8 +1041,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "2.0.21"
+        "build_number": 20240607152945,
+        "version_string": "2.0.28"
       }
     },
     {
@@ -1142,10 +1142,10 @@
     },
     {
       "data": {
-        "checksum": "07c19454806ac60603f18bc9e7eeb56ae6eba1477e25a91fd95682c4011c6207",
-        "contents_checksum": "71ff9043af9fa982b8dbbc1f8f122d9f981cb5fe168356f4a7f13bf58ae23e25",
-        "size": 8748068,
-        "source": "components/google-cloud-sdk-app-engine-python-20231016163610.tar.gz",
+        "checksum": "64171e6c3e1fae05666a7288020b321a0ffad92f8ae6ed7ba93d764c3b0e4369",
+        "contents_checksum": "f7fbbf70cc88e037e8e2d762d8bcd6dc1546a327a259b98f779f734a66be86a5",
+        "size": 5246358,
+        "source": "components/google-cloud-sdk-app-engine-python-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1164,16 +1164,16 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231016163610,
-        "version_string": "1.9.107"
+        "build_number": 20240412130805,
+        "version_string": "1.9.113"
       }
     },
     {
       "data": {
-        "checksum": "44a183b079e30fc932dbd7ca5b497baa6fa7d080ad78c500da99de6ef9e1a132",
-        "contents_checksum": "49a80207105a59c3948dd43fda0e28a6f9621265df127c7a3aa9707862ab7bfe",
-        "size": 33004574,
-        "source": "components/google-cloud-sdk-app-engine-python-extras-20231002150006.tar.gz",
+        "checksum": "e91aacbb794987ea2c24efe524a1204a94e9d46b3ff810740b3a8edd36b320ca",
+        "contents_checksum": "a2243f6ab1398d9caf08f4edcf55de35765698ec756b9f5ed58da87c0f37842e",
+        "size": 2122,
+        "source": "components/google-cloud-sdk-app-engine-python-extras-20240308155052.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1191,8 +1191,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "1.9.102"
+        "build_number": 20240308155052,
+        "version_string": "1.9.106"
       }
     },
     {
@@ -1432,7 +1432,7 @@
         "checksum": "707d412854a14450b4fddee199d258e75946fe51b44eb2980c8cd7e274c15760",
         "contents_checksum": "0b4e9d8e6394dc841aece07ca4da91920a460cbd7ec22495be4a2b4f46635b4d",
         "size": 797,
-        "source": "components/google-cloud-sdk-beta-20231025210228.tar.gz",
+        "source": "components/google-cloud-sdk-beta-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1449,8 +1449,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240628141907,
+        "version_string": "2024.06.28"
       }
     },
     {
@@ -1493,10 +1493,10 @@
     },
     {
       "data": {
-        "checksum": "5af8d24eb8da1c8229c414e9950bcdc453a9e316742541eefe830afaca8a158e",
-        "contents_checksum": "e08ae70a70d4da56bae3d13b09b898b865557461f01e7690fd25f82b91890910",
-        "size": 7097728,
-        "source": "components/google-cloud-sdk-bigtable-darwin-arm-20231006153333.tar.gz",
+        "checksum": "61389b1bb5534dc7386d30df5ab3a1050cbe3a8c9deda0edb40a1d5985439049",
+        "contents_checksum": "3a7f40f835b1b713a96f5b6c404eae20c7c90d794aae8a92713fd5b59a3c778e",
+        "size": 7344145,
+        "source": "components/google-cloud-sdk-bigtable-darwin-arm-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1521,7 +1521,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
@@ -1561,10 +1561,10 @@
     },
     {
       "data": {
-        "checksum": "aa2d0f3e322a7912fac2b012fc1c368eaa129905372b82560488ec9b803494d5",
-        "contents_checksum": "7c84152ea5f2da5f06f9b55b035534d9bd2270c9959ae162c3cb5f8d392d6801",
-        "size": 7333846,
-        "source": "components/google-cloud-sdk-bigtable-darwin-x86_64-20231006153333.tar.gz",
+        "checksum": "1d719de1aa61fb4837d221502e4113b2f786671e1139852275d69dc77d02e494",
+        "contents_checksum": "747c8a308249abd684ad2bc8bb9c3b34ed5092da0825b2887188c7f65385c81a",
+        "size": 7656241,
+        "source": "components/google-cloud-sdk-bigtable-darwin-x86_64-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1589,16 +1589,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "52ea181edb2b8b69fa3ebea25467238facc828dc79d1b22c2aafb79385e0f4e6",
-        "contents_checksum": "0dc475dc09c285508b6ba21ab40ebabf9151a9e5ecaf05a3754b3283a00df42a",
-        "size": 7011804,
-        "source": "components/google-cloud-sdk-bigtable-linux-arm-20231006153333.tar.gz",
+        "checksum": "573c369501c73a684744007a9fc23ca29d8a81fa6c1dd18bed18c659ed406711",
+        "contents_checksum": "5abcfae3e7a061c532d3b4acbb6659d98cc4a7077e21ae4859e4d83d9c07e84f",
+        "size": 7210539,
+        "source": "components/google-cloud-sdk-bigtable-linux-arm-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1623,16 +1623,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "972efb72c12e9fb15777d2f0b0ee49d34793bd088147eda1599826b261c54f8d",
-        "contents_checksum": "ea6f11df05804197e9a0f3ad1d52db162b23769aab97b2913248dc42044e2803",
-        "size": 7255397,
-        "source": "components/google-cloud-sdk-bigtable-linux-x86-20231006153333.tar.gz",
+        "checksum": "987ee97fb43e647db218c80cb9c3381477072aa494292db4d108e23f298e8926",
+        "contents_checksum": "da67b3b932497c895d74221dd3f670374abeda9b18ea32e225b733e69dc87cdc",
+        "size": 7374147,
+        "source": "components/google-cloud-sdk-bigtable-linux-x86-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1657,16 +1657,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "e62748c75c268a9648b26920838b281e50511b7f430dff0eca124f3f5763699e",
-        "contents_checksum": "19b5048d20242fc730b4544fe0b5ac800c30b02059efb4b26588eb31d1fc482a",
-        "size": 7454541,
-        "source": "components/google-cloud-sdk-bigtable-linux-x86_64-20231006153333.tar.gz",
+        "checksum": "a21817f2aae3ea9580a34f3f169a81baf289cbbd0a3b93455252c326654fe8b2",
+        "contents_checksum": "3ac22e1972afab99190324f7b9363fe9454ae845beba9eb3750d6240f40f5ee4",
+        "size": 7668508,
+        "source": "components/google-cloud-sdk-bigtable-linux-x86_64-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1691,16 +1691,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "e031eb7a2735c0bd2db4d82d8da081a264cbaddc58ed9b84e2b1564994e54643",
-        "contents_checksum": "7751a9071bb5830f7f3f9dc9a229a268405a1ba76d5bdd19483a8c66089c72eb",
-        "size": 7288454,
-        "source": "components/google-cloud-sdk-bigtable-windows-x86-20231006153333.tar.gz",
+        "checksum": "44b0bfe67b3e19db8acf4bb144f465509afe1fc25ad9c8dfee18a70c1202d3a3",
+        "contents_checksum": "2fdcda84a5bdb706895ffc4333597c2dbf48cf4fd52048174ece638e2d63348a",
+        "size": 7568622,
+        "source": "components/google-cloud-sdk-bigtable-windows-x86-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1725,16 +1725,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "1f24acd6a6c63ed1c283e7b7bfbda31bc08a86b1241e5ad4f08858df7678d669",
-        "contents_checksum": "f640127893c4339c4f04791834143af3fe3931ac91877dd73dcb4ee3cecf6d01",
-        "size": 7451653,
-        "source": "components/google-cloud-sdk-bigtable-windows-x86_64-20231006153333.tar.gz",
+        "checksum": "36f5c9f98188e968cd53fe4545b3f8cb01dc2dfe2bda5c1f607ac384f358f329",
+        "contents_checksum": "cae59bae355fc9b8ff8fc37296d3885a9944d85b0ba84a4c2e9985380db488e6",
+        "size": 7841324,
+        "source": "components/google-cloud-sdk-bigtable-windows-x86_64-20240329151455.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1759,16 +1759,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
+        "build_number": 20240329151455,
         "version_string": ""
       }
     },
     {
       "data": {
-        "checksum": "5044841dc30f739de0c5f1a846580baf714a36b09070c00574360e906789d373",
-        "contents_checksum": "b1570cc1a0eb04a5856453cb234021a676ff276c0f779a248ddf589f5ed5724d",
-        "size": 1659622,
-        "source": "components/google-cloud-sdk-bq-20230913232318.tar.gz",
+        "checksum": "dc8a494e45b8fb7ed07610415670c4c24d790996c9704ea4de134f5ced656eed",
+        "contents_checksum": "fa75ed5c31aec233af4d26393b6ae73335c66906079df0040bf97716fd7f61a6",
+        "size": 1805684,
+        "source": "components/google-cloud-sdk-bq-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1787,16 +1787,16 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20230913232318,
-        "version_string": "2.0.98"
+        "build_number": 20240628141907,
+        "version_string": "2.1.6"
       }
     },
     {
       "data": {
-        "checksum": "b6a10d752554fb9cf518d697999f49806d1009455c78cc3c6fc67f6d97edf1b9",
-        "contents_checksum": "da65662d83df53b15ff35bdedace8671669280b875620876181ac0e9665cbc04",
-        "size": 2019,
-        "source": "components/google-cloud-sdk-bq-nix-20231025210228.tar.gz",
+        "checksum": "81d6fafb672c791a58b6d2cecbcb8a78ca1a1c7e885d359bcf3ec11ebf138ea0",
+        "contents_checksum": "fcd529ea7485a8621ac5d217ac7e7793cc8acabe5ba4c2c6f222b402580e5578",
+        "size": 2026,
+        "source": "components/google-cloud-sdk-bq-nix-20240106004423.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1821,16 +1821,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2.0.98"
+        "build_number": 20240106004423,
+        "version_string": "2.0.101"
       }
     },
     {
       "data": {
-        "checksum": "d4d4e87deaf12a2c8eefe6ae5d75d9fe160149488077579dc41d6010988ad432",
-        "contents_checksum": "515edb1628a75d42d3b465d7e8c8ad5d298538e75f78d00a0cda738ac9fcce5e",
-        "size": 2660,
-        "source": "components/google-cloud-sdk-bq-win-20230106151201.tar.gz",
+        "checksum": "3bfb69819bbca110fa33474612db6ec6bfb20d2c2334ff41ac21b6f7179441f7",
+        "contents_checksum": "543b11ef740e32b7013fdecdc0ea02fa076e16972dec18155647fb3f0682d743",
+        "size": 4104,
+        "source": "components/google-cloud-sdk-bq-win-20240503145345.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1852,8 +1852,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230106151201,
-        "version_string": "2.0.84"
+        "build_number": 20240503145345,
+        "version_string": "2.1.4"
       }
     },
     {
@@ -1963,8 +1963,8 @@
         "core"
       ],
       "details": {
-        "description": "Provides stand-alone Python 3.9.12 install.",
-        "display_name": "Bundled Python 3.9"
+        "description": "Provides stand-alone Python 3.11 install.",
+        "display_name": "Bundled Python 3.11"
       },
       "id": "bundled-python3",
       "is_configuration": false,
@@ -1982,7 +1982,7 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "3.9.12"
+        "version_string": "3.11.8"
       }
     },
     {
@@ -1991,8 +1991,8 @@
         "core"
       ],
       "details": {
-        "description": "Provides stand-alone Python 3.9.17 installation for UNIX.",
-        "display_name": "Bundled Python 3.9"
+        "description": "Provides stand-alone Python 3.11.8 installation for UNIX.",
+        "display_name": "Bundled Python 3.11"
       },
       "id": "bundled-python3-unix",
       "is_configuration": false,
@@ -2009,15 +2009,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "3.9.17"
+        "version_string": "3.11.8"
       }
     },
     {
       "data": {
-        "checksum": "ad591cffcb3cb00ea73e1e8fa13d76d4ebeded14bb7d4d54f4dbd90cff79911c",
-        "contents_checksum": "d2c4025b7acd5008a935cbd1a71c399d28cb5723065576b1b31f917f10bb0479",
-        "size": 65481810,
-        "source": "components/google-cloud-sdk-bundled-python3-unix-linux-x86_64-20231023224440.tar.gz",
+        "checksum": "400089c6607993c7b9e5f06616208e592a3a9892589e8c10167f70bfabdb5a2b",
+        "contents_checksum": "e147b6037ab53942f556f7914ce786005473f41d8b98c24b2d2ab9342e366b31",
+        "size": 78697278,
+        "source": "components/google-cloud-sdk-bundled-python3-unix-linux-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2025,8 +2025,8 @@
         "core"
       ],
       "details": {
-        "description": "Provides stand-alone Python 3.9.17 installation for UNIX.",
-        "display_name": "Bundled Python 3.9"
+        "description": "Provides stand-alone Python 3.11.8 installation for UNIX.",
+        "display_name": "Bundled Python 3.11"
       },
       "id": "bundled-python3-unix-linux-x86_64",
       "is_configuration": false,
@@ -2042,16 +2042,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "3.9.17"
+        "build_number": 20240510142152,
+        "version_string": "3.11.8"
       }
     },
     {
       "data": {
-        "checksum": "f893470fa6f4cabc0bbbd73275b563b9c97682fd199514440c9027b6c5b94b54",
-        "contents_checksum": "c486cae0284bb1138814cf54bb930441fd39d9ff791366a564d27d6bfac7a789",
-        "size": 20778243,
-        "source": "components/google-cloud-sdk-bundled-python3-windows-x86-20231016163610.tar.gz",
+        "checksum": "6b42a2592dc79efb45b3848f58de62866d9fba0d033a8e91aa919be047ee3cb6",
+        "contents_checksum": "6cce2af1b3947deeff09b5adce78ef1c6b39716ce2ef27c58b48c14408b2e3a0",
+        "size": 20457544,
+        "source": "components/google-cloud-sdk-bundled-python3-windows-x86-20240315155000.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2059,8 +2059,8 @@
         "core"
       ],
       "details": {
-        "description": "Provides stand-alone Python 3.9.12 install.",
-        "display_name": "Bundled Python 3.9"
+        "description": "Provides stand-alone Python 3.11 install.",
+        "display_name": "Bundled Python 3.11"
       },
       "id": "bundled-python3-windows-x86",
       "is_configuration": false,
@@ -2076,16 +2076,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231016163610,
-        "version_string": "3.9.12"
+        "build_number": 20240315155000,
+        "version_string": "3.11.8"
       }
     },
     {
       "data": {
-        "checksum": "cabdb1da4996629632a90399276a75058e46be4a6b92019960c4bdb62efcc4ea",
-        "contents_checksum": "3bb2ec678153e5bd214be0439970173d86729baaa33f06176bd2ec8435d4304d",
-        "size": 22193214,
-        "source": "components/google-cloud-sdk-bundled-python3-windows-x86_64-20231016163610.tar.gz",
+        "checksum": "22a2f8a7370780239ed00ef8771729318b3301e498afba74ef27f300d3b29ec1",
+        "contents_checksum": "9b781d6ff139270cd317f233e448c88d2b54ef3d05970b2c765540485acf1451",
+        "size": 22664923,
+        "source": "components/google-cloud-sdk-bundled-python3-windows-x86_64-20240315155000.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2093,8 +2093,8 @@
         "core"
       ],
       "details": {
-        "description": "Provides stand-alone Python 3.9.12 install.",
-        "display_name": "Bundled Python 3.9"
+        "description": "Provides stand-alone Python 3.11 install.",
+        "display_name": "Bundled Python 3.11"
       },
       "id": "bundled-python3-windows-x86_64",
       "is_configuration": false,
@@ -2110,8 +2110,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231016163610,
-        "version_string": "3.9.12"
+        "build_number": 20240315155000,
+        "version_string": "3.11.8"
       }
     },
     {
@@ -2148,15 +2148,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "0.16.2"
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "4cec674242be0d7a3de6d830325ef93d0b554eeab10431eaf0706199434d937c",
-        "contents_checksum": "c08a0d1bafbfc51f2aac4555268f1e1dba13f8222454ee8315a7855a114c7216",
-        "size": 16254518,
-        "source": "components/google-cloud-sdk-cbt-darwin-arm-20231006153333.tar.gz",
+        "checksum": "3d1713cc5a17d36f806a7313ec68032373c6ef71179e19f383fcc0274aee88a9",
+        "contents_checksum": "dcf1b9502101268ce05abe93970b1f63b56beb325e2e1d9f33f4414cae4aec10",
+        "size": 17871065,
+        "source": "components/google-cloud-sdk-cbt-darwin-arm-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2180,8 +2180,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
@@ -2219,10 +2219,10 @@
     },
     {
       "data": {
-        "checksum": "cab9647842e2c6702f739bcf7f4a390098a245f58798035914d47b2e023f5003",
-        "contents_checksum": "5437ed3b7499b97a8dc71d81f1446b429ca635676fdaada94e5089d181f851f1",
-        "size": 16717237,
-        "source": "components/google-cloud-sdk-cbt-darwin-x86_64-20231006153333.tar.gz",
+        "checksum": "4437e990cf658b31aa184e4e5d2b06a6b0b6b08ff98bb84f7877dbc8e3c69ed7",
+        "contents_checksum": "51fb420da739dde8534ee1bbe419aee62520db2b8e7393ad4bbc1fc8b41defe4",
+        "size": 18668186,
+        "source": "components/google-cloud-sdk-cbt-darwin-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2246,16 +2246,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "50481ebc4a0a82e068b9d11e8af938c81dceae23f39a5d7eff888c5d9d29d379",
-        "contents_checksum": "f1a58b3ed33e5728def81f61e7e28b46239f0a2a0201fc9685d808d11df38f3b",
-        "size": 15863768,
-        "source": "components/google-cloud-sdk-cbt-linux-arm-20231006153333.tar.gz",
+        "checksum": "0dab71da969b9cf86f79793773e30406e2f6913774660083378235627c007b94",
+        "contents_checksum": "c928b188894801fa7d2367712fcbcb7c788d0650d975bbf36e60d19799a91101",
+        "size": 17394282,
+        "source": "components/google-cloud-sdk-cbt-linux-arm-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2279,16 +2279,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "5a5539eab4133fade3206d5f7b546e8d51a5af18c0ac3f0b6ada98249847fa1e",
-        "contents_checksum": "961c6d25d74bae5b5c00b4e0d48393702c529ac0b1de2b85056f07d63933eb8d",
-        "size": 16051931,
-        "source": "components/google-cloud-sdk-cbt-linux-x86-20231006153333.tar.gz",
+        "checksum": "911a85bb4a86bda2d13d00ecec45a9d48ca105ad2d8f14c32dd98f7da65522ee",
+        "contents_checksum": "fd7dc528702f1f66086d83867737b3813ccfcc958cd841602afd7228b3231d41",
+        "size": 17275734,
+        "source": "components/google-cloud-sdk-cbt-linux-x86-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2312,16 +2312,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "74d5a97a01d246acda0897004a5ece95f9c9ced8aa3c89f0e8cf742edd4284b3",
-        "contents_checksum": "5fdf279f55e77702b62280f58d19f5eb0adcd5d81e20f76cc7759de07a224ca3",
-        "size": 16868331,
-        "source": "components/google-cloud-sdk-cbt-linux-x86_64-20231006153333.tar.gz",
+        "checksum": "f1395612e02e4a10c8b381d388af26dc6463ade27bdf1fb8135fff82ce1f7f7a",
+        "contents_checksum": "7c5b9a2019d706ba0bfbf32f030472e6bc8630cfc72f14fbdbf3904eaf2a9dee",
+        "size": 18570041,
+        "source": "components/google-cloud-sdk-cbt-linux-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2345,16 +2345,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "97b355f30dd40324f7724eb8a1e269d857316796a6d42fdcf3805fce9cefa402",
-        "contents_checksum": "e824180249e02e5d9c8805faa2cbbc1a237bac7fe53925d6290943234e42cf8c",
-        "size": 16305542,
-        "source": "components/google-cloud-sdk-cbt-windows-x86-20231006153333.tar.gz",
+        "checksum": "53cb4fc8f903c3deb266f48a364f0591e5ba38e4e9640a18c205c4c01da95e10",
+        "contents_checksum": "506dfe72815e11ff50d4f4c21dbb91b3c7fd8908e0fe598888599c4d18a1a86b",
+        "size": 17698876,
+        "source": "components/google-cloud-sdk-cbt-windows-x86-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2378,16 +2378,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
       "data": {
-        "checksum": "fc7d710003577bf740e4d8dd5f6ad3929620a7f088c1de321a41ff229acb6084",
-        "contents_checksum": "038673c9ff153e08f9e4cb6af1c7963483796d3f6654e746cb5bf414ff4a63ee",
-        "size": 16944208,
-        "source": "components/google-cloud-sdk-cbt-windows-x86_64-20231006153333.tar.gz",
+        "checksum": "fefefe5120b24b0e685c281b8ffafb49566c117f5b1b74b6f44e0a56d35e72a9",
+        "contents_checksum": "ce6d3970696fcabd56d9e569030353d03d312e6e819163766a38af9aafbd825b",
+        "size": 18831679,
+        "source": "components/google-cloud-sdk-cbt-windows-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2411,8 +2411,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "0.16.2"
+        "build_number": 20240624182041,
+        "version_string": "1.21.0"
       }
     },
     {
@@ -2572,10 +2572,10 @@
     },
     {
       "data": {
-        "checksum": "1822e13b021d42edf1ee3d648b00be30960a57d3c74de708a14dd9758bb8f466",
-        "contents_checksum": "16cc1f413795a2197704184256179a5c65eb11b66d8af59f209bfbda798df11b",
-        "size": 44883913,
-        "source": "components/google-cloud-sdk-cloud-firestore-emulator-20230915145114.tar.gz",
+        "checksum": "0f7a96ab1d83ba0e4f53149c6cfc555dfd80be065a4ca966b101feb27fd2061a",
+        "contents_checksum": "2a20a45ed2b832217af8be6ab9155a3aa718ae60eed21acc19a93aee536884f6",
+        "size": 47379482,
+        "source": "components/google-cloud-sdk-cloud-firestore-emulator-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2592,8 +2592,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "1.18.2"
+        "build_number": 20240524155722,
+        "version_string": "1.19.7"
       }
     },
     {
@@ -2818,15 +2818,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.5.10"
+        "version_string": "1.5.19"
       }
     },
     {
       "data": {
-        "checksum": "7460e9a21137063a8f9f8143f6da86d39d3fde425a956240b695924d45bf3e2f",
-        "contents_checksum": "3617a6b7497fc5cc13cb5764e374816940474072d2db432342c1bf0f6844f1c5",
-        "size": 36939704,
-        "source": "components/google-cloud-sdk-cloud-spanner-emulator-linux-x86_64-20230922151743.tar.gz",
+        "checksum": "348756460ed8945f115b3f07163f36ea220595f13b0ec6f47ee803266f0f4b3d",
+        "contents_checksum": "ab4a339f052251c4c217f41ea0a69332477a47baaa688f664cddbfbca67b246e",
+        "size": 38355144,
+        "source": "components/google-cloud-sdk-cloud-spanner-emulator-linux-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2851,8 +2851,275 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230922151743,
-        "version_string": "1.5.10"
+        "build_number": 20240624182041,
+        "version_string": "1.5.19"
+      }
+    },
+    {
+      "dependencies": [
+        "cloud-sql-proxy-darwin-arm",
+        "cloud-sql-proxy-darwin-x86_64",
+        "cloud-sql-proxy-linux-arm",
+        "cloud-sql-proxy-linux-x86",
+        "cloud-sql-proxy-linux-x86_64",
+        "cloud-sql-proxy-windows-x86",
+        "cloud-sql-proxy-windows-x86_64"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy",
+      "is_configuration": false,
+      "is_hidden": false,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm",
+          "x86",
+          "x86_64"
+        ],
+        "operating_systems": [
+          "LINUX",
+          "MACOSX",
+          "WINDOWS"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 0,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "12ab4fc64c3c2972e51fd18144b9633e3dcd6a2190dd8484d63f25f4346f46f7",
+        "contents_checksum": "7739e095d51e0ad78c0c801e61ce178700cb5b8490ec65f5fa7bf4322897783e",
+        "size": 13848476,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-darwin-arm-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-darwin-arm",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm"
+        ],
+        "operating_systems": [
+          "MACOSX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "fdc1ed4057693e802e480353479a553694423b61a23cbafb3ea1a2237e82bb68",
+        "contents_checksum": "87f96d979d238df85b2c2cde4c40d4a5f7869d36b86a0966c38a7c5df6e34d3a",
+        "size": 14482528,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-darwin-x86_64-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-darwin-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "MACOSX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "6ec1b56eae8b797f488e02e01f390a7da2136e812cd78e26b31770f6f4f33005",
+        "contents_checksum": "afc9d080ec70126505ccfc1afd385ba3f3d2c81a9a9f7481cd8865439d384117",
+        "size": 13586220,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-linux-arm-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-linux-arm",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "c876aa706464616c5a2f612f1860b4a6098079a54fe3f579d93b60d0c7c0ce00",
+        "contents_checksum": "d0b6a430d200d210847762ab7b84160aa5196273112d837d97123a45c6864eae",
+        "size": 13629073,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-linux-x86-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-linux-x86",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "8738b48da32f96d08859045c0dd75f03c7e455fe5cab22278ccb717de4c99270",
+        "contents_checksum": "351c1514a9c63b9d0e730c465c724a84400d91ad45658213f763a51eae6f04bf",
+        "size": 14521265,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-linux-x86_64-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-linux-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "83628225ad611dabac12a473c532f876992ea5cdcb822183812a6e21003506af",
+        "contents_checksum": "c58a80989336d672aca1b9ea393998fb5bd01339cf561197f14c497a91b84062",
+        "size": 13662947,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-windows-x86-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-windows-x86",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86"
+        ],
+        "operating_systems": [
+          "WINDOWS"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
+      }
+    },
+    {
+      "data": {
+        "checksum": "5f9775a84500409f09cf4dc02d279e306414c4a555356ae7097c785349b9462a",
+        "contents_checksum": "45f653110069a220eec0f70bf65e54470ae1c682ea7a6f5f369fe6a2610192d2",
+        "size": 14417645,
+        "source": "components/google-cloud-sdk-cloud-sql-proxy-windows-x86_64-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "cloud-sql-proxy"
+      ],
+      "details": {
+        "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
+        "display_name": "Cloud SQL Proxy v2"
+      },
+      "id": "cloud-sql-proxy-windows-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "WINDOWS"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "2.10.0"
       }
     },
     {
@@ -2871,7 +3138,7 @@
       },
       "id": "cloud_sql_proxy",
       "is_configuration": false,
-      "is_hidden": false,
+      "is_hidden": true,
       "is_required": false,
       "platform": {
         "architectures": [
@@ -3152,15 +3419,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.93.0"
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "dd20420980225726c0bb881fdcfb935bf8d25aad84f0bb315e4d5b0ce51cf0fa",
-        "contents_checksum": "8dc4d4419a866c0aaa33fd0d4e0fde885aa926dcf9b8025a580e060b916ca599",
-        "size": 58308273,
-        "source": "components/google-cloud-sdk-config-connector-darwin-arm-20220912133630.tar.gz",
+        "checksum": "34e5709351b7d784dcec4227b47b3b4eaa6f3a8f15135636eb05aba919f23758",
+        "contents_checksum": "a1c8abf6c88e0d3a8ebd47f3850c3b5500ce0a89819fc5e44c4798e5ad13e58a",
+        "size": 93030625,
+        "source": "components/google-cloud-sdk-config-connector-darwin-arm-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3184,16 +3451,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220912133630,
-        "version_string": "1.93.0"
+        "build_number": 20240524155722,
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "541307135cc5c06430cf1368a5a6f9dfe050031aedf1b7e7497362505f81074b",
-        "contents_checksum": "d234dc236ff1c4d88fb4caebd61955df9d3ee5b3db094472dce64f031d646e97",
-        "size": 59915703,
-        "source": "components/google-cloud-sdk-config-connector-darwin-x86_64-20220912133630.tar.gz",
+        "checksum": "d5be87f40407d484fe3a7af51da3fecaf8760cbe75d84fd2ad508d0f82dcec72",
+        "contents_checksum": "b84e55a8a76aebcb792f4c43a29679fa8b486c8768bda279ff5b418fa18b3bbe",
+        "size": 97180772,
+        "source": "components/google-cloud-sdk-config-connector-darwin-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3217,16 +3484,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220912133630,
-        "version_string": "1.93.0"
+        "build_number": 20240524155722,
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "693e9b1fdb2b8958388dca7abc405891d481c5973a5a622da8fa54920114af2c",
-        "contents_checksum": "b29263faa92ec2b3a2780f837c14d991c570914d7a9df10940325fab9e6cbe4d",
-        "size": 54695578,
-        "source": "components/google-cloud-sdk-config-connector-linux-arm-20220912133630.tar.gz",
+        "checksum": "a0698596420502c55bf09ecd68db53217e1b3e64bfad522eb8e4c2c67c8a6610",
+        "contents_checksum": "998d2544b37dd4dbaffc9e3a90191b500edd4b49157a77e024c187b16547b3d9",
+        "size": 90082586,
+        "source": "components/google-cloud-sdk-config-connector-linux-arm-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3250,16 +3517,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220912133630,
-        "version_string": "1.93.0"
+        "build_number": 20240524155722,
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "62babd72829ff1e9c0ee92ee5fcf0052b19780ff028014871ab73d34aeff4021",
-        "contents_checksum": "29127a962616825f78276a0143a3b75239c66d7df4f582aee85b3801e9590a8d",
-        "size": 59462846,
-        "source": "components/google-cloud-sdk-config-connector-linux-x86_64-20220912133630.tar.gz",
+        "checksum": "3b7988660b12c41ea98cdb1c0a8230c03a113d20b6ffde586d9bc3f4f66b421d",
+        "contents_checksum": "72c7d8ea234d7ed6b6910709d08113da6f215945bc8fccf410ec546ee088353a",
+        "size": 95472847,
+        "source": "components/google-cloud-sdk-config-connector-linux-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3283,16 +3550,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220912133630,
-        "version_string": "1.93.0"
+        "build_number": 20240524155722,
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "e2b541bcbbfcdcd359bc828c7d51538cda3ef0fc4f90ad7ca274792b643bd74f",
-        "contents_checksum": "5221ebb5c2a0cc2c8752806c680382f21366c87cda41f5aa0e009da0d73e9bce",
-        "size": 59649780,
-        "source": "components/google-cloud-sdk-config-connector-windows-x86_64-20220912133630.tar.gz",
+        "checksum": "0300fc4eac0f70400384cc5fdea19166ffb9b44d874ea6c32205e6f3975a4a0e",
+        "contents_checksum": "ccba2ee9abc014d84b2404f34518c10913eb20fa19d5f7c996cd73d89fea42dd",
+        "size": 96121234,
+        "source": "components/google-cloud-sdk-config-connector-windows-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3316,16 +3583,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220912133630,
-        "version_string": "1.93.0"
+        "build_number": 20240524155722,
+        "version_string": "1.118.1"
       }
     },
     {
       "data": {
-        "checksum": "8197db59e523d340b2da73594807ac5a2c0a09d2899fa5adb71cc6dbdb64c63e",
-        "contents_checksum": "a788f4961a718e4bc4717a5149874353b83ba4ad01f6587725d48bc2e689a07d",
-        "size": 23032301,
-        "source": "components/google-cloud-sdk-core-20231025210228.tar.gz",
+        "checksum": "c85aa9d08f077efdaa4154c8b25b05bcc43652341172876778b6c1006c0eb227",
+        "contents_checksum": "f04fb4fc18ab33e87bfc87d5fcd7af2a1a4eeb98f5a17a5bd9f280a6728b4806",
+        "size": 19841449,
+        "source": "components/google-cloud-sdk-core-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3346,16 +3613,16 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240628141907,
+        "version_string": "2024.06.28"
       }
     },
     {
       "data": {
-        "checksum": "0d68f826ada61d2ab98721bbab6c94132a1c210080fdd85c750073e009ae6d39",
-        "contents_checksum": "3e23fcf9fd07d22bf46bca03f951e715a328cb8420e09f34ce2e7f5ef401b982",
-        "size": 2402,
-        "source": "components/google-cloud-sdk-core-nix-20231025210228.tar.gz",
+        "checksum": "b7f76cd9c7f391d8504d31fba7c180b7c3028646c0efda8fafdb1abd13056917",
+        "contents_checksum": "35b7e083b5dc365a7f2ff9fac444ad23ddfae564c22296c502183ee4eb9fab00",
+        "size": 2410,
+        "source": "components/google-cloud-sdk-core-nix-20240106004423.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3382,16 +3649,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240106004423,
+        "version_string": "2024.01.06"
       }
     },
     {
       "data": {
-        "checksum": "0af3f8e9ba07b24f3821758107b18d273edf7fa7703ff4d659b9732e84a73a37",
-        "contents_checksum": "2ac264344fcf75702a4770bfcba3e6f47573351303cbba558bcde7f8c32cc731",
-        "size": 3200,
-        "source": "components/google-cloud-sdk-core-win-20230915145114.tar.gz",
+        "checksum": "75e34fa5b9f7524861796258e8140d9e9bab9921ace5e9bcd6f0bdd03c718ceb",
+        "contents_checksum": "5770aeb4c914a1193d8f6311d16eab708f76a1c78eb143d0215a8999a82630ca",
+        "size": 3549,
+        "source": "components/google-cloud-sdk-core-win-20240226203415.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3415,8 +3682,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "2023.09.15"
+        "build_number": 20240226203415,
+        "version_string": "2024.02.26"
       }
     },
     {
@@ -3715,15 +3982,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "0.2.1"
+        "version_string": "0.3.2"
       }
     },
     {
       "data": {
-        "checksum": "01c037710f20fe53e05715439a5de469469f10ee3953076c61387de8afc38d1d",
-        "contents_checksum": "367a10efe8b2bb1ca828cc4e91472f81dcbe3e51d98b16843ebe29e250201fab",
-        "size": 6390940,
-        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-darwin-arm-20230224152814.tar.gz",
+        "checksum": "a3e8f5c45ac19bd3430201339c07f2f6dc21296702375c2381ecf5c8d3e88279",
+        "contents_checksum": "22e8de82f1f0cb7a6db65e095c15017866869cac0f1d5556c146c92b1c49acb9",
+        "size": 8680702,
+        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-darwin-arm-20231208151900.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3747,16 +4014,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230224152814,
-        "version_string": "0.2.1"
+        "build_number": 20231208151900,
+        "version_string": "0.3.2"
       }
     },
     {
       "data": {
-        "checksum": "d0c4da5a4668b94ad0609f414beb05fad1e6ca153b28baa846155b9d6e353a64",
-        "contents_checksum": "9f784ec794093b9aa6867dd9895ca93f7b01eef4bc5a1893303e39e2d2141a31",
-        "size": 7001595,
-        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-darwin-x86_64-20230224152814.tar.gz",
+        "checksum": "301757a2839dce01a6435ed4b0dfd05616f9a3c8aeba4624362b48f115e5b97a",
+        "contents_checksum": "6d407b55892613efd363344f855292ddda8fdbe81f549f318264480dc167b25a",
+        "size": 9536921,
+        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-darwin-x86_64-20231208151900.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3780,16 +4047,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230224152814,
-        "version_string": "0.2.1"
+        "build_number": 20231208151900,
+        "version_string": "0.3.2"
       }
     },
     {
       "data": {
-        "checksum": "01ac1d6276ab45779d87f28970906b050aa1d91d113a76ba1c62a40895519e8a",
-        "contents_checksum": "5dd83c5800e0c515bfc776f8e92e2c8e5c70d84089ccdba9eeb81cc3cd579adb",
-        "size": 8611365,
-        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-linux-x86_64-20230714124024.tar.gz",
+        "checksum": "620e7f1598535dba84e52085cf12275e6e2264b281d7d43d71d4079ad0daab7e",
+        "contents_checksum": "1ccff0b7259285d34269926c6038535561cc6d24c0a5c40e3f1b49c7748c9808",
+        "size": 9012612,
+        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-linux-x86_64-20231208151900.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3813,16 +4080,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230714124024,
-        "version_string": "0.2.1"
+        "build_number": 20231208151900,
+        "version_string": "0.3.2"
       }
     },
     {
       "data": {
-        "checksum": "211f5ac63a9397b6f7ac95d22fd34e18c98b348acfdb2cbf3bcd1384ee1deeb0",
-        "contents_checksum": "16743f19efef5cd51b3f1038e27a60ef68f626317a700acd6a25e2f72e381992",
-        "size": 6778179,
-        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-windows-x86_64-20230519173220.tar.gz",
+        "checksum": "d49562e0fac17a4ac3c4e30d7c7056320a69ebc157a6c3f3e744f5731bb16f92",
+        "contents_checksum": "bfa2c0f4ea80fb6e3299b6fb7554565213c39ed7b01140020f8ae00c260d09e1",
+        "size": 6801316,
+        "source": "components/google-cloud-sdk-enterprise-certificate-proxy-windows-x86_64-20231208151900.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3846,8 +4113,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230519173220,
-        "version_string": "0.2.1"
+        "build_number": 20231208151900,
+        "version_string": "0.3.2"
       }
     },
     {
@@ -3907,10 +4174,10 @@
     },
     {
       "data": {
-        "checksum": "535ce4686c07b3bac76f7b107828d4059bf598c92aefac1ebb55d911d90cbc4c",
-        "contents_checksum": "e3b7aacbdc4d8a5adbf88bee4ac738d9e51755b994a700135dbfd8a758a054c2",
-        "size": 1243996,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-arm-20231023224440.tar.gz",
+        "checksum": "77cacb09f213e98cd3461796567bb583dc05e7f2fe70c47da65e948daf2dfff7",
+        "contents_checksum": "d651a36a3f0e41f7cc7312d09bc3c089a55a583cdaaaa922b0d385e57dece361",
+        "size": 1242963,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-arm-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3934,16 +4201,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "00972aba9c56aa0bc4916798ab672cc1e6806e76b00783e15b5c5bbc4e804900",
-        "contents_checksum": "2db99100afdae388afbf96ba0440977d1ab0e9b1fdaa997fac07c5d2c9d6040e",
-        "size": 1284906,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-x86_64-20231023224440.tar.gz",
+        "checksum": "ef420a608c6446543cf660c7d168f6af297aebb760d163e11c3af278e34eb731",
+        "contents_checksum": "48cfe6b4f0f12b23a1271ef686966959314ba9d3ac21de9082009cbb5e9ab1d8",
+        "size": 1283814,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3967,16 +4234,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "d978d88831992d75a8d1c506c661e3caa702b65acb13bb881f7d2847360836ab",
-        "contents_checksum": "bc5cd52ce1950d6ac8b24d8f8a00c4bbf7f6af82a908fbe2be630b75ecfc35da",
-        "size": 1217581,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-arm-20231023224440.tar.gz",
+        "checksum": "c42492e21729fd33b413c7151e9b9d8c1b352a0f5fa94dbd42e39b0a417ea9da",
+        "contents_checksum": "06647040a666b59ce69c90e6ba9cbfba3f1763236a0872af722e62ea30e51e34",
+        "size": 1214415,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-arm-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4000,16 +4267,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "5abf460069b1f95004805a1f3469061dc340dda0a44fe89fa969e9693cfdd1c1",
-        "contents_checksum": "6a50901818b7cd1a27b2229b350f1869edea9c6aa3bf62a526679b81e967e5f0",
-        "size": 1236281,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86-20231023224440.tar.gz",
+        "checksum": "111269e6760bcf2c8d86c435ba6e1814b96281089d38dc73c699b9b12489c662",
+        "contents_checksum": "93fa6c57934e224e3e9e20eec8386ca1d3169b5a4e8f2515f1b042b11e000564",
+        "size": 1233668,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4033,16 +4300,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "ec15e4bb7d1a361ae7d931c79626b7a27ded310f118208b5b80e6d54b4f7c793",
-        "contents_checksum": "3d6e552b35cbf9a7cb8e34026d14de0422241344032487ff418514503c133ad4",
-        "size": 1289207,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86_64-20231023224440.tar.gz",
+        "checksum": "3fe726e72437a2257264bedb9bb4d61949c15c80b9f587888717c267f65ab91e",
+        "contents_checksum": "0b6b618de4cf9fc339b414d44e6e834e6cdb5fae2ddb65bde3525ad78c595d51",
+        "size": 1287877,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4066,16 +4333,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "98febf85b26c1a33eb215b2af9f3c8bee847ee71c84be463b26b6d0a763f6400",
-        "contents_checksum": "2e7b929903bc28273be12f0c28dbd68c51315a66600c9751e749ff448d89696f",
-        "size": 1268435,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86-20231023224440.tar.gz",
+        "checksum": "46a658000be7850ef81652659448e70c67e089d20946a572c6ba521676af668c",
+        "contents_checksum": "58e78452a22e94789408f6afbb86a65544cb1fac500ef3fbe7422c5eb6b19c10",
+        "size": 1267116,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4099,16 +4366,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "a5ed8bb33c67304f57f1ab4c1922f0396565e868dd938b49ce9434a87992a5b8",
-        "contents_checksum": "0c794abb07a045e2c0110bbda9e4033410bb8b7a3d9ddcd329777626ab36d2b3",
-        "size": 1322057,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86_64-20231023224440.tar.gz",
+        "checksum": "b9752b5c9eccc0105ef06f322b2dff92f2542884475708b864ae02e800ef7765",
+        "contents_checksum": "96506b713c645adb109e0a7bf83fef4af59a24cd7f714f8455b8d66af8946213",
+        "size": 1321071,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86_64-20231215195722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4132,16 +4399,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20231215195722,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "e6ff194b0ebb57cfca1c65a600e852bd5760a7257afb6240a0ed470ff0965fe0",
-        "contents_checksum": "25b6e403e06e65b9205d1258a1b9e09e5e84efb20007e5f940b90af41e3e7873",
-        "size": 12282466,
-        "source": "components/google-cloud-sdk-gcloud-deps-20231025210228.tar.gz",
+        "checksum": "ca09bfbd8ebc1571dc9770caddbb3c9e7ace51b30707eb50ff8de7e8a7c8049f",
+        "contents_checksum": "f3c947eafda42461652eb08104d0309bd3e5b2d1b6edacf276385313880a4da1",
+        "size": 17415961,
+        "source": "components/google-cloud-sdk-gcloud-deps-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4164,8 +4431,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240628141907,
+        "version_string": "2024.06.28"
       }
     },
     {
@@ -4401,10 +4668,10 @@
     },
     {
       "data": {
-        "checksum": "a437611fe8ca14e5fbeada917374b7cd2f7d56ad2212e51b80fcb9e7b036a21a",
-        "contents_checksum": "4272d2b5be6e3778aaddfdd6a9d555b6dcf31d27428ed7d4aea76e68dfe5f839",
-        "size": 6464999,
-        "source": "components/google-cloud-sdk-gcloud-man-pages-nix-20231023224440.tar.gz",
+        "checksum": "6c9cdcacbe7cff43bd94a255b5388a67a3f042db77071893029d4cf1530110a7",
+        "contents_checksum": "5b5391973a55924bc0e962bc2d8654749d68e30144a38723eda2a5fb5883b5ac",
+        "size": 7056653,
+        "source": "components/google-cloud-sdk-gcloud-man-pages-nix-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4429,7 +4696,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
+        "build_number": 20240628141907,
         "version_string": ""
       }
     },
@@ -4466,15 +4733,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "0.5.6"
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "748941d0f1088368cddbff04350c1156eb6c0b941fb4a8281f90e715de91600c",
-        "contents_checksum": "2e92b76de260589610789902d43950f9c23035d9492e9acde1ab81c2ce1b6f86",
-        "size": 7760852,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-darwin-arm-20230915145114.tar.gz",
+        "checksum": "27b741809b10d91841910a7e6dff5f90fe300659f87ac412eb850155faf34ea9",
+        "contents_checksum": "93b2324b7e9d1e74a9c892b720df9b7b88aca216ce747770de4235765f4d8e02",
+        "size": 4148014,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-darwin-arm-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4498,16 +4765,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "87e8b9fa1ab657e6f9059b3e73987cdbcafcd0a54a7c0695933a1a630e8c40b6",
-        "contents_checksum": "e93346a6bed20405a41737b6894e5555fe6e65ff84e0c4dfef1c1ca8fbc8759a",
-        "size": 8135789,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-darwin-x86_64-20230915145114.tar.gz",
+        "checksum": "4def0d9e145c9fe98b0befffc19cd6318fdb3ab26e21f6a300a49d12aca8d84b",
+        "contents_checksum": "59687db899e36af44cf4199c0beb18731080b941324d64892facdef63aace340",
+        "size": 4366885,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-darwin-x86_64-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4531,16 +4798,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "ba39fbdeae5f44a54a83a730d8df93a0b9ce7e18369dabe6f87b023b06b27632",
-        "contents_checksum": "4fe1de8207994103e77bad7d93ebcc9bffde9cb4fa03fd6d658f009454863ba6",
-        "size": 7669387,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-arm-20230915145114.tar.gz",
+        "checksum": "aa080cab16a1224add7d977ff34ac0f926a6935f832fc022e6fec5d779db54d3",
+        "contents_checksum": "0c4706838a3d1272e1b8c179a108b60d6ef3fba64d0c78da29003a0b2ce3d750",
+        "size": 3794917,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-arm-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4564,16 +4831,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "dde5954dc3e5aeb70dd031d1f9dc06ca91fbfef353786dc7aeaf08fe47b8349e",
-        "contents_checksum": "23d71fc214901822027f64f6096b3a6559d963432c189b3bacc7ecf5bf36aef6",
-        "size": 8185793,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-x86-20230915145114.tar.gz",
+        "checksum": "d47b02021ca2228a162e94b6e49b68130feb2becc933d308718106299e567c95",
+        "contents_checksum": "216050b1e8bc0ee27baaae4444aecca9f894015e6e0d84cf928c0662589bd511",
+        "size": 3938786,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-x86-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4597,16 +4864,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "d8d9359bbbb0b8e2761bda8a315a50ad1580450d32e4b31d43da1805c408ec9a",
-        "contents_checksum": "08767b975276ca0651442a13bb7319c3c065dca875cf416a27251cf2093d576a",
-        "size": 8298454,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-x86_64-20230915145114.tar.gz",
+        "checksum": "95ecc2880a8a192436bf1f2b2b7d4343ca0a98da745aab201120e362dd96e48f",
+        "contents_checksum": "3a2e4fd48d7956c17417b281305fa53f0113bf30af8a588868d21535f2c700e3",
+        "size": 4178059,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-linux-x86_64-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4630,16 +4897,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "4e53ce9e76364f936a3730aa26d8396fc905443093bfcba5107e50d999767a28",
-        "contents_checksum": "e13da874c2f1330b78675428fbf7aead7c0f4a4bb8152c911906659d1e7923bb",
-        "size": 8294371,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-windows-x86-20230915145114.tar.gz",
+        "checksum": "a0d8a115db6823642b3f6f94e015209bb77cb7f3de2161adb67d0ad54a0e8921",
+        "contents_checksum": "de5357e3abe645a86193162ebb64c28435a1a86ab8a72918056a0fe42b3f0369",
+        "size": 3966177,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-windows-x86-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4663,16 +4930,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "72c35b4ec450e1e30e301e681c322bb2ddd8c9158b60f6d7a6c86f5d1d082396",
-        "contents_checksum": "1a1de077982ffdcb3762e47dea8d515cfe301ec2fab336aa2d3f968a142cff56",
-        "size": 8448839,
-        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-windows-x86_64-20230915145114.tar.gz",
+        "checksum": "ed447809034732f3753eb9ef3d5a045bafe45702e9d5fb98557ae2b5ca08b775",
+        "contents_checksum": "831925f8cf946320a14695fd19e09a016609a000e7f863cf34f85c969e7ee50a",
+        "size": 4280513,
+        "source": "components/google-cloud-sdk-gke-gcloud-auth-plugin-windows-x86_64-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4696,16 +4963,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230915145114,
-        "version_string": "0.5.6"
+        "build_number": 20240628141907,
+        "version_string": "0.5.9"
       }
     },
     {
       "data": {
-        "checksum": "b4fc023adfe1710bf0ed63ee39aacbaddf090f97deb9435a6e9a955b72904985",
-        "contents_checksum": "c995625b17def8c1cdabb251bbd61259dc4b3aabc2d15f0dde5259726581dbe7",
-        "size": 11833901,
-        "source": "components/google-cloud-sdk-gsutil-20231025210228.tar.gz",
+        "checksum": "6a095725ca5b67f81f0a39c0d506feac032aab079523a23cef9f99bdbd21c4a1",
+        "contents_checksum": "b9ac406aaff3e4a874760d14844a126dd75b2d69c4dcfaeaf36f8fa02bdfba82",
+        "size": 11883175,
+        "source": "components/google-cloud-sdk-gsutil-20240614142823.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4724,16 +4991,16 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "5.27"
+        "build_number": 20240614142823,
+        "version_string": "5.30"
       }
     },
     {
       "data": {
-        "checksum": "140a65cc728b7d7f0e0018c85f30ea6e7a0cae5e59af15fa51a6f1156f598ec8",
-        "contents_checksum": "865d885b3c86680b0f5581236d54916c71c2672b13e32c2c5b1d213429291bdf",
-        "size": 2035,
-        "source": "components/google-cloud-sdk-gsutil-nix-20231025210228.tar.gz",
+        "checksum": "0e203c936ca846514c498e1bf3f18ecfd8f4e031eb65f1f915812fa31824d246",
+        "contents_checksum": "023019da3e1594d499efe2047aa7069fd138fba4022da534f245de4a9b25597c",
+        "size": 2042,
+        "source": "components/google-cloud-sdk-gsutil-nix-20240106004423.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4758,16 +5025,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
+        "build_number": 20240106004423,
         "version_string": "5.27"
       }
     },
     {
       "data": {
-        "checksum": "f44dc54214254bc4c977ac3635113b9299fc7077e2ff2ba649718b0b2b9754ee",
-        "contents_checksum": "d7ff72a9837188a8f602ba4833ea0f38bb0a55ac160121c59dba0b72fae4064e",
-        "size": 4125,
-        "source": "components/google-cloud-sdk-gsutil-win-20231025210228.tar.gz",
+        "checksum": "8b63a83d67b850db7e46f468c9a5370bcdf67aa826c39e5d686c1154e378cf27",
+        "contents_checksum": "0f40962ad671c9f7eb0c6d0d9fe2ea0cfa406fa550764864959335988172d5e6",
+        "size": 4160,
+        "source": "components/google-cloud-sdk-gsutil-win-20240226203415.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4789,7 +5056,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
+        "build_number": 20240226203415,
         "version_string": "5.27"
       }
     },
@@ -4854,6 +5121,169 @@
     },
     {
       "dependencies": [
+        "istioctl-darwin-arm",
+        "istioctl-darwin-x86_64",
+        "istioctl-linux-arm",
+        "istioctl-linux-x86_64"
+      ],
+      "details": {
+        "description": "Support tool for Cloud Service Mesh.",
+        "display_name": "istioctl"
+      },
+      "id": "istioctl",
+      "is_configuration": false,
+      "is_hidden": false,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm",
+          "x86_64"
+        ],
+        "operating_systems": [
+          "LINUX",
+          "MACOSX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 0,
+        "version_string": "1.20.47"
+      }
+    },
+    {
+      "data": {
+        "checksum": "c5b61b4e3b0d5434e4610d706270b5701ef085fd35e1e53541876bb4e03d678a",
+        "contents_checksum": "a2bd9195d75037b1c96b9378109e6a2313d52476c19f5ca3e3d17767c70310ed",
+        "size": 26052154,
+        "source": "components/google-cloud-sdk-istioctl-darwin-arm-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "istioctl"
+      ],
+      "details": {
+        "description": "Support tool for Cloud Service Mesh.",
+        "display_name": "istioctl"
+      },
+      "id": "istioctl-darwin-arm",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm"
+        ],
+        "operating_systems": [
+          "MACOSX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "1.20.47"
+      }
+    },
+    {
+      "data": {
+        "checksum": "2f1b4a1df42ae31d4cd0b301c47d30f998497a701e301ff1a4f81902318b93a7",
+        "contents_checksum": "a41f542d1cb16bf4118643ded861c94ba3cd9dc378d601fd572042360f38e3dc",
+        "size": 26898803,
+        "source": "components/google-cloud-sdk-istioctl-darwin-x86_64-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "istioctl"
+      ],
+      "details": {
+        "description": "Support tool for Cloud Service Mesh.",
+        "display_name": "istioctl"
+      },
+      "id": "istioctl-darwin-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "MACOSX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "1.20.47"
+      }
+    },
+    {
+      "data": {
+        "checksum": "311368b6b4812b945dbe77c3921d89477bbc7a8dbbd90bc871a927621f4f564c",
+        "contents_checksum": "4fbd1efcce42b8e2ab3edff729239cb27ccdc0f4b005fe18f65062abd9ec9e70",
+        "size": 23005079,
+        "source": "components/google-cloud-sdk-istioctl-linux-arm-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "istioctl"
+      ],
+      "details": {
+        "description": "Support tool for Cloud Service Mesh.",
+        "display_name": "istioctl"
+      },
+      "id": "istioctl-linux-arm",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "arm"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "1.20.47"
+      }
+    },
+    {
+      "data": {
+        "checksum": "5f9f4d0aee5adc83960591c9413e523e914c86538a08895958fba3d6610e2e92",
+        "contents_checksum": "4523dd63d1fd52a26170cb366da1bb492a631d36765bdb9b6037af42b70ef3b2",
+        "size": 25206798,
+        "source": "components/google-cloud-sdk-istioctl-linux-x86_64-20240412130805.tar.gz",
+        "type": "tar"
+      },
+      "dependencies": [
+        "istioctl"
+      ],
+      "details": {
+        "description": "Support tool for Cloud Service Mesh.",
+        "display_name": "istioctl"
+      },
+      "id": "istioctl-linux-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "platform_required": false,
+      "version": {
+        "build_number": 20240412130805,
+        "version_string": "1.20.47"
+      }
+    },
+    {
+      "dependencies": [
         "kpt-darwin-arm",
         "kpt-darwin-x86_64",
         "kpt-linux-arm",
@@ -4880,15 +5310,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.0.0-beta.45"
+        "version_string": "1.0.0-beta.50"
       }
     },
     {
       "data": {
-        "checksum": "165e0d01221c66f8a02ca770a613af9e10ca84c301908cee016c4b9f62228c90",
-        "contents_checksum": "d69220663dd3189ef2d75698793f173994662ab4a1331f832cce561122dd3347",
-        "size": 15098362,
-        "source": "components/google-cloud-sdk-kpt-darwin-arm-20231006153333.tar.gz",
+        "checksum": "ae0dad6460ee54cc820b57ff6f384d294c30cadf42e834dc45f2e288ad627e19",
+        "contents_checksum": "74e9c5f7088cbd6c7824a18eddc4721889ebcdf50bb1958dca7557f3c1646cbe",
+        "size": 14487151,
+        "source": "components/google-cloud-sdk-kpt-darwin-arm-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4912,16 +5342,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "1.0.0-beta.45"
+        "build_number": 20240510142152,
+        "version_string": "1.0.0-beta.50"
       }
     },
     {
       "data": {
-        "checksum": "8a507cc40d952611f0d3d7ef881cd2564be93a09d91a01c8d9af13a8477eebe8",
-        "contents_checksum": "bba9c09fe778ebccbeb4c2d77f7fa1a008fc134eebc024d3cfa74ad8737de55d",
-        "size": 15865808,
-        "source": "components/google-cloud-sdk-kpt-darwin-x86_64-20231006153333.tar.gz",
+        "checksum": "e80ffcb2338f17d70bcf5e0d77b049817ad154851f8a68c5a4a112ee3f1fa3e5",
+        "contents_checksum": "2ccd31d47996bb1e7ad06ef860c2099a88be1b8a9deba0afbd12b9a1bce83e38",
+        "size": 15556773,
+        "source": "components/google-cloud-sdk-kpt-darwin-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4945,16 +5375,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "1.0.0-beta.45"
+        "build_number": 20240510142152,
+        "version_string": "1.0.0-beta.50"
       }
     },
     {
       "data": {
-        "checksum": "00242648b8722bdecbbc422dfe5e947a711d14aeb9adb575cb664e07b61a16c0",
-        "contents_checksum": "b7acebf0b9a28366a0a7ee8f283bb01baa7ba9ab0c85a31d994604c9ee62e587",
-        "size": 13639470,
-        "source": "components/google-cloud-sdk-kpt-linux-arm-20231006153333.tar.gz",
+        "checksum": "eeb8b320e5d50954c584f84fd0b5d46549ccf7a402628362cdaca39e141bc132",
+        "contents_checksum": "b52727552507224193bd48871158707738f0582138f4dc6e0eb0a3f83231d61a",
+        "size": 13818240,
+        "source": "components/google-cloud-sdk-kpt-linux-arm-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4978,16 +5408,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "1.0.0-beta.45"
+        "build_number": 20240510142152,
+        "version_string": "1.0.0-beta.50"
       }
     },
     {
       "data": {
-        "checksum": "d429dbc12345c454e5494e3312bdff83d39ad5793a05423c4ae5fc07a8128aba",
-        "contents_checksum": "2d9bc0d3ace7952ca0e3e37df2545c0d30734162edd151f7759a75a186134604",
-        "size": 15103896,
-        "source": "components/google-cloud-sdk-kpt-linux-x86_64-20231006153333.tar.gz",
+        "checksum": "db9b4541f14732e4569bcba320a989b8e54660d53088f45b265d234175bdd8e4",
+        "contents_checksum": "0f56e5d3cee14e5f8e6091938a4ed755de5dd4520643f65b11c2515f94c30631",
+        "size": 15264863,
+        "source": "components/google-cloud-sdk-kpt-linux-x86_64-20240510142152.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5011,16 +5441,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231006153333,
-        "version_string": "1.0.0-beta.45"
+        "build_number": 20240510142152,
+        "version_string": "1.0.0-beta.50"
       }
     },
     {
       "data": {
-        "checksum": "1856710bc0df7be64bab8bf90cb5efb07dc3ea87affbd82d5fb95b1a87a0fd38",
-        "contents_checksum": "40d66e6d7f3852fcf4d60000bb89743f36516642a9fb5e4b4ac72d5db2b7d00f",
-        "size": 35802,
-        "source": "components/google-cloud-sdk-kubectl-20230901141909.tar.gz",
+        "checksum": "c93afe5174d13a67852539bed4a2de80df4d9e27e9267d6d37d78ea4732fcf97",
+        "contents_checksum": "244cd00939229a06b9d7a79582dc2839313cf95d58bc3ecc2e410af35b3f0c30",
+        "size": 35803,
+        "source": "components/google-cloud-sdk-kubectl-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5044,16 +5474,16 @@
       "platform": {},
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "98705f1c24b4deb4c4705890b9d96cf7304b8df3f9fa21d16d971b1e8d577c85",
-        "contents_checksum": "713724b4e531400e61289f6649a0ebc2a390c23c17f9b13cf36ddf713e8c6fff",
-        "size": 103078284,
-        "source": "components/google-cloud-sdk-kubectl-darwin-arm-20230901141909.tar.gz",
+        "checksum": "ba31d657e3125d1a71e5712ec8fa44f5ea9ee6047ac45b82f1db7a5e6ad907e7",
+        "contents_checksum": "f55f74a6ae18d7dfc667e2d3e2731bbf49e92cbd9e992c84c05ed8617a2ae575",
+        "size": 76290494,
+        "source": "components/google-cloud-sdk-kubectl-darwin-arm-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5078,16 +5508,16 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "89fd68aa32498f5fa73e569cc6897c6ef2d12c822870703ce2cc004711260ca6",
-        "contents_checksum": "76c149262b6b45f75eec6d812f6c800924ddc42627bdfa757fbe8ba57c87c856",
-        "size": 108009509,
-        "source": "components/google-cloud-sdk-kubectl-darwin-x86_64-20230901141909.tar.gz",
+        "checksum": "885fcd0694e94f99f23a48dfcf648c4bfd984bd5691e97986992f9c6e1532779",
+        "contents_checksum": "0aa804ed82d0e4667e774f7b14741d5ef499e5120e5b8f2b90252644b5ae37db",
+        "size": 80432565,
+        "source": "components/google-cloud-sdk-kubectl-darwin-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5112,16 +5542,16 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "277ce37c99d1da67302f0b96be2f81712c7655b8bd6e8a681e5ec42c7e839f3d",
-        "contents_checksum": "603f81934af743bec8493385ef0742e396547ab8d4730f1b25243ce6f9d6583c",
-        "size": 96034568,
-        "source": "components/google-cloud-sdk-kubectl-linux-arm-20230901141909.tar.gz",
+        "checksum": "3ad4928265226167ffaa197b18270a61d27a858ad42e5f9079513689d70345ec",
+        "contents_checksum": "f17c7860507b5248c5face0cda8a95ab2c015b13f90a6fd6e274748887eb3c65",
+        "size": 73474381,
+        "source": "components/google-cloud-sdk-kubectl-linux-arm-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5146,16 +5576,16 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "d0aa47c656c3f62b046fcdebe292fdd4277423d27ae82e076b33b7ca9c39eefb",
-        "contents_checksum": "da0be2ec150a1178b21e571fc31f3a0c1bc97aec8808add47123f958c8c3f622",
-        "size": 96964577,
-        "source": "components/google-cloud-sdk-kubectl-linux-x86-20230901141909.tar.gz",
+        "checksum": "e3b28906976e1579dff93dc777fa348e21392d354ba3a493aec56e9a56798b91",
+        "contents_checksum": "6179b9854bb4e63cda81b2c236fa97650891e5c25291a5292311edcd1eab10f9",
+        "size": 71255708,
+        "source": "components/google-cloud-sdk-kubectl-linux-x86-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5180,16 +5610,16 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "7ea12e2911cf031f4f1642d9be5a0336c9142d84b3e9511c2405ab742cddab5b",
-        "contents_checksum": "651b0f1e393ec6903229f7c170d1d54a41066fe5cfd6dd233c5a24e7ce08fb4d",
-        "size": 102779659,
-        "source": "components/google-cloud-sdk-kubectl-linux-x86_64-20230901141909.tar.gz",
+        "checksum": "9b98bb6004218eff092eaaf57e600c6820641ba00f2855577a61852590c7ed27",
+        "contents_checksum": "a3c7d039ffa798e43a3acb15670156e837d4f868e76627601f910177bcea481b",
+        "size": 76953404,
+        "source": "components/google-cloud-sdk-kubectl-linux-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5214,8 +5644,8 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
@@ -5248,15 +5678,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.4.4"
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "a7d9d1a977856dc342b82936bedfda0032e27ec4657fd380048cd7dc5de05039",
-        "contents_checksum": "2d656b34043e23ff6a98a7fb432efa86d251eb0b14c4452d17c537dc02e04eaf",
-        "size": 20108100,
-        "source": "components/google-cloud-sdk-kubectl-oidc-darwin-arm-20220923141408.tar.gz",
+        "checksum": "668657665d86db6d1c2ca53116f022799e9b6202d7e6e0080acd9a89f2e69667",
+        "contents_checksum": "55b5c287ac965c8cb331fcfa27cf8a7a346ceb103eef9e7ff603067a3b8d2217",
+        "size": 21872424,
+        "source": "components/google-cloud-sdk-kubectl-oidc-darwin-arm-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5280,16 +5710,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "1d6d08431d911928ef8500d1979720278f8116e86ae52afc32ce0b76ec4a5fb0",
-        "contents_checksum": "497465b1a0c3a6781d2bb0b68a951af0a4d2230ae67caa84288d38b853800a53",
-        "size": 21183987,
-        "source": "components/google-cloud-sdk-kubectl-oidc-darwin-x86_64-20220923141408.tar.gz",
+        "checksum": "efee37ae3fd4c68bd04b7d851a3a737d4730d1d2c1ea1d1ae0ff1c4b9b415e2e",
+        "contents_checksum": "d5caa4ebe32784b39af30c044d1526cd2c9cfc468912f151c50591818f86981f",
+        "size": 22957587,
+        "source": "components/google-cloud-sdk-kubectl-oidc-darwin-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5313,16 +5743,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "87550a6e878b3091c8da5df8380c65f9e2579f012b7cbddc3e64fb637906fc38",
-        "contents_checksum": "2c33c85c5826938f014a33c21d28289676cccc09d7ffb87368fd94faf43b6cc1",
-        "size": 19755678,
-        "source": "components/google-cloud-sdk-kubectl-oidc-linux-arm-20220923141408.tar.gz",
+        "checksum": "c1bffc495c0f18b7a8b7231815d03ad050d8f7da54e3ae8fb252f30bd9774553",
+        "contents_checksum": "ac25a44fb809f2b4c158abccb88b1a2e66433be79bf46092522f07b02d72ab68",
+        "size": 21399468,
+        "source": "components/google-cloud-sdk-kubectl-oidc-linux-arm-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5346,16 +5776,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "cd6945af71ecfdf94c693ee22b7629ad62dc650cf0c19d58761fe260f792e36f",
-        "contents_checksum": "c2092312910a7e7e86adcd8d72c9e97d7d9757d6dce2f3e24124d9bcadd0d9eb",
-        "size": 21362894,
-        "source": "components/google-cloud-sdk-kubectl-oidc-linux-x86_64-20220923141408.tar.gz",
+        "checksum": "314b8b36331fc2b67fee555fcfb7c0aa1c4c742dcb995164f9822fc513f269de",
+        "contents_checksum": "a7e6a84feb050b265084ae1ea6d8bd0898258b76e7f6226c01d9d8e65fceeb5d",
+        "size": 23109484,
+        "source": "components/google-cloud-sdk-kubectl-oidc-linux-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5379,16 +5809,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "2cf3f2460446692a81c888ec16ac7cbd838fd83acdec46e99bd9225ed49a5d67",
-        "contents_checksum": "6477f1e7ad0e16d891b1b47c201c2bf0e4409789893be60e1697593c58f74025",
-        "size": 21470876,
-        "source": "components/google-cloud-sdk-kubectl-oidc-windows-x86_64-20220923141408.tar.gz",
+        "checksum": "b72cb005890e61307350e45fed931c783f9954a18249210059f780b42ae0c6fc",
+        "contents_checksum": "cabcb7396bd79cf1e80baeb1a53da5e56497ce49a97fbd9e33127da81999e0d7",
+        "size": 23361379,
+        "source": "components/google-cloud-sdk-kubectl-oidc-windows-x86_64-20240426154730.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5412,16 +5842,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220923141408,
-        "version_string": "1.4.4"
+        "build_number": 20240426154730,
+        "version_string": "1.5.1"
       }
     },
     {
       "data": {
-        "checksum": "f0f671d703d9f167ad6bd3eaa6160a1f3612f55cb4224a7f5d6e32fe24aad4bf",
-        "contents_checksum": "97933ed5d6afd63a6d24200980cadc6ebcfe962827cb1cc5fff294f425b02225",
-        "size": 101631898,
-        "source": "components/google-cloud-sdk-kubectl-windows-x86-20230901141909.tar.gz",
+        "checksum": "391b6fb5860780874a4b6c5c2443c047c43b99aa451347184c2c0bad1bb097b8",
+        "contents_checksum": "38c0ad032e37fd6ea90f5ab1eeaba408719851d3e4cf84927d039d60071c304f",
+        "size": 74873955,
+        "source": "components/google-cloud-sdk-kubectl-windows-x86-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5448,16 +5878,16 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
       "data": {
-        "checksum": "be9dfaab70e30013b181ca6b01db0cbe33a9998c8b42b294cb6ae42586c08dcb",
-        "contents_checksum": "8646408cad8f64abcbf575a5b9606d304d3f0a1c914b5c7ba4148d4024c22b34",
-        "size": 103973366,
-        "source": "components/google-cloud-sdk-kubectl-windows-x86_64-20230901141909.tar.gz",
+        "checksum": "6fccb2f163c0d27639adccf8671ca76103759337f6b6954a809fef0262c6d1e2",
+        "contents_checksum": "86d9c6193f04f54bea5e57823e44a36a76034597560c1631b74b2a3730b257c9",
+        "size": 78995215,
+        "source": "components/google-cloud-sdk-kubectl-windows-x86_64-20240624182041.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -5484,8 +5914,8 @@
       },
       "platform_required": true,
       "version": {
-        "build_number": 20230901141909,
-        "version_string": "1.27.5"
+        "build_number": 20240624182041,
+        "version_string": "1.27.15"
       }
     },
     {
@@ -6042,15 +6472,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.31.2"
+        "version_string": "1.33.1"
       }
     },
     {
       "data": {
-        "checksum": "78205e250353829eef8e4226427043612a26df3751750bdfeb4ce5096534477b",
-        "contents_checksum": "989ca8305dc5b0ac3ea012bde522d707e7893ec7b5601476015be170587c2484",
-        "size": 34507436,
-        "source": "components/google-cloud-sdk-minikube-darwin-arm-20230822145232.tar.gz",
+        "checksum": "9a786ac2caf5f10da8c81e013b4c2356aaf219518c30f5b71ee2a695b0caf540",
+        "contents_checksum": "35e0ed7d0c227ebeaa12ce1577086f0d2a90488099c31656c80a7fb85a63c1cd",
+        "size": 36470728,
+        "source": "components/google-cloud-sdk-minikube-darwin-arm-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6074,16 +6504,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230822145232,
-        "version_string": "1.31.2"
+        "build_number": 20240524155722,
+        "version_string": "1.33.1"
       }
     },
     {
       "data": {
-        "checksum": "09de85445c6b3df96b513fa5ef0893e141f2dd276d6ebe2a5c14805e02966386",
-        "contents_checksum": "6599c91419fd71db290d9df3d12a37cb335d9e30c206533767bcbccfb8415894",
-        "size": 35694869,
-        "source": "components/google-cloud-sdk-minikube-darwin-x86_64-20230822145232.tar.gz",
+        "checksum": "05b2b1c945118485c245cf54fab1f34b8511a15523ce98cae552fffc53376ba4",
+        "contents_checksum": "bbee348ae4cfca17b25da2b53a3f56f38717db3a5f0062f2dcc2882042bc32a4",
+        "size": 38183819,
+        "source": "components/google-cloud-sdk-minikube-darwin-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6107,16 +6537,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230822145232,
-        "version_string": "1.31.2"
+        "build_number": 20240524155722,
+        "version_string": "1.33.1"
       }
     },
     {
       "data": {
-        "checksum": "01f5ee655a8877b9d55912694d634151f411f84f59489c8f61129e60eec1dfbb",
-        "contents_checksum": "bdd299c7575c1365a3ebb3ece947b735a51234851358d24c53997228351232c9",
-        "size": 33636964,
-        "source": "components/google-cloud-sdk-minikube-linux-arm-20230822145232.tar.gz",
+        "checksum": "1e606715175e67b6668ad0c93d34a0748fa31df905377def5c0f0a67417eec15",
+        "contents_checksum": "3e1cbed6062ff69dde78ef5d0c1b0a1202a2b97a24e3749beb887be196dbb644",
+        "size": 35836316,
+        "source": "components/google-cloud-sdk-minikube-linux-arm-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6140,16 +6570,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230822145232,
-        "version_string": "1.31.2"
+        "build_number": 20240524155722,
+        "version_string": "1.33.1"
       }
     },
     {
       "data": {
-        "checksum": "567adccb2ee4f3112208def4dda54ec4ec96815a95499444efde14b240175fde",
-        "contents_checksum": "8a3e8c01ca983d10eda486ffcae60cf59d6a1e7fa09e2e4424e5ee56be742d07",
-        "size": 36252687,
-        "source": "components/google-cloud-sdk-minikube-linux-x86_64-20230822145232.tar.gz",
+        "checksum": "fbe9eed12c7b49767778b7a7e0aba68b1eb627e95835151aa6412d27fd609b58",
+        "contents_checksum": "d2a2cd4237e2b9c45cee53ad07ad30d4e3523fdc814df0947abcccf5a3775784",
+        "size": 36038651,
+        "source": "components/google-cloud-sdk-minikube-linux-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6173,16 +6603,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230822145232,
-        "version_string": "1.31.2"
+        "build_number": 20240524155722,
+        "version_string": "1.33.1"
       }
     },
     {
       "data": {
-        "checksum": "2fc9ea9e26e672d5369e63e4084520b7e252f9c9eabf9e63edc30f362b79c751",
-        "contents_checksum": "f31c9d1fd17b363be49476ea676866474dabd71904101bc9cb748c1c8d50efa1",
-        "size": 36153509,
-        "source": "components/google-cloud-sdk-minikube-windows-x86_64-20230822145232.tar.gz",
+        "checksum": "ce9537f1d9706122778e78536a630727067879480ee998172dbd1b79880f303b",
+        "contents_checksum": "e6fb6538cd3967e201d933e73b37e574b00eab9c3dbe6681ebc779a703865a86",
+        "size": 38517955,
+        "source": "components/google-cloud-sdk-minikube-windows-x86_64-20240524155722.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6206,8 +6636,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20230822145232,
-        "version_string": "1.31.2"
+        "build_number": 20240524155722,
+        "version_string": "1.33.1"
       }
     },
     {
@@ -6235,15 +6665,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "1.16.2-rc.2"
+        "version_string": "1.18.2-rc.2"
       }
     },
     {
       "data": {
-        "checksum": "e985978e6f21b67b026ac23882b40fde32fce195c3618c845dce6e05e145359f",
-        "contents_checksum": "21fb7c2de16364b3e011aa4364c7b724cd7aacdfa21610ad891c1b8c3a388e02",
-        "size": 29892791,
-        "source": "components/google-cloud-sdk-nomos-darwin-x86_64-20231023224440.tar.gz",
+        "checksum": "78bfc25756970074fa09b214f9d924f9cf698fe5a0d44e2853f40e5cafb25275",
+        "contents_checksum": "93404e52e62716c64c088035390ded4d5ea12e3328ed319b1ca18b67ad88880e",
+        "size": 31591559,
+        "source": "components/google-cloud-sdk-nomos-darwin-x86_64-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6267,16 +6697,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "1.16.2-rc.2"
+        "build_number": 20240628141907,
+        "version_string": "1.18.2-rc.2"
       }
     },
     {
       "data": {
-        "checksum": "413f599d671855ce7bd0002a35b0f6793041282463342206246e42c01fd9c9b8",
-        "contents_checksum": "ef98a3d5add19c22799e9fe9031487e542f779b31fa604db671775dcd592b739",
-        "size": 30473701,
-        "source": "components/google-cloud-sdk-nomos-linux-x86_64-20231023224440.tar.gz",
+        "checksum": "7fe7d46c755eb5a94df3d7c0031a0ab3b6b95124c6120be0b832c16047685db5",
+        "contents_checksum": "85aab3cdb4ff4c6112b285a57f69b59a3b88663e167e5de19e0d16b0b3e14123",
+        "size": 31771575,
+        "source": "components/google-cloud-sdk-nomos-linux-x86_64-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6300,8 +6730,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "1.16.2-rc.2"
+        "build_number": 20240628141907,
+        "version_string": "1.18.2-rc.2"
       }
     },
     {
@@ -6581,10 +7011,10 @@
     },
     {
       "data": {
-        "checksum": "28574de6bc04f41d2ffc96e94fb00243ae6ec5e6c19524de7c833afd082a0a20",
-        "contents_checksum": "ec18cbdb02d4f8c9f3abe177bd0f9255eedc1e1d7739121a4ed7a29ce9ff36f4",
-        "size": 65097027,
-        "source": "components/google-cloud-sdk-pubsub-emulator-20231016163610.tar.gz",
+        "checksum": "3bafcd5a4ec4e65c540640a97737e4a5e596795e73ead6f4fd75591879c9e529",
+        "contents_checksum": "956782b7d4b6b2057f339a7978728426fef50f7a99c888e1b1342eaf2f9ee8d9",
+        "size": 66777134,
+        "source": "components/google-cloud-sdk-pubsub-emulator-20240419141706.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6601,8 +7031,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231016163610,
-        "version_string": "0.8.10"
+        "build_number": 20240419141706,
+        "version_string": "0.8.14"
       }
     },
     {
@@ -6636,15 +7066,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "2.7.1"
+        "version_string": "2.11.1"
       }
     },
     {
       "data": {
-        "checksum": "d82de49ad5de08e99bd6e77ec3dca58b7a48b6d440fffd24a136bc01d3f15c63",
-        "contents_checksum": "f919555748e2d8c1af435e9a62af9633d5146a251e152d0f077d6f3a5a90d5c5",
-        "size": 24334283,
-        "source": "components/google-cloud-sdk-skaffold-darwin-arm-20231002150006.tar.gz",
+        "checksum": "53c4ab91c11e5cbd68568f8599906e6e5192f3b4019e9761fddfdc45f9af7845",
+        "contents_checksum": "d24345e52dde87a54de371fe79441dd90afe4fe3079bebce79c4f7043f8ac506",
+        "size": 23881902,
+        "source": "components/google-cloud-sdk-skaffold-darwin-arm-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6669,16 +7099,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "2.7.1"
+        "build_number": 20240412130805,
+        "version_string": "2.11.1"
       }
     },
     {
       "data": {
-        "checksum": "80f62a636612be395d304441b70cb94eb2137a21c5f27363a746fd70f3670565",
-        "contents_checksum": "e446714207056f4c0a70739472eca48de9a4063c6260a1609c55291a0756f75a",
-        "size": 26431910,
-        "source": "components/google-cloud-sdk-skaffold-darwin-x86_64-20231002150006.tar.gz",
+        "checksum": "b7dcae5f81e8a66ecf964d9a7e6c009be0be26770daa64470c344a0824a70d6c",
+        "contents_checksum": "a1845e050a4fc99ce6bd24c4c8e30e9c7fe0baa7ca6d89ade4a9ac945a1335fd",
+        "size": 26019391,
+        "source": "components/google-cloud-sdk-skaffold-darwin-x86_64-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6703,16 +7133,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "2.7.1"
+        "build_number": 20240412130805,
+        "version_string": "2.11.1"
       }
     },
     {
       "data": {
-        "checksum": "6fd3ecbea23c64ccb1a7a43ba949df0108d5dcb279b8cd1d55a35f54b53bb674",
-        "contents_checksum": "d38419a04db49b0f30f761ae709c9fa902552871d0aa5522d1777643cc963579",
-        "size": 22351847,
-        "source": "components/google-cloud-sdk-skaffold-linux-arm-20231002150006.tar.gz",
+        "checksum": "0f285235cc2840a8e62d5e8591015c709287ebf01bd8f95b204a5b4d4b019b2a",
+        "contents_checksum": "061859c0ad969a5cb9a3bcd0b34760963c8c842b9902f9b22e97df4e94ff7a65",
+        "size": 23133354,
+        "source": "components/google-cloud-sdk-skaffold-linux-arm-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6737,16 +7167,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "2.7.1"
+        "build_number": 20240412130805,
+        "version_string": "2.11.1"
       }
     },
     {
       "data": {
-        "checksum": "6ed058de92dfa76751028437b05c76ce17030fc19d4ff7fde5f0d5c915b94110",
-        "contents_checksum": "c86e65478b18bc05b803e0d4d2c4cf5387b05bd99def05b7017dd74fd478bebc",
-        "size": 24456326,
-        "source": "components/google-cloud-sdk-skaffold-linux-x86_64-20231002150006.tar.gz",
+        "checksum": "3e7164c21840917c2f565998cdbd20be3972ba5cc09ddad31f01cbd0233c34f6",
+        "contents_checksum": "99c37298757f59403dc8b7b080419ccb62bdb23fb88f559bd31b603cb9a2b4d6",
+        "size": 25252692,
+        "source": "components/google-cloud-sdk-skaffold-linux-x86_64-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6771,16 +7201,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "2.7.1"
+        "build_number": 20240412130805,
+        "version_string": "2.11.1"
       }
     },
     {
       "data": {
-        "checksum": "c81abe9107f9b03476de18df93b7272bfe4942629e5202eea60611b0294f5883",
-        "contents_checksum": "027478d2605b71896dfffeb11c85da30e6fa3e6164b55701c5186137047e2771",
-        "size": 24939189,
-        "source": "components/google-cloud-sdk-skaffold-windows-x86_64-20231002150006.tar.gz",
+        "checksum": "8f864d4189e19ce50bcb52ba61802d70e4e83bb18b13ff32ded5086a7c867fe5",
+        "contents_checksum": "c340681db503b83f07f4ac5ea4f00c4c8db288eaaf6e19ddf6e4b52c29d13e48",
+        "size": 25741614,
+        "source": "components/google-cloud-sdk-skaffold-windows-x86_64-20240412130805.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6805,8 +7235,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231002150006,
-        "version_string": "2.7.1"
+        "build_number": 20240412130805,
+        "version_string": "2.11.1"
       }
     },
     {
@@ -6832,15 +7262,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "3.1.3"
+        "version_string": "3.2.5"
       }
     },
     {
       "data": {
-        "checksum": "f329d03249adcbd72707b0c723b3229bc3957bc2865ae0c2c13a90339ffed4f0",
-        "contents_checksum": "280d4a1fac4f797c9ca31c3a60ac377f32633678e92c45cb3d9c52d9ed697b52",
-        "size": 23033348,
-        "source": "components/google-cloud-sdk-spanner-migration-tool-linux-x86_64-20231023224440.tar.gz",
+        "checksum": "85b90a0016541d6aae62795404aacc7088e0b1701e9f57493bdb4f29c5210fc5",
+        "contents_checksum": "a5b9958d7ad96d243c7fd5d67ec93d8a4b8a62b668435c18d25b9ce4eb72e185",
+        "size": 24696653,
+        "source": "components/google-cloud-sdk-spanner-migration-tool-linux-x86_64-20240517151541.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6864,8 +7294,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231023224440,
-        "version_string": "3.1.3"
+        "build_number": 20240517151541,
+        "version_string": "3.2.5"
       }
     },
     {
@@ -6893,10 +7323,10 @@
     },
     {
       "data": {
-        "checksum": "d1e1fda36ce35e058bf23f8cf114acd776c2891227f23cf3b9d78fb35f89b523",
-        "contents_checksum": "8a106316d2efe6baaa483a8677c9f0f807b43189ad3cbe1cefa8055e7500a318",
-        "size": 3485676,
-        "source": "components/google-cloud-sdk-ssh-tools-windows-20211112160846.tar.gz",
+        "checksum": "616b251f0ef9daf38ac151c622403fd0563ac378cedaa20cf3132a75be05249a",
+        "contents_checksum": "a7771f6c72699f4212a02b3d53b23b20c9d223f13791e5b0988792d56fcd85d4",
+        "size": 3782047,
+        "source": "components/google-cloud-sdk-ssh-tools-windows-20240614142823.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -6917,7 +7347,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20211112160846,
+        "build_number": 20240614142823,
         "version_string": ""
       }
     },
@@ -7022,10 +7452,10 @@
     },
     {
       "data": {
-        "checksum": "be800db8eba62f286ff49c2ad59c399a6375429bcab4d06285a0f6851b10ee01",
-        "contents_checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "size": 105,
-        "source": "components/google-cloud-sdk-terraform-tools-linux-arm-20220325151342.tar.gz",
+        "checksum": "a227491c831d1ed3619bfebd69a3a4379729372b302de64c77891f0955316445",
+        "contents_checksum": "84c92ebb4b1ae244c96595c4774a9594857e37d900306958fb63fcc58ef61a0f",
+        "size": 64183072,
+        "source": "components/google-cloud-sdk-terraform-tools-linux-arm-20231201141418.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -7049,8 +7479,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20220325151342,
-        "version_string": "0.2.1"
+        "build_number": 20231201141418,
+        "version_string": "0.11.1"
       }
     },
     {
@@ -7121,10 +7551,10 @@
     },
     {
       "data": {
-        "checksum": "5f1b1acfd653d1c7906dca110f939cf3e3389778ae0d4328c722348e69c3ba58",
-        "contents_checksum": "7fa3155ffbfc1c7b90d78a1eabb7e722f274149645f0e3979a5493aad1fd9df1",
-        "size": 50896581,
-        "source": "components/google-cloud-sdk-tests-20231025210228.tar.gz",
+        "checksum": "a69ec16f040d496e7f6901717f9738255f66773b0eb20a96cb19688fe853f937",
+        "contents_checksum": "f4dad17b254ae4340379b1c061410d576644fe22f0a9576d29e343c677afda5a",
+        "size": 57476207,
+        "source": "components/google-cloud-sdk-tests-20240628141907.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -7141,8 +7571,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20231025210228,
-        "version_string": "2023.10.25"
+        "build_number": 20240628141907,
+        "version_string": "2024.06.28"
       }
     }
   ],
@@ -7161,11 +7591,11 @@
   ],
   "post_processing_command": "components post-process",
   "release_notes_url": "RELEASE_NOTES",
-  "revision": 20231025210228,
+  "revision": 20240628141907,
   "schema_version": {
     "no_update": false,
     "url": "https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz",
     "version": 3
   },
-  "version": "452.0.1"
+  "version": "483.0.0"
 }

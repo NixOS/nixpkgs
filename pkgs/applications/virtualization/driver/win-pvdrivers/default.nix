@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
 let
   # Upstream versioned download links are broken
@@ -40,7 +40,7 @@ let
   ];
 
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "win-pvdrivers";
   version = "unstable-2023-08-17";
 

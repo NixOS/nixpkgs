@@ -27,7 +27,7 @@ buildGoModule {
 
   meta = {
     homepage = "https://github.com/kahing/goofys";
-    description = "A high-performance, POSIX-ish Amazon S3 file system written in Go";
+    description = "High-performance, POSIX-ish Amazon S3 file system written in Go";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.adisbladis ];
     broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042

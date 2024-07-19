@@ -10,7 +10,6 @@
 , colord
 , lcms2
 , pango
-, json-glib
 , libstartup_notification
 , libcanberra
 , ninja
@@ -36,6 +35,7 @@
 , libinput
 , libdrm
 , libei
+, libdisplay-info
 , gsettings-desktop-schemas
 , glib
 , atk
@@ -58,7 +58,6 @@
 , sysprof
 , libsysprof-capture
 , desktop-file-utils
-, libcap_ng
 , egl-wayland
 , graphene
 , wayland
@@ -67,13 +66,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "45.4";
+  version = "46.3.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "kRQIN74VWC8sdTvmYauOQtrVXUobDwZQvQssk/Ar16s=";
+    hash = "sha256-dHpj2jdF8wSwG1U5PZar2qggmDsYi2C0DburPmg8gF8=";
   };
 
   mesonFlags = [
@@ -90,9 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    # required for pkg-config to detect mutter-clutter
-    json-glib
-    libcap_ng
+    # required for pkg-config to detect mutter-mtk
     graphene
   ];
 
@@ -125,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra
     libdrm
     libei
+    libdisplay-info
     libgudev
     libinput
     libstartup_notification
@@ -172,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-13/doc" "$devdoc"
+    moveToOutput "share/mutter-14/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -181,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-13";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
@@ -200,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A window manager for GNOME";
+    description = "Window manager for GNOME";
+    mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

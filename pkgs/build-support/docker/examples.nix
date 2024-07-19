@@ -509,7 +509,23 @@ rec {
     contents = pkgs.bashInteractive;
   };
 
-  # buildImage without explicit tag
+  # buildLayeredImage without compression
+  bashLayeredUncompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with zstd compression
+  bashLayeredZstdCompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    contents = pkgs.bashInteractive;
+  };
+
+  # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
     contents = pkgs.bashInteractive;
@@ -603,10 +619,14 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/alice
       chown 1000 ./home/alice
-      ln -s ${pkgs.hello.overrideAttrs (o: {
+      ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
+        configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
+        versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+        meta = prevAttrs.meta // {
+          mainProgram = "layeredImageWithFakeRootCommands-hello";
+        };
       })} ./hello
     '';
   };

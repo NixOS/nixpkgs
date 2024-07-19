@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.5.4";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-a4hNgEizxanYE3XuHSCmbV6CkOqhXkznP3Sp0KLFFQs=";
+    hash = "sha256-ZAEIk81geW6oFMsfvlPWFRyd8tS5aIn2S/dsof6xDP0=";
   };
 
-  cargoHash = "sha256-+CA3UG32oZedzRbt7b0wOlhH/subuym4BCL5SMNzrr8=";
+  cargoHash = "sha256-S3Z9UBQ64y2sHcPo8vzgUOKexeM+t7iyQDWjrAk1Kd4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A TUI Git client inspired by Magit";
+    description = "TUI Git client inspired by Magit";
     homepage = "https://github.com/altsem/gitu";
     changelog = "https://github.com/altsem/gitu/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-debug-toolbar
-, psycopg2
-, beautifulsoup4
-, python
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-debug-toolbar,
+  psycopg2,
+  beautifulsoup4,
+  python,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     ./disable-unsupported-tests.patch
   ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   checkInputs = [
     beautifulsoup4

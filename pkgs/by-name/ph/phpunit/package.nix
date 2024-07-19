@@ -1,20 +1,23 @@
 { lib
 , fetchFromGitHub
+, nix-update-script
 , php
 }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "11.0.4";
+  version = "11.2.7";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-ucUDeiqz8QkCsKM/SfHVjJSnfs0TRaV04CTKepSzyo0=";
+    hash = "sha256-s/zfTW8a+E/FOuHg+oSpVZdxBdfIVL0RmvBBcI6zB9Y=";
   };
 
-  vendorHash = "sha256-0jbSUIT4Eh1lWu11REgE4ilGlw1zuawXeKCPBHnoxdk=";
+  vendorHash = "sha256-Gjii3m8wWmZbozKnJW/n9+wQUupemIU8XjmlCuTtfxU=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
@@ -22,6 +25,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
     mainProgram = "phpunit";
-    maintainers = [ lib.maintainers.onny ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ onny ] ++ lib.teams.php.members;
   };
 })

@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
-    description = "A daemon that provides mouse support on the Linux console";
-    license = licenses.gpl2;
+    description = "Daemon that provides mouse support on the Linux console";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.cygwin;
     maintainers = with maintainers; [ eelco ];
   };

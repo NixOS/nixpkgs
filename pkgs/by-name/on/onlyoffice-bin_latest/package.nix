@@ -31,7 +31,7 @@
 , nss
 , pulseaudio
 , qt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , xkeyboard_config
 , xorg
 }:
@@ -65,18 +65,18 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "8.0.0";
+    version = "8.1.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      sha256 = "sha256-YtR2fiARMKw8dOgAPXYM+WFwmhKZRsIIBQYTxppu3F0=";
+      sha256 = "sha256-hS1+gLN17sP3EFud3fQXRWeFiQbrumBONLjqXEl89Js=";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [
@@ -164,7 +164,7 @@ in
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
 # Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
-  name = derivation.name;
+  inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
@@ -175,7 +175,6 @@ buildFHSEnv {
   runScript = "/bin/onlyoffice-desktopeditors";
 
   extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/onlyoffice-desktopeditors
     mkdir -p $out/share
     ln -s ${derivation}/share/icons $out/share
     cp -r ${derivation}/share/applications $out/share
@@ -187,6 +186,7 @@ buildFHSEnv {
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
+    mainProgram = "onlyoffice-desktopeditors";
     longDescription = ''
       This version is broken on wlroots environments (e.g. Hyprland, Sway).
       If you are using one of these environments, please use `onlyoffice-bin` instead.

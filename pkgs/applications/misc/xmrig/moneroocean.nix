@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , xmrig
@@ -27,7 +26,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
   ];
 
   meta = with lib; {
-    description = "A fork of the XMRig CPU miner with support for algorithm switching";
+    description = "Fork of the XMRig CPU miner with support for algorithm switching";
     homepage = "https://github.com/MoneroOcean/xmrig";
     license = licenses.gpl3Plus;
     mainProgram = "xmrig";

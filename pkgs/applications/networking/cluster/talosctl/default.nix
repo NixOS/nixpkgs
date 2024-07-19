@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "talosctl";
-  version = "1.6.5";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
-    hash = "sha256-TEQnbQux+rN2WdlIbxh836Lx/ipqTDkoUsjQP8Ubl6s=";
+    hash = "sha256-lmDLlxiPyVhlSPplYkIaS5Uw19hir6XD8MAk8q+obhY=";
   };
 
-  vendorHash = "sha256-xdcHd/LvIm4rawwXtsGMF8Es9pMGMaJJaZ6UQwc24ZU=";
+  vendorHash = "sha256-8UIey+r1tdVRN1RBK5xxcAzaHb0VFdgenUXSFgoWh1g=";
 
   ldflags = [ "-s" "-w" ];
 
-  GOWORK = "off";
+  env.GOWORK = "off";
 
   subPackages = [ "cmd/talosctl" ];
 
@@ -31,7 +31,8 @@ buildGoModule rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
+    description = "CLI for out-of-band management of Kubernetes nodes created by Talos";
+    mainProgram = "talosctl";
     homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];

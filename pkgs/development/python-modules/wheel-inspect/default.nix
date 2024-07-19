@@ -1,17 +1,18 @@
-{ lib
-, attrs
-, buildPythonPackage
-, entry-points-txt
-, fetchFromGitHub
-, hatchling
-, headerparser
-, jsonschema
-, pythonRelaxDepsHook
-, packaging
-, pytestCheckHook
-, pythonOlder
-, readme-renderer
-, wheel-filename
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  entry-points-txt,
+  fetchFromGitHub,
+  hatchling,
+  headerparser,
+  jsonschema,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  readme-renderer,
+  setuptools,
+  wheel-filename,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +41,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -52,14 +52,14 @@ buildPythonPackage rec {
     wheel-filename
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = [
+    setuptools
     jsonschema
-    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "wheel_inspect"
-  ];
+  pythonImportsCheck = [ "wheel_inspect" ];
 
   pytestFlagsArray = [
     "-W"
@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Extract information from wheels";
+    mainProgram = "wheel2json";
     homepage = "https://github.com/jwodder/wheel-inspect";
     changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/v${version}";
     license = with licenses; [ mit ];

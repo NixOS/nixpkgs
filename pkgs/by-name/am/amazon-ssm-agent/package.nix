@@ -14,7 +14,6 @@
 , nixosTests
 , testers
 , amazon-ssm-agent
-, overrideEtc ? true
 }:
 
 let
@@ -42,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.40.0";
+  version = "3.3.551.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-o1THIj0QAafqhbFoZKVZXWiAEcaYB+xP5Y2e45D/6Xg=";
+    hash = "sha256-ncdLaHsQAdK1vtFzo55yWicKVfQHxpFpXYpODeG5/9I=";
   };
 
   vendorHash = null;
@@ -96,9 +95,6 @@ buildGoModule rec {
       --replace "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
       --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
@@ -166,6 +162,6 @@ buildGoModule rec {
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+    maintainers = with maintainers; [ copumpkin manveru anthonyroussel arianvp ];
   };
 }

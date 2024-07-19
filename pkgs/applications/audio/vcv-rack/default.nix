@@ -4,11 +4,10 @@
 , curl
 , fetchFromBitbucket
 , fetchFromGitHub
-, fetchzip
 , ghc_filesystem
 , glew
 , glfw
-, gnome
+, zenity
 , gtk3-x11
 , imagemagick
 , jansson
@@ -19,15 +18,13 @@
 , libjack2
 , libpulseaudio
 , libsamplerate
-, libXext
-, libXi
 , makeDesktopItem
 , makeWrapper
 , pkg-config
 , rtmidi
 , speexdsp
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , zstd
 }:
 
@@ -114,8 +111,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "VCV-Rack";
-  version = "2.4.0";
+  pname = "vcv-rack";
+  version = "2.4.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +132,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "0azrqyx5as4jmk9dxb7cj7x9dha81i0mm9pkvdv944qyccqwg55i";
+    hash = "sha256-Gn/sFltLXX2mLv4dDqmr/UPd+JBXVkIZGwMI6Rm0Ih4=";
   };
 
   patches = [
@@ -169,10 +166,14 @@ stdenv.mkDerivation rec {
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
     substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugins/Fundamental/src/Logic.cpp \
+      --replace \
+        "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
+        "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
   '';
 
   nativeBuildInputs = [
@@ -182,7 +183,7 @@ stdenv.mkDerivation rec {
     libicns
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     alsa-lib
@@ -190,7 +191,7 @@ stdenv.mkDerivation rec {
     ghc_filesystem
     glew
     glfw
-    gnome.zenity
+    zenity
     gtk3-x11
     jansson
     libarchive
@@ -249,6 +250,7 @@ stdenv.mkDerivation rec {
     # no-derivatives clause
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
+    mainProgram = "Rack";
     platforms = platforms.linux;
   };
 }

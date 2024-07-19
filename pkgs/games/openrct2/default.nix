@@ -30,27 +30,27 @@
 }:
 
 let
-  openrct2-version = "0.4.8";
+  openrct2-version = "0.4.11";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.3.13";
+  objects-version = "1.4.4";
   openmsx-version = "1.5";
-  opensfx-version = "1.0.3";
+  opensfx-version = "1.0.5";
   title-sequences-version = "0.4.6";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-jSKAgohNMHuyOu4gUHyyZf1I7UrsXGDV5XwwK1DQPyM=";
+    hash = "sha256-zaaVieU/hulc2G/F19diJug3xuj3ejn5ihnmKfkBDcQ=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-7RvRe7skXH5x8RbkQgtKs1YMBwq8dHInVo/4FAJwUD0=";
+    hash = "sha256-wKxWp/DSKkxCEI0lp4X8F9LxQsUKZfLk2CgajQ+y84k=";
   };
 
   openmsx-src = fetchFromGitHub {
@@ -64,7 +64,7 @@ let
     owner = "OpenRCT2";
     repo = "OpenSoundEffects";
     rev = "v${opensfx-version}";
-    hash = "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk=";
+    hash = "sha256-ucADnMLGm36eAo+NiioxEzeMqtu7YbGF9wsydK1mmoE=";
   };
 
   title-sequences-src = fetchFromGitHub {

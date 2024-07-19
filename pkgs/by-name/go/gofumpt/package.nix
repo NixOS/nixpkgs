@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A stricter gofmt";
+    description = "Stricter gofmt";
     homepage = "https://github.com/mvdan/gofumpt";
     changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
     license = licenses.bsd3;

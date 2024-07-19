@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "fst-bin";
-    sha256 = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
+    hash = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
   };
 
   cargoHash = "sha256-yTbEaw+BbjVks3j7/b75kGoUjVftLaVYvYIdI/bbfdk=";
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Represent large sets and maps compactly with finite state transducers";
+    mainProgram = "fst";
     homepage = "https://github.com/BurntSushi/fst";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ rmcgibbo ];

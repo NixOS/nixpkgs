@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
@@ -11,7 +10,7 @@
 , curl
 , gdal
 , hdf5-cpp
-, LASzip
+, laszip
 , libe57format
 , libgeotiff
 , libtiff
@@ -20,6 +19,7 @@
 , pkg-config
 , postgresql
 , proj
+, sqlite
 , tiledb
 , xercesc
 , zlib
@@ -28,23 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.6.3";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-wrgEbCYOGW1yrVxyX+UDa5jcUqab3letEGuvWnYvtac=";
+    sha256 = "sha256-ukBZLr/iyYQ68sv9JWrR4YP0ahHfGhytgcWKPzrF3Ps=";
   };
-
-  patches = [
-    # Fix running tests
-    # https://github.com/PDAL/PDAL/issues/4280
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/PDAL/PDAL/pull/4291.patch";
-      sha256 = "sha256-jFS+trwMRBfm+MpT0CcuD/hdYmfyuQj2zyoe06B6G9U=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -55,13 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     hdf5-cpp
-    LASzip
+    laszip
     libgeotiff
     libtiff
     libxml2
     openscenegraph
     postgresql
     proj
+    sqlite
     tiledb
     xercesc
     zlib

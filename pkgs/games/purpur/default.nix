@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A drop-in replacement for Minecraft Paper servers";
+    description = "Drop-in replacement for Minecraft Paper servers";
     longDescription = ''
       Purpur is a drop-in replacement for Minecraft Paper servers designed for configurability, new fun and exciting
       gameplay features, and performance built on top of Airplane.

@@ -10,12 +10,14 @@ let
 in
 {
   options.services.blocky = {
-    enable = mkEnableOption (lib.mdDoc "blocky, a fast and lightweight DNS proxy as ad-blocker for local network with many features");
+    enable = mkEnableOption "blocky, a fast and lightweight DNS proxy as ad-blocker for local network with many features";
+
+    package = mkPackageOption pkgs "blocky" { };
 
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Blocky configuration. Refer to
         <https://0xerr0r.github.io/blocky/configuration/>
         for details on supported values.
@@ -30,7 +32,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.blocky}/bin/blocky --config ${configFile}";
+        ExecStart = "${getExe cfg.package} --config ${configFile}";
         Restart = "on-failure";
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

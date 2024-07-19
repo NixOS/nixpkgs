@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A barcode generating tool and library";
+    description = "Barcode generating tool and library";
     longDescription = ''
       The Zint project aims to provide a complete cross-platform open source
       barcode generating solution. The package currently consists of a Qt based

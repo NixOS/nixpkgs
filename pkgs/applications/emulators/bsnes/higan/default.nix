@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/higan-emu/higan";
-    description = "An open-source, cycle-accurate multi-system emulator";
+    description = "Open-source, cycle-accurate multi-system emulator";
     longDescription = ''
       higan is a multi-system emulator, originally developed by Near, with an
       uncompromising focus on accuracy and code readability.

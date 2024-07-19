@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, jinja2
-, lxml
-, matplotlib
-, odfpy
-, openpyxl
-, pandas
-, poetry-core
-, pyarrow
-, pyreadstat
-, pytestCheckHook
-, pythonOlder
-, scipy
-, sqlalchemy
-, tables
-, tabulate
-, types-pytz
-, typing-extensions
-, xarray
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  jinja2,
+  lxml,
+  matplotlib,
+  odfpy,
+  openpyxl,
+  pandas,
+  poetry-core,
+  pyarrow,
+  pyreadstat,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  sqlalchemy,
+  tables,
+  tabulate,
+  types-pytz,
+  typing-extensions,
+  xarray,
+  xlsxwriter,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-416vyaHcSfTfkSNKZ05edozfsMmNKcpOZAoPenCLFzQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pandas
@@ -68,20 +67,20 @@ buildPythonPackage rec {
     xlsxwriter
   ];
 
-  disabledTests = [
-    # AttributeErrors, missing dependencies, error and warning checks
-    "test_types_groupby"
-    "test_frame_groupby_resample"
-    "test_orc"
-    "test_all_read_without_lxml_dtype_backend"
-    "test_show_version"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_plotting" # Fatal Python error: Illegal instruction
-  ];
+  disabledTests =
+    [
+      # AttributeErrors, missing dependencies, error and warning checks
+      "test_types_groupby"
+      "test_frame_groupby_resample"
+      "test_orc"
+      "test_all_read_without_lxml_dtype_backend"
+      "test_show_version"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_plotting" # Fatal Python error: Illegal instruction
+    ];
 
-  pythonImportsCheck = [
-    "pandas"
-  ];
+  pythonImportsCheck = [ "pandas" ];
 
   meta = with lib; {
     description = "Type annotations for Pandas";

@@ -3,13 +3,12 @@
 , perl
 , buildPerlModule
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGtk3 ? false
 , ffmpeg
 , mpv
 , wget
 , xdg-utils
-, youtube-dl
 , yt-dlp
 , TestPod
 , Gtk3
@@ -38,20 +37,20 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.4.9";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-7l8exCC9robe1hKnQAaIVfnn8L+FuwTOkxaxlwJmpe0=";
+    hash = "sha256-GTmva1pDG1g2wZoS3ABYxhWdbARdlcS0rxGjkdJL7js=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals withGtk3 [ wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
   buildInputs = [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook to work correctly
+    # Can't be in perlEnv for wrapGAppsHook3 to work correctly
     ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule
@@ -75,11 +74,11 @@ buildPerlModule rec {
 
   postFixup = ''
     wrapProgram "$out/bin/pipe-viewer" \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget youtube-dl yt-dlp ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget yt-dlp ]}"
   '' + lib.optionalString withGtk3 ''
     # make xdg-open overrideable at runtime
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget youtube-dl yt-dlp ]}" \
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget yt-dlp ]}" \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 

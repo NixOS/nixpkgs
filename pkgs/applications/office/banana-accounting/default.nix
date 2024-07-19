@@ -10,7 +10,7 @@
 , lib
 , stdenv
 , libgcrypt
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation {
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   installPhase = ''

@@ -1,14 +1,15 @@
-{ fetchFromGitHub
-, lib
-, buildPythonPackage
-, git
-, which
-, pythonOlder
-, unittestCheckHook
-, sphinxHook
-, sphinx-argparse
-, parameterized
-, setuptools
+{
+  fetchFromGitHub,
+  lib,
+  buildPythonPackage,
+  git,
+  which,
+  pythonOlder,
+  unittestCheckHook,
+  sphinxHook,
+  sphinx-argparse,
+  parameterized,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,10 @@ buildPythonPackage rec {
   version = "7.1.0";
   pyproject = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
@@ -26,8 +30,17 @@ buildPythonPackage rec {
     hash = "sha256-eQd/MNlnuzXzgFzvwUMchvHoIvkIrbpGKV7iknO14Cc=";
   };
 
-  nativeBuildInputs = [ sphinxHook sphinx-argparse setuptools ];
-  nativeCheckInputs = [ unittestCheckHook git which parameterized ];
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-argparse
+    setuptools
+  ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    git
+    which
+    parameterized
+  ];
 
   sphinxBuilders = [ "man" ];
   sphinxRoot = "docs";

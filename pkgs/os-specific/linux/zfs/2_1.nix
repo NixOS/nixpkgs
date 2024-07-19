@@ -17,7 +17,7 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible = kernel.kernelOlder "6.8";
 
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_7;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.

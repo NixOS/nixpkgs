@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 
 # nativeBuildInputs
 , scons
@@ -25,7 +26,7 @@
 , pango
 , gdk-pixbuf
 , atk
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , gpsdUser ? "gpsd", gpsdGroup ? "dialout"
 }:
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     scons
   ] ++ lib.optionals guiSupport [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -75,6 +76,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sconstruct-env-fixes.patch
+
+    # fix build with Python 3.12
+    (fetchpatch {
+      url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
+      hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
+    })
   ];
 
   preBuild = ''

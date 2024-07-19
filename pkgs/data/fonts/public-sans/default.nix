@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A strong, neutral, principles-driven, open source typeface for text or display";
+    description = "Strong, neutral, principles-driven, open source typeface for text or display";
     homepage = "https://public-sans.digital.gov/";
     changelog = "https://github.com/uswds/public-sans/raw/v${version}/FONTLOG.txt";
     license = licenses.ofl;

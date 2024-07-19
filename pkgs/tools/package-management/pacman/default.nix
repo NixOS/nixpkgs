@@ -40,14 +40,14 @@
 
 stdenv.mkDerivation (final: {
   pname = "pacman";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
     rev = "v${final.version}";
-    hash = "sha256-uHBq1A//YSqFATlyqjC5ZgmvPkNKqp7sVew+nbmLH78=";
+    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
   };
 
   strictDeps = true;
@@ -107,8 +107,6 @@ stdenv.mkDerivation (final: {
     "--localstatedir=/var"
   ];
 
-  hardeningDisable = [ "fortify3" ];
-
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman
     wrapProgram $out/bin/makepkg \
@@ -125,9 +123,9 @@ stdenv.mkDerivation (final: {
   '';
 
   meta = with lib; {
-    description = "A simple library-based package manager";
+    description = "Simple library-based package manager";
     homepage = "https://archlinux.org/pacman/";
-    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${version}/NEWS";
+    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${final.version}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "pacman";

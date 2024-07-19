@@ -6,6 +6,7 @@
 , mesonEmulatorHook
 , ninja
 , pkg-config
+, cmake
 , gettext
 , xmlto
 , docbook-xsl-nons
@@ -23,6 +24,10 @@
 , gperf
 , vala
 , curl
+, cairo
+, gdk-pixbuf
+, pango
+, librsvg
 , systemd
 , nixosTests
 , testers
@@ -31,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.1";
+  version = "1.0.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
@@ -39,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ULqRHepWVuAluXsXJUoqxqJfrN168MGlwdVkoLLwSN0=";
+    sha256 = "sha256-0NzZku6TQyyaTOAMWZD459RayhsH8cotlOaSKkVY/EQ=";
   };
 
   patches = [
@@ -63,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    cmake
     gettext
     libxslt
     xmlto
@@ -85,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxmlb
     libyaml
     curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
   ] ++ lib.optionals withSystemd [
     systemd
   ];
@@ -94,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
   ] ++ lib.optionals (!withSystemd) [
     "-Dsystemd=false"
   ];

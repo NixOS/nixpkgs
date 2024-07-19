@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-gtqcogOjWvie7XK9E9KhuSsUh+aWEqZB7NVTqXH6R7Q=";
+    hash = "sha256-B8K8/M5cUSchG54ar0ZY2XOH6lYLimdZr+dk5ffdplY=";
   };
-  cargoHash = "sha256-3yWc1wi5jakBG2CTWpB4uhqIzG0/ufQhyd61EtpibIk=";
+  cargoHash = "sha256-bTCXgaE8+nxuEFeOMSihL3lfmbIxiv1f400rmyV2b8k=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     description = "Multi-Monitor Wallpaper Utility";
     homepage = "https://github.com/0xk1f0/rwpspread";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nu-nu-ko ];
+    maintainers = with lib.maintainers; [ fsnkty ];
     platforms = lib.platforms.linux;
     mainProgram = "rwpspread";
   };

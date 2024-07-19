@@ -2,7 +2,7 @@
 , fetchurl
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , anthy
 , ibus
 , glib
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   configureFlags = [

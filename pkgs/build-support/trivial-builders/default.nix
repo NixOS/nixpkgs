@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck-minimal }:
+{ lib, config, stdenv, stdenvNoCC, jq, lndir, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -234,6 +234,12 @@ rec {
        */
       excludeShellChecks ? [ ],
       /*
+         Extra command-line flags to pass to ShellCheck.
+
+         Type: [String]
+       */
+      extraShellCheckFlags ? [ ],
+      /*
          Bash options to activate with `set -o` at the start of the script.
 
          Defaults to `[ "errexit" "nounset" "pipefail" ]`.
@@ -282,11 +288,11 @@ rec {
         # but we still want to use writeShellApplication on those platforms
         let
           shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
-          excludeOption = lib.optionalString (excludeShellChecks != [ ]) "--exclude '${lib.concatStringsSep "," excludeShellChecks}'";
+          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${excludeOption} "$target"
+            ${lib.getExe shellcheck-minimal} ${lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
           '';
         in
         if checkPhase == null then ''
@@ -580,7 +586,7 @@ rec {
   '';
 
 
-  # Docs in doc/builders/special/makesetuphook.section.md
+  # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
@@ -625,18 +631,22 @@ rec {
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
-  writeReferencesToFile = path: runCommand "runtime-deps"
+  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
+  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
+    "writeReferencesToFile is deprecated in favour of writeClosure"
+    (path: writeClosure [ path ]);
+
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
+  writeClosure = paths: runCommand "runtime-deps"
     {
-      exportReferencesGraph = [ "graph" path ];
+      # Get the cleaner exportReferencesGraph interface
+      __structuredAttrs = true;
+      exportReferencesGraph.graph = paths;
+      nativeBuildInputs = [ jq ];
     }
     ''
-      touch $out
-      while read path; do
-        echo $path >> $out
-        read dummy
-        read nrRefs
-        for ((i = 0; i < nrRefs; i++)); do read ref; done
-      done < graph
+      jq -r ".graph | map(.path) | sort | .[]" "$NIX_ATTRS_JSON_FILE" > "$out"
     '';
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md

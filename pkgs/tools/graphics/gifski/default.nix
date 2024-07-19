@@ -44,17 +44,12 @@ rustPlatform.buildRustPackage rec {
   #
   checkType = "debug";
 
-  # Cargo.lock is outdated
-  postPatch = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ figsoda marsam ];
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "gifski";
   };
 }

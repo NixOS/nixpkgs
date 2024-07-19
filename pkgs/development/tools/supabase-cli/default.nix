@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "1.144.2";
+  version = "1.187.2";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-gcQIdXQMcHRbtVEa5dQFAE2UGf2caf7FUlFF+4jNcFY=";
+    hash = "sha256-zc38w09+DvCJMlXMjWvSekrhck8BkWL46RfvQHGpE9c=";
   };
 
-  vendorHash = "sha256-9SKQkfrHNQbJAzrgI7fmkml6RvjqrfpuE9XppKrHBmk=";
+  vendorHash = "sha256-87G0Smjt+/+f0IjloKySgRpIaIyHI5DG89uNuP0sb9U=";
 
   ldflags = [
     "-s"
@@ -31,7 +31,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    rm $out/bin/{codegen,docs,listdep}
+    rm $out/bin/{docs,listdep}
     mv $out/bin/{cli,supabase}
 
     installShellCompletion --cmd supabase \
@@ -48,7 +48,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A CLI for interacting with supabase";
+    description = "CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ gerschtli kashw2 ];

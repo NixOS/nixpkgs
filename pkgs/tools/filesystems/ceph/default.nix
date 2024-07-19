@@ -41,7 +41,7 @@
 , lz4
 , oath-toolkit
 , openldap
-, python310
+, python311
 , rdkafka
 , rocksdb
 , snappy
@@ -140,7 +140,7 @@ let
   getMeta = description: with lib; {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
@@ -168,8 +168,29 @@ let
   };
 
   # Watch out for python <> boost compatibility
-  python = python310.override {
-    packageOverrides = self: super: let cryptographyOverrideVersion = "40.0.1"; in {
+  python = python311.override {
+    packageOverrides = self: super: let
+      cryptographyOverrideVersion = "40.0.1";
+      bcryptOverrideVersion = "4.0.1";
+    in {
+      # Ceph does not support `bcrypt` > 4.0 yet:
+      # * Upstream issue: https://tracker.ceph.com/issues/63529
+      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+      bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
+        pname = "bcrypt";
+        version = bcryptOverrideVersion;
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+        };
+        cargoRoot = "src/_bcrypt";
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          inherit src;
+          sourceRoot = "${pname}-${version}/${cargoRoot}";
+          name = "${pname}-${version}";
+          hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+        };
+      });
       # Ceph does not support `cryptography` > 40 yet:
       # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
       # * Upstream issue: https://tracker.ceph.com/issues/63529
@@ -218,6 +239,12 @@ let
           inherit version;
           hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
         };
+        disabledTests = old.disabledTests or [ ] ++ [
+          "test_export_md5_digest"
+        ];
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
+          self.flaky
+        ];
       });
 
       # Ceph does not support `kubernetes` >= 19, see:
@@ -246,7 +273,7 @@ let
     ceph-common
 
     # build time
-    cython
+    cython_0
 
     # debian/control
     bcrypt
@@ -290,6 +317,11 @@ in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
+
+    postPatch = ''
+      substituteInPlace cmake/modules/Finduring.cmake \
+        --replace-fail "liburing.a liburing" "uring"
+    '';
 
     nativeBuildInputs = [
       cmake

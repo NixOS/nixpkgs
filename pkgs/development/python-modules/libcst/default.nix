@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cargo
-, hypothesis
-, libiconv
-, pytestCheckHook
-, python
-, pythonOlder
-, pyyaml
-, rustPlatform
-, rustc
-, setuptools-rust
-, setuptools-scm
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  hypothesis,
+  libiconv,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  pyyaml,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  setuptools-scm,
+  typing-extensions,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.1.0";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,26 +29,17 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = "libcst";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kFs7edBWz0GRbgbLDmtpUVi5R+6mYXsJSvceOoPW9ck=";
+    hash = "sha256-H0YO8ILWOyhYdosNRWQQ9wziFk0syKSG3vF2zuYkL2k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-fhaHiz64NH6S61fSXj4gNxxcuB+ECxWSSmG5StiFr1k=";
+    hash = "sha256-AcqHn3A7WCVyVnOBD96k4pxokhzgmCWOipK/DrIAQkU=";
   };
 
   cargoRoot = "native";
-
-  patches = [
-    # https://github.com/Instagram/LibCST/pull/1042
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/Instagram/LibCST/commit/a6834aa0e6eb78e41549fd1087d7ba60ca4dd237.patch";
-      hash = "sha256-lyIXJhm4UMwdCOso6McDslIvtK7Ar8sF5Zy7qo1nicQ=";
-    })
-  ];
 
   postPatch = ''
     # avoid infinite recursion by not formatting the release files
@@ -93,15 +84,17 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [
-    "libcst"
-  ];
+  pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 psfl ];
+    license = with licenses; [
+      mit
+      asl20
+      psfl
+    ];
     maintainers = with maintainers; [ ];
   };
 }

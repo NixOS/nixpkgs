@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.15.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-yppQIffjpyQ2nqhiZbV2pSMQJx8srmHjAk+UClCQfRw=";
+    hash = "sha256-coASwU7nMalqvtqukhuRWz52My4e2Zl/7tqHNEvS1Nk=";
   };
 
-  cargoHash = "sha256-2BmKC8DaOdD/THchImmGqplhDrHQHEMyWORWnE2ygSM=";
+  cargoHash = "sha256-9SYjC3xL8OGGT56Q/yhH1oWeRT0Z956Yms6DGvCzlUY=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A Git-compatible DVCS that is both simple and powerful";
+    description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

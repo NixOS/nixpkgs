@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , aqbanking
 , boost
 , cmake
@@ -23,24 +22,24 @@
 , pkg-config
 , swig
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.5";
+  version = "5.8";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-tNr2e7iStwYyP2Lp+pckIDnX3QouHhB3HgwlgX3Q7Ts=";
+    hash = "sha256-osgj+3ALnUWYaS7IE5SVm944jY7xke/k6iwCQmu1JZM=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 
@@ -76,6 +75,9 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # this patch disables a flaky test
+    # see https://bugs.gnucash.org/show_bug.cgi?id=799289
+    ./0005-disable-test-lots.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-ilDh4PH+tdrJReIpgvEd0Gvs8Xvt5Q43XM5r7Bn+5IM=";
+      hash = "sha256-3b1Nue3eEefDi4WI+o3ATfrsQ+H/I+QwTr4Nuc9J7Zg=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -117,11 +119,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # wrapGAppsHook would wrap all binaries including the cli utils which need
+  # wrapGAppsHook3 would wrap all binaries including the cli utils which need
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook.
+  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
     wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"

@@ -19,8 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             Whether to enable power management.  This includes support
             for suspend-to-RAM and powersave features on laptops.
           '';
@@ -29,7 +28,7 @@ in
       resumeCommands = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Commands executed after the system resumes from suspend-to-RAM.";
+        description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
       powerUpCommands = mkOption {
@@ -38,8 +37,7 @@ in
         example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
-        description =
-          lib.mdDoc ''
+        description = ''
             Commands executed when the machine powers up.  That is,
             they're executed both when the system first boots and when
             it resumes from suspend or hibernation.
@@ -52,8 +50,7 @@ in
         example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
-        description =
-          lib.mdDoc ''
+        description = ''
             Commands executed when the machine powers down.  That is,
             they're executed both when the system shuts down and when
             it goes to suspend or hibernation.

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , gtest
 , pkg-config
@@ -18,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
-    repo = finalAttrs.pname;
+    repo = "minizip-ng";
     rev = finalAttrs.version;
     hash = "sha256-rP3WficGQZ2sSYnU9Tj0lVl36ShwV76fn/1lv+TrK2c=";
   };

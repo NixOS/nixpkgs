@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A text editor in ≤1024 lines of code, written in Rust";
+    description = "Text editor in ≤1024 lines of code, written in Rust";
     homepage = "https://github.com/ilai-deutel/kibi";
     license = licenses.mit;
     maintainers = with maintainers; [ robertodr ];

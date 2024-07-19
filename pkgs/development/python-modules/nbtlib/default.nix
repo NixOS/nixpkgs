@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +19,20 @@ buildPythonPackage rec {
   };
 
   prePatch = ''
-      substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" "poetry-core" \
-      --replace "poetry.masonry" "poetry.core.masonry"
+    substituteInPlace pyproject.toml \
+    --replace "poetry>=0.12" "poetry-core" \
+    --replace "poetry.masonry" "poetry.core.masonry"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "nbtlib" ];
 
   meta = with lib; {
-    description = "A python library to read and edit nbt data";
+    description = "Python library to read and edit nbt data";
+    mainProgram = "nbt";
     homepage = "https://github.com/vberlier/nbtlib";
     changelog = "https://github.com/vberlier/nbtlib/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

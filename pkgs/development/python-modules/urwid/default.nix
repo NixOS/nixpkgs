@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, exceptiongroup
-, fetchFromGitHub
-, glibcLocales
-, pygobject3
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyzmq
-, setuptools
-, setuptools-scm
-, tornado
-, trio
-, twisted
-, typing-extensions
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  exceptiongroup,
+  fetchFromGitHub,
+  glibcLocales,
+  pygobject3,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyzmq,
+  setuptools,
+  setuptools-scm,
+  tornado,
+  trio,
+  twisted,
+  typing-extensions,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.8";
+  version = "2.6.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,46 +29,34 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-KtIcmAPOcxC9wTq6mKRZWcohH0skYMHlq4mehpn6raY=";
+    hash = "sha256-bBgzhNNYxNZKaSo43I3fMoR+j6XDV6UBNrZfQyZ/f7c=";
   };
 
   postPatch = ''
     sed -i '/addopts =/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
     wcwidth
   ];
 
   passthru.optional-dependencies = {
-    glib = [
-      pygobject3
-    ];
-    tornado = [
-      tornado
-    ];
+    glib = [ pygobject3 ];
+    tornado = [ tornado ];
     trio = [
       exceptiongroup
       trio
     ];
-    twisted = [
-      twisted
-    ];
-    zmq = [
-      pyzmq
-    ];
-    serial = [
-      pyserial
-    ];
-    lcd = [
-      pyserial
-    ];
+    twisted = [ twisted ];
+    zmq = [ pyzmq ];
+    serial = [ pyserial ];
+    lcd = [ pyserial ];
   };
 
   nativeCheckInputs = [
@@ -77,21 +66,17 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF8";
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTestPaths = [
     # expect call hangs
     "tests/test_vterm.py"
   ];
 
-  pythonImportsCheck = [
-    "urwid"
-  ];
+  pythonImportsCheck = [ "urwid" ];
 
   meta = with lib; {
-    description = "A full-featured console (xterm et al.) user interface library";
+    description = "Full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";

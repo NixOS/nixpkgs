@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
     owner = "interception/linux";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
+    hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev udev yaml-cpp boost ];
 
   meta = {
-    description = "A minimal composable infrastructure on top of libudev and libevdev";
+    description = "Minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vyp ];

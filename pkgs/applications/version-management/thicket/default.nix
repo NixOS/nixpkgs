@@ -22,7 +22,7 @@ crystal.buildCrystalPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A better one-line git log";
+    description = "Better one-line git log";
     homepage = "https://github.com/taylorthurlow/thicket";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];

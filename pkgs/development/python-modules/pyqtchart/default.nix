@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqt-builder
-, python
-, pythonOlder
-, qtcharts
-, setuptools
-, sip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqt-builder,
+  python,
+  pythonOlder,
+  qtcharts,
+  setuptools,
+  sip,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,10 @@ buildPythonPackage rec {
       --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
   # HACK: paralellize compilation of make calls within pyqt's setup.py
@@ -51,22 +54,16 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = [
-    qtcharts
-  ];
+  buildInputs = [ qtcharts ];
 
-  propagatedBuildInputs = [
-    pyqt5
-  ];
+  propagatedBuildInputs = [ pyqt5 ];
 
   dontConfigure = true;
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5.QtChart"
-  ];
+  pythonImportsCheck = [ "PyQt5.QtChart" ];
 
   meta = with lib; {
     description = "Python bindings for the Qt Charts library";

@@ -26,7 +26,8 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A tool that bootstraps your dotfiles";
+    description = "Tool that bootstraps your dotfiles";
+    mainProgram = "dotbot";
     longDescription = ''
       Dotbot is designed to be lightweight and self-contained, with no external
       dependencies and no installation required. Dotbot can also be a drop-in

@@ -92,7 +92,7 @@
 
 , passthru ? {}
 
-, doCheck ? config.doCheckByDefault or false
+, doCheck ? true
 
 , disabledTestPaths ? []
 

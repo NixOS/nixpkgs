@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -20,5 +21,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     description = "Check password strength";
   };
-
 }

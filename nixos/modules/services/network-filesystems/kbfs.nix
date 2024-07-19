@@ -15,13 +15,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to mount the Keybase filesystem.";
+        description = "Whether to mount the Keybase filesystem.";
       };
 
       enableRedirector = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Keybase root redirector service, allowing
           any user to access KBFS files via `/keybase`,
           which will show different contents depending on the requester.
@@ -32,7 +32,7 @@ in {
         type = types.str;
         default = "%h/keybase";
         example = "/keybase";
-        description = lib.mdDoc "Mountpoint for the Keybase filesystem.";
+        description = "Mountpoint for the Keybase filesystem.";
       };
 
       extraFlags = mkOption {
@@ -42,7 +42,7 @@ in {
           "-label kbfs"
           "-mount-type normal"
         ];
-        description = lib.mdDoc ''
+        description = ''
           Additional flags to pass to the Keybase filesystem on launch.
         '';
       };

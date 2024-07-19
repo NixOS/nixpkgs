@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bind gestures via libinput touch events";
+    mainProgram = "lisgd";
     homepage = "https://git.sr.ht/~mil/lisgd";
     license = licenses.mit;
     platforms = platforms.linux;

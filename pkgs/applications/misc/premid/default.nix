@@ -1,4 +1,4 @@
-{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook, fetchurl, copyDesktopItems
+{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook3, fetchurl, copyDesktopItems
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 

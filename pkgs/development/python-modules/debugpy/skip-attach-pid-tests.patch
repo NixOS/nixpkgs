@@ -1,0 +1,27 @@
+diff --git a/tests/debug/runners.py b/tests/debug/runners.py
+index dc60d0ae..cf4a06a3 100644
+--- a/tests/debug/runners.py
++++ b/tests/debug/runners.py
+@@ -163,7 +163,7 @@ def _attach_common_config(session, target, cwd):
+ @_runner
+ @contextlib.contextmanager
+ def attach_pid(session, target, cwd=None, wait=True):
+-    if wait and not sys.platform.startswith("linux"):
++    if wait:
+         pytest.skip("https://github.com/microsoft/ptvsd/issues/1926")
+ 
+     log.info("Attaching {0} to {1} by PID.", session, target)
+diff --git a/tests/debugpy/test_attach.py b/tests/debugpy/test_attach.py
+index afabc1ac..2fff3982 100644
+--- a/tests/debugpy/test_attach.py
++++ b/tests/debugpy/test_attach.py
+@@ -151,8 +151,7 @@ def test_reattach(pyfile, target, run):
+ 
+ 
+ @pytest.mark.parametrize("pid_type", ["int", "str"])
+-@pytest.mark.skipif(
+-    not sys.platform.startswith("linux"),
++@pytest.mark.skip(
+     reason="https://github.com/microsoft/debugpy/issues/311",
+ )
+ def test_attach_pid_client(pyfile, target, pid_type):

@@ -1,5 +1,15 @@
+From 5a0301c2d9c65dbb3c5b8990e635d37f071d26c4 Mon Sep 17 00:00:00 2001
+From: georgewhewell <georgerw@gmail.com>
+Date: Fri, 2 Jun 2017 14:19:04 +0100
+Subject: [PATCH 06/16] linuxPackages.broadcom_sta: fix build for kernel 4.11+
+
+---
+ src/wl/sys/wl_cfg80211_hybrid.c |  3 +++
+ src/wl/sys/wl_linux.c           | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
+
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index a9671e2..da36405 100644
+index 84f0068..9fd8ed1 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
 @@ -30,6 +30,9 @@
@@ -13,7 +23,7 @@ index a9671e2..da36405 100644
  #include <linux/nl80211.h>
  #include <net/rtnetlink.h>
 diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
-index 489c9f5..f8278ad 100644
+index 65d7a22..18841d9 100644
 --- a/src/wl/sys/wl_linux.c
 +++ b/src/wl/sys/wl_linux.c
 @@ -117,6 +117,9 @@ int wl_found = 0;
@@ -26,7 +36,7 @@ index 489c9f5..f8278ad 100644
  } priv_link_t;
  
  #define WL_DEV_IF(dev)          ((wl_if_t*)((priv_link_t*)DEV_PRIV(dev))->wlif)
-@@ -2450,6 +2453,9 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
+@@ -2451,6 +2454,9 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
  {
  	struct sk_buff *oskb = (struct sk_buff *)p;
  	struct sk_buff *skb;
@@ -36,7 +46,7 @@ index 489c9f5..f8278ad 100644
  	uchar *pdata;
  	uint len;
  
-@@ -2916,7 +2922,13 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
+@@ -2917,7 +2923,13 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
  	if (skb == NULL) return;
  
  	skb->dev = wl->monitor_dev;
@@ -50,3 +60,6 @@ index 489c9f5..f8278ad 100644
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 22)
  	skb_reset_mac_header(skb);
  #else
+-- 
+2.45.1
+

@@ -1,86 +1,87 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  pdm-backend,
 
-# dependencies
-, starlette
-, pydantic
-, typing-extensions
+  # dependencies
+  fastapi-cli,
+  starlette,
+  pydantic,
+  typing-extensions,
 
-# tests
-, dirty-equals
-, flask
-, passlib
-, pytest-asyncio
-, pytestCheckHook
-, python-jose
-, sqlalchemy
-, trio
+  # tests
+  dirty-equals,
+  flask,
+  passlib,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-jose,
+  sqlalchemy,
+  trio,
 
-# optional-dependencies
-, httpx
-, jinja2
-, python-multipart
-, itsdangerous
-, pyyaml
-, ujson
-, orjson
-, email-validator
-, uvicorn
-, pydantic-settings
-, pydantic-extra-types
+  # optional-dependencies
+  httpx,
+  jinja2,
+  python-multipart,
+  itsdangerous,
+  pyyaml,
+  ujson,
+  orjson,
+  email-validator,
+  uvicorn,
+  pydantic-settings,
+  pydantic-extra-types,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.109.0";
+  version = "0.111.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = pname;
+    repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-iZBc0tYGmhQuOL/pdthhBYYnZhe+wEttoinePNAIgEs=";
+    hash = "sha256-DQYjK1dZuL7cF6quyNkgdd/GYmWm7k6YlF7YEjObQlI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     "anyio"
-    # https://github.com/tiangolo/fastapi/pull/9636
     "starlette"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    fastapi-cli
     starlette
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies.all = [
-    httpx
-    jinja2
-    python-multipart
-    itsdangerous
-    pyyaml
-    ujson
-    orjson
-    email-validator
-    uvicorn
-  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-    pydantic-settings
-    pydantic-extra-types
-  ] ++ uvicorn.optional-dependencies.standard;
+  optional-dependencies.all =
+    [
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = [
     dirty-equals
@@ -91,8 +92,7 @@ buildPythonPackage rec {
     python-jose
     trio
     sqlalchemy
-  ] ++ passthru.optional-dependencies.all
-  ++ python-jose.optional-dependencies.cryptography;
+  ] ++ optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
@@ -108,9 +108,7 @@ buildPythonPackage rec {
     "tests/test_tutorial/test_sql_databases"
   ];
 
-  pythonImportsCheck = [
-    "fastapi"
-  ];
+  pythonImportsCheck = [ "fastapi" ];
 
   meta = with lib; {
     changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";

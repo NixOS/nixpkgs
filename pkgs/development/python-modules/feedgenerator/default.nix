@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -16,16 +17,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
+    hash = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
   };
 
   postPatch = ''
     sed -i '/cov/d' setup.cfg
   '';
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "feedgenerator" ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchurl, gtk3, gnome, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchurl, gtk3, adwaita-icon-theme, hicolor-icon-theme }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "humanity-icon-theme";
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     hicolor-icon-theme
   ];
 

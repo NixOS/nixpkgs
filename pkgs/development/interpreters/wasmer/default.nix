@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.2.6";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FSplJAVdy/b0HXvW1qny052I7Fm9EA83/XqmgEvneeg=";
+    hash = "sha256-lpWgitQAZ+voGNj3Bo2FjbjDXPRSb067rx3/bIX+C9Y=";
   };
 
-  cargoHash = "sha256-OYHPudXGsDLVx6XKTsJTxqG5cbOAD25sd5KJDyU9lvY=";
+  cargoHash = "sha256-1/krpq7+E2p70d/SlSj0vCHr/9w6SbO15OhfkQiWf2k=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -58,7 +58,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The Universal WebAssembly Runtime";
+    description = "Universal WebAssembly Runtime";
+    mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside
       of the browser, supporting WASI and Emscripten. Wasmer can be used

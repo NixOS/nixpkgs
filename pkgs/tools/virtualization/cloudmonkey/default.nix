@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudmonkey";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cloudstack-cloudmonkey";
     rev = version;
-    sha256 = "sha256-FoouZ2udtZ68W5p32Svr8yAn0oBdWMupn1LEzqY04Oc=";
+    sha256 = "sha256-mkEGOZw7GDIFnYUpgvCetA4dU9R1m4q6MOUDG0TWN64=";
   };
 
   vendorHash = null;

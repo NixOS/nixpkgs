@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.10.2";
+  version = "2.11.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    hash = "sha256-eFa2AXFVymi7et+fHTLgdiBUq6D8zK5DRg9Dqhxe4TE=";
+    hash = "sha256-0Td4TMi9HTvf+GeW2f/ufRW0Y3KBrBSDWhgPW4noXi4=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-O13zMtrXgW3SiJmAn64/QW/CJN0+d0h0MMyEWKsy9WE=";
+  vendorHash = "sha256-y6B//zal2OyzZ1slC+x3vxHasFTM+xD+/6Sd2AFHFgY=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
@@ -56,6 +56,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Declarative continuous deployment for Kubernetes";
+    mainProgram = "argocd";
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;

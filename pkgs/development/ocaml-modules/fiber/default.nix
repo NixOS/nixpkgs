@@ -2,7 +2,6 @@
 , buildDunePackage
 , dyn
 , fetchurl
-, ocaml
 , ppx_expect
 , stdune
 }:

@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "progress";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   inherit (terminal) version src;
 

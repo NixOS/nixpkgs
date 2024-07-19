@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/csa/";
-    description = "A group of LADSPA Audio plugins for FM broadcast and more";
+    description = "Group of LADSPA Audio plugins for FM broadcast and more";
     longDescription = ''
       CSA means : Contrôle Signal Audio.
       It contains the following plugins:

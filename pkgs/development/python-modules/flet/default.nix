@@ -1,47 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, flet-core
-, flet-runtime
-, httpx
-, oauthlib
-, packaging
-, qrcode
-, cookiecutter
-, watchdog
-, websocket-client
-, websockets
+  # propagates
+  fastapi,
+  flet-core,
+  flet-runtime,
+  httpx,
+  oauthlib,
+  packaging,
+  qrcode,
+  cookiecutter,
+  uvicorn,
+  watchdog,
+  websocket-client,
+  websockets,
 
 }:
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.20.2";
+  inherit (flet-client-flutter) version src;
+
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3LhQI/hjenTxG/1DZP/zn2zs00rT5BviDAQYb2vucBM=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet";
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
+  ];
+
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
   ];
 
   pythonRelaxDeps = [
+    "cookiecutter"
+    "packaging"
+    "watchdog"
     "websockets"
   ];
 
   propagatedBuildInputs = [
+    fastapi
     flet-core
     flet-runtime
+    uvicorn
     websocket-client
     watchdog
     oauthlib
@@ -50,20 +58,23 @@ buildPythonPackage rec {
     packaging
     qrcode
     cookiecutter
+    fastapi
+    uvicorn
   ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flet"
-  ];
+  pythonImportsCheck = [ "flet" ];
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

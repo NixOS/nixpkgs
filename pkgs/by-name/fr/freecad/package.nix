@@ -19,21 +19,22 @@
 , mpi
 , ninja
 , ode
-, opencascade-occt
+, opencascade-occt_7_6
 , pkg-config
-, python3Packages
+, python311Packages
 , runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.isLinux
 , stdenv
 , swig
 , vtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xercesc
 , zlib
 }:
 
 let
-  boost = python3Packages.boost;
+  opencascade-occt = opencascade-occt_7_6;
+  boost = python311Packages.boost;
   inherit (libsForQt5)
     qtbase
     qttools
@@ -42,7 +43,7 @@ let
     qtxmlpatterns
     soqt
     wrapQtAppsHook;
-  inherit (python3Packages)
+  inherit (python311Packages)
     gitpython
     matplotlib
     pivy
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     pyside2-tools
     gfortran
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

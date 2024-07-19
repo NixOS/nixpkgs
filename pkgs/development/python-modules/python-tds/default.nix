@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, six
-, pytestCheckHook
-, pyopenssl
-, pyspnego
-, namedlist
-, pydes
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  pytestCheckHook,
+  pyopenssl,
+  pyspnego,
+  namedlist,
+  pydes,
+  cryptography,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
       --replace "version.get_git_version()" '"${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     pytestCheckHook

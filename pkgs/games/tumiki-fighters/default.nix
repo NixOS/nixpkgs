@@ -90,6 +90,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tf_e.html";
     description = "Sticky 2D shooter";
+    mainProgram = "tumiki-fighters";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

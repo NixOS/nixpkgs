@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tokenize-rt,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "unasync";
-  version = "0.5.0";
-
-  format = "pyproject";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "unasync";
     rev = "v${version}";
-    sha256 = "0h86i09v4909a8nk5lp36jlwz6rsln6vyg3d0i13ykxa6lrx1c2l";
+    sha256 = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     setuptools
+    tokenize-rt
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # mess with $PYTHONPATH
@@ -37,9 +39,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unasync" ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-trio/unasync/releases/tag/v${version}";
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ dotlambda ];
   };
 }

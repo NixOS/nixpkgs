@@ -18,6 +18,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Widgets library for Xfce";
+    mainProgram = "xfce4-about";
     license = with licenses; [ lgpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };

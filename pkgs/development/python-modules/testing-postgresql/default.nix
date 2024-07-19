@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pg8000
-, postgresql
-, psycopg2
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, testing-common-database
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pg8000,
+  postgresql,
+  psycopg2,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  testing-common-database,
 }:
 
 buildPythonPackage rec {
@@ -45,11 +46,11 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pg8000 >= 1.10" "pg8000"
+    substituteInPlace tests/test_postgresql.py \
+      --replace-fail "self.assertRegexpMatches" "self.assertRegex"
   '';
 
-  pythonImportsCheck = [
-    "testing.postgresql"
-  ];
+  pythonImportsCheck = [ "testing.postgresql" ];
 
   # Fix tests for Darwin build. See:
   # https://github.com/NixOS/nixpkgs/pull/74716#issuecomment-598546916

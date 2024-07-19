@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "See what Rust is doing behind the curtains";
+    mainProgram = "cargo-inspect";
     homepage = "https://github.com/mre/cargo-inspect";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ minijackson matthiasbeyer ];

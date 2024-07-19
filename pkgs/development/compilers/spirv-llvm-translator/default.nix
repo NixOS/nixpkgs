@@ -7,7 +7,6 @@
 , llvm
 , spirv-headers
 , spirv-tools
-, disable-warnings-if-gcc13
 }:
 
 let
@@ -33,16 +32,16 @@ let
       rev = "v${version}";
       hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
     } else if llvmMajor == "14" then {
-      version = "14.0.0+unstable-2024-01-23";
-      rev = "582a3024c0c2d624a40fa2731d74b2c9ca3b94ab";
-      hash = "sha256-1IRX+5Xh8Fj+/1DIZQrN8ijb2y7H39Y3u+IdbqjQgCc=";
+      version = "14.0.0+unstable-2024-02-14";
+      rev = "2221771c28dc224d5d560faf6a2cd73f8ecf713d";
+      hash = "sha256-J4qOgDdcsPRU1AXXXWN+qe4c47uMCrjmtM8MSrl9NjE=";
     } else if llvmMajor == "11" then {
       version = "11.0.0+unstable-2022-05-04";
       rev = "4ef524240833abfeee1c5b9fff6b1bd53f4806b3"; # 267 commits ahead of v11.0.0
       hash = "sha256-NoIoa20+2sH41rEnr8lsMhtfesrtdPINiXtUnxYVm8s=";
     } else throw "Incompatible LLVM version.";
 in
-disable-warnings-if-gcc13 (stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
   inherit (branch) version;
 
@@ -113,9 +112,10 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
 
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
-    description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    mainProgram = "llvm-spirv";
     license     = licenses.ncsa;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
   };
-})
+}

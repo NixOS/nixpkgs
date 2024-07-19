@@ -22,7 +22,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "The fast, resumable file download client";
+    description = "Fast, resumable file download client";
     homepage = "https://github.com/Code-Hex/pget?tab=readme-ov-file";
     license = licenses.mit;
     maintainers = with maintainers; [ Ligthiago ];

@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-# pyproject
-, hatchling
-, hatch-requirements-txt
-, hatch-fancy-pypi-readme
-# runtime
-, setuptools
-, fsspec
-, httpx
-, huggingface-hub
-, packaging
-, requests
-, typing-extensions
-, websockets
-# checkInputs
-, pytestCheckHook
-, pytest-asyncio
-, pydub
-, rich
-, tomlkit
-, gradio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  pythonOlder,
+  # pyproject
+  hatchling,
+  hatch-requirements-txt,
+  hatch-fancy-pypi-readme,
+  # runtime
+  setuptools,
+  fsspec,
+  httpx,
+  huggingface-hub,
+  packaging,
+  requests,
+  typing-extensions,
+  websockets,
+  # checkInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pydub,
+  rich,
+  tomlkit,
+  gradio,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -36,9 +37,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
+    # not to be confused with @gradio/client@${version}
     rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-cRsYqNMmzuybJI823lpUOmNcTdcTO8dJkp3cpjATZQU=";
+    hash = "sha256-nbOWg2ZPcXTft7e4tR5p5xecVU62en0hEdXqAgLDZF4=";
   };
   prePatch = ''
     cd client/python
@@ -51,14 +53,13 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools # needed for 'pkg_resources'
     fsspec
     httpx
@@ -94,6 +95,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gradio_client" ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "gradio_client@(.*)" ];
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

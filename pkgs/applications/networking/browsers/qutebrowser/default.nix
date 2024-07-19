@@ -18,15 +18,15 @@
 let
   isQt6 = lib.versions.major qtbase.version == "6";
   pdfjs = let
-    version = "4.0.269";
+    version = "4.2.67";
   in
   fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-    hash = "sha256-8gwJUxygcdvERDni/k6WIx3tzk7yb+qHZ4NsfkP0VDo=";
+    hash = "sha256-7kfT3+ZwoGqZ5OwkO9h3DIuBFd0v8fRlcufxoBdcy8c=";
     stripRoot = false;
   };
 
-  version = "3.1.0";
+  version = "3.2.1";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication {
   inherit version;
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-UA3MHMoI1rC4FPowbiII4lM1rL4OLPmZ+1GRbg9LLl8=";
+    hash = "sha256-AqevKmxds42HsiWwuEEsgNmDgzXzLQ6KOPbX+804iX0=";
   };
 
   # Needs tox
@@ -43,15 +43,17 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   nativeBuildInputs = [
     wrapQtAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    python3.pkgs.pygments
   ];
 
-  propagatedBuildInputs = with python3.pkgs; ([
+  dependencies = with python3.pkgs; [
+    colorama
     pyyaml (if isQt6 then pyqt6-webengine else pyqtwebengine) jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
@@ -62,8 +64,8 @@ python3.pkgs.buildPythonApplication {
     adblock
     # for the qute-bitwarden user script to be able to copy the TOTP token to clipboard
     pyperclip
-  ] ++ lib.optional stdenv.isLinux qtwayland
-  );
+  ];
+
 
   patches = [
     ./fix-restart.patch
@@ -83,7 +85,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
+      PYTHON=${(python3.pythonOnBuildForHost.withPackages (ps: with ps; [ setuptools ])).interpreter} \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \

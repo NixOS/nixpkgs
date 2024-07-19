@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libspatialindex
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libspatialindex,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "rtree";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Toblerity";
     repo = "rtree";
     rev = "refs/tags/${version}";
-    hash = "sha256-RmAiyYrkUMBN/ebmo27WvFcRmYlKkywuQHLLUbluTTw=";
+    hash = "sha256-yuSPRb8SRz+FRmwFCKDx+gtp9IWaneQ84jDuZP7TX0A=";
   };
 
   postPatch = ''

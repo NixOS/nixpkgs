@@ -30,6 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Simple input device tester for linux with Qt GUI";
+    mainProgram = "evtest-qt";
     homepage = "https://github.com/Grumbel/evtest-qt";
     maintainers = with maintainers; [ alexarice ];
     platforms = platforms.linux;

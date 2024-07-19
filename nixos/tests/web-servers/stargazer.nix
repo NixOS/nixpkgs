@@ -1,9 +1,9 @@
 { pkgs, lib, ... }:
 let
-  test_script = pkgs.stdenv.mkDerivation rec {
+  test_script = pkgs.stdenv.mkDerivation {
     pname = "stargazer-test-script";
     inherit (pkgs.stargazer) version src;
-    buildInputs = with pkgs; [ (python3.withPackages (ps: with ps; [ cryptography ])) ];
+    buildInputs = with pkgs; [ (python3.withPackages (ps: with ps; [ cryptography urllib3 ])) ];
     dontBuild = true;
     doCheck = false;
     installPhase = ''
@@ -11,7 +11,7 @@ let
       cp scripts/gemini-diagnostics $out/bin/test
     '';
   };
-  test_env = pkgs.stdenv.mkDerivation rec {
+  test_env = pkgs.stdenv.mkDerivation {
     pname = "stargazer-test-env";
     inherit (pkgs.stargazer) version src;
     buildPhase = ''
@@ -23,7 +23,7 @@ let
       cp -r * $out/
     '';
   };
-  scgi_server = pkgs.stdenv.mkDerivation rec {
+  scgi_server = pkgs.stdenv.mkDerivation {
     pname = "stargazer-test-scgi-server";
     inherit (pkgs.stargazer) version src;
     buildInputs = with pkgs; [ python3 ];
@@ -100,7 +100,12 @@ in
           }
           {
             route = "localhost:/no-exist";
-            root = "./does_not_exist";
+            root = "${test_env}/does_not_exist";
+          }
+          {
+            route = "localhost=/rss.xml";
+            root = "${test_env}/test_data/test_site";
+            mime-override = "application/atom+xml";
           }
         ];
       };

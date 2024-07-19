@@ -1,26 +1,28 @@
-{ lib
-, fetchFromGitHub
-, python3
-, cacert
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  cacert,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LvzEyBkhji7ruVVO2EpqM8pKOcTX8Dnkqu/GtWOfMZs=";
+    hash = "sha256-hLGaImYkv6/1Wv1a+0tKmW4qmV4akNoyd0RXopJjetI=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ poetry-core ];
+
+
+  dependencies = with python3.pkgs; [
     aiofiles
     aiohttp
     aiosqlite
@@ -46,9 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "gallia"
-  ];
+  pythonImportsCheck = [ "gallia" ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -59,7 +59,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
     changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab rumpelsepp ];
+    maintainers = with maintainers; [
+      fab
+      rumpelsepp
+    ];
     platforms = platforms.linux;
   };
 }

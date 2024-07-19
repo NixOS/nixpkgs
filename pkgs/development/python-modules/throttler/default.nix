@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, aiohttp
-, codecov
-, flake8
-, pytest
-, pytest-asyncio
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  aiohttp,
+  codecov,
+  flake8,
+  pytest,
+  pytest-asyncio,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/" ];
 
   meta = with lib; {
-    description = "Zero-dependency Python package for easy throttling with asyncio support.";
+    description = "Zero-dependency Python package for easy throttling with asyncio support";
     homepage = "https://github.com/uburuntu/throttler";
     license = licenses.mit;
     maintainers = with maintainers; [ renatoGarcia ];

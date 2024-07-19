@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A program used to set the theme and appearance of deepin desktop";
+    description = "Program used to set the theme and appearance of deepin desktop";
     homepage = "https://github.com/linuxdeepin/dde-appearance";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

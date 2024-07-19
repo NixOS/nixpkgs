@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, ffmpeg-full
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  ffmpeg-full,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -29,14 +31,18 @@ buildPythonPackage rec {
       url = "https://github.com/jiaaro/pydub/commit/66c1bf7813ae8621a71484fdcdf609734c0d8efd.patch";
       hash = "sha256-3OIzvTgGK3r4/s5y7izHvouB4uJEmjO6cgKvegtTf7A=";
     })
+    # Fix paths to ffmpeg, ffplay and ffprobe
+    (substituteAll {
+      src = ./ffmpeg-fix-path.patch;
+      ffmpeg = lib.getExe ffmpeg-full;
+      ffplay = lib.getExe' ffmpeg-full "ffplay";
+      ffprobe = lib.getExe' ffmpeg-full "ffprobe";
+    })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
-    ffmpeg-full
     pytestCheckHook
   ];
 
@@ -46,9 +52,7 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface";

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  decorator,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "07dirdd8y23706110nb0lfz5pzbrcvd9y74h64la3y8igqbk4vc2";
   };
 
-  propagatedBuildInputs = [
-    decorator
-  ];
+  propagatedBuildInputs = [ decorator ];
 
   pythonImportsCheck = [ "ratelim" ];
 

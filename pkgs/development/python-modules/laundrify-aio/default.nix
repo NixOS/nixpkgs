@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, pyjwt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  pyjwt,
 }:
 
 buildPythonPackage rec {
   pname = "laundrify-aio";
-  version = "1.1.2";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "laundrify";
     repo = "laundrify-pypi";
     rev = "v${version}";
-    hash = "sha256-+dTvYn4hux3Y19kWZwxhdkBARmfD8SuNlYWM/ET9K2M=";
+    hash = "sha256-XhdIKitUyC5RWW/o98ZyhG7BuVCINsiNWlh3liITKCs=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "laundrify_aio"
-  ];
+  pythonImportsCheck = [ "laundrify_aio" ];
 
   meta = with lib; {
     description = "Module to communicate with the laundrify API";

@@ -1,11 +1,11 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-, sshfs
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  setuptools-scm,
+  sshfs,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

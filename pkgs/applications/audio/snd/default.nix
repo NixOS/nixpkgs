@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "24.1";
+  version = "24.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    sha256 = "sha256-hC6GddYjBD6p4zwHD3fCvZZLwpRiNKOb6aaHstRhA1M=";
+    sha256 = "sha256-Y497KAlUXtWhkrCd1QrqJkvWGwnzZfYRKaALiEo/7EI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

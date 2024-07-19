@@ -2,38 +2,38 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, fetchpatch
 }:
 
 buildDotnetModule rec {
   pname = "torrentstream";
-  version = "1.0.1.6";
+  version = "1.0.1.11";
 
   src = fetchFromGitHub {
     owner = "trueromanus";
     repo = "TorrentStream";
     rev = version;
-    hash = "sha256-41zlzrQ+YGY2wEvq4Su/lp6lOmGW4u0F37ub2a3z+7o=";
+    hash = "sha256-3lmQWx00Ulp0ZyQBEhFT+djHBi84foMlWGJEp/UOGek=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  projectFile = "TorrentStream.sln";
-  nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   executables = [ "TorrentStream" ];
+  nugetDeps = ./deps.nix;
+  projectFile = "TorrentStream.csproj";
+  selfContainedBuild = true;
+
+  dotnetFlags = [
+    "-p:PublishAot=false" # untill https://github.com/NixOS/nixpkgs/issues/280923 is fixed
+    "-p:PublishSingleFile=true"
+  ];
 
   patches = [
-    (fetchpatch {
-       name = "allow-setting-listen-address.patch";
-       url = "https://github.com/trueromanus/TorrentStream/compare/1.0.1.6..6900b6f33f2b4b94888a8a1355029a81767e66a4.patch";
-       hash = "sha256-jOUs5SO2BnNnkz3wJ710Z4stVlhZ8nKqpmHr4BNlGs0=";
-       stripLen = 1;
-       excludes = [ "README.md" ];
-     })
     ./0001-display-the-message-of-caught-exceptions.patch
   ];
+
+  postInstall = "rm $out/lib/torrentstream/NuGet.config"; # reduce closure size
 
   meta = {
     homepage = "https://github.com/trueromanus/TorrentStream";

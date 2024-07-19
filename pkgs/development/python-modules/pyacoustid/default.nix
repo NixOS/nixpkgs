@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, audioread
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  audioread,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -13,10 +14,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
+    hash = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
   };
 
-  propagatedBuildInputs = [ requests audioread ];
+  propagatedBuildInputs = [
+    requests
+    audioread
+  ];
 
   postPatch = ''
     sed -i \

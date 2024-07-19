@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open source SDR platform";
+    description = "Open source SDR platform";
     homepage = "https://greatscottgadgets.com/hackrf/";
     license = licenses.gpl2;
     platforms = platforms.all;

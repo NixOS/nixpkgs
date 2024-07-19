@@ -1,9 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
 , wrapGAppsHook4
-, gtk4
 , meson
 , ninja
 , pkg-config
@@ -25,13 +23,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-frog";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-w/ENUhJt7bYy5htBLolb/HysK8/scRaPQX5qEezQcXY=";
+    sha256 = "sha256-zL6zuqHF1pTXT3l1mAFx2EL+0ThzjXfst/nEyNVorZg=";
   };
 
   format = "other";
@@ -70,7 +68,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    loguru
+    nanoid
+    posthog
     pygobject3
+    python-dateutil
     pillow
     pytesseract
     pyzbar

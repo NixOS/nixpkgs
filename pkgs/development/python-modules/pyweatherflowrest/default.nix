@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-l1V3HgzqnnoY6sWHwfgBtcIR782RwKhekY2qOLrUMNY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -37,9 +33,7 @@ buildPythonPackage rec {
   # Module has no tests. test.py is a demo script
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyweatherflowrest"
-  ];
+  pythonImportsCheck = [ "pyweatherflowrest" ];
 
   meta = with lib; {
     description = "Python module to get data from WeatherFlow Weather Stations";

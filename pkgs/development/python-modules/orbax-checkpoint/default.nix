@@ -1,28 +1,36 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, cached-property
-, etils
-, fetchPypi
-, flit-core
-, importlib-resources
-, jax
-, jaxlib
-, msgpack
-, nest-asyncio
-, numpy
-, protobuf
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tensorstore
-, typing-extensions
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  etils,
+  fetchPypi,
+  importlib-resources,
+  jax,
+  jaxlib,
+  msgpack,
+  nest-asyncio,
+  numpy,
+  protobuf,
+  pyyaml,
+  tensorstore,
+  typing-extensions,
+
+  # checks
+  google-cloud-logging,
+  mock,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.3";
+  version = "0.5.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,16 +38,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "orbax_checkpoint";
     inherit version;
-    hash = "sha256-FXKQTLv+hROSfg2A+AtzDg7y9oAzLTwoENhENTKTi0U=";
+    hash = "sha256-V91BdeaYqMSVeZGrfmwZ17OoeSrnByuc0rJnzls0iE0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
-    cached-property
     etils
     importlib-resources
     jax
@@ -54,12 +59,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    google-cloud-logging
+    mock
     pytest-xdist
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "orbax"
+    "orbax.checkpoint"
   ];
 
   disabledTestPaths = [
@@ -68,11 +76,11 @@ buildPythonPackage rec {
     "orbax/checkpoint/utils_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
     changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

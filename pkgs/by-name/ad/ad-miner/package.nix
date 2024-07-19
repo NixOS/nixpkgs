@@ -5,25 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ad-miner";
-  version = "1.1.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mazars-Tech";
     repo = "AD_Miner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eAcnGS0HLrTqc/WVKNNwYA89GK233QZj4Gfggt4S8R8=";
+    hash = "sha256-BSUMNVHhclHzQf3Z0p2ZZjfQIZQyc2ZeQ67PXRz1RBk=";
   };
 
   # All requirements are pinned
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     neo4j
     numpy
     pytz

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.6.0";
+  version = "5.6.2";
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
-    hash = "sha256-iMhjHO+6kWZP3EexS7dT4YdvSWSgfbZQgh0gOZKx4eo=";
+    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
+    hash = "sha256-qds7s9ZOJIoPrpY/j7a6hRomuhgi5QTcDv0YqAxibK8=";
   };
 
   strictDeps = true;
@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '';
 
   preCheck = ''
     # Tests have a /bin/sh dependency...
@@ -43,10 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       set -eu -o pipefail
 
-      # Expect the text in format of '>xz-5.2.6.tar.bz2</a>'
+      # Expect the text in format of '>xz-5.2.6.tar.xz</a>'
       # We pick first match where a stable release goes first.
       new_version="$(curl -s https://tukaani.org/xz/ |
-          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
+          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
           head -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
@@ -56,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
+    description = "General-purpose data compression software, successor of LZMA";
     homepage = "https://tukaani.org/xz/";
-    description = "A general-purpose data compression software, successor of LZMA";
-
     longDescription =
       '' XZ Utils is free general-purpose data compression software with high
          compression ratio.  XZ Utils were written for POSIX-like systems,
@@ -72,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
          create 30 % smaller output than gzip and 15 % smaller output than
          bzip2.
       '';
-
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;

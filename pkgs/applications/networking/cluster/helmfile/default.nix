@@ -1,23 +1,23 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , pluginsDir ? null
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "helmfile";
-  version = "0.162.0";
+  version = "0.166.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    hash = "sha256-BiouIaiYveQe0sTgvuf1R1S0qydLpoxWl958zyVFvWE=";
+    hash = "sha256-TZskvZyNihklCJB0yMFXk1bLEuhetQvJ+6uLnYiLBs0=";
   };
 
-  vendorHash = "sha256-z6UfyruXLzcH9iLgsM6Wmb1i8PWrroAbhGi2fphYBoA=";
+  vendorHash = "sha256-aQ/g7MWMWvxRcTHPUYRGjaaPX9ZH6m+TJ6BdsFeGOsY=";
 
   doCheck = false;
 
@@ -41,6 +41,7 @@ buildGo122Module rec {
 
   meta = {
     description = "Declarative spec for deploying Helm charts";
+    mainProgram = "helmfile";
     longDescription = ''
       Declaratively deploy your Kubernetes manifests, Kustomize configs,
       and charts as Helm releases in one shot.

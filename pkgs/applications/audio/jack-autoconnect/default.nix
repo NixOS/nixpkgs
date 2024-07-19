@@ -24,6 +24,7 @@ mkDerivation rec {
     homepage = "https://github.com/kripton/jack_autoconnect";
     description =
       "Tiny application that reacts on port registrations by clients and connects them";
+    mainProgram = "jack_autoconnect";
     maintainers = with maintainers; [ unclechu ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;

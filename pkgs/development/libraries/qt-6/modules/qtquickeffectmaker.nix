@@ -6,4 +6,5 @@
 qtModule {
   pname = "qtquickeffectmaker";
   propagatedBuildInputs = [ qtbase qtquick3d ];
+  meta.mainProgram = "qqem";
 }

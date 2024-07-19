@@ -13,7 +13,7 @@ in
       default = true;
     };
     withUtempter = lib.mkEnableOption "" // {
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable libutempter for mosh.
 
         This is required so that mosh can write to /var/run/utmp (which can be queried with `who` to display currently connected user sessions).

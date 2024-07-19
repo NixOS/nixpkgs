@@ -1,13 +1,12 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , pkg-config
 , cmake
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
@@ -15,6 +14,7 @@
 , qtsvg
 , qtimageformats
 , gtk3
+, glib-networking
 , boost
 , fmt
 , libdbusmenu
@@ -30,7 +30,6 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm_2_68
 , webkitgtk_6_0
 , jemalloc
 , rnnoise
@@ -60,18 +59,17 @@ let
       cxxStandard = "20";
     };
   };
-  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "4.15.1";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UM2+yPIu/mzPUeH71mjTaeaRvtCKPrYUKXSOht51juY=";
+    hash = "sha256-rvd4Ei4MpWiilHCV291UrJkHaUcwth9AWc3PSqjj+EI=";
   };
 
   patches = [
@@ -79,10 +77,7 @@ stdenv.mkDerivation rec {
     # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
-      hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
+    ./scheme.patch
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -111,7 +106,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     extra-cmake-modules
   ] ++ lib.optionals stdenv.isDarwin [
     lld
@@ -138,13 +133,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
+    glib-networking
     fmt
     libdbusmenu
     alsa-lib
     libpulseaudio
     pipewire
     hunspell
-    glibmm_2_68
     webkitgtk_6_0
     jemalloc
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
@@ -179,6 +174,7 @@ stdenv.mkDerivation rec {
     IOSurface
     Metal
     NaturalLanguage
+    LocalAuthentication
     libicns
   ]);
 
@@ -203,19 +199,19 @@ stdenv.mkDerivation rec {
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r ${mainProgram}.app $out/Applications
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
+    cp -r ${finalAttrs.meta.mainProgram}.app $out/Applications
+    ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${mainProgram} \
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
   passthru = {
@@ -234,6 +230,6 @@ stdenv.mkDerivation rec {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
-    inherit mainProgram;
+    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-}
+})

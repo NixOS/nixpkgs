@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Extract the dominant colors from any image";
+    mainProgram = "paleta";
     homepage = "https://github.com/nate-xyz/paleta";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "The RPKI-to-Router server used at Cloudflare";
+    description = "RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

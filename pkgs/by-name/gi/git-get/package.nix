@@ -44,7 +44,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A better way to clone, organize and manage multiple git repositories";
+    description = "Better way to clone, organize and manage multiple git repositories";
     homepage = "https://github.com/grdl/git-get";
     license = licenses.mit;
     maintainers = with maintainers; [ sumnerevans ];

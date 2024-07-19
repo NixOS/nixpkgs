@@ -4,20 +4,20 @@
 , ocamlPackages
 , copyDesktopItems
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , enableX11 ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.4";
+  version = "2.53.5";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nFT6FjlQjh6qx0fepmT4aiQj2SxA7U/as+IU9xXNok0=";
+    hash = "sha256-XCdK38jG7tRI+/Zk72JVY8a/pPJF6KVaf8l2s3hgxLs=";
   };
 
   strictDeps = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook ];
+    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook3 ];
   buildInputs = lib.optionals enableX11 [ gsettings-desktop-schemas ocamlPackages.lablgtk3 ];
 
   makeFlags = [ "PREFIX=$(out)" ]

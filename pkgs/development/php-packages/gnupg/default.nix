@@ -1,8 +1,17 @@
-{ buildPecl, lib, gpgme, file, gnupg, php, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  gpgme,
+  file,
+  gnupg,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   version = "1.5.1";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "gnupg";
 
@@ -11,7 +20,7 @@ in buildPecl {
     repo = "php-gnupg";
     rev = "gnupg-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-kEc0883sYgmAf1mkH0zRjHzUASnZgQvdYE6VzT5X2RI=";
+    hash = "sha256-kEc0883sYgmAf1mkH0zRjHzUASnZgQvdYE6VzT5X2RI=";
   };
 
   buildInputs = [ gpgme ];

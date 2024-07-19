@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -17,13 +18,9 @@ buildPythonPackage {
     hash = "sha256-EkUVd4d4Te8brHerygDc6KQSpiX11NrHYkcZSDRi05w=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gsm0338" ];
 
@@ -31,6 +28,6 @@ buildPythonPackage {
     description = "Python codec for GSM 03.38";
     homepage = "https://github.com/dsch/gsm0338";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli janik ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

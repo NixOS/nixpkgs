@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pycryptodomex,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.8.1";
-  format = "setuptools";
+  version = "1.9.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-KmkoCQDZ1NC3CKfV5DZBukExF9fUTojvWv2ZLTCzRZU=";
+    hash = "sha256-D3PABCFjy7ZhP4L02rUvmKttejDPUE5whxqQih0MvpU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodomex
     requests
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "huawei_lte_api.AuthorizedConnection"

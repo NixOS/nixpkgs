@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , getent
 , iproute2
@@ -9,10 +10,12 @@
 , shadow
 , procps
 , nixosTests
+, installShellFiles
+, tailscale-nginx-auth
 }:
 
 let
-  version = "1.60.1";
+  version = "1.70.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -22,15 +25,25 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-1BzzXRqbs8dS9263cXCujYYSStQlvyQr3dm3tyr+64k=";
+    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
   };
-  vendorHash = "sha256-eci4f6golU1eIQOezplA+I+gmOfof40ktIdpr0v/uMc=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  patches = [
+    # Fix "tailscale ssh" when built with ts_include_cli tag
+    # https://github.com/tailscale/tailscale/pull/12109
+    (fetchpatch {
+      url = "https://github.com/tailscale/tailscale/commit/325ca13c4549c1af58273330744d160602218af9.patch";
+      hash = "sha256-SMwqZiGNVflhPShlHP+7Gmn0v4b6Gr4VZGIF/oJAY8M=";
+    })
+  ];
+
+  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
+  subPackages = [ "cmd/tailscaled" ];
 
   ldflags = [
     "-w"
@@ -39,11 +52,24 @@ buildGoModule {
     "-X tailscale.com/version.shortStamp=${version}"
   ];
 
+  tags = [
+    "ts_include_cli"
+  ];
+
   doCheck = false;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/tailscaled --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]}
-    wrapProgram $out/bin/tailscale --suffix PATH : ${lib.makeBinPath [ procps ]}
+  postInstall = ''
+    ln -s $out/bin/tailscaled $out/bin/tailscale
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/tailscaled \
+      --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
+      --suffix PATH : ${lib.makeBinPath [ procps ]}
+
+    local INSTALL="$out/bin/tailscale"
+    installShellCompletion --cmd tailscale \
+      --bash <($out/bin/tailscale completion bash) \
+      --fish <($out/bin/tailscale completion fish) \
+      --zsh <($out/bin/tailscale completion zsh)
 
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
@@ -51,13 +77,15 @@ buildGoModule {
 
   passthru.tests = {
     inherit (nixosTests) headscale;
+    inherit tailscale-nginx-auth;
   };
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
+    description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
+    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk mfrw ];
+    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
   };
 }

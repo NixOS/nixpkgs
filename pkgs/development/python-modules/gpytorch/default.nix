@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, linear-operator
-, scikit-learn
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  linear-operator,
+  scikit-learn,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  torch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/cornellius-gp/gpytorch/pull/2545
+      name = "scipy-1.14-compatibility.patch";
+      url = "https://github.com/cornellius-gp/gpytorch/commit/2562be472521b8aec366de2619e3130a96fab982.patch";
+      excludes = [ "setup.py" ];
+      hash = "sha256-znOFpN6go2iIxP24VjJLKF3Laxcr4xV/IyP2y36g4QY=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -34,9 +46,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gpytorch" ];
 
@@ -51,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
+    description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

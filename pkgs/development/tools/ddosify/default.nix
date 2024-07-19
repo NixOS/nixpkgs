@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "High-performance load testing tool, written in Golang";
+    mainProgram = "ddosify";
     homepage = "https://ddosify.com/";
     changelog = "https://github.com/ddosify/ddosify/releases/tag/v${version}";
     license = licenses.agpl3Plus;

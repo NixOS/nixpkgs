@@ -27,6 +27,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Terminal Benchmarking as CLI and library";
+    mainProgram = "tbp";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ moni ];

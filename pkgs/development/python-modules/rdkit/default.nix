@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, comic-neue
-, boost
-, catch2_3
-, inchi
-, cairo
-, eigen
-, python
-, rapidjson
-, maeparser
-, coordgenlibs
-, numpy
-, pandas
-, pillow
-, memorymappingHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  comic-neue,
+  boost,
+  catch2_3,
+  inchi,
+  cairo,
+  eigen,
+  python,
+  rapidjson,
+  maeparser,
+  coordgenlibs,
+  numpy,
+  pandas,
+  pillow,
+  memorymappingHook,
 }:
 let
   external = {
@@ -77,17 +78,13 @@ buildPythonPackage rec {
     ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
     cairo
     catch2_3
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
-    memorymappingHook
-  ];
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
 
   propagatedBuildInputs = [
     numpy
@@ -153,7 +150,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = with maintainers; [ rmcgibbo natsukium ];
+    maintainers = with maintainers; [
+      rmcgibbo
+      natsukium
+    ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";

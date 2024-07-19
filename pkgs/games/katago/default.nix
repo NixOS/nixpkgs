@@ -28,14 +28,14 @@ assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
 stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.14.0";
-  githash = "c6de1bbda837a0717eaeca46102f7326ed0da0d4";
+  version = "1.14.1";
+  githash = "f2dc582f98a79fefeb11b2c37de7db0905318f4f";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-0WB/weQIJkLXedcOJO7D/N85oXTufvbmyfIp8XdrACg=";
+    hash = "sha256-ZdvHvrtSLwQ5vFMzLdJSJEiGcSent9iskPgpbL1TfhI=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -53,11 +53,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (backend == "cuda") [
     cudaPackages.cudnn
     cudaPackages.cudatoolkit
-    mesa.drivers
   ] ++ lib.optionals (backend == "tensorrt") [
       cudaPackages.cudatoolkit
       cudaPackages.tensorrt
-      mesa.drivers
   ] ++ lib.optionals (backend == "opencl") [
     opencl-headers
     ocl-icd
@@ -98,6 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
+    mainProgram = "katago";
     homepage    = "https://github.com/lightvector/katago";
     license     = licenses.mit;
     maintainers = [ maintainers.omnipotententity ];

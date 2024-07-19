@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, ntc-templates
-, paramiko
-, pyserial
-, pyyaml
-, scp
-, textfsm
+  # dependencies
+  ntc-templates,
+  paramiko,
+  pyserial,
+  pyyaml,
+  scp,
+  textfsm,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     ntc-templates
@@ -47,8 +46,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description =
-      "Multi-vendor library to simplify Paramiko SSH connections to network devices";
+    description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
     homepage = "https://github.com/ktbyers/netmiko/";
     license = licenses.mit;
     maintainers = [ maintainers.astro ];

@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
+    glib
     itstool
     desktop-file-utils
   ];
@@ -54,15 +55,18 @@ stdenv.mkDerivation rec {
     exiv2
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "gnome.${pname}";
+      freeze = true;
     };
   };
 
   meta = with lib; {
-    description = "A set of graphical utilities for color management to be used in the GNOME desktop";
+    description = "Set of graphical utilities for color management to be used in the GNOME desktop";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

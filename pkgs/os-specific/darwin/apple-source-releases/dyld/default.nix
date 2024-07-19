@@ -11,6 +11,6 @@ appleDerivation' stdenvNoCC {
     description = "Impure primitive symlinks to the Mac OS native dyld, along with headers";
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    license     = licenses.apple-psl20;
   };
 }

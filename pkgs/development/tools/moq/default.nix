@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "moq";
@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/matryer/moq";
     description = "Interface mocking tool for go generate";
+    mainProgram = "moq";
     longDescription = ''
       Moq is a tool that generates a struct from any interface. The struct can
       be used in test code as a mock of the interface.

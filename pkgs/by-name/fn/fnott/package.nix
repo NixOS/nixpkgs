@@ -20,15 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fnott";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
     rev = version;
-    hash = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
+    hash = "sha256-out3OZCGZGIIHFZ4t2nN6/3UpsRH9zfw35emexVo4RE=";
   };
+
+  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
 
   strictDeps = true;
   depsBuildBuild = [
@@ -57,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
+    changelog = "https://codeberg.org/dnkl/fnott/src/tag/${src.rev}/CHANGELOG.md";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
     license = with lib.licenses; [ mit zlib ];
     maintainers = with lib.maintainers; [ polykernel ];

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wio";
-  version = "unstable-2023-11-23";
+  version = "0.17.3-unstable-2024-04-30";
 
   src = fetchFromGitHub {
     owner = "Rubo3";
     repo = "wio";
-    rev = "77c33b555589068350078d634a256a8fbb7ffe6b";
-    hash = "sha256-Wff8RPHfmgPYJ3cO0h5onHtWIvOYDqLjvF1O4uODuCY=";
+    rev = "9d459df379efdcf20ea10906c48c79c506c32066";
+    hash = "sha256-Bn7mCVQPH/kH2WRsGPPGIGgvk0r894zZHCHl6BVmWVg=";
   };
 
   nativeBuildInputs = [

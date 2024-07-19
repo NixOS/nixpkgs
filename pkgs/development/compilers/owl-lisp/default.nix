@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "owl-lisp";
     repo   = "owl";
     rev    = "v${version}";
-    sha256 = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
+    hash = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
   nativeBuildInputs = [ which ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A functional Scheme for world domination";
+    description = "Functional Scheme for world domination";
     homepage    = "https://gitlab.com/owl-lisp/owl";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

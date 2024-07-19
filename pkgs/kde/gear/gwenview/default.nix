@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   qtwayland,
+  qtimageformats,
   pkg-config,
   cfitsio,
   exiv2,
@@ -9,8 +10,6 @@
   kimageannotator,
   lcms2,
   libtiff,
-  wayland,
-  wayland-protocols,
 }:
 mkKdeDerivation {
   pname = "gwenview";
@@ -19,6 +18,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsvg
     qtwayland
+    # adds support for webp and other image formats
+    qtimageformats
 
     cfitsio
     exiv2
@@ -26,7 +27,5 @@ mkKdeDerivation {
     kimageannotator
     lcms2
     libtiff
-    wayland
-    wayland-protocols
   ];
 }

@@ -4,23 +4,23 @@
 , gtk-layer-shell
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-hello";
-  version = "0.1.7";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HDH5B15MQqJhRNCPeg4IJSeX/676AdCNhmJ7iqn8yco=";
+    hash = "sha256-czvKUuSAGEqtjIcIW9mm/LlUsvkGknHbwuXJw5YGT5A=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-hello";
+    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/v${version}";
     description = "GTK3-based greeter for the greetd daemon, written in python";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

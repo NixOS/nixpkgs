@@ -10,13 +10,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.3.2";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
-    hash = "sha256-dl4fTa+CXsycC+hhSkIzQQxrSkBDPsdrmKdrHPakGig=";
+    hash = "sha256-3OMcCMHx+uRid9MF2LMaqUOVQEDlvJiLIVDpCunhxw8=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook4 gobject-introspection ];
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A graphical client for the SoulSeek peer-to-peer system";
+    description = "Graphical client for the SoulSeek peer-to-peer system";
     longDescription = ''
       Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
       to the official Soulseek client, providing additional functionality while

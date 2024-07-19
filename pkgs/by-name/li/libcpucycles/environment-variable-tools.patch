@@ -1,0 +1,59 @@
+diff --git a/configure b/configure
+index 87d5c14..5e2a1a4 100755
+--- a/configure
++++ b/configure
+@@ -112,21 +112,26 @@ def compilerversion(c):
+   except:
+     pass
+ 
+-firstcompiler = None
+-
+-with open('compilers/default') as f:
+-  for c in f.readlines():
+-    c = c.strip()
+-    cv = compilerversion(c)
+-    if cv == None:
+-      print('skipping default compiler %s' % c)
+-      continue
+-    print('using default compiler %s' % c)
+-    firstcompiler = c
+-    break
+-
+-if firstcompiler is None:
+-  raise ValueError('did not find a working compiler')
++if c := os.getenv("CC"):
++  firstcompiler = c
++  print('using default compiler %s' % c)
++else:
++  firstcompiler = None
++
++  with open('compilers/default') as f:
++    for c in f.readlines():
++      c = c.strip()
++      cv = compilerversion(c)
++      if cv == None:
++        print('skipping default compiler %s' % c)
++        continue
++      print('using default compiler %s' % c)
++      firstcompiler = c
++      break
++
++  if firstcompiler is None:
++    raise ValueError('did not find a working compiler')
++
+ 
+ with open('build/%s/scripts/compiledefault' % host,'w') as f:
+   f.write('#!/bin/sh\n')
+diff --git a/scripts-build/staticlib b/scripts-build/staticlib
+index bb23658..111ab13 100755
+--- a/scripts-build/staticlib
++++ b/scripts-build/staticlib
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+ rm -f package/lib/libcpucycles.a
+-ar cr package/lib/libcpucycles.a "$@"
+-ranlib package/lib/libcpucycles.a || :
++${AR:-ar} cr package/lib/libcpucycles.a "$@"
++${RANLIB:-ranlib} package/lib/libcpucycles.a || :
+ chmod 644 package/lib/libcpucycles.a

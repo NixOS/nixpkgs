@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line interface to Concourse CI";
+    mainProgram = "fly";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ ivanbrennan SuperSandro2000 ];

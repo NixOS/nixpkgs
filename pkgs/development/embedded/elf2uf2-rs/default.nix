@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
+    hash = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
+    mainProgram = "elf2uf2-rs";
     homepage = "https://github.com/JoNil/elf2uf2-rs";
     license = with licenses; [ bsd0 ];
     platforms = platforms.linux ++ platforms.darwin;

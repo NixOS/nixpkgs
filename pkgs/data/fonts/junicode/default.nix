@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.206";
+  version = "2.208";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-oOKg85Yz5/2/pvwjVqeQXE8xE7X+QJvPYwYN+E18oEc=";
+    hash = "sha256-uzPzZ6b/CxdcoXSsxf2Cfs9/MpcGn7pQfdwL37pbvXg=";
   };
 
   outputs = [ "out" "doc" "tex" ];
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";
-    description = "A Unicode font for medievalists";
+    description = "Unicode font for medievalists";
     maintainers = with lib.maintainers; [ ivan-timokhin ];
     license = lib.licenses.ofl;
   };

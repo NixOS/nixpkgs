@@ -177,6 +177,26 @@ let
       '';
     };
 
+    borgmatic = {
+      exporterConfig = {
+        enable = true;
+        user = "root";
+      };
+      metricProvider = {
+        services.borgmatic.enable = true;
+        services.borgmatic.settings.source_directories = [ "/home" ];
+        services.borgmatic.settings.repositories = [ { label = "local"; path = "/var/backup"; } ];
+        services.borgmatic.settings.keep_daily = 10;
+      };
+      exporterTest = ''
+        succeed("borgmatic rcreate -e none")
+        succeed("borgmatic")
+        wait_for_unit("prometheus-borgmatic-exporter.service")
+        wait_for_open_port(9996)
+        succeed("curl -sSf localhost:9996/metrics | grep 'borg_total_backups{repository=\"/var/backup\"} 1'")
+      '';
+    };
+
     collectd = {
       exporterConfig = {
         enable = true;
@@ -209,6 +229,34 @@ let
         '';
     };
 
+    deluge = {
+      exporterConfig = {
+        enable = true;
+        port = 1234;
+        listenAddress = "127.0.0.1";
+
+        delugeUser = "user";
+        delugePort = 2345;
+        delugePasswordFile = pkgs.writeText "password" "weak_password";
+      };
+      metricProvider = {
+        services.deluge.enable = true;
+        services.deluge.declarative = true;
+        services.deluge.config.daemon_port = 2345;
+        services.deluge.authFile = pkgs.writeText "authFile" ''
+        localclient:abcdef:10
+        user:weak_password:10
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("deluged.service")
+        wait_for_open_port(2345)
+        wait_for_unit("prometheus-deluge-exporter.service")
+        wait_for_open_port(1234)
+        succeed("curl -sSf http://localhost:1234 | grep 'deluge_torrents'")
+      '';
+    };
+
     dnsmasq = {
       exporterConfig = {
         enable = true;
@@ -224,6 +272,54 @@ let
         wait_for_unit("prometheus-dnsmasq-exporter.service")
         wait_for_open_port(9153)
         succeed("curl -sSf http://localhost:9153/metrics | grep 'dnsmasq_leases 0'")
+      '';
+    };
+
+    dnssec = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          records = [
+            {
+              zone = "example.com";
+              record = "@";
+              type = "SOA";
+            }
+          ];
+        };
+        resolvers = [ "127.0.0.1:53" ];
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          settingsFile = pkgs.writeText "knot.conf" ''
+            server:
+              listen: 127.0.0.1@53
+            template:
+              - id: default
+                storage: ${pkgs.buildEnv {
+                  name = "zones";
+                  paths = [(pkgs.writeTextDir "example.com.zone" ''
+                    @ SOA ns1.example.com. noc.example.com. 2024032401 86400 7200 3600000 172800
+                    @       NS      ns1
+                    ns1     A       192.168.0.1
+                  '')];
+                }}
+                zonefile-load: difference
+                zonefile-sync: -1
+            zone:
+              - domain: example.com
+                file: example.com.zone
+                dnssec-signing: on
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_open_port(53)
+        wait_for_unit("prometheus-dnssec-exporter.service")
+        wait_for_open_port(9204)
+        succeed("curl -sSf http://localhost:9204/metrics | grep 'example.com'")
       '';
     };
 
@@ -266,10 +362,9 @@ let
         tokenPath = pkgs.writeText "token" "abc123";
       };
 
-      # noop: fastly's exporter can't start without first talking to fastly
-      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
       exporterTest = ''
-        succeed("true");
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
       '';
     };
 
@@ -414,54 +509,6 @@ let
         wait_for_open_port(7979)
         succeed(
             "curl -sSf 'localhost:7979/probe?target=http://localhost' | grep 'json_test_metric 1'"
-        )
-      '';
-    };
-
-    kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
-    in
-    {
-      exporterConfig = {
-        enable = true;
-        controlSocketPaths = [
-          controlSocketPathV4
-          controlSocketPathV6
-        ];
-      };
-      metricProvider = {
-        services.kea = {
-          dhcp4 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPathV4;
-              };
-            };
-          };
-          dhcp6 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPathV6;
-              };
-            };
-          };
-        };
-      };
-
-      exporterTest = ''
-        wait_for_unit("kea-dhcp4-server.service")
-        wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPathV4}")
-        wait_for_file("${controlSocketPathV6}")
-        wait_for_unit("prometheus-kea-exporter.service")
-        wait_for_open_port(9547)
-        succeed(
-            "curl --fail localhost:9547/metrics | grep 'packets_received_total'"
         )
       '';
     };
@@ -907,7 +954,7 @@ let
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/db";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example

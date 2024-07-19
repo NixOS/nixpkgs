@@ -36,7 +36,7 @@ in
       type = with types; listOf str;
       default = [];
       example = [ "0xe8ebd30000eee2e1" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of infiniband port guids on the system. This is discoverable using `ibstat -p`
       '';
     };

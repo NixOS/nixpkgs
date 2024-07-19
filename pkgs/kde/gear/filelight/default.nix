@@ -2,7 +2,6 @@
   mkKdeDerivation,
   kirigami,
   kquickcharts,
-  qqc2-desktop-style,
 }:
 mkKdeDerivation {
   pname = "filelight";
@@ -10,6 +9,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     kirigami
     kquickcharts
-    qqc2-desktop-style
   ];
+  meta.mainProgram = "filelight";
 }

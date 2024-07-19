@@ -4,7 +4,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "ipv6";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes =
@@ -39,6 +39,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
+          # disable testing driver's default IPv6 address.
+          networking.interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
         };
 
       router =

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wayland-scanner
@@ -24,14 +25,23 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "v${self.version}";
-    hash = "sha256-wP611tGIWBA4IXShWbah7TxqdbvhfcfT2vnXalX/qzk=";
+    hash = "sha256-KsX7sAwkEFpXiwyjt0HGTnnrUU58wW1jlzj5IA/LRz8=";
   };
+
+  patches = [
+    # TODO: remove on next upgrade
+    (fetchpatch {
+      name = "fix-compilation-pipewire-1.2.0.patch";
+      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/c5b30938710d6c599f3f5cd99a3ffac35381fb0f.patch";
+      hash = "sha256-f9OgW9tLuGuHXYH6bR1Y+CEuBPHOhRiHfEPebJzlwK8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -70,6 +80,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
     description = "xdg-desktop-portal backend for Hyprland";
+    mainProgram = "hyprland-share-picker";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;

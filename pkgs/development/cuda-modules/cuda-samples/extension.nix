@@ -1,7 +1,7 @@
 {
   cudaVersion,
-  hostPlatform,
   lib,
+  stdenv,
 }:
 let
   cudaVersionToHash = {
@@ -22,6 +22,8 @@ let
     "12.2" = "sha256-pOy0qfDjA/Nr0T9PNKKefK/63gQnJV2MQsN2g3S2yng=";
     "12.3" = "sha256-fjVp0G6uRCWxsfe+gOwWTN+esZfk0O5uxS623u0REAk=";
   };
+
+  inherit (stdenv) hostPlatform;
 
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.

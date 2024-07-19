@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtkmm3 libsigcxx xorg.libX11 ];
 
   meta = with lib; {
-    description = "A simple joystick tester based on Gtk+";
+    description = "Simple joystick tester based on Gtk+";
     longDescription = ''
       It provides you with a list of attached joysticks, a way to display which
       buttons and axis are pressed, a way to remap axis and buttons and a way

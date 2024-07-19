@@ -4,6 +4,7 @@
 , fetchYarnDeps
 , makeWrapper
 , prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , yarn
 , nixosTests
@@ -11,21 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.75.0";
+  version = "0.77.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-u4WDD0HRaNHdknHaoPYprebUaHt8EmESjBG0N6NZpIk=";
+    hash = "sha256-Ri2qN7nR79Y1tsUsga/92nS7EuP/nqaUG2FiYJQNAr4=";
   };
 
-  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-V+1lqZh68T3C9VAFETHehv9iCt1j24ZeY9ErbnRGIrk=";
+    hash = "sha256-wxXnvi58mBfAQiMSxhXWK7sYLvr8nfQ+u6kMYnRWI3s=";
   };
 
   configurePhase = ''
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
+    description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;

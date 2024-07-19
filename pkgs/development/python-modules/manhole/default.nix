@@ -1,9 +1,10 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, requests
-, process-tests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  requests,
+  process-tests,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,11 @@ buildPythonPackage rec {
   # https://github.com/ionelmc/python-manhole/issues/54 is fixed
   doCheck = false;
 
-  nativeCheckInputs = [ pytest requests process-tests ];
+  nativeCheckInputs = [
+    pytest
+    requests
+    process-tests
+  ];
   checkPhase = ''
     # Based on its tox.ini
     export PYTHONUNBUFFERED=yes
@@ -42,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ionelmc/python-manhole";
     description = "Debugging manhole for Python applications";
+    mainProgram = "manhole-cli";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ivan ];
   };

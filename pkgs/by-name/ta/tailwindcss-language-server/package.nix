@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.0.16";
+  version = "0.0.20";
 in
 buildNpmPackage {
   pname = "tailwindcss-language-server";
@@ -19,11 +19,11 @@ buildNpmPackage {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
     rev = "@tailwindcss/language-server@v${version}";
-    hash = "sha256-azzWrT8Ac+bdEfmNo+9WfQgHwA3+q9yGZMLfYXAQHtU=";
+    hash = "sha256-MKJHRJPDivq/TDQUEI8usKxDeNkVondotjo+gZiz9n0=";
   };
 
   makeCacheWritable = true;
-  npmDepsHash = "sha256-z2fLtGnYgI8ocWTBrqpdElgjNghoE42LFJRWyVt/U7M=";
+  npmDepsHash = "sha256-DYK7/gfZPKiSYG9IFPUnxhscxGooSUTdG1wFihFY/vA=";
   npmWorkspace = "packages/tailwindcss-language-server";
 
   buildInputs = [ libsecret ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security AppKit ]);

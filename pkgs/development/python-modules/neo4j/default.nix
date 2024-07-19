@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pandas
-, pyarrow
-, pythonOlder
-, pytz
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.18.0";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,45 +22,37 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-rp0N2k23WZ86hqqz4ByW5gdyU2eYLVppyEJEdY/Yk8w=";
+    hash = "sha256-/yilbKui0D49zviNM9MI5ElGAYPB3MlbMgpDyI1kVX8=";
   };
 
   postPatch = ''
     # The dynamic versioning adds a postfix (.dev0) to the version
     substituteInPlace pyproject.toml \
-      --replace '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
-      --replace 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
-      --replace '#readme = "README.rst"' 'version = "${version}"'
+      --replace-fail '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
+      --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
+      --replace-fail '#readme = "README.rst"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     tomlkit
   ];
 
   passthru.optional-dependencies = {
-    numpy = [
-      numpy
-    ];
+    numpy = [ numpy ];
     pandas = [
       numpy
       pandas
     ];
-    pyarrow = [
-      pyarrow
-    ];
+    pyarrow = [ pyarrow ];
   };
 
   # Missing dependencies
   doCheck = false;
 
-  pythonImportsCheck = [
-    "neo4j"
-  ];
+  pythonImportsCheck = [ "neo4j" ];
 
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";

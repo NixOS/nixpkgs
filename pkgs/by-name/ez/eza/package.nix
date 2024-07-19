@@ -10,23 +10,23 @@
 , darwin
 , libiconv
 , installShellFiles
-  # once eza upstream gets support for setting up a compatibilty symlink for exa, we should change
+  # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
   # the handling here from postInstall to passing the required argument to the builder.
 , exaAlias ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.18.6";
+  version = "0.18.22";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-xdMoOGOHbGNRouVbJewQ1bWJbd7nusq3H7mXDC4AIXU=";
+    hash = "sha256-AZTfFMovNZao/zYzXkVZFGuxUnWz41PmJhuzcIPmwZc=";
   };
 
-  cargoHash = "sha256-IM1dxTaFa5kq94pn6QQrUGg6fZWhBZsf4ZND42BPVag=";
+  cargoHash = "sha256-c35CscrsKrzOpzP00K63VUtNcQOzEvS2412s16O4wHw=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A modern, maintained replacement for ls";
+    description = "Modern, maintained replacement for ls";
     longDescription = ''
       eza is a modern replacement for ls. It uses colours for information by
       default, helping you distinguish between many types of files, such as

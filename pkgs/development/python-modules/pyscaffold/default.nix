@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, colorama
-, configupdater
-, importlib-metadata
-, packaging
-, platformdirs
-, tomlkit
-, pre-commit
-, pyscaffoldext-cookiecutter
-, pyscaffoldext-custom-extension
-, pyscaffoldext-django
-, pyscaffoldext-dsproject
-, pyscaffoldext-markdown
-, pyscaffoldext-travis
-, virtualenv
-, build
-, certifi
-, flake8
-, pytest
-, pytest-cov
-, pytest-randomly
-, pytest-xdist
-, sphinx
-, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  colorama,
+  configupdater,
+  importlib-metadata,
+  packaging,
+  platformdirs,
+  tomlkit,
+  pre-commit,
+  pyscaffoldext-cookiecutter,
+  pyscaffoldext-custom-extension,
+  pyscaffoldext-django,
+  pyscaffoldext-dsproject,
+  pyscaffoldext-markdown,
+  pyscaffoldext-travis,
+  virtualenv,
+  build,
+  certifi,
+  flake8,
+  pytest,
+  pytest-cov,
+  pytest-randomly,
+  pytest-xdist,
+  sphinx,
+  tox,
 }:
 
 buildPythonPackage rec {
@@ -72,12 +73,8 @@ buildPythonPackage rec {
       pyscaffoldext-travis
       virtualenv
     ];
-    ds = [
-      pyscaffoldext-dsproject
-    ];
-    md = [
-      pyscaffoldext-markdown
-    ];
+    ds = [ pyscaffoldext-dsproject ];
+    md = [ pyscaffoldext-markdown ];
     testing = [
       build
       certifi
@@ -101,6 +98,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Template tool for putting up the scaffold of a Python project";
+    mainProgram = "putup";
     homepage = "https://pypi.org/project/PyScaffold/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];

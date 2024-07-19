@@ -76,12 +76,14 @@ If you need to refer to the resulting files somewhere else in a Nix expression, 
 For example, if the file destination is a directory:
 
 ```nix
-my-file = writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-  destination = "/share/my-file";
+{
+  my-file = writeTextFile {
+    name = "my-file";
+    text = ''
+      Contents of File
+    '';
+    destination = "/share/my-file";
+  };
 }
 ```
 
@@ -90,9 +92,110 @@ Remember to append "/share/my-file" to the resulting store path when using it el
 ```nix
 writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
-'';
+''
 ```
 ::::
+
+### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
+
+Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/1.4/) to the Nix store.
+
+This function is usually used to add desktop items to a package through the `copyDesktopItems` hook.
+
+`makeDesktopItem` adheres to version 1.4 of the specification.
+
+#### Inputs {#trivial-builder-makeDesktopItem-inputs}
+
+`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/1.4/ar01s06.html).
+
+All recognised keys from the specification are supported with the exception of the "Hidden" field. The keys are converted into camelCase format, but correspond 1:1 to their equivalent in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`.
+
+The "Version" field is hardcoded to the version `makeDesktopItem` currently adheres to.
+
+The following fields are either required, are of a different type than in the specification, carry specific default values, or are additional fields supported by `makeDesktopItem`:
+
+`name` (String)
+
+: The name of the desktop file in the Nix store.
+
+`type` (String; _optional_)
+
+: Default value: `"Application"`
+
+`desktopName` (String)
+
+: Corresponds to the "Name" field of the specification.
+
+`actions` (List of Attribute set; _optional_)
+
+: A list of attribute sets {name, exec?, icon?}
+
+`extraConfig` (Attribute set; _optional_)
+
+: Additional key/value pairs to be added verbatim to the desktop file. Attributes need to be prefixed with 'X-'.
+
+#### Examples {#trivial-builder-makeDesktopItem-examples}
+
+::: {.example #ex-makeDesktopItem}
+# Usage 1 of `makeDesktopItem`
+
+Write a desktop file `/nix/store/<store path>/my-program.desktop` to the Nix store.
+
+```nix
+{makeDesktopItem}:
+makeDesktopItem {
+  name = "my-program";
+  desktopName = "My Program";
+  genericName = "Video Player";
+  noDisplay = false;
+  comment = "Cool video player";
+  icon = "/path/to/icon";
+  onlyShowIn = [ "KDE" ];
+  dbusActivatable = true;
+  tryExec = "my-program";
+  exec = "my-program --someflag";
+  path = "/some/working/path";
+  terminal = false;
+  actions.example = {
+    name = "New Window";
+    exec = "my-program --new-window";
+    icon = "/some/icon";
+  };
+  mimeTypes = [ "video/mp4" ];
+  categories = [ "Utility" ];
+  implements = [ "org.my-program" ];
+  keywords = [ "Video" "Player" ];
+  startupNotify = false;
+  startupWMClass = "MyProgram";
+  prefersNonDefaultGPU = false;
+  extraConfig.X-SomeExtension = "somevalue";
+}
+```
+
+:::
+
+::: {.example #ex2-makeDesktopItem}
+# Usage 2 of `makeDesktopItem`
+
+Override the `hello` package to add a desktop item.
+
+```nix
+{ copyDesktopItems
+, hello
+, makeDesktopItem }:
+
+hello.overrideAttrs {
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [(makeDesktopItem {
+    name = "hello";
+    desktopName = "Hello";
+    exec = "hello";
+  })];
+}
+```
+
+:::
 
 ### `writeTextFile` {#trivial-builder-writeTextFile}
 
@@ -186,7 +289,7 @@ writeTextFile {
   };
   allowSubstitutes = true;
   preferLocalBuild = false;
-};
+}
 ```
 :::
 
@@ -250,7 +353,7 @@ Write the string `Contents of File` to `/nix/store/<store path>`:
 writeText "my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -290,7 +393,7 @@ Write the string `Contents of File` to `/nix/store/<store path>/share/my-file`:
 writeTextDir "share/my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -332,7 +435,7 @@ Write the string `Contents of File` to `/nix/store/<store path>` and make the fi
 writeScript "my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -365,7 +468,7 @@ This is for consistency with the convention of software packages placing executa
 
 The created file is marked as executable.
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
 # Usage of `writeScriptBin`
@@ -374,7 +477,7 @@ The store path will include the the name, and it will be a directory.
 writeScriptBin "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -387,7 +490,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script"
+  destination = "bin/my-script";
 }
 ```
 
@@ -418,7 +521,7 @@ This function is almost exactly like [](#trivial-builder-writeScript), except th
 writeShellScript "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -461,7 +564,7 @@ This function is a combination of [](#trivial-builder-writeShellScript) and [](#
 writeShellScriptBin "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -475,7 +578,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script"
+  destination = "bin/my-script";
 }
 ```
 
@@ -557,19 +660,23 @@ This creates a derivation with a directory structure like the following:
 
 ## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
 
-Writes the closure of transitive dependencies to a file.
+Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
 
-This produces the equivalent of `nix-store -q --requisites`.
+## `writeClosure` {#trivial-builder-writeClosure}
+
+Given a list of [store paths](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nixos.org/manual/nix/stable/glossary#gloss-closure) to a text file.
+
+The result is equivalent to the output of `nix-store -q --requisites`.
 
 For example,
 
 ```nix
-writeReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+writeClosure [ (writeScriptBin "hi" ''${hello}/bin/hello'') ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
 
-```nix
+```
 /nix/store/<hash>-hello-2.10
 /nix/store/<hash>-hi
 /nix/store/<hash>-libidn2-2.3.0
@@ -595,7 +702,7 @@ writeDirectReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
 
 produces an output path `/nix/store/<hash>-runtime-references` containing
 
-```nix
+```
 /nix/store/<hash>-hello-2.10
 ```
 

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, numpy
-, scipy
-, six
-, paramz
-, matplotlib
-, cython
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  numpy,
+  scipy,
+  six,
+  paramz,
+  matplotlib,
+  cython,
 }:
 
 buildPythonPackage rec {
-  pname = "GPy";
-  version = "1.13.0";
+  pname = "gpy";
+  version = "1.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SheffieldML";
     repo = "GPy";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-2HKKKBD/JFSeLQGvvgObxqxv9IHEKFnpaejdKbYZbmY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ykoGdXy1uagKrP9Nqn74mDESZwKVPq6wQgnHlCznevM=";
   };
 
   nativeBuildInputs = [ setuptools ];

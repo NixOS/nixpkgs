@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FzlukSQSKeQY6H53UfWXwL8bXkOXRhaA92/Kgxh4oms=";
+    hash = "sha256-E1D2DvwwrtlY06kvCZkoAO5VcdtkBJYLcxuqGsulFUA=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -31,7 +31,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-jVX/CFf9dd9qD3gyGVDjbfINtPLCsgdjWFix4BCpDZ0=";
+  vendorHash = "sha256-4k4aZnQ9SjcGr/ziCacfcVfVk7w4Qhli2rOeYE76Qs0=";
 
   ldflags = [
     "-s"
@@ -60,7 +60,7 @@ buildGoModule rec {
   subPackages = [ "cmd/pdfcpu" ];
 
   meta = with lib; {
-    description = "A PDF processor written in Go";
+    description = "PDF processor written in Go";
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];

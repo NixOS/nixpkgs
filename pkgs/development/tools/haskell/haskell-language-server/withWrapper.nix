@@ -8,7 +8,7 @@
 # Run
 #  $ nix-instantiate --eval -E 'with import <nixpkgs> {}; builtins.attrNames pkgs.haskell.packages'
 # to list for your nixpkgs version.
-, supportedGhcVersions ? [ "94" ]
+, supportedGhcVersions ? [ "96" ]
 
 # Whether to build hls with the dynamic run-time system.
 # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.

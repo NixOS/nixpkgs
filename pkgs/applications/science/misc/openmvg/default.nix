@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     broken = stdenv.isDarwin && stdenv.isx86_64;
-    description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
+    description = "Library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;

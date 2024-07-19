@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -42,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tools to find secrets from various signatures";
+    mainProgram = "tell-me-your-secrets";
     homepage = "https://github.com/valayDave/tell-me-your-secrets";
     changelog = "https://github.com/valayDave/tell-me-your-secrets/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

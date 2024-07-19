@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gitMinimal }:
 
 buildGoModule rec {
   pname = "krew";
@@ -15,8 +15,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/krew" ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/krew \
+      --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+  '';
+
   meta = with lib; {
     description = "Package manager for kubectl plugins";
+    mainProgram = "krew";
     homepage = "https://github.com/kubernetes-sigs/krew";
     maintainers = with maintainers; [ vdemeester ];
     license = lib.licenses.asl20;

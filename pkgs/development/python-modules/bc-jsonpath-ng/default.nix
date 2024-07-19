@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchFromGitHub
-, ply
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,21 +27,18 @@ buildPythonPackage rec {
     ply
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Exclude tests that require oslotest
     "tests/test_jsonpath_rw_ext.py"
   ];
 
-  pythonImportsCheck = [
-    "bc_jsonpath_ng"
-  ];
+  pythonImportsCheck = [ "bc_jsonpath_ng" ];
 
   meta = with lib; {
     description = "JSONPath implementation for Python";
+    mainProgram = "bc_jsonpath_ng";
     homepage = "https://github.com/bridgecrewio/jsonpath-ng";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

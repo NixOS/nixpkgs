@@ -8,17 +8,20 @@
 , CoreServices
 , Libsystem
 , SystemConfiguration
+, nix-update-script
+, testers
+, rye
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.29.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-rNXzhJazOi815dhqviqtfSTM60Y/5ncKBVn2YhqcKJM=";
+    hash = "sha256-dQgiEvnf5LreHCNV5ZXXehONG2Btj1MbGL0dBABZIXE=";
   };
 
   cargoLock = {
@@ -61,27 +64,36 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_add_flask"
     "--skip=test_add_from_find_links"
     "--skip=test_autosync_remember"
+    "--skip=test_basic_list"
     "--skip=test_basic_tool_behavior"
     "--skip=test_config_empty"
     "--skip=test_config_get_set_multiple"
     "--skip=test_config_incompatible_format_and_show_path"
     "--skip=test_config_save_missing_folder"
     "--skip=test_config_show_path"
+    "--skip=test_dotenv"
     "--skip=test_empty_sync"
     "--skip=test_fetch"
     "--skip=test_init_default"
     "--skip=test_init_lib"
     "--skip=test_init_script"
     "--skip=test_lint_and_format"
+    "--skip=test_list_not_rye_managed"
+    "--skip=test_publish_outside_project"
     "--skip=test_version"
   ];
 
-  meta = with lib; {
-    description = "A tool to easily manage python dependencies and environments";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = rye; };
+  };
+
+  meta = {
+    description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
 }

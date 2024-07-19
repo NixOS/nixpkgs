@@ -8,22 +8,22 @@
 
 buildGoModule rec {
   pname = "goperf";
-  version = "unstable-2023-11-08";
+  version = "0-unstable-2024-07-07";
 
   src = fetchgit {
     url = "https://go.googlesource.com/perf";
-    rev = "cb71e802ccb878a069712546879bf26489f0f300";
-    hash = "sha256-1NvrelLsy9lrepttXXnggc0oycC6EgJgU80iXDu3IoI=";
+    rev = "dc66afd55b77cd4e555203ff2c0d3e4d219a1410";
+    hash = "sha256-necbttrRRVcbe4JOFBFNvAl2CPOXe8bC7qPLb8qXJSE=";
   };
 
-  vendorHash = "sha256-dJQHqIR6v0yYbxplytkdA98IHtdxnsvi9X6kIESCsB8=";
+  vendorHash = "sha256-LJ8eNjOufTvLj1939nYkQOi84ZlT8zSGnTztcEKigfY=";
 
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf
     ${lib.escapeShellArgs (unstableGitUpdater { inherit (src) url; })}
     set -x
-    oldhash="$(nix-instantiate . --eval --strict -A "goperf.go-modules.drvAttrs.outputHash" | cut -d'"' -f2)"
-    newhash="$(nix-build -A goperf.go-modules --no-out-link 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+    oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
+    newhash="$(nix-build -A goperf.goModules --no-out-link 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
     fname="$(nix-instantiate --eval -E 'with import ./. {}; (builtins.unsafeGetAttrPos "version" goperf).file' | cut -d'"' -f2)"
     ${lib.getExe sd} --string-mode "$oldhash" "$newhash" "$fname"
   '';

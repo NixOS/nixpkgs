@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, stdenv }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-code-analysis";
@@ -11,11 +11,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-axrtFZQOm1/UUBq1CDFkaZCks1mWoLWmfajDfsqSBmY=";
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   meta = with lib; {
     description = "Analyze and collect metrics on source code";

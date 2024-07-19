@@ -158,7 +158,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
 
 def parse_version(version_str: str) -> Version:
     version: Version = []
-    for component in re.split('\.|\-', version_str):
+    for component in re.split(r'\.|\-', version_str):
         try:
             version.append(int(component))
         except ValueError:
@@ -211,6 +211,7 @@ with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as kernel_versions_json:
 
 # Remove patches for unpackaged kernel versions.
 for kernel_key in sorted(patches.keys() - kernel_versions.keys()):
+    del patches[kernel_key]
     commit_patches(kernel_key=kernel_key, message="remove")
 
 g = Github(os.environ.get("GITHUB_TOKEN"))

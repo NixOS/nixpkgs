@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
-  version = "2.10.2";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
     rev = version;
-    sha256 = "sha256-gQAeQ3PdnCtnLUgt6utWKfFBfQlJj5/mjAxtlmaGQFw=";
+    sha256 = "sha256-LZL9f/pX74rKW+wnNHGKwGuuISOTcFVr6W9h/JEK0U4=";
   };
 
   nativeBuildInputs = [ cmake ];

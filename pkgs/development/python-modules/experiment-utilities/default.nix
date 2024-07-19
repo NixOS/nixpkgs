@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, dill
-, fasteners
-, fetchFromGitLab
-, qgrid
-, ipynbname
-, ipywidgets
-, odfpy
-, scipy
-, plotly
-, pytestCheckHook
-, pyyaml
-, tabulate
-, tensorboard
-, torch
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  dill,
+  fasteners,
+  fetchFromGitLab,
+  qgrid,
+  ipynbname,
+  ipywidgets,
+  odfpy,
+  scipy,
+  plotly,
+  pytestCheckHook,
+  pyyaml,
+  tabulate,
+  tensorboard,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -57,14 +58,12 @@ buildPythonPackage rec {
     torch
   ];
 
-  disabledTests = [
-    "test_experimentstarter"
-  ];
+  disabledTests = [ "test_experimentstarter" ];
 
   pythonImportsCheck = [ "exputils" ];
 
   meta = with lib; {
-    description = "Various tools to run scientific computer experiments.";
+    description = "Various tools to run scientific computer experiments";
     homepage = "https://gitlab.inria.fr/creinke/exputils";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ GaetanLepage ];

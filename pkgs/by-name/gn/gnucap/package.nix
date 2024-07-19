@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
         propagatedBuildInputs = selectedPlugins;
 
-        phases = [ "installPhase" "fixupPhase" ];
+        dontUnpack = true;
 
         installPhase = ''
           mkdir -p $out/bin

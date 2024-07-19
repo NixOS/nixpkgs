@@ -158,6 +158,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libopenshot = callPackage ../development/libraries/libopenshot {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    python3 = pkgs.python311;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -251,7 +252,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
 
@@ -268,6 +271,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qzxing = callPackage ../development/libraries/qzxing { };
 
   rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
+
+  sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   soqt = callPackage ../development/libraries/soqt { };
 
@@ -289,9 +294,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
-  # Convert to a throw on 01-01-2023.
-  # Warnings show up in various cli tool outputs, throws do not.
-  # Remove completely before 24.05
-  overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+  # Remove completely before 24.11
+  overrideScope' = builtins.throw "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
 }));
 }

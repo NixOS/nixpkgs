@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   meta = {
-    description = "A QML port of qtermwidget";
+    description = "QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;

@@ -18,17 +18,17 @@ in
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption (lib.mdDoc "Cinnamon default applications");
+      apps.enable = mkEnableOption "Cinnamon default applications";
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption (lib.mdDoc "the cinnamon desktop manager");
+      enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = lib.mdDoc ''
+        example = literalExpression "[ pkgs.gpaste ]";
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -39,13 +39,13 @@ in
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
     };
 
@@ -53,14 +53,14 @@ in
       default = [];
       example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages cinnamon should exclude from the default environment";
+      description = "Which packages cinnamon should exclude from the default environment";
     };
 
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
@@ -95,7 +95,7 @@ in
       '';
 
       # Default services
-      services.blueman.enable = mkDefault true;
+      services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -116,7 +116,7 @@ in
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       networking.networkmanager.enable = mkDefault true;
 
@@ -157,13 +157,14 @@ in
 
         # packages
         nemo-with-extensions
+        gnome-online-accounts-gtk
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
 
         # theme
-        gnome.adwaita-icon-theme
-        gnome.gnome-themes-extra
+        adwaita-icon-theme
+        gnome-themes-extra
         gtk3.out
 
         # other
@@ -223,17 +224,16 @@ in
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault true;
-      programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-terminal.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
+      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
@@ -246,7 +246,6 @@ in
         pix
 
         # external apps shipped with linux-mint
-        hexchat
         gnome-calculator
         gnome-calendar
         gnome-screenshot

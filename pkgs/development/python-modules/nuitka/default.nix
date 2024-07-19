@@ -1,33 +1,38 @@
-{ lib
-, buildPythonPackage
-, ccache
-, fetchFromGitHub
-, isPyPy
-, ordered-set
-, python3
-, setuptools
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  ccache,
+  fetchFromGitHub,
+  isPyPy,
+  ordered-set,
+  python,
+  setuptools,
+  zstandard,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "1.8.4";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-spa3V9KEjqmwnHSuxLLIu9hJk5PrRwNyOw72sfxBVKo=";
+    hash = "sha256-nKdCMgA92v9VsSgfktXDbSh3DyKsGlcTjpn0Y7u4rxU=";
   };
 
   # default lto off for darwin
   patches = [ ./darwin-lto.patch ];
 
-  nativeBuildInputs = [ setuptools ];
-  nativeCheckInputs = [ ccache  ];
+  build-system = [
+    setuptools
+    wheel
+  ];
+  nativeCheckInputs = [ ccache ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ordered-set
     zstandard
   ];
@@ -35,7 +40,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    ${python3.interpreter} tests/basics/run_all.py search
+    ${python.interpreter} tests/basics/run_all.py search
 
     runHook postCheck
   '';
@@ -50,5 +55,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
   };
-
 }

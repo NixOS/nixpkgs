@@ -1,7 +1,7 @@
-{ config
-, lib
+{ lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , zlib
 , lzo
 , libtasn1
@@ -38,11 +38,14 @@
 , knot-resolver
 , ngtcp2-gnutls
 , ocamlPackages
+, pkgsStatic
 , python3Packages
 , qemu
 , rsyslog
 , openconnect
 , samba
+
+, gitUpdater
 }:
 
 let
@@ -57,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.3";
+  version = "3.8.5";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-90/FlUsn1Oxt+7Ed6ph4iLWxJCiaNwOvytoO5SD0Fz4=";
+    hash = "sha256-ZiaaLP4OHC2r7Ie9u9irZW85bt2aQN0AaXjgA8+lK/w=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -73,6 +76,25 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
+    # Revert https://gitlab.com/gnutls/gnutls/-/merge_requests/1800
+    # dlopen isn't as easy in NixPkgs, as noticed in tests broken by this.
+    # Without getting the libs into RPATH they won't be found.
+    (fetchpatch2 {
+      name = "revert-dlopen-compression.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/8584908d6b679cd4e7676de437117a793e18347c.diff";
+      revert = true;
+      hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
+    })
+    # Makes the system-wide configuration for RSAES-PKCS1-v1_5 actually apply
+    # and makes it enabled by default when the config file is missing
+    # Without this an error 113 is thrown when using some RSA certificates
+    # see https://gitlab.com/gnutls/gnutls/-/issues/1540
+    # "This is pretty sever[e], since it breaks on letsencrypt-issued RSA keys." (comment from above issue)
+    (fetchpatch2 {
+      name = "fix-rsaes-pkcs1-v1_5-system-wide-configuration.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/2d73d945c4b1dfcf8d2328c4d23187d62ffaab2d.diff";
+      hash = "sha256-2aWcLff9jzJnY+XSqCIaK/zdwSLwkNlfDeMlWyRShN8=";
+    })
   ];
 
   # Skip some tests:
@@ -112,7 +134,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config texinfo ]
+  nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
@@ -137,16 +159,22 @@ stdenv.mkDerivation rec {
       --replace "-lunistring" ""
   '';
 
+
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.com/gnutls/gnutls.git";
+  };
+
   passthru.tests = {
     inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
     inherit (ocamlPackages) ocamlnet;
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
     rsyslog = rsyslog.override { withGnutls = true; };
+    static = pkgsStatic.gnutls;
   };
 
   meta = with lib; {
-    description = "The GNU Transport Layer Security Library";
+    description = "GNU Transport Layer Security Library";
 
     longDescription = ''
       GnuTLS is a project that aims to develop a library which

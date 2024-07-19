@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Yet another Go REPL that works nicely";
+    mainProgram = "gore";
     homepage = "https://github.com/motemen/gore";
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];

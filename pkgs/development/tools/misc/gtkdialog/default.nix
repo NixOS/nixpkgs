@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.google.com/archive/p/gtkdialog/";
     # community links: http://murga-linux.com/puppy/viewtopic.php?t=111923 -> https://github.com/01micko/gtkdialog
     description = "Small utility for fast and easy GUI building from many scripted and compiled languages";
+    mainProgram = "gtkdialog";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

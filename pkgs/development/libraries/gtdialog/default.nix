@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform helper for creating interactive dialogs";
+    mainProgram = "gtdialog";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

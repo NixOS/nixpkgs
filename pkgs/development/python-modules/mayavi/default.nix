@@ -1,30 +1,33 @@
-{ lib
-, apptools
-, buildPythonPackage
-, envisage
-, fetchPypi
-, fetchpatch
-, numpy
-, packaging
-, pyface
-, pygments
-, pyqt5
-, pythonOlder
-, pythonAtLeast
-, traitsui
-, vtk
-, wrapQtAppsHook
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  envisage,
+  fetchPypi,
+  fetchpatch,
+  numpy,
+  packaging,
+  pyface,
+  pygments,
+  pyqt5,
+  pythonOlder,
+  pythonAtLeast,
+  traitsui,
+  vtk,
+  wrapQtAppsHook,
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.8.1";
+  # TODO: Remove meta.broken on next release.
+  version = "4.8.2";
   format = "setuptools";
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n0J+8spska542S02ibpr7KJMhGDicG2KHJuEKJrT/Z4=";
+    hash = "sha256-sQ/pFF8hxI5JAvDnRrNgOzy2lNEUVlFaRoIPIaCnQik=";
   };
 
   patches = [
@@ -51,9 +54,7 @@ buildPythonPackage rec {
       --replace "build.build.run(self)" "build.build.run(self); return"
   '';
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     apptools
@@ -72,9 +73,7 @@ buildPythonPackage rec {
   # Needs X server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mayavi"
-  ];
+  pythonImportsCheck = [ "mayavi" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -85,5 +84,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ knedlsepp ];
+    # Should be fixed in a version from after March 26, see:
+    # https://github.com/enthought/mayavi/issues/1284#issuecomment-2020631244
+    broken = pythonAtLeast "3.12";
   };
 }

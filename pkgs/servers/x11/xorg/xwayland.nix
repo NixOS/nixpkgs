@@ -1,8 +1,10 @@
 { egl-wayland
+, bash
 , libepoxy
 , fetchurl
 , fontutil
 , lib
+, libdecor
 , libei
 , libGL
 , libGLU
@@ -32,6 +34,7 @@
 , pkg-config
 , pixman
 , stdenv
+, systemd
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -46,12 +49,17 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "23.2.4";
+  version = "24.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-qZ4Vm20NMwmLO2qyKoi/zs4jyLnQynLFNcVdywaBtGs=";
+    hash = "sha256-cSW+4LEDNYBdf1ulffqjWaeFCvGmhSTx2Xs2J0GlGDI=";
   };
+
+  postPatch = ''
+    substituteInPlace os/utils.c \
+      --replace-fail '/bin/sh' '${lib.getExe' bash "sh"}'
+  '';
 
   depsBuildBuild = [
     pkg-config
@@ -64,6 +72,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     egl-wayland
+    libdecor
     libepoxy
     libei
     fontutil
@@ -90,6 +99,7 @@ stdenv.mkDerivation rec {
     mesa
     openssl
     pixman
+    systemd
     wayland
     wayland-protocols
     xkbcomp
@@ -100,7 +110,6 @@ stdenv.mkDerivation rec {
     libunwind
   ];
   mesonFlags = [
-    (lib.mesonBool "xwayland_eglstream" true)
     (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
@@ -116,11 +125,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An X server for interfacing X11 apps with the Wayland protocol";
+    description = "X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     mainProgram = "Xwayland";
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [ emantor k900 ];
     platforms = platforms.linux;
   };
 }

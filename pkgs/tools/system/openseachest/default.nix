@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Seagate";
     repo = "openSeaChest";
     rev = "v${version}";
-    sha256 = "sha256-2snxruIC/93+yI7g/9cCXcms8FaoXnoyWq9py8GTwrs=";
+    hash = "sha256-2snxruIC/93+yI7g/9cCXcms8FaoXnoyWq9py8GTwrs=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A collection of command line diagnostic tools for storage devices";
+    description = "Collection of command line diagnostic tools for storage devices";
     homepage = "https://github.com/Seagate/openSeaChest";
     license = licenses.mpl20;
     maintainers = with maintainers; [ justinas ];

@@ -31,10 +31,10 @@
 , mesa
 , mpfr
 , python3
-, tbb_2021_8
+, tbb_2021_11
 , wayland
 , wayland-protocols
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 let
@@ -51,7 +51,7 @@ let
       hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
     };
     nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_8 ];
+    buildInputs = [ tbb_2021_11 ];
     cmakeFlags = [
       # only enable what we need
       "-DCCCL_ENABLE_CUB=OFF"
@@ -97,7 +97,7 @@ clangStdenv.mkDerivation rec {
     flex
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
-    wrapGAppsHook
+    wrapGAppsHook3
     ninja
     pkg-config
   ];
@@ -105,7 +105,7 @@ clangStdenv.mkDerivation rec {
     # manifold dependencies
     clipper2
     glm
-    tbb_2021_8
+    tbb_2021_11
     nvidia-cccl
 
     boost
@@ -149,11 +149,14 @@ clangStdenv.mkDerivation rec {
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
   ];
+
   doCheck = true;
+
+  nativeCheckInputs = [
+    mesa.llvmpipeHook
+  ];
+
   checkPhase = ''
-    # for running mesa llvmpipe
-    export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
-    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib:${mesa.drivers}/lib/dri
     # some fontconfig issues cause pdf output to have wrong font
     ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
   '';

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, python-slugify
-, pytz
-, aresponses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  python-slugify,
+  pytz,
+  aresponses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "logi_circle" ];
 
   meta = {
-    description = "A Python library to communicate with Logi Circle cameras";
+    description = "Python library to communicate with Logi Circle cameras";
     homepage = "https://github.com/evanjd/python-logi-circle";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

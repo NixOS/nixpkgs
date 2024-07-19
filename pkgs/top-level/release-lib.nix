@@ -1,4 +1,5 @@
 { supportedSystems
+, system ? builtins.currentSystem
 , packageSet ? (import ../..)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -33,7 +34,7 @@ let
     systems
     ;
 
-  pkgs = packageSet (recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
+  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
 
   hydraJob' = if scrubJobs then hydraJob else id;
 

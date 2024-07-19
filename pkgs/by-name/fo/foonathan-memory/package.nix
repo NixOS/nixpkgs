@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/foonathan/memory";
     changelog = "https://github.com/foonathan/memory/releases/tag/${finalAttrs.src.rev}";
     description = "STL compatible C++ memory allocator library";
+    mainProgram = "nodesize_dbg";
 
     longDescription = ''
       The C++ STL allocator model has various flaws. For example, they are

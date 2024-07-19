@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchPypi
-, numpy
-, scikit-image
-, lib
-, opencv4
+{
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scikit-image,
+  lib,
+  opencv4,
 }:
 
 buildPythonPackage rec {

@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   meta = {
-    description = "An improved, cross-platform substitute for Make";
+    description = "Improved, cross-platform substitute for Make";
     longDescription = ''
       SCons is an Open Source software construction tool. Think of SCons as an
       improved, cross-platform substitute for the classic Make utility with

@@ -64,5 +64,6 @@ buildDunePackage rec {
     description = "Ocaml bindings to Pytorch";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.asl20;
+    broken = true; # Not compatible with libtorch ≥ 2.3.0
   };
 }

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A GUI frontend for Apx in GTK 4 and Libadwaita";
+    description = "GUI frontend for Apx in GTK 4 and Libadwaita";
     homepage    = "https://github.com/Vanilla-OS/apx-gui";
     license     = lib.licenses.gpl3Only;
     platforms   = lib.platforms.linux;

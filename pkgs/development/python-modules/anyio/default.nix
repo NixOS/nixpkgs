@@ -1,35 +1,39 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, exceptiongroup
-, idna
-, sniffio
-, typing-extensions
+  # dependencies
+  exceptiongroup,
+  idna,
+  sniffio,
+  typing-extensions,
 
-# optionals
-, trio
+  # optionals
+  trio,
 
-# tests
-, hypothesis
-, psutil
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, trustme
-, uvloop
+  # tests
+  hypothesis,
+  psutil,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  uvloop,
+
+  # smoke tests
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +42,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9BxzdeQ5Yh4FDXGNVx9kiy7/fBmn8esvZkrK4wW4oGA=";
+    hash = "sha256-y58DQiTD0ZKaBNf0cA3MFE+7F68Svrl+Idz6BZY7HWQ=";
   };
 
   nativeBuildInputs = [
@@ -46,18 +50,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      idna
+      sniffio
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   passthru.optional-dependencies = {
-    trio = [
-      trio
-    ];
+    trio = [ trio ];
   };
 
   # trustme uses pyopenssl
@@ -75,8 +79,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.trio;
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
-    "-m" "'not network'"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+    "-m"
+    "'not network'"
   ];
 
   disabledTests = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
@@ -91,9 +97,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "anyio"
-  ];
+  pythonImportsCheck = [ "anyio" ];
+
+  passthru.tests = {
+    inherit starlette;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pyright
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, typeguard
-, types-beautifulsoup4
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pyright,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typeguard,
+  types-beautifulsoup4,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pythonImportsCheck = [
-    "lxml-stubs"
-  ];
+  pythonImportsCheck = [ "lxml-stubs" ];
 
   disabledTests = [
     # AttributeError: 'bytes' object has no attribute 'find_class'

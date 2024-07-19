@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
+  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook3, aria2 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

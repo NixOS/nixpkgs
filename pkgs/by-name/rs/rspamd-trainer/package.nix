@@ -3,7 +3,6 @@
 , python3Packages
 , fetchFromGitLab
 , makeWrapper
-, stdenv
 , fetchpatch
 , rspamd
 }:
@@ -53,6 +52,7 @@ python3Packages.buildPythonApplication {
   meta = {
     homepage = "https://gitlab.com/onlime/rspamd-trainer";
     description = "Grabs messages from a spam mailbox via IMAP and feeds them to Rspamd for training";
+    mainProgram = "rspamd-trainer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
   };

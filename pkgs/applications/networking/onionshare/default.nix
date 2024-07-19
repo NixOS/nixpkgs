@@ -1,41 +1,25 @@
 { lib
 , stdenv
-, buildPythonApplication
-, cepa
-, colorama
 , fetchFromGitHub
-, flask
-, flask-compress
-, flask-httpauth
-, flask-socketio
-, gevent-socketio
-, gevent-websocket
+, fetchpatch
 , obfs4
-, psutil
-, pycrypto
-, pynacl
-, pyqt5
-, pyside6
-, pysocks
-, pytestCheckHook
-, qrcode
+, python3
 , qt5
-, requests
 , snowflake
 , substituteAll
 , tor
-, unidecode
-, waitress
 }:
 
 let
-  version = "2.6.1";
+  version = "2.6.2";
+
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-LR3Ao4Q8kEDwrFV+gYdMSEeYF4hDtEa1rJgvRRrJMwc=";
+    hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
   };
+
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
     longDescription = ''
@@ -63,10 +47,9 @@ let
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
   meek = "/meek-not-available";
-
 in
 rec {
-  onionshare = buildPythonApplication {
+  onionshare = python3.pkgs.buildPythonApplication {
     pname = "onionshare-cli";
     inherit version;
     src = "${src}/cli";
@@ -77,32 +60,42 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+
+      # Remove distutils for Python 3.12 compatibility
+      # https://github.com/onionshare/onionshare/pull/1907
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/commit/1fb1a470df20d8a7576c8cf51213e5928528d59a.patch";
+        includes = [ "onionshare_cli/onion.py" ];
+        stripLen = 1;
+        hash = "sha256-4XkqaEhMhvj6PyMssnLfXRazdP4k+c9mMDveho7pWg8=";
+      })
     ];
-    propagatedBuildInputs = [
-      cepa
+    dependencies = with python3.pkgs; [
       colorama
       flask
       flask-compress
-      flask-httpauth
       flask-socketio
-      gevent-socketio
       gevent-websocket
+      packaging
       psutil
       pycrypto
       pynacl
       pyside6
+      pysocks
       qrcode
       requests
+      stem
       unidecode
       waitress
-    ];
+      werkzeug
+    ] ++ requests.optional-dependencies.socks;
 
     buildInputs = [
       obfs4
       tor
     ];
 
-    nativeCheckInputs = [
+    nativeCheckInputs = with python3.pkgs; [
       pytestCheckHook
     ];
 
@@ -127,7 +120,7 @@ rec {
     };
   };
 
-  onionshare-gui = buildPythonApplication {
+  onionshare-gui = python3.pkgs.buildPythonApplication {
     pname = "onionshare";
     inherit version;
     src = "${src}/desktop";
@@ -138,18 +131,33 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+
+      # https://github.com/onionshare/onionshare/pull/1903
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/pull/1903/commits/f20db8fcbd18e51b58814ae8f98f3a7502b4f456.patch";
+        stripLen = 1;
+        hash = "sha256-wfIjdPhdUYAvbK5XyE1o2OtFOlJRj0X5mh7QQRjdyP0=";
+      })
+
+      # Remove distutils for Python 3.12 compatibility
+      # https://github.com/onionshare/onionshare/pull/1907
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/commit/1fb1a470df20d8a7576c8cf51213e5928528d59a.patch";
+        includes = [ "onionshare/update_checker.py" ];
+        stripLen = 1;
+        hash = "sha256-mRRj9cALZVHw86CgU17sp9EglKhkRRcGfROyQpsXVfU=";
+      })
     ];
 
-    propagatedBuildInputs = [
+    dependencies = with python3.pkgs; [
       onionshare
-      psutil
-      pyqt5
       pyside6
-      pysocks
       qrcode
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+    buildInputs = [ qt5.qtwayland ];
 
     postInstall = ''
       mkdir -p $out/share/{appdata,applications,icons}

@@ -5,17 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghauri";
-  version = "1.3";
-  format = "setuptools";
+  version = "1.3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r0oth3x49";
     repo = "ghauri";
     rev = "refs/tags/${version}";
-    hash = "sha256-CZhkb8GmXXSA5QqhW7IAirwsxQg6YNFT3RHrGsyqAbk=";
+    hash = "sha256-ea0YJuHT4G6Y9AE9sZEHTa/Ljtw2fATFha/j4VmukcA=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     chardet
     colorama
     requests
@@ -35,5 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/r0oth3x49/ghauri/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ghauri";
   };
 }

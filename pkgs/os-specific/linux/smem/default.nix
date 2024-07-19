@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.selenic.com/smem/";
-    description = "A memory usage reporting tool that takes shared memory into account";
+    description = "Memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.gpl2Plus;

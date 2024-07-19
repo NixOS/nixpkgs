@@ -38,9 +38,10 @@ let
 
       meta = with lib; {
         homepage = "https://www.nomadproject.io/";
-        description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
+        description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
+        mainProgram = "nomad";
         inherit license;
-        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes amaxine techknowlogick cottand ];
+        maintainers = with maintainers; [ rushmorem pradeepchhetri techknowlogick cottand ];
       };
     } // attrs');
 in
@@ -69,9 +70,9 @@ rec {
 
   nomad_1_6 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.6.8";
-    sha256 = "sha256-lc/HZgyzqWZNW2WHOFZ43gCeL5Y2hwK4lXPgWGboPOY=";
-    vendorHash = "sha256-ecLhq4OHDhA1Bd/97NMpfePqtuCtVje3BdvCzcwWzas=";
+    version = "1.6.10";
+    sha256 = "sha256-kiMdpJzjF0S7lrTX3sBFkWm0Gac9a+qlwCPcMKeVXXQ=";
+    vendorHash = "sha256-qnsPPV/NWTrqUa1v1CL16WfCH7B0zW9ZSnEmtqvotqI=";
     license = lib.licenses.mpl20;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
@@ -81,9 +82,21 @@ rec {
 
   nomad_1_7 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.7.6";
-    sha256 = "sha256-rEWXQwkW/muX3D0An3WmHCoboPACFCrSG7Tyzor2wnQ=";
-    vendorHash = "sha256-95yUtNfN/50LjWHHReaB4/riUqy8J67099bP8Ua7gRw=";
+    version = "1.7.7";
+    sha256 = "sha256-4nuRheidR6rIoytrnDQdIP69f+sBLJ3Ias5DvqVaLFc=";
+    vendorHash = "sha256-ZuaD8iDsT+/eW0QUavf485R804Jtjl76NcQWYHA8QII=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+  };
+
+  nomad_1_8 = generic {
+    buildGoModule = buildGo121Module;
+    version = "1.8.0";
+    sha256 = "sha256-j/9wvnxYhv6h344904cO2Fi6pNeSV5IfcqS4mSjDqpo=";
+    vendorHash = "sha256-jNdLLs/mfARl5Uk9RalwSDFLAKqIISEkek3l1wV8EYE=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

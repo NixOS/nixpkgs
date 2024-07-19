@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-cN+QUHakTnoRGzEZgZmvYz3uCIduGZ5tzjbKjda4sQ8=";
   };
 
-  nativeCheckInputs = [
-    django
-  ];
+  nativeCheckInputs = [ django ];
 
   meta = with lib; {
     description = "Automatically deletes old file for FileField and ImageField. It also deletes files on models instance deletion";

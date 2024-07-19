@@ -1,19 +1,20 @@
-{ lib
-, blinker
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mock
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  mock,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 
-# for passthru.tests
-, django-allauth
-, django-oauth-toolkit
-, google-auth-oauthlib
-, requests-oauthlib
+  # for passthru.tests
+  django-allauth,
+  django-oauth-toolkit,
+  google-auth-oauthlib,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   passthru.optional-dependencies = {
     rsa = [ cryptography ];
-    signedtoken = [ cryptography pyjwt ];
+    signedtoken = [
+      cryptography
+      pyjwt
+    ];
     signals = [ blinker ];
   };
 
@@ -45,16 +47,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "oauthlib"
-  ];
+  pythonImportsCheck = [ "oauthlib" ];
 
   passthru.tests = {
     inherit
       django-allauth
       django-oauth-toolkit
       google-auth-oauthlib
-      requests-oauthlib;
+      requests-oauthlib
+      ;
   };
 
   meta = with lib; {

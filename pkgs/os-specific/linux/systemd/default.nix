@@ -5,7 +5,6 @@
 , nixosTests
 , pkgsCross
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , buildPackages
 , makeBinaryWrapper
@@ -150,6 +149,10 @@
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
 , withVmspawn ? true
+  # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
+  # building disk images for non-NixOS systems. To save users from trying to use it
+  # on their live NixOS system, we disable it by default.
+, withKernelInstall ? false
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
   # build only libudev and libsystemd
@@ -176,7 +179,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.2";
+  version = "255.6";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -193,8 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "v${version}";
-    hash = "sha256-8SfJY/pcH4yrDeJi0GfIUpetTbpMwyswvSu+RSfgqfY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ah0678iNfy0c5NhHhjn0roY6RoM8OE0hWyEt+qEGKRQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -225,15 +228,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-meson.build-do-not-create-systemdstatedir.patch
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ] ++ lib.optional (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV) [
-    # Fixed upstream and included in the main and stable branches. Can be dropped
-    # when bumping to >= v255.5.
-    # https://github.com/systemd/systemd/issues/30448
-    # https://github.com/NixOS/nixpkgs/pull/282607
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/8040fa55a1cbc34dede3205a902095ecd26c21e3.patch";
-      sha256 = "0l8jk0w0wavagzck0vy5m0s6fhxab0hpdr4ib111bacqrvvda3kd";
-    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -413,6 +407,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
+  separateDebugInfo = true;
 
   hardeningDisable = [
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
@@ -497,7 +492,7 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" version)
+    (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
@@ -505,6 +500,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
     (lib.mesonOption "default-hierarchy" "unified")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
+
+    # Attempts to check /usr/sbin and that fails in macOS sandbox because
+    # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
+    # We set it to false since stdenv moves sbin/* to bin and creates a symlink,
+    # that is, we do not have split bin.
+    (lib.mesonOption "split-bin" "false")
 
     # D-Bus
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
@@ -523,8 +524,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
-    (lib.mesonOption "sbat-distro-pkgname" pname)
-    (lib.mesonOption "sbat-distro-version" version)
+    (lib.mesonOption "sbat-distro-pkgname" finalAttrs.pname)
+    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")
@@ -558,7 +559,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "zlib" withCompression)
 
     # NSS
-    (lib.mesonEnable "nss-mymachines" withNss)
+    (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
     (lib.mesonEnable "nss-resolve" withNss)
     (lib.mesonBool "nss-myhostname" withNss)
     (lib.mesonBool "nss-systemd" withNss)
@@ -570,7 +571,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # FIDO2
     (lib.mesonEnable "libfido2" withFido2)
-    (lib.mesonEnable "openssl" withFido2)
+    (lib.mesonEnable "openssl" (withHomed || withFido2 || withSysupdate))
 
     # Password Quality
     (lib.mesonEnable "pwquality" withPasswordQuality)
@@ -595,6 +596,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libiptc" withIptables)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
+    (lib.mesonEnable "seccomp" withLibseccomp)
     (lib.mesonEnable "selinux" withSelinux)
     (lib.mesonEnable "tpm2" withTpm2Tss)
     (lib.mesonEnable "pcre2" withPCRE2)
@@ -628,6 +630,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
     (lib.mesonBool "log-trace" withLogTrace)
+    (lib.mesonBool "kernel-install" withKernelInstall)
     (lib.mesonBool "quotacheck" false)
     (lib.mesonBool "ldconfig" false)
     (lib.mesonBool "install-sysconfdir" false)
@@ -818,8 +821,11 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
     done
 
-    rm -rf $out/etc/rpm
+    # For compatibility with dependents that use sbin instead of bin.
+    ln -s bin "$out/sbin"
 
+    rm -rf $out/etc/rpm
+  '' + lib.optionalString (!withKernelInstall) ''
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
@@ -866,7 +872,7 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withBootloader withCryptsetup withHostnamed withImportd withKmod
+    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
       withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
@@ -888,7 +894,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
-    description = "A system and service manager for Linux";
+    description = "System and service manager for Linux";
     longDescription = ''
       systemd is a suite of basic building blocks for a Linux system. It
       provides a system and service manager that runs as PID 1 and starts the
@@ -920,8 +926,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ flokli kloenk ];
     platforms = lib.platforms.linux;
     priority = 10;
-    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
-    broken = stdenv.hostPlatform.isStatic;
+    badPlatforms = [
+      # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

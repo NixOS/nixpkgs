@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml ];
 
   meta = {
-    description = "A build system designed for scalability and portability";
+    description = "Build system designed for scalability and portability";
     homepage = "http://projects.camlcity.org/projects/omake.html";
     license = with lib.licenses; [
       mit /* scripts */

@@ -12,7 +12,7 @@ This NixOS module also provides basic configuration integrating Sourcehut into l
 and `services.postgresql` services.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 let
   fqdn =
@@ -66,9 +66,9 @@ in {
     # Settings to setup what certificates are used for which endpoint.
     virtualHosts = {
       "${fqdn}".enableACME = true;
-      "meta.${fqdn}".useACMEHost = fqdn:
-      "man.${fqdn}".useACMEHost = fqdn:
-      "git.${fqdn}".useACMEHost = fqdn:
+      "meta.${fqdn}".useACMEHost = fqdn;
+      "man.${fqdn}".useACMEHost = fqdn;
+      "git.${fqdn}".useACMEHost = fqdn;
     };
   };
 }

@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Md6R1thUtPQ7BFZsWmTDuNdD7UHMMFlEVksIJZAyjk4=";
+    hash = "sha256-Md6R1thUtPQ7BFZsWmTDuNdD7UHMMFlEVksIJZAyjk4=";
   };
 
   nativeCheckInputs = with python3.pkgs; [
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Templating system/generator for distributions";
+    mainProgram = "dg";
     license = licenses.gpl2Plus;
     homepage = "https://distgen.readthedocs.io/";
     maintainers = with maintainers; [ bachp ];

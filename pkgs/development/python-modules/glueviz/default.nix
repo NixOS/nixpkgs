@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dill
-, astropy
-, numpy
-, pandas
-, qt6
-, pyqt6
-, pyqt-builder
-, qtconsole
-, setuptools
-, setuptools-scm
-, scipy
-, ipython
-, ipykernel
-, h5py
-, matplotlib
-, xlrd
-, mpl-scatter-density
-, pvextractor
-, openpyxl
-, echo
-, pytest
-, pytest-flakes
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  dill,
+  astropy,
+  numpy,
+  pandas,
+  qt6,
+  pyqt6,
+  pyqt-builder,
+  qtconsole,
+  setuptools,
+  setuptools-scm,
+  scipy,
+  ipython,
+  ipykernel,
+  h5py,
+  matplotlib,
+  xlrd,
+  mpl-scatter-density,
+  pvextractor,
+  openpyxl,
+  echo,
+  pytest,
+  pytest-flakes,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.17.1";
+  version = "1.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,11 +39,15 @@ buildPythonPackage rec {
     owner = "glue-viz";
     repo = "glue";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nr84GJAGnpKzjZEFNsQujPysSQENwGxdNfPIYUCJkK4=";
+    sha256 = "sha256-C9UqDdhPcaznidiDlQO27Vgct2MT9gVlH740hoYg3Bc=";
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [ setuptools setuptools-scm qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    qt6.wrapQtAppsHook
+  ];
   propagatedBuildInputs = [
     astropy
     dill
@@ -69,7 +74,11 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytest pytest-flakes pytest-cov ];
+  nativeCheckInputs = [
+    pytest
+    pytest-flakes
+    pytest-cov
+  ];
 
   pythonImportsCheck = [ "glue" ];
 

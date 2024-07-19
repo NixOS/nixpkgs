@@ -18,11 +18,24 @@
 , ... }@attrs:
 
 let
+  # loop over idrisLibraries and normalize them by turning any that are
+  # direct outputs of the buildIdris function into the `.library {}`
+  # property.
+  idrisLibraryLibs = map (idrisLib:
+    if lib.isDerivation idrisLib
+    then idrisLib
+    else if builtins.isFunction idrisLib
+    then idrisLib {}
+    else if (builtins.isAttrs idrisLib && idrisLib ? "library")
+    then idrisLib.library {}
+    else throw "Found an Idris2 library dependency that was not the result of the buildIdris function"
+  ) idrisLibraries;
+
   propagate = libs: lib.unique (lib.concatMap (nextLib: [nextLib] ++ nextLib.propagatedIdrisLibraries) libs);
   ipkgFileName = ipkgName + ".ipkg";
   idrName = "idris2-${idris2.version}";
   libSuffix = "lib/${idrName}";
-  propagatedIdrisLibraries = propagate idrisLibraries;
+  propagatedIdrisLibraries = propagate idrisLibraryLibs;
   libDirs =
     (lib.makeSearchPath libSuffix propagatedIdrisLibraries) +
     ":${idris2}/${idrName}";
@@ -32,28 +45,34 @@ let
     "idrisLibraries"
   ];
 
-  sharedAttrs = drvAttrs // {
-    pname = ipkgName;
-    inherit version;
-    src = src;
-    nativeBuildInputs = [ idris2 makeWrapper ] ++ attrs.nativeBuildInputs or [];
-    buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [];
+  derivation = stdenv.mkDerivation (finalAttrs:
+    drvAttrs // {
+      pname = ipkgName;
+      inherit version;
+      src = src;
+      nativeBuildInputs = [ idris2 makeWrapper ] ++ attrs.nativeBuildInputs or [];
+      buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [];
 
-    IDRIS2_PACKAGE_PATH = libDirs;
+      IDRIS2_PACKAGE_PATH = libDirs;
 
-    buildPhase = ''
-      runHook preBuild
-      idris2 --build ${ipkgFileName}
-      runHook postBuild
-    '';
+      buildPhase = ''
+        runHook preBuild
+        idris2 --build ${ipkgFileName}
+        runHook postBuild
+      '';
 
-    passthru = {
-      inherit propagatedIdrisLibraries;
-    };
-  };
+      passthru = {
+        inherit propagatedIdrisLibraries;
+      };
+
+      shellHook = ''
+        export IDRIS2_PACKAGE_PATH="${finalAttrs.IDRIS2_PACKAGE_PATH}"
+      '';
+    }
+  );
 
 in {
-  executable = stdenv.mkDerivation (sharedAttrs // {
+  executable = derivation.overrideAttrs {
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -76,11 +95,11 @@ in {
       fi
       runHook postInstall
     '';
-  });
+  };
 
   library = { withSource ? false }:
     let installCmd = if withSource then "--install-with-src" else "--install";
-    in stdenv.mkDerivation (sharedAttrs // {
+    in derivation.overrideAttrs {
       installPhase = ''
         runHook preInstall
         mkdir -p $out/${libSuffix}
@@ -88,5 +107,5 @@ in {
         idris2 ${installCmd} ${ipkgFileName}
         runHook postInstall
       '';
-    });
+    };
 }

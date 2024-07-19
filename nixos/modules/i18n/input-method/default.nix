@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.i18n.inputMethod;
 
+  allowedTypes = types.enum [ "ibus" "fcitx5" "nabi" "uim" "hime" "kime" ];
+
   gtk2_cache = pkgs.runCommand "gtk2-immodule.cache"
     { preferLocalBuild = true;
       allowSubstitutes = false;
@@ -28,11 +30,24 @@ in
 {
   options.i18n = {
     inputMethod = {
+      enable = mkEnableOption "an additional input method type" // {
+        default = cfg.enabled != null;
+        defaultText = literalMD "`true` if the deprecated option `enabled` is set, false otherwise";
+      };
+
       enabled = mkOption {
-        type    = types.nullOr (types.enum [ "ibus" "fcitx5" "nabi" "uim" "hime" "kime" ]);
+        type    = types.nullOr allowedTypes;
         default = null;
         example = "fcitx5";
-        description = lib.mdDoc ''
+        description = "Deprecated - use `type` and `enable = true` instead";
+      };
+
+      type = mkOption {
+        type    = types.nullOr allowedTypes;
+        default = cfg.enabled;
+        defaultText = literalMD "The value of the deprecated option `enabled`, defaulting to null";
+        example = "fcitx5";
+        description = ''
           Select the enabled input method. Input methods is a software to input symbols that are not available on standard input devices.
 
           Input methods are specially used to input Chinese, Japanese and Korean characters.
@@ -52,14 +67,15 @@ in
         internal = true;
         type     = types.nullOr types.path;
         default  = null;
-        description = lib.mdDoc ''
+        description = ''
           The input method method package.
         '';
       };
     };
   };
 
-  config = mkIf (cfg.enabled != null) {
+  config = mkIf cfg.enable {
+    warnings = optional (cfg.enabled != null) "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
     environment.systemPackages = [ cfg.package gtk2_cache gtk3_cache ];
   };
 

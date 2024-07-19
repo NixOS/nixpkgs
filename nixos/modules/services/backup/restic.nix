@@ -8,14 +8,14 @@ let
 in
 {
   options.services.restic.backups = mkOption {
-    description = lib.mdDoc ''
+    description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ config, name, ... }: {
+    type = types.attrsOf (types.submodule ({ name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Read the repository password from a file.
           '';
           example = "/etc/nixos/restic-password";
@@ -24,7 +24,7 @@ in
         environmentFile = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             file containing the credentials to access the repository, in the
             format of an EnvironmentFile as described by systemd.exec(5)
           '';
@@ -33,7 +33,7 @@ in
         rcloneOptions = mkOption {
           type = with types; nullOr (attrsOf (oneOf [ str bool ]));
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Options to pass to rclone to control its behavior.
             See <https://rclone.org/docs/#options> for
             available options. When specifying option names, strip the
@@ -50,7 +50,7 @@ in
         rcloneConfig = mkOption {
           type = with types; nullOr (attrsOf (oneOf [ str bool ]));
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Configuration for the rclone remote being used for backup.
             See the remote's specific options under rclone's docs at
             <https://rclone.org/docs/>. When specifying
@@ -74,7 +74,7 @@ in
         rcloneConfigFile = mkOption {
           type = with types; nullOr path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to the file containing rclone configuration. This file
             must contain configuration for the remote specified in this backup
             set and also must be readable by root. Options set in
@@ -86,7 +86,7 @@ in
         repository = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             repository to backup to.
           '';
           example = "sftp:backup@192.168.1.100:/backups/${name}";
@@ -95,7 +95,7 @@ in
         repositoryFile = mkOption {
           type = with types; nullOr path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to the file containing the repository location to backup to.
           '';
         };
@@ -105,7 +105,7 @@ in
           # after some time has passed since this comment was added.
           type = types.nullOr (types.listOf types.str);
           default = [ ];
-          description = lib.mdDoc ''
+          description = ''
             Which paths to backup, in addition to ones specified via
             `dynamicFilesFrom`.  If null or an empty array and
             `dynamicFilesFrom` is also null, no backup command will be run.
@@ -120,7 +120,7 @@ in
         exclude = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = lib.mdDoc ''
+          description = ''
             Patterns to exclude when backing up. See
             https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
             details on syntax.
@@ -138,7 +138,7 @@ in
             OnCalendar = "daily";
             Persistent = true;
           };
-          description = lib.mdDoc ''
+          description = ''
             When to run the backup. See {manpage}`systemd.timer(5)` for
             details. If null no timer is created and the backup will only
             run when explicitly started.
@@ -153,7 +153,7 @@ in
         user = mkOption {
           type = types.str;
           default = "root";
-          description = lib.mdDoc ''
+          description = ''
             As which user the backup should run.
           '';
           example = "postgresql";
@@ -162,7 +162,7 @@ in
         extraBackupArgs = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = lib.mdDoc ''
+          description = ''
             Extra arguments passed to restic backup.
           '';
           example = [
@@ -173,7 +173,7 @@ in
         extraOptions = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = lib.mdDoc ''
+          description = ''
             Extra extended options to be passed to the restic --option flag.
           '';
           example = [
@@ -184,7 +184,7 @@ in
         initialize = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Create the repository if it doesn't exist.
           '';
         };
@@ -192,7 +192,7 @@ in
         pruneOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = lib.mdDoc ''
+          description = ''
             A list of options (--keep-\* et al.) for 'restic forget
             --prune', to automatically prune old snapshots.  The
             'forget' command is run *after* the 'backup' command, so
@@ -206,12 +206,19 @@ in
           ];
         };
 
+        runCheck = mkOption {
+          type = types.bool;
+          default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
+          defaultText = literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+          description = "Whether to run the `check` command with the provided `checkOpts` options.";
+          example = true;
+        };
+
         checkOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = lib.mdDoc ''
-            A list of options for 'restic check', which is run after
-            pruning.
+          description = ''
+            A list of options for 'restic check'.
           '';
           example = [
             "--with-cache"
@@ -221,7 +228,7 @@ in
         dynamicFilesFrom = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             A script that produces a list of files to back up.  The
             results of this command are given to the '--files-from'
             option. The result is merged with paths specified via `paths`.
@@ -232,7 +239,7 @@ in
         backupPrepareCommand = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             A script that must run before starting the backup process.
           '';
         };
@@ -240,7 +247,7 @@ in
         backupCleanupCommand = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             A script that must run after finishing the backup process.
           '';
         };
@@ -298,7 +305,9 @@ in
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+            ];
+            checkCmd = optionals backup.runCheck [
+                (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -331,7 +340,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
-                ++ pruneCmd;
+                ++ pruneCmd ++ checkCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";

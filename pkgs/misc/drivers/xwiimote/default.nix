@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dvdhrm.github.io/xwiimote";
     description = "Userspace utilities to control connected Nintendo Wii Remotes";
+    mainProgram = "xwiishow";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };

@@ -7,8 +7,8 @@ let
   libwacom-surface = fetchFromGitHub {
     owner = "linux-surface";
     repo = "libwacom-surface";
-    rev = "v2.7.0-1";
-    hash = "sha256-LgJ8YFQQN05kyd6kxBakIIiGgZ9icW27xKK3Dz6TwLs=";
+    rev = "v2.12.0-1";
+    hash = "sha256-z/qNXbe89/0GIDj0BDQY6xdjHKA9chAPpviHPtBLjFM=";
   };
 in libwacom.overrideAttrs (old: {
   pname = "libwacom-surface";
@@ -23,11 +23,15 @@ in libwacom.overrideAttrs (old: {
     "0005-data-Add-Microsoft-Surface-Pro-5.patch"
     "0006-data-Add-Microsoft-Surface-Pro-6.patch"
     "0007-data-Add-Microsoft-Surface-Pro-7.patch"
-    "0008-data-Add-Microsoft-Surface-Book.patch"
-    "0009-data-Add-Microsoft-Surface-Book-2-13.5.patch"
-    "0010-data-Add-Microsoft-Surface-Book-2-15.patch"
-    "0011-data-Add-Microsoft-Surface-Book-3-13.5.patch"
-    "0012-data-Add-Microsoft-Surface-Book-3-15.patch"
+    "0008-data-Add-Microsoft-Surface-Pro-7.patch"
+    "0009-data-Add-Microsoft-Surface-Pro-8.patch"
+    "0010-data-Add-Microsoft-Surface-Pro-9.patch"
+    "0011-data-Add-Microsoft-Surface-Book.patch"
+    "0012-data-Add-Microsoft-Surface-Book-2-13.5.patch"
+    "0013-data-Add-Microsoft-Surface-Book-2-15.patch"
+    "0014-data-Add-Microsoft-Surface-Book-3-13.5.patch"
+    "0015-data-Add-Microsoft-Surface-Book-3-15.patch"
+    "0016-data-Add-Microsoft-Surface-Laptop-Studio.patch"
   ];
 
   meta = old.meta // {

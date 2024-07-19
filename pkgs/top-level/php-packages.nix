@@ -16,7 +16,7 @@
 , gettext
 , gmp
 , html-tidy
-, icu64
+, icu73
 , libffi
 , libiconv
 , libkrb5
@@ -46,15 +46,18 @@
 , fetchpatch
 }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: let
+  inherit (self) buildPecl callPackage mkExtension php;
+
+  builders = import ../build-support/php/builders {
+    inherit callPackages callPackage buildPecl;
+  };
+in {
   buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
   };
 
-  composerHooks = callPackages ../build-support/php/hooks { };
-
-  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
-  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
+  inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -188,6 +191,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     composer = callPackage ../development/php-packages/composer { };
 
+    composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+
+    cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
+
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
@@ -203,6 +210,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
+
+    phpinsights = callPackage ../development/php-packages/phpinsights { };
 
     phpmd = callPackage ../development/php-packages/phpmd { };
 
@@ -258,6 +267,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     imagick = callPackage ../development/php-packages/imagick { };
 
     inotify = callPackage ../development/php-packages/inotify { };
+
+    ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
 
@@ -411,7 +422,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "gettext";
           buildInputs = [ gettext ];
-          postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
+          postPhpize = ''substituteInPlace configure --replace-fail 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
           configureFlags = [ "--with-gettext=${gettext}" ];
         }
         {
@@ -421,10 +432,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "iconv";
-          configureFlags = [
-            "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
-          ];
-          doCheck = false;
+          buildInputs = [ libiconv ];
+          configureFlags = [ "--with-iconv" ];
+          doCheck = stdenv.isLinux;
         }
         {
           name = "imap";
@@ -433,7 +443,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "intl";
-          buildInputs = [ icu64 ];
+          buildInputs = [ icu73 ];
         }
         {
           name = "ldap";
@@ -538,6 +548,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "pdo_odbc";
           internalDeps = [ php.extensions.pdo ];
+          buildInputs = [ unixODBC ];
           configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
           doCheck = false;
         }
@@ -610,6 +621,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             "--enable-soap"
           ];
           doCheck = false;
+          internalDeps = [ php.extensions.session ];
         }
         {
           name = "sockets";
@@ -663,10 +675,16 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "xsl";
           buildInputs = [ libxslt libxml2 ];
+          internalDeps = [ php.extensions.dom ];
           doCheck = false;
+          env.NIX_CFLAGS_COMPILE = toString [ "-I../.." "-DHAVE_DOM" ];
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
-        { name = "zend_test"; }
+        {
+          name = "zend_test";
+          internalDeps = [ php.extensions.dom ];
+          env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+        }
         {
           name = "zip";
           buildInputs = [ libzip pcre2 ];

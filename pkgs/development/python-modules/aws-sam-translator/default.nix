@@ -1,22 +1,23 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, parameterized
-, pydantic
-, pytest-env
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  parameterized,
+  pydantic,
+  pytest-env,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.82.0";
+  version = "1.89.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xAbFF4bKHFv5YAOlMA28lW1Xc37xV83X4r19MdubvFs=";
+    hash = "sha256-wqM3n99lD0s/E9nd55q19Us31XgFtU/bBYJR1HTnnvk=";
   };
 
   postPatch = ''
@@ -80,9 +81,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
+  pythonImportsCheck = [ "samtranslator" ];
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";

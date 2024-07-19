@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false; # tries to resolve DNS
 
   meta = {
-    description = "A tiny and feature-rich command line DNS client with support for UDP, TCP, DoT, DoH, DoQ, and ODoH";
+    description = "Tiny and feature-rich command line DNS client with support for UDP, TCP, DoT, DoH, DoQ, and ODoH";
     homepage = "https://github.com/natesales/q";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.das_j ];

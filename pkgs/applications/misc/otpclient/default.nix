@@ -4,7 +4,7 @@
 , cmake
 , pkg-config
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , jansson
 , libgcrypt
 , libzip
@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MiWEnyhHo6+3woWi4Vf75s+cfzJSPE0xdnvuPbsxrsc=";
+    hash = "sha256-Xw6Z/xDPQEVMdxMzrhtPAl3nOD7oMlZhKDb9bD8GEO8=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

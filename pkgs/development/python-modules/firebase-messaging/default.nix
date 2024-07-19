@@ -1,40 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, poetry-core
-
-# dependencies
-, cryptography
-, http-ece
-, protobuf
-, requests
-
-# docs
-, sphinx
-, sphinxHook
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-
-# tests
-, async-timeout
-, requests-mock
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  async-timeout,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  http-ece,
+  poetry-core,
+  protobuf,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  requests-mock,
+  sphinx,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
-    rev = version;
-    hash = "sha256-e3Ny3pnAfOpNERvvtE/jqSDIsM+YwLq/hbw753QpJ6o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pZpnekJ11yx3L8l56vZOa4uS+jJMxUkYODgNAqysVeY=";
   };
 
   outputs = [
@@ -48,10 +46,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.docs;
 
   propagatedBuildInputs = [
+    aiohttp
     cryptography
     http-ece
     protobuf
-    requests
   ];
 
   passthru.optional-dependencies = {
@@ -62,22 +60,22 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "firebase_messaging"
-  ];
+  pythonImportsCheck = [ "firebase_messaging" ];
 
   nativeCheckInputs = [
+    aioresponses
     async-timeout
     requests-mock
     pytest-asyncio
     pytest-mock
+    pytest-socket
     pytestCheckHook
   ];
 
   meta = with lib; {
-    description = "A library to subscribe to GCM/FCM and receive notifications within a python application";
+    description = "Library to subscribe to GCM/FCM and receive notifications within a python application";
     homepage = "https://github.com/sdb9696/firebase-messaging";
-    changelog = "https://github.com/sdb9696/firebase-messaging/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

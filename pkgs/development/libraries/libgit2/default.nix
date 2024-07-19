@@ -74,8 +74,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linkable library implementation of Git that you can use in your application";
+    mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

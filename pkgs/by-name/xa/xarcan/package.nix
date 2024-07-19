@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , arcan
 , audit
 , dbus
@@ -30,21 +29,23 @@
 , systemd
 , xcbutil
 , xcbutilwm
+, xcbutilimage
 , xkbcomp
 , xkeyboard_config
 , xorgproto
 , xtrans
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "unstable-2023-11-03";
+  version = "0-unstable-2024-05-23";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "380ea856307f593535dfc8b23799938db69e31b0";
-    hash = "sha256-RdizezCbJylQDkOmUdqL0lBTNLsjyvo+lKAjfZXTXf4=";
+    rev = "ebb46609315d95fb286009310de11b03f7333022";
+    hash = "sha256-XXA5c/yV6QaPiz1LHWkb+Tm6Wmead8EndkSk3onvrcs=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalPackages: {
     systemd
     xcbutil
     xcbutilwm
+    xcbutilimage
     xkbcomp
     xkeyboard_config
     xorgproto
@@ -104,9 +106,12 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
+  passthru.updateScript = unstableGitUpdater {};
+
   meta =  {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
+    mainProgram = "Xarcan";
     longDescription = ''
       xarcan is a patched X server with a KDrive backend that uses the
       arcan-shmif to map Xlib/Xcb/X clients to a running arcan instance. It

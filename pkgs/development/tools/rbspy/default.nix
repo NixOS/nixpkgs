@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.19.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2+miC7cp6YbeI7uucFlSdlDpPboJOhhBq7/eqXxZVqs=";
+    hash = "sha256-qZXv7+gPA24U1gB++3Aq/H+JDmAwB4vBIb/WdXjSMqc=";
   };
 
-  cargoHash = "sha256-I+nh6cKniPIG5VYMMsABZNSP/c3DLWswsjenaQBh/X8=";
+  cargoHash = "sha256-LcVxe2KpW8XOa9yoKROo1QHyu76/OUgq7Wf4bcs1+QQ=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -53,7 +53,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://rbspy.github.io/";
-    description = "A Sampling CPU Profiler for Ruby";
+    description = "Sampling CPU Profiler for Ruby";
+    mainProgram = "rbspy";
     changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ viraptor ];

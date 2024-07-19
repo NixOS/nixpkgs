@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , dpkg
 , autoPatchelfHook
 , alsa-lib
@@ -20,10 +19,11 @@
 , curl
 , coreutils
 , cacert
+, libjpeg
 , useChineseVersion ? false
 }:
 let
-  pkgVersion = "11.1.0.11719";
+  pkgVersion = "11.1.0.11720";
   url =
     if useChineseVersion then
       "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}_amd64.deb"
@@ -31,9 +31,9 @@ let
       "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}.XA_amd64.deb";
   hash =
     if useChineseVersion then
-      "sha256-LgE5du2ZnMsAqgoQkY63HWyWYA5TLS5I8ArRYrpxffs="
+      "sha256-wf0zgFrhqHXV68Qsa20X8FbMA83XeYr/dSCBg1IjVlg="
     else
-      "sha256-6fXzHSMzZDGuBubOXsHA0YEUGKcy5QIPg3noyxUbdjA=";
+      "sha256-MvJ5XQx9fmNIFKvzSEbu1BAdxiASJ6HR+qsDFLm53dU=";
   uri = builtins.replaceStrings [ "https://wps-linux-personal.wpscdn.cn" ] [ "" ] url;
   securityKey = "7f8faaaa468174dc1c9cd62e5f218a5b";
 in
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
       nativeBuildInputs = [ curl coreutils ];
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     } ''
     timestamp10=$(date '+%s')
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     at-spi2-core
     libtool
+    libjpeg
     libxkbcommon
     nspr
     mesa
@@ -120,6 +122,9 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
     patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
+    patchelf --add-needed libtiff.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
+    # Fix: Wrong JPEG library version: library is 62, caller expects 80
+    patchelf --add-needed libjpeg.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';

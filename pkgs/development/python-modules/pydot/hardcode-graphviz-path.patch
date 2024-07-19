@@ -1,13 +1,13 @@
-diff --git a/pydot.py b/pydot.py
-index 3c7da4d..582c5bc 100644
---- a/pydot.py
-+++ b/pydot.py
-@@ -124,7 +124,7 @@ def call_graphviz(program, arguments, working_dir, **kwargs):
-         'LD_LIBRARY_PATH': os.environ.get('LD_LIBRARY_PATH', ''),
+diff --git a/src/pydot/core.py b/src/pydot/core.py
+index 26f526b..78c27f5 100644
+--- a/src/pydot/core.py
++++ b/src/pydot/core.py
+@@ -209,7 +209,7 @@ def call_graphviz(program, arguments, working_dir, **kwargs):
+         "SYSTEMROOT": os.environ.get("SYSTEMROOT", ""),
      }
  
--    program_with_args = [program, ] + arguments
-+    program_with_args = ['@graphviz@/bin/' + program, ] + arguments
+-    program_with_args = [program] + arguments
++    program_with_args = [f"@graphviz@/bin/{program}"] + arguments
  
      process = subprocess.Popen(
          program_with_args,

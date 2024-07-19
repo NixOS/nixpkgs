@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "smokeping_prober";
-  version = "0.7.2";
+  version = "0.8.1";
 
   ldflags = let
     setVars = rec {
@@ -20,9 +20,9 @@ buildGoModule rec {
     owner = "SuperQ";
     repo = "smokeping_prober";
     rev = "v${version}";
-    sha256 = "sha256-Z+K3cRMD885V9aJwu3N/vP6aqtzD3LfMrxJ8DSCa5Xo=";
+    sha256 = "sha256-CqUkJLyxCuBDbfPLSXuGNlyg5POh6jYyXUxQ9tF+w3s=";
   };
-  vendorHash = "sha256-39/0reEt4Rfe7DfysS4BROUgBUg+x95z6DU3IjC6m5U=";
+  vendorHash = "sha256-iKAT10pD2ctVIBdDw/AmHYtoZDW9XC8ruIxqlVoAuWY=";
 
   doCheck = true;
 
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for sending continual ICMP/UDP pings";
+    mainProgram = "smokeping_prober";
     homepage = "https://github.com/SuperQ/smokeping_prober";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

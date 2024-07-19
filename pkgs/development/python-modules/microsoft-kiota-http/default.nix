@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, httpx
-, microsoft-kiota-abstractions
-, opentelemetry-api
-, opentelemetry-sdk
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  httpx,
+  microsoft-kiota-abstractions,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,14 +25,12 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-http-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I16WARk6YBr8KgE9MtHcA5VdsnLXBKcZOaqRL/eqwKE=";
+    hash = "sha256-9Xf/M9d+lScCTWXakJ+BMeBbbRGshtzRzhOg5FGbC5o=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     microsoft-kiota-abstractions
     opentelemetry-api
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "kiota_http"
-  ];
+  pythonImportsCheck = [ "kiota_http" ];
 
   meta = with lib; {
     description = "HTTP request adapter implementation for Kiota clients for Python";

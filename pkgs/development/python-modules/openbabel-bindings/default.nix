@@ -1,4 +1,9 @@
-{ lib, openbabel, python, buildPythonPackage }:
+{
+  lib,
+  openbabel,
+  python,
+  buildPythonPackage,
+}:
 
 buildPythonPackage rec {
   inherit (openbabel) pname version;

@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, huggingface-hub
-, hyperpyyaml
-, joblib
-, lib
-, numpy
-, packaging
-, pythonOlder
-, sentencepiece
-, scipy
-, torch
-, torchaudio
-, tqdm
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  huggingface-hub,
+  hyperpyyaml,
+  joblib,
+  lib,
+  numpy,
+  packaging,
+  pythonOlder,
+  sentencepiece,
+  scipy,
+  torch,
+  torchaudio,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "speechbrain" ];
 
   meta = with lib; {
-    description = "A PyTorch-based Speech Toolkit";
+    description = "PyTorch-based Speech Toolkit";
     homepage = "https://speechbrain.github.io";
     changelog = "https://github.com/speechbrain/speechbrain/releases/tag/v${version}";
     license = licenses.asl20;

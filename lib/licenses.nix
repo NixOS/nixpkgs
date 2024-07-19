@@ -93,12 +93,12 @@ in mkLicense lset) ({
     url = "https://aomedia.org/license/patent-license/";
   };
 
-  apsl10 = {
+  apple-psl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
   };
 
-  apsl20 = {
+  apple-psl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
   };
@@ -317,6 +317,12 @@ in mkLicense lset) ({
     free = false;
   };
 
+  cc-by-nd-40 = {
+    spdxId = "CC-BY-ND-4.0";
+    fullName = "Creative Commons Attribution-No Derivative Works v4.0";
+    free = false;
+  };
+
   cc-by-sa-10 = {
     spdxId = "CC-BY-SA-1.0";
     fullName = "Creative Commons Attribution Share Alike 1.0";
@@ -362,6 +368,12 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution Share Alike 4.0";
   };
 
+  cc-sa-10 = {
+    shortName = "CC-SA-1.0";
+    fullName = "Creative Commons Share Alike 1.0";
+    url = "https://creativecommons.org/licenses/sa/1.0";
+  };
+
   cddl = {
     spdxId = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
@@ -390,6 +402,12 @@ in mkLicense lset) ({
   cpal10 = {
     spdxId = "CPAL-1.0";
     fullName = "Common Public Attribution License 1.0";
+  };
+
+  commons-clause = {
+    fullName = "Commons Clause License";
+    url = "https://commonsclause.com/";
+    free = false;
   };
 
   cpl10 = {
@@ -518,6 +536,13 @@ in mkLicense lset) ({
     fullName = "Unspecified free software license";
   };
 
+  fsl11Mit = {
+    fullName = "Functional Source License, Version 1.1, MIT Future License";
+    url = "https://fsl.software/FSL-1.1-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
   ftl = {
     spdxId = "FTL";
     fullName = "Freetype Project License";
@@ -599,6 +624,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
@@ -609,11 +639,21 @@ in mkLicense lset) ({
     spdxId = "HPND-sell-variant";
   };
 
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
+  };
+
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
     fullName = "iASL";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
+  };
+
+  icu = {
+    spdxId = "ICU";
+    fullName = "ICU";
   };
 
   ijg = {
@@ -881,6 +921,17 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ncbiPd = {
+    spdxId = "NCBI-PD";
+    fullName = "NCBI Public Domain Notice";
+    # Due to United States copyright law, anything with this "license" does not have a copyright in the
+    # jurisdiction of the United States. However, other jurisdictions may assign the United States
+    # government copyright to the work, and the license explicitly states that in such a case, no license
+    # is granted. This is nonfree and nonredistributable in most jurisdictions other than the United States.
+    free = false;
+    redistributable = false;
+  };
+
   ncsa = {
     spdxId = "NCSA";
     fullName = "University of Illinois/NCSA Open Source License";
@@ -892,6 +943,11 @@ in mkLicense lset) ({
     free = false;
     redistributable = true; # Only if used in Netdata products.
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
+  };
+
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
   };
 
   nlpl = {
@@ -1111,7 +1167,7 @@ in mkLicense lset) ({
     shortName = "TSL";
     fullName = "Timescale License Agreegment";
     url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
-    unfree = true;
+    free = false;
   };
 
   tcltk = {
@@ -1145,6 +1201,11 @@ in mkLicense lset) ({
     redistributable = true;
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-30 = {
+    spdxId = "Unicode-3.0";
+    fullName = "Unicode License v3";
   };
 
   unicode-dfs-2015 = {
@@ -1230,9 +1291,19 @@ in mkLicense lset) ({
     fullName = "xinetd License";
   };
 
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
+  };
+
+  zsh = {
+    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
+    fullName = "Zsh License";
   };
 
   zpl20 = {
@@ -1245,15 +1316,18 @@ in mkLicense lset) ({
     fullName = "Zope Public License 2.1";
   };
 
-  xskat = {
-    spdxId = "XSkat";
-    fullName = "XSkat License";
-  };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
+  apsl10 = {
+    # deprecated for consistency with `apple-psl20`; use `apple-psl10`
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    deprecated = true;
+  };
+  apsl20 = {
+    # deprecated due to confusion with Apache-2.0; use `apple-psl20`
+    spdxId = "APSL-2.0";
+    fullName = "Apple Public Source License 2.0";
     deprecated = true;
   };
   gpl2 = {

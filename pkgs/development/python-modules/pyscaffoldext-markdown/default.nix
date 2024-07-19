@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, importlib-metadata
-, myst-parser
-, pyscaffold
-, configupdater
-, pre-commit
-, pytest
-, pytest-cov
-, pytest-xdist
-, tox
-, twine
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  importlib-metadata,
+  myst-parser,
+  pyscaffold,
+  configupdater,
+  pre-commit,
+  pytest,
+  pytest-cov,
+  pytest-xdist,
+  tox,
+  twine,
+  virtualenv,
 }:
 
 buildPythonPackage rec {

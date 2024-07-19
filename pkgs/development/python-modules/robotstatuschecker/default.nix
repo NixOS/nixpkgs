@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, robotframework
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  robotframework,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
       --replace-fail BuiltIn.Log Log
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ robotframework ];
 
@@ -40,9 +39,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool for checking that Robot Framework test cases have expected statuses and log messages";
+    description = "Tool for checking that Robot Framework test cases have expected statuses and log messages";
     homepage = "https://github.com/robotframework/statuschecker";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

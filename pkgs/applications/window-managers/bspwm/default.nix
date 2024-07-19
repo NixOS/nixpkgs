@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A tiling window manager based on binary space partitioning";
+    description = "Tiling window manager based on binary space partitioning";
     homepage = "https://github.com/baskerville/bspwm";
     maintainers = with maintainers; [ meisternu ];
     license = licenses.bsd2;

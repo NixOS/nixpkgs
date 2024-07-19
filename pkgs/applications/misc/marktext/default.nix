@@ -20,16 +20,9 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.libsecret
-    p.xorg.libxkbfile
-  ];
+  extraPkgs = pkgs: [ pkgs.libsecret pkgs.xorg.libxkbfile  ];
 
   extraInstallCommands = ''
-    # Strip version from binary name.
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/marktext.desktop $out/share/applications/marktext.desktop
     substituteInPlace $out/share/applications/marktext.desktop \
       --replace "Exec=AppRun" "Exec=${pname} --"
@@ -38,8 +31,8 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A simple and elegant markdown editor, available for Linux, macOS and Windows";
-    homepage = "https://marktext.app";
+    description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
+    homepage = "https://www.marktext.cc";
     license = licenses.mit;
     maintainers = with maintainers; [ nh2 eduarrrd ];
     platforms = [ "x86_64-linux" ];

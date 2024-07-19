@@ -29,7 +29,7 @@ in
     services.xserver.desktopManager.enlightenment.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the Enlightenment desktop environment.";
+      description = "Enable the Enlightenment desktop environment.";
     };
 
   };
@@ -54,7 +54,7 @@ in
       "/share/locale"
     ];
 
-    services.xserver.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
+    services.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
 
     services.xserver.displayManager.sessionCommands = ''
       if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
@@ -92,11 +92,11 @@ in
 
     environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
-    fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+    fonts.packages = [ pkgs.dejavu_fonts ];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

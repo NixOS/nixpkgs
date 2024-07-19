@@ -8,30 +8,40 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.8.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-STWGZzFtU3UpctgNz3m96JyfSRzHy2ZZQPr8R+zpDgM=";
+    hash = "sha256-k8pRSAQpE//qH7XRjSTXmxundgK5dmOQTRKP9D2RUdY=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-0Uac4Q3EYiTkg6RFuwR+saXiVm7jISyZBjkN30uYnnE=";
+  npmDepsHash = "sha256-aw4jOvlfZHCRrgoXT69XrMYe40YXULrfbVG1pQAFGr4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -46,6 +56,9 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
@@ -60,9 +73,14 @@ buildNpmPackage rec {
     })
   ];
 
+  patches = [
+    # Workaround to fix css issue in bruno due to electron difference between Nix and mainstream. https://github.com/NixOS/nixpkgs/issues/324176
+    ./scroll-width-fix.patch
+  ];
+
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
@@ -83,8 +101,8 @@ buildNpmPackage rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
@@ -136,11 +154,11 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks redyf ];
     mainProgram = "bruno";
   };
 }

@@ -26,13 +26,13 @@ let
     else throw "unsupported platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+bQRUTEJluhcs5P87It9/oJOzrCcNFzDJVpixoQKXQc=";
+    sha256 = "sha256-VEQjZ9kDqXz1hoT4PrsBtzoi1TYWyN+YcPMyf9qJMRE=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,7 @@ in stdenv.mkDerivation (finalAttrs: {
     install -D -m 755 -t $out/libexec ./build/pixelorama
     install -D -m 644 -t $out/libexec ./build/pixelorama.pck
     install -D -m 644 -t $out/share/applications ./Misc/Linux/com.orama_interactive.Pixelorama.desktop
+    install -D -m 644 -T ./assets/graphics/icons/icon.png $out/share/icons/hicolor/256x256/apps/pixelorama.png
     install -d -m 755 $out/bin
     ln -s $out/libexec/pixelorama $out/bin/pixelorama
 
@@ -85,7 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://orama-interactive.itch.io/pixelorama";
-    description = "A free & open-source 2D sprite editor, made with the Godot Engine!";
+    description = "Free & open-source 2D sprite editor, made with the Godot Engine!";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];

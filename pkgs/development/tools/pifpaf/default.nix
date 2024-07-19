@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lmixfUP+pq0RdyXeY6MmUQOx1sMLHqojOKUK1mivbaU=";
+    hash = "sha256-lmixfUP+pq0RdyXeY6MmUQOx1sMLHqojOKUK1mivbaU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Suite of tools and fixtures to manage daemons for testing";
+    mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

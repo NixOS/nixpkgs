@@ -1,12 +1,13 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, python
-, dbus-python
-, packaging
-, enlightenment
-, directoryListingUpdater
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  python,
+  dbus-python,
+  packaging,
+  enlightenment,
+  directoryListingUpdater,
 }:
 
 # Should be bumped along with EFL!
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   buildInputs = [ enlightenment.efl ];
 
-  propagatedBuildInputs = [ dbus-python packaging ];
+  propagatedBuildInputs = [
+    dbus-python
+    packaging
+  ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
@@ -47,7 +51,16 @@ buildPythonPackage rec {
     description = "Python bindings for Enlightenment Foundation Libraries";
     homepage = "https://github.com/DaveMDS/python-efl";
     platforms = platforms.linux;
-    license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

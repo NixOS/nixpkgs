@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wlogout";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "ArtsyMacaw";
     repo = "wlogout";
     rev = finalAttrs.version;
-    hash = "sha256-n8r+E6GXXjyDYBTOMiv5musamaUFSpRTM2qHgb047og=";
+    hash = "sha256-/tYZy56ku68ziSOhy6Dex9RGy+blkU6CN2ze76y7718=";
   };
 
   outputs = [ "out" "man" ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
-    description = "A wayland based logout menu";
+    description = "Wayland based logout menu";
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
     mainProgram = "wlogout";

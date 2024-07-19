@@ -6,7 +6,7 @@
 , yarn
 , nodejs
 , nixosTests
-, prefetch-yarn-deps
+, fixup-yarn-lock
 }:
 
 buildGoModule rec {
@@ -32,7 +32,7 @@ buildGoModule rec {
       hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
-    nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps ];
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ];
     configurePhase = ''
       runHook preConfigure
 
@@ -78,10 +78,10 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
-    description = "A looking-glass for BGP sessions";
+    description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
     mainProgram = "alice-lg";
   };
 }

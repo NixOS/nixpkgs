@@ -24,6 +24,9 @@ llvmPackages.stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/rpav/c2ffi.git";
     branch = c2ffiBranch;
+    # Tags only exist for older LLVM versions, so they would result in nonsense names
+    # like: c2ffi-llvm-16.0.0-11.0.0.0-unstable-YYYY-MM-DD
+    hardcodeZeroVersion = true;
   };
 
   nativeBuildInputs = [
@@ -49,7 +52,8 @@ llvmPackages.stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/rpav/c2ffi";
-    description = "An LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
+    description = "LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
+    mainProgram = "c2ffi";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];
  };

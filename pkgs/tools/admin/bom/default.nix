@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nYzBaFtOJhqO0O6MJsxTw/mxsIOa+cnU27nOFRe2/uI=";
+    hash = "sha256-nYzBaFtOJhqO0O6MJsxTw/mxsIOa+cnU27nOFRe2/uI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -62,7 +62,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/bom";
     changelog = "https://github.com/kubernetes-sigs/bom/releases/tag/v${version}";
-    description = "A utility to generate SPDX-compliant Bill of Materials manifests";
+    description = "Utility to generate SPDX-compliant Bill of Materials manifests";
     license = licenses.asl20;
     maintainers = with maintainers; [ developer-guy ];
     mainProgram = "bom";

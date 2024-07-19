@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, aiohttp
-, pytz
-, requests
-, pytestCheckHook
-, pytest-asyncio
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  flit-core,
+  aiohttp,
+  pytz,
+  requests,
+  pytestCheckHook,
+  pytest-asyncio,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace "--cov-report=xml" ""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     aiohttp

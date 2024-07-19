@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "X sokoban";
+    mainProgram = "xsokoban";
     license = licenses.publicDomain;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

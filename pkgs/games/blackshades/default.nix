@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://sr.ht/~cnx/blackshades";
-    description = "A psychic bodyguard FPS";
+    description = "Psychic bodyguard FPS";
     changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
     mainProgram = "blackshades";
     license = lib.licenses.gpl3Plus;

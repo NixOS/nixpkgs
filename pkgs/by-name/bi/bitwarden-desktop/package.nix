@@ -3,11 +3,10 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_28
+, electron_29
 , fetchFromGitHub
-, fetchpatch2
 , glib
-, gnome
+, gnome-keyring
 , gtk3
 , jq
 , libsecret
@@ -15,7 +14,7 @@
 , makeWrapper
 , moreutils
 , napi-rs-cli
-, nodejs_18
+, nodejs_20
 , patchutils_0_4_2
 , pkg-config
 , python3
@@ -25,33 +24,43 @@
 }:
 
 let
-  description = "A secure and free password manager for all of your devices";
+  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_28;
+  electron = electron_29;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.2.0";
+  version = "2024.6.4";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-nCjcwe+7Riml/J0hAVv/t6/oHIDPhwFD5A3iQ/LNR5Y=";
+    hash = "sha256-oQ2VZoxePdYUC+xMKlRMpvPubSPULvt31XSh/OBw3Ec=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/bitwarden/clients/commit/746bf0a4745423b9e70c2c54dcf76a95ffb62e11.patch";
-      hash = "sha256-P9MTsiNbAb2kKo/PasIm9kGm0lQjuVUxAJ3Fh1DfpzY=";
-    })
+    ./electron-builder-package-lock.patch
   ];
 
-  nodejs = nodejs_18;
+  # The nested package-lock.json from upstream is out-of-date, so copy the
+  # lock metadata from the root package-lock.json.
+  postPatch = ''
+    cat {,apps/desktop/src/}package-lock.json \
+      | ${lib.getExe jq} -s '
+        .[1].packages."".dependencies.argon2 = .[0].packages."".dependencies.argon2
+          | .[0].packages."" = .[1].packages.""
+          | .[1].packages = .[0].packages
+          | .[1]
+        ' \
+      | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
+  '';
+
+  nodejs = nodejs_20;
 
   makeCacheWritable = true;
-  npmFlags = [ "--legacy-peer-deps" ];
+  npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-GJl9pVwFWEg9yku9IXLcu2XMJZz+ZoQOxCf1TrW715Y=";
+  npmDepsHash = "sha256-9d9pWrFYelAx/PPDHY3m92Frp8RSQuBqpiOjmWtm/1g=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -67,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-LjwtOmIJlwtOiy36Y0pP+jJEwfmCGTN4RhqgmD3Yj6E=";
+    hash = "sha256-ZmblY1APVa8moAR1waVBZPhrf5Wt1Gi6dvAxkhizckQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -118,7 +127,7 @@ in buildNpmPackage rec {
 
   nativeCheckInputs = [
     dbus
-    (gnome.gnome-keyring.override { useWrappedDaemon = false; })
+    (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
   checkFlags = [
@@ -130,7 +139,7 @@ in buildNpmPackage rec {
 
     pushd ${cargoRoot}
     export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
     export cargoCheckType=release
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
@@ -150,7 +159,7 @@ in buildNpmPackage rec {
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \
@@ -183,7 +192,7 @@ in buildNpmPackage rec {
     inherit description;
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall kiwi ];
+    maintainers = with lib.maintainers; [ amarshall ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "bitwarden";
   };

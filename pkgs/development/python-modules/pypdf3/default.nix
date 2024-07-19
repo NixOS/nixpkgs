@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, python
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  python,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -24,12 +25,10 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest tests/*.py
   '';
 
-  propagatedBuildInputs = [
-    tqdm
-  ];
+  propagatedBuildInputs = [ tqdm ];
 
   meta = with lib; {
-    description = "A Pure-Python library built as a PDF toolkit";
+    description = "Pure-Python library built as a PDF toolkit";
     homepage = "https://github.com/sfneal/PyPDF3";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];

@@ -1,30 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
-, pythonOlder
-, numpy
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
+  numpy,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.2.0";
-  format = "pyproject";
+  version = "4.4.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uS6oVNS+JBN61SEVDwLQDoCf60SwqXV7831E2J+hb7I=";
+    hash = "sha256-pBEK1oMtI8z03zKHKjgE7uohZCE1KRPRUU7Z2tIAHV4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
-  nativeCheckInputs = [ lxml pytestCheckHook ];
+  nativeCheckInputs = [
+    lxml
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # requires loading models which aren't part of the Pypi tarball
@@ -40,6 +44,9 @@ buildPythonPackage rec {
     homepage = "https://trimsh.org/";
     changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner pbsds ];
+    maintainers = with maintainers; [
+      gebner
+      pbsds
+    ];
   };
 }

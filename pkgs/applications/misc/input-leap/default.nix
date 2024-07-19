@@ -21,7 +21,7 @@
 , pkg-config
 , qtbase
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
@@ -36,7 +36,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
   buildInputs = [
     curl qtbase avahi
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM

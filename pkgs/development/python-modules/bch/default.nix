@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, click-log
-, paho-mqtt
-, pyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  click-log,
+  paho-mqtt,
+  pyaml,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-control-tool";
     description = "HARDWARIO Hub Control Tool";
+    mainProgram = "bch";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "hasherezade";
     repo = "pe-bear";
     rev = "v${version}";
-    sha256 = "sha256-We3XxSsGL1mTK5DgI2wgRm7OaziI/cZRiLd+qrvZ7SE=";
+    hash = "sha256-We3XxSsGL1mTK5DgI2wgRm7OaziI/cZRiLd+qrvZ7SE=";
     fetchSubmodules = true;
   };
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable Executable reversing tool with a friendly GUI";
+    mainProgram = "PE-bear";
     homepage = "https://hshrzd.wordpress.com/pe-bear/";
 
     license = [

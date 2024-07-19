@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.22";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-h3DFG6FaJXP9o9u8R31MtX3Z1+P3DrNDT8Xbd8tlI4Y=";
+    hash = "sha256-TSU6sqdwBa86k7HcyNSJeJ6gj+n6EfIMjE8skSG5o0c=";
   };
 
   patches = [
@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCS=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
     "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
   ];
 
   preConfigure = ''
@@ -63,6 +62,12 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DGui/bin/*; do
+      wrapQtApp $binary
+    done
+  '';
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

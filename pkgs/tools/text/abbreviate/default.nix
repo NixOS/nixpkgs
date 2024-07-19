@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Shorten your strings using common abbreviations";
+    mainProgram = "abbreviate";
     homepage = "https://github.com/dnnrly/abbreviate";
     changelog = "https://github.com/dnnrly/abbreviate/releases/tag/${src.rev}";
     license = licenses.asl20;

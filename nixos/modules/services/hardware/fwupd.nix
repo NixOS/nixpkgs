@@ -64,7 +64,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable fwupd, a DBus service that allows
           applications to update firmware.
         '';
@@ -74,7 +74,7 @@ in {
         type = types.listOf types.path;
         default = [];
         example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
-        description = lib.mdDoc ''
+        description = ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
         '';
       };
@@ -83,7 +83,7 @@ in {
         type = with types; listOf str;
         default = [];
         example = [ "lvfs-testing" ];
-        description = lib.mdDoc ''
+        description = ''
           Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
         '';
       };
@@ -98,7 +98,7 @@ in {
               type = types.listOf types.str;
               default = [];
               example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
-              description = lib.mdDoc ''
+              description = ''
                 List of device GUIDs to be disabled.
               '';
             };
@@ -107,7 +107,7 @@ in {
               type = types.listOf types.str;
               default = [];
               example = [ "udev" ];
-              description = lib.mdDoc ''
+              description = ''
                 List of plugins to be disabled.
               '';
             };
@@ -116,7 +116,7 @@ in {
               type = types.path;
               default = config.boot.loader.efi.efiSysMountPoint;
               defaultText = lib.literalExpression "config.boot.loader.efi.efiSysMountPoint";
-              description = lib.mdDoc ''
+              description = ''
                 The EFI system partition (ESP) path used if UDisks is not available
                 or if this partition is not mounted at /boot/efi, /boot, or /efi
               '';
@@ -126,7 +126,7 @@ in {
               internal = true;
               type = types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Create virtual test devices and remote for validating daemon flows.
                 This is only intended for CI testing and development purposes.
               '';
@@ -134,7 +134,7 @@ in {
           };
         };
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Configurations for the fwupd daemon.
         '';
       };
@@ -144,7 +144,7 @@ in {
           freeformType = format.type.nestedTypes.elemType;
         };
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           UEFI capsule configurations for the fwupd daemon.
         '';
       };

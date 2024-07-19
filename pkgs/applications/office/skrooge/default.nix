@@ -35,7 +35,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A personal finances manager, powered by KDE";
+    description = "Personal finances manager, powered by KDE";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ joko ];
     homepage = "https://skrooge.org/";

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, pythonOlder
-, pandas
-, python
-, numpy
-, scikit-learn
-, scipy
-, lxml
-, matplotlib
-, sarge
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  pythonOlder,
+  pandas,
+  python,
+  numpy,
+  scikit-learn,
+  scipy,
+  lxml,
+  matplotlib,
+  sarge,
 }:
 
 buildPythonPackage rec {

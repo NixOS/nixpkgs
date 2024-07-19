@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "w0lff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f0kXy7/31imgHHqKPmW9K+QrLqroaPaXwlJkzOoezRU=";
+    hash = "sha256-f0kXy7/31imgHHqKPmW9K+QrLqroaPaXwlJkzOoezRU=";
   };
 
   cargoSha256 = "sha256-VYT6wV59fraAoJgR/i6GlO8s7LUoehGtxPAggEL1eLo=";
@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A sway workspace tool which allows easy moving of workspaces to and from outputs";
+    description = "Sway workspace tool which allows easy moving of workspaces to and from outputs";
+    mainProgram = "swayws";
     homepage = "https://gitlab.com/w0lff/swayws";
     license = licenses.mit;
     maintainers = [ maintainers.atila ];

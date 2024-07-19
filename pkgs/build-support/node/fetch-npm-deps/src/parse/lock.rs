@@ -179,7 +179,7 @@ impl fmt::Display for Hash {
     }
 }
 
-#[allow(clippy::incorrect_partial_ord_impl_on_ord_type)]
+#[allow(clippy::non_canonical_partial_ord_impl)]
 impl PartialOrd for Hash {
     fn partial_cmp(&self, other: &Hash) -> Option<Ordering> {
         let lhs = self.0.split_once('-')?.0;

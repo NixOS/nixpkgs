@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.fsij.org/doc-gnuk/";
-    description = "An implementation of USB cryptographic token for gpg";
+    description = "Implementation of USB cryptographic token for gpg";
     license = licenses.gpl3;
     platforms = with platforms; linux;
   };

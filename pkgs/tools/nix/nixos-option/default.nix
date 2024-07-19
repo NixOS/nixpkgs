@@ -10,7 +10,8 @@
 stdenv.mkDerivation {
   name = "nixos-option";
 
-  src = ./.;
+  src = ./src;
+
   postInstall = ''
     installManPage ${./nixos-option.8}
   '';

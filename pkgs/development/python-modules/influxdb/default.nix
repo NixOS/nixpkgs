@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, python-dateutil
-, fetchPypi
-, mock
-, msgpack
-, pynose
-, pandas
-, pytestCheckHook
-, pytz
-, requests
-, requests-mock
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  msgpack,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  requests,
+  requests-mock,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "influxdb";
-  version = "5.3.1";
-  format = "setuptools";
+  version = "5.3.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ymjv322mv6y424fmpd70f87152w55mbwwj6i7p3sjzf0ixmxy26";
+    hash = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
+
+  patches = [
+    # https://github.com/influxdata/influxdb-python/pull/835
+    ./remove-nose.patch
+  ];
 
   postPatch = ''
     for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
@@ -35,25 +41,27 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [
-    requests
+  build-system = [ setuptools ];
+
+  dependencies = [
+    msgpack
     python-dateutil
     pytz
+    requests
     six
-    msgpack
   ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    mock
+    pandas
     pytestCheckHook
     requests-mock
-    mock
-    pynose
-    pandas
   ];
 
   disabledTests = [
+    "socket"
     # Tests cause FutureWarning due to use of 'record' instead of 'records' in pandas.
     #   https://github.com/influxdata/influxdb-python/pull/845
     # Also type mismatches in assertEqual on DataFrame:
@@ -78,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
+    changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

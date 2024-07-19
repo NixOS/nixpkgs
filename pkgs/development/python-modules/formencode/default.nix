@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
-, six
-, dnspython
-, pycountry
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  setuptools-scm,
+  six,
+  dnspython,
+  pycountry,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "FormEncode";
     inherit version;
-    sha256 = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
+    hash = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
   };
 
   postPatch = ''

@@ -5,7 +5,8 @@
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ma27 ]
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
+, self_attribute_name
 }@args:
 assert (hash == null) -> (src != null);
 let
@@ -15,11 +16,14 @@ let
   atLeast210 = lib.versionAtLeast version "2.10pre";
   atLeast213 = lib.versionAtLeast version "2.13pre";
   atLeast214 = lib.versionAtLeast version "2.14pre";
+  atLeast219 = lib.versionAtLeast version "2.19pre";
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
+    "2.16"
     "2.18"
     "2.19"
     "2.20"
@@ -55,10 +59,12 @@ in
 , libxml2
 , libxslt
 , lowdown
+, toml11
 , man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
 , pkg-config
@@ -79,6 +85,7 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, runCommand
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -132,6 +139,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals atLeast220 [
     libgit2
+  ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
+    toml11
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.isx86_64) [
@@ -146,6 +155,7 @@ self = stdenv.mkDerivation {
 
   installCheckInputs = lib.optionals atLeast221 [
     git
+  ] ++ lib.optionals atLeast219 [
     man
   ];
 
@@ -246,7 +256,25 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      # Basic smoke test that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
+
+      srcVersion = runCommand "nix-src-version" {
+        inherit version;
+      } ''
+        # This file is an implementation detail, but it's a good sanity check
+        # If upstream changes that, we'll have to adapt.
+        srcVersion=$(cat ${src}/.version)
+        echo "Version in nix nix expression: $version"
+        echo "Version in nix.src: $srcVersion"
+        if [ "$version" != "$srcVersion" ]; then
+          echo "Version mismatch!"
+          exit 1
+        fi
+        touch $out
+      '';
     };
   };
 
@@ -263,7 +291,7 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";

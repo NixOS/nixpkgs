@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.20.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = finalAttrs.version;
-    sha256 = "sha256-ENAsytjqvS8xHZyZLPih3bzBgQ1f/j+s3dWZs1GTWHs=";
+    sha256 = "sha256-X9H5nxbYFSMfxZMxs3iWwCgdrJ2FTVWW7tlgQek3WIg=";
   };
 
   outputs = [ "dev" "out" ];
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals stdenv.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
+    "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
   passthru.tests = {
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An implementation for VA-API (Video Acceleration API)";
+    description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides
       access to graphics hardware acceleration capabilities for video
@@ -61,5 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
       "libva-glx" "libva-wayland" "libva-x11"
     ];
     platforms = platforms.unix;
+    badPlatforms = [
+      # Mandatory libva shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })
