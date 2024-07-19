@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-msm/qdl";
     description = "Tool for flashing images to Qualcomm devices";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ muscaln ];
+    maintainers = with maintainers; [ muscaln anas ];
     platforms = platforms.linux;
     mainProgram = "qdl";
   };
