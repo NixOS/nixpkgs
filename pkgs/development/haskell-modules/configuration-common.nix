@@ -1147,6 +1147,14 @@ self: super: {
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
   digestive-functors = doJailbreak super.digestive-functors;
 
+  # https://github.com/TeofilC/digest/pull/13
+  # this patch is nixpkgs specific, since we have no "base system"
+  digest = super.digest.overrideAttrs {
+    postPatch = ''
+      sed -E -i -e 's/ && !os\(freebsd\)//' digest.cabal
+    '';
+  };
+
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
