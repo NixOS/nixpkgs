@@ -4,6 +4,7 @@
   autoconf,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -57,6 +58,8 @@ mkCoqDerivation {
   ];
   mlPlugin = true;
   useMelquiondRemake.logpath = "Flocq";
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = with lib; {
     description = "Floating-point formalization for the Coq system";
