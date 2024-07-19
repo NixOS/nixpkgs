@@ -28,7 +28,7 @@ buildGoModule rec {
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # Mangal creates a config file in the folder ~/.config/mangal and fails if not possible
-    export MANGAL_CONFIG_PATH=`mktemp -d`
+    export HOME=$(mktemp -d)
     installShellCompletion --cmd mangal \
       --bash <($out/bin/mangal completion bash) \
       --zsh <($out/bin/mangal completion zsh) \
