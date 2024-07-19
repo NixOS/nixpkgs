@@ -1,11 +1,6 @@
 { config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  iso-flags-svg = pkgs.iso-flags.overrideAttrs (p: p // {
-    buildPhase = "mkdir -p $out/share";
-    installPhase = "mv svg $out/share/iso-flags-svg";
-  });
-
   # Extensions added here will be shipped by default
   # We keep this in sync with a default Mint installation
   # Right now (only) nemo-share is missing
@@ -37,6 +32,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
   iso-flags-png-320x420 = lib.warn "cinnamon.iso-flags-png-320x420 was moved to top-level and renamed to pkgs.iso-flags-png-320x240." pkgs.iso-flags-png-320x240; # Added on 2024-07-14
+  iso-flags-svg = throw "cinnamon.iso-flags-svg was removed because this is not used in Cinnamon. You can directly obtain the images from \"\${pkgs.iso-flags.src}/svg\"."; # Added on 2024-07-14
   folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
   mint-artwork = lib.warn "cinnamon.mint-artwork was moved to top-level. Please use pkgs.mint-artwork directly." pkgs.mint-artwork; # Added on 2024-07-14
   mint-cursor-themes = lib.warn "cinnamon.mint-cursor-themes was moved to top-level. Please use pkgs.mint-cursor-themes directly." pkgs.mint-cursor-themes; # Added on 2024-07-14
