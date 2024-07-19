@@ -1,6 +1,7 @@
 { callPackage
 , kernel ? null
 , stdenv
+, lib
 , linuxKernel
 , nixosTests
 , ...
@@ -25,6 +26,8 @@ callPackage ./generic.nix args {
     nixosTests.zfs.installer
     nixosTests.zfs.series_2_2
   ];
+
+  maintainers = with lib.maintainers; [ adamcstephens amarshall ];
 
   hash = "sha256-SSp/1Tu1iGx5UDcG4j0k2fnYxK05cdE8gzfSn8DU5Z4=";
 }
