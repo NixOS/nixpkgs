@@ -393,7 +393,7 @@ in
             The path (inside the VM) to the device containing the EFI System Partition (ESP).
 
             If you are *not* booting from a UEFI firmware, this value is, by
-            default, `null`. The ESP is mounted under `/boot`.
+            default, `null`. The ESP is mounted to `boot.loader.efi.efiSysMountpoint`.
           '';
       };
 
@@ -663,6 +663,14 @@ in
         default = "";
         internal = true;
         description = "Primary IP address used in /etc/hosts.";
+      };
+
+    networking.primaryIPv6Address =
+      mkOption {
+        type = types.str;
+        default = "";
+        internal = true;
+        description = "Primary IPv6 address used in /etc/hosts.";
       };
 
     virtualisation.host.pkgs = mkOption {
@@ -1046,38 +1054,6 @@ in
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
-    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
-      ''
-        # Mark this as a NixOS machine.
-        mkdir -p $targetRoot/etc
-        echo -n > $targetRoot/etc/NIXOS
-
-        # Fix the permissions on /tmp.
-        chmod 1777 $targetRoot/tmp
-
-        mkdir -p $targetRoot/boot
-
-        ${optionalString cfg.writableStore ''
-          echo "mounting overlay filesystem on /nix/store..."
-          mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
-          mount -t overlay overlay $targetRoot/nix/store \
-            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
-        ''}
-      '';
-
-    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
-      "/etc/NIXOS".f = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-      "${config.boot.loader.efi.efiSysMountPoint}".d = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-    };
-
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
     # allows Nix operations to work in the VM.  The path to the
@@ -1093,8 +1069,7 @@ in
       '';
 
     boot.initrd.availableKernelModules =
-      optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
       ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
@@ -1102,7 +1077,9 @@ in
     virtualisation.sharedDirectories = {
       nix-store = mkIf cfg.mountHostNixStore {
         source = builtins.storeDir;
-        target = "/nix/store";
+        # Always mount this to /nix/.ro-store because we never want to actually
+        # write to the host Nix Store.
+        target = "/nix/.ro-store";
         securityModel = "none";
       };
       xchg = {
@@ -1212,10 +1189,7 @@ in
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {
-          name =
-            if tag == "nix-store" && cfg.writableStore
-            then "/nix/.ro-store"
-            else share.target;
+          name = share.target;
           value.device = tag;
           value.fsType = "9p";
           value.neededForBoot = true;
@@ -1240,7 +1214,17 @@ in
           # Sync with systemd's tmp.mount;
           options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmp.tmpfsSize}" ];
         };
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = lib.mkIf cfg.useNixStoreImage {
+        "/nix/store" = lib.mkIf (cfg.useNixStoreImage || cfg.mountHostNixStore) (if cfg.writableStore then {
+          overlay = {
+            lowerdir = [ "/nix/.ro-store" ];
+            upperdir = "/nix/.rw-store/upper";
+            workdir = "/nix/.rw-store/work";
+          };
+        } else {
+          device = "/nix/.ro-store";
+          options = [ "bind" ];
+        });
+        "/nix/.ro-store" = lib.mkIf cfg.useNixStoreImage {
           device = "/dev/disk/by-label/${nixStoreFilesystemLabel}";
           neededForBoot = true;
           options = [ "ro" ];
@@ -1250,39 +1234,12 @@ in
           options = [ "mode=0755" ];
           neededForBoot = true;
         };
-        "/boot" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
+        "${config.boot.loader.efi.efiSysMountPoint}" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
           device = cfg.bootPartition;
           fsType = "vfat";
-          noCheck = true; # fsck fails on a r/o filesystem
         };
       }
     ];
-
-    boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
-      mounts = [{
-        where = "/sysroot/nix/store";
-        what = "overlay";
-        type = "overlay";
-        options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
-        wantedBy = ["initrd-fs.target"];
-        before = ["initrd-fs.target"];
-        requires = ["rw-store.service"];
-        after = ["rw-store.service"];
-        unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
-      }];
-      services.rw-store = {
-        before = [ "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/sysroot/nix/.rw-store";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
-        };
-      };
-    };
 
     swapDevices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) [ ];
     boot.initrd.luks.devices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) {};

@@ -1,22 +1,21 @@
-{ fetchFromGitHub, melpaBuild, pkgs, lib, substituteAll, writeText }:
+{
+  fetchFromGitHub,
+  melpaBuild,
+  pkgs,
+  lib,
+  substituteAll,
+}:
 
 melpaBuild {
   pname = "codeium";
   version = "1.6.13";
+
   src = fetchFromGitHub {
     owner = "Exafunction";
     repo = "codeium.el";
     rev = "1.6.13";
     hash = "sha256-CjT21GhryO8/iM0Uzm/s/I32WqVo4M3tSlHC06iEDXA=";
   };
-  commit = "02f9382c925633a19dc928e99b868fd5f6947e58";
-  buildInputs = [ pkgs.codeium ];
-
-  recipe = writeText "recipe" ''
-    (codeium
-      :repo "Exafunction/codeium.el"
-      :fetcher github)
-  '';
 
   patches = [
     (substituteAll {

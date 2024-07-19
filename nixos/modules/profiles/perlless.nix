@@ -6,10 +6,12 @@
 
 {
 
-  # Disable switching to a new configuration. This is not a necessary
-  # limitation of a perlless system but just a current one. In the future,
-  # perlless switching might be possible.
-  system.switch.enable = lib.mkDefault false;
+  # switch-to-configuration-ng reimplements switch-to-configuration, but
+  # without perl.
+  system.switch = lib.mkDefault {
+    enable = false;
+    enableNg = true;
+  };
 
   # Remove perl from activation
   boot.initrd.systemd.enable = lib.mkDefault true;
@@ -21,6 +23,7 @@
   programs.less.lessopen = lib.mkDefault null;
   programs.command-not-found.enable = lib.mkDefault false;
   boot.enableContainers = lib.mkDefault false;
+  boot.loader.grub.enable = lib.mkDefault false;
   environment.defaultPackages = lib.mkDefault [ ];
   documentation.info.enable = lib.mkDefault false;
 

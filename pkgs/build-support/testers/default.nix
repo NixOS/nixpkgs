@@ -1,12 +1,12 @@
 { pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
-# Documentation is in doc/builders/testers.chapter.md
+# Documentation is in doc/build-helpers/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   inherit (callPackage ./lychee.nix {}) lycheeLinkCheck;
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
@@ -16,11 +16,11 @@
   });
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualContents = {
     assertion,
     actual,
@@ -58,7 +58,7 @@
   '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
@@ -81,8 +81,8 @@
       fi
     '';
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # or doc/build-helpers/testers.chapter.md
   invalidateFetcherByDrvHash = f: args:
     let
       drvPath = (f args).drvPath;
@@ -98,8 +98,8 @@
         else salted;
     in checked;
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  # or doc/build-helpers/testers.chapter.md
   runNixOSTest =
     let nixos = import ../../../nixos/lib {
       inherit lib;
@@ -114,8 +114,8 @@
           node.pkgs = pkgsLinux;
         };
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # or doc/build-helpers/testers.chapter.md
   nixosTest =
     let
       /* The nixos/lib/testing-python.nix module, preapplied with arguments that

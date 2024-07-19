@@ -47,13 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags = with lib; [
-    (cmakeBool "USE_LIBFTDI" useLibFTDI)
-    (cmakeBool "USE_OPENMP" useOpenMP)
-    (cmakeBool "BUILD_OYMOTION_SDK" false) # Needs a "GFORCE_SDK"
-    (cmakeBool "BUILD_BLUETOOTH" buildBluetooth)
-    (cmakeBool "BUILD_BLE" buildBluetoothLowEnergy)
-    (cmakeBool "BUILD_ONNX" buildONNX)
+  cmakeFlags = [
+    (lib.cmakeBool "USE_LIBFTDI" useLibFTDI)
+    (lib.cmakeBool "USE_OPENMP" useOpenMP)
+    (lib.cmakeBool "BUILD_OYMOTION_SDK" false) # Needs a "GFORCE_SDK"
+    (lib.cmakeBool "BUILD_BLUETOOTH" buildBluetooth)
+    (lib.cmakeBool "BUILD_BLE" buildBluetoothLowEnergy)
+    (lib.cmakeBool "BUILD_ONNX" buildONNX)
   ];
 
   buildInputs =
