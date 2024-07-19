@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-r3HsVZo+2WnjxIToGTOR/xp1l4G2a3+sHslBA8iEdSo=";
+    hash = "sha256-n8mbhbW5zN8hQeVF6T3MbET9tJlIy99iwFiZCOh6xTg=";
   };
 
   pythonRemoveDeps = [
