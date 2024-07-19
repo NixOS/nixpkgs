@@ -2,23 +2,24 @@
 , stdenv
 , fetchurl
 , ant
-, jdk
+# executable fails to start for jdk > 17
+, jdk17
 , makeWrapper
 , strip-nondeterminism
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
-  version = "3.8.5";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-b68xIZNbzHdPyZwLngcnjcoBtI6AeTdrblz/qx/HbGQ=";
+    hash = "sha256-MQAnLCkcs3r8/2j4zYaMC/JM8nBCEvqHKk8lv+7b9KE=";
   };
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk17
     makeWrapper
     strip-nondeterminism
   ];
@@ -44,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     # but it hardcodes bash shebang and does not pin the java path.
     # So we create our own wrapper, using similar cmdline args as upstream.
     mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/DataExplorer \
+    makeWrapper ${jdk17}/bin/java $out/bin/DataExplorer \
       --add-flags "-Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
       --set SWT_GTK3 0
 
-    makeWrapper ${jdk}/bin/java $out/bin/DevicePropertiesEditor \
+    makeWrapper ${jdk17}/bin/java $out/bin/DevicePropertiesEditor \
       --add-flags "-Xms32m -Xmx512m -classpath $out/share/DataExplorer/DataExplorer.jar gde.ui.dialog.edit.DevicePropertiesEditor" \
       --set SWT_GTK3 0 \
       --set LIBOVERLAY_SCROLLBAR 0
