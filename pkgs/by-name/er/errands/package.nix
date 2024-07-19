@@ -14,6 +14,7 @@
   libportal,
   gtk4,
   gtksourceview5,
+  gitUpdater,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";
@@ -58,6 +59,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "Manage your tasks";
