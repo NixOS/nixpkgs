@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python39 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation {
   pname = "monoid";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    (python39.withPackages (pp: with pp; [
+    (python3.withPackages (pp: with pp; [
       fontforge
     ]))
   ];
