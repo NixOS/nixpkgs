@@ -63,8 +63,6 @@ in
       settings.PasswordAuthentication = mkDefault false;
     };
 
-    users.users.root.initialPassword = "foobar";
-
     # Enable the serial console on tty1
     systemd.services."serial-getty@tty1".enable = true;
 
