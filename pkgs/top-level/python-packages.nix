@@ -10412,6 +10412,8 @@ self: super: with self; {
 
   plastexdepgraph = callPackage ../development/python-modules/plastexdepgraph { };
 
+  plastexshowmore = callPackage ../development/python-modules/plastexshowmore { };
+
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
 
   platformdirs = callPackage ../development/python-modules/platformdirs { };
