@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.2.3";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wyz2pzwJGYMFKoKVqrhLnkJqXG8Qg2+BygpOm2yegpM=";
+    sha256 = "sha256-mlu/bC1+2rhEQvqIAcTBgYii8t4ELsLc1x0ApcBqx6o=";
   };
 
   patches = [
