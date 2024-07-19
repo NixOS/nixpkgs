@@ -1,12 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.pgadmin;
+  inherit (lib.types) int bool str oneOf listOf attrsOf port path nullOr;
+  inherit (lib) mkEnableOption mkOption mkPackageOption mkDefault mkForce mkIf mapAttrsToList concatStringsSep optional optionalAttrs optionalString escapeShellArg;
 
-  _base = with types; [ int bool str ];
-  base = with types; oneOf ([ (listOf (oneOf _base)) (attrsOf (oneOf _base)) ] ++ _base);
+  _base = [ int bool str ];
+  base = oneOf ([ (listOf (oneOf _base)) (attrsOf (oneOf _base)) ] ++ _base);
 
   formatAttrset = attr:
     "{${concatStringsSep "\n" (mapAttrsToList (key: value: "${builtins.toJSON key}: ${formatPyValue value},") attr)}}";
@@ -23,7 +28,7 @@ let
   formatPy = attrs:
     concatStringsSep "\n" (mapAttrsToList (key: value: "${key} = ${formatPyValue value}") attrs);
 
-  pyType = with types; attrsOf (oneOf [ (attrsOf base) (listOf base) base ]);
+  pyType = attrsOf (oneOf [ (attrsOf base) (listOf base) base ]);
 in
 {
   options.services.pgadmin = {
@@ -31,7 +36,7 @@ in
 
     port = mkOption {
       description = "Port for pgadmin4 to run on";
-      type = types.port;
+      type = port;
       default = 5050;
     };
 
@@ -39,7 +44,7 @@ in
 
     initialEmail = mkOption {
       description = "Initial email for the pgAdmin account";
-      type = types.str;
+      type = str;
     };
 
     initialPasswordFile = mkOption {
@@ -48,12 +53,12 @@ in
         Please see `services.pgadmin.minimumPasswordLength`.
         NOTE: Should be string not a store path, to prevent the password from being world readable
       '';
-      type = types.path;
+      type = path;
     };
 
     minimumPasswordLength = mkOption {
       description = "Minimum length of the password";
-      type = types.int;
+      type = int;
       default = 6;
     };
 
@@ -62,39 +67,39 @@ in
         description = ''
           Enable SMTP email server. This is necessary, if you want to use password recovery or change your own password
         '';
-        type = types.bool;
+        type = bool;
         default = false;
       };
       address = mkOption {
         description = "SMTP server for email delivery";
-        type = types.str;
+        type = str;
         default = "localhost";
       };
       port = mkOption {
         description = "SMTP server port for email delivery";
-        type = types.port;
+        type = port;
         default = 25;
       };
       useSSL = mkOption {
         description = "SMTP server should use SSL";
-        type = types.bool;
+        type = bool;
         default = false;
       };
       useTLS = mkOption {
         description = "SMTP server should use TLS";
-        type = types.bool;
+        type = bool;
         default = false;
       };
       username = mkOption {
         description = "SMTP server username for email delivery";
-        type = types.nullOr types.str;
+        type = nullOr str;
         default = null;
       };
       sender = mkOption {
         description = ''
           SMTP server sender email for email delivery. Some servers require this to be a valid email address from that server
         '';
-        type = types.str;
+        type = str;
         example = "noreply@example.com";
       };
       passwordFile = mkOption {
@@ -102,7 +107,7 @@ in
           Password for SMTP email account.
           NOTE: Should be string not a store path, to prevent the password from being world readable
         '';
-        type = types.path;
+        type = path;
       };
     };
 
@@ -195,7 +200,7 @@ in
     users.groups.pgadmin = { };
 
     environment.etc."pgadmin/config_system.py" = {
-      text = lib.optionalString cfg.emailServer.enable ''
+      text = optionalString cfg.emailServer.enable ''
         import os
         with open(os.path.join(os.environ['CREDENTIALS_DIRECTORY'], 'email_password')) as f:
           pw = f.read()
