@@ -13,7 +13,7 @@
 , gettext
 , winetricks
 , wine
-, glxinfo
+, mesa-demos
 , xrandr
 , bash
 }:
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec  {
   dontWrapGApps = true;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo xrandr ]}"
+    "--prefix PATH : ${lib.makeBinPath [ mesa-demos xdg-user-dirs wine winetricks pciutils xrandr ]}"
     # make xdg-open overrideable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
