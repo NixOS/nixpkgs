@@ -6638,11 +6638,19 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-azure-dynamic-sessions = callPackage ../development/python-modules/langchain-azure-dynamic-sessions { };
+
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
 
   langchain-community = callPackage ../development/python-modules/langchain-community { };
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
+
+  langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
+
+  langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
+
+  langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 
