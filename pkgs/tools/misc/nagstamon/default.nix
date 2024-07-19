@@ -16,9 +16,15 @@ pythonPackages.buildPythonApplication rec {
   dependencies = with pythonPackages; [ configparser pyqt6 psutil requests
      beautifulsoup4 keyring requests-kerberos lxml dbus-python python-dateutil pysocks ];
 
-  runHook preInstall
+  # Enable Workaround for fix this issue : https://github.com/HenriWahl/Nagstamon/issues/1026
+  # On the 3.15 this workaround can be remove.
+  installPhase = ''
+      runHook preInstall
+
       sed -i Nagstamon/QUI/qt.py -e "s/QT_VERSION_STR.split('.')/QT_VERSION_STR.split('.')[0:3]/"
-  '';
+
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Status monitor for the desktop";
