@@ -4,8 +4,8 @@
 , fetchYarnDeps
 , yarnConfigHook
 , yarnBuildHook
+, yarnInstallHook
 , nodejs
-, npmHooks
 }:
 
 let
@@ -37,12 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     nodejs
-    npmHooks.npmInstallHook
   ];
-  # From some reason causes the build to fail due to dependencies not available
-  # offline
-  dontNpmPrune = true;
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";
