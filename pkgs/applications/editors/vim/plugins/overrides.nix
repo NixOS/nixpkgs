@@ -226,6 +226,10 @@
     '';
   };
 
+  cmake-tools-nvim = super.cmake-tools-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   cmp-ai = super.cmp-ai.overrideAttrs {
     dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
