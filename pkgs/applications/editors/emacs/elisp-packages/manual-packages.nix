@@ -69,8 +69,6 @@ in
 
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
-  perl-completion = callPackage ./manual-packages/perl-completion { };
-
   pod-mode = callPackage ./manual-packages/pod-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
@@ -120,4 +118,5 @@ in
   ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
   ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
   haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
+  perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }
