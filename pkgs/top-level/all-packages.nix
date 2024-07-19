@@ -19572,6 +19572,8 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
+  vcpkg-tool-unwrapped = callPackage ../by-name/vc/vcpkg-tool/package.nix { doWrap = false; };
+
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   volta = callPackage ../development/tools/volta { };
