@@ -4,6 +4,7 @@
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
 let
+  handledArgs = [ "meta" ];
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
 
   packageBuild = stdenv.mkDerivation {
@@ -140,4 +141,4 @@ genericBuild ({
   } // meta;
 }
 
-// removeAttrs args [ "meta" ])
+// removeAttrs args handledArgs)
