@@ -3,6 +3,7 @@
   branca,
   buildPythonPackage,
   fetchFromGitHub,
+  geodatasets,
   geopandas,
   jinja2,
   nbconvert,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    geodatasets
     geopandas
     nbconvert
     pandas
@@ -65,6 +67,8 @@ buildPythonPackage rec {
     "test_notebook"
     "test_valid_png_size"
     "test_valid_png"
+    # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
+    "test_timedynamic_geo_json"
   ];
 
   pythonImportsCheck = [ "folium" ];
