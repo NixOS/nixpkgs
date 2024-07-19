@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_0.0.53.orig.tar.gz";
     sha256 = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
   };
-
+# Fix compiler error that wants a string literal as format string for `wprintw`
   prePatch = ''
     substituteInPlace sel_file.c \
       --replace 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
