@@ -1,20 +1,19 @@
 {
   lib,
-  fetchFromGitHub,
   fetchurl,
+  fetchzip,
 }:
 
 {
   # A new source for compat headers: Projeto Pindorama!
   # They did a nice work of seeking the history of them, so let's use it
+  # Let's use fetchzip here since fetchFromGitHub is failing in CI
   musl-compat = {
     pname = "musl-compat";
     version = "0-unstable-2023-06-01";
 
-    src = fetchFromGitHub {
-      owner = "Projeto-Pindorama";
-      repo = "musl-compat";
-      rev = "15a3f6047b5efdeebf07ccdce8ced33692c1bd1c";
+    src = fetchzip {
+      url = "https://github.com/Projeto-Pindorama/musl-compat/archive/refs/tags/20230601.tar.gz";
       hash = "sha256-hwlHOuVSX+54q47fbzmQFY1TPFn7Bp7S5y/vKa6cMHA=";
     };
   };
