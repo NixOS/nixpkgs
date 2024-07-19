@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wireviz";
-  version = "0.4";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFJG0jkE42h2boCxDzXfWPmKFc2Ycqx598wPhD/jaLM=";
+    hash = "sha256-DiWtjC46Jpp91Kf0Xk6NME234EMrGEOmIKz6a+cFcOE=";
   };
 
   nativeBuildInputs = [
