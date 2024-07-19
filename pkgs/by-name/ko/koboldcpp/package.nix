@@ -22,7 +22,7 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
-  arches ? cudaPackages.cudaFlags.arches or [ ],
+  cudaArches ? cudaPackages.cudaFlags.arches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -129,7 +129,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head arches}")
+    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head cudaArches}")
   ];
 
   installPhase = ''
