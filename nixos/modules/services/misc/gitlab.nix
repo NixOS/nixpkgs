@@ -1384,23 +1384,23 @@ in {
               | from_entries
             }' >'${cfg.statePath}/config/database.yml'
 
-            ${utils.genJqSecretsReplacementSnippet
-                gitlabConfig
-                "${cfg.statePath}/config/gitlab.yml"
-            }
+            ${utils.genConfigOutOfBand {
+              config = gitlabConfig;
+              configLocation = "${cfg.statePath}/config/gitlab.yml";
+              generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
+            }}
 
-            rm -f '${cfg.statePath}/config/secrets.yml'
-
-            secret="$(<'${cfg.secrets.secretFile}')"
-            db="$(<'${cfg.secrets.dbFile}')"
-            otp="$(<'${cfg.secrets.otpFile}')"
-            jws="$(<'${cfg.secrets.jwsFile}')"
-            export secret db otp jws
-            jq -n '{production: {secret_key_base: $ENV.secret,
-                    otp_key_base: $ENV.otp,
-                    db_key_base: $ENV.db,
-                    openid_connect_signing_key: $ENV.jws}}' \
-               > '${cfg.statePath}/config/secrets.yml'
+            ${utils.genConfigOutOfBand {
+              config.production = {
+                secret_key_base._secret = cfg.secrets.secretFile;
+                otp_key_base._secret = cfg.secrets.otpFile;
+                db_key_base._secret = cfg.secrets.dbFile;
+                openid_connect_signing_key._secret = cfg.secrets.jwsFile;
+              };
+              configLocation = "${cfg.statePath}/config/secrets.yml";
+              sourceField = "_secret";
+              generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
+            }}
           )
 
           # We remove potentially broken links to old gitlab-shell versions
@@ -1600,9 +1600,11 @@ in {
           set -o errexit -o pipefail -o nounset
           shopt -s dotglob nullglob inherit_errexit
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.workhorse.config
-              "${cfg.statePath}/config/gitlab-workhorse.json"}
+          ${utils.genConfigOutOfBand {
+            config = cfg.workhorse.config;
+            configLocation = "${cfg.statePath}/config/gitlab-workhorse.json";
+            generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.yaml {});
+          }}
 
           json2toml "${cfg.statePath}/config/gitlab-workhorse.json" "${cfg.statePath}/config/gitlab-workhorse.toml"
           rm "${cfg.statePath}/config/gitlab-workhorse.json"
