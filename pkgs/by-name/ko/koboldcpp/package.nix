@@ -43,6 +43,12 @@ let
     --prefix LD_LIBRARY_PATH: "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
 
+  darwinFrameworks =
+    if (stdenv.isDarwin && stdenv.isx86_64) then
+      darwin.apple_sdk.frameworks
+    else
+      darwin.apple_sdk_11_0.frameworks;
+
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
@@ -69,15 +75,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     [ tk ]
     ++ finalAttrs.pythonInputs
     ++ lib.optionals effectiveStdenv.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Accelerate
-      darwin.apple_sdk_11_0.frameworks.CoreVideo
-      darwin.apple_sdk_11_0.frameworks.CoreGraphics
-      darwin.apple_sdk_11_0.frameworks.CoreServices
+      darwinFrameworks.Accelerate
+      darwinFrameworks.CoreVideo
+      darwinFrameworks.CoreGraphics
+      darwinFrameworks.CoreServices
     ]
     ++ lib.optionals metalSupport [
-      darwin.apple_sdk_11_0.frameworks.MetalKit
-      darwin.apple_sdk_11_0.frameworks.Foundation
-      darwin.apple_sdk_11_0.frameworks.MetalPerformanceShaders
+      darwinFrameworks.MetalKit
+      darwinFrameworks.Foundation
+      darwinFrameworks.MetalPerformanceShaders
     ]
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
@@ -95,14 +101,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pythonPath = finalAttrs.pythonInputs;
 
   darwinLdFlags = lib.optionals stdenv.isDarwin [
-    "-F${darwin.apple_sdk_11_0.frameworks.CoreServices}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Accelerate}/Library/Frameworks"
+    "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
+    "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
     "-framework CoreServices"
     "-framework Accelerate"
   ];
   metalLdFlags = lib.optionals metalSupport [
-    "-F${darwin.apple_sdk_11_0.frameworks.Foundation}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Metal}/Library/Frameworks"
+    "-F${darwinFrameworks.Foundation}/Library/Frameworks"
+    "-F${darwinFrameworks.Metal}/Library/Frameworks"
     "-framework Foundation"
     "-framework Metal"
   ];
