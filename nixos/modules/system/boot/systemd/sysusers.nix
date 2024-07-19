@@ -5,6 +5,8 @@ let
   cfg = config.systemd.sysusers;
   userCfg = config.users;
 
+  systemUsers = lib.filterAttrs (_username: opts: !opts.isNormalUser) userCfg.users;
+
   sysusersConfig = pkgs.writeTextDir "00-nixos.conf" ''
     # Type Name ID GECOS Home directory Shell
 
@@ -16,7 +18,7 @@ let
         in
           ''u ${username} ${uid}:${opts.group} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
       )
-      userCfg.users)
+      systemUsers)
     }
 
     # Groups
@@ -35,15 +37,15 @@ let
     ${lib.concatLines (
       (lib.mapAttrsToList
         (username: opts: "echo -n '${opts.initialHashedPassword}' > 'passwd.hashed-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) userCfg.users))
+        (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
         ++
       (lib.mapAttrsToList
         (username: opts: "echo -n '${opts.initialPassword}' > 'passwd.plaintext-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.initialPassword != null) userCfg.users))
+        (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers))
         ++
       (lib.mapAttrsToList
         (username: opts: "cat '${opts.hashedPasswordFile}' > 'passwd.hashed-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) userCfg.users))
+        (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers))
       )
     }
   '';
@@ -90,7 +92,12 @@ in
         assertion = config.users.mutableUsers -> config.system.etc.overlay.enable;
         message = "config.users.mutableUsers requires config.system.etc.overlay.enable.";
       }
-    ];
+    ] ++ lib.mapAttrsToList
+      (username: opts: {
+        assertion = !opts.isNormalUser;
+        message = "systemd-sysusers doesn't create normal users. You can currently only use it to create system users.";
+      })
+      userCfg.users;
 
     systemd = lib.mkMerge [
       ({
@@ -105,7 +112,7 @@ in
               group = opts.group;
             };
           })
-          (lib.filterAttrs (_username: opts: opts.home != "/var/empty") userCfg.users);
+          (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
 
         # Create uid/gid marker files for those without an explicit id
         tmpfiles.settings.nixos-uid = lib.mapAttrs'
@@ -114,7 +121,7 @@ in
               user = username;
             };
           })
-          (lib.filterAttrs (_username: opts: opts.uid == null) userCfg.users);
+          (lib.filterAttrs (_username: opts: opts.uid == null) systemUsers);
 
         tmpfiles.settings.nixos-gid = lib.mapAttrs'
           (groupname: opts: lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
@@ -140,14 +147,14 @@ in
           serviceConfig = {
             LoadCredential = lib.mapAttrsToList
               (username: opts: "passwd.hashed-password.${username}:${opts.hashedPasswordFile}")
-              (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) userCfg.users);
+              (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers);
             SetCredential = (lib.mapAttrsToList
               (username: opts: "passwd.hashed-password.${username}:${opts.initialHashedPassword}")
-              (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) userCfg.users))
+              (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
             ++
             (lib.mapAttrsToList
               (username: opts: "passwd.plaintext-password.${username}:${opts.initialPassword}")
-              (lib.filterAttrs (_username: opts: opts.initialPassword != null) userCfg.users))
+              (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers))
             ;
           };
         };
