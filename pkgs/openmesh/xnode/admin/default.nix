@@ -8,8 +8,8 @@ pkgs.python3Packages.buildPythonPackage rec {
   src = pkgs.fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
-    rev = "b23b17baa1168a77245c5a69f644d373132a4c3e";
-    sha256 = "1h7pywajypjqwzfadb5llin5k52gqfn45a92r7sv24kflqbjdpp5";
+    rev = "06e6fd192e275bb63b54a70e483308466ef5ce50";
+    sha256 = "023mw6sw49mncjc6ir26g0qf3g8axlc317716fk4wl9qdn6p3qgi";
   };
 
   nativeBuildInputs = [
