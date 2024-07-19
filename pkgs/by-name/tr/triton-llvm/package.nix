@@ -11,6 +11,7 @@
 , libedit
 , libffi
 , libpfm
+, lit
 , mpfr
 , zlib
 , ncurses
@@ -45,7 +46,7 @@ let
   isNative = stdenv.hostPlatform == stdenv.buildPlatform;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "17.0.0-c5dede880d17";
+  version = "19.1.0-rc1"; # One of the tags at https://github.com/llvm/llvm-project/commit/10dc3a8e916d73291269e5e2b82dd22681489aa1
 
   outputs = [
     "out"
@@ -60,8 +61,8 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "c5dede880d175f7229c9b2923f4753e12702305d";
-    hash = "sha256-v4r3+7XVFK+Dzxt/rErZNJ9REqFO3JmGN4X4vZ+77ew=";
+    rev = "10dc3a8e916d73291269e5e2b82dd22681489aa1";
+    hash = "sha256-9DPvcFmhzw6MipQeCQnr35LktW0uxtEL8axMMPXIfWw=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +75,7 @@ in stdenv.mkDerivation (finalAttrs: {
     doxygen
     sphinx
     python3Packages.recommonmark
+    python3Packages.myst-parser
   ];
 
   buildInputs = [
@@ -154,9 +156,11 @@ in stdenv.mkDerivation (finalAttrs: {
     rm test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
   '';
 
-  postInstall = lib.optionalString (!isNative) ''
+  postInstall = ''
+    cp ${lib.getExe lit} $out/bin/llvm-lit
+  '' + (lib.optionalString (!isNative) ''
     cp -a NATIVE/bin/llvm-config $out/bin/llvm-config-native
-  '';
+  '');
 
   doCheck = buildTests;
 

@@ -1,100 +1,56 @@
 {
   lib,
-  config,
-  addDriverRunpath,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   cmake,
-  ninja,
-  pybind11,
+  config,
+  cudaPackages,
+  fetchFromGitHub,
+  filelock,
   gtest,
-  zlib,
-  ncurses,
   libxml2,
   lit,
   llvm,
-  filelock,
-  torchWithRocm,
+  ncurses,
+  ninja,
+  pybind11,
   python,
-
   runCommand,
-
-  cudaPackages,
+  setuptools,
+  torchWithRocm,
+  zlib,
   cudaSupport ? config.cudaSupport,
 }:
 
-let
-  ptxas = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "triton";
   version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "triton-lang";
-    repo = pname;
+    repo = "triton";
     # latest branch commit from https://github.com/triton-lang/triton/commits/release/3.0.x/
     rev = "91f24d87e50cb748b121a6c24e65a01187699c22";
     hash = "sha256-L5KqiR+TgSyKjEBlkE0yOU1pemMHFk2PhEmxLdbbxUU=";
   };
 
-  patches =
-    [
-      # Upstream startded pinning CUDA version and falling back to downloading from Conda
-      # in https://github.com/triton-lang/triton/pull/1574/files#diff-eb8b42d9346d0a5d371facf21a8bfa2d16fb49e213ae7c21f03863accebe0fcfR120-R123
-      ./0000-dont-download-ptxas.patch
-    ]
-    ++ lib.optionals (!cudaSupport) [
-      # triton wants to get ptxas version even if ptxas is not
-      # used, resulting in ptxas not found error.
-      ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
-    ];
+  # triton wants to download every dependency, even if we are not using cuda.
+  patches = lib.optionals (!cudaSupport) [ ./0000-dont-download-ptxas.patch ];
 
   postPatch =
-    let
-      quote = x: ''"${x}"'';
-      subs.ldFlags =
-        let
-          # Bash was getting weird without linting,
-          # but basically upstream contains [cc, ..., "-lcuda", ...]
-          # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-          old = [ "-lcuda" ];
-          new = [
-            "-lcuda"
-            "-L${addDriverRunpath.driverLink}"
-            "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-          ];
-        in
-        {
-          oldStr = lib.concatMapStringsSep ", " quote old;
-          newStr = lib.concatMapStringsSep ", " quote new;
-        };
-    in
     ''
       # Use our `cmakeFlags` instead and avoid downloading dependencies
+      # remove any downloads
       substituteInPlace python/setup.py \
-        --replace "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
-
-      # Already defined in llvm, when built with -DLLVM_INSTALL_UTILS
-      substituteInPlace bin/CMakeLists.txt \
-        --replace "add_subdirectory(FileCheck)" ""
+        --replace-fail "get_json_package_info(), get_pybind11_package_info()" ""\
+        --replace-fail "get_pybind11_package_info(), get_llvm_package_info()" ""\
+        --replace-fail 'packages += ["triton/profiler"]' ""\
+        --replace-fail "curr_version != version" "False"
 
       # Don't fetch googletest
       substituteInPlace unittest/CMakeLists.txt \
-        --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-        --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
-
-      cat << \EOF >> python/triton/common/build.py
-      def libcuda_dirs():
-          return [ "${addDriverRunpath.driverLink}/lib" ]
-      EOF
-    ''
-    + lib.optionalString cudaSupport ''
-      # Use our linker flags
-      substituteInPlace python/triton/common/build.py \
-        --replace '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
+        --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
     '';
 
   nativeBuildInputs = [
@@ -133,40 +89,38 @@ buildPythonPackage rec {
   ];
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
-  preConfigure =
-    ''
-      # Ensure that the build process uses the requested number of cores
-      export MAX_JOBS="$NIX_BUILD_CORES"
+  preConfigure = ''
+    # Ensure that the build process uses the requested number of cores
+    export MAX_JOBS="$NIX_BUILD_CORES"
 
-      # Upstream's setup.py tries to write cache somewhere in ~/
-      export HOME=$(mktemp -d)
+    # Upstream's setup.py tries to write cache somewhere in ~/
+    export HOME=$(mktemp -d)
 
-      # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-      echo "
-      [build_ext]
-      base-dir=$PWD" >> python/setup.cfg
+    # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
+    echo "
+    [build_ext]
+    base-dir=$PWD" >> python/setup.cfg
 
-      # The rest (including buildPhase) is relative to ./python/
-      cd python
-    ''
-    + lib.optionalString cudaSupport ''
-      export CC=${cudaPackages.backendStdenv.cc}/bin/cc;
-      export CXX=${cudaPackages.backendStdenv.cc}/bin/c++;
+    # The rest (including buildPhase) is relative to ./python/
+    cd python
+  '';
 
-      # Work around download_and_copy_ptxas()
-      mkdir -p $PWD/triton/third_party/cuda/bin
-      ln -s ${ptxas} $PWD/triton/third_party/cuda/bin
-    '';
+  env = {
+    TRITON_BUILD_PROTON = "OFF";
+  } // lib.optionalAttrs cudaSupport {
+    CC = "${cudaPackages.backendStdenv.cc}/bin/cc";
+    CXX = "${cudaPackages.backendStdenv.cc}/bin/c++";
+
+    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+    TRITON_CUOBJDUMP_PATH = cudaPackages.cuda_cuobjdump;
+    TRITON_NVDISASM_PATH = cudaPackages.cuda_nvdisasm;
+    TRITON_CUDACRT_PATH = cudaPackages.cuda_nvcc;
+    TRITON_CUDART_PATH = cudaPackages.cuda_cudart;
+    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
+  };
 
   # CMake is run by setup.py instead
   dontUseCmakeConfigure = true;
-
-  # Setuptools (?) strips runpath and +x flags. Let's just restore the symlink
-  postFixup = lib.optionalString cudaSupport ''
-    rm -f $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-    ln -s ${ptxas} $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-  '';
-
   checkInputs = [ cmake ]; # ctest
   dontUseSetuptoolsCheck = true;
 
