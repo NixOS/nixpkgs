@@ -47,6 +47,7 @@ buildPythonApplication rec {
     pygobject3
     dbus-python
     croniter
+    setuptools
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
