@@ -27,7 +27,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
+    # Fixes Unable to create config directory /homeless-shelter/.doppler
+    export HOME=$PWD
+
     mv $out/bin/cli $out/bin/doppler
+
     installShellCompletion --cmd doppler \
       --bash <($out/bin/doppler completion bash) \
       --fish <($out/bin/doppler completion fish) \
