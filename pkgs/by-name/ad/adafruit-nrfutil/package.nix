@@ -32,11 +32,9 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  build-system = [ python3Packages.setuptools ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     click
     ecdsa
     pyserial
@@ -44,7 +42,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     behave
-    nose
     pytestCheckHook
   ];
 
@@ -56,11 +53,12 @@ python3Packages.buildPythonApplication rec {
     "nordicsemi"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adafruit/Adafruit_nRF52_nrfutil";
     description = "Modified version of Nordic's nrfutil 0.5.x for use with the Adafruit Feather nRF52";
     mainProgram = "adafruit-nrfutil";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stargate01 ];
+    # https://github.com/adafruit/Adafruit_nRF52_nrfutil/issues/41
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ stargate01 ];
   };
 }
