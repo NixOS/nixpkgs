@@ -79,9 +79,9 @@
 
   # GNU (https://www.gnu.org/prep/ftp.html)
   gnu = [
-    # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
-    # mirror
-    "https://ftpmirror.gnu.org/"
+    # This one used to redirect to a (supposedly) nearby
+    # and (supposedly) up-to-date mirror but no longer does
+#     "https://ftpmirror.gnu.org/"
 
     "https://ftp.nluug.nl/pub/gnu/"
     "https://mirrors.kernel.org/gnu/"
