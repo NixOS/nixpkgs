@@ -6144,6 +6144,8 @@ self: super: with self; {
 
   jaraco-net = callPackage ../development/python-modules/jaraco-net { };
 
+  jaraco-path = callPackage ../development/python-modules/jaraco-path { };
+
   jaraco-stream = callPackage ../development/python-modules/jaraco-stream { };
 
   jaraco-test = callPackage ../development/python-modules/jaraco-test { };
