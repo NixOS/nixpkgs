@@ -613,7 +613,7 @@
   };
 
   deoplete-go = super.deoplete-go.overrideAttrs {
-    buildInputs = [ python3 ];
+    nativeBuildInputs = [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
