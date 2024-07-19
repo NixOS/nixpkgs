@@ -2,6 +2,7 @@
 , substituteAll
 , mkDerivation
 , fetchFromGitLab
+, gitUpdater
 , mobile-broadband-provider-info
 , qmake
 , qtbase
@@ -47,6 +48,8 @@ mkDerivation rec {
     qtbase
     qtdeclarative
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";
