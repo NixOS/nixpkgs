@@ -129,9 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''ln -rs ''${!outputLib}/lib/libc.so ''${!outputLib}/lib/libc.musl-${arch}.so.1'')
     (lib.optionalString useBSDCompatHeaders
       ''
-        install -D ${sources.queue_h.src} ''${!outputDev}/include/sys/queue.h
-        install -D ${sources.cdefs_h.src} ''${!outputDev}/include/sys/cdefs.h
-        install -D ${sources.tree_h.src} ''${!outputDev}/include/sys/tree.h
+        install -D ${sources.musl-compat.src}/src/{cdefs,queue,tree}.h ''${!outputDev}/include/sys/
       '')
   ];
 

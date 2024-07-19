@@ -1,39 +1,21 @@
 {
   lib,
+  fetchFromGitHub,
   fetchurl,
 }:
 
 {
-  # From Alpine, I suppose...
-  cdefs_h = {
-    pname = "sys-cdefs.h";
-    version = "0-unstable-2023-01-21";
+  # A new source for compat headers: Projeto Pindorama!
+  # They did a nice work of seeking the history of them, so let's use it
+  musl-compat = {
+    pname = "musl-compat";
+    version = "0-unstable-2023-06-01";
 
-    src =  fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
-      hash = "sha256-MLttfg4LYfzZXYMMN2yCmmFLzkaDwbl+BsIB7Cxug5o=";
-    };
-  };
-
-  # From NetBSD - should we pick them from original sources?
-  queue_h = {
-    pname = "sys-queue.h";
-    version = "0-unstable-2023-01-21";
-
-    src = fetchurl {
-      url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-queue.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
-      hash = "sha256-wTQH7dDjO+c8rnJRTLI0+GEuHA5UQByUSNr/06JAFYs=";
-    };
-  };
-
-  # From NetBSD - should we pick them from original sources?
-  tree_h = {
-    pname = "sys-tree.h";
-    version = "0-unstable-2023-01-21";
-
-    src = fetchurl {
-      url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-tree.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
-      hash = "sha256-4eSYp5vxYKV2b6Vg8rB7IG/on+IaYmAMd9cuAKaZL5I=";
+    src = fetchFromGitHub {
+      owner = "Projeto-Pindorama";
+      repo = "musl-compat";
+      rev = "15a3f6047b5efdeebf07ccdce8ced33692c1bd1c";
+      hash = "sha256-hwlHOuVSX+54q47fbzmQFY1TPFn7Bp7S5y/vKa6cMHA=";
     };
   };
 
