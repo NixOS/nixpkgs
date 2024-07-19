@@ -191,6 +191,7 @@ in
 
             passwordFile = mkOption {
               type = with lib.types; nullOr path;
+              apply = toString;
               example = "/run/keys/db_user_pw";
               default = null;
               description = ''
