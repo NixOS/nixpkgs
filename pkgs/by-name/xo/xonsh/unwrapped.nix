@@ -113,7 +113,7 @@ let
 
     meta = {
       homepage = "https://xon.sh/";
-      description = "A Python-ish, BASHwards-compatible shell";
+      description = "Python-ish, BASHwards-compatible shell";
       changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "xonsh";
