@@ -122,7 +122,8 @@ in
   taglib = old:
     (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old);
+      addToNativeBuildInputs pkgs.taglib old
+    );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
