@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   propagatedBuildInputs = with python3Packages; [
-    moviepy
+    (moviepy.override { inherit youtube-dl; })
     pygobject3
     pyxdg
     requests
