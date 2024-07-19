@@ -222,6 +222,7 @@ let
       updateScript = let
         filename = head (splitString ":" self.meta.position);
       in attrs.passthru.updateScript or [ update-python-libraries filename ];
+      inherit disabled;
     }
     // optionalAttrs (dependencies != []) {
       inherit dependencies;
