@@ -17,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-6UiiajKLzW5e7y0F6GMYDZP6xTyOiccLIKlwvOY7LRo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${version}"
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
