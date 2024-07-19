@@ -5,11 +5,8 @@
   cudaPackages,
   buildPythonPackage,
   fetchurl,
-  isPy38,
-  isPy39,
-  isPy310,
-  isPy311,
   python,
+  pythonOlder,
   autoPatchelfHook,
   filelock,
   lit,
@@ -29,7 +26,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = !(isPy38 || isPy39 || isPy310 || isPy311);
+  disabled = pythonOlder "3.8";
 
   pythonRemoveDeps = [
     "cmake"
