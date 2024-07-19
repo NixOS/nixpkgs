@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk adamcstephens ];
+    maintainers = with maintainers; [ xrelkd jk ];
     mainProgram = "just";
   };
 }
