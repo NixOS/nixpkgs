@@ -10165,10 +10165,6 @@ with pkgs;
 
   libzmf = callPackage ../development/libraries/libzmf { };
 
-  libreddit = callPackage ../servers/libreddit {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   librespeed-cli = callPackage ../tools/misc/librespeed-cli { };
 
   libreswan = callPackage ../tools/networking/libreswan { };
@@ -19534,6 +19530,8 @@ with pkgs;
   valgrind-light = res.valgrind.override { gdb = null; };
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
+
+  vcpkg-tool-unwrapped = callPackage ../by-name/vc/vcpkg-tool/package.nix { doWrap = false; };
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
@@ -38055,7 +38053,8 @@ with pkgs;
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_12
     z3_4_11
-    z3_4_8
+    z3_4_8;
+  inherit (callPackages ../applications/science/logic/z3 { python = python311; })
     z3_4_8_5;
   z3 = z3_4_8;
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix { };

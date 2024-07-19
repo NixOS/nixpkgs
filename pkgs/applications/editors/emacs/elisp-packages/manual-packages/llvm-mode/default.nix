@@ -2,9 +2,12 @@
 
 melpaBuild {
   pname = "llvm-mode";
-  inherit (llvmPackages.llvm) version;
+  inherit (llvmPackages.llvm) src version;
 
-  src = "${llvmPackages.llvm.src}/llvm/utils/emacs";
+  files = ''
+    ("llvm/utils/emacs/*.el"
+     "llvm/utils/emacs/README")
+  '';
 
   meta = {
     inherit (llvmPackages.llvm.meta) homepage license;
