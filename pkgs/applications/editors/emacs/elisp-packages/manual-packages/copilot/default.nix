@@ -7,7 +7,7 @@
   s,
   melpaBuild,
 }:
-melpaBuild {
+melpaBuild rec {
   pname = "copilot";
   version = "0-unstable-2023-12-26";
 
@@ -26,7 +26,7 @@ melpaBuild {
     s
   ];
 
-  propagatedUserEnvPkgs = [ nodejs ];
+  propagatedUserEnvPkgs = packageRequires ++ [ nodejs ];
 
   meta = {
     description = "Unofficial copilot plugin for Emacs";
