@@ -139,6 +139,10 @@
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
   };
 
+  animation-nvim = super.animation-nvim.overrideAttrs {
+    dependencies = with self; [ middleclass ];
+  };
+
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
   };
