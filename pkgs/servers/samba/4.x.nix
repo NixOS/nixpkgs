@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.1";
+  version = "4.20.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
+    hash = "sha256-OpLpfq6zRbazIjL1A+FNNPA6eqZMRR/owlihG72pCOU=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
     (fetchpatch {
       # workaround for https://github.com/NixOS/nixpkgs/issues/303436
       name = "samba-reproducible-builds.patch";
