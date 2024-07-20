@@ -3190,6 +3190,23 @@ let
         };
       };
 
+      ms-python.flake8 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "flake8";
+          publisher = "ms-python";
+          version = "2023.10.0";
+          hash = "sha256-4Vjw8yJPrxLg0hcoTw8AEBEcmQ9sEUNqFaHLxICks0E=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.flake8/changelog";
+          description = "Python linting support for VS Code using Flake8";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.flake8";
+          homepage = "https://github.com/microsoft/vscode-flake8";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amadejkastelic ];
+        };
+      };
+
       ms-python.isort = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "isort";
