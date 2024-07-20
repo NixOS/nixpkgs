@@ -1945,10 +1945,6 @@ with pkgs;
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
 
-  ntpd-rs = darwin.apple_sdk_11_0.callPackage ../tools/networking/ntpd-rs {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security;
-  };
-
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
@@ -23249,7 +23245,9 @@ with pkgs;
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
-  non = callPackage ../applications/audio/non { };
+  non = callPackage ../applications/audio/non {
+    wafHook = (waf.override { extraTools = [ "gccdeps" ]; }).hook;
+  };
 
   ntl = callPackage ../development/libraries/ntl { };
 
@@ -27704,6 +27702,7 @@ with pkgs;
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
     ubootOrangePiZero2
+    ubootOrangePiZero3
     ubootPcduino3Nano
     ubootPine64
     ubootPine64LTS

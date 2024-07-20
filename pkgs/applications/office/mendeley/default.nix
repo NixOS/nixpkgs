@@ -38,7 +38,7 @@ in appimageTools.wrapType2 {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers  = with maintainers; [ dtzWill atila ];
+    maintainers  = with maintainers; [ atila ];
     mainProgram = "mendeley-reference-manager";
   };
 

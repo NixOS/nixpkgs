@@ -16738,6 +16738,8 @@ self: super: with self; {
 
   undefined = callPackage ../development/python-modules/undefined { };
 
+  undetected-chromedriver = callPackage ../development/python-modules/undetected-chromedriver { };
+
   unearth = callPackage ../development/python-modules/unearth { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
