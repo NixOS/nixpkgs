@@ -253,7 +253,9 @@ let
           else if hasSuffix "-freebsd" config then
             let
               bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
-                localSystem = { inherit config; };
+                pkgs = import ../.. {
+                  localSystem = { inherit config; };
+                };
               };
             in {
               inherit (bootstrap) build;  # test does't exist yet
