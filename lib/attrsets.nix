@@ -1764,6 +1764,7 @@ rec {
   /**
     Get a package output.
     If no output is found, fallback to `.out` and then to the default.
+    The function is idempotent: `getOutput "b" (getOutput "a" p) == getOutput "a" p`.
 
 
     # Inputs
@@ -1779,7 +1780,7 @@ rec {
     # Type
 
     ```
-    getOutput :: String -> Derivation -> String
+    getOutput :: String -> :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1787,7 +1788,7 @@ rec {
     ## `lib.attrsets.getOutput` usage example
 
     ```nix
-    getOutput "dev" pkgs.openssl
+    "${getOutput "dev" pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
     ```
 
@@ -1799,8 +1800,9 @@ rec {
       else pkg;
 
   /**
-    Like `getOutput` but with a list of fallback output names.
+    Get the first of the `outputs` provided by the package, or the default.
     This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    Like `getOutput`, the function is idempotent.
 
     # Inputs
 
@@ -1815,7 +1817,7 @@ rec {
     # Type
 
     ```
-    getFirstOutput :: [String] -> Derivation -> String
+    getFirstOutput :: [String] -> Derivation -> Derivation
     ```
 
     # Examples
@@ -1823,7 +1825,7 @@ rec {
     ## `lib.attrsets.getFirstOutput` usage example
 
     ```nix
-    getFirstOutput [ "include" "dev" ] pkgs.openssl
+    "${getFirstOutput [ "include" "dev" ] pkgs.openssl}"
     => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
     ```
 
@@ -1853,7 +1855,7 @@ rec {
     # Type
 
     ```
-    getBin :: Derivation -> String
+    getBin :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1861,7 +1863,7 @@ rec {
     ## `lib.attrsets.getBin` usage example
 
     ```nix
-    getBin pkgs.openssl
+    "${getBin pkgs.openssl}"
     => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r"
     ```
 
@@ -1883,7 +1885,7 @@ rec {
     # Type
 
     ```
-    getLib :: Derivation -> String
+    getLib :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1891,7 +1893,7 @@ rec {
     ## `lib.attrsets.getLib` usage example
 
     ```nix
-    getLib pkgs.openssl
+    "${getLib pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-lib"
     ```
 
@@ -1913,7 +1915,7 @@ rec {
     # Type
 
     ```
-    getDev :: Derivation -> String
+    getDev :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1921,7 +1923,7 @@ rec {
     ## `lib.attrsets.getDev` usage example
 
     ```nix
-    getDev pkgs.openssl
+    "${getDev pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
     ```
 
@@ -1942,7 +1944,7 @@ rec {
     # Type
 
     ```
-    getInclude :: Derivation -> String
+    getInclude :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1950,7 +1952,7 @@ rec {
     ## `lib.attrsets.getInclude` usage example
 
     ```nix
-    getInclude pkgs.openssl
+    "${getInclude pkgs.openssl}"
     => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
     ```
 
@@ -1972,7 +1974,7 @@ rec {
     # Type
 
     ```
-    getMan :: Derivation -> String
+    getMan :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1980,7 +1982,7 @@ rec {
     ## `lib.attrsets.getMan` usage example
 
     ```nix
-    getMan pkgs.openssl
+    "${getMan pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-man"
     ```
 
@@ -2000,7 +2002,7 @@ rec {
     # Type
 
     ```
-    chooseDevOutputs :: [Derivation] -> [String]
+    chooseDevOutputs :: [Derivation] -> [Derivation]
     ```
   */
   chooseDevOutputs = builtins.map getDev;
