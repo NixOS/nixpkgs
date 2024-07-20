@@ -1,14 +1,15 @@
 {
   lib,
-  writers,
   runCommand,
   python3Packages,
+  makeWrapper,
 }:
 {
   feature ? "cuda",
-  name ? feature,
+  name ? if feature == null then "cpu" else feature,
   libraries ? [ ], # [PythonPackage] | (PackageSet -> [PythonPackage])
-}:
+  ...
+}@args:
 
 let
   inherit (builtins) isFunction all;
@@ -25,23 +26,35 @@ let
   interpreter = python3Packages.python.withPackages librariesFun;
   tester =
     runCommand "tester-${name}"
-      {
-        inherit content;
-        passAsFile = [ "content" ];
-      }
+      (
+        lib.removeAttrs args [
+          "libraries"
+          "name"
+        ]
+        // {
+          inherit content;
+          nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ makeWrapper ];
+          passAsFile = args.passAsFile or [ ] ++ [ "content" ];
+        }
+      )
       ''
         mkdir -p "$out"/bin
-        cat << EOF >"$out"/bin/"tester-${name}"
+        cat << EOF >"$out/bin/$name"
         #!${lib.getExe interpreter}
         EOF
-        cat "$contentPath" >>"$out"/bin/"tester-${name}"
+        cat "$contentPath" >>"$out/bin/$name"
+        chmod +x "$out/bin/$name"
+
+        if [[ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]] ; then
+          wrapProgram "$out/bin/$name" ''${makeWrapperArgs[@]}
+        fi
       '';
   tester' = tester.overrideAttrs (oldAttrs: {
     passthru.gpuCheck =
       runCommand "test-${name}"
         {
           nativeBuildInputs = [ tester' ];
-          requiredSystemFeatures = [ feature ];
+          requiredSystemFeatures = lib.optionals (feature != null) [ feature ];
         }
         ''
           set -e
