@@ -190,14 +190,18 @@ in
             };
 
             passwordFile = mkOption {
-              type = with lib.types; nullOr path;
-              apply = toString;
+              type = with lib.types; nullOr (str // {
+                # We don't want users to be able to pass a path literal here but
+                # it should look like a path.
+                check = it: lib.isString it && lib.types.path.check it;
+              });
               example = "/run/keys/db_user_pw";
               default = null;
               description = ''
                 The path to a file containing a password that is to be set as the user's PASSWORD field.
 
-                A path must be given because Nix strings would be exposed in Nix store through the .drv files.
+                A path must be given because Nix strings would be exposed in Nix store through the .drv files. You must
+                not pass a path literal either for the same reason. The path must therefore be represented as a string.
 
                 Note that the contents of this file are stripped of newlines and that surrounding whitespace is trimmed.
               '';
