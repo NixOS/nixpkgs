@@ -2116,9 +2116,6 @@ self: super: {
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
 
-  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
-  trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
-
   # 2022-12-28: Too strict version bounds on bytestring
   iconv = doJailbreak super.iconv;
 
