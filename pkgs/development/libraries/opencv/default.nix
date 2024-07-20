@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
