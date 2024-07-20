@@ -1,8 +1,4 @@
-{
-  callPackage,
-  torchWithCuda,
-  torchWithRocm,
-}:
+{ callPackage }:
 
 {
   # To perform the runtime check use either
@@ -11,11 +7,11 @@
   tester-cudaAvailable = callPackage ./mk-runtime-check.nix {
     feature = "cuda";
     versionAttr = "cuda";
-    torch = torchWithCuda;
+    libraries = ps: [ ps.torchWithCuda ];
   };
   tester-rocmAvailable = callPackage ./mk-runtime-check.nix {
     feature = "rocm";
     versionAttr = "hip";
-    torch = torchWithRocm;
+    libraries = ps: [ ps.torchWithRocm ];
   };
 }
