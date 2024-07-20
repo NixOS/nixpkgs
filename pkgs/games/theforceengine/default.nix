@@ -9,17 +9,23 @@
 , alsa-lib
 , cmake
 , pkg-config
+, zenity
 }:
-
+let
+  # package depends on SDL2main static library
+  SDL2' = SDL2.override {
+    withStatic = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.09.540";
+  version = "1.10.000";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    sha256 = "sha256-s54X6LZdk7daIlQPHyRBxc8MLS6bzkkypi4m1m+xK80=";
+    hash = "sha256-oEcjHb6HY5qxKuPoNBuobPbdi39hUUWtKSb7FbAfEpc=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2
+    SDL2'
     SDL2_image
     rtaudio
     rtmidi
@@ -39,7 +45,12 @@ stdenv.mkDerivation rec {
   prePatch = ''
     # use nix store path instead of hardcoded /usr/share for support data
     substituteInPlace TheForceEngine/TFE_FileSystem/paths-posix.cpp \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
+
+    # use zenity from nix store
+    substituteInPlace TheForceEngine/TFE_Ui/portable-file-dialogs.h \
+      --replace-fail "check_program(\"zenity\")" "check_program(\"${lib.getExe zenity}\")" \
+      --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${lib.getExe zenity}\""
   '';
 
   meta = with lib; {
