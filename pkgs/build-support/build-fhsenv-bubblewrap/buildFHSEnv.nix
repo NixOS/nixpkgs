@@ -196,6 +196,7 @@ let
     ln -s /usr/lib32 $out/lib32
     ln -s /usr/lib64 $out/lib64
     ln -s /usr/lib64 $out/usr/lib
+    ln -s /usr/libexec $out/libexec
 
     # symlink 32-bit ld-linux so it's visible in /lib
     if [ -e $out/usr/lib32/ld-linux.so.2 ]; then
