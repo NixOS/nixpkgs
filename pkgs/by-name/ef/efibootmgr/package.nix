@@ -13,6 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "efibootmgr";
   version = "18";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "efibootmgr";
