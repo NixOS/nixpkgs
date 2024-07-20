@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Terminal UI to interactively inspect and explore Python objects";
     homepage = "https://github.com/kylepollina/objexplore";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds sigmanificient ];
   };
 }
