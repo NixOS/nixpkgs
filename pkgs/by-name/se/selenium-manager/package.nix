@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selenium-manager";
-  version = "4.22.0";
+  version = "4.23.0";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
     rev = "selenium-${version}";
-    hash = "sha256-qBuZgI5SSBwxbSBrAT0W/HzzV2JmPL00hPJ6s57QTeg=";
+    hash = "sha256-rZWLivBukHZ5h/I7vJkvis1ITLM903jSUDFPZCPA2L4=";
   };
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-1CPUOAfBfUeZt5S8t5SM3oyrNwXKHplhHG5idVy4YrE=";
+  cargoHash = "sha256-HLdKMQj6mhj7ZE+XwUZ0izcOW8P8QpkOV4QB5ZIjj3A=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
