@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://www.hikari-py.dev/";
     changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 ];
+    maintainers = with maintainers; [ tomodachi94 sigmanificient ];
   };
 }
