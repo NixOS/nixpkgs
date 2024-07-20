@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, git, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "git-backdate";

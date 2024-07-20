@@ -55,7 +55,6 @@
 , stdenv
 , systemd
 , wayland
-, wrapGAppsHook3
 , xdg-utils
 , writeScript
 

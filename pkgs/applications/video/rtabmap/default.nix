@@ -11,11 +11,9 @@
 , qtbase
 , g2o
 , ceres-solver
-, libpointmatcher
 , octomap
 , freenect
 , libdc1394
-, librealsense
 , libGL
 , libGLU
 , vtkWithQt5

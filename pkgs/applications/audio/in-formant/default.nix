@@ -13,7 +13,6 @@
 , pkg-config
 , autoPatchelfHook
 , soxr
-, freetype
 , libsamplerate
 , armadillo
 , tomlplusplus

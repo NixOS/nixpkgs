@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, pkg-config
 , dpkg
 , openssl
 , webkitgtk
