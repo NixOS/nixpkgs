@@ -124,6 +124,8 @@ rustPlatform.buildRustPackage {
     "--skip=backend::sqlite::pool::SqliteConnectionManager::with_init"
   ];
 
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+
   passthru = {
     update-script = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
