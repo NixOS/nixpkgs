@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "any-nix-shell";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "haslersn";
     repo = "any-nix-shell";
     rev = "v${version}";
-    sha256 = "0q27rhjhh7k0qgcdcfm8ly5za6wm4rckh633d0sjz87faffkp90k";
+    hash = "sha256-n4+aokW5o3EuXKqyc12vRsn5Mlkvdso27AdpahhySYw=";
   };
 
   strictDeps = true;
