@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     rev = "v${version}";
-    hash = "sha256-yIX9RD1xqkFoxDt82wnKfQR3z/vLA0I5/cptaIgSNjw=";
+    hash = "sha256-td+op7nVmznIcj3JYafEy7HgbBPLuRv25Hu2N5A5qOQ=";
   };
 
-  cargoHash = "sha256-NRFmb9rZVbd0qYKIkslT4TcbC/aD4QhAjm2GA4BvReY=";
+  cargoHash = "sha256-guim3IC2uIA7NKMXDCil/UK8Yj+rt2KUSwtJTcBcZoU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
   nativeBuildInputs = [
