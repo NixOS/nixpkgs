@@ -578,9 +578,8 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
-  # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
   # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
-  streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
+  streamly-bytestring = doJailbreak super.streamly-bytestring;
 
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
