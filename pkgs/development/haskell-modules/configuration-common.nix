@@ -2586,9 +2586,6 @@ self: super: {
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
 
-  # 2022-02-26: https://github.com/emilypi/base64/issues/39
-  base64 = dontCheck super.base64;
-
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
