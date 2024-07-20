@@ -148,12 +148,6 @@ self: super: {
     ];
   }) super.vector;
 
-  # Almost guaranteed failure due to floating point imprecision with QuickCheck-2.14.3
-  # https://github.com/haskell/math-functions/issues/73
-  math-functions = overrideCabal (drv: {
-    testFlags = drv.testFlags or [] ++ [ "-p" "! /Kahan.t_sum_shifted/" ];
-  }) super.math-functions;
-
   # Too strict bounds on base
   # https://github.com/lspitzner/butcher/issues/7#issuecomment-1681394943
   butcher = doJailbreak super.butcher;
