@@ -8702,8 +8702,6 @@ with pkgs;
 
   hans = callPackage ../tools/networking/hans { };
 
-  h2 = callPackage ../servers/h2 { };
-
   haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
