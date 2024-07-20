@@ -1880,10 +1880,6 @@ self: super: {
     })
   ] super.binary-strict;
 
-  # 2020-11-15: nettle tests are pre MonadFail change
-  # https://github.com/stbuehler/haskell-nettle/issues/10
-  nettle = dontCheck super.nettle;
-
   # The tests for semver-range need to be updated for the MonadFail change in
   # ghc-8.8:
   # https://github.com/adnelson/semver-range/issues/15
