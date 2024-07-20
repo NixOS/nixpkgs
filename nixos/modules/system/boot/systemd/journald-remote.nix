@@ -37,6 +37,14 @@ in
       '';
     };
 
+    address = lib.mkOption {
+      default = "[::]";
+      type = lib.types.str;
+      description = ''
+        The address to listen to.
+      '';
+    };
+
     port = lib.mkOption {
       default = 19532;
       type = lib.types.port;
@@ -144,9 +152,9 @@ in
     systemd.sockets.systemd-journal-remote = {
       wantedBy = [ "sockets.target" ];
       listenStreams = [
-        # Clear the default port
+        # Clear the default address and port
         ""
-        (toString cfg.port)
+        "${cfg.address}:${toString cfg.port}"
       ];
     };
 
