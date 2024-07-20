@@ -175,9 +175,9 @@
     "hash": "sha256-/XvauI57zMszOHnrKN7fNYQsEQwFf/TH0/p3cI5UEpY="
   },
   "kio": {
-    "version": "6.4.0",
-    "url": "mirror://kde/stable/frameworks/6.4/kio-6.4.0.tar.xz",
-    "hash": "sha256-X6Ax87l+lu0ii3xCyWJenz5Ud+TKLVprov8dLY10B10="
+    "version": "6.4.1",
+    "url": "mirror://kde/stable/frameworks/6.4/kio-6.4.1.tar.xz",
+    "hash": "sha256-i/H8bJk1EKFs2PcHebAjcB+XFHHTafVlqEBvSw07kFk="
   },
   "kirigami": {
     "version": "6.4.0",
@@ -295,9 +295,9 @@
     "hash": "sha256-sohaCI5fcHVFEcwd2wpDTBpteTnZx3/8NulUg0kfnkA="
   },
   "kwidgetsaddons": {
-    "version": "6.4.0",
-    "url": "mirror://kde/stable/frameworks/6.4/kwidgetsaddons-6.4.0.tar.xz",
-    "hash": "sha256-/afi6BOi3POjkWUplEmQecCyIsAfYneJeSh8YCo/Db8="
+    "version": "6.4.1",
+    "url": "mirror://kde/stable/frameworks/6.4/kwidgetsaddons-6.4.1.tar.xz",
+    "hash": "sha256-010hmP8aRYHn1zOdW0IS5ezwXEheI0C+ILqEJg8o8js="
   },
   "kwindowsystem": {
     "version": "6.4.0",

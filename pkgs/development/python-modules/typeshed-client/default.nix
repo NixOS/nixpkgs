@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "typeshed-client";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lITreXYn/ZOc1fF2Sqcn8UDrZAjWYfjFSEaAxqTHb4s=";
+    hash = "sha256-TZMCitRQlPLZyXJbPmK7SVAcGAyxWDk/y7Gzj24mgIQ=";
   };
 
   build-system = [ setuptools ];

@@ -25,8 +25,16 @@ let
   };
 in
 {
-  allegro = addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd ]
-    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]);
+  allegro = old:
+    ((addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd pkgs.libGLU ]
+    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
+    ++ lib.optionals stdenv.isLinux [ pkgs.xorg.libX11 ])) old) // {
+      # depends on 'chicken' egg, which doesn't exist,
+      # so we specify all the deps here
+      propagatedBuildInputs = [
+        chickenEggs.foreigners
+      ];
+    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
@@ -35,7 +43,6 @@ in
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
     // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  dbus = addToBuildInputsWithPkgConfig pkgs.dbus;
   epoxy = old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
     // lib.optionalAttrs stdenv.cc.isClang {
@@ -122,7 +129,8 @@ in
   taglib = old:
     (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old);
+      addToNativeBuildInputs pkgs.taglib old
+    );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
@@ -165,6 +173,34 @@ in
   # platform changes
   pledge = addMetaAttrs { platforms = lib.platforms.openbsd; };
   unveil = addMetaAttrs { platforms = lib.platforms.openbsd; };
+
+  # overrides for chicken 5.4
+  dbus = old:
+    (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old) // {
+      # backticks in compiler options
+      # aren't supported anymore as of chicken 5.4, it seems.
+      preBuild = ''
+        substituteInPlace \
+          dbus.egg dbus.setup \
+          --replace '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
+          --replace '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
+      '';
+    };
+  math = old: {
+    # define-values is used but not imported
+    # some breaking change happened now it needs to be done
+    # explicitly?
+    preBuild = ''
+      substituteInPlace *.scm **/*.scm \
+        --replace-quiet 'only chicken.base' 'only chicken.base define-values'
+    '';
+  };
+  socket = old: {
+    # chicken-do checks for changes to a file that doesn't exist
+    preBuild = ''
+      touch socket-config
+    '';
+  };
 
   # mark broken
   "ephem-v1.1" = broken;
