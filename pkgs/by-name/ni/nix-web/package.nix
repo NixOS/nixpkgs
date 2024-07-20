@@ -7,7 +7,6 @@
 , nixVersions
 , nixPackage ? nixVersions.nix_2_18
 , darwin
-, nukeReferences
 }:
 
 let

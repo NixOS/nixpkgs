@@ -1,5 +1,4 @@
-{ pkgs
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , buildDotnetModule

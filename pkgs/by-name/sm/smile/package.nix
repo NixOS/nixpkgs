@@ -4,7 +4,6 @@
 , desktop-file-utils
 , glib
 , gobject-introspection
-, gtk4
 , meson
 , ninja
 , wrapGAppsHook4
