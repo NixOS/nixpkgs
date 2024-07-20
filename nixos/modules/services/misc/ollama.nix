@@ -15,6 +15,8 @@ in
       "Use `services.ollama.host` and `services.ollama.port` instead.")
     (lib.mkRemovedOptionModule [ "services" "ollama" "sandbox" ]
       "Set `services.ollama.user` and `services.ollama.group` instead.")
+    (lib.mkRemovedOptionModule [ "services" "ollama" "writablePaths" ]
+      "The `models` directory is now always writable. To make other directories writable, use `systemd.services.ollama.serviceConfig.ReadWritePaths`." )
   ];
 
   options = {
@@ -52,8 +54,6 @@ in
         example = "/home/foo";
         description = ''
           The home directory that the ollama service is started in.
-
-          See also `services.ollama.writablePaths` and `services.ollama.sandbox`.
         '';
       };
 
@@ -64,25 +64,9 @@ in
         example = "/path/to/ollama/models";
         description = ''
           The directory that the ollama service will read models from and download new models to.
-
-          See also `services.ollama.writablePaths` and `services.ollama.sandbox`
-          if downloading models or other mutation of the filesystem is required.
         '';
       };
-      writablePaths = lib.mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        example = [ "/home/foo" "/mnt/foo" ];
-        description = ''
-          Paths that the server should have write access to.
 
-          This sets [`ReadWritePaths`](
-          https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ReadWritePaths=
-          ), which allows specified paths to be written to through the default sandboxing.
-
-          See also `services.ollama.sandbox`.
-        '';
-      };
       host = lib.mkOption {
         type = types.str;
         default = "127.0.0.1";
@@ -193,7 +177,7 @@ in
         ExecStart = "${lib.getExe ollamaPackage} serve";
         WorkingDirectory = cfg.home;
         StateDirectory = [ "ollama" ];
-        ReadWritePaths = cfg.writablePaths;
+        ReadWritePaths = [ cfg.models ];
       };
       postStart = mkBefore ''
         set -x
