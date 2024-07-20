@@ -744,10 +744,10 @@
         "src": {
             "owner": "libretro",
             "repo": "smsplus-gx",
-            "rev": "96fa9bc65aa27a5ab2779f9f2ff0439fec7cf513",
-            "hash": "sha256-tlxlI0+5QFgu2IRB4Cpz9XItbhprLNlq1YdCFGXGyIE="
+            "rev": "081d956e07188ba9204595c9f15d34b2b0664796",
+            "hash": "sha256-oVzoVvbqxbyZytXLdnlpeYZDefRRG8mxBFdhgFCPPHM="
         },
-        "version": "unstable-2023-10-31"
+        "version": "unstable-2024-07-20"
     },
     "snes9x": {
         "fetcher": "fetchFromGitHub",
