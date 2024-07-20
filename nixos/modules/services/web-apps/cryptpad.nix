@@ -141,23 +141,69 @@ in
             # apparently needs proc for workers management
             "/proc"
             "/dev/urandom"
-          ] ++ (if ! cfg.settings.blockDailyCheck then [
-            # allow DNS & TLS if telemetry is explicitly enabled
-            "-/etc/resolv.conf"
-            "-/run/systemd"
-            "/etc/hosts"
-            "/etc/ssl/certs/ca-certificates.crt"
-          ] else []);
+          ];
           DynamicUser = true;
           Environment = [
             "CRYPTPAD_CONFIG=${cryptpadConfigFile}"
             "HOME=%S/cryptpad"
           ];
           ExecStart = lib.getExe cfg.package;
-          PrivateTmp = true;
           Restart = "always";
           StateDirectory = "cryptpad";
           WorkingDirectory = "%S/cryptpad";
+          # security way too many numerous options, from the systemd-analyze security output
+          # at end of test: block everything except
+          # - SystemCallFiters=@resources is required for node
+          # - MemoryDenyWriteExecute for node JIT
+          # - RestrictAddressFamilies=~AF_(INET|INET6) / PrivateNetwork to bind to sockets
+          # - IPAddressDeny likewise allow localhost if binding to localhost or any otherwise
+          # - PrivateUsers somehow service doesn't start with that
+          # - DeviceAllow (char-rtc r added by ProtectClock)
+          AmbientCapabilities = "";
+          CapabilityBoundingSet = "";
+          DeviceAllow = "";
+          LockPersonality = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RuntimeDirectoryMode = "700";
+          SocketBindAllow = [
+            "tcp:${builtins.toString cfg.settings.httpPort}"
+            "tcp:${builtins.toString cfg.settings.websocketPort}"
+          ];
+          SocketBindDeny = [ "any" ];
+          StateDirectoryMode = "0700";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@pkey"
+            "@system-service"
+            "~@chown"
+            "~@keyring"
+            "~@memlock"
+            "~@privileged"
+            "~@resources"
+            "~@setuid"
+            "~@timer"
+          ];
+          UMask = "0077";
         };
         confinement = {
           enable = true;
@@ -166,6 +212,38 @@ in
         };
       };
     }
+    # block external network access if not phoning home and
+    # binding to localhost (default)
+    (mkIf
+      (
+        cfg.settings.blockDailyCheck
+        && (builtins.elem cfg.settings.httpAddress [
+          "127.0.0.1"
+          "::1"
+        ])
+      )
+      {
+        systemd.services.cryptpad = {
+          serviceConfig = {
+            IPAddressAllow = [ "localhost" ];
+            IPAddressDeny = [ "any" ];
+          };
+        };
+      }
+    )
+    # .. conversely allow DNS & TLS if telemetry is explicitly enabled
+    (mkIf (!cfg.settings.blockDailyCheck) {
+      systemd.services.cryptpad = {
+        serviceConfig = {
+          BindReadOnlyPaths = [
+            "-/etc/resolv.conf"
+            "-/run/systemd"
+            "/etc/hosts"
+            "/etc/ssl/certs/ca-certificates.crt"
+          ];
+        };
+      };
+    })
 
     (mkIf cfg.configureNginx {
       assertions = [

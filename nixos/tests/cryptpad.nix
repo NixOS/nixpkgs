@@ -64,5 +64,8 @@ in
 
     # test telemetry has been disabled
     machine.fail("journalctl -u cryptpad | grep TELEMETRY");
+
+    # for future improvements
+    machine.log(machine.execute("systemd-analyze security cryptpad.service")[1])
   '';
 }
