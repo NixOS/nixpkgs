@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, buildPackages
 , cargo
 , gettext
 , meson
@@ -34,6 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-9lrxK2psdIPGsOC6p8T+3AGPrX6PjrK9mFirdJqBSMM=";
+  };
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
