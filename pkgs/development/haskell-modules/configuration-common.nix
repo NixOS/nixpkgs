@@ -2112,9 +2112,6 @@ self: super: {
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
 
-  # 2022-12-28: Too strict version bounds on bytestring
-  iconv = doJailbreak super.iconv;
-
   ginger = doJailbreak super.ginger;
 
   # 2024-05-05 syntax changes: https://github.com/obsidiansystems/haveibeenpwned/pull/9
