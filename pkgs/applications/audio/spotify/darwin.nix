@@ -9,17 +9,17 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.15.828.g79f41970";
+  version = "1.2.40.599.g606b7f29";
 
   src = if stdenv.isAarch64 then (
     fetchurl {
-      url = "https://web.archive.org/web/20230710021420/https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-1X0Mln47uYs5l1t+5BFBk5lLnXZgnSqZLX41yA91I0s=";
+      url = "https://web.archive.org/web/20240622065234/https://download.scdn.co/SpotifyARM64.dmg";
+      hash = "sha256-mmjxKYmsX0rFlIU19JOfPbNgOhlcZs5slLUhDhlON1c=";
     })
   else (
     fetchurl {
-      url = "https://web.archive.org/web/20230710021726/https://download.scdn.co/Spotify.dmg";
-      sha256 = "sha256-CmKZx8Ad0w6STBN0O4Sc4XqidOM6fCl74u2sI8w+Swk=";
+      url = "https://web.archive.org/web/20240622065548/https://download.scdn.co/Spotify.dmg";
+      hash = "sha256-hvS0xnmJQoQfNJRFsLBQk8AJjDOzDy+OGwNOq5Ms/O0=";
     });
 
   nativeBuildInputs = [ undmg ];
@@ -27,11 +27,15 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    runHook postInstall
   '';
 
   meta = meta // {
-    maintainers = with lib.maintainers; [ Enzime ];
+    maintainers = with lib.maintainers; [ matteopacini ];
   };
 }

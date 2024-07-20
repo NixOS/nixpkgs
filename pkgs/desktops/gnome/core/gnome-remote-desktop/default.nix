@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , cairo
 , meson
@@ -6,8 +7,9 @@
 , pkg-config
 , python3
 , asciidoc
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
+, libei
 , libepoxy
 , libdrm
 , nv-codec-headers-11
@@ -15,26 +17,24 @@
 , systemd
 , libsecret
 , libnotify
+, libopus
 , libxkbcommon
 , gdk-pixbuf
-, freerdp
+, freerdp3
 , fdk_aac
 , tpm2-tss
 , fuse3
-, mesa
-, libgudev
-, xvfb-run
-, dbus
 , gnome
+, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "44.2";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ep/9NBtfy2NtJmden2JpZQlSFj//UpUydhjMLVzIe44=";
+    hash = "sha256-CMZlbxHUY560lyqJKej1AkJ9weLqAz4CyZK7Gkx315Q=";
   };
 
   nativeBuildInputs = [
@@ -43,51 +43,40 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     asciidoc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     cairo
-    freerdp
+    freerdp3
     fdk_aac
     tpm2-tss
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    libei
     libepoxy
     libdrm
     nv-codec-headers-11
     libnotify
+    libopus
     libsecret
     libxkbcommon
     pipewire
     systemd
-  ] ++ nativeCheckInputs;
-
-  nativeCheckInputs = [
-    mesa # for gbm
-    libgudev
-    xvfb-run
-    python3.pkgs.dbus-python
-    python3.pkgs.pygobject3
-    dbus # for dbus-run-session
+    polkit # For polkit-gobject
   ];
 
   mesonFlags = [
+    "-Dconf_dir=/etc/gnome-remote-desktop"
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
+    "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsystemd_sysusers_dir=${placeholder "out"}/lib/sysusers.d"
+    "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
+    "-Dtests=false" # Too deep of a rabbit hole.
+    # TODO: investigate who should be fixed here.
+    "-Dc_args=-I${freerdp3}/include/winpr3"
   ];
-
-  # Too deep of a rabbit hole.
-  doCheck = false;
-
-  postPatch = ''
-    patchShebangs \
-      tests/vnc-test-runner.sh \
-      tests/run-vnc-tests.py
-
-    substituteInPlace tests/vnc-test-runner.sh \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -97,8 +86,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop";
     description = "GNOME Remote Desktop server";
+    mainProgram = "grdctl";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

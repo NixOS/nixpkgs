@@ -1,8 +1,0 @@
-diff --git a/src/she/CMakeLists.txt b/src/she/CMakeLists.txt
-index 4909ff1..02fa145 100644
---- a/src/she/CMakeLists.txt
-+++ b/src/she/CMakeLists.txt
-@@ -23,2 +23,3 @@ if(USE_ALLEG4_BACKEND)
-     add_definitions(-DUSE_MOUSE_POLLER)
-+    add_definitions(-DALLEGRO_NO_FIX_ALIASES)
-   endif()

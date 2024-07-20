@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sure
-, six
-, pytest
-, freezegun
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sure,
+  six,
+  pytest,
+  freezegun,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "httpretty";
   version = "1.1.4";
+  format = "setuptools";
 
   # drop this for version > 0.9.7
   # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394

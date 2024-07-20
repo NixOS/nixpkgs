@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "patray";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0vaapn2p4257m1d5nbnwnh252b7lhl00560gr9pqh2b7xqm1bh6g";
+    hash = "sha256-O8CBUexL2V1qI7bB/Lns3yjUvFOpC6spd/6asXa5+pw=";
   };
 
   patchPhase = ''
@@ -38,5 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
+    mainProgram = "patray";
   };
 }

@@ -13,7 +13,7 @@ let
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
-      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      qtwebsockets libpulseaudio quazip llvmPackages.libcxx
     ];
 
   desktopItem = makeDesktopItem {
@@ -30,11 +30,11 @@ in
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
-    hash = "sha256-j4sgZ+tJpV6ST0yLmbLTLgBxQTcK1LZoEEfMe3TUAC4=";
+    hash = "sha256-WfEQQ4lxoj+QSnAOfdCoEc+Z1Oa5dbo6pFli1DsAZCI=";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "The TeamSpeak voice communication tool";
+    description = "TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = with maintainers; [ lhvwb lukegb atemu ];
+    mainProgram = "ts3client";
     platforms = [ "x86_64-linux" ];
   };
 }

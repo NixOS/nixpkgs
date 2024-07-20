@@ -12,21 +12,21 @@ in
   options.services.kubernetes.scheduler = with lib.types; {
 
     address = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening address.";
+      description = "Kubernetes scheduler listening address.";
       default = "127.0.0.1";
       type = str;
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
+    enable = mkEnableOption "Kubernetes scheduler";
 
     extraOpts = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler extra command line options.";
+      description = "Kubernetes scheduler extra command line options.";
       default = "";
       type = separatedString " ";
     };
 
     featureGates = mkOption {
-      description = lib.mdDoc "List set of feature gates";
+      description = "List set of feature gates";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
@@ -35,19 +35,19 @@ in
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler";
 
     leaderElect = mkOption {
-      description = lib.mdDoc "Whether to start leader election before executing main loop.";
+      description = "Whether to start leader election before executing main loop.";
       type = bool;
       default = true;
     };
 
     port = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening port.";
+      description = "Kubernetes scheduler listening port.";
       default = 10251;
       type = port;
     };
 
     verbosity = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';

@@ -1,43 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, tldextract
-, whodap
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-socks,
+  pythonOlder,
+  setuptools,
+  tldextract,
+  whodap,
 }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.0.7";
-  format = "setuptools";
+  version = "1.1.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
-    repo = pname;
+    repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OiDi9hD2IDDfQoQoPhLpClBnJyI/wlZfGyzqmVI94yA=";
+    hash = "sha256-BjHGp94vad5qTvffiU8ZEOxYeXNzQHlNq1SaxviYfps=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "python-socks[asyncio]" "python-socks"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-socks
     tldextract
     whodap
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "python-socks[asyncio]" "python-socks"
-  '';
 
   disabledTests = [
     # Tests require network access
@@ -52,11 +58,11 @@ buildPythonPackage rec {
     "test_whois_query_run"
     "test_whois_query_create_connection"
     "test_whois_query_send_and_recv"
+    "test_input_parameters_for_domain_query"
+    "test__get_top_level_domain"
   ];
 
-  pythonImportsCheck = [
-    "asyncwhois"
-  ];
+  pythonImportsCheck = [ "asyncwhois" ];
 
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";

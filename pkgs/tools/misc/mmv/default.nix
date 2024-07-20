@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmv";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "sha256-tQk3AwmUuhbxvFm9wiO7BM2GChGopvpCZAp8J9XCDF0=";
+    hash = "sha256-hYSTENSmkJP5rAemDyTzbzMKFrWYcMpsJDRWq43etTM=";
     fetchSubmodules = true;
   };
 
@@ -19,6 +19,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gengetopt m4 git gnupg perl autoconf automake help2man pkg-config ];
   buildInputs = [ boehmgc ];
+  enableParallelBuilding = true;
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/rrthomas/mmv";

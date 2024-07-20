@@ -1,47 +1,42 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.7";
-  format = "pyproject";
+  version = "3.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cim";
     rev = "refs/tags/${version}";
-    hash = "sha256-+HHjDUSepAEebMD5ckjXbfgA4AKlNMBYHwxDq+jdhxw=";
+    hash = "sha256-7Mv8yiWEs/mj/JKDrD1BxT75tQr13VgGj0yHdRltcYM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.cim"
-  ];
+  pythonImportsCheck = [ "dissect.cim" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Windows Common Information Model (CIM) database";

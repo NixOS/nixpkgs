@@ -5,40 +5,49 @@
 , yosys
 , icestorm
 , nextpnr
+, unstableGitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "unstable-2023-04-15";
-  # python -m setuptools_scm
-  realVersion = "0.1.dev2+g${lib.substring 0 7 src.rev}";
+  version = "0-unstable-2024-07-13";
+  # from `pdm show`
+  realVersion = let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in "${tag}.1.dev2085+g${rev}";
 
-  patches = [ ./0001-Relax-Amaranth-git-dependency.patch ];
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "406e06fae5c85f6f773c9839747513874bc3ec77";
-    sha256 = "sha256-s4fWpKJj6n2+CIAsD2bjr5K8RhJz1H1sFnjiartNGf0=";
+    rev = "c8fa37e7c84efb296a06c58b2949f676a1e149cc";
+    sha256 = "sha256-rOgd5y9KQf4cpBT31RHlrVwHsiqdofRihtFbeC69DY4=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
+    python3.pkgs.pdm-backend
     sdcc
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
+    typing-extensions
     amaranth
-    bitarray
-    crc
+    packaging
+    platformdirs
     fx2
     libusb1
     pyvcd
-    setuptools
+    aiohttp
   ];
 
-  nativeCheckInputs = [ yosys icestorm nextpnr ];
+  nativeCheckInputs = [
+    python3.pkgs.unittestCheckHook
+    yosys
+    icestorm
+    nextpnr
+  ];
 
   enableParallelBuilding = true;
 
@@ -46,14 +55,24 @@ python3.pkgs.buildPythonApplication rec {
     make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
     cd software
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
   # installCheck tries to build_ext again
   doInstallCheck = false;
 
-  checkPhase = ''
-    ${python3.interpreter} -W ignore::DeprecationWarning test.py
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp $src/config/*.rules $out/etc/udev/rules.d
+  '';
+
+  preCheck = ''
+    export PYTHONWARNINGS="ignore::DeprecationWarning"
+    # tests attempt to cache bitstreams
+    # for linux:
+    export XDG_CACHE_HOME=$TMPDIR
+    # for darwin:
+    export HOME=$TMPDIR
   '';
 
   makeWrapperArgs = [
@@ -62,10 +81,15 @@ python3.pkgs.buildPythonApplication rec {
     "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
   ];
 
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
+    mainProgram = "glasgow";
   };
 }

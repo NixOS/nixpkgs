@@ -114,7 +114,7 @@ This can be overridden by a different version of `ghc` as follows:
 
 ```nix
 agda.withPackages {
-  pkgs = [ ... ];
+  pkgs = [ /* ... */ ];
   ghc = haskell.compiler.ghcHEAD;
 }
 ```
@@ -146,7 +146,7 @@ agdaPackages.mkDerivation {
 
 ### Building Agda packages {#building-agda-packages}
 
-The default build phase for `agdaPackages.mkDerivation` simply runs `agda` on the `Everything.agda` file.
+The default build phase for `agdaPackages.mkDerivation` runs `agda` on the `Everything.agda` file.
 If something else is needed to build the package (e.g. `make`) then the `buildPhase` should be overridden.
 Additionally, a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the `Everything.agda` file.
 `agda` and the Agda libraries contained in `buildInputs` are made available during the build phase.
@@ -180,6 +180,7 @@ To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/d
 
 ```nix
 { mkDerivation, standard-library, fetchFromGitHub }:
+{}
 ```
 
 Note that the derivation function is called with `mkDerivation` set to `agdaPackages.mkDerivation`, therefore you
@@ -193,7 +194,7 @@ mkDerivation {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
-  src = ...
+  src = <...>;
 
   libraryFile = "";
   libraryName = "IAL-1.3";
@@ -250,7 +251,7 @@ Usually, the maintainers will answer within a week or two with a new release.
 Bumping the version of that reverse dependency should be a further commit on your PR.
 
 In the rare case that a new release is not to be expected within an acceptable time,
-simply mark the broken package as broken by setting `meta.broken = true;`.
+mark the broken package as broken by setting `meta.broken = true;`.
 This will exclude it from the build test.
 It can be added later when it is fixed,
 and does not hinder the advancement of the whole package set in the meantime.

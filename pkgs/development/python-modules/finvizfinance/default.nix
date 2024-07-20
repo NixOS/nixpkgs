@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, beautifulsoup4
-, datetime
-, lxml
-, pandas
-, pytest-mock
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  beautifulsoup4,
+  datetime,
+  lxml,
+  pandas,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "0.14.5";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "lit26";
     repo = "finvizfinance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yhOa/CS+9UdI+TVMObBsOqIp9XggMJvNjteSMa5DJcM=";
+    hash = "sha256-4aR1x9GgbxnJUpn1+i95djZEVBFTAIzhMLxHe2FaciY=";
   };
 
   postPatch = ''
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "finvizfinance"
-  ];
+  pythonImportsCheck = [ "finvizfinance" ];
 
   disabledTests = [
     # Tests require network access
@@ -68,4 +67,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ icyrockcom ];
   };
 }
-

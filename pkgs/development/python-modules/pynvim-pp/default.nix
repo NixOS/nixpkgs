@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pynvim
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pynvim,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2023-07-09";
-
-  format = "pyproject";
+  version = "unstable-2024-03-11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "pynvim_pp";
-    rev = "93aa25bf3ee039c4eb85f402d6adf6977033013b";
-    hash = "sha256-gZvIiFpP+eMLD8/xodY7ywWxhWXtethXviVRedW/bgo=";
+    rev = "34e3a027c595981886d7efd1c91071f3eaa4715d";
+    hash = "sha256-2+jDRJXlg9q4MN9vOhmeq4cWVJ0wp5r5xAh3G8lqgOg=";
   };
 
   nativeBuildInputs = [ setuptools ];

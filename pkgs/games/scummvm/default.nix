@@ -5,23 +5,23 @@
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.7.1";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
-    hash = "sha256-GVsvLAjb7pECd7uvPT9ubDFMIkiPWdU5owOafxk5iy0=";
+    hash = "sha256-8/q16MwHhbbmUxiwJOHkjNxrnBB4grMa7qw/n3KLvRc=";
   };
 
   nativeBuildInputs = [ nasm ];
 
   buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
+    alsa-lib libGLU libGL
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
   ] ++ [
-    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis libGLU libGL SDL2 zlib
+    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis SDL2 zlib
   ];
 
   dontDisableStatic = true;
@@ -44,8 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
+    mainProgram = "scummvm";
     homepage = "https://www.scummvm.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.unix;
   };

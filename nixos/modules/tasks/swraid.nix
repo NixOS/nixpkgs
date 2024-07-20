@@ -2,6 +2,13 @@
 
   cfg = config.boot.swraid;
 
+  mdadm_conf = config.environment.etc."mdadm.conf";
+
+  enable_implicitly_for_old_state_versions = lib.versionOlder config.system.stateVersion "23.11";
+
+  minimum_config_is_set = config_text:
+    (builtins.match ".*(MAILADDR|PROGRAM).*" mdadm_conf.text) != null;
+
 in {
   imports = [
     (lib.mkRenamedOptionModule [ "boot" "initrd" "services" "swraid" "enable" ] [ "boot" "swraid" "enable" ])
@@ -10,8 +17,8 @@ in {
 
 
   options.boot.swraid = {
-    enable = lib.mkEnableOption (lib.mdDoc "swraid support using mdadm") // {
-      description = lib.mdDoc ''
+    enable = lib.mkEnableOption "swraid support using mdadm" // {
+      description = ''
         Whether to enable support for Linux MD RAID arrays.
 
         When this is enabled, mdadm will be added to the system path,
@@ -24,19 +31,25 @@ in {
         should detect it correctly in the standard installation
         procedure.
       '';
-      default = lib.versionOlder config.system.stateVersion "23.11";
-      defaultText = lib.mdDoc "`true` if stateVersion is older than 23.11";
+      default = enable_implicitly_for_old_state_versions;
+      defaultText = "`true` if stateVersion is older than 23.11";
     };
 
     mdadmConf = lib.mkOption {
-      description = lib.mdDoc "Contents of {file}`/etc/mdadm.conf`.";
+      description = "Contents of {file}`/etc/mdadm.conf`.";
       type = lib.types.lines;
       default = "";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf
+        ( !enable_implicitly_for_old_state_versions && !minimum_config_is_set mdadm_conf)
+        [ "mdadm: Neither MAILADDR nor PROGRAM has been set. This will cause the `mdmon` service to crash." ];
+
     environment.systemPackages = [ pkgs.mdadm ];
+
+    environment.etc."mdadm.conf".text = lib.mkAfter cfg.mdadmConf;
 
     services.udev.packages = [ pkgs.mdadm ];
 
@@ -49,22 +62,20 @@ in {
         cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
       '';
 
-      extraUtilsCommands = ''
+      extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         # Add RAID mdadm tool.
         copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
         copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
       '';
 
-      extraUtilsCommandsTest = ''
+      extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/mdadm --version
       '';
 
-      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" config.boot.swraid.mdadmConf;
+      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" mdadm_conf.text;
 
       systemd = {
-        contents."/etc/mdadm.conf" = lib.mkIf (cfg.mdadmConf != "") {
-          text = cfg.mdadmConf;
-        };
+        contents."/etc/mdadm.conf".text = mdadm_conf.text;
 
         packages = [ pkgs.mdadm ];
         initrdBin = [ pkgs.mdadm ];

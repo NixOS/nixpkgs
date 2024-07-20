@@ -44,10 +44,13 @@ let
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
-  versionModule =
-    { system.nixos.versionSuffix = versionSuffix;
-      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
-    };
+  versionModule = { config, ... }: {
+    system.nixos.versionSuffix = versionSuffix;
+    system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
+
+    # At creation time we do not have state yet, so just default to latest.
+    system.stateVersion = config.system.nixos.version;
+  };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
 
@@ -120,7 +123,7 @@ let
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
+      configEvaled.pkgs.symlinkJoin {
         name = "netboot";
         paths = [
           build.netbootRamdisk
@@ -143,7 +146,7 @@ in rec {
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.nixos-configuration-reference-manpage);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -171,6 +174,12 @@ in rec {
   iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
+    inherit system;
+  });
+
+  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
+    type = "plasma6";
     inherit system;
   });
 
@@ -310,7 +319,7 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
-  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -319,14 +328,13 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.tarball)
 
   );
 
-  # Metadata for the lxd image
-  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -335,7 +343,55 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.squashfs)
+
+  );
+
+  # Metadata for the lxd image
+  lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdVirtualMachineImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
+        ];
+    }).config.system.build.qemuImage)
+
+  );
+
+  # Metadata for the lxd image
+  lxdVirtualMachineImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
         ];
     }).config.system.build.metadata)
 
@@ -348,7 +404,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -385,7 +441,7 @@ in rec {
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 

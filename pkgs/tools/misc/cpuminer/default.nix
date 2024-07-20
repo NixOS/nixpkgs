@@ -37,8 +37,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/pooler/cpuminer";
     description = "CPU miner for Litecoin and Bitcoin";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "minerd";
   };
 }

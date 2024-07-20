@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "music-player";
-  version = "0.2.0-alpha.13";
+  version = "0.2.0-alpha.14";
 
   src = fetchFromGitHub {
     owner = "tsirysndr";
     repo = "music-player";
     rev = "v${version}";
-    hash = "sha256-LuO64E5kJdMgd5h0+Sb8Wg7hxUmS8E7bKT3NIyd9+Lc=";
+    hash = "sha256-l8Y1fc5v0YDm87b+d3DuMgKFiem6WFfJEASplHoqva0=";
   };
 
-  cargoHash = "sha256-Xn0OUHMgKxzDvhO+xRv5jMa50OzEtl6yhHbJ1R/a56Y=";
+  cargoHash = "sha256-nnOHuAn+eGf+iiX3QbDTH4zHMQ6KV4QP6RnyBhLMrEc=";
 
   nativeBuildInputs = [
     protobuf
@@ -35,10 +35,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "An extensible music player daemon written in Rust";
+    description = "Extensible music player daemon written in Rust";
     homepage = "https://github.com/tsirysndr/music-player";
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    mainProgram = "music-player";
   };
 }

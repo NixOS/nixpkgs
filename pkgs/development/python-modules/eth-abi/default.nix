@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, eth-hash
-, eth-typing
-, eth-utils
-, hypothesis
-, parsimonious
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  eth-hash,
+  eth-typing,
+  eth-utils,
+  hypothesis,
+  parsimonious,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "eth-abi";
   version = "4.1.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

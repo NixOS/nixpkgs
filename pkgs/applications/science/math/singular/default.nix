@@ -5,7 +5,7 @@
 , sharutils
 , file
 , getconf
-, flint
+, flint3
 , ntl
 , cddlib
 , gfan
@@ -13,18 +13,15 @@
 , doxygen
 , graphviz
 , latex2html
-# upstream generates docs with texinfo 4. later versions of texinfo
-# use letters instead of numbers for post-appendix chapters, and we
-# want it to match the upstream format because sage depends on it.
-, texinfo4
-, texlive
+, texinfo
+, texliveSmall
 , enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.2p2";
+  version = "4.3.2p16";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -34,7 +31,7 @@ stdenv.mkDerivation rec {
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
     rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-dtZmN8xUCZ9eSgmtBxqfJeWsM4W5Baq7xWXuNAxNLjA=";
+    hash = "sha256-5JZgI5lnfX4JlBSEAL7Wv6uao/57GBaMqwgslJt9Bjk=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -68,7 +65,7 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     ntl
-    flint
+    flint3
     lrcalc
     gfan
   ] ++ lib.optionals enableGfanlib [
@@ -85,8 +82,8 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz
     latex2html
-    texinfo4
-    texlive.combined.scheme-small
+    texinfo
+    texliveSmall
   ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -159,7 +156,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A CAS for polynomial computations";
+    description = "CAS for polynomial computations";
     maintainers = teams.sage.members;
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
     # https://www.singular.uni-kl.de:8002/trac/ticket/837

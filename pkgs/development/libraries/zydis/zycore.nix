@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zycore";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zycore-c";
     rev = "v${version}";
-    hash = "sha256-kplUgrYecymGxz92tEU6H+NNtcN/Ao/tmmqdVo2c7HA=";
+    hash = "sha256-Kz51EIaw4RwrOKXhuDXAFieGF1mS+HL06gEuj+cVJmk=";
   };
 
   nativeBuildInputs = [ cmake ];

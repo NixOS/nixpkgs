@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, alembic
-, flask
-, flask_script
-, flask-sqlalchemy
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  alembic,
+  flask,
+  flask-script,
+  flask-sqlalchemy,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Migrate";
-  version = "4.0.4";
+  pname = "flask-migrate";
+  version = "4.0.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-x52LGYvXuTUCP9dR3FP7a/xNRWyCAV1sReDAYJbYDvE=";
+    repo = "Flask-Migrate";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TnihrZ+JQ1XCBlFp6k8lrNpZr4P2/Z6AmFwWZbabz+8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     alembic
@@ -34,13 +33,11 @@ buildPythonPackage rec {
     flask-sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "flask_migrate"
-  ];
+  pythonImportsCheck = [ "flask_migrate" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    flask_script
+    flask-script
   ];
 
   meta = with lib; {

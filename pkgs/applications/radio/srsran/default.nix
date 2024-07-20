@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srsran";
-  version = "23.04";
+  version = "23.11";
 
   src = fetchFromGitHub {
     owner = "srsran";
     repo = "srsran";
     rev = "release_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-k2KUejn2eBFGknVQCHeYuZd4UUC2Jv0WEI9le9fYoFE=";
+    sha256 = "sha256-3cQMZ75I4cyHpik2d/eBuzw7M4OgbKqroCddycw4uW8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -41,10 +41,12 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
+  cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
+
   meta = with lib; {
     homepage = "https://www.srslte.com/";
-    description = "Open-source 4G and 5G software radio suite.";
-    license = licenses.agpl3;
+    description = "Open-source 4G and 5G software radio suite";
+    license = licenses.agpl3Plus;
     platforms = with platforms; linux ;
     maintainers = with maintainers; [ hexagonal-sun ];
   };

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "23.05.00";
+  version = "24.03.00";
 
   src = fetchzip {
     url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "sha256-LRsxgvo7XQ62gPjdH4F+03MQyRZ1VxEwokI9RvVkpKI=";
+    sha256 = "sha256-UKL5q5sURSVXvEOzoZdG+wWBSS5f9YWo5stViY3F2vg=";
     stripRoot = false;
   };
 
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
       --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
       --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
+
+    substituteInPlace src/lib/src/fwts_devicetree.c \
+                      src/devicetree/dt_base/dt_base.c \
+      --replace "dtc -I" "${dtc}/bin/dtc -I"
   '';
 
   enableParallelBuilding = true;
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ tadfisher ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3 }:
+{ lib, stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Wrapper library for evdev devices";
-    homepage = "http://www.freedesktop.org/software/libevdev/doc/latest/index.html";
+    homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.amorsillo ];

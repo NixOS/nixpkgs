@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2023-07-23";
+  version = "${kernel.version}-unstable-2024-06-09";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "88x2bu-20210702";
-    rev = "83db18e610845df9434a628ca3feb9004296b307";
-    sha256 = "sha256-as3S7WQkug3suJ5ovUbRu/UzO5GDrGLdgkiWrCrvztk=";
+    rev = "62f3a86a2687fe98bd441e0aff5adf87d95c238a";
+    hash = "sha256-gQWk1nhtT0W2dY5uQitWabBGEDfZpmJAoJg+j2ndO00=";
   };
 
   hardeningDisable = [ "pic" ];

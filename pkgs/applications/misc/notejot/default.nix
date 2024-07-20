@@ -12,6 +12,7 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     json-glib
     libadwaita
     libgee
+  ];
+
+
+  patches = [
+    # Fixes the compilation error with new Vala compiler. Remove in the next version.
+    (fetchpatch {
+      url = "https://github.com/musicinmybrain/notejot/commit/c6a7cfcb792de63fb51eb174f9f3d4e02f6a2ce1.patch";
+      hash = "sha256-dexPKIpUaAu/p0K2WQpElhPNt86CS+jD0dPL5+CTl4I=";
+    })
   ];
 
   passthru.updateScript = nix-update-script { };

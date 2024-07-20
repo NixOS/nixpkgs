@@ -1,49 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, mccabe
-, pycodestyle
-, pyflakes
-, importlib-metadata
-, pythonAtLeast
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  mccabe,
+  pycodestyle,
+  pyflakes,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "6.0.0";
+  version = "7.1.0";
 
   disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
     rev = version;
-    hash = "sha256-dN9LlLpQ/ZoVIFrAQ1NxMvsHqWsgdJVLUIAFwkheEL4=";
+    hash = "sha256-jkRr/k/XjiKOkcd4jlOQTnnFun7/hMHdVUWBlS1QZ1E=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     mccabe
     pycodestyle
     pyflakes
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  # Tests fail on Python 3.7 due to importlib using a deprecated interface
-  doCheck = pythonAtLeast "3.7";
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
-    homepage = "https://github.com/pycqa/flake8";
+    description = "Modular source code checker: pep8, pyflakes and co";
+    homepage = "https://github.com/PyCQA/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "flake8";
   };
 }

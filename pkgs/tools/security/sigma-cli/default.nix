@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.7.2";
-  format = "pyproject";
+  version = "1.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = pname;
+    repo = "sigma-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yzo/BotNzTBjdkaXI1lHntpI5AyW5AbpFu3XtkWpHU4=";
+    hash = "sha256-bBKNKgS3V/sZ8lZMk2ZwTzOVaVecSR9GhNP2FNkWbw0=";
   };
 
   postPatch = ''
@@ -20,11 +21,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace '= "^' '= ">='
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
     colorama
     prettytable
@@ -39,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-pipeline-windows
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     "test_plugin_list"
@@ -50,16 +47,24 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_install_notexisting"
     "test_plugin_install"
     "test_plugin_uninstall"
+    # Tests require network access
+    "test_check_with_issues"
+    "test_plugin_show_identifier"
+    "test_plugin_show_nonexisting"
+    "test_plugin_show_uuid"
+    # Tests compare STDOUT results
+    "test_check_valid"
+    "test_check_stdin"
+    "test_check_exclude"
   ];
 
-  pythonImportsCheck = [
-    "sigma.cli"
-  ];
+  pythonImportsCheck = [ "sigma.cli" ];
 
   meta = with lib; {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
-    license = with licenses; [ lgpl21Plus ];
+    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";
   };

@@ -2,24 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "5.13";
+  version = "6.9.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YU2uPv59/UgJhnY6KiqBeSFQMqWkUmwL5eiZol8Ja4s=";
+    hash = "sha256-4jy6wp8RC6Vx8NqFI+edNzaRRm7X8qMTAXIYF9NFML0=";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
-  postInstall = ''
-    # conflict with shadow-utils
-    rm $out/share/man/man5/passwd.5 \
-       $out/share/man/man3/getspnam.3
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
+  dontBuild = true;
+
+  outputDocdev = "out";
+
+  enableParallelInstalling = true;
+
+  postInstall = ''
     # The manpath executable looks up manpages from PATH. And this package won't
-    # appear in PATH unless it has a /bin folder
+    # appear in PATH unless it has a /bin folder. Without the change
+    # 'nix-shell -p man-pages' does not pull in the search paths.
+    # See 'man 5 manpath' for the lookup order.
     mkdir -p $out/bin
   '';
-  outputDocdev = "out";
 
   meta = with lib; {
     description = "Linux development manual pages";

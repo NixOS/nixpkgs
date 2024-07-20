@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , abootimg
+, acl
 , apksigcopier
 , apksigner
 , apktool
@@ -58,7 +59,6 @@
 , python3
 , qemu
 , R
-, radare2
 , sng
 , sqlite
 , squashfsTools
@@ -75,14 +75,32 @@
 , writeScript
 }:
 
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
+      # ValueError: argument TNULL is not a TLSH hex string
+      tlsh = prev.tlsh.overridePythonAttrs ({ src, ... }: let
+        version = "3.19.1";
+      in {
+        inherit version;
+        src = src.override {
+          rev = version;
+          hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
+        };
+      });
+    };
+  };
+in
+
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "246";
+  version = "271";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-z7wrc8hveKqMJsJMLQXO3z+wcJxpY8QFoYxTBUzfGPg=";
+    hash = "sha256-YwNaYj0daYbs3rN/EcPz5LihJjZ6JZb33FSS6u98Gss=";
   };
 
   outputs = [
@@ -92,6 +110,7 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
+    ./openssh-no-dsa.patch # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/139
   ];
 
   postPatch = ''
@@ -112,16 +131,26 @@ python3.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
+  # Android-specific tools:
   # aapt2
   # dexdump
-  # docx2txt
-  # getfacl
+  # Darwin-specific tools:
   # lipo
   # otool
-  # r2pipe
+  # Other tools:
+  # docx2txt <- makes tests broken:
+  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # radare2
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
+  # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+    acl
     binutils-unwrapped-all-targets
     bzip2
     cdrkit
@@ -154,7 +183,7 @@ python3.pkgs.buildPythonApplication rec {
     zip
     zstd
   ]
-  ++ (with python3.pkgs; [
+  ++ (with python.pkgs; [
     argcomplete
     debian
     defusedxml
@@ -162,7 +191,7 @@ python3.pkgs.buildPythonApplication rec {
     jsondiff
     libarchive-c
     progressbar33
-    pypdf2
+    pypdf
     python-magic
     pyxattr
     rpm
@@ -197,26 +226,27 @@ python3.pkgs.buildPythonApplication rec {
       procyon
       qemu
       R
-      radare2
       tcpdump
       ubootTools
       wabt
       xmlbeans
     ]
-    ++ (with python3.pkgs; [
+    ++ (with python.pkgs; [
       androguard
       binwalk
       guestfs
       h5py
       pdfminer-six
+      r2pipe
+      # docx2txt, nixpkgs packages another project named the same, which does not work
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
-    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+    ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
   ));
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ] ++ pythonPath;
 
@@ -242,9 +272,17 @@ python3.pkgs.buildPythonApplication rec {
     "test_non_unicode_filename"
     "test_listing"
     "test_symlink_root"
+
+    # Appears to be a sandbox related issue
+    "test_trim_stderr_in_command"
+    # Seems to be a bug caused by having different versions of rdata than
+    # expected. Will file upstream.
+    "test_item_rdb"
+    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+    # setup, could be upstream bug. Will file upstream.
+    "test_libmix_differences"
   ];
 
-  # Flaky tests on Darwin
   disabledTestPaths = lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
@@ -283,5 +321,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
+    mainProgram = "diffoscope";
   };
 }

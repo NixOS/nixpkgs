@@ -13,10 +13,10 @@ buildGoModule rec {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JizUI9XRzOEHF1kAblYQRYB11z9KWX7od3lPiRN+JNI=";
+    hash = "sha256-JizUI9XRzOEHF1kAblYQRYB11z9KWX7od3lPiRN+JNI=";
   };
 
-  vendorSha256 = "sha256-lnyKsipr/f9W9LWLb2lizKGLvIbS3XnSlOH1u1B87OY=";
+  vendorHash = "sha256-lnyKsipr/f9W9LWLb2lizKGLvIbS3XnSlOH1u1B87OY=";
 
   ldflags = [
     "-s"
@@ -46,7 +46,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An open-source analytical platform for Prometheus metrics";
+    description = "Open-source analytical platform for Prometheus metrics";
+    mainProgram = "promscale";
     homepage = "https://github.com/timescale/promscale";
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "open-in-mpv";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Baldomo";
     repo = "open-in-mpv";
     rev = "v${version}";
-    hash = "sha256-3Fsa3AwiHsb8VcKa4a/RKyYu+CD5nEX0nIXENhBZCWk=";
+    hash = "sha256-dmsI4ea9L50djT/vwjswWDZ7uwMzc2q84i0T82LGjxs=";
   };
 
   vendorHash = "sha256-G6GZO2+CfEAYcf7zBcqDa808A0eJjM8dq7+4VGZ+P4c=";
@@ -34,5 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/Baldomo/open-in-mpv";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "open-in-mpv";
   };
 }

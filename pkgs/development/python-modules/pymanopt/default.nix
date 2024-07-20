@@ -1,28 +1,37 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, scipy
-, torch
-, autograd
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  torch,
+  autograd,
+  matplotlib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-nbSxqMmYWi71s74bbB9LAlPKEslTqG/j266cLfNHrwg=";
+    hash = "sha256-pDFRYhswcuAHG9pcqvzXIy3Ivhxe5R5Ric7AFRh7MK4=";
   };
 
-  propagatedBuildInputs = [ numpy scipy torch ];
-  nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    torch
+  ];
+  nativeCheckInputs = [
+    autograd
+    matplotlib
+    pytestCheckHook
+  ];
 
   preCheck = ''
     substituteInPlace "tests/conftest.py" \

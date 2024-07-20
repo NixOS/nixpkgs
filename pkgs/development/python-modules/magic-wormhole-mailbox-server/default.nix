@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, six
-, attrs
-, twisted
-, pyopenssl
-, service-identity
-, autobahn
-, treq
-, mock
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  setuptools,
+  six,
+  attrs,
+  twisted,
+  autobahn,
+  treq,
+  mock,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole-mailbox-server";
   version = "0.4.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1af10592909caaf519c00e706eac842c5e77f8d4356215fe9c61c7b2258a88fb";
+    hash = "sha256-GvEFkpCcqvUZwA5wbqyELF53+NQ1YhX+nGHHsiWKiPs=";
   };
 
   patches = [
@@ -34,29 +35,36 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
+    autobahn
+    setuptools # pkg_resources is referenced at runtime
     six
     twisted
-    autobahn
-  ] ++ autobahn.optional-dependencies.twisted
-  ++ twisted.optional-dependencies.tls;
+  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+
+  pythonImportsCheck = [ "wormhole_mailbox_server" ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     treq
     mock
-    twisted
   ];
 
-  checkPhase = ''
-    trial -j$NIX_BUILD_CORES wormhole_mailbox_server
-  '';
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # these tests fail in Darwin's sandbox
+    "src/wormhole_mailbox_server/test/test_web.py"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Securely transfer data between computers";
-    homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
+    homepage = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server";
     changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${version}/NEWS.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
+    # Python 3.12 support: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/issues/41
+    broken = pythonOlder "3.7" || pythonAtLeast "3.12";
   };
 }

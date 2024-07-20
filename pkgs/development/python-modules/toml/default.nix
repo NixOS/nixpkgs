@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "toml";
   version = "0.10.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "a Python library for parsing and creating TOML";
+    description = "Python library for parsing and creating TOML";
     homepage = "https://github.com/uiri/toml";
     license = licenses.mit;
     maintainers = with maintainers; [ twey ];

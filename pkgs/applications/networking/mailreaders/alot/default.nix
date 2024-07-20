@@ -1,5 +1,5 @@
 { lib
-, python3
+, python311
 , fetchFromGitHub
 , file
 , gnupg
@@ -9,7 +9,7 @@
 , withManpage ? false
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python311.pkgs; buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
 
@@ -90,6 +90,7 @@ with python3.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
+    mainProgram = "alot";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ milibopp ];

@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub
 , attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+, libglvnd, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.15.10";
+  version = "0.18.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-JRdqbZAWcPBNspziM/qo2ioIaJOrMgLmx10w7NNaps0=";
+    hash = "sha256-of+sjt8niAR/zEZTlhNP395nyoGoBFQFsHmHmCpX7NQ=";
   };
 
   postPatch = ''
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   # All platforms inputs then Linux-only ones
   buildInputs = [ judy libbsd libgcrypt zlib ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools
+      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd mesa
     ];
 
   makeFlags = [
@@ -70,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.unix;
+    mainProgram = "stress-ng";
   };
 }

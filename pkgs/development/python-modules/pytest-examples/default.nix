@@ -1,66 +1,54 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, ruff
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  ruff,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.9";
-  format = "pyproject";
+  version = "0.0.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ecxSLbPnHdL60vlc7EjKmw5rATTePqJCa5QIdyxevv0=";
+    hash = "sha256-hTLTL3w4OEv8Pkzc/h9qDMnlhe6P+Q6XUImLVDsDKvk=";
   };
 
   postPatch = ''
     # ruff binary is used directly, the ruff Python package is not needed
     substituteInPlace pytest_examples/lint.py \
-      --replace "'ruff'" "'${ruff}/bin/ruff'"
+      --replace-fail "'ruff'" "'${lib.getExe ruff}'"
   '';
 
-  pythonRemoveDeps = [
-    "ruff"
-  ];
+  pythonRemoveDeps = [ "ruff" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    black
-    ruff
-  ];
+  dependencies = [ black ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_examples"
-  ];
+  pythonImportsCheck = [ "pytest_examples" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";
     changelog = "https://github.com/pydantic/pytest-examples/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,12 +13,12 @@ let
 in
 {
   options.services.duplicity = {
-    enable = mkEnableOption (lib.mdDoc "backups with duplicity");
+    enable = mkEnableOption "backups with duplicity";
 
     root = mkOption {
       type = types.path;
       default = "/";
-      description = lib.mdDoc ''
+      description = ''
         Root directory to backup.
       '';
     };
@@ -27,7 +27,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "/home" ];
-      description = lib.mdDoc ''
+      description = ''
         List of paths to include into the backups. See the FILE SELECTION
         section in {manpage}`duplicity(1)` for details on the syntax.
       '';
@@ -36,16 +36,38 @@ in
     exclude = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         List of paths to exclude from backups. See the FILE SELECTION section in
         {manpage}`duplicity(1)` for details on the syntax.
+      '';
+    };
+
+    includeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to include into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
+      '';
+    };
+
+    excludeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to exclude into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
       '';
     };
 
     targetUrl = mkOption {
       type = types.str;
       example = "s3://host:port/prefix";
-      description = lib.mdDoc ''
+      description = ''
         Target url to backup to. See the URL FORMAT section in
         {manpage}`duplicity(1)` for supported urls.
       '';
@@ -54,7 +76,7 @@ in
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
         {manpage}`systemd.exec(5)`. For example:
@@ -69,7 +91,7 @@ in
     frequency = mkOption {
       type = types.nullOr types.str;
       default = "daily";
-      description = lib.mdDoc ''
+      description = ''
         Run duplicity with the given frequency (see
         {manpage}`systemd.time(7)` for the format).
         If null, do not run automatically.
@@ -80,7 +102,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--backend-retry-delay" "100" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra command-line flags passed to duplicity. See
         {manpage}`duplicity(1)`.
       '';
@@ -90,7 +112,7 @@ in
       type = types.str;
       default = "never";
       example = "1M";
-      description = lib.mdDoc ''
+      description = ''
         If `"never"` (the default) always do incremental
         backups (the first backup will be a full backup, of course).  If
         `"always"` always do full backups.  Otherwise, this
@@ -105,7 +127,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "6M";
-        description = lib.mdDoc ''
+        description = ''
           If non-null, delete all backup sets older than the given time.  Old backup sets
           will not be deleted if backup sets newer than time depend on them.
         '';
@@ -114,7 +136,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 2;
-        description = lib.mdDoc ''
+        description = ''
           If non-null, delete all backups sets that are older than the count:th last full
           backup (in other words, keep the last count full backups and
           associated incremental sets).
@@ -124,7 +146,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 1;
-        description = lib.mdDoc ''
+        description = ''
           If non-null, delete incremental sets of all backups sets that are
           older than the count:th last full backup (in other words, keep only
           old full backups and not their increments).
@@ -154,6 +176,8 @@ in
             ${lib.optionalString (cfg.cleanup.maxIncr != null) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
             exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${lib.escapeShellArgs (
               [ cfg.root cfg.targetUrl ]
+              ++ lib.optionals (cfg.includeFileList != null) [ "--include-filelist" cfg.includeFileList ]
+              ++ lib.optionals (cfg.excludeFileList != null) [ "--exclude-filelist" cfg.excludeFileList ]
               ++ concatMap (p: [ "--include" p ]) cfg.include
               ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
               ++ (lib.optionals (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ])

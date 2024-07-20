@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
@@ -64,19 +64,14 @@ in
 {
   # interface
   options.services.moodle = {
-    enable = mkEnableOption (lib.mdDoc "Moodle web application");
+    enable = mkEnableOption "Moodle web application";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.moodle;
-      defaultText = literalExpression "pkgs.moodle";
-      description = lib.mdDoc "The Moodle package to use.";
-    };
+    package = mkPackageOption pkgs "moodle" { };
 
     initialPassword = mkOption {
       type = types.str;
       example = "correcthorsebatterystaple";
-      description = lib.mdDoc ''
+      description = ''
         Specifies the initial password for the admin, i.e. the password assigned if the user does not already exist.
         The password specified here is world-readable in the Nix store, so it should be changed promptly.
       '';
@@ -86,18 +81,18 @@ in
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" ];
         default = "mysql";
-        description = lib.mdDoc "Database engine to use.";
+        description = "Database engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc "Database host port.";
+        description = "Database host port.";
         default = {
           mysql = 3306;
           pgsql = 5432;
@@ -108,20 +103,20 @@ in
       name = mkOption {
         type = types.str;
         default = "moodle";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "moodle";
-        description = lib.mdDoc "Database user.";
+        description = "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/moodle-dbpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           {option}`database.user`.
         '';
@@ -134,13 +129,13 @@ in
           else if pgsqlLocal then "/run/postgresql"
           else null;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+        description = "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
@@ -154,7 +149,7 @@ in
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
         See [](#opt-services.httpd.virtualHosts) for further information.
       '';
@@ -170,7 +165,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the Moodle PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
@@ -179,7 +174,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Any additional text to be appended to the config.php
         configuration file. This is a PHP script. For configuration
         details, see <https://docs.moodle.org/37/en/Configuration_file>.
@@ -194,7 +189,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
         message = "services.moodle.database.user must be set to ${user} if services.moodle.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -220,7 +215,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -260,9 +255,10 @@ in
       } ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-moodle".${stateDir}.d = {
+      inherit user group;
+      mode = "0750";
+    };
 
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];

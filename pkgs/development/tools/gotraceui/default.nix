@@ -1,20 +1,20 @@
 {
-  stdenv, lib, fetchFromGitHub, pkg-config, buildGoModule,
+  lib, fetchFromGitHub, pkg-config, buildGoModule,
   libGL, libX11, libXcursor, libXfixes, libxkbcommon, vulkan-headers, wayland,
 }:
 
 buildGoModule rec {
   pname = "gotraceui";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "gotraceui";
     rev = "v${version}";
-    sha256 = "sha256-dryDDunvxjHHzsMtTbEeIWqWOM7wtcyb9DjqzR2SgYE=";
+    sha256 = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
   };
 
-  vendorHash = "sha256-Nx91u2JOBWYiYeG4VbCYKg66GANDViVHrbE31YdPIzM=";
+  vendorHash = "sha256-dNV5u6BG+2Nzci6dX/4/4WAeM/zXE5+Ix0HqIsNnm0E=";
   subPackages = ["cmd/gotraceui"];
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,7 +36,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An efficient frontend for Go execution traces";
+    description = "Efficient frontend for Go execution traces";
+    mainProgram = "gotraceui";
     homepage = "https://github.com/dominikh/gotraceui";
     platforms = platforms.linux;
     license = licenses.mit;

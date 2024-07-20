@@ -8,19 +8,15 @@
 , libosmo-netif
 }:
 
-let
-  inherit (stdenv) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-bts";
-  version = "1.6.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bts";
     rev = version;
-    hash = "sha256-RSWXWQn3DAPtThUbthyXrSFSQhHzKaH/m1f6/MCojzM=";
+    hash = "sha256-dje+B1jobsVdQZYyIkLTZzez4HQirCcjyosTQCo/v64=";
   };
 
   postPatch = ''
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom GSM Base Transceiver Station (BTS)";
     homepage = "https://osmocom.org/projects/osmobts";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

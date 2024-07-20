@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Allows you to compose wallpapers ('root pixmaps') for X";
     homepage = "https://github.com/himdel/hsetroot";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ henrytill shamilton ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.unix;
   };
 }

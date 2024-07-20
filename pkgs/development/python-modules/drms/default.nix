@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, six
-, astropy
-, pytestCheckHook
-, pytest-doctestplus
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pandas,
+  six,
+  astropy,
+  oldest-supported-numpy,
+  pytestCheckHook,
+  pytest-doctestplus,
+  pythonOlder,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.6.4";
+  version = "0.7.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fH290QRhhglkhkMrpwHUkqVuYvZ6w/MDIYo9V0queVY=";
+    hash = "sha256-2VtAGRx0OnYdATK/ngNhffmQDjZfELYeTTPCdfkHAAc=";
   };
 
   nativeBuildInputs = [
+    numpy
+    oldest-supported-numpy
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -38,13 +44,9 @@ buildPythonPackage rec {
     pytest-doctestplus
   ];
 
-  disabledTests = [
-    "test_query_hexadecimal_strings"
-  ];
+  disabledTests = [ "test_query_hexadecimal_strings" ];
 
-  disabledTestPaths = [
-    "docs/tutorial.rst"
-  ];
+  disabledTestPaths = [ "docs/tutorial.rst" ];
 
   pythonImportsCheck = [ "drms" ];
 

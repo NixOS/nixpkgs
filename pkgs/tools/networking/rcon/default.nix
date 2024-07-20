@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ f4814n ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.bsd2;
+    mainProgram = "rcon";
   };
 }

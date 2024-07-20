@@ -1,26 +1,31 @@
 { lib
-, python3
-, fetchPypi
+, python3Packages
+, fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wyoming-faster-whisper";
-  version = "0.0.3";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "wyoming_faster_whisper";
-    inherit version;
-    hash = "sha256-uqepa70lprzV3DJK2wrNAAyZkMMJ5S86RKK716zxYU4=";
+  src = fetchFromGitHub {
+    owner = "rhasspy";
+    repo = "wyoming-faster-whisper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zWa872YkPh8B7dE//leth+ixIa1wHSRcjkvH2lXzolc=";
   };
 
-  patches = [
-    ./faster-whisper-entrypoint.patch
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    ctranslate2
-    tokenizers
+  pythonRelaxDeps = [
+    "faster-whisper"
+    "wyoming"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    faster-whisper
     wyoming
   ];
 
@@ -32,8 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v${version}";
     description = "Wyoming Server for Faster Whisper";
-    homepage = "https://pypi.org/project/wyoming-faster-whisper/";
+    homepage = "https://github.com/rhasspy/wyoming-faster-whisper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

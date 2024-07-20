@@ -2,22 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fre";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "camdencheek";
     repo = "fre";
-    rev = version;
-    hash = "sha256-nG2+LsmmzAsan3ZjFXGPMz/6hTdj9jiDfgeAwNpu7Eg=";
+    rev = "v${version}";
+    hash = "sha256-cYqEPohqUmewvBUoGJQfa4ATxw2uny5+nUKtNzrxK38=";
   };
 
-  cargoHash = "sha256-y0sWe7q5MKebwKObXRgRs348hmjZaklnhYdfUnHoYX0=";
+  cargoHash = "sha256-BEIrjHsIrNkFEEjCrTKwsJL9hptmVOI8x3ZWoo9ZUvQ=";
 
   meta = with lib; {
-    description = "A CLI tool for tracking your most-used directories and files";
+    description = "CLI tool for tracking your most-used directories and files";
     homepage = "https://github.com/camdencheek/fre";
     changelog = "https://github.com/camdencheek/fre/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gaykitty ];
+    mainProgram = "fre";
   };
 }

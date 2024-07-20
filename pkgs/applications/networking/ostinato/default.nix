@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "ostinato";
-  version = "1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub  {
     owner  = "pstavirs";
     repo   = "ostinato";
     rev    = "v${version}";
-    sha256 = "0B3jOj5rA3/rD2gXS2praZImeP34zN06fOPy/IswXOg=";
+    sha256 = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
   };
 
   ostinatoIcon = fetchurl {
@@ -65,7 +65,7 @@ mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "A packet traffic generator and analyzer";
+    description = "Packet traffic generator and analyzer";
     homepage    = "https://ostinato.org/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ rick68 ];

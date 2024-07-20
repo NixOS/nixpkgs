@@ -1,10 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "keepalived";
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   nodes = {
     node1 = { pkgs, ... }: {
-      networking.firewall.extraCommands = "iptables -A INPUT -p vrrp -j ACCEPT";
       services.keepalived.enable = true;
+      services.keepalived.openFirewall = true;
       services.keepalived.vrrpInstances.test = {
         interface = "eth1";
         state = "MASTER";
@@ -15,8 +16,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.tcpdump ];
     };
     node2 = { pkgs, ... }: {
-      networking.firewall.extraCommands = "iptables -A INPUT -p vrrp -j ACCEPT";
       services.keepalived.enable = true;
+      services.keepalived.openFirewall = true;
       services.keepalived.vrrpInstances.test = {
         interface = "eth1";
         state = "MASTER";

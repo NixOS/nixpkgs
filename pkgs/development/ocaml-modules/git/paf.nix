@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , git
 , mimic
 , paf
@@ -26,7 +26,6 @@ buildDunePackage {
   inherit (git) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     git
@@ -51,6 +50,6 @@ buildDunePackage {
   ];
 
   meta = git.meta // {
-    description = "A package to use HTTP-based ocaml-git with MirageOS backend";
+    description = "Package to use HTTP-based ocaml-git with MirageOS backend";
   };
 }

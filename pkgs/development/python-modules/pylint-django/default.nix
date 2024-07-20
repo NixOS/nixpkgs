@@ -1,52 +1,61 @@
-{ lib
-, buildPythonPackage
-, django
-, factory_boy
-, fetchFromGitHub
-, pylint-plugin-utils
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-tables2,
+  django-tastypie,
+  factory-boy,
+  fetchFromGitHub,
+  poetry-core,
+  pylint-plugin-utils,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.3";
-  format = "setuptools";
+  version = "2.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5xEXjNMkOetRM9NDz0S4DsC6v39YQi34s2s+Fs56hYU=";
+    repo = "pylint-django";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
   };
 
-  propagatedBuildInputs = [
-    django
-    pylint-plugin-utils
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ pylint-plugin-utils ];
+
+  passthru.optional-dependencies = {
+    with_django = [ django ];
+  };
 
   nativeCheckInputs = [
-    factory_boy
+    django-tables2
+    django-tastypie
+    factory-boy
     pytestCheckHook
   ];
 
   disabledTests = [
-    # AttributeError, AssertionError
-    "external_django_tables2_noerror_meta_class"
-    "external_tastypie_noerror_foreign_key"
+    # AttributeError: module 'pylint.interfaces' has no attribute 'IAstroidChecker'
+    "test_migrations_plugin"
     "func_noerror_model_unicode_lambda"
-    "0001_noerror_initial"
+    "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
+    "func_noerror_model_fields"
+    "func_noerror_form_fields"
   ];
 
-  pythonImportsCheck = [
-    "pylint_django"
-  ];
+  pythonImportsCheck = [ "pylint_django" ];
 
   meta = with lib; {
     description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
+    changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kamadorueda ];
   };

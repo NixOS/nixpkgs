@@ -1,5 +1,5 @@
 diff --git a/comby-kernel.opam b/comby-kernel.opam
-index 9db7cc5..a497bff 100644
+index 9db7cc5..83e6e7b 100644
 --- a/comby-kernel.opam
 +++ b/comby-kernel.opam
 @@ -20,7 +20,7 @@ build: [
@@ -7,7 +7,7 @@ index 9db7cc5..a497bff 100644
    "dune" {>= "2.8.0"}
    "ocaml" {>= "4.08.1"}
 -  "core_kernel"
-+  "core_kernel" {>= "v0.15.0"}
++  "core-kernel" {>= "v0.16.0"}
    "mparser" {>= "1.3"}
    "mparser-pcre"
    "ppx_deriving"
@@ -25,7 +25,7 @@ index 88563f6..fbbc122 100644
    "lwt"
    "cohttp"
 diff --git a/comby.opam b/comby.opam
-index 9e5d96b..ecab789 100644
+index 9e5d96b..d5be316 100644
 --- a/comby.opam
 +++ b/comby.opam
 @@ -31,7 +31,7 @@ depends: [
@@ -33,14 +33,23 @@ index 9e5d96b..ecab789 100644
    "comby-kernel" {= "1.7.0"}
    "comby-semantic" {= "1.7.0"}
 -  "core"
-+  "core" {>= "v0.15.0"}
++  "core" {>= "v0.16.0"}
    "hack_parallel" {arch != "arm32" & arch != "arm64"}
    "lwt"
    "lwt_react"
 diff --git a/lib/app/configuration/command_configuration.ml b/lib/app/configuration/command_configuration.ml
-index 75c3107..418276e 100644
+index 75c3107..29826a9 100644
 --- a/lib/app/configuration/command_configuration.ml
 +++ b/lib/app/configuration/command_configuration.ml
+@@ -1,7 +1,7 @@
+ open Core
+ open Camlzip
+ 
+-open Polymorphic_compare
++open Poly
+ 
+ open Comby_kernel
+ 
 @@ -16,21 +16,21 @@ type 'a next =
  
  let fold_directory ?(sorted=false) root ~init ~f =
@@ -356,6 +365,60 @@ index 7a6353d..b79cba2 100644
 - (preprocess (pps ppx_jane)))
 + (preprocess
 +  (pps ppx_jane)))
+diff --git a/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml b/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
+index 4e064fb..dca77b2 100644
+--- a/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
++++ b/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
+@@ -287,7 +287,7 @@ end = struct
+           ~running_step:(fun (car, pos) cadr ->
+             match car, cadr with
+             | Same car_lines, Same cadr_lines ->
+-              Skip (Same (Array.concat [ car_lines; cadr_lines ]), pos)
++              Skip {state = (Same (Array.concat [ car_lines; cadr_lines ]), pos)}
+             | Unified _, _ | _, Unified _ ->
+               raise_s
+                 [%message
+@@ -296,7 +296,7 @@ end = struct
+                     (cadr : string Range.t)]
+             | (Prev _ | Next _ | Replace _), (Prev _ | Next _ | Replace _)
+             | Same _, (Prev _ | Next _ | Replace _)
+-            | (Prev _ | Next _ | Replace _), Same _ -> Yield ((car, pos), (cadr, Middle)))
++            | (Prev _ | Next _ | Replace _), Same _ -> Yield {value = (car, pos); state = (cadr, Middle)})
+           ~inner_finished:(fun (last, pos) ->
+             match last, pos with
+             | Unified _, _ ->
+@@ -308,7 +308,7 @@ end = struct
+               Some (last, End))
+           ~finishing_step:(function
+             | None -> Done
+-            | Some result -> Yield (result, None))
++            | Some result -> Yield {value = result; state = None})
+     ;;
+ 
+     include struct
+@@ -448,7 +448,7 @@ end = struct
+         ~init:{ prev_start; next_start; ranges = [] }
+         ~running_step:(fun t drop_or_keep ->
+           match (drop_or_keep : Drop_or_keep.t) with
+-          | Keep range -> Skip { t with ranges = range :: t.ranges }
++          | Keep range -> Skip {state = { t with ranges = range :: t.ranges }}
+           | Drop n ->
+             let hunk = to_hunk t in
+             let t =
+@@ -457,11 +457,11 @@ end = struct
+               ; ranges = []
+               }
+             in
+-            if List.is_empty (Hunk.ranges hunk) then Skip t else Yield (hunk, t))
++            if List.is_empty (Hunk.ranges hunk) then Skip {state = t} else Yield {value = hunk; state = t})
+         ~inner_finished:(fun t -> if List.is_empty t.ranges then None else Some t)
+         ~finishing_step:(function
+           | None -> Done
+-          | Some t -> Yield (to_hunk t, None))
++          | Some t -> Yield {value = to_hunk t; state = None})
+     ;;
+   end
+ 
 diff --git a/lib/app/vendored/patdiff/kernel/src/patdiff_core.ml b/lib/app/vendored/patdiff/kernel/src/patdiff_core.ml
 index 4f53a0b..88ee0e3 100644
 --- a/lib/app/vendored/patdiff/kernel/src/patdiff_core.ml
@@ -501,7 +564,7 @@ index 03b120a..4d48b61 100644
 +  ppx_deriving_yojson
 +  ppx_deriving_yojson.runtime))
 diff --git a/lib/kernel/matchers/alpha.ml b/lib/kernel/matchers/alpha.ml
-index d6116f7..993aafc 100644
+index d6116f7..7d16171 100644
 --- a/lib/kernel/matchers/alpha.ml
 +++ b/lib/kernel/matchers/alpha.ml
 @@ -13,20 +13,11 @@ module R = MakeRegexp(Regexp)
@@ -537,6 +600,15 @@ index d6116f7..993aafc 100644
        List.fold plist ~init:(return Types.Unit) ~f:(>>)
  
      let with_debug_matcher s tag =
+@@ -745,7 +736,7 @@ module Make (Lang : Types.Language.S) (Meta : Types.Metasyntax.S) (Ext : Types.E
+     let hole_parser ?at_depth sort dimension =
+       let open Types.Hole in
+       let hole_parser =
+-        let open Polymorphic_compare in
++        let open Poly in
+         List.fold ~init:[] hole_parsers ~f:(fun acc (sort', parser) -> if sort' = sort then parser::acc else acc)
+       in
+       let skip_signal hole = skip (string "_signal_hole") |>> fun () -> Types.Hole hole in
 diff --git a/lib/kernel/matchers/dune b/lib/kernel/matchers/dune
 index 12ed326..4625458 100644
 --- a/lib/kernel/matchers/dune
@@ -566,7 +638,7 @@ index 12ed326..4625458 100644
 +  yojson
 +  ppx_deriving_yojson))
 diff --git a/lib/kernel/matchers/evaluate.ml b/lib/kernel/matchers/evaluate.ml
-index 9ea71a0..288f79a 100644
+index 9ea71a0..4f63ab6 100644
 --- a/lib/kernel/matchers/evaluate.ml
 +++ b/lib/kernel/matchers/evaluate.ml
 @@ -3,10 +3,7 @@ open Core_kernel
@@ -581,8 +653,17 @@ index 9ea71a0..288f79a 100644
  
  type result = bool * Match.environment option
  
+@@ -102,7 +99,7 @@ let apply
+           |> Option.some
+       in
+       List.find_map cases ~f:(fun (template, case_expression) -> evaluate template case_expression)
+-      |> Option.value_map ~f:ident ~default:(false, Some env)
++      |> Option.value_map ~f:Fn.id ~default:(false, Some env)
+ 
+     (* rewrite ... { ... } *)
+     | Rewrite (Template t, (match_template, rewrite_template)) ->
 diff --git a/lib/kernel/matchers/omega.ml b/lib/kernel/matchers/omega.ml
-index 61cc69a..0bef682 100644
+index 61cc69a..3445307 100644
 --- a/lib/kernel/matchers/omega.ml
 +++ b/lib/kernel/matchers/omega.ml
 @@ -32,15 +32,9 @@ let push_source_ref : string ref = ref ""
@@ -593,17 +674,25 @@ index 61cc69a..0bef682 100644
 -  match Sys.getenv "DEBUG_COMBY" with
 -  | exception Not_found -> false
 -  | _ -> true
--
++let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
+ 
 -let rewrite =
 -  match Sys.getenv "REWRITE" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
-+
 +let rewrite = Sys.getenv "REWRITE" |> Option.is_some
  
  let actual = Buffer.create 10
  
+@@ -540,7 +534,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) (Ext : External.
+ 
+     let hole_parser sort dimension : (production * 'a) t t =
+       let hole_parser = (* This must be fold, can't be find *)
+-        let open Polymorphic_compare in
++        let open Poly in
+         List.fold ~init:[] Template.Matching.hole_parsers ~f:(fun acc (sort', parser) ->
+             if sort' = sort then parser::acc else acc)
+       in
 diff --git a/lib/kernel/matchers/preprocess.ml b/lib/kernel/matchers/preprocess.ml
 index 84f3ed0..b6d10e7 100644
 --- a/lib/kernel/matchers/preprocess.ml
@@ -633,7 +722,7 @@ index ef0bd59..906820b 100644
  module type Regexp_engine_intf = sig
    type t
 diff --git a/lib/kernel/matchers/rewrite.ml b/lib/kernel/matchers/rewrite.ml
-index 32c4740..2fc28db 100644
+index 32c4740..545cba5 100644
 --- a/lib/kernel/matchers/rewrite.ml
 +++ b/lib/kernel/matchers/rewrite.ml
 @@ -4,10 +4,7 @@ open Core_kernel
@@ -648,6 +737,35 @@ index 32c4740..2fc28db 100644
  
  let counter =
    let uuid_for_id_counter = ref 0 in
+@@ -46,24 +43,24 @@ let parse_first_label ?(metasyntax = Metasyntax.default_metasyntax) template =
+   in
+   parse_string ~consume:All parser template
+   |> function
+-  | Ok label -> List.find_map label ~f:ident
++  | Ok label -> List.find_map label ~f:Fn.id
+   | Error _ -> None
+ 
+ let substitute_fresh
+     ?(metasyntax = Metasyntax.default_metasyntax)
+     ?(fresh = counter)
+     template =
+-  let label_table = String.Table.create () in
++  let label_table = Hashtbl.create (module String) in
+   let template_ref = ref template in
+   let current_label_ref = ref (parse_first_label ~metasyntax !template_ref) in
+   while Option.is_some !current_label_ref do
+     let label = Option.value_exn !current_label_ref in
+     let id =
+-      match String.Table.find label_table label with
++      match Hashtbl.find label_table label with
+       | Some id -> id
+       | None ->
+         let id = fresh () in
+-        if String.(label <> "") then String.Table.add_exn label_table ~key:label ~data:id;
++        if String.(label <> "") then Hashtbl.add_exn label_table ~key:label ~data:id;
+         id
+     in
+     let left, right = replacement_sentinel metasyntax in
 diff --git a/lib/kernel/matchers/template.ml b/lib/kernel/matchers/template.ml
 index 423a07f..136236c 100644
 --- a/lib/kernel/matchers/template.ml

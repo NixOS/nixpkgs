@@ -1,20 +1,14 @@
 { config
 , lib
+, linuxPackages
 , pkgs
 , generateSplicesForMkScope
-, makeScopeWithSplicing
+, makeScopeWithSplicing'
 }:
 
-let
-  keep = _self: { };
-  extra = _spliced0: { };
-
-in
-makeScopeWithSplicing
-  (generateSplicesForMkScope "xfce")
-  keep
-  extra
-  (self:
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "xfce";
+  f = (self:
     let
       inherit (self) callPackage;
     in
@@ -25,10 +19,6 @@ makeScopeWithSplicing
 
       mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
-      automakeAddFlags = pkgs.makeSetupHook {
-        name = "xfce-automake-add-flags-hook";
-      } ./automakeAddFlags.sh;
-
       #### CORE
 
       exo = callPackage ./core/exo { };
@@ -38,6 +28,8 @@ makeScopeWithSplicing
       libxfce4ui = callPackage ./core/libxfce4ui { };
 
       libxfce4util = callPackage ./core/libxfce4util { };
+
+      libxfce4windowing = callPackage ./core/libxfce4windowing { };
 
       thunar = callPackage ./core/thunar {
         thunarPlugins = [ ];
@@ -89,6 +81,8 @@ makeScopeWithSplicing
 
       ristretto = callPackage ./applications/ristretto { };
 
+      xfmpc = callPackage ./applications/xfmpc { };
+
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
       xfce4-dict = callPackage ./applications/xfce4-dict { };
@@ -129,6 +123,8 @@ makeScopeWithSplicing
 
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
+      xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
+
       xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
@@ -139,8 +135,6 @@ makeScopeWithSplicing
 
       xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
 
-      xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
-
       xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
       xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
@@ -149,7 +143,9 @@ makeScopeWithSplicing
 
       xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
+      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
+        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+      };
 
       xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
@@ -172,9 +168,13 @@ makeScopeWithSplicing
     } // lib.optionalAttrs config.allowAliases {
       #### ALIASES
 
+      automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
+
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
-    })
+      xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
+    });
+}

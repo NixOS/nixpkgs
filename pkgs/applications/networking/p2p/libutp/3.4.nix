@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libutp";
-  version = "unstable-2023-03-05";
+  version = "0-unstable-2023-11-14";
 
   src = fetchFromGitHub {
     # Use transmission fork from post-3.4-transmission branch
     owner = "transmission";
     repo = pname;
-    rev = "9cb9f9c4f0073d78b08d6542cebaea6564ecadfe";
-    hash = "sha256-dpbX1h/gpuVIAXC4hwwuRwQDJ0pwVVEsgemOVN0Dv9Q=";
+    rev = "52645d6d0fb16009e11d2f84469d2e43b7b6b48a";
+    hash = "sha256-pcPVkDEEtriN9zlEcVFKwKhhh51wpJGxYlcu7bH1RkI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "uTorrent Transport Protocol library";
+    mainProgram = "ucat";
     homepage = "https://github.com/transmission/libutp";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];

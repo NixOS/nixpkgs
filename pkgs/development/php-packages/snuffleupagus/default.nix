@@ -1,41 +1,38 @@
-{ stdenv
-, buildPecl
-, lib
-, libiconv
-, php
-, fetchFromGitHub
-, pcre2
-, darwin
+{
+  stdenv,
+  buildPecl,
+  lib,
+  libiconv,
+  php,
+  fetchFromGitHub,
+  pcre2,
+  darwin,
 }:
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
     rev = "v${version}";
-    hash = "sha256-1a4PYJ/j9BsoeF5V/KKGu7rqsL3YMo/FbaCBfNc4bfw=";
+    hash = "sha256-NwG8gBaToBaJGrZoCD7bDym7hQidWU0ArckoQCHN81o=";
   };
 
-  buildInputs = [
-    pcre2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.Libsystem
-    libiconv
-  ];
+  buildInputs =
+    [ pcre2 ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.Libsystem
+      libiconv
+    ];
 
-  internalDeps = with php.extensions; [
-    session
-  ];
+  internalDeps = with php.extensions; [ session ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
-  configureFlags = [
-    "--enable-snuffleupagus"
-  ];
+  configureFlags = [ "--enable-snuffleupagus" ];
 
   postPhpize = ''
     ./configure --enable-snuffleupagus

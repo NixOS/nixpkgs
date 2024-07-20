@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook, wrapGAppsHook
-, gnome, avahi, gtk3, libayatana-appindicator, libnotify, libpulseaudio
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook, wrapGAppsHook3
+, adwaita-icon-theme, avahi, gtk3, libayatana-appindicator, libnotify, libpulseaudio
 , gsettings-desktop-schemas
 }:
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     })
    ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook3 ];
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     avahi gtk3 libayatana-appindicator libnotify libpulseaudio
     gsettings-desktop-schemas
   ];
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ exlevan kamilchm ];
     platforms = platforms.linux;
+    mainProgram = "pasystray";
   };
 }

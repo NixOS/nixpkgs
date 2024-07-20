@@ -1,28 +1,51 @@
 { lib
 , fetchFromGitea
 , rustPlatform
+, nix-update-script
+, imagemagick
+, makeWrapper
+, installShellFiles
 }:
-rustPlatform.buildRustPackage rec {
+let
+  version = "3.0.0-beta";
+in
+rustPlatform.buildRustPackage {
   pname = "wallust";
-  version = "2.5.1";
+  inherit version;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "explosion-mental";
-    repo = pname;
+    repo = "wallust";
     rev = version;
-    hash = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
+    hash = "sha256-gGyxRdv2I/3TQWrTbUjlJGsaRv4SaNE+4Zo9LMWmxk8";
   };
 
-  cargoSha256 = "sha256-jDs4KeVN3P+4/T1cW4KDxoY79jE3GXiwzxLrR2HybWw=";
+  cargoHash = "sha256-dkHS8EOzmn5VLiKP3SMT0ZGAsk2wzvQeioG7NuGGUzA=";
 
-  meta = with lib; {
-    description = "A better pywal";
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  postInstall = ''
+    installManPage man/wallust*
+    installShellCompletion --cmd wallust \
+      --bash completions/wallust.bash \
+      --zsh completions/_wallust \
+      --fish completions/wallust.fish
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/wallust \
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Better pywal";
     homepage = "https://codeberg.org/explosion-mental/wallust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onemoresuza ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza iynaix ];
     downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
-    platforms = platforms.unix;
     mainProgram = "wallust";
   };
 }

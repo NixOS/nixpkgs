@@ -1,15 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pytestCheckHook,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "aqualogic";
   version = "3.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "swilson";
@@ -24,9 +26,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # With 3.4 the event loop is not terminated after the first test
   # https://github.com/swilson/aqualogic/issues/9

@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ugs";
-  version = "2.0.18";
+  version = "2.1.8";
 
   src = fetchzip {
     url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${version}/UniversalGcodeSender.zip";
-    hash = "sha256-NaEDG3dmpPRwfVvwYJQXqpCcAkRPeQ1EcKoa0xKeDFA=";
+    hash = "sha256-2rGxo8Yu0i93CXmnkKJwjez3vXzaO69/ztwjXxgWtyo=";
   };
 
   dontUnpack = true;
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "A cross-platform G-Code sender for GRBL, Smoothieware, TinyG and G2core.";
+    description = "Cross-platform G-Code sender for GRBL, Smoothieware, TinyG and G2core";
     homepage = "https://github.com/winder/Universal-G-Code-Sender";
     maintainers = with maintainers; [ matthewcroughan ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = platforms.all;
+    mainProgram = "ugs";
   };
 }

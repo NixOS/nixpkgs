@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Identify single nucleotide positions that are different between tumor and normal";
+    mainProgram = "bam-somaticsniper";
     license = licenses.mit;
     homepage = "https://github.com/genome/somatic-sniper";
     maintainers = with maintainers; [ jbedo ];

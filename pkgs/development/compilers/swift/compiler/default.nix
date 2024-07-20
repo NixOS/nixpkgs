@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , cmake
+, bash
 , coreutils
 , gnugrep
 , perl
@@ -9,7 +10,7 @@
 , pkg-config
 , clang
 , bintools
-, python3
+, python3Packages
 , git
 , fetchpatch
 , makeWrapper
@@ -41,6 +42,7 @@
 }:
 
 let
+  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -133,7 +135,8 @@ let
     sed < '${clang}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
-      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g"
+      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
+      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
     chmod a+x "$targetFile"
   '';
 
@@ -282,7 +285,6 @@ in stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
-    patch -p1 -d swift -i ${./patches/swift-darwin-link-cxxabi.patch}
     patch -p1 -d swift -i ${substituteAll {
       src = ./patches/swift-darwin-plistbuddy-workaround.patch;
       inherit swiftArch;
@@ -307,6 +309,13 @@ in stdenv.mkDerivation {
       name = "clang-cmake-fix-interpreter.patch";
       url = "https://github.com/llvm/llvm-project/commit/b5eaf500f2441eff2277ea2973878fb1f171fd0a.patch";
       sha256 = "1rma1al0rbm3s3ql6bnvbcighp74lri1lcrwbyacgdqp80fgw1b6";
+    }}
+
+   # gcc-13 build fixes
+    patch -p2 -d llvm-project/llvm -i ${fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
+      hash = "sha256-nkRPWx8gNvYr7mlvEUiOAb1rTrf+skCZjAydJVUHrcI=";
     }}
 
     ${lib.optionalString stdenv.isLinux ''
@@ -354,6 +363,9 @@ in stdenv.mkDerivation {
     fixCmakeFiles .
     ''}
   '';
+
+  # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
+  hardeningDisable = lib.optional stdenv.isDarwin "zerocallusedregs";
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
@@ -688,9 +700,9 @@ in stdenv.mkDerivation {
   };
 
   meta = {
-    description = "The Swift Programming Language";
+    description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.

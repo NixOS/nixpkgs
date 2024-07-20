@@ -12,14 +12,15 @@
 , sassc
 , libadwaita
 , pcre2
+, libsixel
 , libxml2
 , librsvg
 , libgee
 , callPackage
 , python3
-, gtk3
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook4
+, sixelSupport ? false
 }:
 
 let
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson/postinstall.py
   '';
 
@@ -55,14 +58,27 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     sassc
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
-    gtk3 # For gtk-update-icon-cache
     desktop-file-utils # For update-desktop-database
   ];
   buildInputs = [
     gtk4
-    vte-gtk4
+    (vte-gtk4.overrideAttrs (old: {
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "vte";
+        rev = "3c8f66be867aca6656e4109ce880b6ea7431b895";
+        hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
+      };
+      postPatch = (old.postPatch or "") + ''
+        patchShebangs src/box_drawing_generate.sh
+      '';
+    } // lib.optionalAttrs sixelSupport {
+      buildInputs = old.buildInputs ++ [ libsixel ];
+      mesonFlags = old.mesonFlags ++ [ "-Dsixel=true" ];
+    }))
     json-glib
     marble
     libadwaita
@@ -76,10 +92,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Beautiful GTK 4 terminal";
+    mainProgram = "blackbox";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu linsui ];
     platforms = platforms.linux;
   };
 }

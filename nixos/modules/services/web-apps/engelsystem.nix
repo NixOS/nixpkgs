@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types literalExpression;
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption types mkPackageOption;
   cfg = config.services.engelsystem;
 in {
   options = {
@@ -9,7 +9,7 @@ in {
       enable = mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable engelsystem, an online tool for coordinating volunteers
           and shifts on large events.
         '';
@@ -19,20 +19,15 @@ in {
       domain = mkOption {
         type = types.str;
         example = "engelsystem.example.com";
-        description = lib.mdDoc "Domain to serve on.";
+        description = "Domain to serve on.";
       };
 
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc "Engelsystem package used for the service.";
-        default = pkgs.engelsystem;
-        defaultText = literalExpression "pkgs.engelsystem";
-      };
+      package = mkPackageOption pkgs "engelsystem" { };
 
       createDatabase = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create a local database automatically.
           This will override every database setting in {option}`services.engelsystem.config`.
         '';
@@ -70,7 +65,7 @@ in {
         min_password_length = 6;
         default_locale = "de_DE";
       };
-      description = lib.mdDoc ''
+      description = ''
         Options to be added to config.php, as a nix attribute set. Options containing secret data
         should be set to an attribute set containing the attribute _secret - a string pointing to a
         file containing the value the option should be set to. See the example to get a better
@@ -104,7 +99,6 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
-      phpPackage = pkgs.php81;
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

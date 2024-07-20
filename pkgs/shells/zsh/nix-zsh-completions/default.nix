@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-zsh-completions";
-  version = "unstable-2023-01-30";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    rev = "6a1bfc024481bdba568f2ced65e02f3a359a7692";
-    hash = "sha256-aXetjkl5nPuYHHyuX59ywXF+4Xg+PUCV6Y2u+g18gEk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
   };
 
   strictDeps = true;
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "ZSH completions for Nix, NixOS, and NixOps";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ olejorgenb hedning ma27 ];
+    maintainers = with maintainers; [ olejorgenb hedning ma27 sebtm ];
   };
 }

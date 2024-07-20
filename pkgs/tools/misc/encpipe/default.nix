@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An encryption tool";
+    description = "Encryption tool";
     homepage = "https://github.com/jedisct1/encpipe";
     license = licenses.isc;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "encpipe";
   };
 }

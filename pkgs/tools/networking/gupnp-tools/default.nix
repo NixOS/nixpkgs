@@ -12,16 +12,16 @@
 , gupnp-av
 , gtksourceview4
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XqdgfuNlZCxVWSf+3FteH+COdPBh0MPrCL2QG16yAII=";
+    sha256 = "U8+TEj85fo+PC46eQ2TIanUCpTNPTAvi4FSoJEeL1bo=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   # new libxml2 version
+  # TODO: can be dropped on next update
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   passthru = {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Set of utilities and demos to work with UPnP";
-    homepage = "https://wiki.gnome.org/Projects/GUPnP";
+    homepage = "https://gitlab.gnome.org/GNOME/gupnp-tools";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

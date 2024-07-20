@@ -1,8 +1,7 @@
 { lib
-, callPackage
 , gcc11Stdenv
 , fetchFromGitHub
-, addOpenGLRunpath
+, autoAddDriverRunpath
 , catch2
 , cmake
 , cudaPackages_10_2
@@ -87,13 +86,13 @@ let
 # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
 in gcc11Stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "3.1.8";
+  version = "3.2.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OXqXkP2ZUNPzafGIgJ0MKa39xB84keVFFYl+JsHgnks=";
+    hash = "sha256-iMyYOr3dSpdRV2S/TlB/tEOAWYhK09373ZRbd5vzogQ=";
   };
 
   # Add our paths to the CUDA paths so FindCuda.cmake can find them.
@@ -104,40 +103,34 @@ in gcc11Stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    addOpenGLRunpath
+    # autoAddDriverRunpath does not actually depend on or incur any dependency
+    # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
+    # executables that need to use cuda at runtime.
+    autoAddDriverRunpath
+
     cmake
     git
     python3
-
-    jsoncpp-static
-    jsoncpp-static.dev
-    libevent-nossl-static
-    libevent-nossl-static.dev
-    plog.dev # header-only
-    tclap_1_4 # header-only
   ];
 
   buildInputs = [
+    plog.dev # header-only
+    tclap_1_4 # header-only
+
     catch2
     fmt_9
+    jsoncpp-static
+    libevent-nossl-static
     yaml-cpp
   ];
-
-  # libcuda.so must be found at runtime because it is supplied by the NVIDIA
-  # driver. autoAddOpenGLRunpathHook breaks on the statically linked exes.
-  postFixup = ''
-    find "$out/bin" "$out/lib" -type f -executable -print0 | while IFS= read -r -d "" f; do
-      if isELF "$f" && [[ $(patchelf --print-needed "$f" || true) == *libcuda.so* ]]; then
-        addOpenGLRunpath "$f"
-      fi
-    done
-  '';
 
   disallowedReferences = lib.concatMap (x: x.pkgSet) cudaPackageSetByVersion;
 
   meta = with lib; {
-    description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs.";
+    description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
     license = licenses.asl20;
     maintainers = teams.deshaw.members;

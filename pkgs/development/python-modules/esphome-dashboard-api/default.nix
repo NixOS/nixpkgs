@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
@@ -17,19 +19,22 @@ buildPythonPackage rec {
     hash = "sha256-RFfS0xzRXoM6ETXmviiMPxffPzspjTqpkvHOlTJXN9g=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=65.6" "setuptools" \
+      --replace "wheel~=0.37.1" "wheel"
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "esphome_dashboard_api"
-  ];
+  pythonImportsCheck = [ "esphome_dashboard_api" ];
 
   meta = with lib; {
     description = "API to interact with ESPHome Dashboard";

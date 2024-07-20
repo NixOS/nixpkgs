@@ -22,12 +22,12 @@ in
 {
   options = {
     services.mchprs = {
-      enable = mkEnableOption "MCHPRS";
+      enable = mkEnableOption "MCHPRS, a Minecraft server";
 
       declarativeSettings = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to use a declarative configuration for MCHPRS.
         '';
       };
@@ -35,7 +35,7 @@ in
       declarativeWhitelist = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to use a declarative whitelist.
           The options {option}`services.mchprs.whitelist.list`
           will be applied if and only if set to `true`.
@@ -45,7 +45,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/mchprs";
-        description = mdDoc ''
+        description = ''
           Directory to store MCHPRS database and other state/data files.
         '';
       };
@@ -53,7 +53,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to open ports in the firewall for the server.
           Only has effect when
           {option}`services.mchprs.declarativeSettings` is `true`.
@@ -64,7 +64,7 @@ in
         type = types.str;
         default = "infinity";
         example = "7d";
-        description = mdDoc ''
+        description = ''
           Automatically restart the server after
           {option}`services.mchprs.maxRuntime`.
           The time span format is described here:
@@ -73,12 +73,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mchprs;
-        defaultText = literalExpression "pkgs.mchprs";
-        description = mdDoc "Version of MCHPRS to run.";
-      };
+      package = mkPackageOption pkgs "mchprs" { };
 
       settings = mkOption {
         type = types.submodule {
@@ -88,7 +83,7 @@ in
             port = mkOption {
               type = types.port;
               default = 25565;
-              description = mdDoc ''
+              description = ''
                 Port for the server.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -98,7 +93,7 @@ in
             address = mkOption {
               type = types.str;
               default = "0.0.0.0";
-              description = mdDoc ''
+              description = ''
                 Address for the server.
                 Please use enclosing square brackets when using ipv6.
                 Only has effect when
@@ -109,7 +104,7 @@ in
             motd = mkOption {
               type = types.str;
               default = "Minecraft High Performance Redstone Server";
-              description = mdDoc ''
+              description = ''
                 Message of the day.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -119,7 +114,7 @@ in
             chat_format = mkOption {
               type = types.str;
               default = "<{username}> {message}";
-              description = mdDoc ''
+              description = ''
                 How to format chat message interpolating `username`
                 and `message` with curly braces.
                 Only has effect when
@@ -130,7 +125,7 @@ in
             max_players = mkOption {
               type = types.ints.positive;
               default = 99999;
-              description = mdDoc ''
+              description = ''
                 Maximum number of simultaneous players.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -140,7 +135,7 @@ in
             view_distance = mkOption {
               type = types.ints.positive;
               default = 8;
-              description = mdDoc ''
+              description = ''
                 Maximal distance (in chunks) between players and loaded chunks.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -150,7 +145,7 @@ in
             bungeecord = mkOption {
               type = types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Enable compatibility with
                 [BungeeCord](https://github.com/SpigotMC/BungeeCord).
                 Only has effect when
@@ -161,7 +156,7 @@ in
             schemati = mkOption {
               type = types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Mimic the verification and directory layout used by the
                 Open Redstone Engineers
                 [Schemati plugin](https://github.com/OpenRedstoneEngineers/Schemati).
@@ -173,7 +168,7 @@ in
             block_in_hitbox = mkOption {
               type = types.bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Allow placing blocks inside of players
                 (hitbox logic is simplified).
                 Only has effect when
@@ -184,7 +179,7 @@ in
             auto_redpiler = mkOption {
               type = types.bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Use redpiler automatically.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -194,7 +189,7 @@ in
         };
         default = { };
 
-        description = mdDoc ''
+        description = ''
           Configuration for MCHPRS via `Config.toml`.
           See https://github.com/MCHPR/MCHPRS/blob/master/README.md for documentation.
         '';
@@ -204,7 +199,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = mdDoc ''
+          description = ''
             Whether or not the whitelist (in `whitelist.json`) shoud be enabled.
             Only has effect when {option}`services.mchprs.declarativeSettings` is `true`.
           '';
@@ -226,7 +221,7 @@ in
               username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
             };
           '';
-          description = mdDoc ''
+          description = ''
             Whitelisted players, only has an effect when
             {option}`services.mchprs.declarativeWhitelist` is
             `true` and the whitelist is enabled

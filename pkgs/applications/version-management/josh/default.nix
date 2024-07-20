@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , libgit2
 , openssl
@@ -11,28 +10,24 @@
 , darwin
 }:
 
+let
+  # josh-ui requires javascript dependencies, haven't tried to figure it out yet
+  cargoFlags = [ "--workspace" "--exclude" "josh-ui" ];
+in
+
 rustPlatform.buildRustPackage rec {
   pname = "josh";
-  version = "23.02.14";
+  version = "23.12.04";
   JOSH_VERSION = "r${version}";
 
   src = fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
     rev = JOSH_VERSION;
-    sha256 = "1sqa8xi5d55zshky7gicac02f67vp944hclkdsmwy0bczk9hgssr";
+    sha256 = "10fspcafqnv6if5c1h8z9pf9140jvvlrch88w62wsg4w2vhaii0v";
   };
 
-  patches = [
-    # Unreleased patch allowing compilation from the GitHub tarball download
-    (fetchpatch {
-      name = "josh-version-without-git.patch";
-      url = "https://github.com/josh-project/josh/commit/13e7565ab029206598881391db4ddc6dface692b.patch";
-      sha256 = "1l5syqj51sn7kcqvffwl6ggn5sq8wfkpviga860agghnw5dpf7ns";
-    })
-  ];
-
-  cargoSha256 = "0f6cvz2s8qs53b2g6xja38m24hafqla61s4r5za0a1dyndgms7sl";
+  cargoSha256 = "1j0vl3h6f65ldg80bgryh1mz423lcrcdkn8rmajya1850pfxk3w3";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,11 +41,8 @@ rustPlatform.buildRustPackage rec {
     darwin.Security
   ];
 
-  cargoBuildFlags = [
-    "-p" "josh"
-    "-p" "josh-proxy"
-    # TODO: josh-ui
-  ];
+  cargoBuildFlags = cargoFlags;
+  cargoTestFlags = cargoFlags;
 
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"

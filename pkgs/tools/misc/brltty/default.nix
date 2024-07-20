@@ -1,19 +1,19 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux, udev
+, tcl, acl, kmod, coreutils, shadow, util-linux
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "brltty";
-  version = "6.3";
+  version = "6.6";
 
   src = fetchurl {
     url = "https://brltty.app/archive/${pname}-${version}.tar.gz";
-    sha256 = "14psxwlvgyi2fj1zh8rfykyjcjaya8xa7yg574bxd8y8n49n8hvb";
+    sha256 = "E+j2mb8UTuGx6PkAOt03hQkvf1XvEHxJEuPBT2zMpPw=";
   };
 
-  nativeBuildInputs = [ pkg-config python3.pkgs.cython tcl ];
+  nativeBuildInputs = [ pkg-config python3.pkgs.cython python3.pkgs.setuptools tcl ];
   buildInputs = [ bluez ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
@@ -37,10 +37,12 @@ stdenv.mkDerivation rec {
     "SYSTEMD_UNITS_DIRECTORY=$(out)/lib/systemd/system"
     "SYSTEMD_USERS_DIRECTORY=$(out)/lib/sysusers.d"
     "SYSTEMD_FILES_DIRECTORY=$(out)/lib/tmpfiles.d"
-    "UDEV_LIBRARY_DIRECTORY=$(out)/lib/udev"
+    "UDEV_PARENT_LOCATION=$(out)/lib"
+    "INSTALL_COMMANDS_DIRECTORY=$(out)/libexec/brltty"
     "UDEV_RULES_TYPE=all"
     "POLKIT_POLICY_DIR=$(out)/share/polkit-1/actions"
     "POLKIT_RULE_DIR=$(out)/share/polkit-1/rules.d"
+    "TCL_DIR=$(out)/lib"
   ];
   configureFlags = [
     "--with-writable-directory=/run/brltty"
@@ -69,7 +71,6 @@ stdenv.mkDerivation rec {
     (
       cd $out/lib
       substituteInPlace systemd/system/brltty@.service \
-        --replace '/usr/lib' "$out/lib" \
         --replace '/sbin/modprobe' '${kmod}/bin/modprobe'
       # Ensure the systemd-wrapper script uses the correct path to the brltty binary
       sed "/^Environment=\"BRLTTY_EXECUTABLE_ARGUMENTS.*/a Environment=\"BRLTTY_EXECUTABLE_PATH=$out/bin/brltty\"" -i systemd/system/brltty@.service
@@ -77,11 +78,14 @@ stdenv.mkDerivation rec {
         --replace '/usr/bin/true' '${coreutils}/bin/true'
       substituteInPlace udev/rules.d/90-brltty-uinput.rules \
         --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
-      substituteInPlace tmpfiles.d/brltty.conf \
+      substituteInPlace udev/rules.d/90-brltty-hid.rules \
+        --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
+       substituteInPlace tmpfiles.d/brltty.conf \
         --replace "$out/etc" '/etc'
 
       # Remove unused commands from udev rules
-      sed '/initctl/d' -i udev/rules.d/90-brltty-device.rules
+      sed '/initctl/d' -i udev/rules.d/90-brltty-usb-generic.rules
+      sed '/initctl/d' -i udev/rules.d/90-brltty-usb-customized.rules
       # Remove pulse-access group from systemd unit and sysusers
       substituteInPlace systemd/system/brltty@.service \
         --replace 'SupplementaryGroups=pulse-access' '# SupplementaryGroups=pulse-access'
@@ -90,6 +94,6 @@ stdenv.mkDerivation rec {
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
        --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${udev}/bin/udevadm"
+       --replace 'udevadm' "${systemd}/bin/udevadm"
   '';
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, python3, perl, bison
-, texinfo, desktop-file-utils, wrapGAppsHook, docbook2x, docbook-xsl-nons
+, texinfo, desktop-file-utils, wrapGAppsHook3, docbook2x, docbook-xsl-nons
 , inform7, gettext, libossp_uuid, gtk3, gobject-introspection, vala, gtk-doc
 , webkitgtk, gtksourceview3, gspell, libxml2, goocanvas2, libplist, glib
 , gst_all_1 }:
@@ -22,11 +22,11 @@ let
       pkg-config
       docbook2x
       docbook-xsl-nons
-      wrapGAppsHook
+      wrapGAppsHook3
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala gtk-doc
     ];
   });
@@ -49,11 +49,11 @@ let
       texinfo
       python3
       glib
-      wrapGAppsHook
+      wrapGAppsHook3
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala
       gtk-doc
       gst_all_1.gstreamer
@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
     inform7
     python3
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gettext
@@ -113,5 +113,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fitzgibbon ];
     platforms = platforms.linux;
+    mainProgram = "gnome-inform7";
   };
 }

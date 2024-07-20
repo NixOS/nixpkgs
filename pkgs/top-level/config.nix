@@ -1,15 +1,26 @@
 # This file defines the structure of the `config` nixpkgs option.
 
+# This file is tested in `pkgs/test/config.nix`.
+# Run tests with:
+#
+#     nix-build -A tests.config
+#
+
 { config, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mapAttrsToList
+    mkOption
+    optionals
+    types
+    ;
 
   mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
     type = args.type or (types.uniq types.bool);
     default = args.default or false;
-    description = lib.mdDoc ((args.description or ''
+    description = ((args.description or ''
       Whether to ${args.feature} while building nixpkgs packages.
     '') + ''
       Changing the default may cause a mass rebuild.
@@ -34,7 +45,7 @@ let
     /* Config options */
 
     warnUndeclaredOptions = mkOption {
-      description = lib.mdDoc "Whether to warn when `config` contains an unrecognized attribute.";
+      description = "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
       default = false;
     };
@@ -66,11 +77,11 @@ let
     allowAliases = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to expose old attribute names for compatibility.
 
         The recommended setting is to enable this, as it
-        improves backward compatibity, easing updates.
+        improves backward compatibility, easing updates.
 
         The only reason to disable aliases is for continuous
         integration purposes. For instance, Nixpkgs should
@@ -86,7 +97,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow unfree packages.
 
         See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
@@ -98,7 +109,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow broken packages.
 
         See [Installing broken packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken) in the NixOS manual.
@@ -110,7 +121,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow unsupported packages.
 
         See [Installing packages on unsupported systems](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system) in the NixOS manual.
@@ -123,10 +134,16 @@ let
       feature = "build packages with CUDA support by default";
     };
 
+    rocmSupport = mkMassRebuild {
+      type = types.bool;
+      default = false;
+      feature = "build packages with ROCm support by default";
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
 
@@ -141,7 +158,7 @@ let
     checkMeta = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
@@ -150,7 +167,7 @@ let
 in {
 
   freeformType =
-    let t = lib.types.lazyAttrsOf lib.types.raw;
+    let t = types.lazyAttrsOf types.raw;
     in t // {
       merge = loc: defs:
         let r = t.merge loc defs;
@@ -160,8 +177,8 @@ in {
   inherit options;
 
   config = {
-    warnings = lib.optionals config.warnUndeclaredOptions (
-      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
+    warnings = optionals config.warnUndeclaredOptions (
+      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
     );
   };
 

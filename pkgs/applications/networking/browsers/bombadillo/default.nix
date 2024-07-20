@@ -7,12 +7,12 @@ buildGoModule rec {
   src = fetchgit {
     url = "https://tildegit.org/sloum/bombadillo.git";
     rev = version;
-    sha256 = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
+    hash = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "man" ];
 
@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Non-web client for the terminal, supporting Gopher, Gemini and more";
+    mainProgram = "bombadillo";
     homepage = "https://bombadillo.colorfield.space/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ehmry ];

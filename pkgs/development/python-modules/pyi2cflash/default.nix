@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyftdi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyftdi,
 }:
 
 buildPythonPackage rec {
   pname = "pyi2cflash";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nkazgf7pajz7jym5rfy2df71lyfp4skxqbrg5ch0h4dwjdwllx1";
   };
 
-  propagatedBuildInputs = [
-    pyftdi
-  ];
+  propagatedBuildInputs = [ pyftdi ];
 
   # tests are not shipped with the PyPI source
   doCheck = false;

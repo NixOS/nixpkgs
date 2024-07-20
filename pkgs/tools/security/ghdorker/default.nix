@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wF4QoXxH55SpdYgKLHf4sCwUk1rkCpSdnIX5FvFi/BU=";
+    hash = "sha256-wF4QoXxH55SpdYgKLHf4sCwUk1rkCpSdnIX5FvFi/BU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Extensible GitHub dorking tool";
+    mainProgram = "ghdorker";
     homepage = "https://github.com/dtaivpp/ghdorker";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

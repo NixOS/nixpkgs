@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ ncurses libX11 ];
 
   # Makefile(s) and config are not top-level
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     # allow usage of ANGBAND_PATH
@@ -55,7 +55,8 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A roguelike game set in the First Age of Middle-earth";
+    description = "Roguelike game set in the First Age of Middle-earth";
+    mainProgram = "sil-q";
     longDescription = ''
       A game of adventure set in the First Age of Middle-earth, when the world still
       rang with Elven song and gleamed with Dwarven mail.
@@ -66,7 +67,7 @@ in stdenv.mkDerivation rec {
       A fork of Sil that's still actively developed.
     '';
     homepage = "https://github.com/sil-quirk/sil-q";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.kenran ];
     platforms = lib.platforms.linux;
   };

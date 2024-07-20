@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbytesize";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
     rev = finalAttrs.version;
-    hash = "sha256-4jbu8Hmc4I1IYKiWlCQq7ob98HsgDTqJdghj3ZzOuN8=";
+    hash = "sha256-IPBoYcnSQ1/ws3mzPUXxgbetZkXRWrGhtakXaVVFb6U=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" ];
@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
-    description = "A tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
+    description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
+    mainProgram = "bscalc";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;

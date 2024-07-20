@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,10 +21,9 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    gobject-introspection
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
@@ -33,7 +32,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://johncheetham.com/projects/gshogi/";
-    description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
+    description = "Graphical implementation of the Shogi board game, also known as Japanese Chess";
+    mainProgram = "gshogi";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ciil ];

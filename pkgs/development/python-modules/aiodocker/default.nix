@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "aiodocker";
   # unstable includes support for python 3.10+
   version = "unstable-2022-01-20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -16,9 +18,7 @@ buildPythonPackage rec {
     sha256 = "RL5Ck4wsBZO88afmoojeFKbdIeCjDo/SwNqUcERH6Ls=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # tests require docker daemon
   doCheck = false;

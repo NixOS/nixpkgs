@@ -1,10 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, python3, libreoffice-unwrapped, asciidoc, makeWrapper
+{ lib, stdenv, fetchFromGitHub, libreoffice-unwrapped, asciidoc, makeWrapper
 # whether to install odt2pdf/odt2doc/... symlinks to unoconv
 , installSymlinks ? true
 }:
-
-# IMPORTANT: unoconv must use the same python version as libreoffice (unless it
-# will not be able to load the pyuno module from libreoffice).
 
 stdenv.mkDerivation rec {
   pname = "unoconv";
@@ -24,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    sed -i "s|/usr/bin/env python.*|${python3}/bin/${python3.executable}|" "$out/bin/unoconv"
+    sed -i "s|/usr/bin/env python.*|${libreoffice-unwrapped.python.interpreter}|" "$out/bin/unoconv"
     wrapProgram "$out/bin/unoconv" \
         --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
   '' + lib.optionalString installSymlinks ''
@@ -34,8 +31,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
     homepage = "http://dag.wieers.com/home-made/unoconv/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "unoconv";
   };
 }

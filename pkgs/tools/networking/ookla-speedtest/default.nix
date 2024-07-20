@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
 let
+  stdenv = stdenvNoCC;
+
   pname = "ookla-speedtest";
   version = "1.2.0";
 
@@ -34,9 +36,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  setSourceRoot = ''
-    sourceRoot=$PWD
-  '';
+  sourceRoot = ".";
 
   dontBuild = true;
   dontConfigure = true;
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ kranzes ];
     platforms = lib.attrNames srcs;
+    mainProgram = "speedtest";
   };
 }

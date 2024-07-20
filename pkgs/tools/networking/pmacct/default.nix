@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "pmacct";
     repo = "pmacct";
     rev = "v${version}";
-    sha256 = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
+    hash = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
   };
 
   nativeBuildInputs = [
@@ -59,14 +59,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small set of multi-purpose passive network monitoring tools";
+    description = "Small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]
     '';
     homepage = "http://www.pmacct.net/";
     changelog = "https://github.com/pmacct/pmacct/blob/v${version}/ChangeLog";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };

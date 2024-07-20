@@ -5,10 +5,9 @@
 }:
 
 let
-  maple-font = { pname, sha256, desc }: stdenv.mkDerivation
-    rec{
-
-      inherit pname desc;
+  maple-font = { pname, sha256, desc }:
+    stdenv.mkDerivation rec{
+      inherit pname;
       version = "6.4";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
@@ -17,7 +16,7 @@ let
 
       # Work around the "unpacker appears to have produced no directories"
       # case that happens when the archive doesn't have a subdirectory.
-      setSourceRoot = "sourceRoot=`pwd`";
+      sourceRoot = ".";
       nativeBuildInputs = [ unzip ];
       installPhase = ''
         find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;

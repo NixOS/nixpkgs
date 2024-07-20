@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, openstep-plist
-, ufoLib2
-, pytestCheckHook
-, unicodedata2
-, setuptools-scm
-, ufonormalizer
-, xmldiff
-, defcon
-, ufo2ft
-, skia-pathops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  openstep-plist,
+  ufolib2,
+  pytestCheckHook,
+  unicodedata2,
+  setuptools-scm,
+  ufonormalizer,
+  xmldiff,
+  defcon,
+  ufo2ft,
+  skia-pathops,
 }:
 
 buildPythonPackage rec {
   pname = "glyphslib";
-  version = "6.2.5";
+  version = "6.7.1";
 
   format = "pyproject";
 
@@ -24,17 +25,15 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "glyphsLib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-El2hRY+ELzdW/Bv34JURsisRr74MEv19sFt9tWFHIes=";
+    hash = "sha256-mUwbUGLhxwoYEwjbT558rTA8dtWxQXyqWYNEVy/WpIU=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     fonttools
     openstep-plist
-    ufoLib2
+    ufolib2
     unicodedata2
     ufonormalizer
     xmldiff
@@ -59,4 +58,3 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.BarinovMaxim ];
   };
 }
-

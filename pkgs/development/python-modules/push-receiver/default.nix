@@ -1,15 +1,17 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, appdirs
-, http-ece
-, oscrypto
-, protobuf
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  appdirs,
+  http-ece,
+  oscrypto,
+  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "push-receiver";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

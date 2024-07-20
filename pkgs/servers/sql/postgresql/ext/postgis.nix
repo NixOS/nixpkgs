@@ -5,38 +5,46 @@
 , postgresql
 , geos
 , proj
-, gdal
+, gdalMinimal
 , json_c
 , pkg-config
 , file
 , protobufc
 , libiconv
+, pcre2
 , nixosTests
+, jitSupport
+, llvm
 }:
+
+let
+  gdal = gdalMinimal;
+in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.3.3";
+  version = "3.4.2";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-dOs1bj+F8UIzeRATNgiBtnSPeAgcxoj/nW8PZzp2LRM=";
+    sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
+  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
+  env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
+
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev} --disable-extension-upgrades-install"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
@@ -72,8 +80,8 @@ stdenv.mkDerivation rec {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber wolfgangwalther ];
     inherit (postgresql.meta) platforms;
   };
 }

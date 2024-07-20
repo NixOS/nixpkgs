@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , callPackage
+, fetchgit
 , fetchurl
-, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -14,6 +14,7 @@
 , gnugrep
 , gnused
 , gsl
+, gtest
 , lapack
 , libX11
 , libXpm
@@ -23,7 +24,7 @@
 , libGL
 , libxcrypt
 , libxml2
-, llvm_9
+, llvm_16
 , lsof
 , lz4
 , xz
@@ -39,7 +40,6 @@
 , xxHash
 , zlib
 , zstd
-, libAfterImage
 , giflib
 , libjpeg
 , libtiff
@@ -52,26 +52,11 @@
 , Cocoa
 , CoreSymbolication
 , OpenGL
-, noSplash ? false
 }:
-
-let
-
-  _llvm_9 = llvm_9.overrideAttrs (prev: {
-    patches = (prev.patches or [ ]) ++ [
-      (fetchpatch {
-        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
-        stripLen = 3;
-        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
-      })
-    ];
-  });
-
-in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.10";
+  version = "6.32.02";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -79,7 +64,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
+    hash = "sha256-PQ92vwWFfhgHzPssngFPUlvLYl+UojcLRV9LFklhYC0=";
+  };
+
+  clad_src = fetchgit {
+    url = "https://github.com/vgvassilev/clad";
+    # Make sure that this is the same tag as in the ROOT build files!
+    # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
+    rev = "refs/tags/v1.5";
+    hash = "sha256-s0DbHfLthv51ZICnTd30O4qG/DyZPk5tADeu3bBRoOw=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -97,14 +90,14 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    _llvm_9
+    llvm_16
     lz4
     xz
     gsl
+    gtest
     openblas
     openssl
     xxHash
-    libAfterImage
     giflib
     libjpeg
     libtiff
@@ -122,26 +115,31 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
-    # Fix build against Python 3.11
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
-      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
-    })
   ];
 
-  # Fix build against vanilla LLVM 9
-  postPatch = ''
-    sed \
-      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/i#define private protected' \
-      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/a#undef private' \
-      -i interpreter/cling/lib/Interpreter/IncrementalJIT.h
-  '';
-
   preConfigure = ''
-    rm -rf builtins/*
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
+
+    # We have to bypass the connection check, because it would disable clad.
+    # This should probably be fixed upstream with a flag to disable the
+    # connectivity check!
+    substituteInPlace CMakeLists.txt \
+      --replace 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
+    # Make sure that clad is not downloaded when building
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+    # Make sure that clad is finding the right llvm version
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
+
+    substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
+      --replace 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
@@ -151,78 +149,40 @@ stdenv.mkDerivation rec {
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
-  '' + lib.optionalString noSplash ''
-    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
-    substituteInPlace core/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks" ""
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks " ""
   '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
   cmakeFlags = [
-    "-Drpath=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
-    "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=OFF"
-    "-Dalien=OFF"
-    "-Dbonjour=OFF"
-    "-Dcastor=OFF"
-    "-Dchirp=OFF"
-    "-Dclad=OFF"
-    "-Ddavix=ON"
-    "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
-    "-Dfftw3=OFF"
     "-Dfitsio=OFF"
-    "-Dfortran=OFF"
     "-Dgnuinstall=ON"
-    "-Dimt=ON"
-    "-Dgfal=OFF"
-    "-Dgviz=OFF"
-    "-Dhdfs=OFF"
-    "-Dhttp=ON"
-    "-Dkrb5=OFF"
-    "-Dldap=OFF"
-    "-Dmonalisa=OFF"
     "-Dmysql=OFF"
-    "-Dodbc=OFF"
-    "-Dopengl=ON"
-    "-Doracle=OFF"
     "-Dpgsql=OFF"
-    "-Dpythia6=OFF"
-    "-Dpythia8=OFF"
-    "-Drfio=OFF"
-    "-Droot7=OFF"
     "-Dsqlite=OFF"
-    "-Dssl=ON"
-    "-Dtmva=ON"
     "-Dvdt=OFF"
-    "-Dwebgui=OFF"
-    "-Dxml=ON"
-    "-Dxrootd=ON"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
 
-  # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
-  # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --set PYTHONPATH "$out/lib" \
-        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib:${lib.makeLibraryPath [ xrootd ]}"
+        --set PYTHONPATH "$out/lib"
     done
 
     # Make ldd and sed available to the ROOT executable by prefixing PATH.
@@ -231,8 +191,7 @@ stdenv.mkDerivation rec {
         gnused # sed
         stdenv.cc # c++ ld etc.
         stdenv.cc.libc # ldd
-      ]}" \
-      --prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xrootd ]}"
+      ]}"
 
     # Patch thisroot.{sh,csh,fish}
 
@@ -240,23 +199,20 @@ stdenv.mkDerivation rec {
     # but it also need to support Bash-less POSIX shell like dash,
     # as they are mentioned in `thisroot.sh`.
 
-    # `thisroot.sh` would include commands `lsof` and `procps` since ROOT 6.28.
-    # See https://github.com/root-project/root/pull/10332
-
     patchRcPathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [
       coreutils # dirname tail
       gnugrep # grep
       gnused # sed
-      lsof # lsof # for ROOT (>=6.28)
+      lsof # lsof
       man # manpath
-      procps # ps # for ROOT (>=6.28)
+      procps # ps
       which # which
     ]}"
     patchRcPathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [
       coreutils
       gnugrep
       gnused
-      lsof # lsof # for ROOT (>=6.28)
+      lsof # lsof
       man
       which
     ]}"
@@ -266,6 +222,9 @@ stdenv.mkDerivation rec {
       which
     ]}"
   '';
+
+  # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
 
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
@@ -279,10 +238,10 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    homepage = "https://root.cern.ch/";
-    description = "A data analysis framework";
+    homepage = "https://root.cern/";
+    description = "Data analysis framework";
     platforms = platforms.unix;
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;
   };
 }

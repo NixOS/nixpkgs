@@ -108,6 +108,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+     */
+  dontCheckIf = condition: if condition then dontCheck else lib.id;
 
   /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
@@ -285,9 +290,9 @@ rec {
   /* link executables statically against haskell libs to reduce
      closure size
    */
-  justStaticExecutables = overrideCabal (drv: {
+ justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
     postFixup = drv.postFixup or "" + ''
@@ -295,6 +300,7 @@ rec {
       # Remove every directory which could have links to other store paths.
       rm -rf $out/lib $out/nix-support $out/share/doc
     '';
+    disallowGhcReference = true;
   });
 
   /* Build a source distribution tarball instead of using the source files
@@ -354,7 +360,12 @@ rec {
   /* Add a dummy command to trigger a build despite an equivalent
      earlier build that is present in the store or cache.
    */
-  triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+  triggerRebuild = i: overrideCabal (drv: {
+    postUnpack = drv.postUnpack or "" + ''
+
+      # trigger rebuild ${toString i}
+    '';
+  });
 
   /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
@@ -393,7 +404,7 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  { doCheck ? !isCross
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };
@@ -407,7 +418,9 @@ rec {
 
     self: super:
       let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
+        haskellPaths =
+          lib.filter (lib.hasSuffix ".nix")
+            (builtins.attrNames (builtins.readDir directory));
 
         toKeyVal = file: {
           name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;

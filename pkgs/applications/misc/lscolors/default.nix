@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-C7aM9jlChRwPvYnBjLbV+sfbTHDVVi6evIR5PvT9jN4=";
+    hash = "sha256-m9S8fG0c+67/msdWaN8noazEdsdLk1aswUJ+8hkjhxo=";
   };
 
-  cargoHash = "sha256-93FAEhl0WFXRq1SaoLRNDd/fy7NyDbeRFgIqUWAssQE=";
+  cargoHash = "sha256-6d/v89Yqn9FioWQTb5513kPbO9lnzBxaubfcdCzwUP4=";
 
   buildFeatures = [ "nu-ansi-term" ];
 
@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "lscolors";
   };
 }

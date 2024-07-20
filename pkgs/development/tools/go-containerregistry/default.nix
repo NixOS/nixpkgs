@@ -1,18 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let bins = [ "crane" "gcrane" ]; in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.15.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bva962laaHJAHwiQAMPtOBkwqce1ww+sBGkjV1TjrwQ=";
+    sha256 = "sha256-qImLnWDw7G4GPn+hj0gbgKwHAWQtXFdtBnEc9oxGcCw=";
   };
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/crane" "cmd/gcrane" ];
 
@@ -29,7 +31,14 @@ buildGoModule rec {
         mv $out/bin/${bin} ''$${bin}/bin/ &&
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
-    );
+    ) + ''
+      for cmd in crane gcrane; do
+        installShellCompletion --cmd "$cmd" \
+          --bash <($GOPATH/bin/$cmd completion bash) \
+          --fish <($GOPATH/bin/$cmd completion fish) \
+          --zsh <($GOPATH/bin/$cmd completion zsh)
+      done
+    '';
 
   # NOTE: no tests
   doCheck = false;

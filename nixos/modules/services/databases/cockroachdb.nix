@@ -35,13 +35,13 @@ let
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Address to bind to for ${descr}";
+      description = "Address to bind to for ${descr}";
     };
 
     port = mkOption {
       type = types.port;
       default = defaultPort;
-      description = lib.mdDoc "Port to bind to for ${descr}";
+      description = "Port to bind to for ${descr}";
     };
   };
 in
@@ -49,7 +49,7 @@ in
 {
   options = {
     services.cockroachdb = {
-      enable = mkEnableOption (lib.mdDoc "CockroachDB Server");
+      enable = mkEnableOption "CockroachDB Server";
 
       listen = addressOption "intra-cluster communication" 26257;
 
@@ -58,7 +58,7 @@ in
       locality = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           An ordered, comma-separated list of key-value pairs that describe the
           topography of the machine. Topography might include country,
           datacenter or rack designations. Data is automatically replicated to
@@ -80,43 +80,43 @@ in
       join = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "The addresses for connecting the node to a cluster.";
+        description = "The addresses for connecting the node to a cluster.";
       };
 
       insecure = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Run in insecure mode.";
+        description = "Run in insecure mode.";
       };
 
       certsDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "The path to the certificate directory.";
+        description = "The path to the certificate directory.";
       };
 
       user = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = lib.mdDoc "User account under which CockroachDB runs";
+        description = "User account under which CockroachDB runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = lib.mdDoc "User account under which CockroachDB runs";
+        description = "User account under which CockroachDB runs";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open firewall ports for cluster communication by default";
+        description = "Open firewall ports for cluster communication by default";
       };
 
       cache = mkOption {
         type = types.str;
         default = "25%";
-        description = lib.mdDoc ''
+        description = ''
           The total size for caches.
 
           This can be a percentage, expressed with a fraction sign or as a
@@ -132,7 +132,7 @@ in
       maxSqlMemory = mkOption {
         type = types.str;
         default = "25%";
-        description = lib.mdDoc ''
+        description = ''
           The maximum in-memory storage capacity available to store temporary
           data for SQL queries.
 
@@ -145,13 +145,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.cockroachdb;
-        defaultText = literalExpression "pkgs.cockroachdb";
-        description = lib.mdDoc ''
-          The CockroachDB derivation to use for running the service.
-
+      package = mkPackageOption pkgs "cockroachdb" {
+        extraDescription = ''
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
@@ -162,7 +157,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra CLI arguments passed to {command}`cockroach start`.
           For the full list of supported arguments, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
         '';

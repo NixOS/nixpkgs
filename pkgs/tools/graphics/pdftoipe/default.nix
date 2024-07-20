@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  sourceRoot = "source/pdftoipe";
+  sourceRoot = "${src.name}/pdftoipe";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program that tries to convert arbitrary PDF documents to Ipe files";
+    description = "Program that tries to convert arbitrary PDF documents to Ipe files";
     homepage = "https://github.com/otfried/ipe-tools";
     changelog = "https://github.com/otfried/ipe-tools/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ yrd ];
+    mainProgram = "pdftoipe";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "telegram-bot-api";
-  version = "5.7";
+  version = "7.3";
 
   src = fetchFromGitHub {
     repo = "telegram-bot-api";
     owner = "tdlib";
-    rev = "c57b04c4c8c4e8d8bb6fdd0bd3bfb5b93b9d8f05";
-    sha256 = "sha256-WetzX8GBdwQAnnZjek+W4v+QN1aUFdlvs+Jv6n1B+eY=";
+    rev = "5951bfbab8b1274437c613c1c48d91be2a050371";
+    hash = "sha256-5aNZqP4K+zP7q1+yllr6fysEcewhh/V9Vl6GXQolanI=";
     fetchSubmodules = true;
   };
 
@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     description = "Telegram Bot API server";
     homepage = "https://github.com/tdlib/telegram-bot-api";
     license = licenses.boost;
-    maintainers = with maintainers; [ Anillc ];
+    maintainers = with maintainers; [ Anillc Forden ];
     platforms = platforms.all;
+    mainProgram = "telegram-bot-api";
   };
 }

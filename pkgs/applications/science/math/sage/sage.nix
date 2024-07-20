@@ -47,14 +47,16 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = sage-tests;
     quicktest = sage-tests.override { longTests = false; timeLimit = 600; }; # as many tests as possible in ~10m
-    doc = sagedoc;
     lib = sage-with-env.env.lib;
     with-env = sage-with-env;
     kernelspec = jupyter-kernel-definition;
+  } // lib.optionalAttrs withDoc {
+    doc = sagedoc;
   };
 
   meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
+    mainProgram = "sage";
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;

@@ -1,13 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "systembridge";
   version = "2.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "timmo001";

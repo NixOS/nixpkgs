@@ -1,8 +1,16 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pytest, cryptography, transitions }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytest,
+  cryptography,
+  transitions,
+}:
 
 buildPythonPackage rec {
   pname = "dissononce";
   version = "0.34.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tgalal";
@@ -16,11 +24,14 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) py.test tests/
   '';
 
-  propagatedBuildInputs = [ cryptography transitions ];
+  propagatedBuildInputs = [
+    cryptography
+    transitions
+  ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/dissononce/";
     license = licenses.mit;
-    description = "A python implementation for Noise Protocol Framework";
+    description = "Python implementation for Noise Protocol Framework";
   };
 }

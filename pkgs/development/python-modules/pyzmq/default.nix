@@ -1,45 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py
-, pytestCheckHook
-, python
-, pythonOlder
-, tornado
-, zeromq
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+
+  # build-system
+  cffi,
+  cython,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  scikit-build-core,
+
+  # checks
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  tornado,
+  zeromq,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "24.0.1";
-  format = "setuptools";
+  version = "26.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IW9dfbtnFmdZ5ZsEebyoK4rPm+1gFbUmuOsQFD+wjnc=";
+    hash = "sha256-26fZ8uBH36K8o7AfT4SqUkZyUgPWKE43kPLKFfumtAo=";
   };
 
-  buildInputs = [
-    zeromq
-  ];
+  build-system = [
+    cmake
+    ninja
+    packaging
+    pathspec
+    scikit-build-core
+  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
 
-  propagatedBuildInputs = [
-    py
-  ];
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [ zeromq ];
+
+  dependencies = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
     tornado
+    pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "zmq"
-  ];
+  pythonImportsCheck = [ "zmq" ];
 
   pytestFlagsArray = [
     "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
+    # pytest.ini is missing in pypi's sdist
+    # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
+    "--asyncio-mode auto"
+    "--ignore=$out/lib/python3.12/site-packages/zmq/tests/test_mypy.py"
   ];
 
   disabledTests = [
@@ -62,7 +84,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
+    license = with licenses; [
+      bsd3 # or
+      lgpl3Only
+    ];
     maintainers = with maintainers; [ ];
   };
 }

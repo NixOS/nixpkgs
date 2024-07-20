@@ -15,33 +15,9 @@
 , crossOverlays ? [ ]
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
-    let
-      fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/aarch64/20acd4c4f14040485f40e55c0a76c186aa8ca4f3/${file}";
-        inherit (localSystem) system;
-        inherit sha256 executable;
-      }; in
-    {
-      sh = fetch { file = "sh"; sha256 = "17m3xrlbl99j3vm7rzz3ghb47094dyddrbvs2a6jalczvmx7spnj"; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "1khs8s5klf76plhlvlc1ma838r8pc1qigk9f5bdycwgbn0nx240q"; };
-      mkdir = fetch { file = "mkdir"; sha256 = "1m9nk90paazl93v43myv2ay68c1arz39pqr7lk5ddbgb177hgg8a"; };
-      cpio = fetch { file = "cpio"; sha256 = "17pxq61yjjvyd738fy9f392hc9cfzkl612sdr9rxr3v0dgvm8y09"; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1v2332k33akm6mrm4bj749rxnnmc2pkbgcslmd0bbkf76bz2ildy"; executable = false; };
-    }
+    import ./bootstrap-files/aarch64-apple-darwin.nix
   else
-    let
-      fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/c253216595572930316f2be737dc288a1da22558/${file}";
-        inherit (localSystem) system;
-        inherit sha256 executable;
-      }; in
-    {
-      sh = fetch { file = "sh"; sha256 = "sha256-igMAVEfumFv/LUNTGfNi2nSehgTNIP4Sg+f3L7u6SMA="; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
-      mkdir = fetch { file = "mkdir"; sha256 = "sha256-VddFELwLDJGNADKB1fWwWPBtIAlEUgJv2hXRmC4NEeM="; };
-      cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
-    }
+    import ./bootstrap-files/x86_64-apple-darwin.nix
 }:
 
 assert crossSystem == localSystem;
@@ -49,7 +25,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  useAppleSDKLibs = localSystem.isAarch64;
+  useAppleSDKLibs = lib.versionAtLeast localSystem.darwinSdkVersion "11";
 
   commonImpureHostDeps = [
     "/bin/sh"
@@ -65,11 +41,7 @@ let
   isBuiltByBootstrapFilesCompiler =
     pkg: isFromNixpkgs pkg && isFromBootstrapFiles pkg.stdenv.cc.cc;
 
-  commonPreHook = pkgs: lib.optionalString (pkgs.darwin.system_cmds != null) ''
-    # Only use a response file on older systems with a small ARG_MAX (less than 1 MiB).
-    export NIX_CC_USE_RESPONSE_FILE=$(( "$("${lib.getBin pkgs.darwin.system_cmds}/bin/getconf" ARG_MAX)" < 1048576 ))
-    export NIX_LD_USE_RESPONSE_FILE=$NIX_CC_USE_RESPONSE_FILE
-  '' + ''
+  commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
@@ -80,10 +52,17 @@ let
     inherit system;
 
     name = "bootstrap-tools";
-    builder = bootstrapFiles.sh; # Not a filename! Attribute 'sh' on bootstrapFiles
-    args = if localSystem.isAarch64 then [ ./unpack-bootstrap-tools-aarch64.sh ] else [ ./unpack-bootstrap-tools.sh ];
+    builder = "${bootstrapFiles.unpack}/bin/bash";
 
-    inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
+    args = [
+      "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
+        bootstrapFiles.bootstrapTools
+    ];
+
+    PATH = lib.makeBinPath [
+      (placeholder "out")
+      bootstrapFiles.unpack
+    ];
 
     __impureHostDeps = commonImpureHostDeps;
   } // lib.optionalAttrs config.contentAddressedByDefault {
@@ -104,12 +83,11 @@ let
         nativeTools = false;
         nativeLibc = false;
 
-        buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
-          inherit (prevStage) stdenv;
-        };
+        expand-response-params = lib.optionalString
+          (prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null")
+          prevStage.expand-response-params;
 
         extraPackages = [
-          prevStage.llvmPackages.libcxxabi
           prevStage.llvmPackages.compiler-rt
         ];
 
@@ -146,6 +124,7 @@ let
         inherit (prevStage) coreutils gnugrep;
 
         stdenvNoCC = prevStage.ccWrapperStdenv;
+        runtimeShell = prevStage.ccWrapperStdenv.shell;
       };
 
       bash = prevStage.bash or bootstrapTools;
@@ -157,16 +136,18 @@ let
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        inherit config extraNativeBuildInputs;
+        inherit config;
 
         extraBuildInputs = [ prevStage.darwin.CF ];
+        extraNativeBuildInputs = extraNativeBuildInputs
+          ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
         preHook = lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
         '' + ''
-          ${commonPreHook prevStage}
+          ${commonPreHook}
           ${extraPreHook}
         '' + lib.optionalString (prevStage.darwin ? locale) ''
           export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
@@ -187,8 +168,16 @@ let
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
+        # Using the bootstrap tools curl for fetchers allows the stdenv bootstrap to avoid
+        # having a dependency on curl, allowing curl to be updated without triggering a
+        # new stdenv bootstrap on Darwin.
         overrides = self: super: (overrides self super) // {
           fetchurl = thisStdenv.fetchurlBoot;
+          fetchpatch = super.fetchpatch.override { inherit (self) fetchurl; };
+          fetchgit = super.fetchgit.override {
+            git = super.git.override { curl = bootstrapTools; };
+          };
+          fetchzip = super.fetchzip.override { inherit (self) fetchurl; };
         };
       };
 
@@ -210,13 +199,13 @@ in
     cpio = null;
 
     darwin = {
+      apple_sdk.sdkRoot = null;
       binutils = null;
       binutils-unwrapped = null;
       cctools = null;
       print-reexports = null;
       rewrite-tbd = null;
       sigtool = null;
-      system_cmds = null;
       CF = null;
       Libsystem = null;
     };
@@ -225,7 +214,6 @@ in
       clang-unwrapped = null;
       libllvm = null;
       libcxx = null;
-      libcxxabi = null;
       compiler-rt = null;
     };
   })
@@ -245,47 +233,130 @@ in
       # stage should only access the stage that came before it.
       ccWrapperStdenv = self.stdenv;
 
-      bash = bootstrapTools;
-
-      coreutils = bootstrapTools;
-      gnugrep = bootstrapTools;
-
-      pbzx = bootstrapTools;
-      cpio = self.stdenv.mkDerivation {
-        name = "bootstrap-stage0-cpio";
-        buildCommand = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapFiles.cpio} $out/bin/cpio
-        '';
-        passthru.isFromBootstrapFiles = true;
+      bash = bootstrapTools // {
+        shellPath = "/bin/bash";
       };
 
-      darwin = super.darwin.overrideScope (selfDarwin: _: {
-        binutils-unwrapped = bootstrapTools // {
-          version = "boot";
-        };
+      coreutils = bootstrapTools;
+      cpio = bootstrapTools;
+      gnugrep = bootstrapTools;
+      pbzx = bootstrapTools;
 
-        binutils = (import ../../build-support/bintools-wrapper) {
+      darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
+        # Prevent CF from being propagated to the initial stdenv. Packages that require it
+        # will have to manually add it to their build inputs.
+        CF = null;
+
+        binutils = super.wrapBintoolsWith {
           name = "bootstrap-stage0-binutils-wrapper";
 
           nativeTools = false;
           nativeLibc = false;
 
-          buildPackages = { };
+          expand-response-params = "";
           libc = selfDarwin.Libsystem;
 
           inherit lib;
           inherit (self) stdenvNoCC coreutils gnugrep;
+          runtimeShell = self.stdenvNoCC.shell;
 
           bintools = selfDarwin.binutils-unwrapped;
 
           inherit (selfDarwin) postLinkSignHook signingUtils;
         };
 
-        cctools = bootstrapTools // {
-          targetPrefix = "";
+        binutils-unwrapped = (superDarwin.binutils-unwrapped.overrideAttrs (old: {
           version = "boot";
-          man = bootstrapTools;
+          passthru = (old.passthru or { }) // {
+            isFromBootstrapFiles = true;
+          };
+        })).override { enableManpages = false; };
+
+        cctools = super.stdenv.mkDerivation {
+          pname = "bootstrap-stage0-cctools";
+          version = "boot";
+
+          buildCommand = ''
+            declare -a cctools=(
+              ar
+              bitcode_strip
+              check_dylib
+              checksyms
+              cmpdylib
+              codesign_allocate
+              ctf_insert
+              depinfo
+              diagtest
+              ld
+              gas
+              gprof
+              install_name_tool
+              libtool
+              lipo
+              mtoc
+              mtor
+              nm
+              nmedit
+              otool
+              pagestuff
+              ranlib
+              redo_prebinding
+              seg_addr_table
+              seg_hack
+              segedit
+              size
+              strings
+              strip
+              vtool
+            )
+
+            mkdir -p "$out/bin"
+            for tool in "''${cctools[@]}"; do
+              toolsrc="${bootstrapTools}/bin/$tool"
+              if [ -e "$toolsrc" ]; then
+                ln -s "$toolsrc" "$out/bin"
+              fi
+            done
+
+            # Copy only the required headers to avoid accidentally linking headers that belong to other packages,
+            # which can cause problems when building Libsystem in the source-based SDK.
+            declare -a machohdrs=(
+              arch.h
+              fat.h
+              fixup-chains.h
+              getsect.h
+              ldsyms.h
+              loader.h
+              nlist.h
+              ranlib.h
+              reloc.h
+              stab.h
+              swap.h
+              arm
+              arm64
+              hppa
+              i386
+              i860
+              m68k
+              m88k
+              ppc
+              sparc
+              x86_64
+            )
+
+            mkdir -p "$out/include/mach-o"
+            for header in "''${machohdrs[@]}"; do
+              machosrc="${bootstrapTools}/include-Libsystem/mach-o/$header"
+              if [ -e "$machosrc" ]; then
+                cp -r "$machosrc" "$out/include/mach-o/$header"
+              fi
+            done
+          '';
+
+          passthru = {
+            isFromBootstrapFiles = true;
+            targetPrefix = "";
+          };
         };
 
         locale = self.stdenv.mkDerivation {
@@ -300,37 +371,7 @@ in
         rewrite-tbd = bootstrapTools;
 
         sigtool = bootstrapTools;
-
-        # The bootstrap only needs `getconf` from system_cmds, and it only needs to be able to
-        # query `ARG_MAX`. Using a small value here should be fine for the initial stage 1 build.
-        system_cmds = self.stdenv.mkDerivation {
-          name = "bootstrap-stage0-system_cmds";
-          buildCommand = ''
-            mkdir -p "$out/bin"
-            cat <<block > "$out/bin/getconf"
-            #!${bootstrapTools}/bin/bash
-            case "\$1" in
-              ARG_MAX)
-                echo "262144"
-                ;;
-              *)
-                exit 1
-            esac
-            block
-            chmod a+x "$out/bin/getconf"
-          '';
-          passthru.isFromBootstrapFiles = true;
-        };
       } // lib.optionalAttrs (! useAppleSDKLibs) {
-        CF = self.stdenv.mkDerivation {
-          name = "bootstrap-stage0-CF";
-          buildCommand = ''
-            mkdir -p $out/Library/Frameworks
-            ln -s ${bootstrapTools}/Library/Frameworks/CoreFoundation.framework $out/Library/Frameworks
-          '';
-          passthru.isFromBootstrapFiles = true;
-        };
-
         Libsystem = self.stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
@@ -371,21 +412,33 @@ in
                 ln -s ${bootstrapTools}/lib/clang $out/lib
                 ln -s ${bootstrapTools}/include   $out
               '';
-              passthru.isFromBootstrapFiles = true;
+              passthru = {
+                isFromBootstrapFiles = true;
+                hardeningUnsupportedFlags = [
+                  "fortify3"
+                  "stackclashprotection"
+                  "zerocallusedregs"
+                ];
+              };
             };
-            clang-unwrapped = selfTools.libclang;
             libllvm = self.stdenv.mkDerivation {
               name = "bootstrap-stage0-llvm";
               outputs = [ "out" "lib" ];
               buildCommand = ''
                 mkdir -p $out/bin $out/lib
                 ln -s $out $lib
-                ln -s ${bootstrapTools}/bin/strip    $out/bin/llvm-strip
+                for tool in ${toString super.darwin.binutils-unwrapped.llvm_cmds}; do
+                  cctoolsTool=''${tool//-/_}
+                  toolsrc="${bootstrapTools}/bin/$cctoolsTool"
+                  if [ -e "$toolsrc" ]; then
+                    ln -s "$toolsrc" $out/bin/llvm-$tool
+                  fi
+                done
+                ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
                 ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
               '';
               passthru.isFromBootstrapFiles = true;
             };
-            llvm = selfTools.libllvm;
           });
           libraries = super.llvmPackages.libraries.extend (_: _: {
             libcxx = self.stdenv.mkDerivation {
@@ -397,18 +450,6 @@ in
               '';
               passthru = {
                 isLLVM = true;
-                cxxabi = self.llvmPackages.libcxxabi;
-                isFromBootstrapFiles = true;
-              };
-            };
-            libcxxabi = self.stdenv.mkDerivation {
-              name = "bootstrap-stage0-libcxxabi";
-              buildCommand = ''
-                mkdir -p $out/lib
-                ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib
-              '';
-              passthru = {
-                libName = "c++abi";
                 isFromBootstrapFiles = true;
               };
             };
@@ -435,33 +476,26 @@ in
     '';
   })
 
-  # This stage is primarily responsible for building the linker and setting up versions of
-  # certain dependencies needed by the rest of the build process. It is necessary to rebuild the
-  # linker because the `compiler-rt` build process checks the version and attempts to manually
-  # run `codesign` if it detects a version of `ld64` it considers too old. If that happens, the
-  # build process will fail for a few different reasons:
-  #  - sigtool is too old and does not accept the `--sign` argument;
-  #  - sigtool is new enough to accept the `--sign` argument, but it aborts when it is invoked on a
-  #    binary that is already signed; or
-  #  - compiler-rt attempts to invoke `codesign` on x86_64-darwin, but `sigtool` is not currently
-  #    part of the x86_64-darwin bootstrap tools.
-  #
-  # This stage also builds CF and Libsystem to simplify assertions and assumptions for later by
-  # making sure both packages are present on x86_64-darwin and aarch64-darwin.
+  # This stage is primarily responsible for setting up versions of certain dependencies needed
+  # by the rest of the build process. This stage also builds CF and Libsystem to simplify assertions
+  # and assumptions for later by making sure both packages are present on x86_64-darwin and aarch64-darwin.
   (prevStage:
     # previous stage0 stdenv:
-    assert lib.all isFromBootstrapFiles (with prevStage; [ bash coreutils cpio gnugrep pbzx ]);
+    assert lib.all isFromBootstrapFiles (
+      with prevStage; [ bash coreutils cpio gnugrep ] ++ lib.optionals useAppleSDKLibs [ pbzx ]
+    );
 
     assert lib.all isFromBootstrapFiles (with prevStage.darwin; [
-      binutils-unwrapped cctools print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isFromBootstrapFiles (with prevStage.darwin; [ CF Libsystem ]);
-    assert    useAppleSDKLibs  -> lib.all        isFromNixpkgs (with prevStage.darwin; [ CF Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all isFromBootstrapFiles (with prevStage.darwin; [ Libsystem ]);
+    assert    useAppleSDKLibs  -> lib.all        isFromNixpkgs (with prevStage.darwin; [ Libsystem ]);
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
+    assert (with prevStage.darwin; (! useAppleSDKLibs) -> CF == null);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     stageFun prevStage {
@@ -471,40 +505,69 @@ in
       inherit (prevStage) ccWrapperStdenv
         coreutils gnugrep;
 
-      cmake = super.cmakeMinimal;
+      binutils-unwrapped = builtins.throw "nothing in the bootstrap should depend on GNU binutils";
 
-      curl = super.curlMinimal;
+      # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
+      cmake = self.cmakeMinimal;
+      cmakeMinimal = super.cmakeMinimal.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ self.darwin.CF ];
+      });
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
+
+      # Use libconvReal to break an infinite recursion. It will be dropped in the next stage.
+      libiconv = super.libiconvReal;
 
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
       ninja = super.ninja.override { buildDocs = false; };
 
-      python3 = super.python3Minimal;
+      # Use this stage’s CF to build Python. It’s required, but it can’t be included in the stdenv.
+      python3 = self.python3Minimal;
+      python3Minimal = (super.python3Minimal.override {
+        self = self.python3Minimal;
+      }).overrideAttrs (old: {
+        buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
+      });
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
-        inherit (prevStage.darwin) system_cmds;
+        inherit (prevStage.darwin) cctools;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
+
+        # Use this stage’s CF to build configd. It’s required, but it can’t be included in the stdenv.
+        configd = superDarwin.configd.overrideAttrs (old: {
+          buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
+        });
 
         signingUtils = prevStage.darwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
         };
 
+        postLinkSignHook = prevStage.darwin.postLinkSignHook.override {
+          inherit (selfDarwin) sigtool;
+        };
+
+        # Rewrap binutils with the real Libsystem
         binutils = superDarwin.binutils.override {
           inherit (self) coreutils;
           inherit (selfDarwin) postLinkSignHook signingUtils;
 
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
+          # TODO(@sternenseemann): can this be removed?
+          runtimeShell = "${bootstrapTools}/bin/bash";
         };
 
+        # Avoid building unnecessary Python dependencies due to building LLVM manpages.
         binutils-unwrapped = superDarwin.binutils-unwrapped.override {
           inherit (selfDarwin) cctools;
+          enableManpages = false;
         };
-
-        cctools = selfDarwin.cctools-port;
       });
 
       llvmPackages = super.llvmPackages // (
@@ -513,7 +576,7 @@ in
             inherit (prevStage.llvmPackages) clang-unwrapped libclang libllvm llvm;
           });
           libraries = super.llvmPackages.libraries.extend (_: _: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -536,31 +599,31 @@ in
     '';
   })
 
-  # Build sysctl, system_cmds and Python for use by LLVM’s check phase. These must be built in their
-  # own stage, or an infinite recursion results on x86_64-darwin when using the source-based SDK.
+  # Build sysctl for use by LLVM’s check phase. It must be built separately to avoid an infinite recursion.
   (prevStage:
     # previous stage1 stdenv:
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
+      autoconf automake bash bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion texinfo unzip which xz zlib zstd
     ]);
 
+    assert lib.all isFromBootstrapFiles (with prevStage.darwin; [ cctools ]);
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
+      locale libtapi print-reexports rewrite-tbd sigtool
     ]);
-    assert lib.all isFromBootstrapFiles (with prevStage.darwin; [ system_cmds ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == "boot";
@@ -571,40 +634,34 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
-        libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
+        libedit libffi libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
         zlib zstd;
 
-      # Support for the SystemConfiguration framework is required to run the LLVM tests, but trying
-      # to override python3Minimal does not appear to work.
-      python3 = (super.python3.override {
-        inherit (self) libffi;
-        inherit (self.darwin) configd;
-        openssl = null;
-        readline = null;
-        ncurses = null;
-        gdbm = null;
-        sqlite = null;
-        tzdata = null;
-        stripConfig = true;
-        stripIdlelib = true;
-        stripTests = true;
-        stripTkinter = true;
-        rebuildBytecode = false;
-        stripBytecode = true;
-        includeSiteCustomize = false;
-        enableOptimizations = false;
+      # Avoid pulling in openldap just to run Meson’s tests.
+      meson = super.meson.overrideAttrs {
+        doInstallCheck = false;
+      };
+
+      # The bootstrap Python needs its own `pythonAttr` to make sure the override works properly.
+      python3 = self.python3-bootstrap;
+      python3-bootstrap = super.python3.override {
+        self = self.python3-bootstrap;
+        pythonAttr = "python3-bootstrap";
         enableLTO = false;
-        mimetypesSupport = false;
-      }).overrideAttrs (_: { pname = "python3-minimal-scproxy"; });
+      };
 
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
-          CF Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
+          CF sdkRoot Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
           launchd libclosure libdispatch libobjc locale objc4 postLinkSignHook
           print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -614,7 +671,7 @@ in
             clang = prevStage.stdenv.cc;
           });
           libraries = super.llvmPackages.libraries.extend (_: _: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -643,47 +700,54 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
-      ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
-      libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
+      atf autoconf automake bash bison brotli cmake cpio cyrus_sasl db
+      ed expat flex gettext gmp groff icu kyua libedit libffi libiconv libidn2 libkrb5 libssh2
+      libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zlib zstd
     ]);
 
+    assert lib.all isFromBootstrapFiles (with prevStage.darwin; [ cctools ]);
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
-
-    assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-port;
 
     stageFun prevStage {
     name = "bootstrap-stage-xclang";
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
-        libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
+        atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        cpio cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
+        libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
 
-      # Switch from cctools-port to cctools-llvm now that LLVM has been built.
-      darwin = super.darwin.overrideScope (_: superDarwin: {
+      darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           CF Libsystem configd darwin-stubs dyld launchd libclosure libdispatch libobjc
-          locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool
-          system_cmds;
+          locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
+
+        binutils = superDarwin.binutils.override {
+          inherit (prevStage) expand-response-params;
+          libc = selfDarwin.Libsystem;
+        };
 
         # Avoid building unnecessary Python dependencies due to building LLVM manpages.
-        cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
+        binutils-unwrapped = superDarwin.binutils-unwrapped.override { enableManpages = false; };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -701,23 +765,19 @@ in
             nixSupport.cc-ldflags = [ "-lSystem" ];
           });
 
+          tools = super.llvmPackages.tools.extend (selfTools: superTools: {
+            # LLVM’s check phase takes a while to run, so disable it in the first LLVM build to speed up the bootstrap.
+            libllvm = superTools.libllvm.override { doCheck = false; };
+          });
+
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
             compiler-rt = null;
             libcxx = superLib.libcxx.override ({
-              inherit (selfLib) libcxxabi;
               stdenv = libcxxBootstrapStdenv;
             });
-            libcxxabi = superLib.libcxxabi.override {
-              stdenv = libcxxBootstrapStdenv;
-            }
-            # Setting `standalone = true` is only needed with older verions of LLVM. Newer ones
-            # automatically do what is necessary to bootstrap lib++abi.
-            // lib.optionalAttrs (builtins.any (v: llvmMajor == v) [ "7" "11" "12" "13" ]) {
-              standalone = true;
-            };
           });
         in
-        { inherit libraries; } // libraries
+        { inherit tools libraries; } // tools // libraries
       );
     };
 
@@ -737,32 +797,31 @@ in
   (prevStage:
     # previous stage-xclang stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
-      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libtool m4 ninja
+      atf autoconf automake bash bison cmake cmakeMinimal coreutils cpio
+      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libtool m4 meson ninja
       openbsm openldap openpam openssh patchutils pbzx perl pkg-config.pkg-config python3
       python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which xz
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      brotli curl libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
+      brotli libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
       nghttp2 openssl zlib zstd
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
     assert prevStage.llvmPackages.compiler-rt == null;
-
-    assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-port;
 
     stageFun prevStage {
 
@@ -770,9 +829,9 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
-        libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
+        atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
+        libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
         zlib zstd;
@@ -786,7 +845,11 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           CF binutils-unwrapped cctools configd darwin-stubs launchd libobjc libtapi locale
-          objc4 print-reexports rewrite-tbd signingUtils sigtool system_cmds;
+          objc4 print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -796,7 +859,7 @@ in
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -812,7 +875,6 @@ in
         in
         self.overrideCC stdenvNoCF (self.llvmPackages.clangNoCompilerRtWithLibc.override {
           inherit (self.llvmPackages) libcxx;
-          extraPackages = [ self.llvmPackages.libcxxabi ];
         });
     };
 
@@ -826,7 +888,7 @@ in
     '';
   })
 
-  # This stage rebuilds CF and compiler-rt.
+  # This stage rebuilds CF, compiler-rt, and the sdkRoot derivation.
   #
   # CF requires:
   # - aarch64-darwin: libobjc (due to being apple_sdk.frameworks.CoreFoundation instead of swift-corefoundation)
@@ -834,9 +896,9 @@ in
   (prevStage:
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-      cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
-      libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
+      atf autoconf automake bison brotli cmake cmakeMinimal coreutils
+      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libidn2
+      libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
     ]);
@@ -848,21 +910,20 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
     assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped  dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
     assert prevStage.llvmPackages.compiler-rt == null;
-
-    assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
 
     stageFun prevStage {
 
@@ -870,9 +931,9 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
-        cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
-        libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
+        atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
+        cyrus_sasl db ed expat flex gettext gmp gnugrep groff kyua libedit libidn2 libkrb5
+        libssh2 libtool libunistring m4 meson ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
         sqlite subversion sysctl texinfo unzip which xz zstd;
 
@@ -882,36 +943,30 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           Libsystem configd darwin-stubs launchd locale print-reexports rewrite-tbd
-          signingUtils sigtool system_cmds;
+          signingUtils sigtool;
 
         # Rewrap binutils so it uses the rebuilt Libsystem.
         binutils = superDarwin.binutils.override {
-          buildPackages = {
-            inherit (prevStage) stdenv;
-          };
+          inherit (prevStage) expand-response-params;
           libc = selfDarwin.Libsystem;
         } // {
           passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
         };
-
-        # Avoid building unnecessary Python dependencies due to building LLVM manpages.
-        cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
       });
 
       llvmPackages = super.llvmPackages // (
         let
           tools = super.llvmPackages.tools.extend (_: _: {
-            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang libllvm llvm;
+            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang lld libllvm llvm;
             clang = prevStage.stdenv.cc;
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) libcxx;
 
             # Make sure compiler-rt is linked against the CF from this stage, which can be
             # propagated to the final stdenv. CF is required by ASAN.
             compiler-rt = superLib.compiler-rt.override ({
-              inherit (selfLib) libcxxabi;
               inherit (self.llvmPackages) libllvm;
               stdenv = self.stdenv.override {
                 extraBuildInputs = [ self.darwin.CF ];
@@ -939,8 +994,6 @@ in
           bintools = self.llvmPackages.clangNoCompilerRtWithLibc.bintools.override {
             libc = self.darwin.Libsystem;
           };
-
-          extraPackages = [ self.llvmPackages.libcxxabi ];
         });
     };
 
@@ -956,38 +1009,37 @@ in
 
   # Rebuild LLVM with LLVM. This stage also rebuilds certain dependencies needed by LLVM.
   #
-  # LLVM requires: libcxx libcxxabi libffi libiconv libxml2 ncurses zlib
+  # LLVM requires: libcxx libffi libiconv libxml2 ncurses zlib
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
-      libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
+      libunistring m4 meson ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zstd
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped icu libffi libiconv libxml2 zlib
+      bash icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      locale print-reexports rewrite-tbd sigtool system_cmds
+      locale print-reexports rewrite-tbd sigtool
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools libtapi
+      cctools libtapi
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
-    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ CF Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
-
-    assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
 
     stageFun prevStage {
 
@@ -996,28 +1048,32 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
-        libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
+        libidn2 libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
 
         # CF dependencies - don’t rebuild them.
-        icu libiconv libxml2 zlib;
+        icu libiconv libiconv-darwin libxml2 zlib;
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
-          CF Libsystem binutils binutils-unwrapped cctools cctools-llvm cctools-port configd
+          CF Libsystem binutils binutils-unwrapped cctools cctools-port configd
           darwin-stubs dyld launchd libclosure libdispatch libobjc libtapi locale objc4
-          postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool system_cmds;
+          postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
         let
           libraries = super.llvmPackages.libraries.extend (_: _: {
-           inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+           inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit libraries; } // libraries
@@ -1039,34 +1095,33 @@ in
   (prevStage:
     # previous stage3 stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
-      libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
+      libunistring m4 meson nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
       perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
       sysctl.provider texinfo unzip which xz zstd
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped icu libffi libiconv libxml2 zlib
+      bash icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      locale print-reexports rewrite-tbd sigtool system_cmds
+      locale print-reexports rewrite-tbd sigtool
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools libtapi
+      cctools libtapi
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
-    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ CF Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
-
-    assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
 
     stageFun prevStage {
 
@@ -1074,35 +1129,58 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff
-        libedit libtool m4 ninja openldap openssh patchutils pbzx perl pkg-config python3
-        python3Minimal scons serf sqlite subversion sysctl texinfo unzip which
+        autoconf automake bash bison cmake cmakeMinimal cyrus_sasl db expat flex groff
+        libedit libtool m4 meson ninja openldap openssh patchutils perl pkg-config python3 scons
+        serf sqlite subversion sysctl texinfo unzip which
 
         # CF dependencies - don’t rebuild them.
         icu
 
         # LLVM dependencies - don’t rebuild them.
-        libffi libiconv libxml2 ncurses zlib;
+        libffi libiconv libiconv-darwin libxml2 ncurses zlib;
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
 
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
+
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
         };
 
         binutils = superDarwin.binutils.override {
-          shell = self.bash + "/bin/bash";
-
-          buildPackages = {
-            inherit (prevStage) stdenv;
-          };
+          inherit (prevStage) expand-response-params;
 
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
         };
+
+        # binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
+        # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
+        # inputs. The following set of overrides allow the LLVM documentation to be built without
+        # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
+        binutils-unwrapped = superDarwin.binutils-unwrapped.override (old: {
+          llvm-manpages = super.llvmPackages.llvm-manpages.override {
+            python3Packages = self.python3.pkgs.overrideScope (_: superPython: {
+              hatch-vcs = superPython.hatch-vcs.overrideAttrs {
+                doInstallCheck = false;
+              };
+              markdown-it-py = superPython.markdown-it-py.overrideAttrs {
+                doInstallCheck = false;
+              };
+              mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs {
+                doInstallCheck = false;
+              };
+              myst-parser = superPython.myst-parser.overrideAttrs {
+                doInstallCheck = false;
+              };
+            });
+          };
+        });
       });
 
       llvmPackages = super.llvmPackages // (
@@ -1113,12 +1191,9 @@ in
               nativeTools = false;
               nativeLibc = false;
 
-              buildPackages = {
-                inherit (prevStage) stdenv;
-              };
+              inherit (prevStage) expand-response-params;
 
               extraPackages = [
-                self.llvmPackages.libcxxabi
                 self.llvmPackages.compiler-rt
               ];
 
@@ -1153,13 +1228,11 @@ in
               inherit (self.llvmPackages) libcxx;
 
               inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
-
-              shell = self.bash + "/bin/bash";
+              inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
             };
           });
           libraries = super.llvmPackages.libraries.extend (_: _:{
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; } // tools // libraries
@@ -1185,30 +1258,30 @@ in
   (prevStage:
     # previous stage4 stdenv:
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped brotli bzip2 curl diffutils ed file findutils gawk gettext gmp
-      gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5 libssh2
-      libunistring libxml2 ncurses nghttp2 openbsm openpam openssl patch pcre xz zlib zstd
+      bash brotli bzip2 cpio diffutils ed file findutils gawk
+      gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5
+      libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch
+      pbzx pcre python3Minimal xar xz zlib zstd
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools libtapi locale print-reexports rewrite-tbd sigtool system_cmds
+      cctools libtapi locale print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all            isFromNixpkgs (with prevStage.darwin; [ CF ]);
     assert    useAppleSDKLibs  -> lib.all            isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ binutils-unwrapped dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff libedit
-      libtool m4 ninja openldap openssh patchutils pbzx perl pkg-config.pkg-config python3
-      python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which
+      autoconf automake bison cmake cmakeMinimal cyrus_sasl db expat flex groff libedit
+      libtool m4 meson ninja openldap openssh patchutils perl pkg-config.pkg-config python3 scons
+      serf sqlite subversion sysctl.provider texinfo unzip which
     ]);
-
-    assert prevStage.darwin.cctools == prevStage.darwin.cctools-llvm;
 
     let
       doSign = localSystem.isAarch64;
@@ -1226,7 +1299,8 @@ in
 
       inherit config;
 
-      preHook = (commonPreHook prevStage) + ''
+      preHook = ''
+        ${commonPreHook}
         stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
         export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
       '';
@@ -1235,7 +1309,7 @@ in
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
         prevStage.updateAutotoolsGnuConfigScriptsHook
-      ];
+      ] ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
       extraBuildInputs = [ prevStage.darwin.CF ];
 
@@ -1260,8 +1334,6 @@ in
 
       allowedRequisites = (with prevStage; [
         bash
-        binutils.bintools
-        binutils.bintools.lib
         bzip2.bin
         bzip2.out
         cc.expand-response-params
@@ -1310,8 +1382,6 @@ in
         compiler-rt.dev
         libcxx
         libcxx.dev
-        libcxxabi
-        libcxxabi.dev
         lld
         llvm
         llvm.lib
@@ -1319,12 +1389,11 @@ in
       ++ (with prevStage.darwin; [
         CF
         Libsystem
-        cctools-llvm
         cctools-port
         dyld
         libtapi
         locale
-        system_cmds
+        apple_sdk.sdkRoot
       ]
       ++ lib.optional useAppleSDKLibs [ objc4 ]
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
@@ -1334,16 +1403,20 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          bash binutils brotli bzip2 coreutils curl diffutils ed file findutils gawk gettext
-          gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
-          libunistring libxml2 ncurses nghttp2 openbsm openpam openssl patch pcre xz zlib
-          zstd;
+          bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
+          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libiconv-darwin
+          libidn2 libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam
+          openssl patch pbzx pcre python3Minimal xar xz zlib zstd;
 
-        darwin = super.darwin.overrideScope (_: _: {
+        darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)
-            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi system_cmds xnu;
+            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi rewrite-tbd xnu;
+
+          apple_sdk = superDarwin.apple_sdk // {
+            inherit (prevStage.darwin.apple_sdk) sdkRoot;
+          };
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
-          inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
+          inherit (prevStage.darwin) binutils binutils-unwrapped cctools-port;
         });
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (prevStage.llvmPackages) clang llvm;
@@ -1355,13 +1428,11 @@ in
               inherit (prevStage.llvmPackages) clang clang-unwrapped libclang libllvm llvm;
             });
             libraries = super.llvmPackages.libraries.extend (_: _: {
-              inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+              inherit (prevStage.llvmPackages) compiler-rt libcxx;
             });
           in
           { inherit tools libraries; } // tools // libraries
         );
-
-        inherit (prevStage) binutils binutils-unwrapped;
       };
     };
   })
@@ -1370,18 +1441,22 @@ in
   (prevStage:
     # previous final stage stdenv:
     assert isBuiltByNixpkgsCompiler prevStage.darwin.sigtool;
-    assert isBuiltByNixpkgsCompiler prevStage.darwin.binutils-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.darwin.print-reexports;
     assert isBuiltByNixpkgsCompiler prevStage.darwin.rewrite-tbd;
     assert isBuiltByNixpkgsCompiler prevStage.darwin.cctools;
 
     assert            isFromNixpkgs prevStage.darwin.CF;
     assert            isFromNixpkgs prevStage.darwin.Libsystem;
+    assert            isFromNixpkgs prevStage.darwin.binutils-unwrapped;
 
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libllvm;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxx;
-    assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxxabi;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.compiler-rt;
+
+    # Make sure these evaluate since they were disabled explicitly in the bootstrap.
+    assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
+    assert            isFromNixpkgs prevStage.binutils-unwrapped.src;
+
     { inherit (prevStage) config overlays stdenv; })
 ]

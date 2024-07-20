@@ -1,52 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, lockfile
-, cachecontrol
-, decorator
-, h5py
-, ipython
-, matplotlib
-, natsort
-, numpy
-, pandas
-, scipy
-, hdmedians
-, scikit-learn
-, coverage
-, python
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  oldest-supported-numpy,
+  requests,
+  decorator,
+  natsort,
+  numpy,
+  pandas,
+  scipy,
+  h5py,
+  hdmedians,
+  biom-format,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.5.8";
   pname = "scikit-bio";
-  disabled = !isPy3k;
+  version = "0.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1VqDw+XyyhEydE4UCSM/th2a8MWpXet7KR5uNAcSuGs=";
+  src = fetchFromGitHub {
+    owner = "scikit-bio";
+    repo = "scikit-bio";
+    rev = "refs/tags/${version}";
+    hash = "sha256-v8/r52pJpMi34SekPQBf7CqRbs+ZEyPR3WO5RBB7uKg=";
   };
 
-  nativeBuildInputs = [ cython ];
-  nativeCheckInputs = [ coverage ];
-  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
+  build-system = [
+    setuptools
+    cython
+    oldest-supported-numpy
+  ];
 
-  # cython package not included for tests
-  doCheck = false;
+  dependencies = [
+    requests
+    decorator
+    natsort
+    numpy
+    pandas
+    scipy
+    h5py
+    hdmedians
+    biom-format
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m skbio.test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # only the $out dir contains the built cython extensions, so we run the tests inside there
+  pytestFlagsArray = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 
   pythonImportsCheck = [ "skbio" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
-    license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

@@ -10,10 +10,12 @@
 , fluidsynth
 , game-music-emu
 , gtk3
+, imagemagick
 , libGL
 , libjpeg
 , libsndfile
 , libvpx
+, libwebp
 , mpg123
 , ninja
 , openal
@@ -25,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.10.0";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-F3p2X/hjPV9fuaA7T2bQTP6SlKcfc8GniJgv8BcopGw=";
+    hash = "sha256-taie1Iod3pXvuxxBC7AArmtndkIV0Di9mtJoPvPkioo=";
   };
 
   outputs = [ "out" "doc" ];
@@ -40,6 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     copyDesktopItems
+    imagemagick
     makeWrapper
     ninja
     pkg-config
@@ -55,6 +58,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libsndfile
     libvpx
+    libwebp
     mpg123
     openal
     vulkan-loader
@@ -79,6 +83,8 @@ stdenv.mkDerivation rec {
       name = "gzdoom";
       exec = "gzdoom";
       desktopName = "GZDoom";
+      comment = meta.description;
+      icon = "gzdoom";
       categories = [ "Game" ];
     })
   ];
@@ -86,11 +92,18 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/bin/gzdoom $out/share/games/doom/gzdoom
     makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom
+
+    for size in 16 24 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -background none -resize "$size"x"$size" $src/src/win32/icon1.ico -flatten \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
+    done;
   '';
 
   meta = with lib; {
     homepage = "https://github.com/ZDoom/gzdoom";
     description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
+    mainProgram = "gzdoom";
     longDescription = ''
       GZDoom is a feature centric port for all DOOM engine games, based on
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.

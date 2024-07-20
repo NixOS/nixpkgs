@@ -1,12 +1,12 @@
 {
   amq-protocol = {
     url = "https://github.com/cloudamqp/amq-protocol.cr.git";
-    rev = "v0.3.24";
-    sha256 = "011xia60wkmbjsk8j4qnswx0lg1i7vrchjwnxlksjv3npp2z98a3";
+    rev = "v1.1.14";
+    sha256 = "1pr5h3lxfhjmarfqpvfldn8d6425g3i56k4p4szk2jkffa0z38nz";
   };
   amqp-client = {
     url = "https://github.com/cloudamqp/amqp-client.cr.git";
-    rev = "v0.6.2";
-    sha256 = "0h9c2v7ks776msm3dn2d68y85i6mm4gm5s3jlrs8dlp36kndkplc";
+    rev = "v1.2.3";
+    sha256 = "1pbiq5srni87hd8q2x3vs4s2hpajlzzlwgalgnmb35dcyih1ff9k";
   };
 }

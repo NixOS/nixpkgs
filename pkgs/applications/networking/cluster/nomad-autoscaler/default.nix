@@ -28,7 +28,7 @@ let
       sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
-    vendorSha256 = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
+    vendorHash = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
 
     buildPhase = ''
       runHook preBuild
@@ -91,9 +91,10 @@ let
 
     meta = with lib; {
       description = "Autoscaling daemon for Nomad";
+      mainProgram = "nomad-autoscaler";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
       license = licenses.mpl20;
-      maintainers = with maintainers; [ jonringer ];
+      maintainers = with maintainers; [ ];
     };
   };
 

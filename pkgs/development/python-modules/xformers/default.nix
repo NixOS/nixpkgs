@@ -1,67 +1,98 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, which
-# runtime dependencies
-, numpy
-, torch
-, pyre-extensions
-# check dependencies
-, pytestCheckHook
-, pytest-cov
-# , pytest-mpi
-, pytest-timeout
-# , pytorch-image-models
-, hydra-core
-, fairscale
-, scipy
-, cmake
-, openai-triton
-, networkx
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  which,
+  # runtime dependencies
+  numpy,
+  torch,
+  # check dependencies
+  pytestCheckHook,
+  pytest-cov,
+  # , pytest-mpi
+  pytest-timeout,
+  # , pytorch-image-models
+  hydra-core,
+  fairscale,
+  scipy,
+  cmake,
+  openai-triton,
+  networkx,
+  #, apex
+  einops,
+  transformers,
+  timm,
+#, flash-attn
 }:
 let
-  version = "0.0.20";
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+  version = "0.0.23.post1";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
-    rev = "v${version}";
-    hash = "sha256-OFH4I3eTKw1bQEKHh1AvkpcoShKK5R5674AoJ/mY85I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AJXow8MmX4GxtEE2jJJ/ZIBr+3i+uS4cA6vofb390rY=";
     fetchSubmodules = true;
   };
 
-  preBuild = ''
-    cat << EOF > ./xformers/version.py
-    # noqa: C801
-    __version__ = "${version}"
-    EOF
-  '';
+  patches = [ ./0001-fix-allow-building-without-git.patch ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    which
-  ];
+  preBuild =
+    ''
+      cat << EOF > ./xformers/version.py
+      # noqa: C801
+      __version__ = "${version}"
+      EOF
+    '';
 
-  pythonRelaxDeps = [
-    "pyre-extensions"
-  ];
+  env = lib.attrsets.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  };
+
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  buildInputs = lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      # flash-attn build
+      cuda_cudart # cuda_runtime_api.h
+      libcusparse # cusparse.h
+      cuda_cccl # nv/target
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcurand # curand_kernel.h
+    ]
+  );
+
+  nativeBuildInputs = [ which ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   propagatedBuildInputs = [
     numpy
     torch
-    pyre-extensions
   ];
 
   pythonImportsCheck = [ "xformers" ];
+
+  # Has broken 0.03 version:
+  # https://github.com/NixOS/nixpkgs/pull/285495#issuecomment-1920730720
+  passthru.skipBulkUpdate = true;
+
+  dontUseCmakeConfigure = true;
+
+  # see commented out missing packages
+  doCheck = false;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -73,6 +104,11 @@ buildPythonPackage {
     cmake
     networkx
     openai-triton
+    # apex
+    einops
+    transformers
+    timm
+    # flash-attn
   ];
 
   meta = with lib; {

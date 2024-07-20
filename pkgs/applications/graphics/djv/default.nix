@@ -17,6 +17,7 @@
 , libpng
 , opencolorio_1
 , freetype
+, openexr
 }:
 
 let
@@ -56,7 +57,7 @@ let
 
     src = djvSrc;
 
-    sourceRoot = "source/etc/SuperBuild";
+    sourceRoot = "${src.name}/etc/SuperBuild";
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
@@ -112,6 +113,11 @@ stdenv.mkDerivation rec {
     # Pull fix ending upstream inclusion for gcc-12+ support:
     #   https://github.com/darbyjohnston/DJV/pull/477
     (fetchpatch {
+      name = "gcc-13-cstdint-include.patch";
+      url = "https://github.com/darbyjohnston/DJV/commit/be0dd90c256f30c0305ff7b180fd932a311e66e5.patch";
+      hash = "sha256-x8GAfakhgjBiCKHbfgCukT5iFNad+zqURDJkQr092uk=";
+    })
+    (fetchpatch {
       name = "gcc-11-limits.patch";
       url = "https://github.com/darbyjohnston/DJV/commit/0544ffa1a263a6b8e8518b47277de7601b21b4f4.patch";
       hash = "sha256-x6ye0xMwTlKyNW4cVFb64RvAayvo71kuOooPj3ROn0g=";
@@ -140,11 +146,12 @@ stdenv.mkDerivation rec {
     ilmbase
     glm
     glfw3
-    zlib.dev
+    zlib
     libpng
     freetype
     opencolorio_1
     djv-deps
+    openexr
   ];
 
   postPatch = ''
@@ -157,13 +164,20 @@ stdenv.mkDerivation rec {
     sed -i cmake/Modules/FindOCIO.cmake \
         -e 's/PATH_SUFFIXES static//' \
         -e '/OpenColorIO_STATIC/d'
+
+    # When searching for OpenEXR this looks for Iex.h, which exists in ilmbase,
+    # since it's a secondary inport, to find the correct OpenEXR lib, we search
+    # for something specifically in OpenEXR.
+
+    sed -i cmake/Modules/FindOpenEXR.cmake \
+        -e 's/find_path(OpenEXR_INCLUDE_DIR NAMES Iex.h PATH_SUFFIXES OpenEXR)/find_path(OpenEXR_INCLUDE_DIR NAMES ImfImage.h PATH_SUFFIXES OpenEXR)/'
   '';
 
   # GLFW requires a working X11 session.
   doCheck = false;
 
   meta = with lib; {
-    description = "A professional review software for VFX, animation, and film production";
+    description = "Professional review software for VFX, animation, and film production";
     homepage = "https://darbyjohnston.github.io/DJV/";
     platforms = platforms.linux;
     maintainers = [ maintainers.blitz ];

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin, stdenv }:
 
 let
   metaCommon = with lib; {
@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.9.0";
+    version = "0.13.1";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-zgi1wNx7fWf/iFGKaVffcXnC90vUz+mBT6HhCGdXMa0=";
+      hash = "sha256-bh0UsXA5yHtvP9femOwEzVzmu1VLz2uZwoIHL/kI7kM=";
     };
 
-    vendorHash = "sha256-EX1T3AygarJn4Zae2I8CHQrZakmbNF1OwE4YZFF+nKc=";
+    vendorHash = "sha256-ziCJG722c32QAh9QmoC2E7TcLiC2InKwfdC9mkanTsU=";
 
     inherit overrideModAttrs;
 
@@ -40,13 +40,17 @@ let
       "-X github.com/temporalio/cli/headers.Version=${version}"
     ];
 
+    # Tests fail with x86 on macOS Rosetta 2
+    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
+
     preCheck = ''
-      export HOME=$(mktemp -d)
+      export HOME="$(mktemp -d)"
     '';
 
     postInstall = ''
       installShellCompletion --cmd temporal \
         --bash <($out/bin/temporal completion bash) \
+        --fish <($out/bin/temporal completion fish) \
         --zsh <($out/bin/temporal completion zsh)
     '';
 
@@ -59,16 +63,16 @@ let
 
   tctl = buildGoModule rec {
     pname = "tctl";
-    version = "1.18.0";
+    version = "1.18.1";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "tctl";
       rev = "v${version}";
-      hash = "sha256-LcBKkx3mcDOrGT6yJx98CSgxbwskqGPWqOzHWOu6cig=";
+      hash = "sha256-LX4hyPme+mkNmPvrTHIT5Ow3QM8BTAB7MXSY1fa8tSk=";
     };
 
-    vendorHash = "sha256-5wCIY95mJ6+FCln4yBu+fM4ZcsxBGcXkCvxjGzt0+dM=";
+    vendorHash = "sha256-294lnUKnXNrN6fJ+98ub7LwsJ9aT+FzWCB3nryfAlCI=";
 
     inherit overrideModAttrs;
 
@@ -79,7 +83,7 @@ let
     ldflags = [ "-s" "-w" ];
 
     preCheck = ''
-      export HOME=$(mktemp -d)
+      export HOME="$(mktemp -d)"
     '';
 
     postInstall = ''

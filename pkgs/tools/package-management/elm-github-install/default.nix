@@ -17,5 +17,6 @@ bundlerEnv rec {
     license     = licenses.unfree;
     maintainers = with maintainers; [ roberth nicknovitski ];
     platforms   = platforms.all;
+    mainProgram = "elm-install";
   };
 }

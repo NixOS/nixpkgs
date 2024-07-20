@@ -1,38 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gsl
-, swig
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gsl,
+  swig,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.3.3";
+  version = "2.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F3m85Bs8sONw0Rv0EAOFK6R1DFHfW4dxuzQmXo4PHfM=";
+  src = fetchFromGitHub {
+    owner = "pygsl";
+    repo = "pygsl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7agGgfDUgY6mRry7d38vGGNLJC4dFUniy2M/cnejDDs=";
   };
 
   nativeBuildInputs = [
     gsl.dev
     swig
   ];
-  buildInputs = [
-    gsl
-  ];
-  propagatedBuildInputs = [
-    numpy
-  ];
+  buildInputs = [ gsl ];
+  dependencies = [ numpy ];
+
+  preBuild = ''
+    python setup.py build_ext --inplace
+  '';
 
   preCheck = ''
     cd tests
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python interface for GNU Scientific Library";

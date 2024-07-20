@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2023-06-29";
+  version = "0.12.0-unstable-2024-07-05";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "a96608add40e316f25f15d9c9d1c1fbd86dbbebe";
-    sha256 = "sha256-bGJSeWq2TN7ukStu+oiYboGnm/RHbO6N0NdZC81IQ8k=";
+    rev = "00cb683def53be4b437bfb3e3a637d2d5879946c";
+    sha256 = "sha256-OtFUEhCZ8DrDfxKXYnLE/6/d2/4oyJYwSfKvsvbn/II=";
   };
 
-  sourceRoot = "source/klippy";
+  sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
       substituteInPlace $file \
         --replace '/usr/bin/env python2' '/usr/bin/env python'
     done
+
+    # needed for cross compilation
+    substituteInPlace ./chelper/__init__.py \
+      --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
 
   # NB: We don't move the main entry point into `/bin`, or even symlink it,
@@ -59,10 +63,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
+  passthru.updateScript = unstableGitUpdater {
+    url = meta.homepage;
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
-    description = "The Klipper 3D printer firmware";
+    description = "Klipper 3D printer firmware";
+    mainProgram = "klippy";
     homepage = "https://github.com/KevinOConnor/klipper";
     maintainers = with maintainers; [ lovesegfault zhaofengli cab404 ];
     platforms = platforms.linux;

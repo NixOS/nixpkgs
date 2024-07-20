@@ -17,8 +17,8 @@ let
 
       compressCmd = getAttr cfg.compression {
         "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel}";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel}";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel} --rsyncable";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel} --rsyncable";
       };
 
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
@@ -71,12 +71,12 @@ in {
 
   options = {
     services.postgresqlBackup = {
-      enable = mkEnableOption (lib.mdDoc "PostgreSQL dumps");
+      enable = mkEnableOption "PostgreSQL dumps";
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";
         type = with types; either (listOf str) str;
-        description = lib.mdDoc ''
+        description = ''
           This option defines (see `systemd.time` for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
@@ -87,7 +87,7 @@ in {
         default = cfg.databases == [];
         defaultText = literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Backup all databases using pg_dumpall.
           This option is mutual exclusive to
           `services.postgresqlBackup.databases`.
@@ -99,7 +99,7 @@ in {
       databases = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of database names to dump.
         '';
       };
@@ -107,7 +107,7 @@ in {
       location = mkOption {
         default = "/var/backup/postgresql";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path of directory where the PostgreSQL database dumps will be placed.
         '';
       };
@@ -115,7 +115,7 @@ in {
       pgdumpOptions = mkOption {
         type = types.separatedString " ";
         default = "-C";
-        description = lib.mdDoc ''
+        description = ''
           Command line options for pg_dump. This options is not used
           if `config.services.postgresqlBackup.backupAll` is enabled.
           Note that config.services.postgresqlBackup.backupAll is also active,
@@ -126,7 +126,7 @@ in {
       compression = mkOption {
         type = types.enum ["none" "gzip" "zstd"];
         default = "gzip";
-        description = lib.mdDoc ''
+        description = ''
           The type of compression to use on the generated database dump.
         '';
       };
@@ -134,7 +134,7 @@ in {
       compressionLevel = mkOption {
         type = types.ints.between 1 19;
         default = 6;
-        description = lib.mdDoc ''
+        description = ''
           The compression level used when compression is enabled.
           gzip accepts levels 1 to 9. zstd accepts levels 1 to 19.
         '';
@@ -178,4 +178,5 @@ in {
     })
   ];
 
+  meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }

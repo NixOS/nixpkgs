@@ -40,7 +40,7 @@ in
   ###### interface
 
   options.console  = {
-    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+    enable = mkEnableOption "virtual console" // {
       default = true;
     };
 
@@ -48,7 +48,7 @@ in
       type = with types; nullOr (either str path);
       default = null;
       example = "LatArCyrHeb-16";
-      description = mdDoc ''
+      description = ''
         The font used for the virtual consoles.
         Can be `null`, a font name, or a path to a PSF font file.
 
@@ -65,7 +65,7 @@ in
       type = with types; either str path;
       default = "us";
       example = "fr";
-      description = lib.mdDoc ''
+      description = ''
         The keyboard mapping table for the virtual consoles.
       '';
     };
@@ -79,7 +79,7 @@ in
         "002b36" "cb4b16" "586e75" "657b83"
         "839496" "6c71c4" "93a1a1" "fdf6e3"
       ];
-      description = lib.mdDoc ''
+      description = ''
         The 16 colors palette used by the virtual consoles.
         Leave empty to use the default colors.
         Colors must be in hexadecimal format and listed in
@@ -91,7 +91,7 @@ in
     packages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
       '';
@@ -100,7 +100,7 @@ in
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If set, configure the virtual console keymap from the xserver
         keyboard settings.
       '';
@@ -109,7 +109,7 @@ in
     earlySetup = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
@@ -127,8 +127,8 @@ in
               ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
                 "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
               } \
-              -model '${xkbModel}' -layout '${layout}' \
-              -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
+              -model '${xkb.model}' -layout '${xkb.layout}' \
+              -option '${xkb.options}' -variant '${xkb.variant}' > "$out"
           '');
     }
 
@@ -168,6 +168,9 @@ in
           # ...but only the keymaps if we don't
           "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
         };
+        boot.initrd.systemd.additionalUpstreamUnits = [
+          "systemd-vconsole-setup.service"
+        ];
         boot.initrd.systemd.storePaths = [
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pam
@@ -10,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shavee";
-  version = "0.5.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "ashuio";
@@ -19,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-41wJ3QBZdmCl7v/6JetXhzH2zF7tsKYMKZY1cKhByX8=";
   };
 
-  cargoHash = "sha256-iNGn5KknSNgazFSu6Nur7AkKVb6qKMxuFwTdCz5djWU=";
+  cargoHash = "sha256-tnIqhZpqdy8pV4L6KF5v19ufpWRpMX5gTPlWWbwB3RU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,9 +38,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/ashuio/shavee";
-    description = "A program to automatically decrypt and mount ZFS datasets using Yubikey HMAC as 2FA or any File on USB/SFTP/HTTPS";
+    description = "Program to automatically decrypt and mount ZFS datasets using Yubikey HMAC as 2FA or any File on USB/SFTP/HTTPS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jasonodoom ];
     platforms = lib.platforms.linux;
+    mainProgram = "shavee";
   };
 }

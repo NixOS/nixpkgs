@@ -1,18 +1,20 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
-, lib
-, numpy
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  lib,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "javaobj-py3";
-  version = "0.4.3";
+  version = "0.4.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38f74db3a57e9998a9774e3614afb95cb396f139f29b3fdb130c5af554435259";
+    hash = "sha256-5OMlfvLPgaMzl4ek1c+STlTJHwlacj9tJYTa5h1Dlu0=";
   };
 
   propagatedBuildInputs = [ numpy ];

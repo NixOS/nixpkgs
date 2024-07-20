@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "idevicerestore";
   };
 }

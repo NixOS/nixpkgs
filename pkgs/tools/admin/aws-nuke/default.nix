@@ -1,36 +1,49 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "aws-nuke";
-  version = "2.22.1";
+  version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "rebuy-de";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cI6HoXclJDMDGBk2RdvzG7kNzfMu133mx+a83gQM5aA=";
+    hash = "sha256-Yc9GXdcSKPvwddh+QU2/pBC0XIqA53wpd0VNKOqppbU=";
   };
 
-  vendorSha256 = "sha256-DkamoQxwJUhO3Q0dh3pig9j6ZiYhZXVPWltK1P8dzhc=";
+  vendorHash = "sha256-FZ92JoyPYysYhl7iQZ8X32BDyNKL1UbOgq7EhHyqb5A=";
 
-  preBuild = ''
-    if [ "x$outputHashAlgo" != "x" ]; then
-      # Only `go generate` when fetching the go mod vendor code
+  nativeBuildInputs = [ installShellFiles ];
+
+  overrideModAttrs = _: {
+    preBuild = ''
       go generate ./...
-    fi
-  '';
+    '';
+  };
 
   doCheck = false;
 
   subPackages = [ "." ];
 
+  ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    installShellCompletion --cmd aws-nuke \
+      --bash <($out/bin/aws-nuke completion bash) \
+      --fish <($out/bin/aws-nuke completion fish) \
+      --zsh <($out/bin/aws-nuke completion zsh)
+  '';
+
   meta = with lib; {
     description = "Nuke a whole AWS account and delete all its resources";
     homepage = "https://github.com/rebuy-de/aws-nuke";
+    changelog = "https://github.com/rebuy-de/aws-nuke/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc ];
+    mainProgram = "aws-nuke";
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       A command-line download/upload tool for popular file sharing websites
     '';
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ aforemny jfrankenau ];
+    maintainers = with lib.maintainers; [ aforemny ];
     platforms = lib.platforms.linux;
   };
 }

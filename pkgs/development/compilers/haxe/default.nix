@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls_2, Security }:
+{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, pcre2, neko, mbedtls_2, Security }:
 
 let
   ocamlDependencies = version:
-    if lib.versionAtLeast version "4.2"
-    then with ocaml-ng.ocamlPackages_4_12; [
+    if lib.versionAtLeast version "4.3"
+    then with ocaml-ng.ocamlPackages_4_14; [
       ocaml
       findlib
       sedlex
@@ -32,12 +32,13 @@ let
       --replace '"neko"' '"${neko}/bin/neko"'
   '';
 
-  generic = { sha256, version, prePatch ? defaultPatch }:
+  generic = { hash, version, prePatch ? defaultPatch }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ zlib pcre neko ]
+      buildInputs = [ zlib neko ]
+        ++ (if lib.versionAtLeast version "4.3" then [pcre2] else [pcre])
         ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
         ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
         ++ ocamlDependencies version;
@@ -47,7 +48,7 @@ let
         repo = "haxe";
         rev = version;
         fetchSubmodules = true;
-        inherit sha256;
+        inherit hash;
       };
 
       inherit prePatch;
@@ -118,14 +119,14 @@ let
 in {
   haxe_4_0 = generic {
     version = "4.0.5";
-    sha256 = "0f534pchdx0m057ixnk07ab4s518ica958pvpd0vfjsrxg5yjkqa";
+    hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
   };
   haxe_4_1 = generic {
     version = "4.1.5";
-    sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
+    hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
   };
-  haxe_4_2 = generic {
-    version = "4.2.5";
-    sha256 = "sha256-Y0gx6uOQX4OZgg8nK4GJxRR1rKh0S2JUjZQFVQ4cfTs=";
+  haxe_4_3 = generic {
+    version = "4.3.4";
+    hash = "sha256-XGV4VG8nUofHGjHbtrLA+2kIpnnPqw5IlcNrP3EsL+Q=";
   };
 }

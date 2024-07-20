@@ -1,39 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, fastprogress
-, jax
-, jaxlib
-, jaxopt
-, optax
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytest-xdist,
+  pytestCheckHook,
+  setuptools-scm,
+  fastprogress,
+  jax,
+  jaxlib,
+  jaxopt,
+  optax,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "0.9.6";
-  disabled = pythonOlder "3.7";
+  version = "1.2.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
-    repo = pname;
+    repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-EieDu9SJxi2cp1bHlxX4vvFZeDGMGIm24GoR8nSyjvE=";
+    hash = "sha256-W89L/3bpvecZdCpLCQOppev+fPc+SXd/T+zZLBH2wJs=";
   };
 
-  patches = [
-    # remove in next release
-    (fetchpatch {
-      name = "fix-lbfgs-args";
-      url = "https://github.com/blackjax-devs/blackjax/commit/1aaa6f64bbcb0557b658604b2daba826e260cbc6.patch";
-      hash = "sha256-XyjorXPH5Ap35Tv1/lTeTWamjplJF29SsvOq59ypftE=";
-    })
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastprogress
     jax
     jaxlib
@@ -42,21 +40,36 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  disabledTestPaths = [ "tests/test_benchmarks.py" ];
-  disabledTests = [
-    # too slow
-    "test_adaptive_tempered_smc"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
   ];
 
-  pythonImportsCheck = [
-    "blackjax"
-  ];
+  disabledTestPaths =
+    [ "tests/test_benchmarks.py" ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Assertion errors on numerical values
+      "tests/mcmc/test_integrators.py"
+    ];
 
-  meta = with lib; {
+  disabledTests =
+    [
+      # too slow
+      "test_adaptive_tempered_smc"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Numerical test (AssertionError)
+      # https://github.com/blackjax-devs/blackjax/issues/668
+      "test_chees_adaptation"
+    ];
+
+  pythonImportsCheck = [ "blackjax" ];
+
+  meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

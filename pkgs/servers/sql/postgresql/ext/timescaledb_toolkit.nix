@@ -1,27 +1,27 @@
 { lib
 , fetchFromGitHub
-, buildPgxExtension
+, buildPgrxExtension
 , postgresql
 , nixosTests
-, cargo-pgx_0_7_1
+, cargo-pgrx_0_10_2
 , nix-update-script
 , stdenv
 }:
 
-(buildPgxExtension.override {cargo-pgx = cargo-pgx_0_7_1;})rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     rev = version;
-    sha256 = "sha256-aivGURTsm0dGaFq75qR3wIkXwsbvBiDEg+qLMcqKMj8=";
+    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
   };
 
-  cargoSha256 = "sha256-AO5nSgQYvTmohXbzjWvDylnBgS2WpKP6wFOnkUx7ksI=";
+  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
   buildAndTestSubdir = "extension";
 
   passthru = {
@@ -39,9 +39,9 @@
     homepage = "https://github.com/timescale/timescaledb-toolkit";
     maintainers = with maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = licenses.tsl;
 
     # as it needs to be used with timescaledb, simply use the condition from there
-    broken = versionOlder postgresql.version "12" || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

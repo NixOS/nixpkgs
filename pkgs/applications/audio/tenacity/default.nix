@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitea
-, fetchpatch
 , cmake
 , wxGTK32
 , gtk3
@@ -49,14 +48,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tenacityteam";
     repo = pname;
+    fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-wesnay+UQiPSDaRuSo86MgHdElN4s0rPIvokZhKM7GI=";
+    hash = "sha256-UU3iKfab6en4IyGlpNLUhOil3snzaZ2nI6JMqoL6DUs=";
   };
 
   postPatch = ''
@@ -149,9 +149,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ irenes lheckemann ];
+    maintainers = with maintainers; [ irenes ];
     platforms = platforms.linux;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "source/SP";
+  sourceRoot = "${src.name}/SP";
 
   makeFlags = [
     "USE_INTERNAL_LIBS=0"
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rjpcasalino ];
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "1.4";
 
   src = fetchFromGitHub {
-    owner = "ofxa";
+    owner = "AcademySoftwareFoundation";
     repo = "openfx";
     rev = "OFX_Release_1_4_TAG";
     sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Image processing plug-in standard";
-    homepage = "http://openeffects.org/";
+    homepage = "https://openeffects.org/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.guibou ];

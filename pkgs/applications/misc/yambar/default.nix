@@ -32,17 +32,19 @@
 assert (x11Support || waylandSupport);
 stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
     rev = finalAttrs.version;
-    hash = "sha256-+bNTEPGV5xaVXhsejyK+FCcJ9J06KS6x7/qo6P2DnZI=";
+    hash = "sha256-QCwwMpBYuMWYqxE2ugPFpG/QtZDW7VsSBYs5EqKYejA=";
   };
 
   outputs = [ "out" "man" ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     bison
@@ -50,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    scdoc
     wayland-scanner
   ];
 
@@ -62,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     pixman
     pulseaudio
-    scdoc
     tllist
     udev
   ] ++ lib.optionals (waylandSupport) [
@@ -80,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonBuildType = "release";
 
   mesonFlags = [
+    (lib.mesonBool "werror" false)
     (lib.mesonEnable "backend-x11" x11Support)
     (lib.mesonEnable "backend-wayland" waylandSupport)
   ];
@@ -116,5 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
+    mainProgram = "yambar";
   };
 })

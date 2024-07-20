@@ -15,12 +15,12 @@
 , lzo
 , which
 , targetArchitecture ? null
-, asmOptimizations ? gcc10Stdenv.targetPlatform.isx86
+, asmOptimizations ? gcc10Stdenv.hostPlatform.isx86
 }:
 
 let
   defaultTargetArchitecture =
-    if gcc10Stdenv.targetPlatform.isx86
+    if gcc10Stdenv.hostPlatform.isx86
     then "haswell"
     else "core";
 
@@ -38,7 +38,7 @@ gcc10Stdenv.mkDerivation rec {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
+    hash = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
 
@@ -62,21 +62,22 @@ gcc10Stdenv.mkDerivation rec {
     patchShebangs utils
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
     "-DUSE_MAINTAINER_MODE=OFF"
     "-DUSE_GOOGLE_TESTS=OFF"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
     "-DTARGET_ARCHITECTURE=${targetArch}"
   ] ++ lib.optionals asmOptimizations [
     "-DASM_OPTIMIZATIONS=ON"
-    "-DHAVE_SSE42=${if gcc10Stdenv.targetPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";
-    description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
+    description = "Native multi-model database with flexible data models for documents, graphs, and key-values";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ flosse jsoo1 ];

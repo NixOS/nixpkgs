@@ -1,35 +1,55 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, progress
-, pyserial
-, pytest
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  flit-core,
+
+  # dependenices
+  progress,
+  pyserial,
+
+  # optional-dependencies
+  intelhex,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "stm32loader";
-  version = "0.5.1";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0135qzxlrivvkq6wgkw7shfz94n755qs2c1754p1hc2jk0nqayrg";
+    hash = "sha256-QTLSEjdJtDH4GCamnKHN5pEjW41rRtAMXxyZZMM5K3w=";
   };
 
-  propagatedBuildInputs = [ progress pyserial ];
+  nativeBuildInputs = [ flit-core ];
 
-  nativeCheckInputs = [ pytest ] ++ lib.optional isPy27 mock;
+  propagatedBuildInputs = [
+    progress
+    pyserial
+  ];
 
-  checkPhase = ''
-    pytest --strict tests/unit
-  '';
+  passthru.optional-dependencies = {
+    hex = [ intelhex ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   meta = with lib; {
     description = "Flash firmware to STM32 microcontrollers in Python";
+    mainProgram = "stm32loader";
     homepage = "https://github.com/florisla/stm32loader";
     changelog = "https://github.com/florisla/stm32loader/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ ];
   };
 }

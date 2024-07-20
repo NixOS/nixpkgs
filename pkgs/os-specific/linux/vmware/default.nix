@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep, vmware-workstation }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "vmware-modules";
-  version = "${vmware-workstation.version}-${kernel.version}";
+  version = "workstation-17.5.1-unstable-2024-01-12-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "mkubecek";
     repo = "vmware-host-modules";
-    rev = "w${vmware-workstation.version}";
-    sha256 = "sha256-EHMiSmljpUjYuZH6r/0Vk5OVGeyQyNngy0AVJO/48a0=";
+    # Developer no longer provides tags for kernel compatibility fixes
+    # Commit hash for branch workstation-17.5.1 as of 2024-03-07
+    rev = "2c6d66f3f1947384038b765c897b102ecdb18298";
+    hash = "sha256-VKN6nxtgQqElVrSD5++UdngjZio4+vmetGCgTAfgtTs=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -40,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     broken = (kernel.kernelOlder "5.5" && kernel.isHardened);
-    maintainers = with maintainers; [ deinferno ];
+    maintainers = with maintainers; [ deinferno vifino ];
   };
 }

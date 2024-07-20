@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchFromGitLab, perl, flex
-, gnused, coreutils, which, opensp, groff, texlive, texinfo, withLatex ? false
+, gnused, coreutils, which, opensp, groff, texliveMedium, texinfo, withLatex ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "agmartin";
     repo = "linuxdoc-tools";
     rev = version;
-    sha256 = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
+    hash = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex which makeWrapper ];
 
   buildInputs = [ opensp groff texinfo perl gnused coreutils ]
-    ++ lib.optionals withLatex [ texlive.combined.scheme-medium ];
+    ++ lib.optionals withLatex [ texliveMedium ];
 
   meta = with lib; {
     description = "Toolset for processing LinuxDoc DTD SGML files";

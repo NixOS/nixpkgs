@@ -1,48 +1,45 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.3.3";
-  format = "pyproject";
+  version = "3.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "aioslimproto";
     rev = "refs/tags/${version}";
-    hash = "sha256-d+PEzCF1Cw/7NmumxIRRlr3hojpNsZM/JMQ0KWdosXk=";
+    hash = "sha256-K7z34fT0PQ5qcV+66VbhYTUhCjqW/OjPnrygBFKIW1k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov" ""
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
+    aiohttp
     async-timeout
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # Module has no tests
+  doCheck = false;
 
-  disabledTests = [
-    # AssertionError: assert ['mixer', 'volume', '50'] == ['volume', '50']
-    "test_msg_instantiation"
-  ];
-
-  pythonImportsCheck = [
-    "aioslimproto"
-  ];
+  pythonImportsCheck = [ "aioslimproto" ];
 
   meta = with lib; {
     description = "Module to control Squeezebox players";

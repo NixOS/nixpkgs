@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, docutils
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pyyaml
-, sphinx
-, typing-extensions
-, beautifulsoup4
-, pytest-param-files
-, pytest-regressions
-, sphinx-pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
+  defusedxml,
+  docutils,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pyyaml,
+  sphinx,
+  typing-extensions,
+  beautifulsoup4,
+  pytest-param-files,
+  pytest-regressions,
+  sphinx-pytest,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "1.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,10 +29,12 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kewd6/4yawpRuyCe8Na0BGUMo59tr2fc97VlGbVJ8mI=";
+    hash = "sha256-TKo1lanZNM+XrOKZ0ZmtlhEPoAYQUspkyHXZm1wNTFE=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -45,30 +48,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beautifulsoup4
+    defusedxml
     pytest-param-files
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
   ] ++ markdown-it-py.optional-dependencies.linkify;
 
-  pythonImportsCheck = [
-    "myst_parser"
-  ];
+  pythonImportsCheck = [ "myst_parser" ];
 
-  disabledTests = [
-    # AssertionError due to different files
-    "test_basic"
-    "test_footnotes"
-    "test_gettext_html"
-    "test_fieldlist_extension"
-    # docutils 0.19 expectation mismatches
-    "test_docutils_roles"
-    # sphinx 6.0 expectation mismatches
-    "test_sphinx_directives"
-    # sphinx 5.3 expectation mismatches
-    "test_render"
-    "test_includes"
-  ];
+  pythonRelaxDeps = [ "docutils" ];
 
   meta = with lib; {
     description = "Sphinx and Docutils extension to parse MyST";

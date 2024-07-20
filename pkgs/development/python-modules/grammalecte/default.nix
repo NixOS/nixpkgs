@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, bottle
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  bottle,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "grammalecte";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://grammalecte.net/grammalecte/zip/Grammalecte-fr-v${version}.zip";
@@ -27,7 +29,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   meta = {
-    description = "An open source grammar and typographic corrector for the French language";
+    description = "Open source grammar and typographic corrector for the French language";
     homepage = "https://grammalecte.net";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ apeyroux ];

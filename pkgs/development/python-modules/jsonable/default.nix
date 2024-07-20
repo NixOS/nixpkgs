@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jsonable";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "halfak";

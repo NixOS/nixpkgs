@@ -102,12 +102,13 @@ def convert_to_throw(date_older_list: list[str]) -> list[tuple[str, str]]:
 
         alias = before_equal
         alias_unquoted = before_equal.strip('"')
-        after_equal_list = [x.strip(";:") for x in after_equal.split()]
+        replacement = next(x.strip(";:") for x in after_equal.split())
+        replacement = replacement.removeprefix("pkgs.")
 
         converted = (
-            f"{indent}{alias} = throw \"'{alias_unquoted}' has been renamed to/replaced by"
-            f" '{after_equal_list.pop(0)}'\";"
-            f' # Converted to throw {datetime.today().strftime("%Y-%m-%d")}'
+            f"{indent}{alias} = throw \"'{alias_unquoted}' has been"
+            f" renamed to/replaced by '{replacement}'\";"
+            f" # Converted to throw {datetime.today().strftime('%Y-%m-%d')}"
         )
         converted_list.append((line, converted))
 

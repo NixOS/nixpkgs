@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , makeWrapper
 , pkg-config
 , file
@@ -10,18 +11,19 @@
 , busybox
 , apk-tools
 , perl
+, findutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "abuild";
-  version = "3.11.9";
+  version = "3.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lp2+38eJLp0SU34pywrrXVON0PW2NvgaIO4n/KChMro=";
+    sha256 = "sha256-xVxgcBchGfeVo1cgP9iVsWjZ6SHVN6R8zWaE1k3DcXQ=";
   };
 
   buildInputs = [
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
     scdoc
     makeWrapper
     file
+    findutils
   ];
 
   patchPhase = ''
@@ -76,6 +79,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${placeholder "out"}/bin"
     done
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Alpine Linux build tools";

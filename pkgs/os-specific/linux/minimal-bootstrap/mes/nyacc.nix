@@ -6,8 +6,8 @@
 let
   pname = "nyacc";
   # NYACC is a tightly coupled dependency of mes. This version is known to work
-  # with mes 0.24.2.
-  # https://git.savannah.gnu.org/cgit/mes.git/tree/INSTALL?h=v0.24.2&id=7562330ec746f09b4060d3081e3377fb7083897d#n31
+  # with mes 0.25.
+  # https://git.savannah.gnu.org/cgit/mes.git/tree/INSTALL?h=v0.25#n31
   version = "1.00.2";
 
   src = fetchurl {

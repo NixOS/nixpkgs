@@ -1,13 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jsonmerge";
   version = "1.9.2";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,16 +21,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # Fails with "Unresolvable JSON pointer"
-    "test_local_reference_in_meta"
-  ];
-
   meta = with lib; {
     description = "Merge a series of JSON documents";
     homepage = "https://github.com/avian2/jsonmerge";
     changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${version}/ChangeLog";
     license = licenses.mit;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ ];
   };
 }

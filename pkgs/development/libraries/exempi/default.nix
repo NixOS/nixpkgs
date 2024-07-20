@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exempi";
-  version = "2.6.3";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://libopenraw.freedesktop.org/download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-sHSdsYqeeM93FzeVSoOM3NsdVBWIi6wbqcr4y6d8ZWw=";
+    sha256 = "sha256-6fmj1Cv/c7XrD3fsIs0BY8PiGUnMQUrR8ZoEZd3kH/4=";
   };
 
   configureFlags = [
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
+    description = "Implementation of XMP (Adobe's Extensible Metadata Platform)";
+    mainProgram = "exempi";
     homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8812au";
-  version = "${kernel.version}-unstable-2023-07-22";
+  version = "${kernel.version}-unstable-2024-06-13";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8812au-20210629";
-    rev = "b5f4e6e894eca8fea38661e2fc22a2570e0274ad";
-    hash = "sha256-3uPowesJVh/cnagMz/Uadb+U5rDUAWfU39tZaDNCoqg=";
+    repo = "8812au-20210820";
+    rev = "c0efee9cd121d9f0c815d9771475f76339a8f7d3";
+    hash = "sha256-ZS0iUb77XnXR5BUMeQ1EDuly7hStRt430ECueFW4v4w=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
@@ -41,9 +41,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
-    homepage = "https://github.com/morrownr/8812au-20210629";
+    homepage = "https://github.com/morrownr/8812au-20210820";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

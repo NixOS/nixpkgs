@@ -3,18 +3,20 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, python3
+, python311
+, vaultwarden
 }:
 
 let
-  version = "2023.5.0";
+  version = "2024.5.1b";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-dH+d206nDaUrX2FcpPTegAtlQvquxk+tfQt3vJQlOjw=";
+    hash = "sha256-5nlFt05ari9ovl+CaoyR/X9BzhsmsGyDt6eGLJ5ae/4=";
   };
+
 in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
@@ -23,10 +25,10 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-ELKpGSY4ZbgSk4vJnTiB+IOa8RQU8Ahy3A1mYsKtthU=";
+    hash = "sha256-U/lAt2HfoHGMu6mOki/4+ljhU9FwkodvFBr5zcDO8Wk=";
   };
 
-  npmDepsHash = "sha256-G8DEYPjEP3L4s0pr5n2ZTj8kkT0E7Po1BKhZ2hUdJuY=";
+  npmDepsHash = "sha256-ui00afmnu77CTT9gh6asc4uT7AhVIuiD60sq/1f9viA=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -35,7 +37,8 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    python3
+    # signalr through gyp wants to import distutils
+    python311
   ];
 
   makeCacheWritable = true;
@@ -47,6 +50,8 @@ in buildNpmPackage rec {
   npmBuildFlags = [
     "--workspace" "apps/web"
   ];
+
+  npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
     runHook preInstall
@@ -63,8 +68,9 @@ in buildNpmPackage rec {
   meta = with lib; {
     description = "Integrates the web vault into vaultwarden";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
+    changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda msteen mic92 ];
+    inherit (vaultwarden.meta) maintainers;
   };
 }

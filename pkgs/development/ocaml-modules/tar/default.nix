@@ -2,30 +2,24 @@
 , fetchurl
 , buildDunePackage
 , camlp-streams
-, ppx_cstruct
 , cstruct
 , decompress
 }:
 
 buildDunePackage rec {
   pname = "tar";
-  version = "2.2.2";
+  version = "2.6.0";
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-tar/releases/download/v${version}/tar-${version}.tbz";
-    hash = "sha256-Q+41LPFZFHi9sXKFV3F13FZZNO3KXRSElEmr+nH58Uw=";
+    hash = "sha256-yv8MtwRjQ+K/9/wPkhfk4xI1VV5MSIn7GUeSmFtvse4=";
   };
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     camlp-streams
     cstruct
     decompress
-  ];
-
-  buildInputs = [
-    ppx_cstruct
   ];
 
   doCheck = true;

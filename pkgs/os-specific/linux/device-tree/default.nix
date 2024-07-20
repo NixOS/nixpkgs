@@ -1,6 +1,29 @@
-{ lib, stdenvNoCC, dtc }:
+{ lib, stdenv, stdenvNoCC, dtc }:
 
 with lib; {
+  # Compile single Device Tree overlay source
+  # file (.dts) into its compiled variant (.dtb)
+  compileDTS = ({
+    name,
+    dtsFile,
+    includePaths ? [],
+    extraPreprocessorFlags ? []
+  }: stdenv.mkDerivation {
+    inherit name;
+
+    nativeBuildInputs = [ dtc ];
+
+    buildCommand =
+      let
+        includeFlagsStr = lib.concatMapStringsSep " " (includePath: "-I${includePath}") includePaths;
+        extraPreprocessorFlagsStr = lib.concatStringsSep " " extraPreprocessorFlags;
+      in
+      ''
+        $CC -E -nostdinc ${includeFlagsStr} -undef -D__DTS__ -x assembler-with-cpp ${extraPreprocessorFlagsStr} ${dtsFile} | \
+        dtc -I dts -O dtb -@ -o $out
+      '';
+  });
+
   applyOverlays = (base: overlays': stdenvNoCC.mkDerivation {
     name = "device-tree-overlays";
     nativeBuildInputs = [ dtc ];
@@ -9,7 +32,7 @@ with lib; {
     in ''
       mkdir -p $out
       cd "${base}"
-      find . -type f -name '*.dtb' -print0 \
+      find -L . -type f -name '*.dtb' -print0 \
         | xargs -0 cp -v --no-preserve=mode --target-directory "$out" --parents
 
       for dtb in $(find "$out" -type f -name '*.dtb'); do

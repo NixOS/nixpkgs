@@ -1,40 +1,27 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
-, fetchYarnDeps, fixup_yarn_lock
+{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
+, yarn, callPackage, ruby, writeShellScript
+, fetchYarnDeps, fixup-yarn-lock
 , brotli
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
-, version ? import ./version.nix
-, srcOverride ? null
-, dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+, version ? srcOverride.version
+, patches ? []
+  # src is a package
+, srcOverride ? callPackage ./source.nix { inherit patches; }
+, gemset ? ./. + "/gemset.nix"
+, yarnHash ? srcOverride.yarnHash
 }:
 
 stdenv.mkDerivation rec {
   inherit pname version;
 
-  # Using overrideAttrs on src does not build the gems and modules with the overridden src.
-  # Putting the callPackage up in the arguments list also does not work.
-  src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
+  src = srcOverride;
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
-    inherit version;
-    ruby = ruby_3_0;
+    inherit version gemset ruby;
     gemdir = src;
-    gemset = dependenciesDir + "/gemset.nix";
-    # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
-    # symlinks with directories, resolving this error when running rake:
-    #   /nix/store/451rhxkggw53h7253izpbq55nrhs7iv0-mastodon-gems-3.0.1/lib/ruby/gems/2.6.0/gems/bundler-1.17.3/lib/bundler/settings.rb:6:in `<module:Bundler>': uninitialized constant Bundler::Settings (NameError)
-    postBuild = ''
-      for gem in "$out"/lib/ruby/gems/*/gems/*; do
-        cp -a "$gem/" "$gem.new"
-        rm "$gem"
-        # needed on macOS, otherwise the mv yields permission denied
-        chmod +w "$gem.new"
-        mv "$gem.new" "$gem"
-      done
-    '';
   };
 
   mastodonModules = stdenv.mkDerivation {
@@ -43,10 +30,10 @@ stdenv.mkDerivation rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-e3rl/WuKXaUdeDEYvo1sSubuIwtBjkbguCYdAijwXOA=";
+      hash = yarnHash;
     };
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [ fixup-yarn-lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -55,10 +42,7 @@ stdenv.mkDerivation rec {
       runHook preBuild
 
       export HOME=$PWD
-      # This option is needed for openssl-3 compatibility
-      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
-      export NODE_OPTIONS=--openssl-legacy-provider
-      fixup_yarn_lock ~/yarn.lock
+      fixup-yarn-lock ~/yarn.lock
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
@@ -97,7 +81,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
+  nativeBuildInputs = [ brotli ];
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''

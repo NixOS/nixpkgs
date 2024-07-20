@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.47.3";
+  version = "11.49.11";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-0vhcPh4ZXCAKpgiSZstu6vBQv7VwOYc6qoz8dPkugNE=";
+    hash = "sha256-tnGRNTx/SH7Yj8xvaFUxKr8af+7b8ZouU4PdmKEMkKk=";
   };
 
   nativeBuildInputs = [ bison cmake python3 ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An open source database system";
+    description = "Open source database system";
     homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;
     platforms = platforms.unix;

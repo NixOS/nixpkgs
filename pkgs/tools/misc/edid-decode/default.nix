@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "edid-decode";
-  version = "unstable-2022-12-14";
+  version = "0-unstable-2024-04-02";
 
   outputs = [
     "out"
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";
-    rev = "e052f5f9fdf74ca11aa1a8edfa62eff8d0aa3d0d";
-    hash = "sha256-qNtb/eM7VpS8nRbC/nNm6J9vEWVUSrg7OwNaW1774QY=";
+    rev = "3d635499e4aca3319f0796ba787213c981c5a770";
+    hash = "sha256-bqzO39YM/3h9p37xaGJAw9xERgWOD+4yqO/XQiq/QqM=";
   };
 
   preBuild = ''
@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
+    mainProgram = "edid-decode";
   };
 }

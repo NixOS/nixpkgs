@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, python3, hunspell }:
 
 
 let
@@ -807,7 +807,7 @@ rec {
     meta = with lib; {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with licenses; [ bsd3 ]; # and/or cc-by-nc-30
+      license = with licenses; [ bsd3 /* or */ cc-by-30 ];
       maintainers = with maintainers; [ artturin ];
     };
   };
@@ -828,14 +828,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "experimental-2023-03-01";
+    version = "experimental-2024-04-15";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "9c09f1b7c0eb4d04b9f6f427901686c5c3d9fa54";
-      sha256 = "1wszpnbgj31k72x1vvcfkzcpmxsncdpqsi3zagah7swilpi7cqm4";
+      rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
+      sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
     meta = with lib; {
       description = "Hunspell dictionary for Central Thai (Thailand)";
@@ -915,13 +915,110 @@ rec {
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
 
-  # Portugese
+  /* PORTUGUESE */
+
   pt_BR = pt-br;
   pt-br = mkDictFromLibreOffice {
     shortName = "pt-br";
     dictFileName = "pt_BR";
-    shortDescription = "Brazillian Portugese (Brazil)";
+    shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
     license = with lib.licenses; [ lgpl3 ];
+  };
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    shortDescription = "Portuguese (Portugal)";
+    readmeFile = "README_pt_PT.txt";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+  };
+
+  /* PERSIAN */
+
+  fa_IR = fa-ir;
+  fa-ir = mkDict {
+    pname = "hunspell-dict-fa-ir";
+    version = "experimental-2022-09-04";
+    dictFileName = "fa-IR";
+    readmeFile = "README.md";
+    src = fetchFromGitHub {
+      owner = "b00f";
+      repo = "lilak";
+      rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
+      hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
+    };
+    nativeBuildInputs = [ python3 ];
+    buildPhase = ''
+      runHook preBuild
+      mkdir build
+      (cd src && python3 lilak.py)
+      mv build/* ./
+      # remove timestamp from file
+      sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+      runHook postBuild
+    '';
+    meta = with lib; {
+      description = "Hunspell dictionary for Persian (Iran)";
+      homepage = "https://github.com/b00f/lilak";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ nix-julia ];
+      platforms = platforms.all;
+    };
+  };
+
+  /* ROMANIAN */
+  ro_RO = ro-ro;
+  ro-ro = mkDict rec {
+    pname = "hunspell-dict-ro-ro";
+    version = "3.3.10";
+    shortName = "ro-ro";
+    dictFileName = "ro_RO";
+    fileName = "${dictFileName}.${version}.zip";
+    shortDescription = "Romanian (Romania)";
+    readmeFile = "README";
+
+    src = fetchurl {
+      url = "https://downloads.sourceforge.net/rospell/${fileName}";
+      hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}.aff ${dictFileName}.dic ${readmeFile} -d ${dictFileName}
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for ${shortDescription} from rospell";
+      homepage = "https://sourceforge.net/projects/rospell/";
+      license = with lib.licenses; [ gpl2Only ];
+      maintainers = with lib.maintainers; [ Andy3153 ];
+    };
+  };
+
+  /* Turkish */
+  tr_TR = tr-tr;
+  tr-tr = mkDict rec {
+    pname = "hunspell-dict-tr-tr";
+    version = "1.1.1";
+
+    src = fetchFromGitHub {
+      owner = "tdd-ai";
+      repo = "hunspell-tr";
+      rev = "7302eca5f3652fe7ae3d3ec06c44697c97342b4e";
+      hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
+    };
+
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
+      homepage = "https://github.com/tdd-ai/hunspell-tr/";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ samemrecebi ];
+      platforms = platforms.all;
+    };
   };
 }

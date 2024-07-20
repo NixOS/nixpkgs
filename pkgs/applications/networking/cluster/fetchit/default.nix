@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -18,7 +17,7 @@ buildGoModule rec {
     sha256 = "sha256-hxS/+/fbYOpMJ5VfvvG5l7wWKBUUR22rYn9X79DzUUk=";
   };
 
-  vendorSha256 = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
+  vendorHash = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
 
   subPackages = [ "cmd/fetchit" ];
 
@@ -63,7 +62,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to manage the life cycle and configuration of Podman containers";
+    description = "Tool to manage the life cycle and configuration of Podman containers";
+    mainProgram = "fetchit";
     longDescription = ''
       FetchIt allows for a GitOps based approach to manage containers running on
       a single host or multiple hosts based on a git repository. This allows for

@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, libev, buildDunePackage
-, ocaml, cppo, dune-configurator, ocplib-endian
+, cppo, dune-configurator, ocplib-endian
 }:
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.6.1";
+  version = "5.7.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,15 +12,8 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "lwt";
     rev = version;
-    sha256 = "sha256-XstKs0tMwliCyXnP0Vzi5WC27HKJGnATUYtbbQmH1TE=";
+    hash = "sha256-o0wPK6dPdnsr/LzwcSwbIGcL85wkDjdFuEcAxuS/UEs=";
   };
-
-  postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
-    substituteInPlace src/core/dune \
-      --replace "(libraries bytes)" ""
-    substituteInPlace src/unix/dune \
-      --replace "libraries bigarray lwt" "libraries lwt"
-  '';
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator ];
@@ -28,7 +21,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://ocsigen.org/lwt/";
-    description = "A cooperative threads library for OCaml";
+    description = "Cooperative threads library for OCaml";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.mit;
   };

@@ -5,7 +5,7 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  testCombinations = pkgs.lib.cartesianProductOfSets {
+  testCombinations = pkgs.lib.cartesianProduct {
     predictable = [true false];
     withNetworkd = [true false];
     systemdStage1 = [true false];
@@ -36,7 +36,7 @@ in pkgs.lib.listToAttrs (builtins.map ({ predictable, withNetworkd, systemdStage
       networking.useDHCP = !withNetworkd;
 
       # Check if predictable interface names are working in stage-1
-      boot.initrd.postDeviceCommands = script;
+      boot.initrd.postDeviceCommands = lib.mkIf (!systemdStage1) script;
 
       boot.initrd.systemd = lib.mkIf systemdStage1 {
         enable = true;

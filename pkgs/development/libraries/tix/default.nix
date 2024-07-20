@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchurl
 , fetchpatch
 , tcl
@@ -21,6 +20,9 @@ tcl.mkTclDerivation {
     })
     # Remove duplicated definition of XLowerWindow
     ./duplicated-xlowerwindow.patch
+    # Fix incompatible function pointer conversions and implicit definition of `panic`.
+    # `panic` is just `Tcl_Panic`, but it is not defined on Darwin due to a conflict with `mach/mach.h`.
+    ./fix-clang16.patch
   ] ++ lib.optional (tcl.release == "8.6")
   (fetchpatch {
     name = "tix-8.4.3-tcl8.6.patch";
@@ -51,7 +53,7 @@ tcl.mkTclDerivation {
   ];
 
   meta = with lib; {
-    description = "A widget library for Tcl/Tk";
+    description = "Widget library for Tcl/Tk";
     homepage    = "https://tix.sourceforge.net/";
     platforms   = platforms.all;
     license     = with licenses; [

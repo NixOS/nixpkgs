@@ -1,10 +1,11 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchPypi
-, nwdiag
-, pythonOlder
-, sphinx
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchPypi,
+  nwdiag,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,9 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.nwdiag"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.nwdiag" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx nwdiag extension";

@@ -7,17 +7,19 @@
 , meson
 , ninja
 , pkg-config
-, python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , evolution-data-server
 , feedbackd
 , glibmm
+, libsecret
 , gnome-desktop
 , gspell
-, gtk3
+, gtk4
+, gtksourceview5
+, gst_all_1
 , json-glib
 , libgcrypt
-, libhandy
+, libadwaita
 , libphonenumber
 , modemmanager
 , olm
@@ -27,22 +29,18 @@
 , plugins ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.7.2";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = "chatty";
-    rev = "v${version}";
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "Chatty";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H9cW19Eoz8cSv26Cyw5BIZSEWsWJktsEw92CHeecFsM=";
+    hash = "sha256-1CHreTkw1C3tc6vOCG+7Y/u4R/xTFOnlI4mcxjY/alY=";
   };
-
-  postPatch = ''
-    patchShebangs build-aux/meson
-  '';
 
   nativeBuildInputs = [
     appstream-glib
@@ -51,20 +49,22 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     evolution-data-server
     feedbackd
     glibmm
+    libsecret
     gnome-desktop
     gspell
-    gtk3
+    gtk4
+    gtksourceview5
+    gst_all_1.gstreamer
     json-glib
     libgcrypt
-    libhandy
+    libadwaita
     libphonenumber
     modemmanager
     olm
@@ -82,10 +82,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
-    homepage = "https://source.puri.sm/Librem5/chatty";
-    changelog = "https://source.puri.sm/Librem5/chatty/-/blob/${src.rev}/NEWS";
+    mainProgram = "chatty";
+    homepage = "https://gitlab.gnome.org/World/Chatty";
+    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
   };
-}
+})

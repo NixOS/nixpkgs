@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.6";
+  version = "0.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,15 +16,13 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-r6QjtKEnMmWRfDAnxP5zMChCVwyi9Z2lFrYu7hPrTUg=";
+    hash = "sha256-WguSTtWxkiDs5nK5eiaarfD0CBxzIxQR9fxjuW3wMGc=";
   };
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydevccu"
-  ];
+  pythonImportsCheck = [ "pydevccu" ];
 
   meta = with lib; {
     description = "HomeMatic CCU XML-RPC Server with fake devices";

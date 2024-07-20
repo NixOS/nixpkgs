@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.4.0";
+  version = "1.7.0";
   # nixpkgs-update: no auto update
 
   suffix = {
@@ -13,7 +13,7 @@ let
 
   dlbin = sha256: fetchurl {
     url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
+    sha256 = sha256."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
 in
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-WSa8fd0OSPo1HFkH6i8cGMNH1df88xI6PCx39ONb73c=";
-    aarch64-linux = "sha256-eOsO/nbwKT50tC5g6INPELh2yVb5C3EGqNLQLT7IGBs=";
+    x86_64-linux = "sha256-Vb0+bVmf3RCONuUvmu4jGfBsGKkPL6SbZOk/3wb1/1M=";
+    aarch64-linux = "sha256-PLoQA4a6qulxSns/ZRSgn6EtHr46/hstNhP1pAHt9VA=";
   };
 
   dontConfigure = true;
@@ -50,8 +50,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice endocrimes ];
+    maintainers = with maintainers; [ thoughtpolice qjoly ];
   };
 }

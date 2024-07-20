@@ -68,8 +68,9 @@ stdenv.mkDerivation rec {
       chess board & DGT clocks and much more.
     '';
     license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    homepage = "http://www.playwitharena.de";
     platforms = ["x86_64-linux"];
-    hydraPlatforms = lib.platforms.none;
   };
 
 }

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "xdg-ninja";
-  version = "0.2.0.1";
+  version = "0.2.0.2";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
     rev = "v${version}";
-    sha256 = "sha256-ZyqxMlyCB8gEsZTVrxgLdW/mQ/4xeTHTK+lDKIzYs6I=";
+    sha256 = "sha256-ASJIFQ/BpZMQGRtw8kPhtMCbXC1eb/X8TWQz+CAnaSM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,10 +27,11 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A shell script which checks your $HOME for unwanted files and directories";
+    description = "Shell script which checks your $HOME for unwanted files and directories";
     homepage = "https://github.com/b3nj5m1n/xdg-ninja";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ patricksjackson ];
+    maintainers = with maintainers; [ arcuru ];
+    mainProgram = "xdg-ninja";
   };
 }

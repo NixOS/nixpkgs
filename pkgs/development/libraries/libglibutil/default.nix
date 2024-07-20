@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
-  version = "1.0.71";
+  version = "1.0.79";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = pname;
     rev = version;
-    sha256 = "sha256-I58XN1Ku5VVmxuTZ6yPm8jWGKscwLOhetWC+6B6EZRE=";
+    sha256 = "sha256-UJsKjvigZuwDL4DyjUE6fXEecgoHrTE+5pO0hVyCwP4=";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s@Cflags: @Cflags: $($PKG_CONFIG --cflags glib-2.0) @g" $dev/lib/pkgconfig/$pname.pc
   '';
 
-  meta = with lib; {
-    description = "Library of glib utilities.";
+  meta = {
+    description = "Library of glib utilities";
     homepage = "https://git.sailfishos.org/mer-core/libglibutil";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

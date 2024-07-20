@@ -1,28 +1,34 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, stdenv
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "swego";
-  version = "0.98";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
-    rev = "v${version}";
-    sha256 = "sha256-fS1mrB4379hnnkLMkpKqV2QB680t5T0QEqsvqOp9pzY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-roaAzh6Mncu4qtaxEoXk41Mrmz/l7X1+n+Yh5skA65A=";
   };
 
-  vendorSha256 = "sha256-N4HDngQFNCzQ74W52R0khetN6+J7npvBC/bYZBAgLB4=";
+  vendorHash = "sha256-mJWJdwbZq042//hM3WWp2rnLC1GebckUnsIopbF858Q=";
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname
   '';
 
+  ldflags = [
+    "-w"
+    "-s"
+  ];
+
   meta = with lib; {
-    description = "Simple Webserver in Golang";
+    description = "Simple Webserver";
     longDescription = ''
       Swiss army knife Webserver in Golang. Similar to the Python
       SimpleHTTPServer but with many features.
@@ -33,5 +39,6 @@ buildGoModule rec {
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
     broken = stdenv.isDarwin;
+    mainProgram = "swego";
   };
 }

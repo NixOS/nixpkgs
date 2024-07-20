@@ -21,6 +21,7 @@ let
     NODE_ENV = "production";
     RAILS_SERVE_STATIC_FILES = "true";
     RAILS_LOG_TO_STDOUT = "true";
+    REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
   };
   databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
 in
@@ -28,19 +29,14 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution");
+      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zammad;
-        defaultText = literalExpression "pkgs.zammad";
-        description = lib.mdDoc "Zammad package to use.";
-      };
+      package = mkPackageOption pkgs "zammad" { };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/zammad";
-        description = lib.mdDoc ''
+        description = ''
           Path to a folder that will contain Zammad working directory.
         '';
       };
@@ -49,25 +45,55 @@ in
         type = types.str;
         default = "127.0.0.1";
         example = "192.168.23.42";
-        description = lib.mdDoc "Host address.";
+        description = "Host address.";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to open firewall ports for Zammad";
+        description = "Whether to open firewall ports for Zammad";
       };
 
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = lib.mdDoc "Web service port.";
+        description = "Web service port.";
       };
 
       websocketPort = mkOption {
         type = types.port;
         default = 6042;
-        description = lib.mdDoc "Websocket service port.";
+        description = "Websocket service port.";
+      };
+
+      redis = {
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Whether to create a local redis automatically.";
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "zammad";
+          description = ''
+            Name of the redis server. Only used if `createLocally` is set to true.
+          '';
+        };
+
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = ''
+            Redis server address.
+          '';
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 6379;
+          description = "Port of the redis server.";
+        };
       };
 
       database = {
@@ -75,7 +101,7 @@ in
           type = types.enum [ "PostgreSQL" "MySQL" ];
           default = "PostgreSQL";
           example = "MySQL";
-          description = lib.mdDoc "Database engine to use.";
+          description = "Database engine to use.";
         };
 
         host = mkOption {
@@ -90,7 +116,7 @@ in
               MySQL = "localhost";
             }.''${config.services.zammad.database.type};
           '';
-          description = lib.mdDoc ''
+          description = ''
             Database host address.
           '';
         };
@@ -98,13 +124,13 @@ in
         port = mkOption {
           type = types.nullOr types.port;
           default = null;
-          description = lib.mdDoc "Database port. Use `null` for default port.";
+          description = "Database port. Use `null` for default port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "zammad";
-          description = lib.mdDoc ''
+          description = ''
             Database name.
           '';
         };
@@ -112,14 +138,14 @@ in
         user = mkOption {
           type = types.nullOr types.str;
           default = "zammad";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zammad-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password for {option}`services.zammad.database.user`.
           '';
         };
@@ -127,7 +153,7 @@ in
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Whether to create a local database automatically.";
+          description = "Whether to create a local database automatically.";
         };
 
         settings = mkOption {
@@ -137,7 +163,7 @@ in
             {
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             The {file}`database.yml` configuration file as key value set.
             See \<TODO\>
             for list of configuration parameters.
@@ -149,7 +175,7 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = lib.mdDoc ''
+        description = ''
           The path to a file containing the
           `secret_key_base` secret.
 
@@ -204,12 +230,16 @@ in
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
+        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
         assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zammad.database.createLocally is set to true";
+      }
+      {
+        assertion = cfg.redis.createLocally -> cfg.redis.host == "localhost";
+        message = "the redis host must be localhost if services.zammad.redis.createLocally is set to true";
       }
     ];
 
@@ -231,9 +261,16 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
+    };
+
+    services.redis = optionalAttrs cfg.redis.createLocally {
+      servers."${cfg.redis.name}" = {
+        enable = true;
+        port = cfg.redis.port;
+      };
     };
 
     systemd.services.zammad-web = {
@@ -245,6 +282,8 @@ in
       after = [
         "network.target"
         "postgresql.service"
+      ] ++ optionals cfg.redis.createLocally [
+        "redis-${cfg.redis.name}.service"
       ];
       requires = [
         "postgresql.service"
@@ -308,16 +347,15 @@ in
       script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
     };
 
-    systemd.services.zammad-scheduler = {
-      inherit environment;
-      serviceConfig = serviceConfig // { Type = "forking"; };
+    systemd.services.zammad-worker = {
+      inherit serviceConfig environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
-      description = "Zammad scheduler";
+      description = "Zammad background worker";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/scheduler.rb start";
+      script = "./script/background-worker.rb start";
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ garbas taeer ];
+  meta.maintainers = with lib.maintainers; [ taeer netali ];
 }

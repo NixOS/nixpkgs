@@ -2,6 +2,7 @@
 , lib
 , nixosTests
 , fetchFromGitHub
+, fetchYarnDeps
 , applyPatches
 , bundlerEnv
 , defaultGemConfig
@@ -16,13 +17,13 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
-, v8
 , cacert
+, redis
 }:
 
 let
   pname = "zammad";
-  version = "5.4.1";
+  version = "6.2.0";
 
   src = applyPatches {
 
@@ -81,7 +82,7 @@ let
       };
       mini_racer = attrs: {
         buildFlags = [
-          "--with-v8-dir=\"${v8}\""
+          "--with-v8-dir=\"${nodejs.libv8}\""
         ];
         dontBuild = false;
         postPatch = ''
@@ -95,9 +96,12 @@ let
   yarnEnv = yarn2nix-moretea.mkYarnPackage {
     pname = "${pname}-node-modules";
     inherit version src;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
     packageJSON = ./package.json;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-u72ZTpcUvFa1gaWi4lzTQa+JsI85jU4n8r1JhqFnCj4=";
+    };
 
     yarnPreBuild = ''
       mkdir -p deps/Zammad
@@ -120,13 +124,26 @@ stdenv.mkDerivation {
     cacert
   ];
 
+  nativeBuildInputs = [
+    redis
+  ];
+
   RAILS_ENV = "production";
 
   buildPhase = ''
     node_modules=${yarnEnv}/libexec/Zammad/node_modules
     ${yarn2nix-moretea.linkNodeModulesHook}
 
+    mkdir redis-work
+    pushd redis-work
+    redis-server &
+    REDIS_PID=$!
+    popd
+
     rake DATABASE_URL="nulldb://user:pass@127.0.0.1/dbname" assets:precompile
+
+    kill $REDIS_PID
+    rm -r redis-work
   '';
 
   installPhase = ''
@@ -143,10 +160,10 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution.";
+    description = "Zammad, a web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ n0emis garbas taeer ];
+    maintainers = with maintainers; [ n0emis taeer netali ];
   };
 }

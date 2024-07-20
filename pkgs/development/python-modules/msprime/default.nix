@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonOlder
-, gsl
-, numpy
-, newick
-, tskit
-, demes
-, pytest
-, pytest-xdist
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  demes,
+  fetchPypi,
+  gsl,
+  newick,
+  numpy,
+  oldest-supported-numpy,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  tskit,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YAJa2f0w2CenKubnYLbP8HodDhabLB2hAkyw/CPkp6o=";
+    hash = "sha256-s/Ys1RatLkPIQS6h8kKsrRvJOTkc/pyqGWJYdOLjSDU=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
     gsl
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
   ];
 
-  buildInputs = [
-    gsl
-  ];
+  buildInputs = [ gsl ];
 
   propagatedBuildInputs = [
     numpy
@@ -41,40 +45,37 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-xdist
     scipy
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # avoid adding the current directory to sys.path
-    # https://docs.pytest.org/en/7.1.x/explanation/pythonpath.html#invoking-pytest-versus-python-m-pytest
-    # need pythonPackages.stdpopsim
-    # need pythonPackages.bintrees
-    # need pythonPachages.python_jsonschema_objects
-    # ModuleNotFoundError: No module named 'lwt_interface.dict_encoding_testlib'
-    # fails for python311
-    # fails for python311
-    pytest -v --import-mode append \
-      --ignore=tests/test_demography.py \
-      --ignore=tests/test_algorithms.py \
-      --ignore=tests/test_provenance.py \
-      --ignore=tests/test_dict_encoding.py \
-      --deselect=tests/test_ancestry.py::TestSimulator::test_debug_logging \
-      --deselect=tests/test_ancestry.py::TestSimulator::test_debug_logging_dtwf
-
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [
-    "msprime"
+  disabledTests = [
+    "tests/test_ancestry.py::TestSimulator::test_debug_logging"
+    "tests/test_ancestry.py::TestSimulator::test_debug_logging_dtw"
   ];
+
+  disabledTestPaths = [
+    "tests/test_demography.py"
+    "tests/test_algorithms.py"
+    "tests/test_provenance.py"
+    "tests/test_dict_encoding.py"
+  ];
+
+  # `python -m pytest` puts $PWD in sys.path, which causes the extension
+  # modules imported as `msprime._msprime` to be unavailable, failing the
+  # tests. This deletes the `msprime` folder such that only what's installed in
+  # $out is used for the imports. See also discussion at:
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    rm -r msprime
+  '';
+  pythonImportsCheck = [ "msprime" ];
 
   meta = with lib; {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";
     homepage = "https://github.com/tskit-dev/msprime";
+    changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alxsimon ];
   };

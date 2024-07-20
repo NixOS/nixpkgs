@@ -112,38 +112,33 @@ in
 
       enable = mkOption {
         default = false;
-        description = lib.mdDoc "Whether to enable the influxdb server";
+        description = "Whether to enable the influxdb server";
         type = types.bool;
       };
 
-      package = mkOption {
-        default = pkgs.influxdb;
-        defaultText = literalExpression "pkgs.influxdb";
-        description = lib.mdDoc "Which influxdb derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "influxdb" { };
 
       user = mkOption {
         default = "influxdb";
-        description = lib.mdDoc "User account under which influxdb runs";
+        description = "User account under which influxdb runs";
         type = types.str;
       };
 
       group = mkOption {
         default = "influxdb";
-        description = lib.mdDoc "Group under which influxdb runs";
+        description = "Group under which influxdb runs";
         type = types.str;
       };
 
       dataDir = mkOption {
         default = "/var/db/influxdb";
-        description = lib.mdDoc "Data directory for influxd data files.";
+        description = "Data directory for influxd data files.";
         type = types.path;
       };
 
       extraConfig = mkOption {
         default = {};
-        description = lib.mdDoc "Extra configuration options for influxdb";
+        description = "Extra configuration options for influxdb";
         type = types.attrs;
       };
     };
@@ -166,6 +161,7 @@ in
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = cfg.user;
         Group = cfg.group;
+        Restart = "on-failure";
       };
       postStart =
         let

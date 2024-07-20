@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dzvip90yf1wg0fhfghn96dwrhg289d06b624px9a2wwy3vp5ryg";
   };
 
-  sourceRoot = "code-0-r${src.rev}/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "BINDIR=$(out)/bin" ];
 
   meta = with lib; {
-    description = "A multi-platform cross assembler for 6502/6510/65816 CPUs";
+    description = "Multi-platform cross assembler for 6502/6510/65816 CPUs";
+    mainProgram = "acme";
     homepage = "https://sourceforge.net/projects/acme-crossass/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

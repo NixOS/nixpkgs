@@ -13,14 +13,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-NsxGpjuZPpz4gCJRp5IOcfRFh8DTud47nV2bE0/kc2Q=";
 
+  postPatch = ''
+    # drop hardcoded linker names, fixing static build
+    rm .cargo/config.toml
+  '';
+
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
 
   meta = with lib; {
-    description = "A Prometheus exporter for WireGuard, written in Rust";
+    description = "Prometheus exporter for WireGuard, written in Rust";
     homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 globin ];
+    mainProgram = "prometheus_wireguard_exporter";
   };
 }

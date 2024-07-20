@@ -1,37 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, trio
-, outcome
-, sniffio
-, pytest-trio
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  greenlet,
+  trio,
+  outcome,
+  sniffio,
+  exceptiongroup,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.12.0";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "trio_asyncio";
-    inherit version;
-    sha256 = "824be23b0c678c0df942816cdb57b92a8b94f264fffa89f04626b0ba2d009768";
+  src = fetchFromGitHub {
+    owner = "python-trio";
+    repo = "trio-asyncio";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    greenlet
     trio
     outcome
     sniffio
+  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+
+  pytestFlagsArray = [
+    # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
+    "-W"
+    "ignore::RuntimeWarning"
   ];
 
   nativeCheckInputs = [
@@ -39,29 +52,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # https://github.com/python-trio/trio-asyncio/issues/112
-    "-W" "ignore::DeprecationWarning"
-    # trio.MultiError is deprecated since Trio 0.22.0; use BaseExceptionGroup (on Python 3.11 and later) or exceptiongroup.BaseExceptionGroup (earlier versions) instead (https://github.com/python-trio/trio/issues/2211)
-    "-W" "ignore::trio.TrioDeprecationWarning"
-  ];
-
-  disabledTestPaths = [
-    "tests/python" # tries to import internal API test.test_asyncio
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    "test_run_task"
-  ];
-
-  pythonImportsCheck = [
-    "trio_asyncio"
-  ];
+  pythonImportsCheck = [ "trio_asyncio" ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-trio/trio-asyncio/blob/v${version}/docs/source/history.rst";
     description = "Re-implementation of the asyncio mainloop on top of Trio";
     homepage = "https://github.com/python-trio/trio-asyncio";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ dotlambda ];
   };
 }

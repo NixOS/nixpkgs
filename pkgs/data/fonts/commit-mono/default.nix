@@ -4,11 +4,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "commit-mono";
-  version = "1.132";
+  version = "1.143";
 
   src = fetchzip {
-    url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/${version}/CommitMono-${version}.zip";
-    sha256 = "sha256-a9zxzjfOFmqemSIb4Tav0l7YtKvbyizDy+1dwPuZ4d4=";
+    url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/v${version}/CommitMono-${version}.zip";
+    hash = "sha256-JTyPgWfbWq+lXQU/rgnyvPG6+V3f+FB5QUkd+I1oFKE=";
     stripRoot = false;
   };
 
@@ -20,12 +20,13 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 -t $out/share/fonts/opentype/ *.otf
+    install -Dm644 CommitMono-${version}/*.otf             -t $out/share/fonts/opentype
+    install -Dm644 CommitMono-${version}/ttfautohint/*.ttf -t $out/share/fonts/truetype
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "An anonymous and neutral programming typeface focused on creating a better reading experience";
+    description = "Anonymous and neutral programming typeface focused on creating a better reading experience";
     homepage = "https://commitmono.com/";
     license = licenses.ofl;
     maintainers = [ maintainers.yoavlavi ];

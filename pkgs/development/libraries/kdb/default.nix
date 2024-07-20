@@ -4,12 +4,12 @@
 , fetchpatch
 , extra-cmake-modules
 , qtbase
-, qttranslations
 , kcoreaddons
 , python3
 , sqlite
 , postgresql
 , libmysqlclient
+, qttools
 }:
 
 mkDerivation rec {
@@ -34,14 +34,15 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules qttools ];
 
-  buildInputs = [ qttranslations kcoreaddons python3 sqlite postgresql libmysqlclient ];
+  buildInputs = [ kcoreaddons python3 sqlite postgresql libmysqlclient ];
 
   propagatedBuildInputs = [ qtbase ];
 
   meta = with lib; {
-    description = "A database connectivity and creation framework for various database vendors";
+    description = "Database connectivity and creation framework for various database vendors";
+    mainProgram = "kdb3_sqlite3_dump";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

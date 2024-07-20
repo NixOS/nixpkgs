@@ -1,0 +1,21 @@
+--- a/unix/configure	2009-04-16 15:25:12.000000000 -0400
++++ b/unix/configure	2023-05-30 15:18:33.670321348 -0400
+@@ -408,7 +408,7 @@
+ echo Check for errno declaration
+ cat > conftest.c << _EOF_
+ #include <errno.h>
+-main()
++int main()
+ {
+   errno = 0;
+   return 0;
+@@ -419,6 +419,8 @@
+ 
+ echo Check for directory libraries
+ cat > conftest.c << _EOF_
++#include <sys/types.h>
++#include <dirent.h>
+ int main() { return closedir(opendir(".")); }
+ _EOF_
+ 
+

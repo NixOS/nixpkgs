@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "xtruss";
   };
 }

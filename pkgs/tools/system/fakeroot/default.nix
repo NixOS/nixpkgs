@@ -1,4 +1,5 @@
 { lib
+, coreutils
 , stdenv
 , fetchurl
 , fetchpatch
@@ -6,14 +7,15 @@
 , libcap
 , gnused
 , nixosTests
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.29";
   pname = "fakeroot";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.gz";
+    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${finalAttrs.version}.orig.tar.gz";
     sha256 = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
   };
 
@@ -39,16 +41,23 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ getopt gnused ]
-    ++ lib.optional (!stdenv.isDarwin) libcap
-    ;
+  buildInputs = lib.optional (!stdenv.isDarwin) libcap;
 
   postUnpack = ''
-    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in
+    sed -i \
+      -e 's@getopt@${getopt}/bin/getopt@g' \
+      -e 's@sed@${gnused}/bin/sed@g' \
+      -e 's@kill@${coreutils}/bin/kill@g' \
+      -e 's@/bin/ls@${coreutils}/bin/ls@g' \
+      -e 's@cut@${coreutils}/bin/cut@g' \
+      fakeroot-${finalAttrs.version}/scripts/fakeroot.in
   '';
 
   passthru = {
     tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
       # A lightweight *unit* test that exercises fakeroot and fakechroot together:
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };
@@ -61,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [viric];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -19,7 +19,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-jDMAtcq3ZowFdky5BdTkVNxq4ltkhklr76nXYJgGALg=";
+  vendorHash = "sha256-jDMAtcq3ZowFdky5BdTkVNxq4ltkhklr76nXYJgGALg=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -32,5 +32,6 @@ buildGoModule rec {
     license = lib.licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
     maintainers = with lib.maintainers; [ lovek323 ];
+    mainProgram = "goreplay";
   };
 }

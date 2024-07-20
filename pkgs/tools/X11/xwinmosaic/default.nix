@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
+    mainProgram = "xwinmosaic";
   };
 }

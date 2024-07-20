@@ -5,29 +5,40 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "2.4.0";
-  format = "setuptools";
+  version = "3.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-gZXA+2zW25Dl8JmBgg7APZt6ZdpFOEFZXAkiZ+tn/4g=";
+    hash = "sha256-Qr3ZGU4y7f6yHD78ecdv7a6IBFDpT+/4Yez0n/MenN0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"pytest-runner",' ""
+  '';
+
+  pythonRelaxDeps = [
+    "python-socketio"
+  ];
+
+  build-system = with python3.pkgs; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     click
     faraday-agent-parameters-types
     faraday-plugins
     itsdangerous
     psutil
+    pytenable
     python-gvm
     python-owasp-zap-v2-4
+    python-socketio
     pyyaml
     requests
     syslog-rfc5424-formatter
@@ -38,11 +49,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -56,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTestPaths = [
     # Tests require a running Docker instance
     "tests/plugins-docker/test_executors.py"
+    "tests/unittests/test_import_official_executors.py"
   ];
 
   pythonImportsCheck = [
@@ -66,7 +73,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
     changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "faraday-dispatcher";
   };
 }

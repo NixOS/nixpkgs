@@ -1,5 +1,5 @@
 { lib, stdenv, linkFarm, lightdm-tiny-greeter, fetchFromGitHub
-, pkg-config, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
+, pkg-config, lightdm, gtk3, glib, wrapGAppsHook3, config, conf ? config.lightdm-tiny-greeter.conf or "" }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-tiny-greeter";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ lightdm gtk3 glib ];
 
   postUnpack = lib.optionalString (conf != "") ''
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   }];
 
   meta = with lib; {
-    description = "A tiny multi user lightdm greeter";
+    description = "Tiny multi user lightdm greeter";
+    mainProgram = "lightdm-tiny-greeter";
     homepage = "https://github.com/off-world/lightdm-tiny-greeter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];

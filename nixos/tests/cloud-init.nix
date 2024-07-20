@@ -73,6 +73,7 @@ in makeTest {
   };
   testScript = ''
     # To wait until cloud-init terminates its run
+    unnamed.wait_for_unit("cloud-init-local.service")
     unnamed.wait_for_unit("cloud-final.service")
 
     unnamed.succeed("cat /tmp/cloudinit-write-file | grep -q 'cloudinit'")

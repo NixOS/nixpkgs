@@ -1,5 +1,4 @@
 { stdenv
-, breakpointHook
 , fetchFromGitLab
 , python
 , libxml2
@@ -39,7 +38,7 @@
 , dia
 , tetex ? null
 , ghostscript ? null
-, texlive ? null
+, texliveMedium ? null
 
   # generates python bindings
 , pythonSupport ? true
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
     owner = "nsnam";
     repo = "ns-3-dev";
     rev = "ns-3.${version}";
-    sha256 = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
+    hash = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config pythonEnv ];
@@ -72,14 +71,14 @@ stdenv.mkDerivation rec {
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
     ++ lib.optionals enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texlive.combined.scheme-medium ]
+    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texliveMedium ]
     ++ [
     libxml2
     pythonEnv
     sqlite.dev
     gsl
     boost
-    root
+    root # provides cppyy
     glib.out
     glib.dev
     libpcap
@@ -120,7 +119,7 @@ stdenv.mkDerivation rec {
     "-DPython3_EXECUTABLE=${pythonEnv}/bin/python"
     "-DNS3_PYTHON_BINDINGS=ON"
     "-DNS3_DES_METRICS=ON"
-    "-DNS3_BINDINGS_INSTALL_DIR=lib/${pythonEnv.libPrefix}/site-packages"
+    "-DNS3_BINDINGS_INSTALL_DIR=${pythonEnv.sitePackages}"
     "-DNS3_LOG=ON"
     "-DNS3_ASSERT=ON"
     "-DNS3_GTK3=ON"
@@ -134,7 +133,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
-    description = "A discrete time event network simulator";
+    description = "Discrete time event network simulator";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ teto rgrunbla ];
     # never built on aarch64-darwin since first introduction in nixpkgs

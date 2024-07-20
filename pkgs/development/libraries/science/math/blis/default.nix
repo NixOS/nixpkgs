@@ -17,13 +17,13 @@ let
   blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "blis";
-  version = "0.9.0";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
     rev = version;
-    sha256 = "sha256-1aHIdt5wCDrT1hBPnaUVThwjwDkJQ0G0+tao2iFXYpM=";
+    sha256 = "sha256-lAo6C34QQvXr3LmcsnTp4+Imi/lKxzcWu3EJkVgLvDI=";
   };
 
   inherit blas64;
@@ -48,8 +48,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ln -s $out/lib/libblis.so.3 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis.so.3 $out/lib/libcblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libcblas.so.3
     ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stephen-huan ];
     platforms = [ "x86_64-linux" ];
   };
 }

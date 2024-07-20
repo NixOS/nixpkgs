@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fldigi";
-  version = "4.1.26";
+  version = "4.2.05";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RIrTWjQPnn0I8bzV3kMQEesNaAkIQnhikLMaYivrWRc=";
+    hash = "sha256-rBGJ+63Szhy37LQw0LpE2/lLyP5lwK7hsz/uq453iHY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     libsamplerate
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
 
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -47,8 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ relrod ftrvxmtrx ];
     platforms = platforms.unix;
-    # unable to execute command: posix_spawn failed: Argument list too long
-    # Builds fine on aarch64-darwin
-    broken = stdenv.system == "x86_64-darwin";
   };
 }

@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.kovirobi ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "fatsort";
   };
 }

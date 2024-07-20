@@ -1,8 +1,7 @@
 { stdenv, lib
-, kernel
 , fetchurl
 , pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
+, libbsd, numactl, libbpf, zlib, elfutils, jansson, openssl, libpcap, rdma-core
 , doxygen, python3, pciutils
 , withExamples ? []
 , shared ? false
@@ -13,16 +12,13 @@
   )
 }:
 
-let
-  mod = kernel != null;
-  dpdkVersion = "22.11.1";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "dpdk";
-  version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
+  version = "23.11";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-3gdkZfcXSg1ScUuQcuSDenJrqsgtj+fcZEytXIz3TUw=";
+    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+    sha256 = "sha256-ZPpY/fyelRDo5BTjvt0WW9PUykZaIxsoAyP4PNU/2GU=";
   };
 
   nativeBuildInputs = [
@@ -38,13 +34,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     jansson
     libbpf
-    libelf
+    elfutils
     libpcap
     numactl
     openssl.dev
     zlib
     python3
-  ] ++ lib.optionals mod kernel.moduleBuildDependencies;
+  ];
 
   propagatedBuildInputs = [
     # Propagated to support current DPDK users in nixpkgs which statically link
@@ -56,21 +52,15 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs config/arm buildtools
-  '' + lib.optionalString mod ''
-    # kernel_install_dir is hardcoded to `/lib/modules`; patch that.
-    sed -i "s,kernel_install_dir *= *['\"].*,kernel_install_dir = '$kmod/lib/modules/${kernel.modDirVersion}'," kernel/linux/meson.build
   '';
 
   mesonFlags = [
     "-Dtests=false"
     "-Denable_docs=true"
-    "-Denable_kmods=${lib.boolToString mod}"
+    "-Ddeveloper_mode=disabled"
   ]
-  # kni kernel driver is currently not compatble with 5.11
-  ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
-  ++ lib.optional (!shared) "-Ddefault_library=static"
+  ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
   ++ lib.optional (machine != null) "-Dmachine=${machine}"
-  ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
   postInstall = ''
@@ -87,15 +77,13 @@ in stdenv.mkDerivation rec {
 
   outputs =
     [ "out" "doc" ]
-    ++ lib.optional mod "kmod"
     ++ lib.optional (withExamples != []) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
-    license = with licenses; [ lgpl21 gpl2 bsd2 ];
+    license = with licenses; [ lgpl21 gpl2Only bsd2 ];
     platforms =  platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
-    broken = mod && kernel.isHardened;
   };
 }

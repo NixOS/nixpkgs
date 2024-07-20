@@ -12,14 +12,14 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "comedilib";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Linux-Comedi";
     repo = "comedilib";
-    rev = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "r${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "0kfs2dw62vjz8j7fgsxq6ky8r8kca726gyklbm6kljvgfh47lyfw";
   };
 
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with lib; {
-    description = "The Linux Control and Measurement Device Interface Library";
+    description = "Linux Control and Measurement Device Interface Library";
     homepage = "https://github.com/Linux-Comedi/comedilib";
     license = licenses.lgpl21;
     maintainers = [ maintainers.doronbehar ];
     platforms = platforms.linux;
   };
-}
+})

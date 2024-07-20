@@ -5,29 +5,29 @@
 , pkg-config
 , withNativeTls ? true
 , stdenv
-, Security
+, darwin
 , openssl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.18.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-2qZ+FGc8Y8HLJaQluVv036NG77lvaqsc3I5cmkD+r/M=";
+    sha256 = "sha256-FhhVodpIdcB+2s4AkFk6phvoXFLYll/CFJV2/lHS0ww=";
   };
 
-  cargoSha256 = "sha256-0lPEZ8Th3PAw6AEnb+ciKMhi5wysFCvYwiHd9/o8VVc=";
+  cargoHash = "sha256-P/OLzMpqWThrdCReWcPlVPGqVSjVD1veq3xL0TJ/soM=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = lib.optionals withNativeTls
-    (if stdenv.isDarwin then [ Security ] else [ openssl ]);
+    (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
@@ -59,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda payas ];
+    maintainers = with maintainers; [ figsoda bhankas ];
   };
 }

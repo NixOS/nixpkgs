@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "takethetime";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "TakeTheTime";
     inherit version;
-    sha256 = "sha256-2+MEU6G1lqOPni4/qOGtxa8tv2RsoIN61cIFmhb+L/k=";
+    hash = "sha256-2+MEU6G1lqOPni4/qOGtxa8tv2RsoIN61cIFmhb+L/k=";
   };
 
   disabled = pythonOlder "3.6";

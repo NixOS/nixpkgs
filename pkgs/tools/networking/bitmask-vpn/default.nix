@@ -16,6 +16,7 @@
 , qmltermwidget
 , qtbase
 , qtdeclarative
+, qtgraphicaleffects
 , qtinstaller
 , qtquickcontrols
 , qtquickcontrols2
@@ -25,21 +26,21 @@
 , provider ? "riseup"
 }:
 let
-  version = "0.21.6";
+  version = "0.21.11";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
     rev = version;
-    sha256 = "sha256-LMz+ZgQVFGujoLA8rlyZ3VnW/NSlPipD5KwCe+cFtnY=";
+    sha256 = "sha256-mhmKG6Exxh64oeeeLezJYWEw61iIHLasHjLomd2L8P4=";
   };
 
   # bitmask-root is only used on GNU/Linux
   # and may one day be replaced by pkg/helper
   bitmask-root = mkDerivation {
     inherit src version;
-    sourceRoot = "source/helpers";
+    sourceRoot = "${src.name}/helpers";
     pname = "bitmask-root";
     nativeBuildInputs = [ python3Packages.wrapPython ];
     postPatch = ''
@@ -67,7 +68,7 @@ in
 buildGoModule rec {
   inherit src version;
   pname = "${provider}-vpn";
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace pkg/pickle/helpers.go \
@@ -98,7 +99,6 @@ buildGoModule rec {
     pkg-config
     python3Packages.wrapPython
     qmake
-    qtquickcontrols
     qtquickcontrols2
     qttools
     which
@@ -109,6 +109,9 @@ buildGoModule rec {
     qtbase
     qmltermwidget
     qtdeclarative
+    qtgraphicaleffects
+    qtquickcontrols
+    qtquickcontrols2
   ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,

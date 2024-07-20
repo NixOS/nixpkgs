@@ -1,33 +1,34 @@
-{ lib
-, ajpy
-, buildPythonPackage
-, cx_oracle
-, dnspython
-, fetchPypi
-, impacket
-, ipy
-, mysqlclient
-, paramiko
-, psycopg2
-, pyasn1
-, pycrypto
-, pycurl
-, pyopenssl
-, pysnmp
-, pysqlcipher3
-, pythonOlder
+{
+  lib,
+  ajpy,
+  buildPythonPackage,
+  cx-oracle,
+  dnspython,
+  fetchPypi,
+  impacket,
+  ipy,
+  mysqlclient,
+  paramiko,
+  psycopg2,
+  pyasn1,
+  pycrypto,
+  pycurl,
+  pyopenssl,
+  pysnmp,
+  pysqlcipher3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "patator";
-  version = "0.9";
+  version = "1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aMskvcMELuDUeiiLGai5mmxUvb1N3wxYF9m5rAoNihU=";
+    hash = "sha256-VQ7JPyQOY9X/7LVAvTwftoOegt4KyfERgu38HfmsYDM=";
   };
 
   postPatch = ''
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ajpy
-    cx_oracle
+    cx-oracle
     dnspython
     impacket
     ipy

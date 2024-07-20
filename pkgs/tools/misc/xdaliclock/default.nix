@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
-  version = "2.47";
+  version = "2.48";
 
   src = fetchurl {
     url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
-    hash = "sha256-1Jkv9iulvyY+b5KryDr8s+v8LU95hcVi7PJQsL1rUL4=";
+    hash = "sha256-BZiqjTSSAgvT/56OJDcKh4pDP9uqVhR5cCx89H+5FLQ=";
   };
 
   # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3
@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A clock application that morphs digits when they are changed";
+    description = "Clock application that morphs digits when they are changed";
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";
+    mainProgram = "xdaliclock";
   };
 }

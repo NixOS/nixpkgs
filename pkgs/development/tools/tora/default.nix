@@ -48,6 +48,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Tora SQL tool";
+    mainProgram = "tora";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
     license = licenses.asl20;

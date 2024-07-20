@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "naev";
-  version = "0.10.6";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "naev";
     repo = "naev";
     rev = "v${version}";
-    sha256 = "sha256-nUQhpKl1aIsoJZtQGyHuwPhRBeb7nSs6+MfmTtX17mY=";
+    hash = "sha256-vdPkACgLGSTb9E/HZR5KoXn/fro0iHV7hX9kJim1j/M=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "2D action/rpg space game";
+    mainProgram = "naev";
     homepage = "http://www.naev.org";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ralismark ];

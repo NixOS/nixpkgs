@@ -1,29 +1,20 @@
-{ lib, stdenv, undmg, fetchurl }:
+{ stdenv, pname, version, src, meta, undmg }:
 
-stdenv.mkDerivation rec {
-  pname = "lens";
-  version = "2022.12";
-  build = "${version}.11410-latest";
-  appName = "Lens";
+stdenv.mkDerivation {
+  inherit pname version src meta;
 
-  sourceRoot = "${appName}.app";
+  sourceRoot = ".";
 
-  src = fetchurl {
-    url = "https://api.k8slens.dev/binaries/Lens-${build}-arm64.dmg";
-    sha256 = "sha256-PKWJ2CZ/wacbJnrCZdYwYJzbFVhjIGAw60UGhdw11Mc=";
-  };
+  nativeBuildInputs = [ undmg ];
 
-  buildInputs = [ undmg ];
   installPhase = ''
-    mkdir -p "$out/Applications/${appName}.app"
-    cp -R . "$out/Applications/${appName}.app"
+    runHook preInstall
+
+    mkdir -p "$out/Applications"
+    cp -R "Lens.app" "$out/Applications/Lens.app"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "The Kubernetes IDE";
-    homepage = "https://k8slens.dev/";
-    license = licenses.lens;
-    maintainers = with maintainers; [ dbirks ];
-    platforms = [ "aarch64-darwin" ];
-  };
+  dontFixup = true;
 }

@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , libnotify
 , libayatana-appindicator
@@ -35,11 +35,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     libnotify
     libayatana-appindicator
   ];
@@ -50,10 +51,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fully-featured alarm clock with an indicator";
+    description = "Fully-featured alarm clock with an indicator";
     homepage = "https://alarm-clock-applet.github.io";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
+    mainProgram = "alarm-clock-applet";
   };
 }

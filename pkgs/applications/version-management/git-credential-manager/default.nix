@@ -20,20 +20,20 @@
 assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.2.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-XXtir/sSjJ1rpv3UQHM3Kano/fMBch/sm8ZtYwGyFyQ=";
+    hash = "sha256-fD/HToyreYS8PG85CHHLPQOUKV1cDYGukxyVOr+7cKk=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
-  dotnetInstallFlags = [ "--framework" "net7.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnetInstallFlags = [ "--framework" "net8.0" ];
   executables = [ "git-credential-manager" ];
 
   runtimeDeps = [ fontconfig ]
@@ -51,7 +51,7 @@ buildDotnetModule rec {
   };
 
   meta = with lib; {
-    description = "A secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services";
+    description = "Secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services";
     homepage = "https://github.com/git-ecosystem/git-credential-manager";
     license = with licenses; [ mit ];
     platforms = platforms.unix;
@@ -63,5 +63,6 @@ buildDotnetModule rec {
       .NET can find `/usr/bin/codesign` to sign the compiled binary.
       This problem is common to all .NET packages on MacOS with Nix.
     '';
+    mainProgram = "git-credential-manager";
   };
 }

@@ -15,8 +15,10 @@
 , pkg-config
 , protobuf
 , python3
+, systemd
+, enableSystemdResolved ? false
 , tinyxml-2
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.docutils
     python3.pkgs.jinja2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.wrapPython
   ] ++ pythonPath;
 
@@ -80,6 +82,8 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
     tinyxml-2
+  ] ++ lib.optionals enableSystemdResolved [
+    systemd
   ];
 
   # runtime deps
@@ -101,6 +105,10 @@ stdenv.mkDerivation rec {
     "--enable-addons-aws"
     "--disable-selinux-build"
     "--disable-build-test-progs"
+  ] ++ lib.optionals enableSystemdResolved [
+    # This defaults to --resolv-conf /etc/resolv.conf. See
+    # https://github.com/OpenVPN/openvpn3-linux/blob/v20/configure.ac#L434
+    "DEFAULT_DNS_RESOLVER=--systemd-resolved"
   ];
 
   NIX_LDFLAGS = "-lpthread";

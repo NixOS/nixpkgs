@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-hlr";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
     rev = version;
-    hash = "sha256-lFIYoDaJbVcC0A0TukRO9KDTVx31WqPPz/Z3wACJBp0=";
+    hash = "sha256-snl4Ezvz28NJEjHwb68V+W3MvMJjkFvc/AlGaeSyiXc=";
   };
 
   postPatch = ''
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     description = "Osmocom implementation of 3GPP Home Location Registr (HLR)";
     homepage = "https://osmocom.org/projects/osmo-hlr";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "osmo-hlr";
   };
 }

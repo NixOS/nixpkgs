@@ -1,48 +1,71 @@
 { useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl, nixosTests
-, openssl, zlib, libxcrypt
-, lua5_3 ? null, pcre ? null, systemd ? null
+, sslLibrary ? "quictls"
+, stdenv
+, lib
+, fetchurl
+, nixosTests
+, zlib
+, libxcrypt
+, wolfssl
+, libressl
+, quictls
+, openssl
+, lua5_4
+, pcre2
 }:
 
-assert useLua -> lua5_3 != null;
-assert usePcre -> pcre != null;
-
-stdenv.mkDerivation rec {
+assert lib.assertOneOf "sslLibrary" sslLibrary [ "quictls" "openssl" "libressl" "wolfssl" ];
+let
+  sslPkgs = {
+    inherit quictls openssl libressl;
+    wolfssl = wolfssl.override {
+      variant = "haproxy";
+      extraConfigureFlags = [ "--enable-quic" ];
+    };
+  };
+  sslPkg = sslPkgs.${sslLibrary};
+in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.8.1";
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SFVS/NnV1fQarQRvEx/Ap+hJvvJaNJoEB1CvDG/FaAc=";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Oac8GHoLANJgLLP/ylLRtZ2Q8JAyc0/owD6y4pp9Gd8=";
   };
 
-  buildInputs = [ openssl zlib libxcrypt ]
-    ++ lib.optional useLua lua5_3
-    ++ lib.optional usePcre pcre
-    ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = [ sslPkg zlib libxcrypt ]
+    ++ lib.optional useLua lua5_4
+    ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    ("TARGET=" + (if stdenv.isSunOS  then "solaris"
-             else if stdenv.isLinux  then "linux-glibc"
-             else if stdenv.isDarwin then "osx"
-             else "generic"))
+    ("TARGET=" + (if stdenv.isSunOS then "solaris"
+    else if stdenv.isLinux then "linux-glibc"
+    else if stdenv.isDarwin then "osx"
+    else "generic"))
   ];
 
   buildFlags = [
-    "USE_OPENSSL=yes"
     "USE_ZLIB=yes"
+    "USE_OPENSSL=yes"
+    "SSL_INC=${lib.getDev sslPkg}/include"
+    "SSL_LIB=${lib.getDev sslPkg}/lib"
+    "USE_QUIC=yes"
+  ] ++ lib.optionals (sslLibrary == "openssl") [
+    "USE_QUIC_OPENSSL_COMPAT=yes"
+  ] ++ lib.optionals (sslLibrary == "wolfssl") [
+    "USE_OPENSSL_WOLFSSL=yes"
   ] ++ lib.optionals usePcre [
-    "USE_PCRE=yes"
-    "USE_PCRE_JIT=yes"
+    "USE_PCRE2=yes"
+    "USE_PCRE2_JIT=yes"
   ] ++ lib.optionals useLua [
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_3}/lib"
-    "LUA_INC=${lua5_3}/include"
+    "LUA_LIB=${lua5_4}/lib"
+    "LUA_INC=${lua5_4}/include"
   ] ++ lib.optionals stdenv.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
@@ -54,8 +77,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.haproxy = nixosTests.haproxy;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/CHANGELOG";
     description = "Reliable, high performance TCP/HTTP load balancer";
+    homepage = "https://haproxy.org";
+    license = with lib.licenses; [ gpl2Plus lgpl21Only ];
     longDescription = ''
       HAProxy is a free, very fast and reliable solution offering high
       availability, load balancing, and proxying for TCP and HTTP-based
@@ -64,10 +90,8 @@ stdenv.mkDerivation rec {
       tens of thousands of connections is clearly realistic with todays
       hardware.
     '';
-    homepage = "https://haproxy.org";
-    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
-    license = with licenses; [ gpl2Plus lgpl21Only ];
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ vifino ];
+    platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "haproxy";
   };
-}
+})

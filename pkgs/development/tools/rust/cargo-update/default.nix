@@ -7,7 +7,7 @@
 , ronn
 , stdenv
 , curl
-, libgit2_1_5
+, libgit2
 , libssh2
 , openssl
 , zlib
@@ -16,14 +16,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "13.0.4";
+  version = "13.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-LIOJaJKjl9GrGazIYeJWKuAQTxD6OlVO86qWhKnolQE=";
+    hash = "sha256-/9igT1/3ck8Roy2poq1urf+cLblentOB7S9Hh6uqIEw=";
   };
 
-  cargoHash = "sha256-fx+LWNnzCVUz2owETXUgqjT+AUtda4RZnVXUabPX8q4=";
+  cargoHash = "sha256-pdWVp9+CLnNO7+U0a8WXWHZ+EeGNYx9J7WWAI1MTDvc=";
 
   nativeBuildInputs = [
     cmake
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     libssh2
     openssl
     zlib
@@ -55,11 +55,15 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
   meta = with lib; {
-    description = "A cargo subcommand for checking and applying updates to installed executables";
+    description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];
+    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor matthiasbeyer ];
   };
 }

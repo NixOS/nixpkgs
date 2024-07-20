@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, google-cloud-storage
-, mock
-, pytestCheckHook
-, pythonOlder
-, smart-open
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pathlib-abc,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  smart-open,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.10.2";
-  format = "setuptools";
+  version = "0.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecVyq3/thNxGg3NG7a5YVlmS0Ed6eJzUaRpB2Oq5kX0=";
+    hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
-  propagatedBuildInputs = [
-    google-cloud-storage
+
+  pythonRelaxDeps = [ "smart-open" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    pathlib-abc
     smart-open
     typer
   ];
@@ -40,12 +46,11 @@ buildPythonPackage rec {
     "pathy/_tests/test_s3.py"
   ];
 
-  pythonImportsCheck = [
-    "pathy"
-  ];
+  pythonImportsCheck = [ "pathy" ];
 
   meta = with lib; {
-    description = "A Path interface for local and cloud bucket storage";
+    description = "Path interface for local and cloud bucket storage";
+    mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];

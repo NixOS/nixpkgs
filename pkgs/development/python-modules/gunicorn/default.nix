@@ -1,55 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, eventlet
-, gevent
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  packaging,
+
+  # optional-dependencies
+  eventlet,
+  gevent,
+  tornado,
+  setproctitle,
+
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "20.1.0";
-  disabled = pythonOlder "3.5";
+  version = "22.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    rev = version;
-    hash = "sha256-xdNHm8NQWlAlflxof4cz37EoM74xbWrNaf6jlwwzHv4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xIXQMAdTZEBORu6789tLpT1OpBL+aveL/MfDj4f4bes=";
   };
 
-  patches = [
-    (fetchpatch {
-      # fix eventlet 0.30.3+ compability
-      url = "https://github.com/benoitc/gunicorn/commit/6a8ebb4844b2f28596ffe7421eb9f7d08c8dc4d8.patch";
-      hash = "sha256-+iApgohzPZ/cHTGBNb7XkqLaHOVVPF26BnPUsvISoZw=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=gunicorn --cov-report=xml" ""
-  '';
+  dependencies = [ packaging ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
-
-  nativeCheckInputs = [
-    eventlet
-    gevent
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    gevent = [ gevent ];
+    eventlet = [ eventlet ];
+    tornado = [ tornado ];
+    gthread = [ ];
+    setproctitle = [ setproctitle ];
+  };
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/benoitc/gunicorn";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  meta = {
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/benoitc/gunicorn";
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "gunicorn";
   };
 }

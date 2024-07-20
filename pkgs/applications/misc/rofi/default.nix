@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
+    hash = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''
@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
+    mainProgram = "rofi";
   };
 }

@@ -1,39 +1,77 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, fetchpatch
+{
+  alsa-lib
+, AppKit
+, CoreAudio
+, CoreGraphics
+, dbus
+, Foundation
+, fetchFromGitHub
+, glib
+, gst_all_1
+, IOKit
+, lib
+, MediaPlayer
+, openssl
 , pkg-config
-, alsa-lib
-, darwin
+, protobuf
+, rustPlatform
+, Security
+, sqlite
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.10";
+  version = "0.9.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-m0hi5u4BcRcEDEpg1BoWXc25dfhD6+OJtqSZfSdV0HM=";
+  src = fetchFromGitHub {
+    owner = "tramhao";
+    repo = "termusic";
+    rev = "v${version}";
+    hash = "sha256-FOFZg32hrWpKVsjkMDkiqah7jmUZw0HRWGqOvsN0t8Q=";
   };
 
-  cargoHash = "sha256-A83gLsaPm6t4nm7DJfcp9z1huDU/Sfy9gunP8pzBiCA=";
+  postPatch = ''
+    pushd $cargoDepsCopy/stream-download
+    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
+    substituteInPlace $cargoDepsCopy/stream-download/src/lib.rs \
+      --replace-warn '#![doc = include_str!("../README.md")]' ""
+    substituteInPlace .cargo-checksum.json \
+      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
+    popd
+  '';
+
+  cargoHash = "sha256-r5FOl3Bp3GYhOhvWj/y6FXsuG2wvuFcMcYKBzVBVqiM=";
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
+  buildInputs = [
+    dbus
+    glib
+    gst_all_1.gstreamer
+    openssl
+    sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
+    AppKit
+    CoreAudio
+    CoreGraphics
+    Foundation
+    IOKit
+    MediaPlayer
+    Security
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Music Player TUI written in Rust";
     homepage = "https://github.com/tramhao/termusic";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ devhell ];
+    mainProgram = "termusic";
   };
 }

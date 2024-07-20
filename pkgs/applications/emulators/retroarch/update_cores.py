@@ -1,27 +1,40 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ requests nix-prefetch-github ])" -p "git"
+#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ ])" -p git -p nix-prefetch-github -p nix-prefetch-git -p nix-prefetch-scripts
 
 import json
 import os
 import subprocess
 import sys
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
+# To add a new core, add it to the dictionary below. You need to set at least
+# `repo`, that is the repository name if the owner of the repository is
+# `libretro` itself, otherwise also set `owner`.
+# You may set `deep_clone`, `fetch_submodules` or `leave_dot_git` options to
+# `True` and they're similar to `fetchgit` options. Also if for some reason you
+# need to pin a specific revision, set `rev` to a commit.
+# There is also a `fetcher` option that for now only supports `fetchFromGitHub`
+# (see `get_repo_hash()`), but it may be extended in the future if there is a
+# need to support fetchers from other source hubs.
+# To generate the hash file for your new core, you can run
+# `<nixpkgs>/pkgs/applications/emulators/retroarch/update_cores.py <core>`. Do
+# not forget to add your core to `cores.nix` file with the proper overrides so
+# the core can be build.
 CORES = {
     "2048": {"repo": "libretro-2048"},
     "atari800": {"repo": "libretro-atari800"},
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
     "beetle-ngp": {"repo": "beetle-ngp-libretro"},
+    "beetle-pce": {"repo": "beetle-pce-libretro"},
     "beetle-pce-fast": {"repo": "beetle-pce-fast-libretro"},
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},
     "beetle-saturn": {"repo": "beetle-saturn-libretro"},
-    "beetle-snes": {"repo": "beetle-bsnes-libretro"},
     "beetle-supafaust": {"repo": "supafaust"},
     "beetle-supergrafx": {"repo": "beetle-supergrafx-libretro"},
     "beetle-vb": {"repo": "beetle-vb-libretro"},
@@ -37,11 +50,16 @@ CORES = {
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
     "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
+    # The EasyRPG core is pinned to 0.8 since it depends on version 0.8 of liblcf, which
+    # was released in April 2023.
+    # Update the version when a compatible liblcf is available.
+    # See pkgs/games/easyrpg-player/default.nix for details.
+    "easyrpg": {"repo": "Player", "owner": "EasyRPG", "fetch_submodules": True, "rev": "0.8"},
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},
     "fceumm": {"repo": "libretro-fceumm"},
-    "flycast": {"repo": "flycast"},
+    "flycast": {"repo": "flycast", "owner": "flyinghead", "fetch_submodules": True},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
     "fuse": {"repo": "fuse-libretro"},
@@ -51,7 +69,11 @@ CORES = {
     "gw": {"repo": "gw-libretro"},
     "handy": {"repo": "libretro-handy"},
     "hatari": {"repo": "hatari"},
-    "mame": {"repo": "mame"},
+    # Setting fetch_submodules=True since libretro/mame constantly gives
+    # different hashes for its tarballs, see:
+    # - https://github.com/NixOS/nixpkgs/issues/259488#issuecomment-1751768379
+    # - https://github.com/NixOS/nixpkgs/pull/303494
+    "mame": {"repo": "mame", "fetch_submodules": True},
     "mame2000": {"repo": "mame2000-libretro"},
     "mame2003": {"repo": "mame2003-libretro"},
     "mame2003-plus": {"repo": "mame2003-plus-libretro"},
@@ -62,6 +84,7 @@ CORES = {
     "mesen": {"repo": "mesen"},
     "mesen-s": {"repo": "mesen-s"},
     "meteor": {"repo": "meteor-libretro"},
+    "mrboom": {"repo": "mrboom-libretro", "owner": "Javanaise", "fetch_submodules": True},
     "mgba": {"repo": "mgba"},
     "mupen64plus": {"repo": "mupen64plus-libretro-nx"},
     "neocd": {"repo": "neocd_libretro"},
@@ -71,7 +94,11 @@ CORES = {
     "o2em": {"repo": "libretro-o2em"},
     "opera": {"repo": "opera-libretro"},
     "parallel-n64": {"repo": "parallel-n64"},
-    "pcsx2": {"repo": "pcsx2"},
+    # libretro/lrps2 is a hard-fork of pcsx2 with simplified code to target
+    # only libretro, while libretro/pcsx2 is supposedly closer to upstream but
+    # it is a WIP.
+    # TODO: switch to libretro/pcsx2 when upstream switches to it.
+    "pcsx2": {"repo": "lrps2"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},
     "play": {"repo": "Play-", "owner": "jpd002", "fetch_submodules": True},
@@ -81,7 +108,13 @@ CORES = {
     "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
-    "scummvm": {"repo": "scummvm"},
+    "same_cdi": {"repo": "same_cdi"},
+    # This is the old source code before they upstreamed the source code,
+    # so now the libretro related code lives in the scummvm/scummvm repository.
+    # However this broke the old way we were doing builds, so for now point
+    # to a mirror with the old source code until this issue is fixed.
+    # TODO: switch to libretro/scummvm since this is more up-to-date
+    "scummvm": {"repo": "scummvm", "owner": "libretro-mirrors"},
     "smsplus-gx": {"repo": "smsplus-gx"},
     "snes9x": {"repo": "snes9x", "owner": "snes9xgit"},
     "snes9x2002": {"repo": "snes9x2002"},
@@ -129,15 +162,24 @@ def get_repo_hash_fetchFromGitHub(
     if rev:
         extra_args.append("--rev")
         extra_args.append(rev)
-    result = subprocess.run(
-        ["nix-prefetch-github", owner, repo, *extra_args],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            ["nix-prefetch-github", owner, repo, "--meta", *extra_args],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError as ex:
+        info(f"Error while updating {owner}/{repo}:", ex.stderr)
+        raise ex
+
     j = json.loads(result.stdout)
-    # Remove False values
-    return {k: v for k, v in j.items() if v}
+    return {
+        "fetcher": "fetchFromGitHub",
+        # Remove False values
+        "src": {k: v for k, v in j["src"].items() if v},
+        "version": f"unstable-{j['meta']['commitDate']}",
+    }
 
 
 def get_repo_hash(fetcher="fetchFromGitHub", **kwargs):
@@ -179,6 +221,7 @@ def main():
 
     cores = {core: repo for core, repo in CORES.items() if core in cores_to_update}
     repo_hashes = get_repo_hashes(cores)
+    repo_hashes["!comment"] = "Generated with update_cores.py script, do not edit!"
     info(f"Generating '{HASHES_PATH}'...")
     with open(HASHES_PATH, "w") as f:
         f.write(json.dumps(dict(sorted(repo_hashes.items())), indent=4))

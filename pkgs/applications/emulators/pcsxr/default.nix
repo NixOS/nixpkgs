@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, intltool, pkg-config, gtk3, SDL2, xorg
-, wrapGAppsHook, libcdio, nasm, ffmpeg_4, file
+, wrapGAppsHook3, libcdio, nasm, ffmpeg_4, file
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ./0001-libpcsxcore-fix-build-with-ffmpeg-4.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook3 ];
   buildInputs = [
     gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg_4 file
     xorg.libXxf86vm
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    mainProgram = "pcsxr";
   };
 }

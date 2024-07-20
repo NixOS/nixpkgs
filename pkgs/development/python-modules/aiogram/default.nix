@@ -1,59 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, aiohttp
-, aiohttp-socks
-, aioredis
-, aresponses
-, babel
-, certifi
-, magic-filter
-, pytest-asyncio
-, pytest-lazy-fixture
-, redis
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aiohttp-socks,
+  aresponses,
+  babel,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  gitUpdater,
+  hatchling,
+  magic-filter,
+  motor,
+  pycryptodomex,
+  pydantic,
+  pymongo,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "2.25.1";
-  format = "setuptools";
+  version = "3.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
-    rev = "v${version}";
-    hash = "sha256-g8nuvna7DpXElvjBehnGKHUsrf+nyQcoKNnyR59RALo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7GTZvYyD6ypaH6PuOoh6TVboyS6nf8BFGgKvD59K6gc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<3.9.0" "aiohttp" \
-      --replace "Babel>=2.9.1,<2.10.0" "Babel" \
-      --replace "magic-filter>=1.0.9" "magic-filter"
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+
+  pythonRelaxDeps = [ "pydantic" ];
+
+  dependencies = [
+    aiofiles
     aiohttp
     babel
     certifi
     magic-filter
+    pydantic
   ];
 
   nativeCheckInputs = [
     aiohttp-socks
-    aioredis
     aresponses
+    motor
+    pycryptodomex
+    pymongo
+    pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    pytz
     redis
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pluggy.PluggyTeardownRaisedWarning"
+    "-W"
+    "ignore::pytest.PytestDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "aiogram" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

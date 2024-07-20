@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bottle
-, importlib-resources
-, proxy_tools
-, pygobject3
-, pyqtwebengine
-, pytest
-, pythonOlder
-, qt5
-, qtpy
-, six
-, xvfb-run
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  bottle,
+  importlib-resources,
+  proxy-tools,
+  pygobject3,
+  pyqtwebengine,
+  pytest,
+  pythonOlder,
+  qt5,
+  qtpy,
+  six,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "4.1";
-  format = "setuptools";
+  version = "5.0.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -25,21 +27,20 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
-    hash = "sha256-oqyWT0GaZ201OMVRcRpm1dma6NonTMmTx5SKnjzQl3M=";
+    hash = "sha256-Mep4r5OujsefXFQA09OospqnzgQ3xn8HHdZFKNo3oM4=";
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
     bottle
     pyqtwebengine
-    proxy_tools
+    proxy-tools
     six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   nativeCheckInputs = [
     pygobject3
@@ -66,9 +67,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "webview"
-  ];
+  pythonImportsCheck = [ "webview" ];
 
   meta = with lib; {
     description = "Lightweight cross-platform wrapper around a webview";

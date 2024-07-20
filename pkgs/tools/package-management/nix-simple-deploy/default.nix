@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
     license = with licenses; [ asl20 /* OR */ mit ];
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "nix-simple-deploy";
   };
 }

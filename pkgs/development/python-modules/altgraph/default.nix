@@ -1,24 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools
 }:
 
 buildPythonPackage rec {
   pname = "altgraph";
-  version = "0.17.3";
+  version = "0.17.4";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ad33358114df7c9416cdb8fa1eaa5852166c505118717021c6a8c7c7abbd03dd";
+    hash = "sha256-G1r7uY9sTcrbLirmq5+plLu4wddfT6ltNA+UN65FRAY=";
   };
+
+  dependencies = [
+    # setuptools in dependencies is intentional
+    # https://github.com/ronaldoussoren/altgraph/issues/21
+    setuptools
+  ];
 
   pythonImportsCheck = [ "altgraph" ];
 
   meta = with lib; {
     changelog = "https://github.com/ronaldoussoren/altgraph/tags${version}";
-    description = "A fork of graphlib: a graph (network) package for constructing graphs";
+    description = "Fork of graphlib: a graph (network) package for constructing graphs";
     longDescription = ''
       altgraph is a fork of graphlib: a graph (network) package for constructing graphs,
       BFS and DFS traversals, topological sort, shortest paths, etc. with graphviz output.

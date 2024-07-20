@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchsvn
+, fetchFromGitHub
 , gzip
 , libvorbis
 , libmad
@@ -54,7 +54,7 @@
         --add-needed ${vulkan-loader}/lib/libvulkan.so
     '';
 
-    description = "A hybrid and versatile game engine";
+    description = "Hybrid and versatile game engine";
   } // attrs);
 
   fteqw-dedicated = import ./generic.nix (rec {

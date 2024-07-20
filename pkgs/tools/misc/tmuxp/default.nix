@@ -1,18 +1,17 @@
 { lib, python3Packages, fetchPypi, installShellFiles }:
 
-python3Packages.buildPythonApplication rec {
+let
   pname = "tmuxp";
-  version = "1.28.1";
+  version = "1.47.0";
+  hash = "sha256-HYY6CEUPpZVvVK9kV4Ehw4wGk5YfIVSkZ0+qqf6Nz4c=";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-sNLqUyas6QY11eW/FhkqB6+u4MTqiY1ixvD3BN69Fic=";
+    inherit pname version hash;
   };
-
-  # No tests in archive
-  doCheck = false;
-
-  format = "pyproject";
 
   nativeBuildInputs = [
     python3Packages.poetry-core
@@ -21,11 +20,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    click
     colorama
-    kaptan
     libtmux
+    pyyaml
   ];
+
+  # No tests in archive
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion --cmd tmuxp \
@@ -33,11 +34,12 @@ python3Packages.buildPythonApplication rec {
       --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
+    mainProgram = "tmuxp";
   };
 }

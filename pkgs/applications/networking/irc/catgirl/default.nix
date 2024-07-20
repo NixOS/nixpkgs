@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
-  version = "2.2";
+  version = "2.2a";
 
   src = fetchurl {
     url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-+20EoJkwOvBdJ4xwXBVC5+5hZDwDDWoLaN7FNxCAo8c=";
+    hash = "sha256-xtdgqu4TTgUlht73qRA1Q/coH95lMfvLQQhkcHlCl8I=";
   };
 
   # catgirl's configure script uses pkg-config --variable exec_prefix openssl
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://git.causal.agency/catgirl/about/";
     license = licenses.gpl3Plus;
-    description = "A TLS-only terminal IRC client";
+    description = "TLS-only terminal IRC client";
     platforms = platforms.unix;
+    mainProgram = "catgirl";
     maintainers = with maintainers; [ xfnw ];
   };
 }

@@ -1,64 +1,69 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# propagates
-, isodate
-, pyparsing
+  # builds
+  poetry-core,
 
-# propagates <3.8
-, importlib-metadata
+  # propagates
+  isodate,
+  pyparsing,
 
-# extras: networkx
-, networkx
+  # propagates <3.8
+  importlib-metadata,
 
-# extras: html
-, html5lib
+  # extras: networkx
+  networkx,
 
-# tests
-, pytest-cov
-, pytestCheckHook
+  # extras: html
+  html5lib,
+
+  # tests
+  pip,
+  pytest-cov,
+  pytest7CheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.2.0";
-  format = "setuptools";
+  version = "7.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GkqfSyApOFKPIiIYXhgaRZuMawk7PRYmxGDhnRI+Rz0=";
+    hash = "sha256-VCjvgXMun1Hs+gPeqjzLXbIX1NBQ5aMLz0aWlwsm0iY=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     isodate
     html5lib
     pyparsing
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
-    html = [
-      html5lib
-    ];
-    networkx = [
-      networkx
-    ];
+    html = [ html5lib ];
+    networkx = [ networkx ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
+    pip
     pytest-cov
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.networkx
-  ++ passthru.optional-dependencies.html;
+    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+    pytest7CheckHook
+    setuptools
+  ] ++ passthru.optional-dependencies.networkx ++ passthru.optional-dependencies.html;
 
   pytestFlagsArray = [
     # requires network access
@@ -66,22 +71,23 @@ buildPythonPackage rec {
     "--deselect=test/jsonld/test_onedotone.py::test_suite"
   ];
 
-  disabledTests = [
-    # Requires network access
-    "test_service"
-    "testGuessFormatForParse"
-    "test_infix_owl_example1"
-    "test_context"
-    "test_guess_format_for_parse"
-    "rdflib.extras.infixowl"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Require loopback network access
-    "TestGraphHTTP"
-  ];
+  disabledTests =
+    [
+      # Requires network access
+      "test_service"
+      "testGuessFormatForParse"
+      "test_infix_owl_example1"
+      "test_context"
+      "test_example"
+      "test_guess_format_for_parse"
+      "rdflib.extras.infixowl"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Require loopback network access
+      "TestGraphHTTP"
+    ];
 
-  pythonImportsCheck = [
-    "rdflib"
-  ];
+  pythonImportsCheck = [ "rdflib" ];
 
   meta = with lib; {
     description = "Python library for working with RDF";

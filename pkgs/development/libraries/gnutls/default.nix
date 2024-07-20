@@ -1,13 +1,36 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn2, libiconv
-, unbound, dns-root-data, gettext, util-linux
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, zlib
+, lzo
+, libtasn1
+, nettle
+, pkg-config
+, lzip
+, perl
+, gmp
+, autoconf
+, automake
+, libidn2
+, libiconv
+, texinfo
+, unbound
+, dns-root-data
+, gettext
+, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
-, tpmSupport ? false, trousers, which, nettools, libunistring
-, withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
+, tpmSupport ? false
+, trousers
+, which
+, nettools
+, libunistring
+, withP11-kit ? !stdenv.hostPlatform.isStatic
+, p11-kit
 , Security  # darwin Security.framework
-# certificate compression - only zlib now, more possible: zstd, brotli
+  # certificate compression - only zlib now, more possible: zstd, brotli
 
-# for passthru.tests
+  # for passthru.tests
 , curlWithGnuTls
 , emacs
 , ffmpeg
@@ -15,10 +38,14 @@
 , knot-resolver
 , ngtcp2-gnutls
 , ocamlPackages
+, pkgsStatic
 , python3Packages
 , qemu
 , rsyslog
+, openconnect
 , samba
+
+, gitUpdater
 }:
 
 let
@@ -26,26 +53,49 @@ let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin
-      && stdenv.buildPlatform == stdenv.hostPlatform;
+    && stdenv.buildPlatform == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.0";
+  version = "3.8.5";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "sha256-DqDRGhZgoeY/lg8Vexl6vm0MjLMlW+JOH7OBWTC5vcU=";
+    hash = "sha256-ZiaaLP4OHC2r7Ie9u9irZW85bt2aQN0AaXjgA8+lK/w=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [ "bin" "dev" "out" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ "man" "devdoc" ];
+
   # Not normally useful docs.
   outputInfo = "devdoc";
-  outputDoc  = "devdoc";
+  outputDoc = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ];
+  patches = [
+    ./nix-ssl-cert-file.patch
+    # Revert https://gitlab.com/gnutls/gnutls/-/merge_requests/1800
+    # dlopen isn't as easy in NixPkgs, as noticed in tests broken by this.
+    # Without getting the libs into RPATH they won't be found.
+    (fetchpatch2 {
+      name = "revert-dlopen-compression.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/8584908d6b679cd4e7676de437117a793e18347c.diff";
+      revert = true;
+      hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
+    })
+    # Makes the system-wide configuration for RSAES-PKCS1-v1_5 actually apply
+    # and makes it enabled by default when the config file is missing
+    # Without this an error 113 is thrown when using some RSA certificates
+    # see https://gitlab.com/gnutls/gnutls/-/issues/1540
+    # "This is pretty sever[e], since it breaks on letsencrypt-issued RSA keys." (comment from above issue)
+    (fetchpatch2 {
+      name = "fix-rsaes-pkcs1-v1_5-system-wide-configuration.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/2d73d945c4b1dfcf8d2328c4d23187d62ffaab2d.diff";
+      hash = "sha256-2aWcLff9jzJnY+XSqCIaK/zdwSLwkNlfDeMlWyRShN8=";
+    })
+  ];
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -64,23 +114,27 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
   configureFlags =
     lib.optionals withP11-kit [
-    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-    "--with-default-trust-store-pkcs11=pkcs11:"
-  ] ++ [
-    "--disable-dependency-tracking"
-    "--enable-fast-install"
-    "--with-unbound-root-key-file=${dns-root-data}/root.key"
-    (lib.withFeature withP11-kit "p11-kit")
-    (lib.enableFeature cxxBindings "cxx")
-  ];
+      "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+      "--with-default-trust-store-pkcs11=pkcs11:"
+    ] ++ [
+      "--disable-dependency-tracking"
+      "--enable-fast-install"
+      "--with-unbound-root-key-file=${dns-root-data}/root.key"
+      (lib.withFeature withP11-kit "p11-kit")
+      (lib.enableFeature cxxBindings "cxx")
+    ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "--disable-doc"
+    ];
 
   enableParallelBuilding = true;
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config ]
+  nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
@@ -105,29 +159,35 @@ stdenv.mkDerivation rec {
       --replace "-lunistring" ""
   '';
 
+
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.com/gnutls/gnutls.git";
+  };
+
   passthru.tests = {
-    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
     inherit (ocamlPackages) ocamlnet;
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
     rsyslog = rsyslog.override { withGnutls = true; };
+    static = pkgsStatic.gnutls;
   };
 
   meta = with lib; {
-    description = "The GNU Transport Layer Security Library";
+    description = "GNU Transport Layer Security Library";
 
     longDescription = ''
-       GnuTLS is a project that aims to develop a library which
-       provides a secure layer, over a reliable transport
-       layer. Currently the GnuTLS library implements the proposed standards by
-       the IETF's TLS working group.
+      GnuTLS is a project that aims to develop a library which
+      provides a secure layer, over a reliable transport
+      layer. Currently the GnuTLS library implements the proposed standards by
+      the IETF's TLS working group.
 
-       Quoting from the TLS protocol specification:
+      Quoting from the TLS protocol specification:
 
-       "The TLS protocol provides communications privacy over the
-       Internet. The protocol allows client/server applications to
-       communicate in a way that is designed to prevent eavesdropping,
-       tampering, or message forgery."
+      "The TLS protocol provides communications privacy over the
+      Internet. The protocol allows client/server applications to
+      communicate in a way that is designed to prevent eavesdropping,
+      tampering, or message forgery."
     '';
 
     homepage = "https://gnutls.org/";

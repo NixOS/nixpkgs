@@ -1,58 +1,54 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, jre
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  jre,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  jpype1,
 }:
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.7.0";
-  format = "pyproject";
+  version = "2.9.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chezou";
-    repo = pname;
+    repo = "tabula-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SV4QLvk7dXtU0/husS5A5mBYvbTejLyO9PpiO2oBtjs=";
+    hash = "sha256-dEcVIlK3M7zqRMN7W7mnnMPWhM2A4/qvf0aY61ko4yE=";
   };
 
-  patches = [
-    ./java-interpreter-path.patch
-  ];
-
   postPatch = ''
-    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+    substituteInPlace tabula/backend.py \
+      --replace-fail '"java"' '"${lib.getExe jre}"'
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [ jre ];
+
+  dependencies = [
     distro
     numpy
     pandas
-    setuptools
+    jpype1
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tabula"
-  ];
+  pythonImportsCheck = [ "tabula" ];
 
   disabledTests = [
     # Tests require network access
@@ -60,6 +56,11 @@ buildPythonPackage rec {
     "test_read_pdf_with_remote_template"
     "test_read_remote_pdf"
     "test_read_remote_pdf_with_custom_user_agent"
+    # not sure what it checks
+    # probably related to jpype, but we use subprocess instead
+    # https://github.com/chezou/tabula-py/issues/352#issuecomment-1730791540
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_read_pdf_with_silent_true"
   ];
 
   meta = with lib; {

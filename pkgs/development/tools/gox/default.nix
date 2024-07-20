@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # This is required for wrapProgram.
   allowGoReference = true;
@@ -29,7 +29,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mitchellh/gox";
-    description = "A dead simple, no frills Go cross compile tool";
+    description = "Dead simple, no frills Go cross compile tool";
+    mainProgram = "gox";
     license = licenses.mpl20;
     maintainers = with maintainers; [ azahi ];
   };

@@ -29,101 +29,101 @@ in
 {
   options = {
     services.confluence = {
-      enable = mkEnableOption (lib.mdDoc "Atlassian Confluence service");
+      enable = mkEnableOption "Atlassian Confluence service";
 
       user = mkOption {
         type = types.str;
         default = "confluence";
-        description = lib.mdDoc "User which runs confluence.";
+        description = "User which runs confluence.";
       };
 
       group = mkOption {
         type = types.str;
         default = "confluence";
-        description = lib.mdDoc "Group which runs confluence.";
+        description = "Group which runs confluence.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/confluence";
-        description = lib.mdDoc "Home directory of the confluence instance.";
+        description = "Home directory of the confluence instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Address to listen on.";
+        description = "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.port;
         default = 8090;
-        description = lib.mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
-        description = lib.mdDoc "Java options to pass to catalina/tomcat.";
+        description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption (lib.mdDoc "proxy support");
+        enable = mkEnableOption "proxy support";
 
         name = mkOption {
           type = types.str;
           example = "confluence.example.com";
-          description = lib.mdDoc "Virtual hostname at the proxy";
+          description = "Virtual hostname at the proxy";
         };
 
         port = mkOption {
           type = types.port;
           default = 443;
           example = 80;
-          description = lib.mdDoc "Port used at the proxy";
+          description = "Port used at the proxy";
         };
 
         scheme = mkOption {
           type = types.str;
           default = "https";
           example = "http";
-          description = lib.mdDoc "Protocol used at the proxy.";
+          description = "Protocol used at the proxy.";
         };
       };
 
       sso = {
-        enable = mkEnableOption (lib.mdDoc "SSO with Atlassian Crowd");
+        enable = mkEnableOption "SSO with Atlassian Crowd";
 
         crowd = mkOption {
           type = types.str;
           example = "http://localhost:8095/crowd";
-          description = lib.mdDoc "Crowd Base URL without trailing slash";
+          description = "Crowd Base URL without trailing slash";
         };
 
         applicationName = mkOption {
           type = types.str;
           example = "jira";
-          description = lib.mdDoc "Exact name of this Confluence instance in Crowd";
+          description = "Exact name of this Confluence instance in Crowd";
         };
 
         applicationPassword = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc "Application password of this Confluence instance in Crowd";
+          description = "Application password of this Confluence instance in Crowd";
         };
 
         applicationPasswordFile = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc "Path to the application password for Crowd of Confluence.";
+          description = "Path to the application password for Crowd of Confluence.";
         };
 
         validationInterval = mkOption {
           type = types.int;
           default = 2;
           example = 0;
-          description = lib.mdDoc ''
+          description = ''
             Set to 0, if you want authentication checks to occur on each
             request. Otherwise set to the number of minutes between request
             to validate if the user is logged in or out of the Crowd SSO
@@ -133,18 +133,14 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atlassian-confluence;
-        defaultText = literalExpression "pkgs.atlassian-confluence";
-        description = lib.mdDoc "Atlassian Confluence package to use.";
-      };
+      package = mkPackageOption pkgs "atlassian-confluence" { };
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.oraclejre8;
-        defaultText = literalExpression "pkgs.oraclejre8";
-        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+      jrePackage = mkPackageOption pkgs "oraclejre8" {
+        extraDescription = ''
+        ::: {.note }
+        Atlassian only supports the Oracle JRE (JRASERVER-46152).
+        :::
+        '';
       };
     };
   };

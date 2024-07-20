@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, makeWrapper, nodejs }:
+{ stdenv, lib, fetchzip, makeWrapper, nodejs, writeScript }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "heroku";
-  version = "7.66.4";
+  version = "8.11.5";
 
-  src = fetchurl {
-    url = "https://cli-assets.heroku.com/heroku-v${version}/heroku-v${version}.tar.xz";
-    sha256 = "sha256-AAiC88RBqR5RXeIj39in7hlvI3JNQB6KUwGmt9jo93A=";
+  src = fetchzip {
+    url = "https://cli-assets.heroku.com/versions/8.11.5/df5cd30/heroku-v8.11.5-df5cd30-linux-x64.tar.xz";
+    hash = "sha256-in6VuJmoItXGL85XqN1oItGPkUmDb4n+LzxE5q4ycYc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,10 +22,24 @@ stdenv.mkDerivation rec {
       --set HEROKU_DISABLE_AUTOUPDATE 1
   '';
 
+  passthru.updateScript = writeScript "update-heroku" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -I nixpkgs=./. -i bash -p nix-prefetch curl jq common-updater-scripts
+    resp="$(
+        curl -L "https://cli-assets.heroku.com/versions/heroku-linux-x64-tar-xz.json" \
+            | jq '[to_entries[] | { version: .key, url: .value } | select(.version|contains("-")|not)] | sort_by(.version|split(".")|map(tonumber)) | .[-1]'
+    )"
+    url="$(jq <<<"$resp" .url --raw-output)"
+    version="$(jq <<<"$resp" .version --raw-output)"
+    hash="$(nix-prefetch fetchzip --url "$(jq <<<"$resp" .url --raw-output)")"
+    update-source-version heroku "$version" "$hash" "$url"
+  '';
+
   meta = {
     homepage = "https://devcenter.heroku.com/articles/heroku-cli";
     description = "Everything you need to get started using Heroku";
-    maintainers = with lib.maintainers; [ aflatter mirdhyn marsam ];
+    mainProgram = "heroku";
+    maintainers = with lib.maintainers; [ aflatter mirdhyn ];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
   };

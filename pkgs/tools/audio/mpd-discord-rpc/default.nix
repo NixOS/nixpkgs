@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpd-discord-rpc";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "mpd-discord-rpc";
     rev = "v${version}";
-    hash = "sha256-fJHBQGc0+HjEALWuAWSts1l6NMookkut3Cm4e541iGw=";
+    hash = "sha256-WiHMXazNKyt5N7WmkftZYEHeQi+l9qoU2yr6jRHfjdE=";
   };
 
-  cargoHash = "sha256-v5JN0Nqp/fGjjJaKrMWt2HWzxAnA1URf0P2Xq9lHNVQ=";
+  cargoHash = "sha256-DnOv9YJpr777p1GVhe8LS5uAUs6Dr/gRLoJarFx5avw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {
@@ -36,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
+    mainProgram = "mpd-discord-rpc";
   };
 }

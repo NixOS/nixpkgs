@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.24.2";
+  version = "1.27.4";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-gey+/DAfAK69f5q568giLNL4R1UqGD6eiImkjyvnZys=";
+    hash = "sha256-67bAiu40VQDtTJPlg6wOxQs4nyLZQ8aJJ5WJ1J9NNlw=";
   };
-
-  postPatch = ''
-    substituteInPlace src/libbson/CMakeLists.txt src/libmongoc/CMakeLists.txt \
-      --replace "\\\''${prefix}/" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +43,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION=${version}"
     "-DENABLE_UNINSTALL=OFF"
     "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # remove forbidden reference to $TMPDIR
@@ -56,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The official C client library for MongoDB";
+    description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
     mainProgram = "mongoc-stat";

@@ -48,6 +48,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/raspberrypi/tools";
     license = licenses.bsd3;
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

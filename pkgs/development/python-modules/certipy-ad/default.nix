@@ -1,25 +1,27 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, cryptography
-, dnspython
-, dsinternals
-, fetchFromGitHub
-, impacket
-, ldap3
-, pyasn1
-, pycryptodome
-, pyopenssl
-, pythonOlder
-, requests
-, requests_ntlm
-, unicrypto
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  dnspython,
+  dsinternals,
+  fetchFromGitHub,
+  impacket,
+  ldap3,
+  pyasn1,
+  pycryptodome,
+  pyopenssl,
+  pythonOlder,
+  requests,
+  requests-ntlm,
+  unicrypto,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "4.7.0";
-  format = "setuptools";
+  version = "4.8.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "ly4k";
     repo = "Certipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CkIxk+Aps9TRA2wEE/zZKl9t4CyjxEsgLntbn9kWY6o=";
+    hash = "sha256-Era5iNLJkZIRvN/p3BiD/eDiDQme24G65VSG97tuEOQ=";
   };
 
   postPatch = ''
@@ -35,6 +37,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "pyasn1==0.4.8" "pyasn1"
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -47,19 +51,19 @@ buildPythonPackage rec {
     pycryptodome
     pyopenssl
     requests
-    requests_ntlm
+    requests-ntlm
+    setuptools
     unicrypto
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "certipy"
-  ];
+  pythonImportsCheck = [ "certipy" ];
 
   meta = with lib; {
     description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
+    mainProgram = "certipy";
     homepage = "https://github.com/ly4k/Certipy";
     changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
     license = with licenses; [ mit ];

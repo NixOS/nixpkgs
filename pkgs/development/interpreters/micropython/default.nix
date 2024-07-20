@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.19.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-BoX3Z3Zr/AQqkgRrq+UVgdoDqNESDTNsY9AtrElpzfA=";
+    hash = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
     fetchSubmodules = true;
   };
 
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  skippedTests = ""
-    + lib.optionalString (stdenv.isDarwin) " -e uasyncio_basic -e uasyncio_heaplock -e uasyncio_wait_task"
+  skippedTests = " -e select_poll_fd"
     + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback"
     + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
   ;
@@ -49,12 +48,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -Dm755 ports/unix/micropython -t $out/bin
+    install -Dm755 ports/unix/build-standard/micropython -t $out/bin
+    install -Dm755 mpy-cross/build/mpy-cross -t $out/bin
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A lean and efficient Python implementation for microcontrollers and constrained systems";
+    description = "Lean and efficient Python implementation for microcontrollers and constrained systems";
     homepage = "https://micropython.org";
     platforms = platforms.unix;
     license = licenses.mit;

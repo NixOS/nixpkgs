@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
     rev =  version;
-    hash = "sha256-VqcMdlptoMJEsPTny/E6ly7/xmHKcljIsSeZDzaA+ig=";
+    hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source minimalist computing technology";
+    description = "Open-source minimalist computing technology";
     longDescription = ''
       Minimacy is an open-source minimalist computation system based on the principle "Less is more".
       It is designed and programmed by Sylvain Huet.

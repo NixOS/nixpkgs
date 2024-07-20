@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
-    description = "An OpenXR example using Vulkan for rendering";
+    description = "OpenXR example using Vulkan for rendering";
+    mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ expipiplus1 ];

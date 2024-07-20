@@ -8,34 +8,44 @@
 , postgresql
 , openssl
 , libyaml
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "2.1.8";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iWbWkKd0Rpg0EU3H//sAxth1v1S52yPwGn1AzeC9xkA=";
+    hash = "sha256-X97Z/1GBooQNH6SLH5AG6uX7BkCXCIkdh9vEE4IkUEA=";
   };
+
+  # optional only to avoid linux rebuild
+  patches = lib.optionals stdenv.isDarwin [ ./macos-11-sdk-compat.patch ];
 
   nativeBuildInputs = [ cmake flex bison ];
 
   buildInputs = [ openssl libyaml postgresql ]
-    ++ lib.optionals stdenv.isLinux [ systemd ];
+    ++ lib.optionals stdenv.isLinux [ systemd ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.IOKit darwin.apple_sdk_11_0.frameworks.Foundation ];
 
-  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" "-DFLB_OUT_PGSQL=ON"  ];
+  cmakeFlags = [
+    "-DFLB_RELEASE=ON"
+    "-DFLB_METRICS=ON"
+    "-DFLB_HTTP_SERVER=ON"
+    "-DFLB_OUT_PGSQL=ON"
+  ]
+  ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
 
-  # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-O" ]
-    # Workaround build failure on -fno-common toolchains:
-    #   ld: /monkey/mk_tls.h:81: multiple definition of `mk_tls_server_timeout';
-    #     flb_config.c.o:include/monkey/mk_tls.h:81: first defined here
-    # TODO: drop when upstream gets a fix for it:
-    #   https://github.com/fluent/fluent-bit/issues/5537
-    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    # Used by the embedded luajit, but is not predefined on older mac SDKs.
+    lib.optionals stdenv.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
+    # Assumes GNU version of strerror_r, and the posix version has an
+    # incompatible return type.
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
+  );
 
   outputs = [ "out" "dev" ];
 
@@ -50,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

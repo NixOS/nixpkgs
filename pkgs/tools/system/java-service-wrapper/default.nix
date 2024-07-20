@@ -1,29 +1,40 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , jdk
-, ant, cunit, ncurses
+, ant
+, cunit
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.54";
+  version = "3.5.58";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    hash = "sha256-t16i1WqvDqr4J5sDldeUk6+DAyN/6oWGV6eME5yj+i4=";
+    hash = "sha256-mwfLCZfjAtKNfp9Cc8hkLAOKo6VfKD3l+IDiXDP2LV8=";
   };
 
-  buildInputs = [ jdk ];
-  nativeBuildInputs = [ ant cunit ncurses ];
+  strictDeps = true;
+
+  buildInputs = [ cunit ncurses ];
+
+  nativeBuildInputs = [ ant jdk ];
+
+  postConfigure = ''
+    substituteInPlace default.properties \
+      --replace "javac.target.version=1.4" "javac.target.version=8"
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_HOME=${jdk}/lib/openjdk/
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
 
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
+    ant -f build.xml -Dbits=${if stdenv.isi686 then "32" else "64"}
 
     runHook postBuild
   '';
@@ -44,7 +55,12 @@ stdenv.mkDerivation rec {
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = [ maintainers.suhr ];
+    mainProgram = "wrapper";
+    # Broken for Musl at 2024-01-17. Errors as:
+    # logger.c:81:12: fatal error: gnu/libc-version.h: No such file or directory
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/281557
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

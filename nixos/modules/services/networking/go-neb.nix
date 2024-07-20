@@ -9,11 +9,11 @@ let
   configFile = settingsFormat.generate "config.yaml" cfg.config;
 in {
   options.services.go-neb = {
-    enable = mkEnableOption (lib.mdDoc "Extensible matrix bot written in Go");
+    enable = mkEnableOption "an extensible matrix bot written in Go";
 
     bindAddress = mkOption {
       type = types.str;
-      description = lib.mdDoc "Port (and optionally address) to listen on.";
+      description = "Port (and optionally address) to listen on.";
       default = ":4050";
     };
 
@@ -21,7 +21,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/run/keys/go-neb.env";
-      description = lib.mdDoc ''
+      description = ''
         Environment variables from this file will be interpolated into the
         final config file using envsubst with this syntax: `$ENVIRONMENT`
         or `''${VARIABLE}`.
@@ -32,12 +32,12 @@ in {
 
     baseUrl = mkOption {
       type = types.str;
-      description = lib.mdDoc "Public-facing endpoint that can receive webhooks.";
+      description = "Public-facing endpoint that can receive webhooks.";
     };
 
     config = mkOption {
       inherit (settingsFormat) type;
-      description = lib.mdDoc ''
+      description = ''
         Your {file}`config.yaml` as a Nix attribute set.
         See [config.sample.yaml](https://github.com/matrix-org/go-neb/blob/master/config.sample.yaml)
         for possible options.

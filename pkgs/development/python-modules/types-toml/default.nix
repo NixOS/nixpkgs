@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "types-toml";
-  version = "0.10.8.5";
+  version = "0.10.8.20240310";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v4D859LXS+kRSPR7iNmuWt6xAkq+8iqi/bq8A21rizw=";
+    hash = "sha256-PUFQEwKXJDamuLI5yFCyZollfiUoG0j/DsBjRbiDAzE=";
   };
 
   # Module doesn't have tests

@@ -20,9 +20,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A C rewrite of hackertyper.net";
+    description = "C rewrite of hackertyper.net";
     homepage = "https://github.com/Hurricane996/Hackertyper";
     license = licenses.gpl3;
     maintainers = [ maintainers.marius851000 ];
+    mainProgram = "hackertyper";
   };
 }

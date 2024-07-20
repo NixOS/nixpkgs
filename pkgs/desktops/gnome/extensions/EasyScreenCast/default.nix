@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq, intltool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
-    rev = version;
-    hash = "sha256-+cH/gczCdxoSrLp5nD82Spo8bSGyRnUUut3Xkmr9f3o=";
+    rev = finalAttrs.version;
+    hash = "sha256-rRRMFAdWseTxW6W194TE3yNlnpPX7gLViLPLQW6zuSI=";
   };
 
   patches = [
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux;
-    broken = true;
   };
-}
+})

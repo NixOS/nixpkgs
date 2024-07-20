@@ -49,7 +49,7 @@ buildNpmPackage rec {
     npmDepsHash = "sha256-a/cDPABWI4lPxvSOI4D90O71A9lm8icPMak/g6DPYQY=";
     npmRootPath = "";
 
-    sourceRoot = "source/client";
+    sourceRoot = "${src.name}/client";
     NODE_OPTIONS = "--openssl-legacy-provider";
   };
 
@@ -119,5 +119,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/l3tnun/EPGStation";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
+    mainProgram = "epgstation";
   };
 }

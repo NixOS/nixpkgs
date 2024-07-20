@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     libzip
   ];
 
+  # the package uses zip_get_num_entries, which is deprecated
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+  ];
+
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
@@ -44,6 +49,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ aristid infinisil ];
+    maintainers = with maintainers; [ aristid ];
+    mainProgram = "ideviceinstaller";
   };
 }

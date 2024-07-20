@@ -10,24 +10,28 @@
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iJSHCQbom+V0TrtEYrjMrMkdc6PoZrjhtcgebZYjQjI=";
+    hash = "sha256-2kWTVAi4hq2d9jQ6yBLVzm3x7n/oSvBdZ45WyjhXhc4=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ wayland ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   meta = with lib; {
-    description = "An xrandr clone for wlroots compositors";
+    description = "Xrandr clone for wlroots compositors";
     homepage = "https://git.sr.ht/~emersion/wlr-randr";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
+    mainProgram = "wlr-randr";
   };
 }

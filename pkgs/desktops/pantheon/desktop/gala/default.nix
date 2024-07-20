@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -19,26 +20,40 @@
 , mesa
 , mutter
 , gnome-settings-daemon
-, wrapGAppsHook
+, wrapGAppsHook3
 , gexiv2
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "7.1.1";
+  version = "7.1.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-s63znprGrMvitefAKlbL3r1s0kbo7NA9bhrNH8w0h2o=";
+    sha256 = "sha256-0fDbR28gh7F8Bcnofn48BBP1CTsYnfmY5kG72ookOXw=";
   };
 
   patches = [
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
+
+    # Start gala-daemon internally (needed for systemd managed gnome-session)
+    # https://github.com/elementary/gala/pull/1844
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/351722c5a4fded46992b725e03dc94971c5bd31f.patch";
+      hash = "sha256-RvdVHQjCUNmLrROBZTF+m1vE2XudtQZjk/YW28P/vKc=";
+    })
+
+    # InternalUtils: Fix window placement
+    # https://github.com/elementary/gala/pull/1913
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/2d30bee678788c5a853721d16b5b39c997b23c02.patch";
+      hash = "sha256-vhGFaLpJZFx1VTfjY1BahQiOUvBPi0dBSXLGhYc7r8A=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -50,7 +65,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -77,7 +92,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
+    description = "Window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

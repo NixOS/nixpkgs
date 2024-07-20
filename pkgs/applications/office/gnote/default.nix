@@ -3,9 +3,9 @@
 , fetchurl
 , desktop-file-utils
 , gettext
-, gspell
-, gtkmm3
+, gtkmm4
 , itstool
+, libadwaita
 , libsecret
 , libuuid
 , libxml2
@@ -13,22 +13,22 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "44.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-aWelUGgiMguuGcHrC8dFFmRPnp61TtwslCU+rhDHYE0=";
+    hash = "sha256-ht9YoVlbIVN0aRq0S/wWE7Sf28p3CEI6PVZY3NOgFe0=";
   };
 
   buildInputs = [
-    gspell
-    gtkmm3
+    gtkmm4
+    libadwaita
     libsecret
     libuuid
     libxml2
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   passthru = {
@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gnote";
-    description = "A note taking application";
+    homepage = "https://gitlab.gnome.org/GNOME/gnote";
+    description = "Note taking application";
+    mainProgram = "gnote";
     maintainers = with maintainers; [ jfvillablanca ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;

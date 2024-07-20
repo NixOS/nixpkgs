@@ -1,27 +1,29 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, pythonOlder
-, asgiref
-, hatchling
-, opentelemetry-api
-, opentelemetry-sdk
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  asgiref,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-sdk,
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-api) version src;
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-test-utils";
-  disabled = pythonOlder "3.7";
+  # This package is in the same repository as `opentelemetry-api`,
+  # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
+  version = opentelemetry-instrumentation.version;
+  pyproject = true;
 
-  sourceRoot = "source/tests/opentelemetry-test-utils";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     opentelemetry-api
     opentelemetry-sdk

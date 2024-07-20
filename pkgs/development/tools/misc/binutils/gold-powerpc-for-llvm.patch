@@ -1,0 +1,107 @@
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff_plain;h=d537f77ef3b18a5fbfd598643aaad957652e9608
+
+Fix llvm testsuite failure on a single test:
+    FAIL: LLVM :: tools/gold/PowerPC/mtriple.ll (43659 of 49708)
+      ld.gold: internal error in add_output_section_to_load, at output.cc:4097
+
+From: Alan Modra <amodra@gmail.com>
+Date: Thu, 24 Aug 2023 23:42:18 +0000 (+0930)
+Subject: PR30794, PowerPC gold: internal error in add_output_section_to_load
+X-Git-Tag: gdb-14-branchpoint~482
+X-Git-Url: https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff_plain;h=d537f77ef3b18a5fbfd598643aaad957652e9608
+
+PR30794, PowerPC gold: internal error in add_output_section_to_load
+
+Caused by commit 5a97377e5513, specifically this code added to
+Target_powerpc::do_relax
++      if (parameters->options().output_is_position_independent())
++       this->rela_dyn_size_
++         = this->rela_dyn_section(layout)->current_data_size();
+
+The problem here is that if .rela.dyn isn't already created then the
+call to rela_dyn_section creates it, and as this comment in
+Target_powerpc::do_finalize_sections says:
+	  // Annoyingly, we need to make these sections now whether or
+	  // not we need them.  If we delay until do_relax then we
+	  // need to mess with the relaxation machinery checkpointing.
+We can't be creating sections in do_relax.
+
+	PR 30794
+	* powerpc.cc (Target_powerpc::do_relax): Only set rela_dyn_size_
+	for size == 64, and assert that rela_dyn_ already exists.
+	Tidy code setting plt_thread_safe, which also only needs to be
+	set when size == 64 for ELFv1.
+---
+
+diff --git a/gold/powerpc.cc b/gold/powerpc.cc
+index e66d9cbb900..a4fecaae55a 100644
+--- a/gold/powerpc.cc
++++ b/gold/powerpc.cc
+@@ -3714,12 +3714,7 @@ Target_powerpc<size, big_endian>::do_relax(int pass,
+   unsigned int prev_brlt_size = 0;
+   if (pass == 1)
+     {
+-      bool thread_safe
+-	= this->abiversion() < 2 && parameters->options().plt_thread_safe();
+-      if (size == 64
+-	  && this->abiversion() < 2
+-	  && !thread_safe
+-	  && !parameters->options().user_set_plt_thread_safe())
++      if (size == 64 && this->abiversion() < 2)
+ 	{
+ 	  static const char* const thread_starter[] =
+ 	    {
+@@ -3747,29 +3742,37 @@ Target_powerpc<size, big_endian>::do_relax(int pass,
+ 	      /* libgo */
+ 	      "__go_go",
+ 	    };
++	  bool thread_safe = parameters->options().plt_thread_safe();
+ 
+-	  if (parameters->options().shared())
+-	    thread_safe = true;
+-	  else
++	  if (!thread_safe
++	      && !parameters->options().user_set_plt_thread_safe())
+ 	    {
+-	      for (unsigned int i = 0;
+-		   i < sizeof(thread_starter) / sizeof(thread_starter[0]);
+-		   i++)
++	      if (parameters->options().shared())
++		thread_safe = true;
++	      else
+ 		{
+-		  Symbol* sym = symtab->lookup(thread_starter[i], NULL);
+-		  thread_safe = (sym != NULL
+-				 && sym->in_reg()
+-				 && sym->in_real_elf());
+-		  if (thread_safe)
+-		    break;
++		  for (unsigned int i = 0;
++		       i < sizeof(thread_starter) / sizeof(thread_starter[0]);
++		       i++)
++		    {
++		      Symbol* sym = symtab->lookup(thread_starter[i], NULL);
++		      thread_safe = (sym != NULL
++				     && sym->in_reg()
++				     && sym->in_real_elf());
++		      if (thread_safe)
++			break;
++		    }
+ 		}
+ 	    }
++	  this->plt_thread_safe_ = thread_safe;
+ 	}
+-      this->plt_thread_safe_ = thread_safe;
+ 
+-      if (parameters->options().output_is_position_independent())
+-	this->rela_dyn_size_
+-	  = this->rela_dyn_section(layout)->current_data_size();
++      if (size == 64
++	  && parameters->options().output_is_position_independent())
++	{
++	  gold_assert (this->rela_dyn_);
++	  this->rela_dyn_size_ = this->rela_dyn_->current_data_size();
++	}
+ 
+       this->stub_group_size_ = parameters->options().stub_group_size();
+       bool no_size_errors = true;

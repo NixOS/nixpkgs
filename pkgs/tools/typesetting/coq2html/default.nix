@@ -32,5 +32,6 @@ stdenv.mkDerivation  rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jwiegley siraben ];
     platforms = platforms.unix;
+    mainProgram = "coq2html";
   };
 }

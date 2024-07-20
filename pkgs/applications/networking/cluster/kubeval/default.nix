@@ -24,12 +24,13 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-R/vVrLsVSA9SGra4ytoHlQkPaIgQaj/XdivcQp8xjSM=";
+  vendorHash = "sha256-R/vVrLsVSA9SGra4ytoHlQkPaIgQaj/XdivcQp8xjSM=";
 
   doCheck = false;
 
   meta = with lib; {
     description = "Validate your Kubernetes configuration files";
+    mainProgram = "kubeval";
     homepage = "https://github.com/instrumenta/kubeval";
     license = licenses.asl20;
     maintainers = with maintainers; [ johanot nicknovitski ];

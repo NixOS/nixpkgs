@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
-  version = "40";
+  version = "42";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    hash = "sha256-4wPKe8D1lOLWqoT2h4VCPmvwyNrQCbsgvk1XQliOiQ0=";
+    hash = "sha256-c3/jhGqyMzolDfrfHtbr4YYK8dil/154A8dyzEJW5Qo=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "The Next Generation Spice (Electronic Circuit Simulator)";
+    description = "Next Generation Spice (Electronic Circuit Simulator)";
+    mainProgram = "ngspice";
     homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
     maintainers = with maintainers; [ bgamari rongcuid ];

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchurl
 , meson
 , ninja
@@ -32,7 +31,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gnome.gnome-shell
-    gobject-introspection # for Gio typelib
   ];
 
   pythonPath = [
@@ -58,9 +56,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Native host connector for the GNOME Shell browser extension";
-    homepage = "https://wiki.gnome.org/Projects/GnomeShellIntegration";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-browser-connector";
     longDescription = ''
-      To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegration/Installation">browser extension</link>, and then set <option>services.gnome.gnome-browser-connector.enable</option> to <literal>true</literal>.
+      To use the integration, install the [browser extension](https://gitlab.gnome.org/GNOME/gnome-browser-extension), and then set `services.gnome.gnome-browser-connector.enable` to `true`.
     '';
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

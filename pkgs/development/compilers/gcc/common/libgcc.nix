@@ -8,6 +8,7 @@
 , targetPlatform
 , hostPlatform
 , withoutTargetLibc
+, libcCross
 }:
 
 assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
@@ -19,7 +20,7 @@ drv: lib.pipe drv
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
-      (enableShared || targetPlatform.libc == "msvcrt") &&
+      (enableShared || targetPlatform.isMinGW) &&
       withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];
@@ -31,29 +32,46 @@ drv: lib.pipe drv
 # nixpkgs did not add the "libgcc" output until gcc11.  In theory
 # the following condition can be changed to `true`, but that has not
 # been tested.
-lib.optional (lib.versionAtLeast version "11.0")
+lib.optionals (lib.versionAtLeast version "11.0")
 
 (let
   targetPlatformSlash =
-    if hostPlatform.config == targetPlatform.config
+    if hostPlatform == targetPlatform
     then ""
     else "${targetPlatform.config}/";
+
+  # If we are building a cross-compiler and the target libc provided
+  # to us at build time has a libgcc, use that instead of building a
+  # new one.  This avoids having two separate (but identical) libgcc
+  # outpaths in the closure of most packages, which can be confusing.
+  useLibgccFromTargetLibc =
+    libcCross != null &&
+    libcCross?passthru.libgcc;
 
   enableLibGccOutput =
     (!stdenv.targetPlatform.isWindows || (with stdenv; targetPlatform == hostPlatform)) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
-    enableShared
-    ;
+    enableShared &&
+    !useLibgccFromTargetLibc
+  ;
 
-    # For some reason libgcc_s.so has major-version "2" on m68k but
-    # "1" everywhere else.  Might be worth changing this to "*".
-    libgcc_s-version-major =
-      if targetPlatform.isM68k
-      then "2"
-      else "1";
+  # For some reason libgcc_s.so has major-version "2" on m68k but
+  # "1" everywhere else.  Might be worth changing this to "*".
+  libgcc_s-version-major =
+    if targetPlatform.isM68k
+    then "2"
+    else "1";
 
 in
+[
+
+(pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs useLibgccFromTargetLibc {
+  passthru = (previousAttrs.passthru or {}) // {
+    inherit (libcCross) libgcc;
+  };
+}))
+
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
   # This is a separate phase because gcc assembles its phase scripts
@@ -65,26 +83,21 @@ in
     lib.optionalString (!langC) ''
       rm -f $out/lib/libgcc_s.so*
     ''
-    + lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-      mkdir -p $lib/lib/
-      ln -s ${targetPlatformSlash}lib $lib/lib
-    ''
 
-    # TODO(amjoseph): remove the `libgcc_s.so` symlinks below and replace them
-    # with a `-L${gccForLibs.libgcc}/lib` in cc-wrapper's
-    # `$out/nix-support/cc-flags`.  See also:
-    # - https://github.com/NixOS/nixpkgs/pull/209870#discussion_r1130614895
-    # - https://github.com/NixOS/nixpkgs/pull/209870#discussion_r1130635982
-    # - https://github.com/NixOS/nixpkgs/commit/404155c6acfa59456aebe6156b22fe385e7dec6f
-    #
     # move `libgcc_s.so` into its own output, `$libgcc`
+    # We maintain $libgcc/lib/$target/ structure to make sure target
+    # strip runs over libgcc_s.so and remove debug references to headers:
+    #   https://github.com/NixOS/nixpkgs/issues/316114
     + lib.optionalString enableLibGccOutput (''
       # move libgcc from lib to its own output (libgcc)
-      mkdir -p $libgcc/lib
-      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
-      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/lib/
-      ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
-      ln -s $libgcc/lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
+      mkdir -p $libgcc/${targetPlatformSlash}lib
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/${targetPlatformSlash}lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/${targetPlatformSlash}lib/
+      ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
+      ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
+    ''
+    + lib.optionalString (targetPlatformSlash != "") ''
+      ln -s ${targetPlatformSlash}lib $libgcc/lib
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
@@ -143,5 +156,4 @@ in
     + ''
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.${libgcc_s-version-major}
     '');
-}))))
-
+}))]))

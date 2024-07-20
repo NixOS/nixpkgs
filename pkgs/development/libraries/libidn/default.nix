@@ -1,12 +1,14 @@
-{ fetchurl, lib, stdenv, libiconv }:
+{ fetchurl, lib, stdenv, libiconv
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libidn";
-  version = "1.41";
+  version = "1.42";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
-    sha256 = "sha256-iE1wY2S4Gr3Re+6Whtj/KudDHFoUZRBHxorfizH9iUU=";
+    url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
@@ -14,6 +16,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/";
@@ -35,8 +39,10 @@ stdenv.mkDerivation rec {
       included.
     '';
 
+    mainProgram = "idn";
     license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lsix ];
   };
-}
+})

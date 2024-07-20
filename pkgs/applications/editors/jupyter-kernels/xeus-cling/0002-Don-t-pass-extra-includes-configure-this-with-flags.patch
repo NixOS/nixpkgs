@@ -1,0 +1,34 @@
+From 9e6a14bb20567071883563dafb5dfaf512df6243 Mon Sep 17 00:00:00 2001
+From: thomasjm <tom@codedown.io>
+Date: Wed, 2 Aug 2023 18:27:16 -0700
+Subject: [PATCH 2/3] Don't pass extra includes; configure this with flags
+
+---
+ src/main.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/main.cpp b/src/main.cpp
+index 57294b4..0041a55 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -84,7 +84,7 @@ using interpreter_ptr = std::unique_ptr<xcpp::interpreter>;
+ 
+ interpreter_ptr build_interpreter(int argc, char** argv)
+ {
+-    int interpreter_argc = argc + 1;
++    int interpreter_argc = argc;
+     const char** interpreter_argv = new const char*[interpreter_argc];
+     interpreter_argv[0] = "xeus-cling";
+     // Copy all arguments in the new array excepting the process name.
+@@ -92,8 +92,6 @@ interpreter_ptr build_interpreter(int argc, char** argv)
+     {
+         interpreter_argv[i] = argv[i];
+     }
+-    std::string include_dir = std::string(LLVM_DIR) + std::string("/include");
+-    interpreter_argv[interpreter_argc - 1] = include_dir.c_str();
+ 
+     interpreter_ptr interp_ptr = interpreter_ptr(new xcpp::interpreter(interpreter_argc, interpreter_argv));
+     delete[] interpreter_argv;
+-- 
+2.40.1
+

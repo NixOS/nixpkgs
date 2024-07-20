@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "sha256-XLXANN9TOmrNOixWtlqnIC27u+0TW2P3s9MyeyVUcAQ=";
   };
 
-  vendorSha256 = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
+  vendorHash = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
 
   allowGoReference = true;
 
@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Detect ineffectual assignments in Go code";
+    mainProgram = "ineffassign";
     homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

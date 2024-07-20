@@ -1,4 +1,4 @@
-{ lib, ocamlPackages }:
+{ ocamlPackages }:
 
 let inherit (ocamlPackages) buildDunePackage csv uutf; in
 
@@ -14,5 +14,6 @@ buildDunePackage {
 
   meta = csv.meta // {
     description = "Command line tool for handling CSV files";
+    mainProgram = "csvtool";
   };
 }

@@ -1,33 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pytestCheckHook
-, six
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pytestCheckHook,
+  six,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "9.1.0";
-  format = "flit";
+  version = "10.3.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yrqjQa0DieqDwXqUVmpTrkydBzSYYeyxTcbQNFz5rF0=";
+    hash = "sha256-5dk+9BEiT7zvNmpujdxMV4G8Y1nUNBKmXdWWTkYRFGM=";
   };
 
-  nativeBuildInouts = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # iterable = range(10 ** 10)  # Is efficiently reversible
   # OverflowError: Python int too large to convert to C long

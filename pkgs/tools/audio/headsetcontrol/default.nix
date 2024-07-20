@@ -1,20 +1,28 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , hidapi
 }:
 
 stdenv.mkDerivation rec {
   pname = "headsetcontrol";
-  version = "2.6.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Sapd";
     repo = "HeadsetControl";
     rev = version;
-    sha256 = "sha256-SVOcRzR52RYZsk/OWAr1/s+Nm6x48OxG0TF7yQ+Kb94=";
+    sha256 = "sha256-N1c94iAJgCPhGNDCGjMINg0AL2wPX5gVIsJ+pzn/l9Y=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Sapd/HeadsetControl/pull/337.patch";
+      hash = "sha256-18w9BQsMljEA/eY3rnosHvKwhiaF79TrWH/ayuyZMrM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -23,11 +31,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     hidapi
   ];
-
-  /*
-  Test depends on having the apropiate headsets connected.
-  */
-  doCheck = false;
 
   meta = with lib; {
     description = "Sidetone and Battery status for Logitech G930, G533, G633, G933 SteelSeries Arctis 7/PRO 2019 and Corsair VOID (Pro)";
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Sapd/HeadsetControl";
     license = licenses.gpl3Plus;
+    mainProgram = "headsetcontrol";
     maintainers = with maintainers; [ leixb ];
     platforms = platforms.all;
   };

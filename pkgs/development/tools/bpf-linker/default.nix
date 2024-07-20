@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages_15
+, llvmPackages_18
 , zlib
 , ncurses
 , libxml2
@@ -10,21 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.5";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LEZ2to1bzJ/H/XYytuh/7NT7+04aI8chpKIFxxVzM+4=";
+    hash = "sha256-HMLbNAB6Ze2x8OeAwVXMMn5P9GYK9hCa61Ic5yqblUA=";
   };
 
-  cargoHash = "sha256-s8cW7lXtvgemuQueTtAywewnDVJ/WDcz8SBqsC/tO80=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "compiletest_rs-0.10.2" = "sha256-n1OxKal1B+WNshfMgtiA5Th+FQyDalOdB4PAo6mUzwQ=";
+    };
+  };
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "system-llvm" ];
 
-  nativeBuildInputs = [ llvmPackages_15.llvm ];
+  nativeBuildInputs = [ llvmPackages_18.llvm ];
   buildInputs = [ zlib ncurses libxml2 ];
 
   # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
@@ -33,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple BPF static linker";
+    mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ nickcao ];

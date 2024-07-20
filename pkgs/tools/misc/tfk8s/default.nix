@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "sha256-VLpXL5ABnCxc+7dV3sZ6wsY2nKn2yfu7eTjtn881/XQ=";
   };
 
-  vendorSha256 = "sha256-eTADcUW9b6l47BkWF9YLxdcgvMbCzWTjLF28FneJHg8=";
+  vendorHash = "sha256-eTADcUW9b6l47BkWF9YLxdcgvMbCzWTjLF28FneJHg8=";
 
   ldflags = [
     "-s"
@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An utility to convert Kubernetes YAML manifests to Terraform's HCL format";
+    description = "Utility to convert Kubernetes YAML manifests to Terraform's HCL format";
     license = licenses.mit;
     longDescription = ''
       tfk8s is a tool that makes it easier to work with the Terraform Kubernetes Provider.
@@ -44,5 +44,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jrhouston/tfk8s/";
     maintainers = with maintainers; [ bryanasdev000 ];
+    mainProgram = "tfk8s";
   };
 }

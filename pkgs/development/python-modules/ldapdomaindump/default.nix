@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dnspython
-, future
-, ldap3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dnspython,
+  future,
+  ldap3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # requires ldap server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ldapdomaindump"
-  ];
+  pythonImportsCheck = [ "ldapdomaindump" ];
 
   meta = with lib; {
     description = "Active Directory information dumper via LDAP";

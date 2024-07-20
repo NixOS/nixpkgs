@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "progress";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "Xfennec";
     repo = "progress";
     rev = "v${version}";
-    sha256 = "sha256-kkEyflyBaQ5hUVo646NUuC1u54uzLJJsVFej9pMEwT0=";
+    sha256 = "sha256-riewkageSZIlwDNMjYep9Pb2q1GJ+WMXazokJGbb4bE=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "progress";
   };
 }

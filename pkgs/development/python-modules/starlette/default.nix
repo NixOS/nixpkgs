@@ -1,86 +1,81 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# runtime
-, ApplicationServices
-, anyio
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, httpx
-, typing-extensions
+  # build-system
+  hatchling,
 
-# tests
-, pytestCheckHook
-, pythonOlder
-, trio
+  # dependencies
+  anyio,
+  typing-extensions,
+
+  # optional dependencies
+  itsdangerous,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  httpx,
+
+  # tests
+  pytestCheckHook,
+  pythonOlder,
+  trio,
+
+  # reverse dependencies
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.26.1";
-  format = "pyproject";
+  version = "0.37.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "starlette";
     rev = "refs/tags/${version}";
-    hash = "sha256-/zYqYmmCcOLU8Di9b4BzDLFtB5wYEEF1bYN6u2rb8Lg=";
+    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
+  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  propagatedBuildInputs = [
-    anyio
+  optional-dependencies.full = [
     itsdangerous
     jinja2
     python-multipart
     pyyaml
     httpx
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     trio
     typing-extensions
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
-  disabledTests = [
-    # asserts fail due to inclusion of br in Accept-Encoding
-    "test_websocket_headers"
-    "test_request_headers"
-  ];
+  pythonImportsCheck = [ "starlette" ];
 
-  pythonImportsCheck = [
-    "starlette"
-  ];
+  passthru.tests = {
+    inherit fastapi;
+  };
 
   meta = with lib; {
-    changelog = "https://github.com/encode/starlette/releases/tag/${version}";
+    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
+    downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
-    description = "The little ASGI framework that shines";
+    description = "Little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };

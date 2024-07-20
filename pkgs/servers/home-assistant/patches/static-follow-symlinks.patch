@@ -1,0 +1,12 @@
+diff --git a/homeassistant/components/http/static.py b/homeassistant/components/http/static.py
+index e6e773d4c0..b53e0b4a11 100644
+--- a/homeassistant/components/http/static.py
++++ b/homeassistant/components/http/static.py
+@@ -31,7 +31,6 @@ def _get_file_path(rel_url: str, directory: Path) -> Path | None:
+         # where the static dir is totally different
+         raise HTTPForbidden
+     filepath: Path = directory.joinpath(filename).resolve()
+-    filepath.relative_to(directory)
+     # on opening a dir, load its contents if allowed
+     if filepath.is_dir():
+         return None

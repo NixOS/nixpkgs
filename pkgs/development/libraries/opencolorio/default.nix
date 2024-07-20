@@ -1,17 +1,15 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , yaml-cpp
-, ilmbase
 , pystring
 , imath
 , minizip-ng
 # Only required on Linux
 , glew
-, freeglut
+, libglut
 # Only required on Darwin
 , Carbon
 , GLUT
@@ -27,32 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "sha256-l5UUysHdP/gb4Mn5A64XEoHOkthl6Mlb95CuI0l4vXQ=";
+    hash = "sha256-CSD3AZ36tmC/cYSdPsdDYx894+jd9GkGkhYJ767QY8A=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "darwin-no-hidden-l.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/48bab7c643ed8d108524d718e5038d836f906682.patch";
-      revert = true;
-      sha256 = "sha256-0DF+lwi2nfkUFG0wYvL3HYbhZS6SqGtPWoOabrFS1Eo=";
-    })
-    (fetchpatch {
-      name = "pkg-config-absolute-path.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/332462e7f5051b7e26ee3d8c22890cd5e71e7c30.patch";
-      sha256 = "sha256-7xHALhnOkKszgFBgPIbiZQaORnEJ+1M6RyoZdFgjElM=";
-    })
-    (fetchpatch {
-      name = "minizip-ng-4.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/opencolorio/-/raw/5fc40f42f5c05d905793610c37b46ca3649245f3/minizip-ng-4.patch";
-      hash = "sha256-B+dbBVRn0EuGtJaWxz5ah9el0RN7cLb81hgqnKkvhew=";
-    })
+    # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
+    # Needed for zlib >= 1.3 && cmake < 3.27.4.
+    ./broken-cmake-zlib-version.patch
+    # Fix incorrect line number in test
+    ./line-numbers.patch
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -67,11 +54,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     yaml-cpp
-    ilmbase
     pystring
     imath
     minizip-ng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew libglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
     ++ lib.optionals buildApps [
@@ -81,18 +67,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
-    # GPU test fails with: freeglut (GPU tests): failed to open display ''
+    "-DOCIO_USE_SSE2NEON=OFF"
+    # GPU test fails with: libglut (GPU tests): failed to open display ''
     "-DOCIO_BUILD_GPU_TESTS=OFF"
-    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include"
+    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
   ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
   doCheck = stdenv.isx86_64;
+  # Tends to fail otherwise.
+  enableParallelChecking = false;
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
-    description = "A color management framework for visual effects and animation";
+    description = "Color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;

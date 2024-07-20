@@ -3,7 +3,7 @@
 # To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
-{ lib, stdenv, fetchurl, config, wrapGAppsHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook3
 , alsa-lib
 , atk
 , cairo
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 adwaita-icon-theme ];
 
@@ -213,6 +213,7 @@ stdenv.mkDerivation {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
+    mainProgram = "thunderbird";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with lib.maintainers; [ lovesegfault ];

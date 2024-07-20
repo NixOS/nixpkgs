@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zpV3RpFPYICntNLVTC4FpkrxJ7nDh/KEzmNpg0ORWZQ=";
+    sha256 = "sha256-z4CfakCvFdCPwB52wfeooCMI51QY629nMDbCmR50fI4=";
   };
 
   buildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--libdir=${placeholder "out"}/lib"
+    "--datadir=${placeholder "out"}/share"
     "--disable-bundled-getopt"
     "--disable-bundled-md5"
     "--disable-dynamic-load"

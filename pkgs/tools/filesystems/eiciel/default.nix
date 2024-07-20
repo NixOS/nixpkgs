@@ -2,10 +2,10 @@
 , fetchFromGitHub
 , stdenv
 , acl
-, gnome
 , glibmm_2_68
 , gtkmm4
 , meson
+, nautilus
 , ninja
 , pkg-config
 , itstool
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     acl
     glibmm_2_68
     gtkmm4
-    gnome.nautilus
+    nautilus
   ];
 
   mesonFlags = [
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sersorrel ];
     platforms = platforms.linux;
+    mainProgram = "eiciel";
   };
 }

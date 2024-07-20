@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A tool to convert filename encoding inside a ZIP archive";
+    description = "Tool to convert filename encoding inside a ZIP archive";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
+    mainProgram = "runzip";
   };
 }

@@ -25,11 +25,13 @@
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
 , potrace
+, coreutils
 , curl
 , ApplicationServices
 , Foundation
 , testers
-, imagemagick
+, nixos-icons
+, perlPackages
 , python3
 }:
 
@@ -47,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-14";
+  version = "7.1.1-35";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-vZ3ILHIRxwB3ho7hlJpC7hlo7Nhb56SjZ/hgdoh1rwY=";
+    hash = "sha256-ac0xvCwwH/qsdewBAO6POcPY74kBPkcnW6ywVvnegKw=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -62,13 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    # specify delegates explicitly otherwise `convert` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
-    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
@@ -125,13 +131,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit nixos-icons;
+    inherit (perlPackages) ImageMagick;
     inherit (python3.pkgs) img2pdf;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = lib.head (lib.splitString "-" finalAttrs.version);
+    };
   };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
+    description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ erictapen dotlambda rhendric ];

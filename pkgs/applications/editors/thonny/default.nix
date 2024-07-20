@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "4.0.2";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TxfpzKAsU/5ble4VzJ+4pokCiyJsdisjmNwWfxOMKzE=";
+    hash = "sha256-f4wR5OPzWbtSqE+hSW2zD8u3pPl5nPTtGvf2LzOXjI4=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -34,6 +34,7 @@ buildPythonApplication rec {
     pyperclip
     asttokens
     send2trash
+    dbus-next
   ];
 
   preInstall = ''
@@ -64,5 +65,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.unix;
+    mainProgram = "thonny";
   };
 }

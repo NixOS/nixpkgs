@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "finefindus";
-    repo = pname;
+    repo = "artem";
     rev = "v${version}";
-    hash = "sha256-liYZloaXN9doNyPO76iCaiZO9ZkNGBm+BxxNX87ZqBM=";
+    hash = "sha256-C3Co+hXstVN/WADIpzqr7f3muAgQL0Zbnz6VI1XNo4U=";
   };
 
-  cargoHash = "sha256-fTAuh4jbfNpFaEu1X0LwVA30ghQ6mh5/Afap7gUjzMc=";
+  cargoHash = "sha256-QyFUxnq4BSULgpZxCu5+7TWfu6Gey0JFkOYSK+rL7l0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,10 +43,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A small CLI program to convert images to ASCII art";
+    description = "Small CLI program to convert images to ASCII art";
     homepage = "https://github.com/finefindus/artem";
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "artem";
   };
 }

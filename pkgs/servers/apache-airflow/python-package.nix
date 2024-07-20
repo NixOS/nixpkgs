@@ -26,6 +26,7 @@
 , flask-session
 , flask-wtf
 , gitpython
+, google-re2
 , graphviz
 , gunicorn
 , httpx
@@ -45,6 +46,8 @@
 , mdit-py-plugins
 , numpy
 , openapi-spec-validator
+, opentelemetry-api
+, opentelemetry-exporter-otlp
 , pandas
 , pathspec
 , pendulum
@@ -76,13 +79,14 @@
 , pytestCheckHook
 , time-machine
 , mkYarnPackage
+, fetchYarnDeps
 , writeScript
 
 # Extra airflow providers to enable
 , enabledProviders ? []
 }:
 let
-  version = "2.6.2";
+  version = "2.7.3";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -91,19 +95,22 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-ejZw71lMhfnqy4Ziha8/ufmX+SkOfopkeCskf02ZQgA=";
+    hash = "sha256-+YbiKFZLigSDbHPaUKIl97kpezW1rIt/j09MMa6lwhQ=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
   # This replicates this shell script, fixing bugs in yarn.lock and package.json
 
-  airflow-frontend = mkYarnPackage {
+  airflow-frontend = mkYarnPackage rec {
     name = "airflow-frontend";
 
     src = "${airflow-src}/airflow/www";
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-WQKuQgNp35fU6z7owequXOSwoUGJDJYcUgkjPDMOops=";
+    };
 
     distPhase = "true";
 
@@ -167,6 +174,7 @@ buildPythonPackage rec {
     flask-wtf
     flask-login
     gitpython
+    google-re2
     graphviz
     gunicorn
     httpx
@@ -185,6 +193,8 @@ buildPythonPackage rec {
     mdit-py-plugins
     numpy
     openapi-spec-validator
+    opentelemetry-api
+    opentelemetry-exporter-otlp
     pandas
     pathspec
     pendulum
@@ -231,15 +241,21 @@ buildPythonPackage rec {
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-appbuilder==4.3.0" "flask-appbuilder>=4.3.0" \
-      --replace "pathspec~=0.9.0" "pathspec"
+    # https://github.com/apache/airflow/issues/33854
+    substituteInPlace pyproject.toml \
+      --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
+
+  pythonRelaxDeps = [
+    "colorlog"
+    "flask-appbuilder"
+    "opentelemetry-api"
+    "pathspec"
+  ];
 
   # allow for gunicorn processes to have access to Python packages
   makeWrapperArgs = [
@@ -247,7 +263,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
     # Needed for pythonImportsCheck below
     export HOME=$(mktemp -d)
   '';
@@ -288,7 +304,7 @@ buildPythonPackage rec {
     update-source-version ${pname} "$new_version"
 
     # Update frontend
-    cd ./pkgs/development/python-modules/apache-airflow
+    cd ./pkgs/servers/apache-airflow
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
     yarn2nix > yarn.nix
@@ -314,5 +330,9 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple gbpdt ingenieroariel ];
+    knownVulnerabilities = [
+      "CVE-2023-50943"
+      "CVE-2023-50944"
+    ];
   };
 }

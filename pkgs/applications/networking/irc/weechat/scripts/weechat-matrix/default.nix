@@ -34,10 +34,19 @@ in buildPythonPackage {
     hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 
-  patches = fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
-    sha256 = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
-  };
+  patches = [
+    # server: remove set_npn_protocols()
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
+      hash = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
+    })
+    # Fix compatibility with matrix-nio 0.21
+    (fetchpatch {
+      url = "https://github.com/poljar/weechat-matrix/commit/feae9fda26ea9de98da9cd6733980a203115537e.patch";
+      hash = "sha256-MAfxJ85dqz5PNwp/GJdHA2VvXVdWh+Ayx5g0oHiw9rs=";
+      includes = ["matrix/config.py"];
+    })
+  ];
 
   propagatedBuildInputs = [
     pyopenssl
@@ -67,11 +76,11 @@ in buildPythonPackage {
     cp contrib/matrix_decrypt.py $out/bin/matrix_decrypt
     cp contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
     substituteInPlace $out/bin/matrix_upload \
-      --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_sso_helper \
-      --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_decrypt \
-      --replace '/usr/bin/env python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env python3' '${scriptPython}/bin/python'
 
     mkdir -p $out/${python.sitePackages}
     cp -r matrix $out/${python.sitePackages}/matrix
@@ -81,14 +90,15 @@ in buildPythonPackage {
   postFixup = ''
     addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
-    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace-fail \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+    substituteInPlace $out/${python.sitePackages}/matrix/uploads.py --replace-fail \"matrix_upload\" \"$out/bin/matrix_upload\"
   '';
 
   meta = with lib; {
-    description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
+    description = "Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner emily ];
+    maintainers = with maintainers; [ tilpner ];
   };
 }

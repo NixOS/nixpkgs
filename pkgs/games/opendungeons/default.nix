@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, ogre
+, ogre_13
 , cegui
 , boost
 , sfml
@@ -12,7 +12,7 @@
 }:
 
 let
-  ogre' = ogre.overrideAttrs (old: {
+  ogre' = ogre_13.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ [
       "-DOGRE_RESOURCEMANAGER_STRICT=0"
     ];
@@ -63,7 +63,8 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
+    description = "Open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
+    mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
     license = with licenses; [ gpl3Plus zlib mit cc-by-sa-30 cc0 ofl cc-by-30 ];
     platforms = platforms.linux;

@@ -1,10 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, typing ? null, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  typing ? null,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,8 +19,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ aiohttp ]
-  ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ aiohttp ] ++ lib.optional (pythonOlder "3.5") typing;
 
   # Requires network access
   doCheck = false;

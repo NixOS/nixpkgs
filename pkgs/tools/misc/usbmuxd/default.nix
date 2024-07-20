@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
-    description = "A socket daemon to multiplex connections from and to iOS devices";
+    description = "Socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
       usbmuxd stands for "USB multiplexing daemon". This daemon is in charge of
       multiplexing connections over USB to an iOS device. To users, it means
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
+    mainProgram = "usbmuxd";
   };
 }

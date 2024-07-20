@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "FUSE module to mount ISO filesystem images";
     homepage = "https://sourceforge.net/projects/fuseiso";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "fuseiso";
   };
 }

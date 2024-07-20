@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.1.1";
-  format = "pyproject";
+  version = "3.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,10 +18,8 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-N1Us/dpF/y638qIuwTzBiuv4vXfBMtWxmQnMBxNTUuc=";
+    hash = "sha256-4JMyBixc6LcSdpvvLmK4nyyqZMK2kuFcPU7OXhJLpoc=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -30,14 +29,13 @@ buildPythonPackage rec {
   # Tries to build and install test packages which fails
   doCheck = false;
 
-  pythonImportsCheck = [
-    "argcomplete"
-  ];
+  pythonImportsCheck = [ "argcomplete" ];
 
   meta = with lib; {
-    description = "Bash tab completion for argparse";
-    homepage = "https://kislyuk.github.io/argcomplete/";
     changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    description = "Bash tab completion for argparse";
+    downloadPage = "https://github.com/kislyuk/argcomplete";
+    homepage = "https://kislyuk.github.io/argcomplete/";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo ];
   };

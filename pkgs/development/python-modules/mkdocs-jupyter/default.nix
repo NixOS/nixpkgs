@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, ipykernel
-, jupytext
-, mkdocs
-, mkdocs-material
-, nbconvert
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  ipykernel,
+  jupytext,
+  mkdocs,
+  mkdocs-material,
+  nbconvert,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.24.1";
+  version = "0.24.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,22 +23,19 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-lncDf7fpMSaPPfdZn8CCjCYSR989FXW87TILqLfR1G0=";
+    hash = "sha256-Cadi9ITVQNnA6UTTSyjLU2oyhp4iS0YOL8eRsUP3aUA=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
-    substituteInPlace mkdocs_jupyter/tests/test_base_usage.py \
+    substituteInPlace src/mkdocs_jupyter/tests/test_base_usage.py \
       --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
   '';
 
-  pythonRelaxDeps = [
-    "nbconvert"
-  ];
+  pythonRelaxDeps = [ "nbconvert" ];
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,13 +47,11 @@ buildPythonPackage rec {
     pygments
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mkdocs_jupyter"
-  ];
+  pythonImportsCheck = [ "mkdocs_jupyter" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Use Jupyter Notebook in mkdocs";

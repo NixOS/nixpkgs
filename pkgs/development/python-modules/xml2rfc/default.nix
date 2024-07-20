@@ -1,41 +1,43 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, configargparse
-, decorator
-, dict2xml
-, fetchFromGitHub
-, google-i18n-address
-, html5lib
-, intervaltree
-, jinja2
-, lxml
-, markupsafe
-, pycairo
-, pycountry
-, pyflakes
-, pypdf2
-, pytestCheckHook
-, python-fontconfig
-, pythonOlder
-, pyyaml
-, requests
-, six
-, wcwidth
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  configargparse,
+  decorator,
+  dict2xml,
+  fetchFromGitHub,
+  google-i18n-address,
+  html5lib,
+  intervaltree,
+  jinja2,
+  lxml,
+  markupsafe,
+  platformdirs,
+  pycairo,
+  pycountry,
+  pyflakes,
+  pypdf2,
+  pytestCheckHook,
+  python-fontconfig,
+  pythonOlder,
+  pyyaml,
+  requests,
+  six,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.17.3";
+  version = "3.21.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5RL4DkWcQRxzi1dhSJlGgoU0BU3aUWOfBNINFKiOwLg=";
+    hash = "sha256-7lYNEyoLYbxn1ld08eXaN8BumYhN9EftpHQKxdu64MY=";
   };
 
   postPatch = ''
@@ -56,6 +58,7 @@ buildPythonPackage rec {
     jinja2
     lxml
     markupsafe
+    platformdirs
     pycountry
     pyflakes
     pypdf2
@@ -72,24 +75,26 @@ buildPythonPackage rec {
     python-fontconfig
   ];
 
-   # Requires Noto Serif and Roboto Mono font
+  # Requires Noto Serif and Roboto Mono font
   doCheck = false;
 
   checkPhase = ''
     make tests-no-network
   '';
 
-  pythonImportsCheck = [
-    "xml2rfc"
-  ];
+  pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
+    mainProgram = "xml2rfc";
     homepage = "https://github.com/ietf-tools/xml2rfc";
     changelog = "https://github.com/ietf-tools/xml2rfc/blob/v${version}/CHANGELOG.md";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vcunat yrashk ];
+    maintainers = with maintainers; [
+      vcunat
+      yrashk
+    ];
   };
 }

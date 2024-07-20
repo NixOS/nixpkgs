@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snappy";
-  version = "1.1.10";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = version;
-    hash = "sha256-wYZkKVDXKCugycx/ZYhjV0BjM/NrEM0R6A4WFhs/WPU=";
+    hash = "sha256-IzKzrMDjh+Weor+OrKdX62cAKYTdDXgldxCgNE2/8vk=";
   };
 
   patches = [
@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-
-  # See https://github.com/NixOS/nixpkgs/pull/219778#issuecomment-1464884412
-  # and https://github.com/NixOS/nixpkgs/pull/221215#issuecomment-1482564003.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-sign-compare";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"

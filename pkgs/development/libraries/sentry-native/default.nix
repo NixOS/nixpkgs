@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.6.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
-    hash = "sha256-x9xqcQQQS6hUcZaF8Ei8OmDXUP+y3prVyjlzwm4+4ko=";
+    hash = "sha256-yriFV6OLk+miaKKWQKd08MmwDx0blkiiyq6gQHUaNWE=";
   };
 
   nativeBuildInputs = [
@@ -28,9 +28,11 @@ stdenv.mkDerivation rec {
     breakpad
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DSENTRY_BREAKPAD_SYSTEM=On"
+    "-DSENTRY_BACKEND=breakpad"
   ];
 
   meta = with lib; {
@@ -39,6 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/getsentry/sentry-native/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wheelsandmetal ];
+    maintainers = with maintainers; [ wheelsandmetal daniel-fahey ];
   };
 }

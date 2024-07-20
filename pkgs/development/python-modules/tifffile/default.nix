@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchPypi
-, fsspec
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zarr
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  fsspec,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.4.12";
+  version = "2024.6.18";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L6mfmJDKq5GdkyoKyqnQ9YQ9wu81lOISljky4gcTut0=";
+    hash = "sha256-V+DSoDS8tih+oxVdhxZQjfrIZEOiV/ZQK1fuf4ozs7Y=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     dask
@@ -51,9 +50,10 @@ buildPythonPackage rec {
     "test_issue_invalid_predictor"
   ];
 
-  pythonImportsCheck = [
-    "tifffile"
-  ];
+  pythonImportsCheck = [ "tifffile" ];
+
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";

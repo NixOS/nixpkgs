@@ -1,34 +1,25 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Send2Trash";
-  version = "1.8.1b0";
+  pname = "send2trash";
+  version = "1.8.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
     rev = "refs/tags/${version}";
-    hash = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
+    hash = "sha256-p0Pd9g+nLoT+oruthwjBn2E9rznvcx35VmzOAce2iTY=";
   };
 
-  postPatch = ''
-    # Confuses setuptools validation
-    # setuptools.extern.packaging.requirements.InvalidRequirement: One of the parsed requirements in `extras_require[win32]` looks like a valid environment marker: 'sys_platform == "win32"'
-    sed -i '/win32 =/d' setup.cfg
-
-    # setuptools.extern.packaging.requirements.InvalidRequirement: One of the parsed requirements in `extras_require[objc]` looks like a valid environment marker: 'sys_platform == "darwin"'
-    sed -i '/objc =/d' setup.cfg
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -36,12 +27,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";
+    mainProgram = "send2trash";
     homepage = "https://github.com/hsoft/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;

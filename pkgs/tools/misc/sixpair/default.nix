@@ -32,8 +32,9 @@ stdenv.mkDerivation {
       This command-line utility searches USB buses for SIXAXIS controllers and tells them to connect to a new Bluetooth master.
     '';
     homepage = "http://www.pabr.org/sixlinux/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.tomsmeets ];
     platforms = lib.platforms.linux;
+    mainProgram = "sixpair";
   };
 }

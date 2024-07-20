@@ -19,10 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VaUr63v7mzhh4VBghH7a7qrqOYwl6vucmmKzTi9yAjY=";
   }) ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=deprecated-declarations"
-  ];
+  postPatch = ''
+    # Disable -Werror to avoid build failure on fresh toolchains like
+    # gcc-13.
+    substituteInPlace lib/date/CMakeLists.txt --replace-fail ' -Werror ' ' '
+    substituteInPlace lib/ranger/CMakeLists.txt --replace-fail ' -Werror ' ' '
+    substituteInPlace lib/tandem/CMakeLists.txt --replace-fail ' -Werror ' ' '
+    substituteInPlace src/CMakeLists.txt --replace-fail ' -Werror ' ' '
+
+    # Fix gcc-13 build due to missing <cstdint> header.
+    sed -e '1i #include <cstdint>' -i src/core/tools/vargen/utils/assembler.hpp
+  '';
 
   postInstall = ''
     mkdir $out/bin
@@ -31,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bayesian haplotype-based mutation calling";
+    mainProgram = "octopus";
     license = licenses.mit;
     homepage = "https://github.com/luntergroup/octopus";
     maintainers = with maintainers; [ jbedo ];

@@ -1,24 +1,26 @@
 { lib
 , stdenv
-, fetchgit
+, fetchFromGitLab
 , cmake
+, elfutils
 , extra-cmake-modules
-, wrapQtAppsHook
 , kitemmodels
 , libiberty
-, libelf
 , libdwarf
 , libopcodes
+, wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elf-dissector";
-  version = "unstable-2023-06-06";
+  version = "unstable-2023-12-24";
 
-  src = fetchgit {
-    url = "https://invent.kde.org/sdk/elf-dissector.git";
-    rev = "de2e80438176b4b513150805238f3333f660718c";
-    hash = "sha256-2yHPVPu6cncXhFCJvrSodcRFVAxj4vn+e99WhtiZniM=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "sdk";
+    repo = "elf-dissector";
+    rev = "613538bd1d87ce72d5115646551a49cf7ff2ee34";
+    hash = "sha256-fQFGFw8nZHMs8J1W2CcHAJCdcvaY2l2/CySyBSsKpyE=";
   };
 
   patches = [
@@ -27,12 +29,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
 
-  buildInputs = [ kitemmodels libiberty libelf libdwarf libopcodes ];
+  buildInputs = [ kitemmodels libiberty elfutils libopcodes libdwarf ];
 
   meta = with lib; {
     homepage = "https://invent.kde.org/sdk/elf-dissector";
     description = "Tools for inspecting, analyzing and optimizing ELF files";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry philiptaron ];
   };
 }

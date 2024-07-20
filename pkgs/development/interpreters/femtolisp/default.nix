@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "femtolisp";
-  version = "unstable-2023-07-12";
+  version = "0-unstable-2024-06-18";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = "femtolisp";
-    rev = "b3a21a0ff408e559639f6c31e1a2ab970787567f";
-    hash = "sha256-PE/xYhfhn0xv/kJWsS07fOF2n5sXP666vy7OVaNxc7Y=";
+    rev = "ee58f398fec62d3096b0e01da51a3969ed37a32d";
+    hash = "sha256-pfPD9TNLmrqhvJS/aVVmziMVApsiU5v1nAMqU+Kduzw=";
   };
 
   strictDeps = true;
@@ -30,11 +30,12 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A compact interpreter for a minimal lisp/scheme dialect";
+    description = "Compact interpreter for a minimal lisp/scheme dialect";
     homepage = "https://git.sr.ht/~ft/femtolisp";
     license = with lib.licenses; [ mit bsd3 ];
     maintainers = with lib.maintainers; [ moody ];
     broken = stdenv.isDarwin;
     platforms = lib.platforms.unix;
+    mainProgram = "flisp";
   };
 }

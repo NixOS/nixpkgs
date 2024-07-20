@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/visit1985/mdp";
-    description = "A command-line based markdown presentation tool";
-    maintainers = with maintainers; [ matthiasbeyer vrthra ];
+    description = "Command-line based markdown presentation tool";
+    maintainers = with maintainers; [ matthiasbeyer ];
     license = licenses.gpl3;
     platforms = with platforms; unix;
+    mainProgram = "mdp";
   };
 }

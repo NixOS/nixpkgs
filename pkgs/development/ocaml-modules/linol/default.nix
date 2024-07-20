@@ -1,22 +1,25 @@
-{ lib, fetchFromGitHub, buildDunePackage, yojson, logs, lsp, ppx_yojson_conv_lib }:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, yojson, logs, lsp, ppx_yojson_conv_lib, trace }:
 
 buildDunePackage
 rec {
   pname = "linol";
-  version = "2023-04-25";
+  version = "0.5";
 
   minimalOCamlVersion = "4.14";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "linol";
-    # Brings support for newer LSP
-    rev = "439534e0c5b7a3fbf93ba05fae7d171426153763";
-    sha256 = "sha256-EW35T7KUc/L1Zy4+oaJOC6mlVpbvhTfnU3NNFGoZAJg=";
+    rev = "v${version}";
+    hash = "sha256-ULPOB/hb+2VXDB/eK66WDDh/wj0bOwUt0tZsiIXqndo=";
   };
 
-  propagatedBuildInputs = [ yojson logs lsp ppx_yojson_conv_lib ];
+  patches = fetchpatch {
+    url = "https://github.com/c-cube/linol/commit/d8ebcf9a60f1e7251d14cdcd0b2ebd5b7f8eec6d.patch";
+    hash = "sha256-JHR0P0X3ep5HvDWW43dMb452/WsFKS4e+5Qhk4MzaxQ=";
+  };
+
+  propagatedBuildInputs = [ yojson logs lsp ppx_yojson_conv_lib trace ];
 
   meta = with lib; {
     description = "LSP server library";

@@ -1,46 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation, buildPackages }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, cmake
+, gtest
+, jre
+, pkg-config
+, boost
+, icu
+, protobuf
+, Foundation
+}:
 
-stdenv.mkDerivation rec {
-  pname = "phonenumber";
-  version = "8.12.37";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libphonenumber";
+  version = "8.13.40";
 
   src = fetchFromGitHub {
-    owner = "googlei18n";
+    owner = "google";
     repo = "libphonenumber";
-    rev = "v${version}";
-    sha256 = "sha256-xLxadSxVY3DjFDQrqj3BuOvdMaKdFSLjocfzovJCBB0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3I+/oLJVbgOA+o8jHhOuHhD+0s7sgOghnW7DTMCllBU=";
   };
 
   patches = [
-    # Submitted upstream: https://github.com/google/libphonenumber/pull/2921
+    # An earlier version of this patch was submitted upstream but did not get
+    # any interest there - https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
   ];
 
   nativeBuildInputs = [
     cmake
+    gtest
+    jre
     pkg-config
   ];
 
   buildInputs = [
     boost
-    protobuf
     icu
-    gtest
-  ] ++ lib.optional stdenv.isDarwin Foundation;
+    protobuf
+  ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
+  ];
 
   cmakeDir = "../cpp";
-  cmakeFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DBUILD_GEOCODER=OFF"
-      "-DPROTOC_BIN=${buildPackages.protobuf}/bin/protoc"
-    ];
 
-  checkPhase = "./libphonenumber_test";
+  doCheck = true;
+
+  checkTarget = "tests";
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
     license = licenses.asl20;
     maintainers = with maintainers; [ illegalprime ];
   };
-}
+})

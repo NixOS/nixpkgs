@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, pyserial-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  pyserial-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "epson-projector";
-  version = "0.5.0";
+  version = "0.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "epson_projector";
     inherit version;
-    hash = "sha256-a9pRncC22DCKX+7ObC8PORpR+RGbOBor2lbwzfrU8tk=";
+    hash = "sha256-LwsdMuwvLifIP1PRNhfLi4TTZRp/cw9Bcf57vrsNrbI=";
   };
 
   propagatedBuildInputs = [

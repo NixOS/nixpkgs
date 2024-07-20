@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Glib abstaction to handle feeds in RSS, Atom and other formats";
-    homepage = "https://wiki.gnome.org/Projects/Libgrss";
+    homepage = "https://gitlab.gnome.org/GNOME/libgrss";
     license = licenses.lgpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

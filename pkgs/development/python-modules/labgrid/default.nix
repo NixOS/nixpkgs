@@ -1,44 +1,48 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools-scm
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  packaging,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "0.4.1";
+  version = "23.0.6";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
-    rev = "v${version}";
-    sha256 = "0ih04lh1q3dysps4vfmk2rhqqrsimssadsxvbxdsnim2yihrrw47";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UAfBzQZeFNs2UJSFb5fH5wHXQoVU/dOTFciR0/UB7vc=";
   };
 
-  patches = [
-    # Pyserial within Nixpkgs already includes the necessary fix, remove the
-    # pyserial version check from labgrid.
-    ./0001-serialdriver-remove-pyserial-version-check.patch
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pyproject = true;
 
   propagatedBuildInputs = [
     ansicolors
@@ -55,12 +59,23 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  pythonRelaxDeps = [
+    "attrs"
+    "autobahn"
+    "jinja2"
+    "packaging"
+    "pexpect"
+    "pytest"
+    "pyudev"
+    "requests"
+    "xmodem"
+  ];
+
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
 
   nativeCheckInputs = [
     mock
+    openssh
     psutil
     pytestCheckHook
     pytest-mock

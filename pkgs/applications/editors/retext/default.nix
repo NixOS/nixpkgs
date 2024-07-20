@@ -10,19 +10,19 @@
 , aspellDicts
   # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
   # available.
-, enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
+, enchantAspellDicts ? with aspellDicts; [ en en-computers ]
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "retext";
-  version = "8.0.0";
+  version = "8.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = pname;
-    rev = version;
-    hash = "sha256-22yqNwIehgTfeElqhN5Jzye7LbcAiseTeoMgenpmsL0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BToW9rPFEbgAErvJ5gtUpNadCLtlRihE7eKKFgO5N68=";
   };
 
   toolbarIcons = fetchzip {
@@ -88,5 +88,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
+    mainProgram = "retext";
   };
 }

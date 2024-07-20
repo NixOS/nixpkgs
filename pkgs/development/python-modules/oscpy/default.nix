@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "oscpy";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kivy";
@@ -25,7 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oscpy" ];
 
   meta = with lib; {
-    description = "A modern implementation of OSC for python2/3";
+    description = "Modern implementation of OSC for python2/3";
+    mainProgram = "oscli";
     license = licenses.mit;
     homepage = "https://github.com/kivy/oscpy";
     maintainers = [ maintainers.yurkobb ];

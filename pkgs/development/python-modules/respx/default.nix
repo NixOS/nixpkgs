@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpcore
-, httpx
-, flask
-, pytest-asyncio
-, pytestCheckHook
-, starlette
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  httpcore,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  starlette,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.20.1";
+  version = "0.21.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lundberg";
-    repo = pname;
+    repo = "respx";
     rev = version;
-    hash = "sha256-Qs3+NWMKiAFlKTTosdyHOxWRPKFlYQD20+MKiKR371U=";
+    hash = "sha256-sBb9HPvX+AKJUMWBME381F2amYdQmBiM8OguGW3lFG0=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "httpx-0.24-test-compatibility.patch";
-      url = "https://github.com/lundberg/respx/commit/b014780bde8e82a65fc6bb02d62b89747189565c.patch";
-      hash = "sha256-wz9YYUtdptZw67ddnzUCet2iTozKaW0jrTIS62I/HXo=";
-    })
-  ];
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     httpcore
@@ -44,21 +45,15 @@ buildPythonPackage rec {
     trio
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
-  disabledTests = [
-    "test_pass_through"
-  ];
+  disabledTests = [ "test_pass_through" ];
 
   pythonImportsCheck = [ "respx" ];
 
   meta = with lib; {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
-    changelog = "https://github.com/lundberg/respx/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/lundberg/respx/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

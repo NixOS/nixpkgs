@@ -10,17 +10,18 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 buildGoModule {
   pname = "boringssl";
-  version = "2021-07-09";
+  version = "unstable-2024-02-15";
 
   src = fetchgit {
-    url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "268a4a6ff3bd656ae65fe41ef1185daa85cfae21";
-    sha256 = "04fja4fdwhc69clmvg8i12zm6ks3sfl3r8i5bxn4x63b9dj5znlx";
+    url = "https://boringssl.googlesource.com/boringssl";
+    rev = "5a1a5fbdb865fa58f1da0fd8bf6426f801ea37ac";
+    hash = "sha256-nu+5TeWEAVLGhTE15kxmTWZxo0V2elNUy67gdaU3Y+I=";
   };
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorSha256 = null;
+  vendorHash = "sha256-074bgtoBRS3SOxLrwZbBdK1jFpdCvF6tRtU1CkrhoDY=";
+  proxyVendor = true;
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)
@@ -58,6 +59,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";
+    mainProgram = "bssl";
     homepage    = "https://boringssl.googlesource.com";
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];

@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0r9q45y55z4i0askkxmxrx0jr1620ypd870vz0hx2a6n9skimdy0";
   };
 
-  makeFlags = [ "CFLAGS=-O2" ];
+  preBuild = ''
+    makeFlagsArray+=(CFLAGS="-O2 -std=c89")
+  '';
 
   installPhase = ''
     install -Dm755 snow -t $out/bin
@@ -17,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Conceal messages in ASCII text by appending whitespace to the end of lines";
+    mainProgram = "snow";
     homepage = "http://www.darkside.com.au/snow/";
     license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];

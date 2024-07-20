@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
-    sha256 = "sha256-zT31tzsm5OM99vz8DzGCdPmnemiwiJpKccYwECnUgOQ=";
+    hash = "sha256-YLGsKGcKIPd0ihd5IzlT71dYkxZfeH7BpnKQMEyY8dI=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ janik _0x4A6F ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
   };
 }

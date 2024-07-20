@@ -4,7 +4,7 @@
 # TODO: LWP/Pg perl libs aren't recognized
 
 # TODO: support fastcgi
-# http://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
+# https://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
 # spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
 # spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
@@ -83,42 +83,47 @@ let
   # Copy one Munin plugin into the Nix store with a specific name.
   # This is suitable for use with plugins going directly into /etc/munin/plugins,
   # i.e. munin.extraPlugins.
-  internOnePlugin = name: path:
+  internOnePlugin = { name, path }:
     "cp -a '${path}' '${name}'";
 
   # Copy an entire tree of Munin plugins into a single directory in the Nix
-  # store, with no renaming.
-  # This is suitable for use with munin-node-configure --suggest, i.e.
-  # munin.extraAutoPlugins.
-  internManyPlugins = name: path:
+  # store, with no renaming. The output is suitable for use with
+  # munin-node-configure --suggest, i.e. munin.extraAutoPlugins.
+  # Note that this flattens the input; this is intentional, as
+  # munin-node-configure won't recurse into subdirectories.
+  internManyPlugins = path:
     "find '${path}' -type f -perm /a+x -exec cp -a -t . '{}' '+'";
 
   # Use the appropriate intern-fn to copy the plugins into the store and patch
   # them afterwards in an attempt to get them to run on NixOS.
+  # This is a bit hairy because we can't just fix shebangs; lots of munin plugins
+  # hardcode paths like /sbin/mount rather than trusting $PATH, so we have to
+  # look for and update those throughout the script. At the same time, if the
+  # plugin comes from a package that is already nixified, we don't want to
+  # rewrite paths like /nix/store/foo/sbin/mount.
+  # For now we make the simplifying assumption that no file will contain lines
+  # which mix store paths and FHS paths, and thus run our substitution only on
+  # lines which do not contain store paths.
   internAndFixPlugins = name: intern-fn: paths:
     pkgs.runCommand name {} ''
       mkdir -p "$out"
       cd "$out"
-      ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList intern-fn paths)}
+      ${lib.concatStringsSep "\n" (map intern-fn paths)}
       chmod -R u+w .
-      find . -type f -exec sed -E -i '
-        s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
-      ' '{}' '+'
+      ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -E -i "
+        \%''${NIX_STORE}/%! s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
+      " '{}' '+'
     '';
 
   # TODO: write a derivation for munin-contrib, so that for contrib plugins
   # you can just refer to them by name rather than needing to include a copy
   # of munin-contrib in your nixos configuration.
   extraPluginDir = internAndFixPlugins "munin-extra-plugins.d"
-    internOnePlugin nodeCfg.extraPlugins;
+    internOnePlugin
+    (lib.attrsets.mapAttrsToList (k: v: { name = k; path = v; }) nodeCfg.extraPlugins);
 
   extraAutoPluginDir = internAndFixPlugins "munin-extra-auto-plugins.d"
-    internManyPlugins
-    (builtins.listToAttrs
-      (map
-        (path: { name = baseNameOf path; value = path; })
-        nodeCfg.extraAutoPlugins));
+    internManyPlugins nodeCfg.extraAutoPlugins;
 
   customStaticDir = pkgs.runCommand "munin-custom-static-data" {} ''
     cp -a "${pkgs.munin}/etc/opt/munin/static" "$out"
@@ -138,29 +143,29 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <http://guide.munin-monitoring.org/en/latest/architecture/index.html>.
+          See <https://guide.munin-monitoring.org/en/latest/architecture/index.html>.
         '';
       };
 
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`munin-node.conf` extra configuration. See
-          <http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
+          <https://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
       };
 
       extraPluginConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`plugin-conf.d` extra plugin configuration. See
-          <http://guide.munin-monitoring.org/en/latest/plugin/use.html>
+          <https://guide.munin-monitoring.org/en/latest/plugin/use.html>
         '';
         example = ''
           [fail2ban_*]
@@ -171,7 +176,7 @@ in
       extraPlugins = mkOption {
         default = {};
         type = with types; attrsOf path;
-        description = lib.mdDoc ''
+        description = ''
           Additional Munin plugins to activate. Keys are the name of the plugin
           symlink, values are the path to the underlying plugin script. You
           can use the same plugin script multiple times (e.g. for wildcard
@@ -201,7 +206,7 @@ in
       extraAutoPlugins = mkOption {
         default = [];
         type = with types; listOf path;
-        description = lib.mdDoc ''
+        description = ''
           Additional Munin plugins to autoconfigure, using
           `munin-node-configure --suggest`. These should be
           the actual paths to the plugin files (or directories containing them),
@@ -234,7 +239,7 @@ in
         # NaNs in the output.
         default = [ "munin_stats" ];
         type = with types; listOf str;
-        description = lib.mdDoc ''
+        description = ''
           Munin plugins to disable, even if
           `munin-node-configure --suggest` tries to enable
           them. To disable a wildcard plugin, use an actual wildcard, as in
@@ -253,7 +258,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
           munin-graphs and munin-html in that order.
@@ -266,11 +271,11 @@ in
       extraGlobalConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`munin.conf` extra global configuration.
-          See <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
+          See <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
           Useful to setup notifications, see
-          <http://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
+          <https://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -280,10 +285,10 @@ in
       hosts = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
-          <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
+          <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
         '';
         example = literalExpression ''
           '''
@@ -296,7 +301,7 @@ in
       extraCSS = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Custom styling for the HTML that munin-cron generates. This will be
           appended to the CSS files used by munin-cron and will thus take
           precedence over the builtin styles.
@@ -369,7 +374,11 @@ in
     };
 
     # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
-    systemd.tmpfiles.rules = [ "d /run/munin 0755 munin munin -" ];
+    systemd.tmpfiles.settings."10-munin"."/run/munin".d = {
+      mode = "0755";
+      user = "munin";
+      group = "munin";
+    };
 
   }) (mkIf cronCfg.enable {
 
@@ -394,11 +403,17 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /run/munin 0755 munin munin -"
-      "d /var/log/munin 0755 munin munin -"
-      "d /var/www/munin 0755 munin munin -"
-      "d /var/lib/munin 0755 munin munin -"
-    ];
+    systemd.tmpfiles.settings."20-munin" = let
+      defaultConfig = {
+        mode = "0755";
+        user = "munin";
+        group = "munin";
+      };
+    in {
+      "/run/munin".d = defaultConfig;
+      "/var/log/munin".d = defaultConfig;
+      "/var/www/munin".d = defaultConfig;
+      "/var/lib/munin".d = defaultConfig;
+    };
   })];
 }

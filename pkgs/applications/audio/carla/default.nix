@@ -26,13 +26,13 @@ assert withQt -> wrapQtAppsHook != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
-  version = "2.5.5";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = finalAttrs.pname;
+    repo = "carla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kXQ0dv4KrwvfxdP73zimof9XKpAz5E6hQrFOjLG4hKU=";
+    hash = "sha256-H15T/z/IRfgWdqToTzq2eJ7q3n9Kj44IZXsd4uaipuU=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
         filename="$(basename -- "$file")"
         substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
     done
+  '' + lib.optionalString withGtk2 ''
+    # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
+    substituteInPlace source/bridges-ui/Makefile \
+        --replace '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;
@@ -89,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://kx.studio/Applications:Carla";
-    description = "An audio plugin host";
+    description = "Audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3
       and AU plugin formats, plus GIG, SF2 and SFZ file support.

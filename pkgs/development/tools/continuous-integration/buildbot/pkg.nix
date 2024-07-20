@@ -1,15 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
+{ lib, buildPythonPackage, isPy3k, buildbot }:
 
-buildPythonPackage rec {
-  pname = "buildbot-pkg";
-  inherit (buildbot) version;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-duv8oKgVGfeOzjKiI8Ltmto0dcGSI1xtSy8YbqtIFTk=";
-  };
+buildPythonPackage {
+  pname = "buildbot_pkg";
+  inherit (buildbot) src version;
 
   postPatch = ''
+    cd pkg
     # Their listdir function filters out `node_modules` folders.
     # Do we have to care about that with Nix...?
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
@@ -25,7 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ ryansydnor lopsided98 ];
+    maintainers = teams.buildbot.members;
     license = licenses.gpl2;
   };
 }

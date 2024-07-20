@@ -1,6 +1,5 @@
 { lib
 , rustPlatform
-, rust
 , fetchFromGitHub
 , substituteAll
 , stdenv
@@ -8,23 +7,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lalrpop";
-  version = "0.20.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
-    # there's no tag for 0.20.0
-    rev = "1584ddb243726195b540fdd2b3ccf693876288e0";
-    # rev = version;
-    hash = "sha256-aYlSR8XqJnj76Hm3MFqfA5d9L3SO/iCCKpzOES5YQGY=";
+    rev = version;
+    hash = "sha256-cFwBck+bdOjhF6rQQj03MOO+XCsrII5c4Xvhsw12ETA=";
   };
 
-  cargoHash = "sha256-JaU5ZJbmlV/HfFT/ODpB3xFjZc2XiljhEVz/dql8o/c=";
+  cargoHash = "sha256-zkPLas+fQQzm7LlWNpTooUR/e30KMS9OET6PMwQ2yAA=";
 
   patches = [
     (substituteAll {
       src = ./use-correct-binary-path-in-tests.patch;
-      target_triple = rust.toRustTarget stdenv.hostPlatform;
+      target_triple = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];
 
@@ -41,6 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
     license = with licenses; [ asl20 /* or */ mit ];
+    mainProgram = "lalrpop";
     maintainers = with maintainers; [ chayleaf ];
   };
 }

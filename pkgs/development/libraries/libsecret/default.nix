@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , glib
 , meson
 , ninja
@@ -13,7 +14,7 @@
 , libgcrypt
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , gi-docgen
 , gnome
@@ -24,14 +25,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.5";
+  version = "0.21.4";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
+    hash = "sha256-Fj0I14O+bUq5qXnOtaT+y8HZZg08NBaMWBMBzVORKyA=";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/libsecret/-/merge_requests/141
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/libsecret/-/commit/208989323211c756dff690115e5cbde5ef7491ce.patch";
+      hash = "sha256-DtRbqyyoMttEYf6B16m9O72Yjurv6rpbnqH7AlrAU4k=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -75,6 +84,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.isLinux && withIntrospection;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh
@@ -119,8 +129,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A library for storing and retrieving passwords and other secrets";
-    homepage = "https://wiki.gnome.org/Projects/Libsecret";
+    description = "Library for storing and retrieving passwords and other secrets";
+    homepage = "https://gitlab.gnome.org/GNOME/libsecret";
     license = lib.licenses.lgpl21Plus;
     mainProgram = "secret-tool";
     inherit (glib.meta) platforms maintainers;

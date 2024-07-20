@@ -6,7 +6,7 @@ let
   stdenv = pkgs.stdenv;
 
   rubyVersions = with pkgs; [
-    ruby_2_7
+    ruby_3_2
   ];
 
   gemTests =

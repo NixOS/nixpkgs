@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of audio level meters with GUI in LV2 plugin format";
+    mainProgram = "x42-meter";
     homepage = "https://x42.github.io/meters.lv2/";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

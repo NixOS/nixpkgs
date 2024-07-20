@@ -1,30 +1,38 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.4.3";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
-    rev = "v${version}";
-    hash = "sha256-O/qiznQs+x7qBYXVItd0W7a0irEzRf0We7kW7HHLqcw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TNIAin4W3pBNl9Id0zFeEDTT0B2PCS29q7csekkZ4CQ=";
   };
+
+  vendorHash = "sha256-LqoWkhEnsKTz384dhqNKmZrG38NHxaFx4k7zjHj51Ys=";
 
   postConfigure = ''
     export CGO_ENABLED=0
   '';
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags '-static'"
+  ];
 
-  vendorHash = "sha256-If0K6DmkGk3AmO3eb/ocAl1RJeBN/xgY7dOh9lnVLh8=";
-
-  doCheck = false; # tests require network access
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
+    description = "Tunneling/pivoting tool that uses a TUN interface";
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
-    description = "A tunneling/pivoting tool that uses a TUN interface";
+    changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "simple-rlp";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

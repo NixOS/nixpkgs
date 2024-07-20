@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apko";
-  version = "0.8.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-02W9YOnV/zXopH3C9UNKu5gepNVS2gzoGa10uaKYu94=";
+    hash = "sha256-O1lU3b3dNmFcV0Dfkpw63Eu6AgLSLBi7MbF47OsjgL4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +24,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-h1uAAL3FBskx6Qv9E5WY+UPeXK49WW/hFoNN4QyKevU=";
+  vendorHash = "sha256-shnVJ6TcqWxUu1Ib2ewaz2VK4mi1Rt3R0Cmof9ilDJ4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,9 +42,8 @@ buildGoModule rec {
   '';
 
   checkFlags = [
-    # networking required to fetch alpine-keys
-    # pulled out into a separate library next release
-    "-skip=TestInitDB"
+    # fails to run on read-only filesystem
+    "-skip=(TestPublish|TestBuild|TestTarFS)"
   ];
 
   postInstall = ''
@@ -68,6 +67,7 @@ buildGoModule rec {
     homepage = "https://apko.dev/";
     changelog = "https://github.com/chainguard-dev/apko/blob/main/NEWS.md";
     description = "Build OCI images using APK directly without Dockerfile";
+    mainProgram = "apko";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

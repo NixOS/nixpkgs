@@ -1,53 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, swig2
-, openssl
-, typing
-, parameterized
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  openssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  swig,
 }:
 
-
 buildPythonPackage rec {
-  version = "0.38.0";
-  pname = "M2Crypto";
+  pname = "m2crypto";
+  version = "0.41.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mfImCjCQHJSajcbV+CzVMS/7iryS52YzuvIxu7yy3ss=";
+    pname = "M2Crypto";
+    inherit version;
+    hash = "sha256-OhNYx+6EkEbZF4Knd/F4a/AnocHVG1+vjxlDW/w/FJU=";
   };
 
-  patches = [
-    # Use OpenSSL_version_num() instead of unrealiable parsing of .h file.
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-MR271-opensslversion.patch";
-      hash = "sha256-e1/NHgWza+kum76MUFSofq9Ko3pML67PUfqWjcwIl+A=";
-    })
-    # Changed required to pass tests on OpenSSL 3.0
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-0.38-ossl3-tests.patch";
-      hash = "sha256-B6JKoPh76+CIna6zmrvFj50DIp3pzg8aKyzz+Q5hqQ0=";
-    })
-    # Allow EVP tests fail on non-FIPS algorithms
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-0.38-ossl3-tests-evp.patch";
-      hash = "sha256-jMUAphVBQMFaOJSeYUCQMV3WSe9VDQqG6GY5fDQXZnA=";
-    })
-    # Fix the readline test https://gitlab.com/m2crypto/m2crypto/-/issues/286
-    (fetchpatch {
-      url = "https://gitlab.com/m2crypto/m2crypto/-/commit/b8addc7ad9990d1ba3786830ebd74aa8c939849d.patch";
-      hash = "sha256-M5mrmJVCT0fASvERLKa/MR+EY2hzRGIkyUfguVBPKNk=";
-    })
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ swig ];
+
+  buildInputs = [ openssl ];
+
+  env =
+    {
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=incompatible-pointer-types"
+      ]);
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+      CPP = "${stdenv.cc.targetPrefix}cpp";
+    };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    openssl
   ];
 
-  nativeBuildInputs = [ swig2 openssl ];
-  buildInputs = [ openssl parameterized ];
+  pythonImportsCheck = [ "M2Crypto" ];
 
   meta = with lib; {
-    description = "A Python crypto and SSL toolkit";
+    description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ ];
   };
 }

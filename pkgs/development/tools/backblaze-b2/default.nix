@@ -1,71 +1,104 @@
-{ lib, python3Packages, fetchPypi }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, testers
+, backblaze-b2
+# executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+, execName ? "backblaze-b2"
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.7.0";
+  version = "4.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "b2";
-    sha256 = "sha256-sW6gaZWUh3WX+0+qHRlQ4gZzKU4bL8ePPNKWo9rdF84=";
+  src = fetchFromGitHub {
+    owner = "Backblaze";
+    repo = "B2_Command_Line_Tool";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rZUWPSI7CrKOdEKdsSpekwBerbIMf2iiVrWkV8WrqSc=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
-    substituteInPlace requirements.txt \
-      --replace 'tabulate==0.8.10' 'tabulate'
-    substituteInPlace setup.py \
-      --replace 'setuptools_scm<6.0' 'setuptools_scm'
-  '';
-
   nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+    installShellFiles
+    argcomplete
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    pdm-backend
+  ];
+
+  dependencies = with python3Packages; [
+    argcomplete
+    arrow
     b2sdk
     phx-class-registry
-    setuptools
     docutils
     rst2ansi
     tabulate
+    tqdm
+    platformdirs
+    packaging
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
     more-itertools
+    pexpect
     pytestCheckHook
+    pytest-xdist
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # require network
-    "test_files_headers"
-    "test_integration"
-  ];
-
   disabledTestPaths = [
-    # requires network
+    # Test requires network
     "test/integration/test_b2_command_line.py"
+    "test/integration/test_tqdm_closer.py"
+    # it's hard to make it work on nix
+    "test/integration/test_autocomplete.py"
+    "test/unit/test_console_tool.py"
+    # this one causes successive tests to fail
+    "test/unit/_cli/test_autocomplete_cache.py"
   ];
 
-  postInstall = ''
-    mv "$out/bin/b2" "$out/bin/backblaze-b2"
+  disabledTests = [
+    # Autocomplete is not successful in a sandbox
+    "test_autocomplete_installer"
+    "test_help"
+    "test_install_autocomplete"
+  ];
 
-    sed 's/b2/backblaze-b2/' -i contrib/bash_completion/b2
-
-    mkdir -p "$out/share/bash-completion/completions"
-    cp contrib/bash_completion/b2 "$out/share/bash-completion/completions/backblaze-b2"
+  postInstall = lib.optionalString (execName != "b2") ''
+    mv "$out/bin/b2" "$out/bin/${execName}"
+  ''
+  + ''
+    installShellCompletion --cmd ${execName} \
+      --bash <(register-python-argcomplete ${execName}) \
+      --zsh <(register-python-argcomplete ${execName})
   '';
+
+  passthru.tests.version = (testers.testVersion {
+    package = backblaze-b2;
+    command = "${execName} version --short";
+  }).overrideAttrs (old: {
+    # workaround the error: Permission denied: '/homeless-shelter'
+    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+    preHook = ''
+      export HOME=$(mktemp -d)
+    '';
+  });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
+    maintainers = with maintainers; [ hrdinka tomhoule ];
+    mainProgram = "backblaze-b2";
   };
 }

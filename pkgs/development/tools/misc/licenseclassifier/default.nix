@@ -15,14 +15,15 @@ buildGoModule rec {
   };
 
   # The new and improved "License Classifier v2" is hidden in a subdirectory.
-  sourceRoot = "source/v2";
+  sourceRoot = "${src.name}/v2";
 
   vendorHash = "sha256-u0VR8DCmbZS0MF26Y4HfqtLaGyX2n2INdAidVNbnXPE=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A License Classifier";
+    description = "License Classifier";
+    mainProgram = "identify_license";
     longDescription = ''
       The license classifier can analyze text to determine what type of license
       it contains. It searches for license texts in a file and compares them to

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clex";
-  version = "4.6.patch10";
+  version = "4.7";
 
   src = fetchurl {
-    sha256 = "03niihqk57px7rm2c84qira5jm5vw8lj5s58dximk0w5gsis4fhw";
-    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
+    url = "https://github.com/xitop/clex/releases/download/v${version}/clex-${version}.tar.gz";
+    hash = "sha256-3Y3ayJEy9pHLTUSeXYeekTVdopwKLZ8vVcVarLIFnpM=";
   };
 
   buildInputs = [ ncurses ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       to be executed by the shell. There are no built-in commands, CLEX is an
       add-on to your favorite shell.
     '';
-    homepage = "http://www.clex.sk";
+    homepage = "https://github.com/xitop/clex";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ darwin;
   };

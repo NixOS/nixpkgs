@@ -6,15 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "compactor";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
-    repo = pname;
+    repo = "compactor";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-SgmtlbYOrSMzVfzsrbg4qs+yGkXQialiJTI99EBsUjQ=";
+    hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
   };
+
+  patches = [
+    ./patches/add-a-space-after-type-in-check-response-opt-sh.patch
+  ];
 
   nativeBuildInputs = [
     asciidoctor
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage    = "https://dns-stats.org/";
-    changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
+    changelog   = "https://github.com/dns-stats/compactor/raw/${version}/ChangeLog.txt";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ fdns ];
     platforms   = platforms.unix;

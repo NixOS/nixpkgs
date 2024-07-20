@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-sytem
-, cython_3
-, numpy
-, setuptools
-, setuptools-scm
-, gnutar
+  # build-system
+  cython,
+  numpy,
+  oldest-supported-numpy,
+  setuptools,
+  setuptools-scm,
+  gnutar,
 
-# native
-, libsoxr
+  # native
+  libsoxr,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.3.5";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -26,26 +28,28 @@ buildPythonPackage rec {
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
+    hash = "sha256-HGtoMfMQ5/2iEIFtik7mCrSxFnLXkSSx2W8wBul0+jk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "SYS_LIBSOXR = False" "SYS_LIBSOXR = True"
+  '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gnutar
     numpy
+    oldest-supported-numpy
     setuptools
     setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "soxr"
-  ];
+  buildInputs = [ libsoxr ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "soxr" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "High quality, one-dimensional sample-rate conversion library";

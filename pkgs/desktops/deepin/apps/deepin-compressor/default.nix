@@ -14,25 +14,26 @@
 , wrapQtAppsHook
 , minizip
 , libzip
+, libuuid
 , libarchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.15";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6grnbv9hMKntOmpVcmU5IpAbHM7r0dQWb+SoQYtc5YY=";
+    hash = "sha256-DUpYb1xNmWpBcKo9kajeVm/+z4yj2OBE+qOyEkCHbUI=";
   };
 
   postPatch = ''
     substituteInPlace src/source/common/pluginmanager.cpp \
-      --replace "/usr/lib/" "$out/lib/"
+      --replace-fail "/usr/lib" "$out/lib"
     substituteInPlace src/desktop/deepin-compressor.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     karchive
     minizip
     libzip
+    libuuid
     libarchive
   ];
 
@@ -59,10 +61,16 @@ stdenv.mkDerivation rec {
     "-DUSE_TEST=OFF"
   ];
 
+  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
+  qtWrapperArgs = [
+    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+  ];
+
   strictDeps = true;
 
   meta = with lib; {
-    description = "A fast and lightweight application for creating and extracting archives";
+    description = "Fast and lightweight application for creating and extracting archives";
+    mainProgram = "deepin-compressor";
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

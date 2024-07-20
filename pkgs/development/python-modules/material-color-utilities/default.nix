@@ -1,4 +1,10 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pillow, regex }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  regex,
+}:
 
 buildPythonPackage rec {
   pname = "material-color-utilities-python";
@@ -6,8 +12,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PG8C585wWViFRHve83z3b9NijHyV+iGY2BdMJpyVH64=";
+    hash = "sha256-PG8C585wWViFRHve83z3b9NijHyV+iGY2BdMJpyVH64=";
   };
+
+  pythonRelaxDeps = [ "Pillow" ];
 
   propagatedBuildInputs = [
     pillow

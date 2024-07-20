@@ -1,6 +1,6 @@
 { lib
 , pkgconfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , gtk3
 , glib
@@ -33,21 +33,21 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(buildPythonApplication {
+(buildPythonApplication rec {
   pname = "input-remapper";
-  version = "1.5.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
-    rev = "e31a1b2bc5d23fe13130afcc242063196335399f";
     owner = "sezanzeb";
     repo = "input-remapper";
-    hash = "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU=";
+    rev = version;
+    hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
   };
 
   postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
-      --replace "/usr/share/input-remapper"  "$out/usr/share/input-remapper"
+      --replace "/usr/share"  "$out/usr/share"
   '' + lib.optionalString withDebugLogLevel ''
     # if debugging
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
@@ -88,7 +88,7 @@ in
       python tests/test.py --start-dir unit
   '';
 
-  # Nixpkgs 15.9.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+  # Nixpkgs 15.9.4.3. When using wrapGAppsHook3 with special derivers you can end up with double wrapped binaries.
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
@@ -98,7 +98,7 @@ in
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext # needed to build translations
     gtk3
     glib
@@ -137,7 +137,7 @@ in
   passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
-    description = "An easy to use tool to change the mapping of your input device buttons";
+    description = "Easy to use tool to change the mapping of your input device buttons";
     homepage = "https://github.com/sezanzeb/input-remapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

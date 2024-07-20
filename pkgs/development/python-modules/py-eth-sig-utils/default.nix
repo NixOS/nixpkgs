@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, eth-abi
-, py-ecc
-, pycryptodome
-, python
-, rlp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  eth-abi,
+  py-ecc,
+  pycryptodome,
+  python,
+  rlp,
 }:
 
 buildPythonPackage rec {
   pname = "py-eth-sig-utils";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rmeissner";

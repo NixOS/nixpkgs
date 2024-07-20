@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , fetchFromGitHub
-, llvmPackages_12
+, llvmPackages
 , boost
 , cmake
 , spdlog
@@ -10,19 +11,15 @@
 , testers
 }:
 
-let
-  llvmPackages = llvmPackages_12;
-  stdenv = llvmPackages.stdenv;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-AU+EfNC6Au93ajj8cMTbJDvJ5iWLtT5Law7l55Knxuk=";
+    sha256 = "sha256-JPuJIM5OU1qCvFZEQ3gDNBZsIiJijtWLAVGp54z7lt0=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
@@ -60,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://wasmedge.org/";
     license = with licenses; [ asl20 ];
-    description = "A lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
+    description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.all;
   };

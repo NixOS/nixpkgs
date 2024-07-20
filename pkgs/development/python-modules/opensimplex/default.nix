@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "opensimplex";
   version = "0.4.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lmas";

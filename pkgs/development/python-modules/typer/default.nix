@@ -1,36 +1,34 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, click
-, colorama
-, coverage
-, fetchpatch
-, fetchPypi
-, flit-core
-, pytest-sugar
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rich
-, shellingham
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  click,
+  colorama,
+  coverage,
+  fetchPypi,
+  pdm-backend,
+  pytest-sugar,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  shellingham,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.9.0";
+  version = "0.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UJIv15rqL0dRqOBAj/ENJmK9DIu/qEdVppnzutopeLI=";
+    hash = "sha256-SecxMUgdgEKI72JZjZehzu8wWJBapTahE0+QiRujVII=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     click
@@ -62,13 +60,9 @@ buildPythonPackage rec {
     # fails also on Linux
     "test_show_completion"
     "test_install_completion"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    "test_install_completion"
-  ];
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "test_install_completion" ];
 
-  pythonImportsCheck = [
-    "typer"
-  ];
+  pythonImportsCheck = [ "typer" ];
 
   meta = with lib; {
     description = "Library for building CLI applications";

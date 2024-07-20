@@ -1,40 +1,60 @@
 { lib
 , fetchFromGitHub
 , meerk40t-camera
-, python3
+, python3Packages
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.8.1000";
-  format = "setuptools";
+  version = "0.9.4000";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YCcnqaH4Npmct5IBHsnufswRz8bS7mUb1YFwTta/Dxc=";
+    hash = "sha256-ceDnnHdmJ6VOrM9pSxjeKQ748E8fsIqSQ36qFpXc9Ac=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
-  ];
+    wrapGAppsHook3
+  ] ++ (with python3Packages; [
+    setuptools
+  ]);
 
   # prevent double wrapping
   dontWrapGApps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    ezdxf
+  # https://github.com/meerk40t/meerk40t/blob/main/setup.py
+  propagatedBuildInputs = with python3Packages; [
     meerk40t-camera
-    opencv4
-    pillow
+    numpy
     pyserial
     pyusb
     setuptools
-    wxPython_4_2
-  ];
+    wxpython
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  passthru.optional-dependencies = with python3Packages; {
+    cam = [
+      opencv4
+    ];
+    camhead = [
+      opencv4
+    ];
+    dxf = [
+      ezdxf
+    ];
+    gui = [
+      wxpython
+      pillow
+      opencv4
+      ezdxf
+    ];
+  };
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -43,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     unittestCheckHook
   ];
 
@@ -54,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${version}";
     description = "MeerK40t LaserCutter Software";
+    mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

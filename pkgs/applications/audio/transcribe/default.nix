@@ -1,7 +1,7 @@
 { stdenv
 , fetchzip
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , which
 , alsa-lib
@@ -22,21 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.25";
+  version = "9.41.2";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
-          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.0.tar.gz";
-          sha256 = "sha256-vgl3BCAC7gOYTviHJzMbgZfHTpP90XUvxpC1IhvEZ8I=";
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
+          sha256 = "sha256-VWfjtNbwK9ZiWgs161ubRy+IjSXXk3FEfMkmA6Jhz8A=";
         }
     else throw "Platform not supported";
 
   nativeBuildInputs = [
     which
     xdg-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = with gst_all_1; [
@@ -106,9 +106,11 @@ stdenv.mkDerivation rec {
       conventional music players.
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
+    changelog = "https://www.seventhstring.com/xscribe/history.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
+    mainProgram = "transcribe";
   };
 }

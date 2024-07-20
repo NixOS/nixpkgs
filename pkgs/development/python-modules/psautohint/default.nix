@@ -1,14 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
-, runAllTests ? false, psautohint # for passthru.tests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fonttools,
+  lxml,
+  fs, # for fonttools extras
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-xdist,
+  runAllTests ? false,
+  psautohint, # for passthru.tests
 }:
 
 buildPythonPackage rec {
   pname = "psautohint";
   version = "2.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +37,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  propagatedBuildInputs = [
+    fonttools
+    lxml
+    fs
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

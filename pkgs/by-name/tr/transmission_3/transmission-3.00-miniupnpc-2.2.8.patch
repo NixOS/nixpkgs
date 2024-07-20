@@ -1,0 +1,18 @@
+diff --git a/libtransmission/upnp.c b/libtransmission/upnp.c
+index c9e248a379...c7b2580bcb 100644
+--- a/libtransmission/upnp.c
++++ b/libtransmission/upnp.c
+@@ -194,8 +194,13 @@
+ 
+         errno = 0;
+ 
++#if (MINIUPNPC_API_VERSION >= 18)
+         if (UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, handle->lanaddr,
++            sizeof(handle->lanaddr), NULL, 0) == UPNP_IGD_VALID_CONNECTED)
++#else
++        if (UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, handle->lanaddr,
+             sizeof(handle->lanaddr)) == UPNP_IGD_VALID_CONNECTED)
++#endif
+         {
+             tr_logAddNamedInfo(getKey(), _("Found Internet Gateway Device \"%s\""), handle->urls.controlURL);
+             tr_logAddNamedInfo(getKey(), _("Local Address is \"%s\""), handle->lanaddr);

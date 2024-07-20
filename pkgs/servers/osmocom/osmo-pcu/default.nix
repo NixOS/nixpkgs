@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-pcu";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-pcu";
     rev = version;
-    hash = "sha256-wZLTDvqVxP0FXV0VQH5KuigwbgzBipwL5JkTDp5Mzrc=";
+    hash = "sha256-rE5/wtzABEd6OVSRVrBvIJuo/CSfK19nf7tm+QQzljY=";
   };
 
   postPatch = ''
@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom Packet control Unit (PCU): Network-side GPRS (RLC/MAC); BTS- or BSC-colocated";
+    mainProgram = "osmo-pcu";
     homepage = "https://osmocom.org/projects/osmopcu";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

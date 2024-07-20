@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchFromGitHub
-, hatchling
-, beautifulsoup4
-, lxml
-, jinja2
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.35";
-  format = "pyproject";
+  version = "0.0.42";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
-    repo = pname;
+    repo = "reqif";
     rev = "refs/tags/${version}";
-    hash = "sha256-3yOLOflPqzJRv3qCQXFK3rIFftBq8FkYy7XhOfWH82Y=";
+    hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
   };
 
   postPatch = ''
-    substituteInPlace ./tests/unit/conftest.py --replace \
-       "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
+    substituteInPlace ./tests/unit/conftest.py \
+      --replace-fail "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
-    substituteInPlace requirements.txt --replace "==" ">="
   '';
 
   nativeBuildInputs = [
@@ -39,18 +40,16 @@ buildPythonPackage rec {
     beautifulsoup4
     lxml
     jinja2
+    xmlschema
   ];
 
-  pythonImportsCheck = [
-    "reqif"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "reqif" ];
 
   meta = with lib; {
     description = "Python library for ReqIF format";
+    mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;

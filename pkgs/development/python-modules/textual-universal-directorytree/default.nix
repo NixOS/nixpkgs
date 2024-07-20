@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, textual
-, universal-pathlib
-, adlfs
-, aiohttp
-, gcsfs
-, paramiko
-, requests
-, s3fs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  textual,
+  universal-pathlib,
+  adlfs,
+  aiohttp,
+  gcsfs,
+  paramiko,
+  requests,
+  s3fs,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.0.1";
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
-    rev = "v${version}";
-    hash = "sha256-a7alxVmHTKJnJiU7X6UlUD2y7MY4O5TMR+02KcyPwEs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ncQ3IRaZaCv1rMUWT9dkUKo6OAEC5pziMCM7adIBGWo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     textual

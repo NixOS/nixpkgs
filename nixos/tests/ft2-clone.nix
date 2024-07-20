@@ -4,13 +4,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ fgaz ];
   };
 
-  nodes.machine = { config, pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
-
-    services.xserver.enable = true;
-    sound.enable = true;
     environment.systemPackages = [ pkgs.ft2-clone ];
   };
 
@@ -30,4 +27,3 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.screenshot("screen")
     '';
 })
-

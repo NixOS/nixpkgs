@@ -12,6 +12,8 @@
 stdenv.mkDerivation {
   inherit pname version src gitSrc;
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [
     pkg-config asciidoc
   ] ++ (with python3Packages; [ python wrapPython ]);

@@ -1,55 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, asn1crypto
-, click
-, cryptography
-, pyhanko-certvalidator
-, pytz
-, pyyaml
-, qrcode
-, requests
-, tzlocal
-, certomancer
-, freezegun
-, python-pae
-, pytest-aiohttp
-, requests-mock
-, pytestCheckHook
-
-# optionals
-, defusedxml
-, oscrypto
-, fonttools
-, uharfbuzz
-, pillow
-, python-barcode
-, python-pkcs11
-, aiohttp
+{
+  lib,
+  aiohttp,
+  asn1crypto,
+  buildPythonPackage,
+  certomancer,
+  click,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  fonttools,
+  freezegun,
+  oscrypto,
+  pillow,
+  pyhanko-certvalidator,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-barcode,
+  python-pae,
+  python-pkcs11,
+  pythonOlder,
+  pyyaml,
+  qrcode,
+  requests,
+  requests-mock,
+  setuptools,
+  tzlocal,
+  uharfbuzz,
+  xsdata,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.17.0";
-  format = "setuptools";
+  version = "0.25.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tvb2zdmIN6MkezmLNkyCcP8EfqxrbPg/FEqgW16Ka6Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     click
     cryptography
     pyhanko-certvalidator
-    pytz
     pyyaml
     qrcode
     requests
@@ -57,12 +57,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    extra_pubkey_algs = [
-      oscrypto
-    ];
-    xmp = [
-      defusedxml
-    ];
+    extra-pubkey-algs = [ oscrypto ];
+    xmp = [ defusedxml ];
     opentype = [
       fonttools
       uharfbuzz
@@ -71,18 +67,10 @@ buildPythonPackage rec {
       pillow
       python-barcode
     ];
-    pkcs11 = [
-      python-pkcs11
-    ];
-    async_http = [
-      aiohttp
-    ];
+    pkcs11 = [ python-pkcs11 ];
+    async-http = [ aiohttp ];
+    etsi = [ xsdata ];
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-runner'" "" \
-  '';
 
   nativeCheckInputs = [
     aiohttp
@@ -125,14 +113,14 @@ buildPythonPackage rec {
     "test_ts_fetch_requests"
   ];
 
-  pythonImportsCheck = [
-    "pyhanko"
-  ];
+  pythonImportsCheck = [ "pyhanko" ];
 
   meta = with lib; {
     description = "Sign and stamp PDF files";
+    mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

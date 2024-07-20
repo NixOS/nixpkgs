@@ -10,6 +10,7 @@ let
   opt = options.services.smartd;
 
   nm = cfg.notifications.mail;
+  ns = cfg.notifications.systembus-notify;
   nw = cfg.notifications.wall;
   nx = cfg.notifications.x11;
 
@@ -19,7 +20,7 @@ let
       {
       ${pkgs.coreutils}/bin/cat << EOF
       From: smartd on ${host} <${nm.sender}>
-      To: undisclosed-recipients:;
+      To: ${nm.recipient}
       Subject: $SMARTD_SUBJECT
 
       $SMARTD_FULLMESSAGE
@@ -27,6 +28,12 @@ let
 
       ${pkgs.smartmontools}/sbin/smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
       } | ${nm.mailer} -i "${nm.recipient}"
+    ''}
+    ${optionalString ns.enable ''
+      ${pkgs.dbus}/bin/dbus-send --system \
+        / net.nuetzlich.SystemNotifications.Notify \
+        "string:Problem detected with disk: $SMARTD_DEVICESTRING" \
+        "string:Warning message from smartd is: $SMARTD_MESSAGE"
     ''}
     ${optionalString nw.enable ''
       {
@@ -71,14 +78,14 @@ let
       device = mkOption {
         example = "/dev/sda";
         type = types.str;
-        description = lib.mdDoc "Location of the device.";
+        description = "Location of the device.";
       };
 
       options = mkOption {
         default = "";
         example = "-d sat";
         type = types.separatedString " ";
-        description = lib.mdDoc "Options that determine how smartd monitors the device.";
+        description = "Options that determine how smartd monitors the device.";
       };
 
     };
@@ -94,12 +101,12 @@ in
 
     services.smartd = {
 
-      enable = mkEnableOption (lib.mdDoc "smartd daemon from `smartmontools` package");
+      enable = mkEnableOption "smartd daemon from `smartmontools` package";
 
       autodetect = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whenever smartd should monitor all devices connected to the
           machine at the time it's being started (the default).
 
@@ -112,7 +119,7 @@ in
         default = [];
         type = types.listOf types.str;
         example = ["-A /var/log/smartd/" "--interval=3600"];
-        description = lib.mdDoc ''
+        description = ''
           Extra command-line options passed to the `smartd`
           daemon on startup.
 
@@ -127,14 +134,14 @@ in
             default = config.services.mail.sendmailSetuidWrapper != null;
             defaultText = literalExpression "config.services.mail.sendmailSetuidWrapper != null";
             type = types.bool;
-            description = lib.mdDoc "Whenever to send e-mail notifications.";
+            description = "Whenever to send e-mail notifications.";
           };
 
           sender = mkOption {
             default = "root";
             example = "example@domain.tld";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Sender of the notification messages.
               Acts as the value of `email` in the emails' `From: ...` field.
             '';
@@ -143,13 +150,13 @@ in
           recipient = mkOption {
             default = "root";
             type = types.str;
-            description = lib.mdDoc "Recipient of the notification messages.";
+            description = "Recipient of the notification messages.";
           };
 
           mailer = mkOption {
             default = "/run/wrappers/bin/sendmail";
             type = types.path;
-            description = lib.mdDoc ''
+            description = ''
               Sendmail-compatible binary to be used to send the messages.
 
               You should probably enable
@@ -159,11 +166,29 @@ in
           };
         };
 
+        systembus-notify = {
+          enable = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Whenever to send systembus-notify notifications.
+
+              WARNING: enabling this option (while convenient) should *not* be done on a
+              machine where you do not trust the other users as it allows any other
+              local user to DoS your session by spamming notifications.
+
+              To actually see the notifications in your GUI session, you need to have
+              `systembus-notify` running as your user, which this
+              option handles by enabling {option}`services.systembus-notify`.
+            '';
+          };
+        };
+
         wall = {
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = lib.mdDoc "Whenever to send wall notifications to all users.";
+            description = "Whenever to send wall notifications to all users.";
           };
         };
 
@@ -172,21 +197,21 @@ in
             default = config.services.xserver.enable;
             defaultText = literalExpression "config.services.xserver.enable";
             type = types.bool;
-            description = lib.mdDoc "Whenever to send X11 xmessage notifications.";
+            description = "Whenever to send X11 xmessage notifications.";
           };
 
           display = mkOption {
             default = ":${toString config.services.xserver.display}";
             defaultText = literalExpression ''":''${toString config.services.xserver.display}"'';
             type = types.str;
-            description = lib.mdDoc "DISPLAY to send X11 notifications to.";
+            description = "DISPLAY to send X11 notifications to.";
           };
         };
 
         test = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc "Whenever to send a test notification on startup.";
+          description = "Whenever to send a test notification on startup.";
         };
 
       };
@@ -196,7 +221,7 @@ in
           default = "-a";
           type = types.separatedString " ";
           example = "-a -o on -s (S/../.././02|L/../../7/04)";
-          description = lib.mdDoc ''
+          description = ''
             Common default options for explicitly monitored (listed in
             {option}`services.smartd.devices`) devices.
 
@@ -213,7 +238,7 @@ in
           default = cfg.defaults.monitored;
           defaultText = literalExpression "config.${opt.defaults.monitored}";
           type = types.separatedString " ";
-          description = lib.mdDoc ''
+          description = ''
             Like {option}`services.smartd.defaults.monitored`, but for the
             autodetected devices.
           '';
@@ -224,7 +249,7 @@ in
         default = [];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
         type = with types; listOf (submodule smartdDeviceOpts);
-        description = lib.mdDoc "List of devices to monitor.";
+        description = "List of devices to monitor.";
       };
 
     };
@@ -246,6 +271,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
     };
+
+    services.systembus-notify.enable = mkDefault ns.enable;
 
   };
 

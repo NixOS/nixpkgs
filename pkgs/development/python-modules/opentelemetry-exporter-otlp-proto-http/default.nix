@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, backoff
-, googleapis-common-protos
-, hatchling
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-common
-, opentelemetry-test-utils
-, requests
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  deprecated,
+  googleapis-common-protos,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-common,
+  opentelemetry-proto,
+  opentelemetry-sdk,
+  opentelemetry-test-utils,
+  requests,
+  responses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp-proto-http";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  sourceRoot = "source/exporter/opentelemetry-exporter-otlp-proto-http";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-http";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    backoff
+  dependencies = [
+    deprecated
     googleapis-common-protos
+    opentelemetry-api
     opentelemetry-exporter-otlp-proto-common
+    opentelemetry-proto
+    opentelemetry-sdk
     requests
   ];
 

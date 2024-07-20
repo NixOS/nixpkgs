@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table-others";
-  version = "1.3.16";
+  version = "1.3.17";
 
   src = fetchurl {
     url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-TybqFQ2EgYo4zCYXwDJ0dke7HSzkZXs0lG2zR2XmlG4=";
+    hash = "sha256-7//axHjQ1LgLpeWR4MTI8efLURm4Umj4JV3G33Y0m0g=";
   };
 
   nativeBuildInputs = [ pkg-config python3 ];

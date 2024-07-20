@@ -1,26 +1,31 @@
-{ lib
-, stdenv
+{ cmake
 , fetchFromGitHub
-, cmake
-, pkg-config
 , ffmpeg
 , graphicsmagick
+, lib
 , libdeflate
 , libexif
 , libjpeg
 , libsixel
 , openslide
+, poppler
+, librsvg
+, cairo
+, pkg-config
+, stb
+, qoi
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timg";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
-    rev = "v${version}";
-    hash = "sha256-hGQL6MAsaSVV/w5fDKAcd4KIBuh2pvl3D2QUzi/aeG0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rTqToWgCPQeRYnMUmhPd/lJPX6L9PstFs1NczyecaB0=";
   };
 
   buildInputs = [
@@ -31,6 +36,11 @@ stdenv.mkDerivation rec {
     libjpeg
     libsixel
     openslide
+    poppler
+    librsvg
+    cairo
+    qoi.dev
+    stb
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -43,11 +53,12 @@ stdenv.mkDerivation rec {
     "-DWITH_LIBSIXEL=On"
   ];
 
-  meta = with lib; {
+  meta = {
+    description = "Terminal image and video viewer";
     homepage = "https://timg.sh/";
-    description = "A terminal image and video viewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ hzeller ];
+    license = lib.licenses.gpl2Only;
+    mainProgram = "timg";
+    maintainers = with lib.maintainers; [ hzeller ];
+    platforms = lib.platforms.unix;
   };
-}
+})

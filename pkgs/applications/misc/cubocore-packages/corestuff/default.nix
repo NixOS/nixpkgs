@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corestuff";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-F0kddb622W44MDkZOh4YTyFQ+J/UGGbkcrWXCSDYcek=";
+    hash = "sha256-2tnJMBbROGWZQDWjy/xGBNkv7DXXKLWrHf2XnMjOjWQ=";
   };
 
   patches = [
@@ -31,7 +31,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An activity viewer from the C Suite";
+    description = "Activity viewer from the C Suite";
+    mainProgram = "corestuff";
     homepage = "https://gitlab.com/cubocore/coreapps/corestuff";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

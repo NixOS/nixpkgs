@@ -1,27 +1,27 @@
 { lib
 , rustPlatform
+, darwin
 , fetchCrate
 , pkg-config
 , openssl
 , stdenv
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "star-history";
-  version = "1.0.12";
+  version = "1.0.22";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-znISDhxmAEw38TWAtA3xCZrplYs1pQ+DvfCucGDJZSU=";
+    hash = "sha256-Ymocx843DVxvtTHBS3PdyYDLgYJJtUMpmdOnOmFKJZE=";
   };
 
-  cargoSha256 = "sha256-GBms5Ha7agwG5u2U+perN8Uo5ihL4QFRZh2wxlV+Wxo=";
+  cargoHash = "sha256-xDO+Qdg8gDj0Eny7QtaRiAxwdXycOsInf5L1YZKv++g=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dtolnay/star-history";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "star-history";
   };
 }

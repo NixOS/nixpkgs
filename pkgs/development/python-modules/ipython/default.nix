@@ -1,91 +1,122 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# Build dependencies
-, setuptools
+  # Build dependencies
+  setuptools,
 
-# Runtime dependencies
-, appnope
-, backcall
-, decorator
-, jedi
-, matplotlib-inline
-, pexpect
-, pickleshare
-, prompt-toolkit
-, pygments
-, stack-data
-, traitlets
+  # Runtime dependencies
+  decorator,
+  exceptiongroup,
+  jedi,
+  matplotlib-inline,
+  pexpect,
+  prompt-toolkit,
+  pygments,
+  stack-data,
+  traitlets,
+  typing-extensions,
 
-# Test dependencies
-, pytestCheckHook
-, testpath
+  # Optional dependencies
+  ipykernel,
+  ipyparallel,
+  ipywidgets,
+  matplotlib,
+  nbconvert,
+  nbformat,
+  notebook,
+  qtconsole,
+
+  # Reverse dependency
+  sage,
+
+  # Test dependencies
+  pickleshare,
+  pytest-asyncio,
+  pytest7CheckHook,
+  testpath,
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.11.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "8.25.0";
+  pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
+    hash = "sha256-xu1yahQLbnJbkRUo+AQ5xTT6yRUkavPvw5RAprD51xY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    backcall
-    decorator
-    jedi
-    matplotlib-inline
-    pexpect
-    pickleshare
-    prompt-toolkit
-    pygments
-    stack-data
-    traitlets
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
-  ];
+  dependencies =
+    [
+      decorator
+      jedi
+      matplotlib-inline
+      pexpect
+      prompt-toolkit
+      pygments
+      stack-data
+      traitlets
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
+    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
-  pythonImportsCheck = [
-    "IPython"
-  ];
+  optional-dependencies = {
+    kernel = [ ipykernel ];
+    nbconvert = [ nbconvert ];
+    nbformat = [ nbformat ];
+    notebook = [
+      ipywidgets
+      notebook
+    ];
+    parallel = [ ipyparallel ];
+    qtconsole = [ qtconsole ];
+    matplotlib = [ matplotlib ];
+  };
+
+  pythonImportsCheck = [ "IPython" ];
 
   preCheck = ''
     export HOME=$TMPDIR
 
     # doctests try to fetch an image from the internet
-    substituteInPlace pytest.ini \
-      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
+    substituteInPlace pyproject.toml \
+      --replace '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pickleshare
+    pytest-asyncio
+    pytest7CheckHook
     testpath
   ];
 
-  disabledTests = [
-    # UnboundLocalError: local variable 'child' referenced before assignment
-    "test_system_interrupt"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
-    "test_clipboard_get"
-  ];
+  disabledTests =
+    [
+      # UnboundLocalError: local variable 'child' referenced before assignment
+      "test_system_interrupt"
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+      "test_clipboard_get"
+    ];
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
+    downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor fridh ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

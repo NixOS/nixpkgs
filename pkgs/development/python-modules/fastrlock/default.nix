@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastrlock";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,23 +18,17 @@ buildPythonPackage rec {
     owner = "scoder";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KYJd1wGJo+z34cY0YfsRbpC9IsQY/VJqycGpMmLmaVk=";
+    hash = "sha256-2h+rhP/EVMG3IkJVkE74p4GeBTwV3BS7fUkKpwedr2k=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   # Todo: Check why the tests have an import error
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "fastrlock"
-  ];
+  pythonImportsCheck = [ "fastrlock" ];
 
   meta = with lib; {
     description = "RLock implementation for CPython";

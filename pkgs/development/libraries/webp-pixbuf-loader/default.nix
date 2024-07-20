@@ -11,20 +11,17 @@
 
 let
   inherit (gdk-pixbuf) moduleDir;
-
-  # turning lib/gdk-pixbuf-#.#/#.#.#/loaders into lib/gdk-pixbuf-#.#/#.#.#/loaders.cache
-  # removeSuffix is just in case moduleDir gets a trailing slash
-  loadersPath = (lib.strings.removeSuffix "/" gdk-pixbuf.moduleDir) + ".cache";
+  loadersPath = "${gdk-pixbuf.binaryDir}/webp-loaders.cache";
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-TdZK2OTwetLVmmhN7RZlq2NV6EukH1Wk5Iwer2W/aHc=";
+    sha256 = "sha256-2GDH5+YCwb2mPdMfEscmWDOzdGnWRcppE+4rcDCZog4=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +44,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # It looks for gdk-pixbuf-thumbnailer in this package's bin rather than the gdk-pixbuf bin. We need to patch that.
     substituteInPlace webp-pixbuf.thumbnailer.in \
-      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer"
+      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp"
   '';
 
   postInstall = ''
@@ -55,10 +52,13 @@ stdenv.mkDerivation rec {
     GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
     gdk-pixbuf-query-loaders --update-cache
 
+    # gdk-pixbuf disables the thumbnailer in cross-builds (https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/fc37708313a5fc52083cf10c9326f3509d67701f)
+    # and therefore makeWrapper will fail because 'gdk-pixbuf-thumbnailer' the executable does not exist.
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
     # So we replace it with a wrapped executable.
     mkdir -p "$out/bin"
-    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer" \
+    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
   '';
 

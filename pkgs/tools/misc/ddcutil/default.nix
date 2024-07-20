@@ -1,12 +1,11 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , autoreconfHook
 , pkg-config
 , glib
-, i2c-tools
+, jansson
 , udev
-, kmod
 , libgudev
 , libusb1
 , libdrm
@@ -15,25 +14,23 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.4.1";
+  version = "2.1.4";
 
-  src = fetchFromGitHub {
-    owner = "rockowitz";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-y3mubdInYa4gpxhdw2JcRhnhd12O7jNq/oF3qoP82LU=";
+  src = fetchurl {
+    url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
+    hash = "sha256-4U/igqtgw2rwyuhEkV1pWYPIyNZEt2N6hlXJ9bDUyRw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     glib
-    i2c-tools
-    kmod
+    jansson
     libdrm
     libgudev
     libusb1
     udev
+    xorg.libXext
     xorg.libXrandr
   ];
 
@@ -42,10 +39,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.ddcutil.com/";
     description = "Query and change Linux monitor settings using DDC/CI and USB";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
     changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
+    mainProgram = "ddcutil";
   };
 }
 

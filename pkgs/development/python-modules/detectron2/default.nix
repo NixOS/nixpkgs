@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, ninja
-, which
-# build inputs
-, pillow
-, matplotlib
-, pycocotools
-, termcolor
-, yacs
-, tabulate
-, cloudpickle
-, tqdm
-, tensorboard
-, fvcore
-, iopath
-, omegaconf
-, hydra-core
-, packaging
-, torch
-, pydot
-, black
-# optional dependencies
-, fairscale
-, timm
-, scipy
-, shapely
-, pygments
-, psutil
-# check inputs
-, pytestCheckHook
-, torchvision
-, av
-, opencv4
-, pytest-mock
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ninja,
+  which,
+  # build inputs
+  pillow,
+  matplotlib,
+  pycocotools,
+  termcolor,
+  yacs,
+  tabulate,
+  cloudpickle,
+  tqdm,
+  tensorboard,
+  fvcore,
+  iopath,
+  omegaconf,
+  hydra-core,
+  packaging,
+  torch,
+  pydot,
+  black,
+  # optional dependencies
+  fairscale,
+  timm,
+  scipy,
+  shapely,
+  pygments,
+  psutil,
+  # check inputs
+  pytestCheckHook,
+  torchvision,
+  av,
+  opencv4,
+  pytest-mock,
+  pybind11,
 }:
 
 let
@@ -59,19 +60,24 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "detectron2";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "1w6cgvc8r2lwr72yxicls650jr46nriv1csivp2va9k1km8jx2sf";
   };
 
+  postPatch = ''
+    # https://github.com/facebookresearch/detectron2/issues/5010
+    substituteInPlace detectron2/data/transforms/transform.py \
+      --replace "interp=Image.LINEAR" "interp=Image.BILINEAR"
+  '';
+
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     ninja
     which
   ];
 
-  pythonRelaxDeps = [
-    "black"
-  ];
+  buildInputs = [ pybind11 ];
+
+  pythonRelaxDeps = [ "black" ];
 
   propagatedBuildInputs = [
     pillow
@@ -123,42 +129,46 @@ buildPythonPackage {
     "tests/structures/test_instances.py"
     # hangs for some reason
     "tests/modeling/test_model_e2e.py"
+    # KeyError: 'precision'
+    "tests/data/test_coco_evaluation.py"
   ];
 
-  disabledTests = [
-    # fails for some reason
-    "test_checkpoint_resume"
-    "test_map_style"
-    # requires shapely
-    "test_resize_and_crop"
-    # require caffe2
-    "test_predict_boxes_tracing"
-    "test_predict_probs_tracing"
-    "testMaskRCNN"
-    "testRetinaNet"
-    # require coco dataset
-    "test_default_trainer"
-    "test_unknown_category"
-    "test_build_dataloader_train"
-    "test_build_iterable_dataloader_train"
-    # require network access
-    "test_opencv_exif_orientation"
-    "test_read_exif_orientation"
-    # use deprecated api, numpy.bool
-    "test_BWmode_nomask"
-    "test_draw_binary_mask"
-    "test_draw_empty_mask_predictions"
-    "test_draw_instance_predictions"
-    "test_draw_no_metadata"
-    "test_overlay_instances"
-    "test_overlay_instances_no_boxes"
-    "test_get_bounding_box"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    "test_build_batch_dataloader_inference"
-    "test_build_dataloader_inference"
-    "test_build_iterable_dataloader_inference"
-    "test_to_iterable"
-  ];
+  disabledTests =
+    [
+      # fails for some reason
+      "test_checkpoint_resume"
+      "test_map_style"
+      # requires shapely
+      "test_resize_and_crop"
+      # require caffe2
+      "test_predict_boxes_tracing"
+      "test_predict_probs_tracing"
+      "testMaskRCNN"
+      "testRetinaNet"
+      # require coco dataset
+      "test_default_trainer"
+      "test_unknown_category"
+      "test_build_dataloader_train"
+      "test_build_iterable_dataloader_train"
+      # require network access
+      "test_opencv_exif_orientation"
+      "test_read_exif_orientation"
+      # use deprecated api, numpy.bool
+      "test_BWmode_nomask"
+      "test_draw_binary_mask"
+      "test_draw_empty_mask_predictions"
+      "test_draw_instance_predictions"
+      "test_draw_no_metadata"
+      "test_overlay_instances"
+      "test_overlay_instances_no_boxes"
+      "test_get_bounding_box"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      "test_build_batch_dataloader_inference"
+      "test_build_dataloader_inference"
+      "test_build_iterable_dataloader_inference"
+      "test_to_iterable"
+    ];
 
   pythonImportsCheck = [ "detectron2" ];
 

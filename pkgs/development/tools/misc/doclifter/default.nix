@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "doclifter";
-  version = "2.20";
+  version = "2.21";
   src = fetchurl {
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-BEuMbICJ8TD3+VjUr8rmhss7XlPNjxSy1P0SkmKLPsc=";
+    sha256 = "sha256-3zb+H/rRmU87LWh0+kQtiRMZ4JwJ3tVrt8vQ/EeKx8Q=";
   };
   buildInputs = [ python3 ];
   nativeBuildInputs = [ python3 makeWrapper ];

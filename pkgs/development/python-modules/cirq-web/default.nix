@@ -1,21 +1,19 @@
-{ buildPythonPackage
-, cirq-core
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cirq-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-web";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
-  propagatedBuildInputs = [
-    cirq-core
-  ];
+  propagatedBuildInputs = [ cirq-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_web" ];

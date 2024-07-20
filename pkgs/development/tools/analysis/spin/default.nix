@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison ];
 
-  sourceRoot = "source/Src";
+  sourceRoot = "${src.name}/Src";
 
   preBuild = ''
     mkdir -p $out/bin

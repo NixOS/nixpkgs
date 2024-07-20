@@ -1,0 +1,15 @@
+diff --git a/src/pyload/core/__init__.py b/src/pyload/core/__init__.py
+index 4324fc700..f7fcd66ec 100644
+--- a/src/pyload/core/__init__.py
++++ b/src/pyload/core/__init__.py
+@@ -46,8 +46,8 @@ class Exit(Exception):
+ #  improve external scripts
+ class Core:
+     LOCALE_DOMAIN = APPID
+-    DEFAULT_USERNAME = APPID
+-    DEFAULT_PASSWORD = APPID
++    DEFAULT_USERNAME = os.getenv("PYLOAD_DEFAULT_USERNAME", APPID)
++    DEFAULT_PASSWORD = os.getenv("PYLOAD_DEFAULT_PASSWORD", APPID)
+     DEFAULT_DATADIR = os.path.join(
+         os.getenv("APPDATA") or USERHOMEDIR, "pyLoad" if os.name == "nt" else ".pyload"
+     )

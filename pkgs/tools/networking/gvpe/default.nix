@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
+    sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set dev $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
     sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
   meta = with lib; {
-    description = "A protected multinode virtual network";
+    description = "Protected multinode virtual network";
     homepage = "http://software.schmorp.de/pkg/gvpe.html";
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

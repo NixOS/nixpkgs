@@ -1,126 +1,318 @@
-/* Some functions for manipulating meta attributes, as well as the
-   name attribute. */
+/**
+  Some functions for manipulating meta attributes, as well as the
+  name attribute.
+*/
 
 { lib }:
 
+let
+  inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (builtins) isString match typeOf;
+
+in
 rec {
 
 
-  /* Add to or override the meta attributes of the given
-     derivation.
+  /**
+    Add to or override the meta attributes of the given
+    derivation.
 
-     Example:
-       addMetaAttrs {description = "Bla blah";} somePkg
+    # Inputs
+
+    `newAttrs`
+
+    : 1\. Function argument
+
+    `drv`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.addMetaAttrs` usage example
+
+    ```nix
+    addMetaAttrs {description = "Bla blah";} somePkg
+    ```
+
+    :::
   */
   addMetaAttrs = newAttrs: drv:
     drv // { meta = (drv.meta or {}) // newAttrs; };
 
 
-  /* Disable Hydra builds of given derivation.
+  /**
+    Disable Hydra builds of given derivation.
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
   */
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
 
-  /* Change the symbolic name of a package for presentation purposes
-     (i.e., so that nix-env users can tell them apart).
+  /**
+    Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
+
+    :::{.warning}
+    Dependent derivations will be rebuilt when the symbolic name is changed.
+    :::
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `drv`
+
+    : 2\. Function argument
   */
   setName = name: drv: drv // {inherit name;};
 
 
-  /* Like `setName`, but takes the previous name as an argument.
+  /**
+    Like `setName`, but takes the previous name as an argument.
 
-     Example:
-       updateName (oldName: oldName + "-experimental") somePkg
+    # Inputs
+
+    `updater`
+
+    : 1\. Function argument
+
+    `drv`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.updateName` usage example
+
+    ```nix
+    updateName (oldName: oldName + "-experimental") somePkg
+    ```
+
+    :::
   */
   updateName = updater: drv: drv // {name = updater (drv.name);};
 
 
-  /* Append a suffix to the name of a package (before the version
-     part). */
+  /**
+    Append a suffix to the name of a package (before the version
+    part).
+
+    # Inputs
+
+    `suffix`
+
+    : 1\. Function argument
+  */
   appendToName = suffix: updateName (name:
     let x = builtins.parseDrvName name; in "${x.name}-${suffix}-${x.version}");
 
 
-  /* Apply a function to each derivation and only to derivations in an attrset.
+  /**
+    Apply a function to each derivation and only to derivations in an attrset.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `set`
+
+    : 2\. Function argument
   */
   mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
-  /* Set the nix-env priority of the package.
+  /**
+    Set the nix-env priority of the package.
+
+    # Inputs
+
+    `priority`
+    : 1\. Function argument
+
+    `drv`
+    : 2\. Function argument
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
-  /* Decrease the nix-env priority of the package, i.e., other
-     versions/variants of the package will be preferred.
+  /**
+    Decrease the nix-env priority of the package, i.e., other
+    versions/variants of the package will be preferred.
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
   */
   lowPrio = setPrio 10;
 
-  /* Apply lowPrio to an attrset with derivations
+  /**
+    Apply lowPrio to an attrset with derivations
+
+
+    # Inputs
+
+    `set`
+
+    : 1\. Function argument
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
 
 
-  /* Increase the nix-env priority of the package, i.e., this
-     version/variant of the package will be preferred.
+  /**
+    Increase the nix-env priority of the package, i.e., this
+    version/variant of the package will be preferred.
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
   */
   hiPrio = setPrio (-10);
 
-  /* Apply hiPrio to an attrset with derivations
+  /**
+    Apply hiPrio to an attrset with derivations
+
+
+    # Inputs
+
+    `set`
+
+    : 1\. Function argument
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 
 
-  /* Check to see if a platform is matched by the given `meta.platforms`
-     element.
+  /**
+    Check to see if a platform is matched by the given `meta.platforms`
+    element.
 
-     A `meta.platform` pattern is either
+    A `meta.platform` pattern is either
 
-       1. (legacy) a system string.
+    1. (legacy) a system string.
 
-       2. (modern) a pattern for the entire platform structure (see `lib.systems.inspect.platformPatterns`).
+    2. (modern) a pattern for the entire platform structure (see `lib.systems.inspect.platformPatterns`).
 
-       3. (modern) a pattern for the platform `parsed` field (see `lib.systems.inspect.patterns`).
+    3. (modern) a pattern for the platform `parsed` field (see `lib.systems.inspect.patterns`).
 
-     We can inject these into a pattern for the whole of a structured platform,
-     and then match that.
+    We can inject these into a pattern for the whole of a structured platform,
+    and then match that.
+
+
+    # Inputs
+
+    `platform`
+
+    : 1\. Function argument
+
+    `elem`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.platformMatch` usage example
+
+    ```nix
+    lib.meta.platformMatch { system = "aarch64-darwin"; } "aarch64-darwin"
+    => true
+    ```
+
+    :::
   */
-  platformMatch = platform: elem: let
-      pattern =
-        if builtins.isString elem
-        then { system = elem; }
-        else if elem?parsed
-        then elem
-        else { parsed = elem; };
-    in lib.matchAttrs pattern platform;
+  platformMatch = platform: elem: (
+    # Check with simple string comparison if elem was a string.
+    #
+    # The majority of comparisons done with this function will be against meta.platforms
+    # which contains a simple platform string.
+    #
+    # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
+    # because this is a hot path for nixpkgs.
+    if isString elem then platform ? system && elem == platform.system
+    else matchAttrs (
+      # Normalize platform attrset.
+      if elem ? parsed then elem
+      else { parsed = elem; }
+    ) platform
+  );
 
-  /* Check if a package is available on a given platform.
+  /**
+    Check if a package is available on a given platform.
 
-     A package is available on a platform if both
+    A package is available on a platform if both
 
-       1. One of `meta.platforms` pattern matches the given
-          platform, or `meta.platforms` is not present.
+    1. One of `meta.platforms` pattern matches the given
+        platform, or `meta.platforms` is not present.
 
-       2. None of `meta.badPlatforms` pattern matches the given platform.
+    2. None of `meta.badPlatforms` pattern matches the given platform.
+
+
+    # Inputs
+
+    `platform`
+
+    : 1\. Function argument
+
+    `pkg`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.availableOn` usage example
+
+    ```nix
+    lib.meta.availableOn { system = "aarch64-darwin"; } pkg.zsh
+    => true
+    ```
+
+    :::
   */
   availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
-    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
+    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
-  /* Get the corresponding attribute in lib.licenses
-     from the SPDX ID.
-     For SPDX IDs, see
-     https://spdx.org/licenses
+  /**
+    Get the corresponding attribute in lib.licenses
+    from the SPDX ID.
+    For SPDX IDs, see
+    https://spdx.org/licenses
 
-     Type:
-       getLicenseFromSpdxId :: str -> AttrSet
+    # Type
 
-     Example:
-       lib.getLicenseFromSpdxId "MIT" == lib.licenses.mit
-       => true
-       lib.getLicenseFromSpdxId "mIt" == lib.licenses.mit
-       => true
-       lib.getLicenseFromSpdxId "MY LICENSE"
-       => trace: warning: getLicenseFromSpdxId: No license matches the given SPDX ID: MY LICENSE
-       => { shortName = "MY LICENSE"; }
+    ```
+    getLicenseFromSpdxId :: str -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getLicenseFromSpdxId` usage example
+
+    ```nix
+    lib.getLicenseFromSpdxId "MIT" == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxId "mIt" == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxId "MY LICENSE"
+    => trace: warning: getLicenseFromSpdxId: No license matches the given SPDX ID: MY LICENSE
+    => { shortName = "MY LICENSE"; }
+    ```
+
+    :::
   */
   getLicenseFromSpdxId =
     let
@@ -132,17 +324,81 @@ rec {
         { shortName = licstr; }
       );
 
-  /* Get the path to the main program of a derivation with either
-     meta.mainProgram or pname or name
+  /**
+    Get the path to the main program of a package based on meta.mainProgram
 
-     Type: getExe :: derivation -> string
 
-     Example:
-       getExe pkgs.hello
-       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
-       getExe pkgs.mustache-go
-       => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getExe :: package -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getExe` usage example
+
+    ```nix
+    getExe pkgs.hello
+    => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+    getExe pkgs.mustache-go
+    => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+    ```
+
+    :::
   */
-  getExe = x:
-    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
+  getExe = x: getExe' x (x.meta.mainProgram or (
+    # This could be turned into an error when 23.05 is at end of life
+    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+    lib.getName
+    x
+  ));
+
+  /**
+    Get the path of a program of a derivation.
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    getExe' :: derivation -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getExe'` usage example
+
+    ```nix
+    getExe' pkgs.hello "hello"
+    => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+    getExe' pkgs.imagemagick "convert"
+    => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
+    ```
+
+    :::
+  */
+  getExe' = x: y:
+    assert assertMsg (isDerivation x)
+      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert assertMsg (isString y)
+      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert assertMsg (match ".*\/.*" y == null)
+      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    "${getBin x}/bin/${y}";
 }

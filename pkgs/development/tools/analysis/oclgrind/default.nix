@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages_12, readline, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "oclgrind";
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ python3 ];
-  buildInputs = [ llvmPackages.llvm llvmPackages.clang-unwrapped readline ];
+  buildInputs = [ llvmPackages_12.llvm llvmPackages_12.clang-unwrapped readline ];
 
   cmakeFlags = [
-    "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}"
+    "-DCLANG_ROOT=${llvmPackages_12.clang-unwrapped}"
   ];
 
   meta = with lib; {
-    description = "An OpenCL device simulator and debugger";
+    description = "OpenCL device simulator and debugger";
     homepage = "https://github.com/jrprice/oclgrind";
     license = licenses.bsd3;
     platforms = platforms.linux;

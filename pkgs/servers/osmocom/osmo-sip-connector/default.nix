@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-sip-connector";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sip-connector";
     rev = version;
-    hash = "sha256-vsPtNeh6Yi5fQb+E90OF4/Hnjl9T5nMf9EMBhzpIA2I=";
+    hash = "sha256-5+bNqdQuobCwy99BLTIWLLNIpirMcb8w1xnIew5a9WE=";
   };
 
   postPatch = ''
@@ -43,9 +43,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "This implements an interface between the MNCC (Mobile Network Call Control) interface of OsmoMSC (and also previously OsmoNITB) and SIP";
+    mainProgram = "osmo-sip-connector";
     homepage = "https://osmocom.org/projects/osmo-sip-conector";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

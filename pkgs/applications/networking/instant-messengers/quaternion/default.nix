@@ -4,7 +4,7 @@
 , cmake
 , wrapQtAppsHook
 , qtbase
-, qtquickcontrols2
+, qtquickcontrols2 ? null # only a separate package on qt5
 , qtkeychain
 , qtmultimedia
 , qttools
@@ -13,15 +13,19 @@
 , olm
 }:
 
-stdenv.mkDerivation {
+let
+  inherit (lib) cmakeBool;
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "quaternion";
-  version = "0.0.95.81";
+  version = "0.0.96.1";
 
   src = fetchFromGitHub {
-    owner = "QMatrixClient";
+    owner = "quotient-im";
     repo = "Quaternion";
-    rev = "5f639d8c84ed1475057b2cb3f7d0cb0abe77203b";
-    hash = "sha256-/1fich97oqSSDpfOjaYghYzHfu3MDrh77nanbIN/v/w=";
+    rev = finalAttrs.version;
+    hash = "sha256-lRCSEb/ldVnEv6z0moU4P5rf0ssKb9Bw+4QEssLjuwI=";
   };
 
   buildInputs = [
@@ -36,6 +40,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
 
+  # qt6 needs UTF
+  env.LANG = "C.UTF-8";
+
+  cmakeFlags = [
+    # drop this from 0.0.97 onwards as it will be qt6 only
+    (cmakeBool "BUILD_WITH_QT6" ((lib.versions.major qtbase.version) == "6"))
+  ];
+
   postInstall =
     if stdenv.isDarwin then ''
       mkdir -p $out/Applications
@@ -48,9 +60,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Cross-platform desktop IM client for the Matrix protocol";
-    homepage = "https://matrix.org/docs/projects/client/quaternion.html";
+    mainProgram = "quaternion";
+    homepage = "https://matrix.org/ecosystem/clients/quaternion/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (qtquickcontrols2.meta) platforms;
+    inherit (qtbase.meta) platforms;
   };
-}
+})

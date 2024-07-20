@@ -14,7 +14,7 @@
 , libnotify
 , pango
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # check inputs
 , xvfb-run
@@ -75,16 +75,16 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.13";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-ectrfbIkPhIqfhkavDpBCNdLPnGQhCnfFYwTf2IxB50=";
+    hash = "sha256-Tr5k5LU0s75+1B17oK8tlgA6SlS1SHyyLS6UBKadUmw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   buildInputs = [
     atk
     gdk-pixbuf
@@ -121,7 +121,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace lutris/util/magic.py \
-      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+      --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
   nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
@@ -147,5 +147,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

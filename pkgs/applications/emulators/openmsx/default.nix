@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmsx";
-  version = "18.0";
+  version = "19.1";
 
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
     rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    sha256 = "sha256-4V2B+OQbPVRmkRuqfeqyd+7pz9Z1YISjI79WqZS0Qhc=";
+    hash = "sha256-5ULljLmEDGFp32rnrXKLfL6P3ad2STJUNngBuWlRCbc=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://openmsx.org";
-    description = "The MSX emulator that aims for perfection";
+    description = "MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ bsd2 boost gpl2Plus ];
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    mainProgram = "openmsx";
   };
 })

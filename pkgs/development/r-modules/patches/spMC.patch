@@ -1,8 +1,0 @@
-Only in spMC_orig: spMC
-diff -ru -x '*~' spMC_orig/src/Makevars spMC/src/Makevars
---- spMC_orig/src/Makevars	2014-09-19 21:23:30.000000000 +0900
-+++ spMC/src/Makevars	2014-10-25 18:14:48.366954769 +0900
-@@ -1,2 +1,2 @@
- PKG_CFLAGS=$(SHLIB_OPENMP_CFLAGS)
--PKG_LIBS=$(SHLIB_OPENMP_CFLAGS) $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS)
-+PKG_LIBS=$(SHLIB_OPENMP_CFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "hyperframe";
   version = "6.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,20 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, mypy-extensions
-, numpy
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  mypy-extensions,
+  numpy,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  toolz,
+  typing-extensions,
+  wrapt,
+  attrs,
 }:
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.9.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,10 +26,8 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9rYG0XqwFJQojnvM5ygm1RVu9NbeFASns0llOGKaP+4=";
+    hash = "sha256-eGJWtmw2Ps3jII4T8E6s3djzxfqcSdyPemvejal0cn4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     hatch-vcs
@@ -42,12 +43,12 @@ buildPythonPackage rec {
     numpy
     pydantic
     pytestCheckHook
+    toolz
     wrapt
+    attrs
   ];
 
-  pythonImportsCheck = [
-    "psygnal"
-  ];
+  pythonImportsCheck = [ "psygnal" ];
 
   meta = with lib; {
     description = "Implementation of Qt Signals";

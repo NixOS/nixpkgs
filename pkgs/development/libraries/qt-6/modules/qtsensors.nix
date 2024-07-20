@@ -6,5 +6,5 @@
 
 qtModule {
   pname = "qtsensors";
-  qtInputs = [ qtbase qtdeclarative qtsvg ];
+  propagatedBuildInputs = [ qtbase qtdeclarative qtsvg ];
 }

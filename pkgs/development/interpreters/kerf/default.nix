@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash  = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   buildInputs = [ libedit zlib ncurses ]
     ++ lib.optionals stdenv.isDarwin ([
       Accelerate
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Columnar tick database and time-series language";
+    mainProgram = "kerf";
     longDescription = ''
       Kerf is a columnar tick database and small programming
       language that is a superset of JSON and SQL. It can be

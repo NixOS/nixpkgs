@@ -3,40 +3,44 @@
 , fetchurl
 , pkg-config
 , gettext
+, gtk-layer-shell
 , gtk3
 , libnotify
 , libxml2
 , libexif
 , exempi
-, mate
+, mate-desktop
 , hicolor-icon-theme
-, wrapGAppsHook
+, wayland
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "caja";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "MP1ubwCjggD24uiYrX+nl4drsGDx0DQd0vc5MnnhTAc=";
+    sha256 = "HjAUzhRVgX7C73TQnv37aDXYo3LtmhbvtZGe97ghlXo=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    gtk-layer-shell
     gtk3
     libnotify
     libxml2
     libexif
     exempi
-    mate.mate-desktop
+    mate-desktop
     hicolor-icon-theme
+    wayland
   ];
 
   configureFlags = [ "--disable-update-mimedb" ];

@@ -13,9 +13,14 @@
 , colorVariants ? [] # default: all
 , opacityVariants ? [] # default: all
 , themeVariants ? [] # default: default (BigSur-like theme)
+, iconVariant ? null # default: standard (Apple logo)
+, nautilusStyle ? null # default: stable (BigSur-like style)
 , nautilusSize ? null # default: 200px
 , panelOpacity ? null # default: 15%
 , panelSize ? null # default: 32px
+, roundedMaxWindow ? false # default: false
+, nordColor ? false # default = false
+, darkerColor ? false # default = false
 }:
 
 let
@@ -24,22 +29,24 @@ let
 
 in
 lib.checkListOfEnum "${pname}: alt variants" [ "normal" "alt" "all" ] altVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: color variants" [ "Light" "Dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "normal" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: Activities icon variants" [ "standard" "simple" "gnome" "ubuntu" "tux" "arch" "manjaro" "fedora" "debian" "void" "opensuse" "popos" "mxlinux" "zorin" "budgie" "gentoo" ] (single iconVariant)
+lib.checkListOfEnum "${pname}: nautilus style" [ "stable" "normal" "mojave" "glassy" ] (single nautilusStyle)
 lib.checkListOfEnum "${pname}: nautilus sidebar minimum width" [ "default" "180" "220" "240" "260" "280" ] (single nautilusSize)
 lib.checkListOfEnum "${pname}: panel opacity" [ "default" "30" "45" "60" "75" ] (single panelOpacity)
 lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (single panelSize)
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2023-02-07";
+  version = "2024-05-01";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RGYD2+ZTUTPyFbaHvXU9VD3W6WTNeg3ifY+DAR3MmtI=";
+    sha256 = "sha256-NgmFQtgVJvVXJjZUXt/BIx1hdzjHfVmmwXUCDZZD7+g=";
   };
 
   nativeBuildInputs = [
@@ -79,9 +86,14 @@ stdenv.mkDerivation rec {
       ${toString (map (x: "--color " + x) colorVariants)} \
       ${toString (map (x: "--opacity " + x) opacityVariants)} \
       ${toString (map (x: "--theme " + x) themeVariants)} \
+      ${lib.optionalString (iconVariant != null) ("--icon " + iconVariant)} \
+      ${lib.optionalString (nautilusStyle != null) ("--nautilus-style " + nautilusStyle)} \
       ${lib.optionalString (nautilusSize != null) ("--size " + nautilusSize)} \
       ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
+      ${lib.optionalString (roundedMaxWindow == true) "--roundedmaxwindow"} \
+      ${lib.optionalString (nordColor == true) "--nordcolor"} \
+      ${lib.optionalString (darkerColor == true) "--darkercolor"} \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share
@@ -91,11 +103,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "MacOS Big Sur like theme for Gnome desktops";
+  meta = {
+    description = "MacOS BigSur like Gtk+ theme based on Elegant Design";
     homepage = "https://github.com/vinceliuice/WhiteSur-gtk-theme";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

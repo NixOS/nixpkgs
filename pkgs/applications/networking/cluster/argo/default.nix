@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGoPackage
 , fetchFromGitHub
 , installShellFiles
 , pkgsBuildBuild
@@ -35,16 +34,16 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "3.4.8";
+  version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cN1uLy0QHABks99BJqEpLDf2VbYUzLM2iCTTBvcY0es=";
+    hash = "sha256-BYUP/Gu+N8KK9mfjRAXupXqrwfZMZlYPxxuZCmUDFfE=";
   };
 
-  vendorHash = "sha256-kO4ME0r3MoOjn+83X+8bbkgF7zL/Id2+hKabQjEob+Y=";
+  vendorHash = "sha256-pVOTeH6fq4Gqarjvi7w2wYJ3FSqV6yNZERmOmbVGxLM=";
 
   doCheck = false;
 
@@ -85,6 +84,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Container native workflow engine for Kubernetes";
+    mainProgram = "argo";
     homepage = "https://github.com/argoproj/argo";
     changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rfbry0qy8mv746mzk9zdfffkdgq4w7invgb5cszjma2cp83q3i2";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ncurses readline ronn ];
+
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manipulating CPC dsk images and files";
+    mainProgram = "cpcfs";
     homepage = "https://github.com/derikz/cpcfs/" ;
     license = licenses.bsd2;
     maintainers = [ ];

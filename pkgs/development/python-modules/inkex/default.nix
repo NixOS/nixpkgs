@@ -1,52 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, poetry-core
-, cssselect
-, lxml
-, numpy
-, packaging
-, pillow
-, pygobject3
-, pyserial
-, scour
-, gobject-introspection
-, pytestCheckHook
-, gtk3
+{
+  lib,
+  buildPythonPackage,
+  inkscape,
+  fetchpatch,
+  poetry-core,
+  cssselect,
+  lxml,
+  numpy,
+  packaging,
+  pillow,
+  pygobject3,
+  pyparsing,
+  pyserial,
+  scour,
+  gobject-introspection,
+  pytestCheckHook,
+  gtk3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "inkex";
-  version = "1.2.2";
+  inherit (inkscape) version;
 
   format = "pyproject";
 
-  src = fetchFromGitLab {
-    owner = "inkscape";
-    repo = "extensions";
-    rev = "EXTENSIONS_AT_INKSCAPE_${version}";
-    hash = "sha256-jw7daZQTBxLHWOpjZkMYtP1vIQvd/eLgiktWqVSjEgU=";
-  };
+  inherit (inkscape) src;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"1.2.0"' '"${version}"' \
-      --replace 'scour = "^0.37"' 'scour = ">=0.37"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # Fix “distribute along path” test with Python 3.12.
+    # https://gitlab.com/inkscape/extensions/-/issues/580
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
+      extraPrefix = "share/extensions/";
+      stripLen = 1;
+      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
+    })
   ];
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     cssselect
     lxml
     numpy
-    packaging
-    pillow
     pygobject3
     pyserial
-    scour
   ];
 
   pythonImportsCheck = [ "inkex" ];
@@ -58,6 +56,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     gtk3
+    packaging
+    pillow
+    pyparsing
+    scour
   ];
 
   disabledTests = [
@@ -73,6 +75,14 @@ buildPythonPackage rec {
     # Failed to find pixmap 'image-missing' in /build/source/tests/data/
     "tests/test_inkex_gui_pixmaps.py"
   ];
+
+  postPatch = ''
+    cd share/extensions
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
+      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
+  '';
 
   meta = {
     description = "Library for manipulating SVG documents which is the basis for Inkscape extensions";

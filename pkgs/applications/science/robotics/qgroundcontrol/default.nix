@@ -4,9 +4,9 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.8";
+  version = "4.4.0";
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
     qtgraphicaleffects qtspeech qtx11extras
   ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
+  buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
   nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EmGtVy/cHiZ2SqOOKmt9vCUQbyT5Sl8XnkRlhn9BdvA=";
+    hash = "sha256-LKERjHoIgJ4cF1MjB5nVW3FB/DrmKP4Xj58avsDobhc=";
     fetchSubmodules = true;
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [ lopsided98 pandapip1 ];
     mainProgram = "QGroundControl";
   };
 }

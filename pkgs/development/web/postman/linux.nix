@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , at-spi2-atk
 , at-spi2-core
@@ -20,6 +20,7 @@
 , nspr
 , pango
 , udev
+, libsecret
 , libuuid
 , libX11
 , libxcb
@@ -36,23 +37,29 @@
 , libxkbcommon
 , libdrm
 , mesa
+# It's unknown which version of openssl that postman expects but it seems that
+# OpenSSL 3+ seems to work fine (cf.
+# https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
+# around OpenSSL stuff then try changing this dependency version.
+, openssl
 , xorg
 , pname
 , version
 , meta
 , copyDesktopItems
+, makeWrapper
 }:
 
 let
   dist = {
     aarch64-linux = {
       arch = "arm64";
-      sha256 = "sha256-cBueTCZHZZGU3Z/UKLBIw4XCvCz9Hm4MxdIMY9+2ulk=";
+      sha256 = "sha256-yq2J5KRv/NJDaQG7e7RKyzbJqKWRolSU9X6khHxlrNo=";
     };
 
     x86_64-linux = {
       arch = "64";
-      sha256 = "sha256-svk60K4pZh0qRdx9+5OUTu0xgGXMhqvQTGTcmqBOMq8=";
+      sha256 = "sha256-fAaxrLZSXGBYr4Vu0Cz2pZwXivSTkaIF5wL217cB9qM=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -71,7 +78,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
       (makeDesktopItem {
       name = "postman";
-      exec = "postman";
+      exec = "postman %U";
       icon = "postman";
       comment = "API Development Environment";
       desktopName = "Postman";
@@ -101,6 +108,7 @@ stdenv.mkDerivation rec {
     pango
     udev
     libdrm
+    libsecret
     libuuid
     libX11
     libxcb
@@ -118,7 +126,7 @@ stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
@@ -128,6 +136,10 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     ln -s $out/share/postman/postman $out/bin/postman
+
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/postman.png
@@ -144,5 +156,6 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
     popd
+    wrapProgram $out/bin/postman --set PATH ${lib.makeBinPath [ openssl ]}
   '';
 }

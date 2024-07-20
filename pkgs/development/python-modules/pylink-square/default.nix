@@ -1,28 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, mock
-, psutil
-, six
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.1.0";
+  version = "1.2.1";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pICSU33n/oH+LRbWNYOdnTaa5qAGRRXWsO1NjO4ylzw=";
+    hash = "sha256-WMpb/b9kF1rFlegDYxNGJbZ2Nz8nuG21tyjgUFLs5mg=";
   };
 
-  propagatedBuildInputs = [ psutil six future ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    psutil
+    six
+  ];
 
   nativeCheckInputs = [
     mock
@@ -31,11 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylink" ];
 
+  disabledTests = [
+    # AttributeError: 'called_once_with' is not a valid assertion
+    "test_cp15_register_write_success"
+    "test_jlink_restarted"
+    "test_set_log_file_success"
+  ];
+
   meta = with lib; {
     description = "Python interface for the SEGGER J-Link";
     homepage = "https://github.com/square/pylink";
-    changelog = "https://github.com/square/pylink/blob/${src.rev}/CHANGELOG.md";
-    maintainers = with maintainers; [ dump_stack ];
+    changelog = "https://github.com/square/pylink/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ dump_stack ];
   };
 }

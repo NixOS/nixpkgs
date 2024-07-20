@@ -5,7 +5,7 @@
 , lib
 , pandoc
 , pandoc-acro
-, texlive
+, texliveTeTeX
 , runCommand
 }:
 
@@ -15,7 +15,7 @@ let
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
+    hash = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
   };
 in
 buildPythonApplication {
@@ -35,13 +35,7 @@ buildPythonApplication {
           nativeBuildInputs = [
             pandoc
             pandoc-acro
-            (texlive.combine {
-              inherit (texlive)
-                scheme-tetex
-                acro
-                translations
-                ;
-            })
+            (texliveTeTeX.withPackages (ps: with ps; [ acro translations ]))
           ];
         };
       in
@@ -65,5 +59,6 @@ buildPythonApplication {
     description = "Pandoc filter which manages acronyms in Pandoc flavored Markdown sources";
     license = licenses.bsd2;
     maintainers = with maintainers; [ tfc ];
+    mainProgram = "pandoc-acro";
   };
 }

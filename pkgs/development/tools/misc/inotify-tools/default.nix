@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-tools";
-  version = "3.22.6.0";
+  version = "4.23.9.0";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
     rev = finalAttrs.version;
-    hash = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
+    hash = "sha256-6kM2JzxRcwUjUmbUWGnQ+gAvZcn7C32/enRwiYiuQGU=";
   };
 
   configureFlags = [

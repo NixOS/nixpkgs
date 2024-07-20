@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, python
-, cairocffi
-, django
-, django-tagging
-, fetchFromGitHub
-, fetchpatch
-, gunicorn
-, mock
-, pyparsing
-, python-memcached
-, pythonOlder
-, pytz
-, six
-, txamqp
-, urllib3
-, whisper
+{
+  lib,
+  buildPythonPackage,
+  python,
+  cairocffi,
+  django,
+  django-tagging,
+  fetchFromGitHub,
+  fetchpatch,
+  gunicorn,
+  mock,
+  pyparsing,
+  python-memcached,
+  pythonOlder,
+  pytz,
+  six,
+  txamqp,
+  urllib3,
+  whisper,
 }:
 
 buildPythonPackage rec {
@@ -92,14 +92,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "graphite"
-  ];
+  pythonImportsCheck = [ "graphite" ];
 
   meta = with lib; {
     description = "Enterprise scalable realtime graphing";
     homepage = "http://graphiteapp.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline basvandijk ];
+    maintainers = with maintainers; [
+      offline
+      basvandijk
+    ];
   };
 }

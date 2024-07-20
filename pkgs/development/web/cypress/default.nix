@@ -10,7 +10,7 @@
 , stdenv
 , udev
 , unzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -18,7 +18,7 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      checksum = "sha256-QL1Kca1yM1P4Tn+Citw4UG6wPX/ji6oBjCONE4tyNPQ=";
+      checksum = "sha256-9o0nprGcJhudS1LNm+T7Vf0Dwd1RBauYKI+w1FBQ3ZM=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
@@ -30,7 +30,7 @@ let
   inherit (binary) platform checksum;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "12.17.2";
+  version = "13.2.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 unzip ];
 
   buildInputs = with xorg; [
     libXScrnSaver

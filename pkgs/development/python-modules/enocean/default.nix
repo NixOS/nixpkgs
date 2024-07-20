@@ -1,40 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, enum-compat
-, pyserial
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  beautifulsoup4,
+  enum-compat,
+  pyserial,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "enocean";
-    rev = version;
-    sha256 = "0cbcvvy3qaqv8925z608qmkc1l914crzw79krwrz2vpm2fyribab";
+    rev = "refs/tags/${version}";
+    hash = "sha256-S62YvRP1bvEzzzMd/jMjIdHAZsUImF9EQhsrPPzebDE=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch2 {
+      name = "replace-nose-with-pytest.patch";
+      url = "https://github.com/kipe/enocean/commit/e5ca3b70f0920f129219c980ad549d7f3a4576de.patch";
+      hash = "sha256-cDBvI0I4W5YkGTpg+rKy08TUAmKlhKa/5+Muou9iArs=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     enum-compat
     pyserial
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "enocean.communicators"
@@ -43,7 +47,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/kipe/enocean/releases/tag/${version}";
     description = "EnOcean serial protocol implementation";
+    mainProgram = "enocean_example.py";
     homepage = "https://github.com/kipe/enocean";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

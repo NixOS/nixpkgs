@@ -1,26 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, poetry-core
-, setuptools
-, bleak
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  cython,
+  poetry-core,
+  setuptools,
+
+  # dependencies
+  habluetooth,
+
+  # tests
+  bleak,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.10.2";
-  format = "pyproject";
+  version = "1.12.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "home-assistant-bluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zNhqiWYZ3tv6lwYgmi6Yue+mFcgk7Y1dDMbzWlsvVJM=";
+    hash = "sha256-WAsgiOmYqmt/PCKp+vZA2To95YZAgnYCF8ysCn5N9nc=";
   };
 
   postPatch = ''
@@ -28,23 +36,20 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    bleak
-  ];
-
-  pythonImportsCheck = [
-    "home_assistant_bluetooth"
-  ];
+  dependencies = [ habluetooth ];
 
   nativeCheckInputs = [
+    bleak
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "home_assistant_bluetooth" ];
 
   meta = with lib; {
     description = "Basic bluetooth models used by Home Assistant";

@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Interpreter for the metamath proof language";
+    mainProgram = "metamath";
     longDescription = ''
       The metamath program is an ASCII-based ANSI C program with a command-line
       interface. It was used (along with mmj2) to build and verify the proofs

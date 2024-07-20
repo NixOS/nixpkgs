@@ -7,6 +7,7 @@
 , flac
 , libjxl
 , librsvg
+, game-music-emu
 , gobject-introspection
 , gtk3
 , kissfft
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.6.6";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yt5sMvYau43WwVerQlaOrvzJ4HnBOEVQqbql9UH8jnM=";
+    hash = "sha256-8UnUcEvG206tPwyD+WqxcJgDvQlYvTJ6v+sm0u30Z3k=";
   };
 
   postUnpack = ''
@@ -70,11 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
+    gobject-introspection
   ];
 
   buildInputs = [
     flac
-    gobject-introspection
+    game-music-emu
     gtk3
     libappindicator
     libnotify
@@ -133,7 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The Linux desktop music player from the future";
+    description = "Linux desktop music player from the future";
+    mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3;

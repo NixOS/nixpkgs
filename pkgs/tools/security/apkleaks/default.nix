@@ -1,23 +1,25 @@
-{ lib
-, fetchFromGitHub
-, jadx
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  jadx,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkleaks";
-  version = "2.6.1";
-
-  disabled = python3.pythonOlder "3.6";
+  version = "2.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0ysciv643p8gkqw2wp7zy4n07hihdcyil8d20lj86cpgga71rd64";
+    repo = "apkleaks";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a7zOowvhV9H91RwNDImN2+ecixY8g3WUotlBQVdmLgA=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     jadx
     pyaxmlparser
     setuptools
@@ -31,7 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Scanning APK file for URIs, endpoints and secrets";
     homepage = "https://github.com/dwisiswant0/apkleaks";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/dwisiswant0/apkleaks/releases/tag/v${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "apkleaks";
   };
 }

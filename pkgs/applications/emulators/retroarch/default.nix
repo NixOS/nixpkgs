@@ -8,16 +8,15 @@
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_4
 , flac
 , freetype
 , gamemode
+, gitUpdater
 , libdrm
 , libGL
 , libGLU
 , libpulseaudio
-, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -32,10 +31,8 @@
 , pkg-config
 , python3
 , qtbase
-, retroarch-assets
 , SDL2
 , spirv-tools
-, substituteAll
 , udev
 , vulkan-loader
 , wayland
@@ -50,12 +47,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.15.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-kJOR3p3fKqGM8a5rgDPkz43uuf5AtS5fVnvr3tJgWbc=";
+    hash = "sha256-NVe5dhH3w7RL1C7Z736L5fdi/+aO+Ah9Dpa4u4kn0JY=";
     rev = "v${version}";
   };
 
@@ -126,7 +123,12 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man6/retroarch-cg2glsl.6*
   '';
 
-  passthru.tests = nixosTests.retroarch;
+  passthru = {
+    tests = nixosTests.retroarch;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://libretro.com";

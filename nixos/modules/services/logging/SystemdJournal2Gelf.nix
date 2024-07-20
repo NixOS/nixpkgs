@@ -10,7 +10,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable SystemdJournal2Gelf.
         '';
       };
@@ -18,7 +18,7 @@ in
       graylogServer = mkOption {
         type = types.str;
         example = "graylog2.example.com:11201";
-        description = lib.mdDoc ''
+        description = ''
           Host and port of your graylog2 input. This should be a GELF
           UDP input.
         '';
@@ -27,20 +27,13 @@ in
       extraOptions = mkOption {
         type = types.separatedString " ";
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Any extra flags to pass to SystemdJournal2Gelf. Note that
           these are basically `journalctl` flags.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.systemd-journal2gelf;
-        defaultText = literalExpression "pkgs.systemd-journal2gelf";
-        description = lib.mdDoc ''
-          SystemdJournal2Gelf package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "systemd-journal2gelf" { };
 
     };
   };

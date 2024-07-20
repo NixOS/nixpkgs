@@ -16,7 +16,12 @@
   #
   # if vendorHash is null, then we won't fetch any dependencies and
   # rely on the vendor folder within the source.
-, vendorHash ? args'.vendorSha256 or (throw "buildGoModule: vendorHash is missing")
+, vendorHash ? throw (
+    if args'?vendorSha256 then
+      "buildGoModule: Expect vendorHash instead of vendorSha256"
+    else
+      "buildGoModule: vendorHash is missing"
+  )
   # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
   # Whether to fetch (go mod download) and proxy the vendor directory.
@@ -39,6 +44,10 @@
   # Not needed with buildGoModule
 , goPackagePath ? ""
 
+, ldflags ? [ ]
+
+, GOFLAGS ? [ ]
+
   # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
@@ -47,10 +56,12 @@
 }@args':
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
-assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
 
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
+
+  GO111MODULE = "on";
+  GOTOOLCHAIN = "local";
 
   goModules = if (vendorHash == null) then "" else
   (stdenv.mkDerivation {
@@ -60,6 +71,7 @@ let
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
+    inherit GO111MODULE GOTOOLCHAIN;
 
     # The following inheritence behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
@@ -72,8 +84,8 @@ let
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
-
-    GO111MODULE = "on";
+    setSourceRoot = args.setSourceRoot or "";
+    env = args.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -141,7 +153,9 @@ let
 
     outputHashMode = "recursive";
     outputHash = vendorHash;
-    outputHashAlgo = if args' ? vendorSha256 || vendorHash == "" then "sha256" else null;
+    # Handle empty vendorHash; avoid
+    # error: empty hash requires explicit hash algorithm
+    outputHashAlgo = if vendorHash == "" then "sha256" else null;
   }).overrideAttrs overrideModAttrs;
 
   package = stdenv.mkDerivation (args // {
@@ -149,9 +163,15 @@ let
 
     inherit (go) GOOS GOARCH;
 
-    GO111MODULE = "on";
-    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED enableParallelBuilding;
+    GOFLAGS = GOFLAGS
+      ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+        (lib.optional (!proxyVendor) "-mod=vendor")
+      ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+        (lib.optional (!allowGoReference) "-trimpath");
+    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -179,7 +199,12 @@ let
       runHook postConfigure
     '');
 
-    buildPhase = args.buildPhase or (''
+    buildPhase = args.buildPhase or (
+      lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+        "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+      lib.warnIf (builtins.elem "-buildid=" ldflags)
+        "`-buildid=` is set by default as ldflag by buildGoModule"
+    ''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -194,8 +219,7 @@ let
       buildGoDir() {
         local cmd="$1" dir="$2"
 
-        . $TMPDIR/buildFlagsArray
-
+        declare -ga buildFlagsArray
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=''${tags// /,}})
@@ -234,11 +258,6 @@ let
         buildFlagsArray+=(-x)
       fi
 
-      if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
-        declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
-      else
-        touch $TMPDIR/buildFlagsArray
-      fi
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
@@ -288,7 +307,7 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; } // { inherit (args') vendorSha256; };
+    passthru = passthru // { inherit go goModules vendorHash; };
 
     meta = {
       # Add default meta information
@@ -296,6 +315,4 @@ let
     } // meta;
   });
 in
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-  package
+package

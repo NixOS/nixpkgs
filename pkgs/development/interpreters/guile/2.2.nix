@@ -124,6 +124,12 @@ builder rec {
 
   setupHook = ./setup-hook-2.2.sh;
 
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
@@ -136,7 +142,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ludo ];
     platforms = platforms.all;
   };
 }

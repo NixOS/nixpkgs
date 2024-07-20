@@ -21,7 +21,7 @@ apk = stdenv.mkDerivation {
   '';
 };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "gnirehtet";
   inherit version;
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
     inherit apk;
   };
 
-  sourceRoot = "source/relay-rust";
+  sourceRoot = "${src.name}/relay-rust";
 
   cargoHash = "sha256-3oVWFMFzYsuCec1wxZiHXW6O45qbdL1npqYrg/m4SPc=";
 
@@ -44,11 +44,12 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     wrapProgram $out/bin/gnirehtet \
     --set GNIREHTET_APK ${apk}/gnirehtet.apk \
-    --set ADB ${androidenv.androidPkgs_9_0.platform-tools}/bin/adb
+    --set ADB ${androidenv.androidPkgs.platform-tools}/bin/adb
   '';
 
   meta = with lib; {
     description = "Reverse tethering over adb for Android";
+    mainProgram = "gnirehtet";
     longDescription = ''
       This project provides reverse tethering over adb for Android: it allows devices to use the internet connection of the computer they are plugged on. It does not require any root access (neither on the device nor on the computer).
 

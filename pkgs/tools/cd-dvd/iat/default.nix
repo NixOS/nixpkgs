@@ -13,10 +13,11 @@ stdenv.mkDerivation (finalAttr: {
   };
 
   meta = with lib; {
-    description = "The Iso9660 Analyzer Tool is a tool for detecting the structure of many types of CD/DVD images. It can convert from IMG to ISO format.";
+    description = "Tool for detecting the structure of many types of CD/DVD images";
     homepage = "https://www.berlios.de/software/iso9660-analyzer-tool/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hughobrien ];
     platforms = platforms.linux;
+    mainProgram = "iat";
   };
 })

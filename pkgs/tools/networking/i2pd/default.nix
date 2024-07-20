@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub
+, fetchpatch2
 , installShellFiles
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc
@@ -8,14 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.48.0";
+  version = "2.52.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MqkpzNUd2FZgt9TZPtEp+jIq7r3sr+EeTpHlqNCgatU=";
+    sha256 = "sha256-0n3cPF3KBuzNOagrn88HeTvFAu1sYTkijpiGr77X5GI=";
   };
+
+  patches = [
+    # Support miniupnp-2.2.8 (fixes #2071)
+    (fetchpatch2 {
+      url = "https://github.com/PurpleI2P/i2pd/commit/697d8314415b0dc0634fd1673abc589a080e0a31.patch?full_index=1";
+      hash = "sha256-B9Ngw1yPrnF5pGLe1a5x0TlyInvQGcq1zQUKO/ELFzA=";
+    })
+  ];
 
   buildInputs = [ boost zlib openssl ]
     ++ lib.optional upnpSupport miniupnpc;
@@ -45,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
+    mainProgram = "i2pd";
   };
 }

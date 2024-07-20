@@ -1,57 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zope_interface
-, zope_schema
-, zope-cachedescriptors
-, pytz
-, webtest
-, beautifulsoup4
-, soupsieve
-, wsgiproxy2
-, six
-, mock
-, zope_testing
-, zope_testrunner
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  zope-interface,
+  zope-schema,
+  zope-cachedescriptors,
+  pytz,
+  webtest,
+  beautifulsoup4,
+  soupsieve,
+  wsgiproxy2,
+  mock,
+  zope-testing,
+  zope-testrunner,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "zope-testbrowser";
-  version = "5.6.1";
+  version = "7.0";
+  pyproject = true;
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    pname = "zope.testbrowser";
-    inherit version;
-    sha256 = "035bf63d9f7244e885786c3327448a7d9fff521dba596429698b8474961b05e7";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.testbrowser";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vGx2ObHgt4hSQe/JKZkD2/GhdtbJEAfggkM209maen4=";
   };
 
   postPatch = ''
     # remove test that requires network access
     substituteInPlace src/zope/testbrowser/tests/test_doctests.py \
-      --replace "suite.addTests(wire)" ""
+      --replace-fail "suite.addTests(wire)" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     setuptools
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
     zope-cachedescriptors
     pytz
     webtest
     beautifulsoup4
     soupsieve
     wsgiproxy2
-    six
   ];
 
   nativeCheckInputs = [
     mock
-    zope_testing
-    zope_testrunner
+    zope-testing
+    zope-testrunner
   ];
 
   checkPhase = ''
@@ -67,6 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/zopefoundation/zope.testbrowser/blob/${src.rev}/CHANGES.rst";
     description = "Programmable browser for functional black-box tests";
     homepage = "https://github.com/zopefoundation/zope.testbrowser";
     license = lib.licenses.zpl21;

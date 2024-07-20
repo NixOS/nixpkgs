@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, diff-match-patch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  diff-match-patch,
+}:
 
 buildPythonPackage rec {
   pname = "three-merge";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

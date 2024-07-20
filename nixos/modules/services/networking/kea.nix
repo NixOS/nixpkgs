@@ -9,7 +9,6 @@ with lib;
 let
   cfg = config.services.kea;
 
-  xor = x: y: (!x && y) || (x && !y);
   format = pkgs.formats.json {};
 
   chooseNotNull = x: y: if x != null then x else y;
@@ -35,18 +34,18 @@ in
 {
   options.services.kea = with types; {
     ctrl-agent = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Kea Control Agent configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc "Kea Control Agent");
+          enable = mkEnableOption "Kea Control Agent";
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               List of additional arguments to pass to the daemon.
             '';
           };
@@ -54,7 +53,7 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
 
               Takes preference over [settings](#opt-services.kea.ctrl-agent.settings).
@@ -65,7 +64,7 @@ in
           settings = mkOption {
             type = format.type;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
             '';
           };
@@ -74,18 +73,18 @@ in
     };
 
     dhcp4 = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         DHCP4 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc "Kea DHCP4 server");
+          enable = mkEnableOption "Kea DHCP4 server";
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               List of additional arguments to pass to the daemon.
             '';
           };
@@ -93,7 +92,7 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP4 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp4.settings).
@@ -125,7 +124,7 @@ in
                 } ];
               } ];
             };
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
             '';
           };
@@ -134,18 +133,18 @@ in
     };
 
     dhcp6 = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         DHCP6 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc "Kea DHCP6 server");
+          enable = mkEnableOption "Kea DHCP6 server";
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               List of additional arguments to pass to the daemon.
             '';
           };
@@ -153,7 +152,7 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP6 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp6.settings).
@@ -186,7 +185,7 @@ in
                 } ];
               } ];
             };
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
             '';
           };
@@ -195,18 +194,18 @@ in
     };
 
     dhcp-ddns = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Kea DHCP-DDNS configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc "Kea DDNS server");
+          enable = mkEnableOption "Kea DDNS server";
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               List of additional arguments to pass to the daemon.
             '';
           };
@@ -214,7 +213,7 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp-ddns.settings).
@@ -239,7 +238,7 @@ in
                 ddns-domains = [ ];
               };
             };
-            description = lib.mdDoc ''
+            description = ''
               Kea DHCP-DDNS configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
             '';
           };
@@ -255,6 +254,7 @@ in
       User = "kea";
       ConfigurationDirectory = "kea";
       RuntimeDirectory = "kea";
+      RuntimeDirectoryPreserve = true;
       StateDirectory = "kea";
       UMask = "0077";
     };
@@ -278,6 +278,9 @@ in
         "https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"
       ];
 
+      wants = [
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
         "time-sync.target"
@@ -323,6 +326,9 @@ in
       after = [
         "network-online.target"
         "time-sync.target"
+      ];
+      wants = [
+        "network-online.target"
       ];
       wantedBy = [
         "multi-user.target"
@@ -371,6 +377,9 @@ in
         "network-online.target"
         "time-sync.target"
       ];
+      wants = [
+        "network-online.target"
+      ];
       wantedBy = [
         "multi-user.target"
       ];
@@ -412,6 +421,7 @@ in
         "https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"
       ];
 
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
         "time-sync.target"

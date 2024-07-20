@@ -31,7 +31,7 @@ qtHostPathHook() {
     local qmlDir="$1/${qtQmlPrefix:?}"
     if [ -d "$qmlDir" ]
     then
-        qtWrapperArgs+=(--prefix QML2_IMPORT_PATH : "$qmlDir")
+        qtWrapperArgs+=(--prefix NIXPKGS_QT5_QML_IMPORT_PATH : "$qmlDir")
     fi
 }
 addEnvHooks "$targetOffset" qtHostPathHook

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, sanic
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  httpx,
+  pythonOlder,
+  sanic,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "22.12.0";
+  version = "23.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pFTF2SQ9giRzPhG24FLqLPJRXaFdQ7Xi5EeltS7J3DI=";
+    hash = "sha256-pFsGB0QDeO/iliHOitHqBIQtDlwRgFg8nhgMLsopoec=";
   };
 
   outputs = [

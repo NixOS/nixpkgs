@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud27` which is also the latest
+The current default by NixOS is `nextcloud29` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -25,7 +25,7 @@ to `true`, Nextcloud will automatically be configured to connect to it through
 socket.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 {
   services.nextcloud = {
@@ -49,9 +49,9 @@ used by the imperative installer and all values are written to an additional fil
 to ensure that changes can be applied by changing the module's options.
 
 In case the application serves multiple domains (those are checked with
-[`$_SERVER['HTTP_HOST']`](http://php.net/manual/en/reserved.variables.server.php))
+[`$_SERVER['HTTP_HOST']`](https://www.php.net/manual/en/reserved.variables.server.php))
 it's needed to add them to
-[`services.nextcloud.config.extraTrustedDomains`](#opt-services.nextcloud.config.extraTrustedDomains).
+[`services.nextcloud.settings.trusted_domains`](#opt-services.nextcloud.settings.trusted_domains).
 
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).
@@ -119,13 +119,30 @@ Auto updates for Nextcloud apps can be enabled using
   - **Server-side encryption.**
     Nextcloud supports [server-side encryption (SSE)](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html).
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
-    to external storage such as S3. Please note that this won't work anymore when using OpenSSL 3
-    for PHP's openssl extension and **Nextcloud 25 or older** because this is implemented using the
-    legacy cipher RC4. For Nextcloud26 this isn't relevant anymore, because Nextcloud has an RC4 implementation
-    written in native PHP and thus doesn't need `ext-openssl` for that anymore.
-    If [](#opt-system.stateVersion) is *above* `22.05`,
-    this is disabled by default. To turn it on again and for further information please refer to
-    [](#opt-services.nextcloud.enableBrokenCiphersForSSE).
+    to external storage such as S3.
+
+  - **Issues with file permissions / unsafe path transitions**
+
+    {manpage}`systemd-tmpfiles(8)` makes sure that the paths for
+
+    * configuration (including declarative config)
+    * data
+    * app store
+    * home directory itself (usually `/var/lib/nextcloud`)
+
+    are properly set up. However, `systemd-tmpfiles` will refuse to do so
+    if it detects an unsafe path transition, i.e. creating files/directories
+    within a directory that is neither owned by `root` nor by `nextcloud`, the
+    owning user of the files/directories to be created.
+
+    Symptoms of that include
+
+    * `config/override.config.php` not being updated (and the config file
+      eventually being garbage-collected).
+    * failure to read from application data.
+
+    To work around that, please make sure that all directories in question
+    are owned by `nextcloud:nextcloud`.
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
@@ -136,7 +153,7 @@ settings `listen.owner` &amp; `listen.group` in the
 [corresponding `phpfpm` pool](#opt-services.phpfpm.pools).
 
 An exemplary configuration may look like this:
-```
+```nix
 { config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
@@ -190,6 +207,27 @@ Alternatively, extra apps can also be declared with the [](#opt-services.nextclo
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
 that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
 
+## Known warnings {#module-services-nextcloud-known-warnings}
+
+### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+
+This is because
+
+* our module writes logs into the journal (`journalctl -t Nextcloud`)
+* the Logreader application that allows reading logs in the admin panel is enabled
+  by default and requires logs written to a file.
+
+The logreader application doesn't work, as it was the case before. The only change is that
+it complains loudly now. So nothing actionable here by default. Alternatively you can
+
+* disable the logreader application to shut up the "error".
+
+  We can't really do that by default since whether apps are enabled/disabled is part
+  of the application's state and tracked inside the database.
+
+* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
+  from the admin panel.
+
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
 As stated in the previous paragraph, we must provide a clean upgrade-path for Nextcloud
@@ -211,7 +249,7 @@ If major-releases will be abandoned by upstream, we should check first if those 
 in NixOS for a safe upgrade-path before removing those. In that case we should keep those
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
-```
+```nix
 /* ... */
 {
   nextcloud17 = generic {

@@ -2,13 +2,17 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, libtool
+, perl
 , libtermkey
 , unibilium
-, libtool
 }:
-stdenv.mkDerivation rec {
-  pname = "libtickit";
+let
   version = "0.4.3";
+in
+stdenv.mkDerivation {
+  pname = "libtickit";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "leonerd";
@@ -17,16 +21,37 @@ stdenv.mkDerivation rec {
     hash = "sha256-QCrym8g5J1qwsFpU/PB8zZIWdM3YzOySknISSbQE4Sc=";
   };
 
+  patches = [
+    # Disabled on darwin, since test assumes TERM=linux
+    ./001-skip-test-18term-builder-on-macos.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+  ];
+
+  buildInputs = [
+    libtermkey
+    unibilium
+  ];
+
+  nativeCheckInputs = [ perl ];
+
   makeFlags = [
-    "PREFIX=$(out)"
     "LIBTOOL=${lib.getExe libtool}"
   ];
 
-  nativeBuildInputs = [ pkg-config libtool ];
-  buildInputs = [ libtermkey unibilium ];
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with lib; {
-    description = "A terminal interface construction kit";
+    description = "Terminal interface construction kit";
     longDescription = ''
       This library provides an abstracted mechanism for building interactive full-screen terminal
       programs. It provides a full set of output drawing functions, and handles keyboard and mouse

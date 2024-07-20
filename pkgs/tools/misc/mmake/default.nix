@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-JPsVfLIl06PJ8Nsfu7ogwrttB1G93HTKbZFqUTSV9O8=";
   };
 
-  vendorSha256 = "sha256-0z+sujzzBl/rtzXbhL4Os+jYfLUuO9PlXshUDxAH9DU=";
+  vendorHash = "sha256-0z+sujzzBl/rtzXbhL4Os+jYfLUuO9PlXshUDxAH9DU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/tj/mmake";
-    description = "A small program  which wraps make to provide additional functionality";
+    description = "Small program  which wraps make to provide additional functionality";
     longDescription = ''
       Mmake is a small program  which wraps make to provide additional
       functionality,  such   as  user-friendly  help   output,  remote
@@ -29,5 +29,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = [ maintainers.gabesoft ];
+    mainProgram = "mmake";
   };
 }

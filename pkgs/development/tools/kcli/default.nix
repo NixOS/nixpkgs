@@ -11,12 +11,12 @@ buildGoModule rec {
     sha256 = "0whijr2r2j5bvfy8jgmpxsa0zvwk5kfjlpnkw4za5k35q7bjffls";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A kafka command line browser";
+    description = "Kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
     license = licenses.mit;
     maintainers = with maintainers; [ cswank ];

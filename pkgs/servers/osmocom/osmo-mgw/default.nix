@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-mgw";
-  version = "1.11.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-mgw";
     rev = version;
-    hash = "sha256-l7JBAigcqQdb1IIz2iuetK8EKVkevtei7hB98g4a79Y=";
+    hash = "sha256-RE16qzL8CXjGzoDniB8gBF0fsIaWzDuIvpdQ/5vUdug=";
   };
 
   postPatch = ''
@@ -43,9 +43,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom Media Gateway (MGW). speaks RTP and E1 as well as MGCP";
+    mainProgram = "osmo-mgw";
     homepage = "https://osmocom.org/projects/osmo-mgw";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

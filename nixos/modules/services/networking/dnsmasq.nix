@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.dnsmasq;
-  dnsmasq = pkgs.dnsmasq;
+  dnsmasq = cfg.package;
   stateDir = "/var/lib/dnsmasq";
 
   # True values are just put as `name` instead of `name=true`, and false values
@@ -48,15 +48,17 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run dnsmasq.
         '';
       };
 
+      package = mkPackageOption pkgs "dnsmasq" {};
+
       resolveLocalQueries = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
           /etc/resolv.conf).
         '';
@@ -65,7 +67,7 @@ in
       alwaysKeepRunning = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, systemd will always respawn dnsmasq even if shut down manually. The default, disabled, will only restart it on error.
         '';
       };
@@ -79,14 +81,14 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "8.8.8.8" "8.8.4.4" ];
-            description = lib.mdDoc ''
+            description = ''
               The DNS servers which dnsmasq should query.
             '';
           };
 
         };
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration of dnsmasq. Lists get added one value per line (empty
           lists and false values don't get added, though false values get
           turned to comments). Gets merged with
@@ -108,7 +110,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration directives that should be added to
           `dnsmasq.conf`.
 
@@ -179,4 +181,6 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
   };
+
+  meta.doc = ./dnsmasq.md;
 }

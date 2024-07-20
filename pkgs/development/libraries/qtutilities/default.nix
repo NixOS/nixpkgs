@@ -1,27 +1,36 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cpp-utilities
-, qttools
-, qtbase
 , cmake
+, qttools
+, cpp-utilities
+, qtbase
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
-  version = "6.13.0";
+  version = "6.14.1";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gfGVVjtzpBGrPrp2k3fOIh54EAMSicyikF1CtaO74y8=";
+    repo = "qtutilities";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WUrxBlSS1Z3+tQGmAi+d3wpqutqNjPrVOxmpUy01aqU=";
   };
 
-  buildInputs = [ qtbase cpp-utilities ];
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    cpp-utilities
+  ];
 
-  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
+  cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   dontWrapQtApps = true;
 
@@ -32,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms   = platforms.linux ++ platforms.darwin;
   };
-}
+})

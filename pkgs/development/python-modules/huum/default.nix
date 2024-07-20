@@ -1,35 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.7.1";
-  format = "pyproject";
+  version = "0.7.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frwickst";
     repo = "pyhuum";
     rev = "refs/tags/${version}";
-    hash = "sha256-vYHwcEOzxYEBav5YbmWpm+izFlivzu2UIR6hmAXXi0U=";
+    hash = "sha256-INW6d/Zc5UZZOgN6wW+Xbm/wH1K/V6bviu3mID1R+BY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    mashumaro
   ];
 
   nativeCheckInputs = [
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "huum"
-  ];
+  pythonImportsCheck = [ "huum" ];
 
   meta = with lib; {
     description = "Library for Huum saunas";

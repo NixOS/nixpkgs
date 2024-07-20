@@ -11,12 +11,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           memorySize = 2048;
 
           libvirtd.enable = true;
+          libvirtd.hooks.qemu.is_working = "${pkgs.writeShellScript "testHook.sh" ''
+            touch /tmp/qemu_hook_is_working
+          ''}";
+          libvirtd.nss.enable = true;
         };
         boot.supportedFilesystems = [ "zfs" ];
         networking.hostId = "deadbeef"; # needed for zfs
-        networking.nameservers = [ "192.168.122.1" ];
         security.polkit.enable = true;
         environment.systemPackages = with pkgs; [ virt-manager ];
+
+        # This adds `resolve` to the `hosts` line of /etc/nsswitch.conf; NSS modules placed after it
+        # will not be consulted. Therefore this tests that the libvirtd NSS modules will be
+        # be placed early enough for name resolution to work.
+        services.resolved.enable = true;
       };
   };
 
@@ -57,5 +65,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.shutdown()
       virthost.wait_for_unit("multi-user.target")
       virthost.wait_until_succeeds("ping -c 1 nixos")
+
+    with subtest("test if hooks are linked and run"):
+      virthost.succeed("ls /var/lib/libvirt/hooks/qemu.d/is_working")
+      virthost.succeed("ls /tmp/qemu_hook_is_working")
   '';
 })

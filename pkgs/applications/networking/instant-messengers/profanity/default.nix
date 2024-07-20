@@ -20,7 +20,7 @@
 , sqlite
 , autoAwaySupport ? true,       libXScrnSaver, libX11
 , notifySupport ? true,         libnotify, gdk-pixbuf
-, omemoSupport ? true,          libsignal-protocol-c, libgcrypt
+, omemoSupport ? true,          libsignal-protocol-c, libgcrypt, qrencode
 , pgpSupport ? true,            gpgme
 , pythonPluginSupport ? true,   python3
 , traySupport ? true,           gtk3
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    hash = "sha256-A9ZgHliLb4v/3W5tm5zD0WN8mRmxLE/MUSTBXGvBCCM=";
+    hash = "sha256-u/mp+vtMj602LfrulA+nhLNH8K6sqKIOuPJzhZusVmE=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     sqlite
   ] ++ lib.optionals autoAwaySupport     [ libXScrnSaver libX11 ]
     ++ lib.optionals notifySupport       [ libnotify gdk-pixbuf ]
-    ++ lib.optionals omemoSupport        [ libsignal-protocol-c libgcrypt ]
+    ++ lib.optionals omemoSupport        [ libsignal-protocol-c libgcrypt qrencode ]
     ++ lib.optionals pgpSupport          [ gpgme ]
     ++ lib.optionals pythonPluginSupport [ python3 ]
     ++ lib.optionals traySupport         [ gtk3 ];
@@ -91,7 +91,8 @@ stdenv.mkDerivation rec {
 
   meta =  with lib; {
     homepage = "http://www.profanity.im/";
-    description = "A console based XMPP client";
+    description = "Console based XMPP client";
+    mainProgram = "profanity";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.

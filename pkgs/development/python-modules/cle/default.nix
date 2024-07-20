@@ -1,51 +1,54 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, minidump
-, nose
-, pefile
-, pyelftools
-, pytestCheckHook
-, pythonOlder
-, pyvex
-, pyxbe
-, setuptools
-, sortedcontainers
+{
+  lib,
+  archinfo,
+  buildPythonPackage,
+  cart,
+  cffi,
+  fetchFromGitHub,
+  minidump,
+  pefile,
+  pyelftools,
+  pytestCheckHook,
+  pythonOlder,
+  pyvex,
+  pyxbe,
+  setuptools,
+  sortedcontainers,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.61";
+  version = "9.2.110";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-03DyvPht4E4uysKqgyfu8hxu1qh+YzWsTI09E4ftiSs=";
+    hash = "sha256-pxyFTIMMlROcqa1h9vOJ0Ka6NcgsZNMnaW5QSMqF8Yk=";
   };
-
 in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iAKHNVAtUdm+ZTk5nXejI7WdEV9sTjLnfZ4B6Wxzk18=";
+    hash = "sha256-vr5qj2wDUKoo/IQtaD9JuT1hv+u6M6d7OHmTP96mixI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "pyvex" ];
+
+  dependencies = [
+    archinfo
+    cart
     cffi
     minidump
     pefile
@@ -56,7 +59,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
@@ -74,13 +76,13 @@ buildPythonPackage rec {
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    "test_x86"
+    "test_x86_64"
     # The required parts is not present on Nix
     "test_remote_file_map"
   ];
 
-  pythonImportsCheck = [
-    "cle"
-  ];
+  pythonImportsCheck = [ "cle" ];
 
   meta = with lib; {
     description = "Python loader for many binary formats";

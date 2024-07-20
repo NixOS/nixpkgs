@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build time
-, hatchling
-, hatch-vcs
-, setuptools-scm
+  # build time
+  hatchling,
+  hatch-vcs,
 
-# runtime
-, packaging
-, toml
-, tomli
+  # runtime
+  packaging,
+  toml,
+  tomli,
 
-# docs
-, sphinxHook
-, furo
-, sphinx-autodoc-typehints
+  # docs
+  sphinxHook,
+  furo,
+  sphinx-autodoc-typehints,
 
-# tests
-, pytest-mock
-, pytestCheckHook
-, virtualenv
-, wheel
+  # tests
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  virtualenv,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.5.0";
+  version = "1.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pyproject-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-VO+huA9i7uMpCVaWHC29XlfestSu+N9vWWHteY21uqs=";
+    hash = "sha256-XQD+36NP2zKUp/QRlgKhwzfMYBh6GVlCYXURXs2qeO8=";
   };
 
   outputs = [
@@ -44,12 +45,9 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs
-    setuptools-scm
 
     # docs
     sphinxHook
@@ -57,15 +55,12 @@ buildPythonPackage rec {
     sphinx-autodoc-typehints
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    setuptools
     virtualenv
     wheel
   ];
@@ -75,9 +70,7 @@ buildPythonPackage rec {
     "test_can_build_on_python_2"
   ];
 
-  pythonImportsCheck = [
-    "pyproject_api"
-  ];
+  pythonImportsCheck = [ "pyproject_api" ];
 
   meta = with lib; {
     changelog = "https://github.com/tox-dev/pyproject-api/releases/tag/${version}";

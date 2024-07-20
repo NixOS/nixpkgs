@@ -1,58 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pexpect
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  pexpect,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygatt";
   version = "4.0.5";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "peplin";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1zdfxidiw0l8n498sy0l33n90lz49n25x889cx6jamjr7frlcihd";
+    repo = "pygatt";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DUZGsztZViVNZwmhXoRN5FOQ7BgUeI0SsYgCHlvsrv0=";
   };
-
-  propagatedBuildInputs = [
-    pyserial
-  ];
-
-  passthru.optional-dependencies.GATTTOOL = [
-    pexpect
-  ];
-
-  nativeBuildInputs = [
-    # For cross compilation the doCheck is false and therefor the
-    # nativeCheckInputs not included. We have to include nose here, since
-    # setup.py requires nose unconditionally.
-    nose
-  ];
-
-  nativeCheckInputs = [
-    mock
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.GATTTOOL;
 
   postPatch = ''
     # Not support for Python < 3.4
-    substituteInPlace setup.py --replace "'enum-compat'" ""
+    substituteInPlace setup.py \
+      --replace-fail "'enum-compat'" "" \
+      --replace-fail "'coverage >= 3.7.1'," "" \
+      --replace-fail "'nose >= 1.3.7'" ""
+    substituteInPlace tests/bgapi/test_bgapi.py \
+       --replace-fail "assertEquals" "assertEqual"
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial ];
+
+  optional-dependencies.GATTTOOL = [ pexpect ];
+
+  # tests require nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
+    mock
+    nose
+    pytestCheckHook
+  ] ++ optional-dependencies.GATTTOOL;
 
   pythonImportsCheck = [ "pygatt" ];
 
   meta = with lib; {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
-    license = with licenses; [ asl20 mit ];
+    changelog = "https://github.com/peplin/pygatt/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,32 +1,39 @@
 { lib
-, flutter37
+, flutter319
 , python3
 , fetchFromGitHub
 , pcre2
-, gnome
+, libnotify
+, libappindicator
+, pkg-config
+, gnome-screenshot
 , makeWrapper
 , removeReferencesTo
 }:
 
-flutter37.buildFlutterApplication rec {
+flutter319.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.1.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    sha256 = "sha256-N9/qwC79mG9r+zMPLHSPjNSQ+srGtnXuKsf0ijtH7CI=";
+    hash = "sha256-aXUnmKEUCi0rsVr3HVhEk6xa1z9HMsH+0AIY531hqiU=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-WfZiB7MO4wHUg81xm67BMu4zQdC9CfhN5BQol+AI2S8=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = {
+    window_manager = "sha256-mLX51nbWFccsAfcqLQIYDjYz69y9wAz4U1RZ8TIYSj0=";
+  };
 
   postPatch = ''
+    rm -f pubspec.lock
+
     substituteInPlace linux/CMakeLists.txt \
-      --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
+      --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
   preInstall = ''
@@ -52,35 +59,32 @@ flutter37.buildFlutterApplication rec {
     # Symlink binary.
     ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
 
-    # Needed for QR scanning to work.
-    wrapProgram "$out/bin/yubioath-flutter" \
-      --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
-
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+  '';
 
-    # Remove unnecessary references to Flutter.
-    remove-references-to -t ${flutter37.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
+  # Needed for QR scanning to work
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [
     makeWrapper
     removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
-  ];
-
-  disallowedReferences = [
-    flutter37
-    flutter37.unwrapped
+    libnotify
+    libappindicator
   ];
 
   meta = with lib; {
     description = "Yubico Authenticator for Desktop";
+    mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

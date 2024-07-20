@@ -15,6 +15,9 @@ def load_file(path: str) -> dict[str, Any]:
         return tomli.load(f)
 
 
+# This replicates the dependency merging logic from Cargo.
+# See `inner_dependency_inherit_with`:
+# https://github.com/rust-lang/cargo/blob/4de0094ac78743d2c8ff682489e35c8a7cafe8e4/src/cargo/util/toml/mod.rs#L982
 def replace_key(
     workspace_manifest: dict[str, Any], table: dict[str, Any], section: str, key: str
 ) -> bool:
@@ -25,28 +28,37 @@ def replace_key(
     ):
         print("replacing " + key)
 
-        replaced = table[key]
-        del replaced["workspace"]
+        local_dep = table[key]
+        del local_dep["workspace"]
 
-        workspace_copy = workspace_manifest[section][key]
+        workspace_dep = workspace_manifest[section][key]
 
         if section == "dependencies":
-            crate_features = replaced.get("features")
+            if isinstance(workspace_dep, str):
+                workspace_dep = {"version": workspace_dep}
 
-            if type(workspace_copy) is str:
-                replaced["version"] = workspace_copy
-            else:
-                replaced.update(workspace_copy)
+            final: dict[str, Any] = workspace_dep.copy()
 
-                merged_features = (crate_features or []) + (
-                    workspace_copy.get("features") or []
-                )
+            merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
+            if merged_features:
+                final["features"] = merged_features
 
-                if len(merged_features) > 0:
-                    # Dictionaries are guaranteed to be ordered (https://stackoverflow.com/a/7961425)
-                    replaced["features"] = list(dict.fromkeys(merged_features))
+            local_default_features = local_dep.pop("default-features", None)
+            workspace_default_features = workspace_dep.get("default-features")
+
+            if not workspace_default_features and local_default_features:
+                final["default-features"] = True
+
+            optional = local_dep.pop("optional", False)
+            if optional:
+                final["optional"] = True
+
+            if local_dep:
+                raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
+
+            table[key] = final
         elif section == "package":
-            table[key] = replaced = workspace_copy
+            table[key] = workspace_dep
 
         return True
 
@@ -95,6 +107,13 @@ def main() -> None:
             changed |= replace_dependencies(
                 workspace_manifest, crate_manifest["target"][key]
             )
+
+    if (
+        "lints" in crate_manifest
+        and "workspace" in crate_manifest["lints"]
+        and crate_manifest["lints"]["workspace"] is True
+    ):
+        crate_manifest["lints"] = workspace_manifest["lints"]
 
     if not changed:
         return

@@ -1,14 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , miniupnpc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yaup";
   version = "unstable-2019-10-16";
 
@@ -19,10 +20,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-RWnNjpgXRYncz9ID8zirENffy1UsfHD1H6Mmd8DKN4k=";
   };
 
+  patches = [
+    # Fix build with miniupnpc 2.2.8
+    # https://github.com/Holarse-Linuxgaming/yaup/pull/6
+    (fetchpatch2 {
+      url = "https://github.com/Holarse-Linuxgaming/yaup/commit/c92134e305932785a60bd72131388f507b4d1853.patch?full_index=1";
+      hash = "sha256-Exqkfp9VYIf9JpAc10cO8NuEAWvI5Houi7CLXV5zBDY=";
+    })
+  ];
+
   nativeBuildInputs = [
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,5 +53,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # ld: unknown option: --export-dynamic
     broken = stdenv.isDarwin;
+    mainProgram = "yaup";
   };
 }

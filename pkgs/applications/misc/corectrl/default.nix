@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
 , extra-cmake-modules
-, botan2
+, botan3
 , karchive
 , kauth
 , libdrm
@@ -9,6 +9,8 @@
 , glxinfo
 , polkit
 , procps
+, pugixml
+, spdlog
 , util-linux
 , vulkan-tools
 , qtbase
@@ -23,13 +25,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.3.5";
+  version = "1.4.1";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-HETD2+acxJf30iC6UwRXD/onFYo3ki4RwAAVs4NbSAw=";
+    hash = "sha256-E2Dqe1IYXjFb/nShQX+ARZW/AWpNonRimb3yQ6/2CFw=";
   };
   patches = [
     ./polkit-dir.patch
@@ -40,13 +42,15 @@ stdenv.mkDerivation rec{
     wrapQtAppsHook
   ];
   buildInputs = [
-    botan2
+    botan3
     karchive
     kauth
     libdrm
     glxinfo
     polkit
     procps
+    pugixml
+    spdlog
     util-linux
     vulkan-tools
     qtbase

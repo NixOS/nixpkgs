@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "ruamel-base";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ruamel.base";
@@ -17,6 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ruamel.base" ];
+
+  pythonNamespaces = [ "ruamel" ];
 
   meta = with lib; {
     description = "Common routines for ruamel packages";

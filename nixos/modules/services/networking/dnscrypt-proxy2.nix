@@ -6,12 +6,12 @@ in
 
 {
   options.services.dnscrypt-proxy2 = {
-    enable = mkEnableOption (lib.mdDoc "dnscrypt-proxy2");
+    enable = mkEnableOption "dnscrypt-proxy2";
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Attrset that is converted and passed as TOML config file.
-        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
+        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
       '';
       example = literalExpression ''
         {
@@ -28,7 +28,7 @@ in
     };
 
     upstreamDefaults = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to base the config declared in {option}`services.dnscrypt-proxy2.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
 
         Disable this if you want to declare your dnscrypt config from scratch.
@@ -38,7 +38,7 @@ in
     };
 
     configFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Path to TOML config file. See: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>
         If this option is set, it will override any configuration done in options.services.dnscrypt-proxy2.settings.
       '';
@@ -49,12 +49,12 @@ in
         passAsFile = [ "json" ];
       } ''
         ${if cfg.upstreamDefaults then ''
-          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
-          ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
+          ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+          ${pkgs.buildPackages.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
         '' else ''
           cp $jsonPath config.json
         ''}
-        ${pkgs.remarshal}/bin/json2toml < config.json > $out
+        ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
       '';
       defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };
@@ -80,7 +80,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
-        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy -config ${cfg.configFile}";
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;

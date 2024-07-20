@@ -1,29 +1,29 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , python3
 }:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.40.3";
+  version = "0.45.24";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
-    rev = version;
-    sha256 = "sha256-RYxhkCSL17rU3C4rOArYptmYpdK/CDPw9xfXkKja2xs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VltrcTbX95agV9JGV2KYGeZ6iUlgzrOsjShsUpiGfes=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.3.0" "apprise" \
+      --replace "apprise~=1.8.0" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
-      --replace "dnspython<2.3.0" "dnspython" \
-      --replace "pytest ~=6.2" "" \
+      --replace "dnspython==2.6.1" "dnspython" \
+      --replace "pytest ~=7.2" "" \
       --replace "pytest-flask ~=1.2" "" \
-      --replace "selenium~=4.1.0" "selenium" \
-      --replace "werkzeug~=2.0.0" "werkzeug"
+      --replace "selenium~=4.14.0" "selenium" \
+      --replace "werkzeug~=3.0" "werkzeug"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,19 +37,24 @@ python3.pkgs.buildPythonApplication rec {
     feedgen
     flask
     flask-compress
+    flask-cors
     flask-expects-json
     flask-login
+    flask-paginate
     flask-restful
     flask-wtf
+    greenlet
     inscriptis
     jinja2
     jinja2-time
     jsonpath-ng
     jq
+    loguru
     lxml
     paho-mqtt
-    pillow
     playwright
+    pyee
+    pyppeteer
     pytz
     requests
     selenium
@@ -70,9 +75,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
-    description = "Simplest self-hosted free open source website change detection tracking, monitoring and notification service";
+    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mikaelfangel ];
+    mainProgram = "changedetection.io";
   };
 }

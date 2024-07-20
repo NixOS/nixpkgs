@@ -1,12 +1,17 @@
-{ lib, buildGraalvmNativeImage, fetchurl  }:
+{ lib
+, buildGraalvmNativeImage
+, fetchurl
+, testers
+, zprint
+}:
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
-  version = "1.2.7";
+  version = "1.2.9";
 
   src = fetchurl {
     url = "https://github.com/kkinnear/${pname}/releases/download/${version}/${pname}-filter-${version}";
-    sha256 = "sha256-C2WEzF7Xl37/LDlk6f77/WcWNadE0zAfzxEw+RTRGto=";
+    sha256 = "sha256-4gSGD7Jiu1mqyPMoQrrPT60EFXs7ySfjpT9wSyhp3ig=";
   };
 
   extraNativeImageBuildArgs = [
@@ -18,6 +23,12 @@ buildGraalvmNativeImage rec {
     "--no-fallback"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = zprint;
+    command = "zprint --version";
+  };
+
   meta = with lib; {
     description = "Clojure/EDN source code formatter and pretty printer";
     longDescription = ''
@@ -28,5 +39,6 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/kkinnear/zprint";
     license = licenses.mit;
     maintainers = with maintainers; [ stelcodes ];
+    mainProgram = "zprint";
   };
 }

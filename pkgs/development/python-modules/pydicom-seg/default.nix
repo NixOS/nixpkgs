@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pythonRelaxDepsHook
-, poetry-core
-, jsonschema
-, numpy
-, pydicom
-, simpleitk
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pytestCheckHook,
+  poetry-core,
+  jsonschema,
+  numpy,
+  pydicom,
+  simpleitk,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,19 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
-
-  pythonRelaxDeps = [
-    "jsonschema"
+  patches = [
+    # https://github.com/razorx89/pydicom-seg/pull/54
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/razorx89/pydicom-seg/commit/ac91eaefe3b0aecfe745869972c08de5350d2b61.patch";
+      hash = "sha256-xBOVjWZPjyQ8gSj6JLe9B531e11TI3FUFFtL+IelZOM=";
+    })
   ];
+
+  pythonRelaxDeps = [ "jsonschema" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -47,13 +49,9 @@ buildPythonPackage rec {
     simpleitk
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pydicom_seg"
-  ];
+  pythonImportsCheck = [ "pydicom_seg" ];
 
   meta = with lib; {
     description = "Medical segmentation file reading and writing";

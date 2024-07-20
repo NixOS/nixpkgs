@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libappindicator-gtk2 libtool pidgin ];
 
   meta = with lib; {
-    description = "An AppIndicator and KStatusNotifierItem Plugin for Pidgin";
+    description = "AppIndicator and KStatusNotifierItem Plugin for Pidgin";
     homepage = "https://github.com/philipl/pidgin-indicator";
     maintainers = with maintainers; [ imalison ];
     license = licenses.gpl2;

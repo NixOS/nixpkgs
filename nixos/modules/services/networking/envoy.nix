@@ -15,14 +15,14 @@ in
 
 {
   options.services.envoy = {
-    enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
+    enable = mkEnableOption "Envoy reverse proxy";
 
-    package = mkPackageOptionMD pkgs "envoy" { };
+    package = mkPackageOption pkgs "envoy" { };
 
     requireValidConfig = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether a failure during config validation at build time is fatal.
         When the config can't be checked during build time, for example when it includes
         other files, disable this option.
@@ -50,7 +50,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Envoy in Nix.
       '';
     };

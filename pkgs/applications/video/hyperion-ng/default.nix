@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "hyperion-project";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Y1PZ+YyPMZEX4fBpMG6IVT1gtXR9ZHlavJMCQ4KAenc=";
+    hash = "sha256-Y1PZ+YyPMZEX4fBpMG6IVT1gtXR9ZHlavJMCQ4KAenc=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib
     # * qmdnsengine - not in nixpkgs yet
@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   '' ;
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DENABLE_DEPLOY_DEPENDENCIES=OFF"
     "-DUSE_SYSTEM_FLATBUFFERS_LIBS=ON"
     "-DUSE_SYSTEM_PROTO_LIBS=ON"
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An opensource Bias or Ambient Lighting implementation";
+    description = "Opensource Bias or Ambient Lighting implementation";
     homepage = "https://github.com/hyperion-project/hyperion.ng";
     license = licenses.mit;
     maintainers = with maintainers; [ algram kazenyuk ];

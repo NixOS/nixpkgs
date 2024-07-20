@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "pysabnzbd";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jeradM";
@@ -15,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-Ubl+kdcjMm1A7pa3Q5G+fFBwPIxA375Ci04/vVyUl+A=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # upstream has no tests
   doCheck = false;

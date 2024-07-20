@@ -14,7 +14,7 @@ in {
   ###### interface
   options = {
     services.flatpak = {
-      enable = mkEnableOption (lib.mdDoc "flatpak");
+      enable = mkEnableOption "flatpak";
     };
   };
 
@@ -32,9 +32,12 @@ in {
 
     security.polkit.enable = true;
 
+    fonts.fontDir.enable = true;
+
     services.dbus.packages = [ pkgs.flatpak ];
 
     systemd.packages = [ pkgs.flatpak ];
+    systemd.tmpfiles.packages = [ pkgs.flatpak ];
 
     environment.profiles = [
       "$HOME/.local/share/flatpak/exports"

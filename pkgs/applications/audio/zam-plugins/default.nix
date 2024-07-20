@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zam-plugins";
-  version = "4.1";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NKa6lOP3fpAFMYwzZAMFgW0tBSM/F89oB/nDbEUeflw=";
+    hash = "sha256-wT1BXQrcD+TI+trqx0ZVUmVLZMTDQgJI3dAvN54wy6Y=";
     fetchSubmodules = true;
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.zamaudio.com/?p=976";
-    description = "A collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
+    description = "Collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

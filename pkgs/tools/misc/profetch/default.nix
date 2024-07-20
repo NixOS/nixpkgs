@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = [ maintainers.vel ];
+    mainProgram = "profetch";
   };
 }

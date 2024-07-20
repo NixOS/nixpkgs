@@ -1,13 +1,9 @@
-{ pname
-, dir
-, version
-, hash
-, stdenv
+{ stdenv
 , lib
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , nixosTests
 , gtk3
@@ -15,6 +11,7 @@
 , at-spi2-atk
 , cairo
 , pango
+, pipewire
 , gdk-pixbuf
 , glib
 , freetype
@@ -50,8 +47,21 @@
 , wayland
 }:
 
+{ pname
+, dir
+, version
+, hash
+, url
+}:
+
+let
+  inherit (stdenv) targetPlatform;
+  ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
+in
 stdenv.mkDerivation rec {
-  inherit pname version; # Please backport all updates to the stable channel.
+  inherit pname version;
+
+  # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -60,14 +70,13 @@ stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/s/${pname}/${pname}_${version}_amd64.deb";
-    inherit hash;
+    inherit url hash;
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -112,6 +121,8 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libdbusmenu
+    pipewire
+    stdenv.cc.cc
     xdg-utils
     wayland
   ];
@@ -120,10 +131,6 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-  dontPatchELF = true;
-  # We need to run autoPatchelf manually with the "no-recurse" option, see
-  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
-  dontAutoPatchelf = true;
 
   installPhase = ''
     runHook preInstall
@@ -132,11 +139,6 @@ stdenv.mkDerivation rec {
 
     mv usr/share $out/share
     mv "opt/${dir}" "$out/lib/${dir}"
-
-    # Note: The following path contains bundled libraries:
-    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
-    # We run autoPatchelf with the "no-recurse" option to avoid picking those
-    # up, but resources/app.asar still requires them.
 
     # Symlink to bin
     mkdir -p $out/bin
@@ -150,22 +152,25 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "/opt/${dir}/${pname}" $out/bin/${pname}
+      --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
+      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
-    autoPatchelf --no-recurse -- "$out/lib/${dir}/"
-    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node"
+    # Note: The following path contains bundled libraries:
+    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
   '';
 
-  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
-  passthru.tests.application-launch = nixosTests.signal-desktop;
+  passthru = {
+    # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+    tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     description = "Private, simple, and secure messenger";
@@ -176,8 +181,9 @@ stdenv.mkDerivation rec {
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mic92 equirosa urandom ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr teutat3s ];
+    mainProgram = pname;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

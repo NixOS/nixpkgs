@@ -21,10 +21,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An upscaled version of scientifica";
+    description = "Upscaled version of scientifica";
     homepage = "https://github.com/NerdyPepper/curie";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

@@ -1,20 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, fixup_yarn_lock, yarn, nodejs
+, fixup-yarn-lock, yarn, nodejs
 , jpegoptim, oxipng, nodePackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "akkoma-fe";
-  version = "unstable-2023-05-23";
+  version = "3.11.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "e530c2b4626fab3bc94736cb7d0774809717911f";
-    hash = "sha256-dowo4YzlkfuQv1G4NclPrKyBwtOq7bEXruQY/BVjNyM=";
+    rev = "v${version}";
+    hash = "sha256-Z7psmIyOo8Rvwcip90JgxLhZ5SkkGB94QInEgm8UOjQ=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    fixup-yarn-lock
     yarn
     nodejs
     jpegoptim
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Frontend for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mvs ];
   };
 }

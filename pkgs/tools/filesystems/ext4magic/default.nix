@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
       It's much more effective and works much better than extundelete.
     '';
     homepage = "https://ext4magic.sourceforge.net/ext4magic_en.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rkoe ];
+    mainProgram = "ext4magic";
   };
 }

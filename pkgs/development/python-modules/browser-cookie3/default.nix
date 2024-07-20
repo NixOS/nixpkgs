@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, lz4
-, keyring
-, pbkdf2
-, pycryptodomex
-, pyaes
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  lz4,
+  keyring,
+  pbkdf2,
+  pycryptodomex,
+  pyaes,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +33,7 @@ buildPythonPackage rec {
   # No tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "browser_cookie3"
-  ];
+  pythonImportsCheck = [ "browser_cookie3" ];
 
   meta = with lib; {
     description = "Loads cookies from your browser into a cookiejar object";
@@ -43,6 +41,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ borisbabic ];
-    broken = stdenv.isDarwin;
   };
 }

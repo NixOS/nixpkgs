@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pythonRelaxDepsHook
 , python3
 , snagboot
 , testers
@@ -10,31 +9,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.1";
+  version = "1.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     rev = "v${version}";
-    hash = "sha256-MU6LzjH6s2MS7T3u1OUeJ5ZmWgL0otA/q0ylwTNH4fA=";
-  };
-
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
-
-    tests.version = testers.testVersion {
-      package = snagboot;
-      command = "snagrecover --version";
-      version = "v${version}";
-    };
+    hash = "sha256-ergTa6uR1SyR27H2HAWp/rtgalCnQge07Pi24PrsW+8=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [
@@ -46,7 +31,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     pyusb
     pyserial
-    hid
     crccheck
     six
     xmodem
@@ -68,6 +52,19 @@ python3.pkgs.buildPythonApplication rec {
 
   # There are no tests
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
+    };
+
+    tests.version = testers.testVersion {
+      package = snagboot;
+      command = "snagrecover --version";
+      version = "v${version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/bootlin/snagboot";

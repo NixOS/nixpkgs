@@ -10,37 +10,51 @@
 , useProprietaryAssets ? true
 }:
 
-with lib;
-stdenv.mkDerivation rec {
+let
+  inherit (lib)
+    and
+    licenses
+    maintainers
+    optional
+    optionalString
+    platforms
+    ;
+
   pname = "koboredux";
   version = "0.7.5.1";
 
-  src =
-    [(fetchFromGitHub {
-      owner = "olofson";
-      repo = "koboredux";
-      rev = "v${version}";
-      sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
-    })]
-    ++
-    (optional useProprietaryAssets (requireFile {
-      name = "koboredux-${version}-Linux.tar.bz2";
-      sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
-      message = ''
-        Please purchase the game on https://olofson.itch.io/kobo-redux
-        and download the Linux build.
+  main_src = fetchFromGitHub {
+    owner = "olofson";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
+  };
 
-        Once you have downloaded the file, please use the following command
-        and re-run the installation:
+  assets_src = requireFile {
+    name = "koboredux-${version}-Linux.tar.bz2";
+    sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
+    message = ''
+      Please purchase the game on https://olofson.itch.io/kobo-redux
+      and download the Linux build.
 
-        nix-prefetch-url file://\$PWD/koboredux-${version}-Linux.tar.bz2
+      Once you have downloaded the file, please use the following command
+      and re-run the installation:
 
-        Alternatively, install the "koboredux-free" package, which replaces the
-        proprietary assets with a placeholder theme.
-      '';
-    }));
+      nix-prefetch-url file://\$PWD/koboredux-${version}-Linux.tar.bz2
 
-  sourceRoot = "source"; # needed when we have the assets source
+      Alternatively, install the "koboredux-free" package, which replaces the
+      proprietary assets with a placeholder theme.
+    '';
+  };
+
+in
+
+stdenv.mkDerivation rec {
+  inherit pname version;
+
+  src = [ main_src ] ++ optional useProprietaryAssets assets_src;
+
+  sourceRoot = main_src.name;
 
   # Fix clang build
   patches = [(fetchpatch {
@@ -66,8 +80,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
+    description = "Frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
       optionalString (!useProprietaryAssets) " (built without proprietary assets)";
+    mainProgram = "kobord";
     longDescription = ''
       Kobo Redux is a frantic 80's style 2D shooter, inspired by the look and
       feel of 90's arcade cabinets. The gameplay is fast and unforgiving,
@@ -79,7 +94,7 @@ stdenv.mkDerivation rec {
       For the full experience, consider installing "koboredux" instead.
     '';
     homepage = "https://olofson.itch.io/kobo-redux";
-    license = with licenses; if useProprietaryAssets then unfree else gpl2;
+    license = with licenses; if useProprietaryAssets then unfree else gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
   };

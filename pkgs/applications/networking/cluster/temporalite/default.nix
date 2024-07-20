@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-IEB9AFEt8U2zXYfbChfL/UH1rNSLPnfS396/cPE8UdE=";
   };
 
-  vendorSha256 = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";
+  vendorHash = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";
 
   subPackages = [ "cmd/temporalite" ];
 
@@ -27,7 +27,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An experimental distribution of Temporal that runs as a single process";
+    description = "Experimental distribution of Temporal that runs as a single process";
+    mainProgram = "temporalite";
     homepage = "https://github.com/temporalio/temporalite";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];

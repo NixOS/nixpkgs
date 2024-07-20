@@ -9,7 +9,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the jenkins continuous integration server.
         '';
       };
@@ -17,7 +17,7 @@ in {
       user = mkOption {
         default = "jenkins";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User the jenkins server should execute under.
         '';
       };
@@ -25,7 +25,7 @@ in {
       group = mkOption {
         default = "jenkins";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           If the default user "jenkins" is configured then this is the primary
           group of that user.
         '';
@@ -35,7 +35,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         example = [ "wheel" "dialout" ];
-        description = lib.mdDoc ''
+        description = ''
           List of extra groups that the "jenkins" user should be a part of.
         '';
       };
@@ -43,7 +43,7 @@ in {
       home = mkOption {
         default = "/var/lib/jenkins";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to use as JENKINS_HOME. If the default user "jenkins" is configured then
           this is the home of the "jenkins" user.
         '';
@@ -53,7 +53,7 @@ in {
         default = "0.0.0.0";
         example = "localhost";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the bind address on which the jenkins HTTP interface listens.
           The default is the wildcard address.
         '';
@@ -62,7 +62,7 @@ in {
       port = mkOption {
         default = 8080;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Specifies port number on which the jenkins HTTP interface listens.
           The default is 8080.
         '';
@@ -72,25 +72,20 @@ in {
         default = "";
         example = "/jenkins";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies a urlPrefix to use with jenkins.
           If the example /jenkins is given, the jenkins server will be
           accessible using localhost:8080/jenkins.
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jenkins;
-        defaultText = literalExpression "pkgs.jenkins";
-        type = types.package;
-        description = lib.mdDoc "Jenkins package to use.";
-      };
+      package = mkPackageOption pkgs "jenkins" { };
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];
         defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
-        description = lib.mdDoc ''
+        description = ''
           Packages to add to PATH for the jenkins process.
         '';
       };
@@ -98,7 +93,7 @@ in {
       environment = mkOption {
         default = { };
         type = with types; attrsOf str;
-        description = lib.mdDoc ''
+        description = ''
           Additional environment variables to be passed to the jenkins process.
           As a base environment, jenkins receives NIX_PATH from
           {option}`environment.sessionVariables`, NIX_REMOTE is set to
@@ -112,7 +107,7 @@ in {
       plugins = mkOption {
         default = null;
         type = types.nullOr (types.attrsOf types.package);
-        description = lib.mdDoc ''
+        description = ''
           A set of plugins to activate. Note that this will completely
           remove and replace any previously installed plugins. If you
           have manually-installed plugins that you want to keep while
@@ -129,7 +124,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         example = [ "--debug=9" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional command line arguments to pass to Jenkins.
         '';
       };
@@ -138,7 +133,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         example = [ "-Xmx80m" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional command line arguments to pass to the Java run time (as opposed to Jenkins).
         '';
       };
@@ -146,7 +141,7 @@ in {
       withCLI = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to make the CLI available.
 
           More info about the CLI available at
@@ -241,6 +236,9 @@ in {
 
       serviceConfig = {
         User = cfg.user;
+        StateDirectory = mkIf (hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        # For (possible) socket use
+        RuntimeDirectory = "jenkins";
       };
     };
   };

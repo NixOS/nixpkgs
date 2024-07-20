@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -7,7 +6,12 @@
 , udev
 , stdenv
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
+, alsa-lib
+, nss
+, nspr
+, systemd
+, xorg
 }:
 let
   desktopItem = makeDesktopItem {
@@ -32,21 +36,29 @@ stdenv.mkDerivation rec {
       url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
       sha256 = "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
     };
-  }."${stdenv.hostPlatform.system}";
+  }."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
   dontConfigure = true;
   dontPatchELF = true;
   dontWrapGApps = true;
 
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = [
+    alsa-lib
+    nss
+    nspr
+    xorg.libXScrnSaver
+    xorg.libXtst
+    systemd
+  ];
 
   unpackPhase = ''
     # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
@@ -81,5 +93,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
+    mainProgram = "hakuneko";
   };
 }

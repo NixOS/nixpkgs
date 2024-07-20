@@ -9,15 +9,16 @@
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
 , wafHook
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-bfNoYsQkZu+I82BERROHDvRpNPkBbIQ4PMQAin0MRro=";
+    sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,9 @@ stdenv.mkDerivation rec {
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
@@ -71,5 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

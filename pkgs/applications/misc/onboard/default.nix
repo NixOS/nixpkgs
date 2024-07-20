@@ -23,7 +23,7 @@
 , pkg-config
 , procps
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 , yelp
 }:
@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -82,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonPath = with python3.pkgs; [
     dbus-python
-    distutils_extra
+    distutils-extra
     pyatspi
     pycairo
     pygobject3
@@ -157,8 +157,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"killall",' '"${procps}/bin/pkill", "-x",'
   '';
 
+  # setuptools to get distutils with python 3.12
   installPhase = ''
-    ${python3.interpreter} setup.py install --prefix="$out"
+    ${(python3.withPackages (p: [ p.setuptools ])).interpreter} setup.py install --prefix="$out"
 
     cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
     glib-compile-schemas $out/share/glib-2.0/schemas/

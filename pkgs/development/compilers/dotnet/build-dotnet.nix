@@ -18,12 +18,16 @@ assert if type == "sdk" then packages != null else true;
 , libuuid
 , zlib
 , libkrb5
+, openssl
 , curl
 , lttng-ust_2_12
 , testers
 , runCommand
 , writeShellScript
 , mkNugetDeps
+, callPackage
+, dotnetCorePackages
+, xmlstarlet
 }:
 
 let
@@ -41,19 +45,40 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = if type == "sdk" then mkNugetDeps {
-    name = "${pname}-${version}-deps";
-    nugetDeps = packages;
-  } else null;
+  mkCommon = callPackage ./common.nix {};
+
+  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
+
+  sigtool = callPackage ./sigtool.nix {};
+  signAppHost = callPackage ./sign-apphost.nix {};
+
+  hasILCompiler =
+    lib.versionAtLeast version (if targetRid == "osx-arm64" then "8" else "7");
+
+  extraTargets = writeText "extra.targets" (''
+    <Project>
+  '' + lib.optionalString hasILCompiler ''
+      <ItemGroup>
+        <CustomLinkerArg Include="-Wl,-rpath,'${lib.makeLibraryPath [ icu zlib openssl ]}'" />
+      </ItemGroup>
+  '' + lib.optionalString stdenv.isDarwin ''
+      <Import Project="${signAppHost}" />
+  '' + ''
+    </Project>
+  '');
 
 in
-stdenv.mkDerivation (finalAttrs: rec {
+mkCommon type rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
+  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
+    xmlstarlet
+    sigtool
+  ];
 
   buildInputs = [
     stdenv.cc.cc
@@ -61,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     icu
     libkrb5
     curl
+    xmlstarlet
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
   src = fetchurl (
@@ -69,6 +95,16 @@ stdenv.mkDerivation (finalAttrs: rec {
   );
 
   sourceRoot = ".";
+
+  postPatch = if type == "sdk" then (''
+    xmlstarlet ed \
+      --inplace \
+      -s //_:Project -t elem -n Import \
+      -i \$prev -t attr -n Project -v "${extraTargets}" \
+      sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+  '' + lib.optionalString stdenv.isDarwin ''
+    codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+  '') else null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -88,46 +124,42 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dotnet --info
-  '';
-
   # Tell autoPatchelf about runtime dependencies.
   # (postFixup phase is run before autoPatchelfHook.)
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.targetPlatform.isLinux ''
     patchelf \
       --add-needed libicui18n.so \
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
   '';
 
-  setupHook = writeText "dotnet-setup-hook" ''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
-
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+  # fixes: Could not load ICU data. UErrorCode: 2
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+    (allow file-read* (subpath "/private/var/db/mds/system"))
+    (allow mach-lookup (global-name "com.apple.SecurityServer")
+                       (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
   passthru = {
-    inherit icu;
-    packages = packageDeps;
+    inherit icu hasILCompiler;
+  } // lib.optionalAttrs (type == "sdk") {
+    packages = mkNugetDeps {
+      name = "${pname}-${version}-deps";
+      nugetDeps = packages;
+    };
 
     updateScript =
-      if type == "sdk" then
       let
         majorVersion =
           with lib;
@@ -136,24 +168,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       writeShellScript "update-dotnet-${majorVersion}" ''
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
-      '' else null;
-
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
-
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        HOME=$(pwd)/fake-home
-        dotnet new console
-        dotnet build
-        output="$(dotnet run)"
-        # yes, older SDKs omit the comma
-        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
-    };
   };
 
   meta = with lib; {
@@ -164,4 +179,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     mainProgram = "dotnet";
     platforms = attrNames srcs;
   };
-})
+}

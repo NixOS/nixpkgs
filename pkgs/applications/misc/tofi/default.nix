@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fbergroth ];
     platforms = platforms.linux;
+    mainProgram = "tofi";
   };
 }

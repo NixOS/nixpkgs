@@ -9,22 +9,19 @@
 , libxfce4util
 , libxklavier
 , upower
+, withUpower ? true
 , xfconf
 , xf86inputlibinput
+, colord
+, withColord ? true
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.18.3";
+  version = "4.18.6";
 
-  sha256 = "sha256-QGh5th790qkvqchUfi+kOAJ9A1M+zEIzMxOM5eCGPEk=";
-
-  postPatch = ''
-    for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
-      substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
-    done
-  '';
+  sha256 = "sha256-xiu26B3dbWu+/AtF/iUC6Wo2U5ZZyzN9RfdbBaQRJ1M=";
 
   buildInputs = [
     exo
@@ -35,15 +32,18 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
     libxklavier
-    upower
     xf86inputlibinput
     xfconf
-  ];
+  ]
+  ++ lib.optionals withUpower [ upower ]
+  ++ lib.optionals withColord [ colord ];
 
   configureFlags = [
     "--enable-pluggable-dialogs"
     "--enable-sound-settings"
-  ];
+  ]
+  ++ lib.optionals withUpower [ "--enable-upower-glib" ]
+  ++ lib.optionals withColord [ "--enable-colord" ];
 
   meta = with lib; {
     description = "Settings manager for Xfce";

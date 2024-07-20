@@ -1,91 +1,84 @@
-{ lib
-, brotli
-, brotlicffi
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchPypi
-, idna
-, isPyPy
-, mock
-, pyopenssl
-, pysocks
-, pytest-freezegun
-, pytest-timeout
-, pytestCheckHook
-, python-dateutil
-, tornado
-, trustme
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+
+  # build-system
+  hatchling,
+
+  # optional-dependencies
+  brotli,
+  brotlicffi,
+  pysocks,
+
+  # tests
+  backports-zoneinfo,
+  pytestCheckHook,
+  pytest-timeout,
+  pythonOlder,
+  tornado,
+  trustme,
 }:
 
-buildPythonPackage rec {
-  pname = "urllib3";
-  version = "1.26.14";
-  format = "setuptools";
+let
+  self = buildPythonPackage rec {
+    pname = "urllib3";
+    version = "2.2.2";
+    pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-B2kHv4/TVc3ndyhHExZiWk0vfnE8El9RlTu1s+7PT3I=";
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-3VBUhVSaelUoM9peYGNjnQ0XfATyO8OGTkHl3F9hIWg=";
+    };
+
+    nativeBuildInputs = [ hatchling ];
+
+    passthru.optional-dependencies = {
+      brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+      socks = [ pysocks ];
+    };
+
+    nativeCheckInputs =
+      [
+        pytest-timeout
+        pytestCheckHook
+        tornado
+        trustme
+      ]
+      ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
+      ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+    # Tests in urllib3 are mostly timeout-based instead of event-based and
+    # are therefore inherently flaky. On your own machine, the tests will
+    # typically build fine, but on a loaded cluster such as Hydra random
+    # timeouts will occur.
+    #
+    # The urllib3 test suite has two different timeouts in their test suite
+    # (see `test/__init__.py`):
+    # - SHORT_TIMEOUT
+    # - LONG_TIMEOUT
+    # When CI is in the env, LONG_TIMEOUT will be significantly increased.
+    # Still, failures can occur and for that reason tests are disabled.
+    doCheck = false;
+
+    passthru.tests.pytest = self.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    preCheck = ''
+      export CI # Increases LONG_TIMEOUT
+    '';
+
+    pythonImportsCheck = [ "urllib3" ];
+
+    meta = with lib; {
+      description = "Powerful, user-friendly HTTP client for Python";
+      homepage = "https://github.com/urllib3/urllib3";
+      changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
+      license = licenses.mit;
+      maintainers = with maintainers; [ fab ];
+    };
   };
-
-  # FIXME: remove backwards compatbility hack
-  propagatedBuildInputs = passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.socks;
-
-  nativeCheckInputs = [
-    python-dateutil
-    mock
-    pytest-freezegun
-    pytest-timeout
-    pytestCheckHook
-    tornado
-    trustme
-  ];
-
-  # Tests in urllib3 are mostly timeout-based instead of event-based and
-  # are therefore inherently flaky. On your own machine, the tests will
-  # typically build fine, but on a loaded cluster such as Hydra random
-  # timeouts will occur.
-  #
-  # The urllib3 test suite has two different timeouts in their test suite
-  # (see `test/__init__.py`):
-  # - SHORT_TIMEOUT
-  # - LONG_TIMEOUT
-  # When CI is in the env, LONG_TIMEOUT will be significantly increased.
-  # Still, failures can occur and for that reason tests are disabled.
-  doCheck = false;
-
-  preCheck = ''
-    export CI # Increases LONG_TIMEOUT
-  '';
-
-  pythonImportsCheck = [
-    "urllib3"
-  ];
-
-  passthru.optional-dependencies = {
-    brotli = if isPyPy then [
-      brotlicffi
-    ] else [
-      brotli
-    ];
-    # Use carefully since pyopenssl is not supported aarch64-darwin
-    secure = [
-      certifi
-      cryptography
-      idna
-      pyopenssl
-    ];
-    socks = [
-      pysocks
-    ];
-  };
-
-  meta = with lib; {
-    description = "Powerful, sanity-friendly HTTP client for Python";
-    homepage = "https://github.com/shazow/urllib3";
-    changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-  };
-}
+in
+self

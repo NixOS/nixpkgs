@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "rc-9front";
-  version = "unstable-2022-11-01";
+  version = "0-unstable-2022-11-01";
 
   src = fetchFrom9Front {
     domain = "shithub.us";
@@ -22,16 +22,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ byacc installShellFiles ];
   enableParallelBuilding = true;
   patches = [ ./path.patch ];
-
-  buildPhase = ''
-    make PREFIX=$out
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin/ rc
     installManPage rc.1
     mkdir -p $out/lib
     install -m644 rcmain.unix $out/lib/rcmain
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "The 9front shell";
+    description = "9front shell";
     longDescription = "unix port of 9front rc";
     homepage = "http://shithub.us/cinap_lenrek/rc/HEAD/info.html";
     license = licenses.mit;

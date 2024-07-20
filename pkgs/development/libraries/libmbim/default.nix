@@ -7,18 +7,17 @@
 , glib
 , python3
 , help2man
-, systemd
 , bash-completion
 , bash
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.28.4";
+  version = "1.30.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "man" ];
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libmbim";
     rev = version;
-    hash = "sha256-aaYjvJ2OMTzkUyqWCyHdmsKJ3VGqBmKQzb1DWK/1cPU=";
+    hash = "sha256-sHTpu9WeMZroT+1I18ObEHWSzcyj/Relyz8UNe+WawI=";
   };
 
   mesonFlags = [
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
     bash-completion
     bash
   ];

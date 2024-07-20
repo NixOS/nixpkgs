@@ -15,11 +15,11 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "7.4.0";
+    version = "7.5.1";
 
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-FL09EXxQlUZuJMMHYu9tSOH8ARPgzoqAKmQYV6225PU=";
+      sha256 = "sha256-191PYpxs/TbVXoBPHvuyTp81ZMtw1YaFznY1hUSbh+0=";
     };
 
     preferLocalBuild = true;
@@ -137,12 +137,13 @@ let
 
     meta = with lib; {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
+      mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
         ONLYOFFICE Document Server is an online office suite comprising viewers and editors for texts, spreadsheets and presentations,
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
-      homepage = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
-      license = licenses.agpl3;
+      homepage = "https://github.com/ONLYOFFICE/DocumentServer";
+      license = licenses.agpl3Plus;
       platforms = [ "x86_64-linux" ];
       sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];

@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, krb5 }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  krb5,
+}:
 
 buildPythonPackage rec {
   pname = "pykerberos";
   version = "1.2.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level interface to Kerberos";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ catern ];
   };
 }

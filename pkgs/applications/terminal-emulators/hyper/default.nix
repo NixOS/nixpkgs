@@ -47,11 +47,12 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
   meta = with lib; {
-    description = "A terminal built on web technologies";
+    description = "Terminal built on web technologies";
     homepage    = "https://hyper.is/";
     maintainers = with maintainers; [ puffnfresh fabiangd ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];
+    mainProgram = "hyper";
   };
 }

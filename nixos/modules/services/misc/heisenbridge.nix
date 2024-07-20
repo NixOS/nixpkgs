@@ -23,26 +23,19 @@ let
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption (lib.mdDoc "the Matrix to IRC bridge");
+    enable = mkEnableOption "the Matrix to IRC bridge";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.heisenbridge;
-      defaultText = lib.literalExpression "pkgs.heisenbridge";
-      description = lib.mdDoc ''
-        Package of the application to run, exposed for overriding purposes.
-      '';
-    };
+    package = mkPackageOption pkgs "heisenbridge" { };
 
     homeserver = mkOption {
       type = types.str;
-      description = lib.mdDoc "The URL to the home server for client-server API calls";
+      description = "The URL to the home server for client-server API calls";
       example = "http://localhost:8008";
     };
 
     registrationUrl = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The URL where the application service is listening for HS requests, from the Matrix HS perspective.#
         The default value assumes the bridge runs on the same host as the home server, in the same network.
       '';
@@ -53,26 +46,26 @@ in
 
     address = mkOption {
       type = types.str;
-      description = lib.mdDoc "Address to listen on. IPv6 does not seem to be supported.";
+      description = "Address to listen on. IPv6 does not seem to be supported.";
       default = "127.0.0.1";
       example = "0.0.0.0";
     };
 
     port = mkOption {
       type = types.port;
-      description = lib.mdDoc "The port to listen on";
+      description = "The port to listen on";
       default = 9898;
     };
 
     debug = mkOption {
       type = types.bool;
-      description = lib.mdDoc "More verbose logging. Recommended during initial setup.";
+      description = "More verbose logging. Recommended during initial setup.";
       default = false;
     };
 
     owner = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Set owner MXID otherwise first talking local user will claim the bridge
       '';
       default = null;
@@ -80,7 +73,7 @@ in
     };
 
     namespaces = mkOption {
-      description = lib.mdDoc "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
+      description = "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
       # TODO link to Matrix documentation of the format
       type = types.submodule {
         freeformType = jsonType;
@@ -98,16 +91,16 @@ in
       };
     };
 
-    identd.enable = mkEnableOption (lib.mdDoc "identd service support");
+    identd.enable = mkEnableOption "identd service support";
     identd.port = mkOption {
       type = types.port;
-      description = lib.mdDoc "identd listen port";
+      description = "identd listen port";
       default = 113;
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      description = lib.mdDoc "Heisenbridge is configured over the command line. Append extra arguments here";
+      description = "Heisenbridge is configured over the command line. Append extra arguments here";
       default = [ ];
     };
   };
@@ -217,5 +210,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 }

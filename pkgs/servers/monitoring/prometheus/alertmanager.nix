@@ -3,21 +3,22 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "alertmanager";
-  version = "0.25.0";
+  version = "0.27.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    hash = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
+    hash = "sha256-soE2D/PLesV1+Kif9myB54a9zIFIa94i0BrmywJPTbI=";
   };
 
-  vendorHash = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
+  vendorHash = "sha256-zkHIdEdAy44iV2F929NB3ISuUbxdecaeZcsNQQGd06E=";
 
   subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
 
@@ -38,6 +39,8 @@ buildGoModule rec {
     $out/bin/amtool --completion-script-zsh > amtool.zsh
     installShellCompletion amtool.zsh
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
 
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";

@@ -2,17 +2,20 @@
 
 buildGoModule rec {
   pname = "gopls";
-  version = "0.12.4";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "gopls/v${version}";
-    sha256 = "sha256-OieIbWgc5l7HS6otkRxsKYQmNIjPbADQ+C3A6qJr2h0=";
+    hash = "sha256-4RpQrlFj0stefVBouxyYN3Pf0PkYZ4cn4IKIskqUhVY=";
   };
 
   modRoot = "gopls";
-  vendorSha256 = "sha256-0Svz0VFmNW/f8Po+DpIQi0bJB1ICLcSJM1sG/Nju+ZY=";
+  vendorHash = "sha256-D+ew0XyHRns1i9KAdV5vhCs3Uu338EujYjwU6IIZ8OY=";
+
+  # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
+  ldflags = [ "-X main.version=v${version}" ];
 
   doCheck = false;
 
@@ -22,7 +25,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
+    changelog = "https://github.com/golang/tools/releases/tag/${src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mic92 rski SuperSandro2000 zimbatm ];
+    mainProgram = "gopls";
   };
 }

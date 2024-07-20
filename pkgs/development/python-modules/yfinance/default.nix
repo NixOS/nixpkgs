@@ -1,52 +1,71 @@
-{ lib
-, appdirs
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, frozendict
-, html5lib
-, multitasking
-, numpy
-, pandas
-, pythonOlder
-, requests
-, lxml
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  frozendict,
+  html5lib,
+  lxml,
+  multitasking,
+  numpy,
+  pandas,
+  peewee,
+  platformdirs,
+  pythonOlder,
+  pytz,
+  requests-cache,
+  requests-ratelimiter,
+  requests,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.24";
-  format = "setuptools";
+  version = "0.2.41";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
-    repo = pname;
+    repo = "yfinance";
     rev = "refs/tags/${version}";
-    hash = "sha256-V8yPB01HR+DGrKRXnmERFeC0WZal0nG3lMNVKTa519k=";
+    hash = "sha256-9Vp/z0u/Mfil1xWHvHPRFa62sLvEJMjHLBYweLfz42o=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     cryptography
     frozendict
     html5lib
+    lxml
     multitasking
     numpy
     pandas
+    peewee
+    platformdirs
+    pytz
     requests
-    lxml
   ];
+
+  passthru.optional-dependencies = {
+    nospam = [
+      requests-cache
+      requests-ratelimiter
+    ];
+    repair = [
+      scipy
+    ];
+  };
 
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yfinance"
-  ];
+  pythonImportsCheck = [ "yfinance" ];
 
   meta = with lib; {
     description = "Module to doiwnload Yahoo! Finance market data";

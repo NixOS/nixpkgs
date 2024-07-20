@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glyphslib
-, setuptools-scm
-, ufo2ft
-, fonttools
-, fontmath
-, lxml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glyphslib,
+  setuptools-scm,
+  ufo2ft,
+  fonttools,
+  fontmath,
+  lxml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.5.1";
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-njJArNq7nhdoq0Si3+RUDE+VJSwuUvk+e7WeuNaluK0=";
+    hash = "sha256-KrfT0fvE1fhaM2RH4LqRUda7yMHg2T59UdGi3SSZP7s=";
     extension = "zip";
   };
 

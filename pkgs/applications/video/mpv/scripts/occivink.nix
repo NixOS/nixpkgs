@@ -1,53 +1,49 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  buildLua,
 }:
 
 let
-  script = { n, ... }@p:
-    stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
-      pname = "mpv_${n}";
-      passthru.scriptName = "${n}.lua";
+  camelToKebab =
+    let
+      inherit (lib.strings) match stringAsChars toLower;
+      isUpper = match "[A-Z]";
+    in
+    stringAsChars (c: if isUpper c != null then "-${toLower c}" else c);
 
-      src = fetchFromGitHub {
-        owner = "occivink";
-        repo = "mpv-scripts";
-        rev = "af360f332897dda907644480f785336bc93facf1";
-        hash = "sha256-KdCrUkJpbxxqmyUHksVVc8KdMn8ivJeUA2eerFZfEE8=";
+  mkScript =
+    name: args:
+    let
+      self = rec {
+        pname = camelToKebab name;
+        version = "0-unstable-2024-01-11";
+        src = fetchFromGitHub {
+          owner = "occivink";
+          repo = "mpv-scripts";
+          rev = "d0390c8e802c2e888ff4a2e1d5e4fb040f855b89";
+          hash = "sha256-pc2aaO7lZaoYMEXv5M0WI7PtmqgkNbdtNiLZZwVzppM=";
+        };
+        passthru.updateScript = unstableGitUpdater { };
+
+        scriptPath = "scripts/${pname}.lua";
+
+        meta = with lib; {
+          homepage = "https://github.com/occivink/mpv-scripts";
+          license = licenses.unlicense;
+          maintainers = with maintainers; [ nicoo ];
+        };
+
+        # Sadly needed to make `common-updaters` work here
+        pos = builtins.unsafeGetAttrPos "version" self;
       };
-      version = "unstable-2022-10-02";
-
-      dontBuild = true;
-      installPhase = ''
-        mkdir -p $out/share/mpv/scripts
-        cp -r scripts/${n}.lua $out/share/mpv/scripts/
-      '';
-
-      meta = with lib; {
-        homepage = "https://github.com/occivink/mpv-scripts";
-        license = licenses.unlicense;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ nicoo ];
-      };
-
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    } p);
-
+    in
+    buildLua (lib.attrsets.recursiveUpdate self args);
 in
-{
+lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = script {
-    n = "seek-to";
-    meta.description = "Mpv script for seeking to a specific position";
-    outputHash = "sha256-3RlbtUivmeoR9TZ6rABiZSd5jd2lFv/8p/4irHMLshs=";
-  };
-
-  blacklistExtensions = script {
-    n = "blacklist-extensions";
-    meta.description = "Automatically remove playlist entries based on their extension.";
-    outputHash = "sha256-qw9lz8ofmvvh23F9aWLxiU4YofY+YflRETu+nxMhvVE=";
-  };
-
+  seekTo.meta.description = "Mpv script for seeking to a specific position";
+  blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension.";
 }

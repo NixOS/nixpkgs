@@ -6,20 +6,20 @@ in
 {
   options = {
     services.harmonia = {
-      enable = lib.mkEnableOption (lib.mdDoc "Harmonia: Nix binary cache written in Rust");
+      enable = lib.mkEnableOption "Harmonia: Nix binary cache written in Rust";
 
       signKeyPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
+        description = "Path to the signing key that will be used for signing the cache";
       };
 
-      package = lib.mkPackageOptionMD pkgs "harmonia" { };
+      package = lib.mkPackageOption pkgs "harmonia" { };
 
       settings = lib.mkOption {
         inherit (format) type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Settings to merge with the default configuration.
           For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
         '';
@@ -28,6 +28,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nix.settings.extra-allowed-users = [ "harmonia" ];
+    users.users.harmonia = {
+      isSystemUser = true;
+      group = "harmonia";
+    };
+    users.groups.harmonia = { };
+
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
 
@@ -48,7 +55,7 @@ in
         ExecStart = lib.getExe cfg.package;
         User = "harmonia";
         Group = "harmonia";
-        DynamicUser = true;
+        Restart = "on-failure";
         PrivateUsers = true;
         DeviceAllow = [ "" ];
         UMask = "0066";

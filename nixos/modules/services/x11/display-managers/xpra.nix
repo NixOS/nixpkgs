@@ -16,34 +16,34 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable xpra as display manager.";
+        description = "Whether to enable xpra as display manager.";
       };
 
       bindTcp = mkOption {
         default = "127.0.0.1:10000";
         example = "0.0.0.0:10000";
         type = types.nullOr types.str;
-        description = lib.mdDoc "Bind xpra to TCP";
+        description = "Bind xpra to TCP";
       };
 
       desktop = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "gnome-shell";
-        description = lib.mdDoc "Start a desktop environment instead of seamless mode";
+        description = "Start a desktop environment instead of seamless mode";
       };
 
       auth = mkOption {
         type = types.str;
         default = "pam";
         example = "password:value=mysecret";
-        description = lib.mdDoc "Authentication to use when connecting to xpra";
+        description = "Authentication to use when connecting to xpra";
       };
 
-      pulseaudio = mkEnableOption (lib.mdDoc "pulseaudio audio streaming");
+      pulseaudio = mkEnableOption "pulseaudio audio streaming";
 
       extraOptions = mkOption {
-        description = lib.mdDoc "Extra xpra options";
+        description = "Extra xpra options";
         default = [];
         type = types.listOf types.str;
       };
@@ -60,11 +60,11 @@ in
       VertRefresh 1.0 - 200.0
       #To add your own modes here, use a modeline calculator, like:
       # cvt:
-      # http://www.x.org/archive/X11R7.5/doc/man/man1/cvt.1.html
+      # https://www.x.org/archive/X11R7.5/doc/man/man1/cvt.1.html
       # xtiming:
-      # http://xtiming.sourceforge.net/cgi-bin/xtiming.pl
+      # https://xtiming.sourceforge.net/cgi-bin/xtiming.pl
       # gtf:
-      # http://gtf.sourceforge.net/
+      # https://gtf.sourceforge.net/
       #This can be used to get a specific DPI, but only for the default resolution:
       #DisplaySize 508 317
       #NOTE: the highest modes will not work without increasing the VideoRam
@@ -226,7 +226,7 @@ in
       VideoRam 192000
     '';
 
-    services.xserver.displayManager.job.execCmd = ''
+    services.displayManager.execCmd = ''
       ${optionalString (cfg.pulseaudio)
         "export PULSE_COOKIE=/run/pulse/.config/pulse/cookie"}
       exec ${pkgs.xpra}/bin/xpra ${if cfg.desktop == null then "start" else "start-desktop --start=${cfg.desktop}"} \
@@ -251,7 +251,6 @@ in
 
     environment.systemPackages = [pkgs.xpra];
 
-    virtualisation.virtualbox.guest.x11 = false;
     hardware.pulseaudio.enable = mkDefault cfg.pulseaudio;
     hardware.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
   };

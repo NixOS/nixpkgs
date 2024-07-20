@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fail2ban";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
     rev = version;
-    hash = "sha256-Zd8zLkFlvXTbeInEkNFyHgcAiOsX4WwF6hf5juSQvbY=";
+    hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 
   outputs = [ "out" "man" ];
@@ -22,12 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     lib.optionals stdenv.isLinux [
       systemd
       pyinotify
+
+      # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
+      setuptools
     ];
 
   preConfigure = ''
-    patchShebangs fail2ban-2to3
-    ./fail2ban-2to3
-
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
 
     # see https://github.com/NixOS/nixpkgs/issues/4968
-    ${python3.interpreter} setup.py install_data --install-dir=$out --root=$out
+    ${python3.pythonOnBuildForHost.interpreter} setup.py install_data --install-dir=$out --root=$out
   '';
 
   postInstall =
@@ -61,6 +61,11 @@ python3.pkgs.buildPythonApplication rec {
       rm -r "${sitePackages}/etc"
 
       installManPage man/*.[1-9]
+
+      # This is a symlink to the build python version created by `updatePyExec`, seemingly to assure the same python version is used?
+      rm $out/bin/fail2ban-python
+      ln -s ${python3.interpreter} $out/bin/fail2ban-python
+
     '' + lib.optionalString stdenv.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/usr"
@@ -68,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.fail2ban.org/";
-    description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
+    description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 ];
   };

@@ -2,6 +2,7 @@
 , stdenvNoCC
 , buildDotnetModule
 , fetchFromGitHub
+, dotnetCorePackages
 , makeDesktopItem
 , copyDesktopItems
 , ffmpeg
@@ -9,7 +10,6 @@
 , SDL2
 , lttng-ust
 , numactl
-, dotnetCorePackages
 , libglvnd
 , xorg
 , udev
@@ -17,17 +17,20 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2023.717.0";
+  version = "2024.718.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-Yqv2CaJwjagUb+P87TQhpexdQaFc6nzKh6P+CJocx4Y=";
+    hash = "sha256-/JO/kGFhqzDBnkqLqoj1fM+0WRI1ipUaMKZQBtZPFLU=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.nix;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -71,10 +74,12 @@ buildDotnetModule rec {
     name = "osu";
     exec = "osu!";
     icon = "osu!";
-    comment = meta.description;
+    comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     type = "Application";
     categories = [ "Game" ];
   })];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
@@ -84,9 +89,8 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica thiagokokada ];
+    maintainers = with maintainers; [ gepbird thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
-  passthru.updateScript = ./update.sh;
 }

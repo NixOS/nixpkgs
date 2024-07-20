@@ -94,8 +94,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://w3m.sourceforge.net/";
     changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
-    description = "A text-mode web browser";
-    maintainers = with maintainers; [ cstrahan anthonyroussel ];
+    description = "Text-mode web browser";
+    maintainers = with maintainers; [ anthonyroussel ];
     platforms = platforms.unix;
     license = licenses.mit;
     mainProgram = "w3m";

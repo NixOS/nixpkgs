@@ -93,6 +93,8 @@ mapAliases (with prev; {
   neoinclude          = neoinclude-vim;
   neomru              = neomru-vim;
   neosnippet          = neosnippet-vim;
+  nvim-ts-rainbow     = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
+  nvim-ts-rainbow2    = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
@@ -114,6 +116,7 @@ mapAliases (with prev; {
   solidity            = vim-solidity;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = vim-stylish-haskell; # backwards compat, added 2014-10-18
+  suda-vim            = vim-suda; # backwards compat, added 2024-05-16
   Supertab            = supertab;
   Syntastic           = syntastic;
   SyntaxRange         = vim-SyntaxRange;
@@ -127,6 +130,7 @@ mapAliases (with prev; {
   tlib                = tlib_vim;
   tmux-navigator      = vim-tmux-navigator;
   tmuxNavigator       = vim-tmux-navigator; # backwards compat, added 2014-10-18
+  todo-nvim           = throw "todo-nvim has been removed: abandoned by upstream"; # Added 2023-08-23
   tslime              = tslime-vim;
   unite               = unite-vim;
   UltiSnips           = ultisnips;

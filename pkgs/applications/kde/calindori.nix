@@ -41,6 +41,6 @@ mkDerivation rec {
     description = "Calendar for Plasma Mobile";
     homepage = "https://invent.kde.org/plasma-mobile/calindori";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

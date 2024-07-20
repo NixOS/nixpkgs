@@ -1,11 +1,11 @@
 { lib
-, mkYarnPackage
+, stdenvNoCC
 , libsass
 , nodejs
 , python3
 , pkg-config
+, pnpm_9
 , fetchFromGitHub
-, fetchYarnDeps
 , nixosTests
 , vips
 , nodePackages
@@ -14,77 +14,70 @@
 let
   pinData = lib.importJSON ./pin.json;
 
-  pkgConfig = {
-    node-sass = {
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ libsass python3 ];
-      postInstall = ''
-        LIBSASS_EXT=auto yarn --offline run build
-        rm build/config.gypi
-      '';
-    };
-    sharp = {
-      nativeBuildInputs = [ pkg-config nodePackages.semver ];
-      buildInputs = [ vips ];
-      postInstall = ''
-        yarn --offline run install
-      '';
-    };
-  };
 
-  name = "lemmy-ui";
+in
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+
+  pname = "lemmy-ui";
   version = pinData.uiVersion;
 
-  src = fetchFromGitHub {
+  src = with finalAttrs; fetchFromGitHub {
     owner = "LemmyNet";
-    repo = name;
+    repo = pname;
     rev = version;
     fetchSubmodules = true;
     hash = pinData.uiHash;
   };
-in
-mkYarnPackage {
 
-  inherit src pkgConfig name version;
+  nativeBuildInputs = [
+    nodejs
+    pnpm_9.configHook
+  ];
+
+  buildInputs = [libsass vips ];
 
   extraBuildInputs = [ libsass ];
-
-  packageJSON = ./package.json;
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = pinData.uiYarnDepsHash;
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = pinData.uiPNPMDepsHash;
   };
 
-  yarnPreBuild = ''
-    export npm_config_nodedir=${nodejs}
-  '';
-
   buildPhase = ''
-    # Yarn writes cache directories etc to $HOME.
-    export HOME=$PWD/yarn_home
+    runHook preBuild
 
-    ln -sf $PWD/node_modules $PWD/deps/lemmy-ui/
-    echo 'export const VERSION = "${version}";' > $PWD/deps/lemmy-ui/src/shared/version.ts
+    pnpm build:prod
 
-    yarn --offline build:prod
+    runHook postBuild
   '';
 
-  preInstall = ''
+  # installPhase = ''
+  #     runHook preInstall
+
+  #     mkdir -p $out/{bin,lib/${finalAttrs.pname}}
+  #     mv {dist,node_modules} $out/lib/${finalAttrs.pname}
+
+  #     runHook postInstall
+
+  #  '';
+    preInstall = ''
     mkdir $out
-    cp -R ./deps/lemmy-ui/dist $out
+    cp -R ./dist $out
     cp -R ./node_modules $out
   '';
+
 
   distPhase = "true";
 
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
+  passthru.commit_sha = finalAttrs.src.rev;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
+    maintainers = with maintainers; [ happysalada billewanick georgyo ];
     inherit (nodejs.meta) platforms;
   };
-}
+})

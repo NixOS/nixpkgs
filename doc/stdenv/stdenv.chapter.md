@@ -36,7 +36,7 @@ Many packages have dependencies that are not provided in the standard environmen
 stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
-  ...
+  # ...
   buildInputs = [libbar perl ncurses];
 }
 ```
@@ -49,7 +49,7 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
-  ...
+  # ...
   buildPhase = ''
     gcc foo.c -o foo
   '';
@@ -70,7 +70,7 @@ While the standard environment provides a generic builder, you can still supply 
 stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
-  ...
+  # ...
   builder = ./builder.sh;
 }
 ```
@@ -101,24 +101,66 @@ genericBuild
 
 ### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
 
-To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), use
+To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), enter a shell, find the [phases](#sec-stdenv-phases) you wish to build, then invoke `genericBuild` manually:
+
+Go to an empty directory, invoke `nix-shell` with the desired package, and from inside the shell, set the output variables to a writable directory:
 
 ```bash
+cd "$(mktemp -d)"
 nix-shell '<nixpkgs>' -A some_package
-eval "${unpackPhase:-unpackPhase}"
-cd $sourceRoot
-eval "${patchPhase:-patchPhase}"
-eval "${configurePhase:-configurePhase}"
-eval "${buildPhase:-buildPhase}"
+export out=$(pwd)/out
+```
+
+Next, invoke the desired parts of the build.
+First, run the phases that generate a working copy of the sources, which will change directory to the sources for you:
+
+```bash
+phases="${prePhases[*]:-} unpackPhase patchPhase" genericBuild
+```
+
+Then, run more phases up until the failure is reached.
+If the failure is in the build or check phase, the following phases would be required:
+
+```bash
+phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase" genericBuild
+```
+
+Use this command to run all install phases:
+```bash
+phases="${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase" genericBuild
+```
+
+Single phase can be re-run as many times as necessary to examine the failure like so:
+
+```bash
+phases="buildPhase" genericBuild
 ```
 
 To modify a [phase](#sec-stdenv-phases), first print it with
+
+```bash
+echo "$buildPhase"
+```
+
+Or, if that is empty, for instance, if it is using a function:
 
 ```bash
 type buildPhase
 ```
 
 then change it in a text editor, and paste it back to the terminal.
+
+::: {.note}
+This method may have some inconsistencies in environment variables and behaviour compared to a normal build within the [Nix build sandbox](https://nixos.org/manual/nix/unstable/language/derivations#builder-execution).
+The following is a non-exhaustive list of such differences:
+
+- `TMP`, `TMPDIR`, and similar variables likely point to non-empty directories that the build might conflict with files in.
+- Output store paths are not writable, so the variables for outputs need to be overridden to writable paths.
+- Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
+
+If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+:::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
 
@@ -180,7 +222,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
+    hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
@@ -188,9 +230,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/solo5-virtio-mkimage \
-      --replace "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
-      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux" \
-      --replace "cp " "cp --no-preserve=mode "
+      --replace-fail "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "/usr/share/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
       --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
@@ -219,14 +261,50 @@ For more complex cases, like libraries linked into an executable which is then e
 
 As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
 
-Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
+Dependencies can be broken down along these axes: their host and target platforms relative to the new derivation’s. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether a dependency is needed at run-time or build-time.
 
 The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
-A dependency is said to be **propagated** when some of its other-transitive (non-immediate) downstream dependencies also need it as an immediate dependency.
-[^footnote-stdenv-propagated-dependencies]
+### Dependency propagation {#ssec-stdenv-dependencies-propagated}
 
-It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
+Propagated dependencies are made available to all downstream dependencies.
+This is particularly useful for interpreted languages, where all transitive dependencies have to be present in the same environment.
+Therefore it is used for the Python infrastructure in Nixpkgs.
+
+:::{.note}
+Propagated dependencies should be used with care, because they obscure the actual build inputs of dependent derivations and cause side effects through setup hooks.
+This can lead to conflicting dependencies that cannot easily be resolved.
+:::
+
+:::{.example}
+# A propagated dependency
+
+```nix
+with import <nixpkgs> {};
+let
+  bar = stdenv.mkDerivation {
+    name = "bar";
+    dontUnpack = true;
+    # `hello` is also made available to dependents, such as `foo`
+    propagatedBuildInputs = [ hello ];
+    postInstall = "mkdir $out";
+  };
+  foo = stdenv.mkDerivation {
+    name = "foo";
+    dontUnpack = true;
+    # `bar` is a direct dependency, which implicitly includes the propagated `hello`
+    buildInputs = [ bar ];
+    # The `hello` binary is available!
+    postInstall = "hello > $out";
+  };
+in
+foo
+```
+:::
+
+Dependency propagation takes cross compilation into account, meaning that dependencies that cross platform boundaries are properly adjusted.
+
+To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
 | `host → target`     | attribute name      | offset   |
 | ------------------- | ------------------- | -------- |
@@ -282,7 +360,7 @@ let f(h, h + 1, i) = i + (if i <= 0 then h else h)
 let f(h, h + 1, i) = i + h
 ```
 
-This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is simply the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
+This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
 
 Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
 
@@ -364,124 +442,7 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
-### Special variables {#special-variables}
-
-#### `passthru` {#var-stdenv-passthru}
-
-This is an attribute set which can be filled with arbitrary values. For example:
-
-```nix
-passthru = {
-  foo = "bar";
-  baz = {
-    value1 = 4;
-    value2 = 5;
-  };
-}
-```
-
-Values inside it are not passed to the builder, so you can change them without triggering a rebuild. However, they can be accessed outside of a derivation directly, as if they were set inside a derivation itself, e.g. `hello.baz.value1`. We don’t specify any usage or schema of `passthru` - it is meant for values that would be useful outside the derivation in other parts of a Nix expression (e.g. in other derivations). An example would be to convey some specific dependency of your derivation which contains a program with plugins support. Later, others who make derivations with plugins can use passed-through dependency to ensure that their plugin would be binary-compatible with built program.
-
-#### `passthru.updateScript` {#var-passthru-updateScript}
-
-A script to be run by `maintainers/scripts/update.nix` when the package is matched. The attribute can contain one of the following:
-
-- []{#var-passthru-updateScript-command} an executable file, either on the file system:
-
-  ```nix
-  passthru.updateScript = ./update.sh;
-  ```
-
-  or inside the expression itself:
-
-  ```nix
-  passthru.updateScript = writeScript "update-zoom-us" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre common-updater-scripts
-
-    set -eu -o pipefail
-
-    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
-    update-source-version zoom-us "$version"
-  '';
-  ```
-
-- a list, a script followed by arguments to be passed to it:
-
-  ```nix
-  passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
-  ```
-
-- an attribute set containing:
-  - [`command`]{#var-passthru-updateScript-set-command} – a string or list in the [format expected by `passthru.updateScript`](#var-passthru-updateScript-command).
-  - [`attrPath`]{#var-passthru-updateScript-set-attrPath} (optional) – a string containing the canonical attribute path for the package. If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
-  - [`supportedFeatures`]{#var-passthru-updateScript-set-supportedFeatures} (optional) – a list of the [extra features](#var-passthru-updateScript-supported-features) the script supports.
-
-  ```nix
-  passthru.updateScript = {
-    command = [ ../../update.sh pname ];
-    attrPath = pname;
-    supportedFeatures = [ … ];
-  };
-  ```
-
-##### How update scripts are executed? {#var-passthru-updateScript-execution}
-
-Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
-
-Each update script will be passed the following environment variables:
-
-- [`UPDATE_NIX_NAME`]{#var-passthru-updateScript-env-UPDATE_NIX_NAME} – content of the `name` attribute of the updated package.
-- [`UPDATE_NIX_PNAME`]{#var-passthru-updateScript-env-UPDATE_NIX_PNAME} – content of the `pname` attribute of the updated package.
-- [`UPDATE_NIX_OLD_VERSION`]{#var-passthru-updateScript-env-UPDATE_NIX_OLD_VERSION} – content of the `version` attribute of the updated package.
-- [`UPDATE_NIX_ATTR_PATH`]{#var-passthru-updateScript-env-UPDATE_NIX_ATTR_PATH} – attribute path the `update.nix` discovered the package on (or the [canonical `attrPath`](#var-passthru-updateScript-set-attrPath) when available). Example: `pantheon.elementary-terminal`
-
-::: {.note}
-An update script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that `update.nix` executes update scripts in parallel by default so you should avoid running `git commit` or any other commands that cannot handle that.
-:::
-
-::: {.tip}
-While update scripts should not create commits themselves, `maintainers/scripts/update.nix` supports automatically creating commits when running it with `--argstr commit true`. If you need to customize commit message, you can have the update script implement [`commit`](#var-passthru-updateScript-commit) feature.
-:::
-
-##### Supported features {#var-passthru-updateScript-supported-features}
-###### `commit` {#var-passthru-updateScript-commit}
-
-This feature allows update scripts to *ask* `update.nix` to create Git commits.
-
-When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
-
-When `update.nix` is run with `--argstr commit true` arguments, it will create a separate commit for each of the objects. An empty list can be returned when the script did not update any files, for example, when the package is already at the latest version.
-
-The commit object contains the following values:
-
-- [`attrPath`]{#var-passthru-updateScript-commit-attrPath} – a string containing attribute path.
-- [`oldVersion`]{#var-passthru-updateScript-commit-oldVersion} – a string containing old version.
-- [`newVersion`]{#var-passthru-updateScript-commit-newVersion} – a string containing new version.
-- [`files`]{#var-passthru-updateScript-commit-files} – a non-empty list of file paths (as strings) to add to the commit.
-- [`commitBody`]{#var-passthru-updateScript-commit-commitBody} (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links).
-- [`commitMessage`]{#var-passthru-updateScript-commit-commitMessage} (optional) – a string to use instead of the default commit message.
-
-If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
-
-::: {.example #var-passthru-updateScript-example-commit}
-# Standard output of an update script using commit feature
-
-```json
-[
-  {
-    "attrPath": "volume_key",
-    "oldVersion": "0.3.11",
-    "newVersion": "0.3.12",
-    "files": [
-      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
-    ]
-  }
-]
-```
-:::
-
-### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
+### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
 If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
 
@@ -533,13 +494,13 @@ in pkg
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
 
-See also the section about [`passthru.tests`](#var-meta-tests).
+See also the section about [`passthru.tests`](#var-passthru-tests).
 
 ## Phases {#sec-stdenv-phases}
 
 `stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
 
-This generic command invokes a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
+This generic command either invokes a script at *buildCommandPath*, or a *buildCommand*, or a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 
 Each phase can be overridden in its entirety either by setting the environment variable `namePhase` to a string containing some shell commands to be executed, or by redefining the shell function `namePhase`. The former is convenient to override a phase from the derivation, while the latter is convenient from a build script. However, typically one only wants to *add* some commands to a phase, e.g. by defining `postInstall` or `preFixup`, as skipping some of the default actions may have unexpected consequences. The default script for each phase is defined in the file `pkgs/stdenv/generic/setup.sh`.
 
@@ -602,7 +563,7 @@ Zip files are unpacked using `unzip`. However, `unzip` is not in the standard en
 
 #### Directories in the Nix store {#directories-in-the-nix-store}
 
-These are simply copied to the current directory. The hash part of the file name is stripped, e.g. `/nix/store/1wydxgby13cz...-my-sources` would be copied to `my-sources`.
+These are copied to the current directory. The hash part of the file name is stripped, e.g. `/nix/store/1wydxgby13cz...-my-sources` would be copied to `my-sources`.
 
 Additional file types can be supported by setting the `unpackCmd` variable (see below).
 
@@ -614,13 +575,18 @@ The list of source files or directories to be unpacked or copied. One of these m
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
+After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSourceRoot` are set, `unpackPhase` of the generic builder checks that the unpacking produced a single directory and moves the current working directory into it.
 
-By default the `sourceRoot` is set to `"source"`. If you want to point to a sub-directory inside your project, you therefore need to set `sourceRoot = "source/my-sub-directory"`.
+If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
+
+For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
 Alternatively to setting `sourceRoot`, you can set `setSourceRoot` to a shell command to be evaluated by the unpack phase after the sources have been unpacked. This command must set `sourceRoot`.
+
+For example, if you are using `fetchurl` on an archive file that gets unpacked into a single directory the name of which changes between package versions, and you want your build to start in its sub-directory, you need to set `setSourceRoot = "sourceRoot=$(echo */my-sub-directory)";`, or in the case of multiple sources, you could use something more specific, like `setSourceRoot = "sourceRoot=$(echo ${pname}-*/my-sub-directory)";`.
 
 ##### `preUnpack` {#var-stdenv-preUnpack}
 
@@ -692,7 +658,7 @@ A shell array containing additional arguments passed to the configure script. Yo
 
 ##### `dontAddPrefix` {#var-stdenv-dontAddPrefix}
 
-By default, the flag `--prefix=$prefix` is added to the configure flags. If this is undesirable, set this variable to true.
+By default, `./configure` is passed the concatenation of [`prefixKey`](#var-stdenv-prefixKey) and [`prefix`](#var-stdenv-prefix) on the command line. Disable this by setting `dontAddPrefix` to `true`.
 
 ##### `prefix` {#var-stdenv-prefix}
 
@@ -700,7 +666,7 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 ##### `prefixKey` {#var-stdenv-prefixKey}
 
-The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
+The key to use when specifying the installation [`prefix`](#var-stdenv-prefix). By default, this is set to `--prefix=` as that is used by the majority of packages. Other packages may need `--prefix ` (with a trailing space) or `PREFIX=`.
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
@@ -736,7 +702,7 @@ Hook executed at the end of the configure phase.
 
 ### The build phase {#build-phase}
 
-The build phase is responsible for actually building the package (e.g. compiling it). The default `buildPhase` simply calls `make` if a file named `Makefile`, `makefile` or `GNUmakefile` exists in the current directory (or the `makefile` is explicitly set); otherwise it does nothing.
+The build phase is responsible for actually building the package (e.g. compiling it). The default `buildPhase` calls `make` if a file named `Makefile`, `makefile` or `GNUmakefile` exists in the current directory (or the `makefile` is explicitly set); otherwise it does nothing.
 
 #### Variables controlling the build phase {#variables-controlling-the-build-phase}
 
@@ -753,7 +719,9 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-makeFlags = [ "PREFIX=$(out)" ];
+{
+  makeFlags = [ "PREFIX=$(out)" ];
+}
 ```
 
 ::: {.note}
@@ -765,16 +733,18 @@ The flags are quoted in bash, but environment variables can be specified by usin
 A shell array containing additional arguments passed to `make`. You must use this instead of `makeFlags` if the arguments contain spaces, e.g.
 
 ```nix
-preBuild = ''
-  makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
-'';
+{
+  preBuild = ''
+    makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+  '';
+}
 ```
 
 Note that shell arrays cannot be passed through environment variables, so you cannot set `makeFlagsArray` in a derivation attribute (because those are passed through environment variables): you have to define them in shell code.
 
 ##### `buildFlags` / `buildFlagsArray` {#var-stdenv-buildFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the build phase.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the build phase. Any build targets should be specified as part of the `buildFlags`.
 
 ##### `preBuild` {#var-stdenv-preBuild}
 
@@ -792,6 +762,8 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](#var-stdenv-doCheck) is enabled.
 
+It is highly recommended, for packages' sources that are not distributed with any tests, to at least use [`versionCheckHook`](#versioncheckhook) to test that the resulting executable is basically functional.
+
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
 ##### `doCheck` {#var-stdenv-doCheck}
@@ -799,7 +771,9 @@ The check phase checks whether the package was built correctly by running its te
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-doCheck = true;
+{
+  doCheck = true;
+}
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -815,7 +789,7 @@ If unset, use `check` if it exists, otherwise `test`; if neither is found, do no
 
 ##### `checkFlags` / `checkFlagsArray` {#var-stdenv-checkFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the check phase.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the check phase. Unlike with `buildFlags`, the `checkTarget` is automatically added to the `make` invocation in addition to any `checkFlags` specified.
 
 ##### `checkInputs` {#var-stdenv-checkInputs}
 
@@ -852,12 +826,14 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-installTargets = "install-bin install-doc";
+{
+  installTargets = "install-bin install-doc";
+}
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the install phase.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the install phase. Unlike with `buildFlags`, the `installTargets` are automatically added to the `make` invocation in addition to any `installFlags` specified.
 
 ##### `preInstall` {#var-stdenv-preInstall}
 
@@ -922,6 +898,28 @@ Like `stripDebugList`, but only applies to packages’ target platform. By defau
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S` (i.e. `--strip-debug`).
 
+##### `stripExclude` {#var-stdenv-stripExclude}
+
+A list of filenames or path patterns to avoid stripping. A file is excluded if its name _or_ path (from the derivation root) matches.
+
+This example prevents all `*.rlib` files from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "*.rlib" ];
+}
+```
+
+This example prevents files within certain paths from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "lib/modules/*/build/*" ];
+}
+```
+
 ##### `dontPatchELF` {#var-stdenv-dontPatchELF}
 
 If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries. Only applies to Linux.
@@ -954,20 +952,63 @@ Hook executed at the end of the fixup phase.
 
 If set to `true`, the standard environment will enable debug information in C/C++ builds. After installation, the debug information will be separated from the executables and stored in the output named `debug`. (This output is enabled automatically; you don’t need to set the `outputs` attribute explicitly.) To be precise, the debug information is stored in `debug/lib/debug/.build-id/XX/YYYY…`, where \<XXYYYY…\> is the \<build ID\> of the binary — a SHA-1 hash of the contents of the binary. Debuggers like GDB use the build ID to look up the separated debug information.
 
-For example, with GDB, you can add
+:::{.example #ex-gdb-debug-symbols-socat}
 
-```
-set debug-file-directory ~/.nix-profile/lib/debug
+# Enable debug symbols for use with GDB
+
+To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
+
+```nix
+let
+  pkgs = import ./. {
+    config = {};
+    overlays = [
+      (final: prev: {
+        ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
+        readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
+      })
+    ];
+  };
+
+  myDebugInfoDirs = pkgs.symlinkJoin {
+    name = "myDebugInfoDirs";
+    paths = with pkgs; [
+      glibc.debug
+      ncurses.debug
+      openssl.debug
+      readline.debug
+    ];
+  };
+in
+  pkgs.mkShell {
+
+    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+
+    packages = [
+      pkgs.gdb
+      pkgs.socat
+    ];
+
+    shellHook = ''
+      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+    '';
+  }
 ```
 
-to `~/.gdbinit`. GDB will then be able to find debug information installed via `nix-env -i`.
+This setup works as follows:
+- Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
+- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+
+:::
 
 ### The installCheck phase {#ssec-installCheck-phase}
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
 It is often better to add tests that are not part of the source distribution to `passthru.tests` (see
-[](#var-meta-tests)). This avoids adding overhead to every build and enables us to run them independently.
+[](#var-passthru-tests)). This avoids adding overhead to every build and enables us to run them independently.
 
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
@@ -976,7 +1017,9 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-doInstallCheck = true;
+{
+  doInstallCheck = true;
+}
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -1086,18 +1129,31 @@ To use this, add `removeReferencesTo` to `nativeBuildInputs`.
 As `remove-references-to` is an actual executable and not a shell function, it can be used with `find`.
 Example removing all references to the compiler in the output:
 ```nix
-postInstall = ''
-  find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-'';
+{
+  postInstall = ''
+    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  '';
+}
 ```
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
 
-#### `--replace` \<s1\> \<s2\> {#fun-substitute-replace}
+#### `--replace-fail` \<s1\> \<s2\> {#fun-substitute-replace-fail}
 
 Replace every occurrence of the string \<s1\> by \<s2\>.
+Will error if no change is made.
+
+#### `--replace-warn` \<s1\> \<s2\> {#fun-substitute-replace-warn}
+
+Replace every occurrence of the string \<s1\> by \<s2\>.
+Will print a warning if no change is made.
+
+#### `--replace-quiet` \<s1\> \<s2\> {#fun-substitute-replace-quiet}
+
+Replace every occurrence of the string \<s1\> by \<s2\>.
+Will do nothing if no change can be made.
 
 #### `--subst-var` \<varName\> {#fun-substitute-subst-var}
 
@@ -1111,8 +1167,8 @@ Example:
 
 ```shell
 substitute ./foo.in ./foo.out \
-    --replace /usr/bin/bar $bar/bin/bar \
-    --replace "a string containing spaces" "some other text" \
+    --replace-fail /usr/bin/bar $bar/bin/bar \
+    --replace-fail "a string containing spaces" "some other text" \
     --subst-var someVar
 ```
 
@@ -1164,7 +1220,7 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
@@ -1200,7 +1256,7 @@ Nix itself considers a build-time dependency as merely something that should pre
 
 In order to alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
-The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
+The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
 
 The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency. For example, the C compiler wrapper’s setup hook feeds itself flags for each dependency that contains relevant libraries and headers. This is done by defining a bash function, and appending its name to one of `envBuildBuildHooks`, `envBuildHostHooks`, `envBuildTargetHooks`, `envHostHostHooks`, `envHostTargetHooks`, or `envTargetTargetHooks`. These 6 bash variables correspond to the 6 sorts of dependencies by platform (there’s 12 total but we ignore the propagated/non-propagated axis).
 
@@ -1365,6 +1421,8 @@ Both parameters take a list of flags as strings. The special `"all"` flag can be
 
 For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
 
+Note that support for some hardening flags varies by compiler, CPU architecture, target OS and libc. Combinations of these that don't support a particular hardening flag will silently ignore attempts to enable it. To see exactly which hardening flags are being employed in any invocation, the `NIX_DEBUG` environment variable can be used.
+
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
 The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
@@ -1414,6 +1472,16 @@ installwatch.c:3751:5: error: conflicting types for '__open_2'
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
 ```
 
+Disabling `fortify` implies disablement of `fortify3`
+
+#### `fortify3` {#fortify3}
+
+Adds the `-O2 -D_FORTIFY_SOURCE=3` compiler options. This expands the cases that can be protected by fortify-checks to include some situations with dynamic-length buffers whose length can be inferred at runtime using compiler hints.
+
+Enabling this flag implies enablement of `fortify`. Disabling this flag does not imply disablement of `fortify`.
+
+This flag can sometimes conflict with a build-system's own attempts at enabling fortify support and result in errors complaining about `redefinition of _FORTIFY_SOURCE`.
+
 #### `pic` {#pic}
 
 Adds the `-fPIC` compiler options. This options adds support for position independent code in shared libraries and thus making ASLR possible.
@@ -1441,7 +1509,7 @@ This flag can break dynamic shared object loading. For instance, the module syst
 
 #### `bindnow` {#bindnow}
 
-Adds the `-z bindnow` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
+Adds the `-z now` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
 
 This flag can break dynamic shared object loading. For instance, the module systems of Xorg and PHP are incompatible with this flag. Programs incompatible with this flag often fail at runtime due to missing symbols, like:
 
@@ -1449,18 +1517,42 @@ This flag can break dynamic shared object loading. For instance, the module syst
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
 ```
 
+#### `zerocallusedregs` {#zerocallusedregs}
+
+Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
+
 ### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
 #### `pie` {#pie}
 
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
+
+  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
+
+  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
+
+#### `trivialautovarinit` {#trivialautovarinit}
+
+Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
+
+Use of this flag is controversial as it can prevent tools that detect uninitialized variable use (such as valgrind) from operating correctly.
+
+This should be turned off or fixed for build errors such as:
+
+```
+sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
+```
+
+#### `stackclashprotection` {#stackclashprotection}
+
+This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.

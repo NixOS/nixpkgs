@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "restish";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sXktiYCymoqZgEWQJHYn9KAUxtZYNCSyDyPC8D/X+Mw=";
+    hash = "sha256-a0ObgFgWEsLYjGmCCi/py2PADAWJ0By+AZ4wh+Yeam4=";
   };
 
-  vendorHash = "sha256-quDHEoHVAEAnw+M0xiAd07s/EOhVUgH0T1z8TaBcbj0=";
+  vendorHash = "sha256-qeArar0WnMACUnKBlC+PcFeJPzofwbK440A4M/rQ04U=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
@@ -52,5 +52,6 @@ buildGoModule rec {
     changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "restish";
   };
 }

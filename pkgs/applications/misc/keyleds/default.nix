@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=MinSizeRel"
-  ];
+  cmakeBuildType = "MinSizeRel";
 
   meta = {
     homepage = "https://github.com/keyleds/keyleds";

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-b/rsujR3GRwxrVc0iPVbxyPTRTr8kk2WKqEMwdb9lac=";
+    hash = "sha256-rwCVOdu9UfTArISt8ITQtLU4Gj2EZd07bcFKvxXQ7Bc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A posix script to find and watch youtube videos from the terminal";
+    description = "Posix script to find and watch youtube videos from the terminal";
     homepage = "https://github.com/pystardust/ytfzf";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "ytfzf";
   };
 }

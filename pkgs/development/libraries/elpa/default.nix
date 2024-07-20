@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gfortran, perl
-, mpi, blas, lapack, scalapack, openssh
+{ lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
+, gfortran, perl, mpi, blas, lapack, scalapack, openssh
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
@@ -11,7 +11,7 @@
 , enableCuda ? config.cudaSupport
 # type of GPU architecture
 , nvidiaArch ? "sm_60"
-, cudatoolkit
+, cudaPackages
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -19,13 +19,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2023.05.001";
+  version = "2023.11.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-7GS+XWUigQ1gGjuOajFyDjw+tK8zpDTYpkVw125kYrY=";
+    sha256 = "sha256-tXvRl85nvbbiRRJOn9q4mz/a3dvTTYEu5JDVdH7npBA=";
   };
 
   patches = [
@@ -41,10 +41,16 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
-  nativeBuildInputs = [ autoreconfHook perl openssh ];
+  outputs = [ "out" "doc" "man" "dev" ];
+
+  nativeBuildInputs = [ autoreconfHook perl ]
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [ mpi blas lapack scalapack ]
-    ++ lib.optional enableCuda cudatoolkit;
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+    ];
 
   preConfigure = ''
     export FC="mpifort"
@@ -74,16 +80,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-assembly"
     ++ lib.optionals enableCuda [  "--enable-nvidia-gpu" "--with-NVIDIA-GPU-compute-capability=${nvidiaArch}" ];
 
-  doCheck = true;
+  enableParallelBuilding = true;
 
+  doCheck = !enableCuda;
+
+  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   preCheck = ''
     #patchShebangs ./
-
-    # make sure the test starts even if we have less than 4 cores
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
 
     # Run dual threaded
     export OMP_NUM_THREADS=2
@@ -98,5 +101,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
+    broken = true;  # At 2024-06-25. 49 unit tests fail.
+                    # https://hydra.nixos.org/build/263906391/nixlog/1
   };
 }

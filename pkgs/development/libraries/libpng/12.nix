@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib
+, testers
+}:
 
 assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpng";
   version = "1.2.59";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
+    url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
     sha256 = "1izw9ybm27llk8531w6h4jp4rk2rxy2s9vil16nwik5dp0amyqxl";
   };
 
@@ -15,18 +17,23 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib ];
 
-  passthru = { inherit zlib; };
-
   configureFlags = [ "--enable-static" ];
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 
+  passthru = {
+    inherit zlib;
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
-    description = "The official reference implementation for the PNG file format";
+    description = "Official reference implementation for the PNG file format";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;
     maintainers = [ ];
     branch = "1.2";
+    pkgConfigModules = [ "libpng" "libpng12" ];
     platforms = platforms.unix;
   };
-}
+})

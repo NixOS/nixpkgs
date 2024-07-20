@@ -17,10 +17,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ udev ];
 
   meta = with lib; {
-    description = "An application to configure Logitech wireless G933/G533 headsets";
+    description = "Application to configure Logitech wireless G933/G533 headsets";
     homepage = "https://github.com/ashkitten/g933-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
     platforms = platforms.linux;
+    mainProgram = "g933-utils";
   };
 }

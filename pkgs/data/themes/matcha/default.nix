@@ -19,13 +19,13 @@ lib.checkListOfEnum "${pname}: theme variants" [ "aliz" "azul" "sea" "pueril" "a
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-04-03";
+  version = "2024-05-01";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "mr9X7p/H8H2QKZxAQC9j/8OLK4D3EnWLxriFlh16diE=";
+    sha256 = "trQwRZ/JKIS8TcRIg0eL5GmB/yymDwqqNued0ddRuqU=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A stylish flat Design theme for GTK based desktop environments";
+    description = "Stylish flat Design theme for GTK based desktop environments";
     homepage = "https://vinceliuice.github.io/theme-matcha";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

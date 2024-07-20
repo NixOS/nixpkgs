@@ -21,7 +21,7 @@ tcl.mkTclDerivation {
 
   meta = with lib; {
     homepage = "https://nagelfar.sourceforge.net/";
-    description = "A static syntax checker (linter) for Tcl";
+    description = "Static syntax checker (linter) for Tcl";
     longDescription = ''
       Provides static syntax checking, code coverage instrumentation,
       and is very extendable through its syntax database and plugins.

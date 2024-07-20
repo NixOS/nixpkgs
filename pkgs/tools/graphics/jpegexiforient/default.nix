@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     # to be free since it's from IJG, the current maintainers of libjpeg
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
+    mainProgram = "jpegexiforient";
   };
 }

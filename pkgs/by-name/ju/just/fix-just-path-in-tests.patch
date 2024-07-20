@@ -1,0 +1,20 @@
+diff --git a/tests/completions/just.bash b/tests/completions/just.bash
+index 6d5c12c..13bff87 100755
+--- a/tests/completions/just.bash
++++ b/tests/completions/just.bash
+@@ -17,11 +17,13 @@ reply_equals() {
+   fi
+ }
+ 
++just() {
++  cargo run -- "$@"
++}
++
+ # --- Initial Setup ---
+ source "$1"
+ cd tests/completions
+-cargo build
+-PATH="$(git rev-parse --show-toplevel)/target/debug:$PATH"
+ exit_code=0
+ 
+ # --- Tests ---

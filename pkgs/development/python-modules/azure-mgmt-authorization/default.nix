@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-authorization";
-  version = "3.0.0";
+  version = "4.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-Cl1/aDvzNyI2uEHNvUZ39rCO185BuZnD5kTUKGJSBX0=";
+    hash = "sha256-abhavAmuZPxyl1vUNDEXDYx+tdFmdUuYqsXzhF3lfcQ=";
   };
 
   propagatedBuildInputs = [
@@ -24,9 +26,7 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
-  ];
+  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;

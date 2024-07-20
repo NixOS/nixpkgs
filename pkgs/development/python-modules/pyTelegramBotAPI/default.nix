@@ -1,25 +1,27 @@
-{ lib
-, aiohttp
-, aioredis
-, buildPythonPackage
-, coloredlogs
-, fastapi
-, fetchFromGitHub
-, pillow
-, psutil
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
-, ujson
-, uvicorn
-, watchdog
+{
+  lib,
+  aiohttp,
+  aioredis,
+  buildPythonPackage,
+  coloredlogs,
+  fastapi,
+  fetchFromGitHub,
+  hatchling,
+  pillow,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
+  ujson,
+  uvicorn,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.12.0";
-  format = "setuptools";
+  version = "4.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,51 +29,30 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-cW9IQy4D2iaoQ6oHQ07f27YQR7q9DBv2JkoukUtPBRQ=";
+    hash = "sha256-JKT3kllOV9VEwhUwv3geAP5ibJgaAApCahD1N4V5SE8=";
   };
 
+  build-system = [ hatchling ];
+
   passthru.optional-dependencies = {
-    json = [
-      ujson
-    ];
-    PIL = [
-      pillow
-    ];
-    redis = [
-      redis
-    ];
-    aioredis = [
-      aioredis
-    ];
-    aiohttp = [
-      aiohttp
-    ];
-    fastapi = [
-      fastapi
-    ];
-    uvicorn = [
-      uvicorn
-    ];
-    psutil = [
-      psutil
-    ];
-    coloredlogs = [
-      coloredlogs
-    ];
-    watchdog = [
-      watchdog
-    ];
+    json = [ ujson ];
+    PIL = [ pillow ];
+    redis = [ redis ];
+    aioredis = [ aioredis ];
+    aiohttp = [ aiohttp ];
+    fastapi = [ fastapi ];
+    uvicorn = [ uvicorn ];
+    psutil = [ psutil ];
+    coloredlogs = [ coloredlogs ];
+    watchdog = [ watchdog ];
   };
 
   checkInputs = [
     pytestCheckHook
     requests
-  ] ++ passthru.optional-dependencies.watchdog
-  ++ passthru.optional-dependencies.aiohttp;
+  ] ++ passthru.optional-dependencies.watchdog ++ passthru.optional-dependencies.aiohttp;
 
-  pythonImportsCheck = [
-    "telebot"
-  ];
+  pythonImportsCheck = [ "telebot" ];
 
   meta = with lib; {
     description = "Python implementation for the Telegram Bot API";

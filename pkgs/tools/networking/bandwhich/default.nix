@@ -1,39 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.20.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
-    rev = version;
-    hash = "sha256-lggeJrPfZTpUEydFJ9XXgbbS3pmrGqTef2ROsPOmiwQ=";
+    rev = "v${version}";
+    hash = "sha256-/uG1xjhxnIkS3rq7Tv1q1v8X7p1baDB8OiSEV9OLyfo=";
   };
 
-  cargoHash = "sha256-kGRsF+THNQahEoD3vY+XcPrr9cHjchtg86tMvcIdHPk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "packet-builder-0.7.0" = "sha256-KxNrnLZ/z3JJ3E1pCTJF9tNXI7XYNRc6ooTUz3avpjw=";
+    };
+  };
+
+  checkFlags = [
+    # failing in upstream CI
+    "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
 
-  cargoPatches = [
-    # FIXME: remove when the linked-hash-map dependency is bumped upstream
-    # https://github.com/imsnif/bandwhich/pull/222/
-    (fetchpatch {
-      name = "update-linked-hash-map.patch";
-      url = "https://github.com/imsnif/bandwhich/commit/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
-      hash = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
-    })
+  preConfigure = ''
+    export BANDWHICH_GEN_DIR=_shell-files
+    mkdir -p $BANDWHICH_GEN_DIR
+  '';
 
-    # Tweaked https://github.com/imsnif/bandwhich/pull/245 so that it merges
-    # cleanly with the earlier patch.
-    ./update-socket2-for-rust-1.64.diff
-  ];
+  postInstall = ''
+    installManPage $BANDWHICH_GEN_DIR/bandwhich.1
+
+    installShellCompletion $BANDWHICH_GEN_DIR/bandwhich.{bash,fish} \
+      --zsh $BANDWHICH_GEN_DIR/_bandwhich
+  '';
 
   meta = with lib; {
-    description = "A CLI utility for displaying current network utilization";
+    description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
       referencing it with the /proc filesystem on linux or lsof on MacOS. It is
@@ -42,8 +52,10 @@ rustPlatform.buildRustPackage rec {
       the background using reverse DNS on a best effort basis.
     '';
     homepage = "https://github.com/imsnif/bandwhich";
+    changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
     platforms = platforms.unix;
+    mainProgram = "bandwhich";
   };
 }

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sexpdata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sexpdata,
 }:
 
 buildPythonPackage rec {
   pname = "epc";
   version = "0.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,5 +23,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tkf/python-epc";
     license = licenses.gpl3;
   };
-
 }

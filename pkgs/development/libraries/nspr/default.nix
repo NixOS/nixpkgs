@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit (nixosTests) firefox firefox-esr-102 firefox-esr-115;
+    inherit (nixosTests) firefox firefox-esr-115;
   };
 
   meta = with lib; {
-    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
+    homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
     maintainers = with maintainers; [ ajs124 hexa ];
     platforms = platforms.all;

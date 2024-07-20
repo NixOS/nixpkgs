@@ -21,26 +21,26 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    hash = "sha256-7sgAp9/CKKxPr8rWbOot+FPAwaC8EPLa9pjVcC4TjW8=";
+    hash = "sha256-Z9vRuz5PwOhJ3DQD9zvCilgTMww7bRL4aR6fRoHIayI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Va7qLC6WvsLmG9JVmdT1FdIlWP4W/EFmsy7JOagQ+X8=";
+    hash = "sha256-hcfkwxwLOUBMj6rvhI5F4OO9UaSP7CAE0JNOGlh2lVY=";
   };
 
   patches = [
     (substituteAll {
       src = ./borg-path.patch;
-      borg = "${borgbackup}/bin/borg";
+      borg = lib.getExe borgbackup;
     })
   ];
 

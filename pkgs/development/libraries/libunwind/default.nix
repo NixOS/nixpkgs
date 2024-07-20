@@ -1,21 +1,15 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.6.2";
+  version = "1.8.1";
 
-  src = fetchurl {
-    url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
+  src = fetchFromGitHub {
+    owner = "libunwind";
+    repo = "libunwind";
+    rev = "v${version}";
+    hash = "sha256-rCFBHs6rCSnp5FEwbUR5veNNTqSQpFblAv8ebSPX0qE=";
   };
-
-  patches = [
-    # Fix for aarch64 and non-4K pages. Remove once upgraded past 1.6.2.
-    (fetchpatch {
-      url = "https://github.com/libunwind/libunwind/commit/e85b65cec757ef589f28957d0c6c21c498a03bdf.patch";
-      sha256 = "1lnlygvhqrdrjgw303pg2k2k4ms4gaghpjsgmhk47q83vy1yjwfg";
-    })
-  ];
 
   postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
     substituteInPlace configure.ac --replace "-lgcc_s" ""
@@ -27,9 +21,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devman" ];
 
-  # Without latex2man, no man pages are installed despite being
-  # prebuilt in the source tarball.
-  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
+  configureFlags = [
+    # Starting from 1.8.1 libunwind installs testsuite by default.
+    # As we don't run the tests we disable it (this also fixes circular
+    # reference install failure).
+    "--disable-tests"
+    # Without latex2man, no man pages are installed despite being
+    # prebuilt in the source tarball.
+    "LATEX2MAN=${buildPackages.coreutils}/bin/true"
+  ]
+  # See https://github.com/libunwind/libunwind/issues/693
+  ++ lib.optionals (with stdenv.hostPlatform; isAarch64 && isMusl && !isStatic) [
+    "CFLAGS=-mno-outline-atomics"
+  ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -43,10 +47,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/libunwind";
-    description = "A portable and efficient API to determine the call-chain of a program";
+    description = "Portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     # https://github.com/libunwind/libunwind#libunwind
-    platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd13" "i686-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "x86_64-freebsd13" "x86_64-linux" "x86_64-solaris" ];
+    platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd" "i686-linux" "loongarch64-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "s390x-linux" "x86_64-freebsd" "x86_64-linux" "x86_64-solaris" ];
     license = licenses.mit;
   };
 }

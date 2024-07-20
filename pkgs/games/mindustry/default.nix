@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchpatch
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
 , gradle
-, jdk
-, perl
+, jdk17
 
 # for arc
 , SDL2
 , pkg-config
-, stb
 , ant
+, curl
+, wget
 , alsa-lib
 , alsa-plugins
 , glew
@@ -37,8 +39,10 @@
 
 let
   pname = "mindustry";
-  version = "145.1";
+  version = "146";
   buildVersion = makeBuildVersion version;
+
+  jdk = jdk17;
 
   selectedGlew = if enableWayland then glew-egl else glew;
 
@@ -46,13 +50,13 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-xHF+3QIzP6Xekm1arXio4dAveOQpY9MXuiUC7OZFSUA=";
+    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-HkJoYdnC4rwTMEmSO0r82cuhY3ZT7Baj3pyqSbzJrQ4=";
+    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -61,86 +65,83 @@ let
     rev = "v0.9";
     hash = "sha256-6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
   };
-  freetypeSource = fetchurl {
-    # This is pinned in Arc's extensions/freetype/build.gradle
-    url = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz";
-    hash = "sha256-Xqt5XrsjrHcAHPtot9TVC11sdGkkewsBsslTJp9ljaw=";
-  };
-  glewSource = fetchurl {
-    # This is pinned in Arc's backends/backend-sdl/build.gradle
-    url = "https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip";
-    hash = "sha256-qQRqkTd0OVoJXtzAsKwtgcOqzKYXh7OYOblB6b4U4NQ=";
-  };
-  SDLmingwSource = fetchurl {
-    # This is pinned in Arc's backends/backend-sdl/build.gradle
-    url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
-    hash = "sha256-OAlNgqhX1sYjUuXFzex0lIxbTSXFnL0pjW0jNWiXa9E=";
-  };
-
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-  ];
-
-  unpackPhase = ''
-    cp -r ${Mindustry} Mindustry
-    cp -r ${Arc} Arc
-    chmod -R u+w -- Mindustry Arc
-    cp ${stb.src}/stb_image.h Arc/arc-core/csrc/
-    cp -r ${soloud} Arc/arc-core/csrc/soloud
-    chmod -R u+w -- Arc
-  '';
 
   desktopItem = makeDesktopItem {
     name = "Mindustry";
     desktopName = "Mindustry";
     exec = "mindustry";
     icon = "mindustry";
-  };
-
-  cleanupMindustrySrc = ''
-    # Ensure the prebuilt shared objects don't accidentally get shipped
-    rm -r Arc/natives/natives-*/libs/*
-    rm -r Arc/backends/backend-*/libs/*
-
-    # Remove unbuildable iOS stuff
-    sed -i '/^project(":ios"){/,/^}/d' Mindustry/build.gradle
-    sed -i '/robo(vm|VM)/d' Mindustry/build.gradle
-    rm Mindustry/ios/build.gradle
-  '';
-
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version unpackPhase patches;
-    postPatch = cleanupMindustrySrc;
-
-    nativeBuildInputs = [ gradle perl ];
-    # Here we download dependencies for both the server and the client so
-    # we only have to specify one hash for 'deps'. Deps can be garbage
-    # collected after the build, so this is not really an issue.
-    buildPhase = ''
-      pushd Mindustry
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon resolveDependencies
-      popd
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-    outputHashMode = "recursive";
-    outputHash = "sha256-tSQV9A4uxKUVEJuFRxCQVZNb+0wEQrZofQOluQe0cfA=";
+    categories = [ "Game" ];
   };
 
 in
 assert lib.assertMsg (enableClient || enableServer)
   "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
-stdenv.mkDerivation rec {
-  inherit pname version unpackPhase patches;
+stdenv.mkDerivation {
+  inherit pname version;
 
-  postPatch = cleanupMindustrySrc;
+  unpackPhase = ''
+    cp -r ${Mindustry} Mindustry
+    cp -r ${Arc} Arc
+    chmod -R u+w -- Mindustry Arc
+    cp -r ${soloud} Arc/arc-core/csrc/soloud
+    chmod -R u+w -- Arc/arc-core/csrc/soloud
+  '';
+
+  patches = [
+    ./0001-fix-include-path-for-SDL2-on-linux.patch
+    # Fix build with gradle 8.8, remove on next Arc release
+    (fetchpatch {
+      url = "https://github.com/Anuken/Arc/commit/2a91c51bf45d700091e397fd0b62384763901ae6.patch";
+      hash = "sha256-sSD78GmF14vBvNe+ajUJ4uIc4p857shTP/UkAK6Pyyg=";
+      extraPrefix = "Arc/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://github.com/Anuken/Arc/commit/d7f8ea858c425410dbd43374271a703d4443b432.patch";
+      hash = "sha256-5LPgBOV0r/dUtpyxitTu3/9tMIqjeIKfGVJi3MEr7fQ=";
+      extraPrefix = "Arc/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://github.com/Anuken/Mindustry/commit/695dad201fb4c2b4252f2ee5abde32e968169ba5.patch";
+      hash = "sha256-bbTjyfUl+XFG/dgD1XPddVKD/ImOP5ARAP3q0FPnt58=";
+      name = "always-use-local-arc-1.patch";
+      stripLen = 1; extraPrefix = "Mindustry/";
+    })
+    (fetchpatch {
+      url = "https://github.com/Anuken/Mindustry/commit/f6082225e859c759c8d9c944250b6ecd490151ed.patch";
+      hash = "sha256-xFHdAUTS1EiHNQqw6qfzYk2LMr/DjeHoEzQfcfOUcFs=";
+      name = "always-use-local-arc-2.patch";
+      stripLen = 1; extraPrefix = "Mindustry/";
+    })
+    (fetchpatch {
+      url = "https://github.com/Anuken/Mindustry/commit/e4eadbbb7f35db3093a0a3d13272bdfbedfaead3.patch";
+      hash = "sha256-L/XQAxh6UgKsTVTgQKDXNRIAdtVtaY4ameT/Yb/+1p8=";
+      name = "always-use-local-arc-3.patch";
+      stripLen = 1; extraPrefix = "Mindustry/";
+    })
+  ];
+
+  postPatch = ''
+    # Ensure the prebuilt shared objects don't accidentally get shipped
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
+
+    cd Mindustry
+
+    # Remove unbuildable iOS stuff
+    sed -i '/^project(":ios"){/,/^}/d' build.gradle
+    sed -i '/robo(vm|VM)/d' build.gradle
+    rm ios/build.gradle
+  '';
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  __darwinAllowLocalNetworking = true;
 
   buildInputs = lib.optionals enableClient [
     SDL2
@@ -155,27 +156,20 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableClient [
     ant
     copyDesktopItems
+    curl
+    wget
   ];
 
   desktopItems = lib.optional enableClient desktopItem;
 
-  buildPhase = with lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
+  gradleFlags = [ "-Pbuildversion=${buildVersion}" "-Dorg.gradle.java.home=${jdk}" ];
 
-    # point to offline repo
-    sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
-    sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
-    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
-    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
-    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
-
-    pushd Mindustry
+  buildPhase = with lib; optionalString enableServer ''
+    gradle server:dist
   '' + optionalString enableClient ''
-
     pushd ../Arc
-    gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
+    gradle jnigenBuild
+    gradle jnigenJarNativesDesktop
     glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
@@ -186,9 +180,7 @@ stdenv.mkDerivation rec {
     cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
     popd
 
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-  '' + optionalString enableServer ''
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+    gradle desktop:dist
   '';
 
   installPhase = with lib; let
@@ -229,23 +221,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    nixosTest = nixosTests.mindustry;
-  };
+  postGradleUpdate = ''
+    # this fetches non-gradle dependencies
+    cd ../Arc
+    gradle preJni
+  '';
+
+  passthru.tests.nixosTest = nixosTests.mindustry;
 
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
-    description = "A sandbox tower defense game";
+    description = "Sandbox tower defense game";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.x86_64;
-    # Hash mismatch on darwin:
-    # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    platforms = platforms.all;
+    # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin
+    broken = enableClient && stdenv.isDarwin;
   };
 }

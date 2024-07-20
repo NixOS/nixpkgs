@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "22.11";
+  version = "23.11";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
     rev = version;
-    sha256 = "sha256-qDY+prdf8O/dqmAgLU6lpsNIvL1R5V2AwsB+4CpOqGM=";
+    hash = "sha256-qCfPweJeYHIuM1DfDmeDilkV/RLzbzlIe1sIpSx/EYc=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ earldouglas markuskowa ];
     platforms = platforms.all;
+    mainProgram = "rtl_433";
   };
 }

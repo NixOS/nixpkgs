@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, expiringdict
-, google-auth-httplib2
-, google-auth-oauthlib
-, google-api-python-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  expiringdict,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  google-api-python-client,
 }:
 
 buildPythonPackage rec {
   pname = "drivelib";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

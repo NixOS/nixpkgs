@@ -1,43 +1,51 @@
-{ lib
-, buildPythonPackage
-, django
-, django-stubs-ext
-, fetchPypi
-, mypy
-, pytestCheckHook
-, pythonOlder
-, tomli
-, types-pytz
-, types-pyyaml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-stubs-ext,
+  fetchPypi,
+  mypy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
+  types-pytz,
+  types-pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "4.2.3";
-  format = "setuptools";
+  version = "5.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2tqzm0bZro83qOh5xZDzmp4EK1ZcA/oMWo91S0QbHyM=";
+    pname = "django_stubs";
+    inherit version;
+    hash = "sha256-I2vFYG5WB8uWj5K2SEcfntqkYad0vAE7+ea/+HMPa98=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django
     django-stubs-ext
-    mypy
     types-pytz
     types-pyyaml
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  passthru.optional-dependencies = {
+    compatible-mypy = [ mypy ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "django-stubs" ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django";

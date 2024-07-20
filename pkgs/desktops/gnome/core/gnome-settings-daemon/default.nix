@@ -1,5 +1,5 @@
-{ lib, stdenv
-, fetchpatch
+{ stdenv
+, lib
 , substituteAll
 , fetchurl
 , meson
@@ -31,29 +31,25 @@
 , gnome-desktop
 , geocode-glib_2
 , docbook_xsl
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , tzdata
-, nss
 , gcr_4
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "44.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "EmU7ctgfFRMApH1wCslBCsG8zjjoPxvdGc3tKTKUOYk=";
+    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0.patch";
-      sha256 = "O4m0rOW8Zrgu3Q0p0OA8b951VC0FjYbOUk9MLzB9icI=";
-    })
+    ./add-gnome-session-ctl-option.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
@@ -70,7 +66,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     docbook_xsl
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
@@ -89,7 +85,6 @@ stdenv.mkDerivation rec {
     upower
     colord
     libgweather
-    nss
     polkit
     geocode-glib_2
     geoclue2

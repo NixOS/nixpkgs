@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecation
-, hatchling
-, pythonOlder
-, packaging
-, pytestCheckHook
-, pytest-timeout
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  deprecation,
+  hatchling,
+  pythonOlder,
+  packaging,
+  pytestCheckHook,
+  pytest-timeout,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  patches = [
+    (fetchpatch {
+      name = "setuptools-68-test-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter-packaging/commit/e963fb27aa3b58cd70c5ca61ebe68c222d803b7e.patch";
+      hash = "sha256-NlO07wBCutAJ1DgoT+rQFkuC9Y+DyF1YFlTwWpwsJzo=";
+    })
   ];
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     deprecation
@@ -60,6 +68,5 @@ buildPythonPackage rec {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = licenses.bsd3;
-    maintainers = [ maintainers.elohmeier ];
   };
 }

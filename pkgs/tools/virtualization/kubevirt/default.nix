@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kubevirt";
-  version = "1.0.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    sha256 = "sha256-1Idfz2cMiIivroEkdRAA1x4v0BVACLoNCKSBS5o+wr4=";
+    hash = "sha256-W31B803XTdJ7ExeIwsTAac7RyAX7TZI3UKLURkotjBI=";
   };
 
   vendorHash = null;
@@ -49,5 +49,6 @@ buildGoModule rec {
     homepage = "https://kubevirt.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ haslersn ];
+    mainProgram = "virtctl";
   };
 }

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
 }:
 
 buildPythonPackage rec {
   pname = "tlsh";
   version = "4.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
@@ -30,5 +32,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
   };
-
 }

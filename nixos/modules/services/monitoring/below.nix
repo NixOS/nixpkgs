@@ -13,10 +13,10 @@ let
   mkDisableOption = n: mkOption {
     type = types.bool;
     default = true;
-    description = mdDoc "Whether to enable ${n}.";
+    description = "Whether to enable ${n}.";
   };
   optionalType = ty: x: mkOption (x // {
-    description = mdDoc x.description;
+    description = x.description;
     type = (types.nullOr ty);
     default = null;
   });
@@ -26,7 +26,7 @@ let
 in {
   options = {
     services.below = {
-      enable = mkEnableOption (mdDoc "'below' resource monitor");
+      enable = mkEnableOption "'below' resource monitor";
 
       cgroupFilterOut = optionalStr {
         description = "A regexp matching the full paths of cgroups whose data shouldn't be collected";
@@ -34,10 +34,10 @@ in {
       };
       collect = {
         diskStats = mkDisableOption "dist_stat collection";
-        ioStats   = mkEnableOption (mdDoc "io.stat collection for cgroups");
+        ioStats   = mkEnableOption "io.stat collection for cgroups";
         exitStats = mkDisableOption "eBPF-based exitstats";
       };
-      compression.enable = mkEnableOption (mdDoc "data compression");
+      compression.enable = mkEnableOption "data compression";
       retention = {
         size = optionalInt {
           description = ''
@@ -103,4 +103,6 @@ in {
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ nicoo ];
 }

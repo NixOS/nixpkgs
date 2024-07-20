@@ -5,17 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "1.0.0";
+  version = "1.0.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IvCdc4f784hBM+TEa0zIACz/1/FUnEpGxHUGiS85tt8=";
+    hash = "sha256-aAfsGsgCZwWcFkYaJsKjRroAZjW7b/vnX1oL/Mg0kgY=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
@@ -38,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/firecat53/urlscan";
     changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dpaetzel jfrankenau ];
+    maintainers = with maintainers; [ dpaetzel ];
+    mainProgram = "urlscan";
   };
 }

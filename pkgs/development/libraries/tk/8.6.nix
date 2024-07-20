@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , callPackage
 , fetchurl
-, fetchpatch
 , tcl
 , ...
 } @ args:

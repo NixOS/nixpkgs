@@ -7,25 +7,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "1.2.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rwNiSXOIIQR1I8wwp1ROVOfEChT6SCa5c6XnTRqekDc=";
+    hash = "sha256-fJXt3mM/v87hWumML6L3MH1O/uKkzmpE58B9nDRohzM=";
 
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ gprbuild gnat ];
 
-  # on HEAD (roughly 2c4e5a3), alire provides a dev/build.sh script. for now,
-  # just use gprbuild.
+  postPatch = ''
+    patchShebangs ./dev/build.sh
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    gprbuild -j$NIX_BUILD_CORES -P alr_env
+    export ALIRE_BUILD_JOBS="$NIX_BUILD_CORES"
+    ./dev/build.sh
 
     runHook postBuild
   '';
@@ -40,11 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A source-based package manager for the Ada and SPARK programming languages";
+    description = "Source-based package manager for the Ada and SPARK programming languages";
     homepage = "https://alire.ada.dev";
     changelog = "https://github.com/alire-project/alire/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ atalii ];
     platforms = lib.platforms.unix;
+    mainProgram = "alr";
   };
 })

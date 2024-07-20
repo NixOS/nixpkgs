@@ -102,14 +102,31 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           test2.psk = "@PSK_SPECIAL@";            # should be replaced
           test3.psk = "@PSK_MISSING@";            # should not be replaced
           test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
+          test5.psk = "@PSK_AWK_REGEX@";          # should be replaced
         };
 
         # secrets
         environmentFile = pkgs.writeText "wpa-secrets" ''
           PSK_VALID="S0m3BadP4ssw0rd";
           # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
+          PSK_SPECIAL=",./;'[]\/\-= <>?:\"{}|_+ !@#$%^&*()`~";
+          PSK_AWK_REGEX="PassowrdWith&symbol";
         '';
+      };
+    };
+
+    imperative = { ... }: {
+      imports = [ ../modules/profiles/minimal.nix ];
+
+      # add a virtual wlan interface
+      boot.kernelModules = [ "mac80211_hwsim" ];
+
+      # wireless client
+      networking.wireless = {
+        enable = lib.mkOverride 0 true;
+        userControlled.enable = true;
+        allowAuxiliaryImperativeNetworks = true;
+        interfaces = [ "wlan1" ];
       };
     };
 
@@ -171,6 +188,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           basic.fail(f"grep -q @PSK_SPECIAL@ {config_file}")
           basic.succeed(f"grep -q @PSK_MISSING@ {config_file}")
           basic.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
+          basic.succeed(f"grep -q 'PassowrdWith&symbol' {config_file}")
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
@@ -184,6 +202,15 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           status = basic.succeed("wpa_cli -i wlan1 status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
+
+      with subtest("Daemon can be configured imperatively"):
+          imperative.wait_for_unit("wpa_supplicant-wlan1.service")
+          imperative.wait_until_succeeds("wpa_cli -i wlan1 status")
+          imperative.succeed("wpa_cli -i wlan1 add_network")
+          imperative.succeed("wpa_cli -i wlan1 set_network 0 ssid '\"nixos-test\"'")
+          imperative.succeed("wpa_cli -i wlan1 set_network 0 psk '\"reproducibility\"'")
+          imperative.succeed("wpa_cli -i wlan1 save_config")
+          imperative.succeed("grep -q nixos-test /etc/wpa_supplicant.conf")
 
       machineSae.wait_for_unit("hostapd.service")
       machineSae.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
 }:
 
 buildPythonPackage rec {
   pname = "pyxiaomigateway";
   version = "0.14.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

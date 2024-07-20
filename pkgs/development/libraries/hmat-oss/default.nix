@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hmat-oss";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = "hmat-oss";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-N6VSQeq2BS/PLcMbyIn/OQfd45zyJJHuOD5bho2nue8=";
+    sha256 = "sha256-GnFlvZCEzSCcBVLjFWLe+AKXVA6UMs/gycrOJ2TBqrE=";
   };
 
   cmakeFlags = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A hierarchical matrix C/C++ library";
+    description = "Hierarchical matrix C/C++ library";
     homepage = "https://github.com/jeromerobert/hmat-oss";
     license = licenses.gpl2;
     platforms = platforms.unix;

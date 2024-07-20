@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxxy";
-  version = "0.8.0";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "queer";
     repo = "boxxy";
     rev = "v${version}";
-    hash = "sha256-I7VQfLCD+nfFllbns7yjYMl9hNwM8AgUbiHte4vMciM=";
+    hash = "sha256-6pb3yyC4/kpe8S67B3pzsSu3PfQyOWpiYi0JTBQk3lU=";
   };
 
-  cargoHash = "sha256-xtyiJZ9jPP2M0pUpMwQlUa9QgsRhFLqEm+hE3K4WO88=";
+  cargoHash = "sha256-PaH0WBBGK37T59RU4ofL0XjYX3cV5lR7WmCw+H/MeuA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dit7ya figsoda ];
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
+    mainProgram = "boxxy";
   };
 }

@@ -1,21 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, jinja2, flake8 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  importlib-resources,
+  jinja2,
+
+}:
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
-  version = "0.0.9";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";
     inherit version;
-    sha256 = "b462aa1460261796ab78fd4663961a7f6f347ce01760f1303bbbdf630f11f516";
+    hash = "sha256-IGc8NDHIcz1dFhXs952azzDP91ICrK8hp9nH9IlxRSk=";
   };
 
-  # patch away unused test requirements since package contains no tests
-  postPatch = ''
-    substituteInPlace setup.py --replace "setup_requires=['pytest-runner', 'flake8']" "setup_requires=[]"
-  '';
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ jinja2 ];
+  propagatedBuildInputs = [ jinja2 ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   # package contains no tests
   doCheck = false;
@@ -24,6 +35,5 @@ buildPythonPackage rec {
     description = "bundled swagger-ui pip package";
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

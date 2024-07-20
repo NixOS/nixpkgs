@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchFromSourcehut, python3, help2man }:
+{ lib, stdenv, fetchzip, python3, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "fead";
-  version = "0.1.3";
+  version = "1.0.0";
 
-  src = fetchFromSourcehut {
-    owner = "~cnx";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-cW0GxyvC9url2QAAWD0M2pR4gBiPA3eeAaw77TwMV/0=";
+  src = fetchzip {
+    url = "https://trong.loang.net/~cnx/fead/snapshot/fead-${version}.tar.gz";
+    hash = "sha256-cbU379Zz+mwRqEHiDUlGvWheLkkr0YidHeVs/1Leg38=";
   };
 
   nativeBuildInputs = [ help2man ];
@@ -29,9 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Advert generator from web feeds";
-    homepage = "https://git.sr.ht/~cnx/fead";
+    homepage = "https://trong.loang.net/~cnx/fead";
     license = licenses.agpl3Plus;
-    changelog = "https://git.sr.ht/~cnx/fead/refs/${version}";
+    changelog = "https://trong.loang.net/~cnx/fead/tag?h=${version}";
     maintainers = with maintainers; [ McSinyx ];
+    mainProgram = "fead";
   };
 }

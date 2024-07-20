@@ -5,7 +5,7 @@
 , ninja
 , vala
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , discount
 , glib
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.kmwallio.thiefmd";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

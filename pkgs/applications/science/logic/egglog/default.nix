@@ -5,26 +5,27 @@
 
 rustPlatform.buildRustPackage {
   pname = "egglog";
-  version = "unstable-2023-07-19";
+  version = "0-unstable-2024-01-26";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "9fe03ad35a2a975a2c9140a641ba91266b7a72ce";
-    hash = "sha256-9JeJJdZW8ecogReJzQrp3hFkK/pp/+pLxJMNREWuiyI=";
+    rev = "b78f69ca1f7187c363bb31271c8e8958f477f15d";
+    hash = "sha256-/1ktyz8wU1yLTdAFPnupK6jUFjiK6nQfotGRNOWiOsA=";
   };
+
+  useNextest = true;
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "egraph-serialize-0.1.0" = "sha256-1lDaoR/1TNFW+uaf3UdfDZgXlxyAb37Ij7yky16xCG8=";
-      "symbol_table-0.2.0" = "sha256-f9UclMOUig+N5L3ibBXou0pJ4S/CQqtaji7tnebVbis=";
-      "symbolic_expressions-5.0.3" = "sha256-mSxnhveAItlTktQC4hM8o6TYjgtCUgkdZj7i6MR4Oeo=";
+      "generic_symbolic_expressions-5.0.3" = "sha256-UX6fS470YJMdNnn0GR3earMGQK3p/YvaFia7IEvGGKg=";
     };
   };
 
   meta = with lib; {
-    description = "A fixpoint reasoning system that unifies Datalog and equality saturation";
+    description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
+    mainProgram = "egglog";
     homepage = "https://github.com/egraphs-good/egglog";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

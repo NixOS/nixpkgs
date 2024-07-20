@@ -1,40 +1,33 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.weylus;
 in
 {
-  options.programs.weylus = with types; {
-    enable = mkEnableOption (lib.mdDoc "weylus");
+  options.programs.weylus = with lib.types; {
+    enable = lib.mkEnableOption "weylus, which turns your smart phone into a graphic tablet/touch screen for your computer";
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports needed for the functionality of the program.
       '';
     };
 
-     users = mkOption {
+     users = lib.mkOption {
       type = listOf str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         To enable stylus and multi-touch support, the user you're going to use must be added to this list.
         These users can synthesize input events system-wide, even when another user is logged in - untrusted users should not be added.
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.weylus;
-      defaultText = lib.literalExpression "pkgs.weylus";
-      description = lib.mdDoc "Weylus package to install.";
-    };
+    package = lib.mkPackageOption pkgs "weylus" { };
   };
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openFirewall {
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 1701 9001 ];
     };
 

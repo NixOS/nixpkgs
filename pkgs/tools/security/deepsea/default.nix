@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "02s03sha8vwp7dsaw3z446pskhb6wmy0hyj0mhpbx58sf147rkig";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Phishing tool for red teams and pentesters";

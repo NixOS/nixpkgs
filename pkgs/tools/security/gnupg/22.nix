@@ -5,6 +5,7 @@
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
+, nixosTests
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
-    "--with-npth-prefix=${npth}"
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = lib.nixosTests.gnupg;
+  passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

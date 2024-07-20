@@ -17,13 +17,13 @@
 }:
 
 let
-  pythonEnv = python3.pythonForBuild.withPackages (ps: with ps; [
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (ps: with ps; [
     setuptools
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.4.6";
+  version = "0.4.9";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libgusb";
     rev = "refs/tags/${version}";
-    hash = "sha256-CtB9+5dDs+l05NyIFkKJpS1x3zHSykhLW3HiIM0RUWY=";
+    hash = "sha256-piIPNLc3deToyQaajXFvM+CKh9ni8mb0P3kb+2RoJOs=";
   };
 
   patches = [
@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    ls -la "$out/share/doc"
     moveToOutput "share/doc" "$devdoc"
   '';
 
   meta = with lib; {
     description = "GLib libusb wrapper";
+    mainProgram = "gusbcmd";
     homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];

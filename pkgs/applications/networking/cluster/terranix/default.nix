@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "terranix";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
     rev = version;
-    sha256 = "sha256-pNuJxmVMGbBHw7pa+Bx0HY0orXIXoyyAXOKuQ1zpfus=";
+    sha256 = "sha256-xiUfVD6rtsVWFotVtUW3Q1nQh4obKzgvpN1wqZuGXvM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A NixOS like terraform-json generator";
+    description = "NixOS like terraform-json generator";
     homepage = "https://terranix.org";
     license = licenses.gpl3;
     platforms = platforms.unix;

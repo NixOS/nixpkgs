@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     description = "Test your commits";
     homepage = "https://github.com/spotify/git-test";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
+    mainProgram = "git-test";
   };
 }

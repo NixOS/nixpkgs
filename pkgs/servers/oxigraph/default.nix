@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxigraph";
-  version = "0.3.18";
+  version = "0.3.22";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0sAQ/jOnYO0P1EX+DY7rDJyzOkdAaO7hGQDFTgNJyQs=";
+    hash = "sha256-zwUiUDWdrmLF+Qj9Jy6JGXHaBskRnm+pMKW2GKGGeN8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-bRSv77fq+3f4X+NB75qtjXRHo50H61ytoRPTEjKp6W0=";
+  cargoHash = "sha256-O9/YvvFOaZ1F7HYO/AplWLz1vw0hysJEvGketk8zb9w=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ astro ];
     license = with licenses; [ asl20 mit ];
+    mainProgram = "oxigraph_server";
   };
 }

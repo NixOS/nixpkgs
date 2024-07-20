@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, nettle
-, libidn, libnetfilter_conntrack, buildPackages
+, libidn, libnetfilter_conntrack, nftables, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus
 , nixosTests
@@ -13,15 +13,16 @@ let
     "-DHAVE_DBUS"
   ] ++ lib.optionals stdenv.isLinux [
     "-DHAVE_CONNTRACK"
+    "-DHAVE_NFTSET"
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.89";
+  version = "2.90";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Ar0jA0bPC51ZCfXhUd8WiycHEDeF62FrVmhYVa3rtgk=";
+    hash = "sha256-jlAwm9g3v+yWSagS4GbAm2mItz10m30pPAbFfUahCeQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
     ++ lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals stdenv.isLinux [ libnetfilter_conntrack ];
+    ++ lib.optionals stdenv.isLinux [ libnetfilter_conntrack nftables ];
 
   passthru.tests = {
     prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;
@@ -87,9 +88,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An integrated DNS, DHCP and TFTP server for small networks";
+    description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    mainProgram = "dnsmasq";
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];
   };

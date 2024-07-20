@@ -3,9 +3,17 @@
 , fetchFromGitHub
 , pkg-config
 
-, gtk3
+, bzip2
 , curl
+, fribidi
+, gtk3
+, iconv
+, libcpuid
+, libjpeg
+, libpng
+, libwebp
 , libxml2
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -25,16 +33,26 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
+    "config=systemlibbz2,systemlibcpuid,systemlibcurl,systemlibfribidi,systemlibiconv,systemlibjpeg,systemlibpng,systemlibwebp,systemlibxml2,systemzlib"
   ];
 
   buildInputs = [
-    gtk3
+    bzip2
     curl
+    fribidi
+    gtk3
+    iconv
+    libcpuid
+    libjpeg
+    libpng
+    libwebp
     libxml2
+    zlib
   ];
 
   meta = with lib; {
-    description = "The smooth Class Library";
+    description = "Smooth Class Library";
+    mainProgram = "smooth-translator";
     license = licenses.artistic2;
     homepage = "http://www.smooth-project.org/";
     maintainers = with maintainers; [ shamilton ];

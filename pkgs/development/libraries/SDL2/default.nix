@@ -1,14 +1,15 @@
 { lib
 , stdenv
 , config
-, fetchurl
+, fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported
 , libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , alsa-lib
-, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11
 , xorgproto
 , libICE
@@ -47,19 +48,23 @@
 , OpenGL
 , audiofile
 , libiconv
-, withStatic ? false
+, withStatic ? stdenv.hostPlatform.isMinGW
+  # passthru.tests
+, testers
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.28.1";
+  version = "2.30.4";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SXfOulwAVNvmwvEUZBrO1DzjvytB6mS2o3LWuhKcsV0=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-RhqbmS+mPVlXlo4/jrqPqtyGzvfaPTozlUEeAjHUBoA=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -93,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals x11Support [ libX11 ];
 
   propagatedBuildInputs = lib.optionals x11Support [ xorgproto ]
-    ++ dlopenPropagatedBuildInputs;
+    ++ finalAttrs.dlopenPropagatedBuildInputs;
 
   dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
     ++ lib.optional dbusSupport dbus
@@ -106,7 +111,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
-    ++ dlopenBuildInputs
+    ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
     ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
@@ -117,7 +122,7 @@ stdenv.mkDerivation rec {
     "--disable-oss"
   ] ++ lib.optional (!x11Support) "--without-x"
   ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-  ++ lib.optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
+  ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
   ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
@@ -153,7 +158,7 @@ stdenv.mkDerivation rec {
   # list the symbols used in this way.
   postFixup =
     let
-      rpath = lib.makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+      rpath = lib.makeLibraryPath (finalAttrs.dlopenPropagatedBuildInputs ++ finalAttrs.dlopenBuildInputs);
     in
     lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
       for lib in $out/lib/*.so* ; do
@@ -165,14 +170,22 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+    updateScript = nix-update-script { extraArgs = [ "--version-regex" "release-(.*)" ]; };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
-    description = "A cross-platform multimedia library";
+    description = "Cross-platform multimedia library";
+    mainProgram = "sdl2-config";
     homepage = "http://www.libsdl.org/";
-    changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
+    changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];
+    pkgConfigModules = [ "sdl2" ];
   };
-}
+})

@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to access the X clipboard from a console application";
     homepage = "https://github.com/astrand/xclip";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    mainProgram = "xclip";
   };
 }

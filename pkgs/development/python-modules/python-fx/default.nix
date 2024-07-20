@@ -1,36 +1,36 @@
-{ lib
-, antlr4-python3-runtime
-, asciimatics
-, buildPythonPackage
-, click
-, dacite
-, decorator
-, fetchFromGitHub
-, future
-, first
-, jsonpath-ng
-, loguru
-, overrides
-, pillow
-, ply
-, pyfiglet
-, pyperclip
-, pytestCheckHook
-, pythonOlder
-, antlr4
-, pythonRelaxDepsHook
-, pyyaml
-, setuptools
-, six
-, urwid
-, parameterized
-, wcwidth
-, yamale
+{
+  lib,
+  antlr4-python3-runtime,
+  asciimatics,
+  buildPythonPackage,
+  click,
+  dacite,
+  decorator,
+  fetchFromGitHub,
+  future,
+  first,
+  jsonpath-ng,
+  loguru,
+  overrides,
+  pillow,
+  ply,
+  pyfiglet,
+  pyperclip,
+  pytestCheckHook,
+  pythonOlder,
+  antlr4,
+  pyyaml,
+  setuptools,
+  six,
+  urwid,
+  parameterized,
+  wcwidth,
+  yamale,
 }:
 
 buildPythonPackage rec {
   pname = "python-fx";
-  version = "0.2.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "cielong";
     repo = "pyfx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nRMeYL0JGvCtUQBUMXUsZ4+F2KX+x/CbZ61sAidT9so=";
+    hash = "sha256-BXKH3AlYMNbMREW5Qx72PrbuZdXlmVS+knWWu/y9PsA=";
   };
 
   postPatch = ''
@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     antlr4
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -92,6 +91,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";
+    mainProgram = "pyfx";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
     license = with licenses; [ mit ];

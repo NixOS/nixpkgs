@@ -1,11 +1,11 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gnome
 , pkg-config
 , meson
 , ninja
+, adwaita-icon-theme
 , exiv2
 , libheif
 , libjpeg
@@ -20,36 +20,28 @@
 , libchamplain
 , librsvg
 , libwebp
+, libX11
 , json-glib
-, webkitgtk
 , lcms2
 , bison
 , flex
 , clutter-gtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , python3
 , desktop-file-utils
 , itstool
+, withWebservices ? true, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.2";
+  version = "3.12.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-l/iv5SJTUhZUHrvx47VG0Spr6zio8OuF8m5naTSq1CU=";
+    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
   };
-
-  patches = [
-    # Fix build with libraw 0.21, can be removed on next update
-    # https://hydra.nixos.org/build/209327709/nixlog/1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/da0d3f22a5c3a141211d943e7d963d14090011ec.patch";
-      sha256 = "sha256-/l9US19rKxIUJjZ+oynGLr/9PKJPg9VUuA/VSuIT5AQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -60,14 +52,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     clutter-gtk
     exiv2
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -86,11 +78,12 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libwebp
-    webkitgtk
-  ];
+    libX11
+  ] ++ lib.optional withWebservices webkitgtk;
 
   mesonFlags = [
     "-Dlibchamplain=true"
+    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''
@@ -115,8 +108,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gthumb";
+    homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

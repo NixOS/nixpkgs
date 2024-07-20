@@ -1,35 +1,26 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, go
 , tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd" ]
 }:
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.16.3-beta";
+  version = "0.18.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    hash = "sha256-/seSpWnlQmeU4vQtlHMOSedPXP9HJp1GyxcB1LqHayA=";
+    hash = "sha256-LkVlsmL/NjWtKUnerqTiT/jNfxazYw0B0GhBDCTGmao=";
   };
 
-  vendorHash = "sha256-obrSVMqTwHe7231wa0OuoT6ANBqkQbkHIy93J2f68Zk=";
+  vendorHash = "sha256-T7jPuhAEeQ0U43J9gTQ+0/BdLAn4BOupAkmmmofhHtY=";
 
   subPackages = [ "cmd/lncli" "cmd/lnd" ];
 
-  preBuild = let
-    buildVars = {
-      RawTags = lib.concatStringsSep "," tags;
-      GoVersion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
-    };
-    buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X github.com/lightningnetwork/lnd/build.${k}=${v}") buildVars);
-  in
-  lib.optionalString (tags != []) ''
-    buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
-    buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-  '';
+  inherit tags;
 
   meta = with lib; {
     description = "Lightning Network Daemon";

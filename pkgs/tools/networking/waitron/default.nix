@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-ZkGhEOckIOYGb6Yjr4I4e9cjAHDfksRwHW+zgOMZ/FE=";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   subPackages = [ "." ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A tool to manage network booting of machines";
+    description = "Tool to manage network booting of machines";
     longDescription = ''
       Waitron is used to build machines (primarily bare-metal, but anything that
       understands PXE booting will work) based on definitions from any number of

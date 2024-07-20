@@ -1,14 +1,22 @@
-{ lib, fetchPypi, buildPythonPackage
-, click, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  click,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "click-help-colors";
-  version = "0.9.1";
+  version = "0.9.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78cbcf30cfa81c5fc2a52f49220121e1a8190cd19197d9245997605d3405824d";
+    hash = "sha256-9Mq+Us9VApm4iI9PLuTF81msJ+M7z+TWHbR3haXMk2w=";
   };
 
   propagatedBuildInputs = [ click ];
@@ -19,9 +27,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colorization of help messages in Click";
-    homepage    = "https://github.com/r-m-n/click-help-colors";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/click-contrib/click-help-colors";
+    changelog = "https://github.com/click-contrib/click-help-colors/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

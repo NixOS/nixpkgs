@@ -12,7 +12,7 @@ buildPythonPackage {
 
   format = "pyproject";
 
-  sourceRoot = "source/build/python";
+  sourceRoot = "${autodock-vina.src.name}/build/python";
 
   postPatch = ''
     # wildcards are not allowed

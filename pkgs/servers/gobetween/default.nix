@@ -21,7 +21,7 @@ buildGoModule rec {
     make -e build${lib.optionalString enableStatic "-static"}
   '';
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   installPhase = ''
     mkdir -p $out/bin

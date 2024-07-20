@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "orvibo";
-  version = "1.1.1";
+  version = "1.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-orvibo";
     rev = version;
-    sha256 = "042prd5yxqvlfija7ii1xn424iv1p7ndhxv6m67ij8cbvspwx356";
+    sha256 = "sha256-Azmho47CEbRo18emmLKhYa/sViQX0oxUTUk4zdrpOaE=";
   };
 
   # Project as no tests

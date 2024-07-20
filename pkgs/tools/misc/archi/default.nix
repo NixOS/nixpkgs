@@ -1,31 +1,33 @@
 { lib, stdenv
 , fetchurl
-, fetchzip
 , autoPatchelfHook
 , makeWrapper
 , jdk
 , libsecret
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
+, _7zz
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "Archi";
-  version = "4.7.1";
+  version = "5.3.0";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/Archi-Linux64-${version}.tgz";
-        sha256 = "0sd57cfnh5q2p17sd86c8wgmqyipg29rz6iaa5brq8mwn8ps2fdw";
-      }
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchzip {
-        url = "https://www.archimatetool.com/downloads/archi/Archi-Mac-${version}.zip";
-        sha256 = "1h05lal5jnjwm30dbqvd6gisgrmf1an8xf34f01gs9pwqvqfvmxc";
-      }
-    else
-      throw "Unsupported system";
+  src = {
+    "x86_64-linux" = fetchurl {
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Linux64-${version}.tgz";
+      hash = "sha256-ngO3YFCChsnefxdxtR00Dy736K2GYnTEYI4vKWLnPsw=";
+    };
+    "x86_64-darwin" = fetchurl {
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-${version}.dmg";
+      hash = "sha256-dL1c7IrbDMY/WbijQh1dCmCrRQQhj4fjGN+6m19OjO0=";
+    };
+    "aarch64-darwin" = fetchurl {
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
+      hash = "sha256-iczIUm1LCAjYKOyHXbFCgb+zoUxxATSOVkB8Ldk7pxQ=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   buildInputs = [
     libsecret
@@ -33,8 +35,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    wrapGAppsHook3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    _7zz
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
+
+  sourceRoot = if stdenv.isDarwin then "." else null;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -47,6 +55,7 @@ stdenv.mkDerivation rec {
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
+          --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
           --prefix PATH : ${jdk}/bin
       ''
     else
@@ -54,6 +63,10 @@ stdenv.mkDerivation rec {
         mkdir -p "$out/Applications"
         mv Archi.app "$out/Applications/"
       '';
+
+  passthru.updateScript = ./update.sh;
+
+  passthru.tests = { inherit (nixosTests) archi; };
 
   meta = with lib; {
     description = "ArchiMate modelling toolkit";
@@ -65,6 +78,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [ earldouglas paumr ];
+    mainProgram = "Archi";
   };
 }

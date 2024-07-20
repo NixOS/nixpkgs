@@ -1,35 +1,41 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
 , gi-docgen
 , meson
 , ninja
 , pkg-config
 , vala
 , gobject-introspection
+, gperf
 , glib
 , cairo
 , sqlite
 , libsoup_3
 , gtk4
+, libsysprof-capture
+, json-glib
+, protobufc
 , xvfb-run
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.0.5";
+  version = "1.2.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libshumate";
-    rev = version;
-    sha256 = "mHfhCKzLfP1BkqM+FiLUlo/I0TCe3G8C0lmO6007pMY=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
+    hash = "sha256-b1h1effy1gs40/RyfrGo0v6snL3AGOU/9fdyqGCPpEs=";
   };
+
+  depsBuildBuild = [
+    # required to find native gi-docgen when cross compiling
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gi-docgen
@@ -38,6 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
+    gperf
   ];
 
   buildInputs = [
@@ -46,6 +53,9 @@ stdenv.mkDerivation rec {
     sqlite
     libsoup_3
     gtk4
+    libsysprof-capture
+    json-glib
+    protobufc
   ];
 
   nativeCheckInputs = [
@@ -76,16 +86,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "none";
+      packageName = "libshumate";
     };
   };
 
   meta = with lib; {
     description = "GTK toolkit providing widgets for embedded maps";
+    mainProgram = "shumate-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

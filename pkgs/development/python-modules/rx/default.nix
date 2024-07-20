@@ -1,8 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, nose }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "rx";
   version = "3.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   # Use fetchPypi to avoid the updater script to migrate it to `reactivex` which

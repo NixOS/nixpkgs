@@ -1,25 +1,28 @@
-{ lib
-, black
-, boto3
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, isort
-, jinja2
-, md-toc
-, mdformat
-, newversion
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  black,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isort,
+  jinja2,
+  md-toc,
+  mdformat,
+  newversion,
+  pip,
+  poetry-core,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.16.1";
-  format = "pyproject";
+  version = "7.25.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -27,12 +30,10 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-zqiJqjsE54mzN1/NScKeXtRa3Tt3IzSdtnmOxP4meEE=";
+    hash = "sha256-uLatx9/nLIoB+CY/QrddBxaaa4TeAzVNu/Nl9wWUTz4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     black
@@ -43,17 +44,15 @@ buildPythonPackage rec {
     md-toc
     mdformat
     newversion
+    pip
     pyparsing
     setuptools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mypy_boto3_builder"
-  ];
+  pythonImportsCheck = [ "mypy_boto3_builder" ];
 
   disabledTests = [
     # Tests require network access
@@ -62,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
+    mainProgram = "mypy_boto3_builder";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
     changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];

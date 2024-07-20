@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "zap";
-  version = "2.13.0";
+  version = "2.15.0";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
-    sha256 = "sha256-k261Kg/TkMHviQxFVCDZXOIAYv4TbsCSfgI+K69Q9Uk=";
+    sha256 = "sha256-ZBDhlrqrRYqSBOKar7V0X8oAOipsA4byxuXAS2diH6c=";
   };
 
   buildInputs = [ jre ];
@@ -36,10 +36,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.owasp.org/index.php/ZAP";
+    homepage = "https://www.zaproxy.org/";
     description = "Java application for web penetration testing";
     maintainers = with maintainers; [ mog rafael ];
     platforms = platforms.linux;
     license = licenses.asl20;
+    mainProgram = "zap";
   };
 }

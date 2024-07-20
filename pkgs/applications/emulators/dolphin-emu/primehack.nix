@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
+    hash = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
     fetchSubmodules = true;
   };
 
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
     mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
     mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
     substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'dolphin-emu' 'dolphin-emu-primehack'
+    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'Dolphin Emulator' 'PrimeHack'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
@@ -142,7 +143,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten Madouura ];
+    maintainers = with maintainers; [ Madouura ];
     broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };

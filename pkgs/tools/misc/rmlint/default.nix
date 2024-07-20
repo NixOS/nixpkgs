@@ -1,11 +1,11 @@
 { lib, stdenv
 , cairo
+, elfutils
 , fetchFromGitHub
 , glib
 , gobject-introspection
 , gtksourceview3
 , json-glib
-, libelf
 , makeWrapper
 , pango
 , pkg-config
@@ -14,20 +14,20 @@
 , scons
 , sphinx
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGui ? false }:
 
 assert withGui -> !stdenv.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "rmlint";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
-    sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
+    sha256 = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
   };
 
   patches = [
@@ -41,22 +41,23 @@ stdenv.mkDerivation rec {
     scons
   ] ++ lib.optionals withGui [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
     json-glib
-    libelf
     util-linux
   ] ++ lib.optionals withGui [
     cairo
-    gobject-introspection
     gtksourceview3
     pango
     polkit
     python3
     python3.pkgs.pygobject3
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   prePatch = ''
@@ -85,5 +86,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aaschmid koral ];
+    mainProgram = "rmlint";
   };
 }

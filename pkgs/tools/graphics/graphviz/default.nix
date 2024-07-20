@@ -17,10 +17,14 @@
 , bison
 , xorg
 , ApplicationServices
+, Foundation
 , python3
-, fltk
-, exiv2
 , withXorg ? true
+
+# for passthru.tests
+, exiv2
+, fltk
+, graphicsmagick
 }:
 
 let
@@ -28,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "8.0.5";
+  version = "10.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-s3AUOLZhehxs2GcDCsq87RVvsDli1NvvQtwI0AyUs4k=";
+    hash = "sha256-KAqJUVqPld3F2FHlUlfbw848GPXXOmyRQkab8jlH1NM=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +59,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices ];
+  ++ optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -71,7 +75,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
-  preAutoreconf = "./autogen.sh";
+  preAutoreconf = ''
+    # components under this directory require a tool `CompileXIB` to build
+    # and there's no official way to disable this on darwin.
+    substituteInPlace Makefile.am --replace-fail 'SUBDIRS += macosx' ""
+
+    ./autogen.sh
+  '';
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
@@ -81,8 +91,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) pygraphviz;
-    inherit fltk exiv2;
+    inherit (python3.pkgs)
+      graphviz
+      pydot
+      pygraphviz
+      xdot
+    ;
+    inherit
+      exiv2
+      fltk
+      graphicsmagick
+    ;
   };
 
   meta = with lib; {

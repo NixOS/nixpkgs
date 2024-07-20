@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A VNC server connected to a real X11 screen";
+    description = "VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];
+    mainProgram = "x11vnc";
   };
 }

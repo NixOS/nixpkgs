@@ -1,17 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, cargo
-, rustc
-, setuptools-rust
-, unittestCheckHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  cargo,
+  rustc,
+  setuptools-rust,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gb-io";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "althonos";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-lPnOFbEJgcaPPl9bTngugubhW//AUFp9RAjyiFHxC70=";
   };
 
-  sourceRoot = "source";
+  sourceRoot = src.name;
 
   nativeBuildInputs = [
     setuptools-rust
@@ -42,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/althonos/gb-io.py";
-    description = "A Python interface to gb-io, a fast GenBank parser written in Rust";
+    description = "Python interface to gb-io, a fast GenBank parser written in Rust";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ dlesl ];
   };

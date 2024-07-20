@@ -11,12 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-KDZyOnytDLyybHTgU1v/NpiomeHXMIUHiQ+Xpmwyo0w=";
   };
 
-  vendorSha256 = "sha256-O+hJRMSwV/9NHxbaLjloCWnfPugfRYaXNve098wjbqQ=";
+  vendorHash = "sha256-O+hJRMSwV/9NHxbaLjloCWnfPugfRYaXNve098wjbqQ=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A flexible developer tool that runs processes and responds to filesystem changes";
+    description = "Flexible developer tool that runs processes and responds to filesystem changes";
+    mainProgram = "modd";
     homepage = "https://github.com/cortesi/modd";
     license = licenses.mit;
     maintainers = with maintainers; [ kierdavis ];

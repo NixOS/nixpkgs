@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-bT1DbcQi+SbeRBsL7ILuQbSnAj3BBB4+FNl+Zek5xU4=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Aarch64-linux times out for these tests, so they need to be disabled.
@@ -26,9 +25,7 @@ buildPythonPackage rec {
     "test_feeder"
   ];
 
-  pythonImportsCheck = [
-    "sarge"
-  ];
+  pythonImportsCheck = [ "sarge" ];
 
   meta = with lib; {
     description = "Python wrapper for subprocess which provides command pipeline functionality";

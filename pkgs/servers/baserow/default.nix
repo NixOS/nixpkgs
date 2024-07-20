@@ -16,7 +16,7 @@ let
       baserow_premium = self.buildPythonPackage rec {
         pname = "baserow_premium";
         version = "1.12.1";
-        foramt = "setuptools";
+        format = "setuptools";
 
         src = fetchFromGitLab {
           owner = "bramw";
@@ -25,10 +25,12 @@ let
           hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
         };
 
-        sourceRoot = "source/premium/backend";
+        sourceRoot = "${src.name}/premium/backend";
 
         doCheck = false;
       };
+
+      django = super.django_3;
     };
   };
 in
@@ -45,13 +47,18 @@ with python.pkgs; buildPythonApplication rec {
     hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
   };
 
-  sourceRoot = "source/backend";
+  sourceRoot = "${src.name}/backend";
 
   postPatch = ''
+    # use input files to not depend on outdated peer dependencies
+    mv requirements/base.{in,txt}
+    mv requirements/dev.{in,txt}
+
     # remove dependency constraints
-    sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
-    sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
-    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
+    sed -i requirements/base.txt \
+      -e 's/[~<>=].*//' -i requirements/base.txt \
+      -e 's/zope-interface/zope.interface/' \
+      -e 's/\[standard\]//'
   '';
 
   nativeBuildInputs = [
@@ -115,13 +122,13 @@ with python.pkgs; buildPythonApplication rec {
     pytest-django
     pytest-unordered
     responses
-    zope_interface
+    zope-interface
   ];
 
   fixupPhase = ''
     cp -r src/baserow/contrib/database/{api,action,trash,formula,file_import} \
-      $out/lib/${python.libPrefix}/site-packages/baserow/contrib/database/
-    cp -r src/baserow/core/management/backup $out/lib/${python.libPrefix}/site-packages/baserow/core/management/
+      $out/${python.sitePackages}/baserow/contrib/database/
+    cp -r src/baserow/core/management/backup $out/${python.sitePackages}/baserow/core/management/
   '';
 
   disabledTests = [
@@ -147,5 +154,6 @@ with python.pkgs; buildPythonApplication rec {
     homepage = "https://baserow.io";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "baserow";
   };
 }

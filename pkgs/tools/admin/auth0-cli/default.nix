@@ -5,21 +5,22 @@
 
 buildGoModule rec {
   pname = "auth0-cli";
-  version = "1.0.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    rev = "v${version}";
-    hash = "sha256-mOG7N7+qmAw+D6Bp0QtyS3oualDD/fffDVCuidLJ+Pw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j7HT57/4rrrVkx9Zz+XuWD6UL0spdej+U5gWtFo1FSI=";
   };
 
-  vendorHash = "sha256-8t5qnHaZeZUxdk5DmIfOx86Zk9c9hJuxHjE6upqC638=";
+  vendorHash = "sha256-bWAneCRsQbPRxEM/3jr1/Lov6NV67MRycOgrlj3bKF8=";
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
-    "-X github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
+    "-s"
+    "-w"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
   ];
 
   preCheck = ''
@@ -27,6 +28,9 @@ buildGoModule rec {
     # This is because subPackages above limits what is built to just what we
     # want but also limits the tests
     unset subPackages
+    # Test requires network access
+    substituteInPlace internal/cli/universal_login_customize_test.go \
+      --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
   '';
 
   subPackages = [ "cmd/auth0" ];

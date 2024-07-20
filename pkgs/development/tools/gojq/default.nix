@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gojq";
-  version = "0.12.13";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tlnj0CCsPZRQjIZCvNPjN0JD6oqRDvdWOCYR3tYMPUA=";
+    hash = "sha256-lCNh0J0vVvSJaNE9fu3X83YRZlWHOI4rQwmrGJDQWzk=";
   };
 
-  vendorHash = "sha256-DVJZ35C+6SuhaaGDM3u+3fB1497qaW6oTByAUPVwhJI=";
+  vendorHash = "sha256-ZC0byawZLBwId5GcAgHXRdEOMUSAv4wDNHFHLrbhB+I=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/itchyny/gojq/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "gojq";
   };
 }

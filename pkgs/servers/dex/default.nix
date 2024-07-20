@@ -1,24 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, testers, dex-oidc }:
 
 buildGoModule rec {
   pname = "dex";
-  version = "2.37.0";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2u9UHummUpPljTzPNCQfHwYVeWgDOGLcGx10aVHUAZM=";
+    sha256 = "sha256-FaM8rBmfFmawtJRK0UmQNrRHebeFUg9ujXX8ubt4flw=";
   };
 
-  vendorHash = "sha256-sSn3qpbo04DjyPD+Ogx9JUdJ/++fNYb0bAmudQjchQ0=";
+  vendorHash = "sha256-4YfuJPFYmIFKK1RqrdRy+LA8dXQbcB/qrBzzkQ60pXI=";
 
   subPackages = [
     "cmd/dex"
   ];
 
   ldflags = [
-    "-w" "-s" "-X github.com/dexidp/dex/version.Version=${src.rev}"
+    "-w" "-s" "-X main.version=${src.rev}"
   ];
 
   postInstall = ''
@@ -26,12 +26,20 @@ buildGoModule rec {
     cp -r $src/web $out/share/web
   '';
 
-  passthru.tests = { inherit (nixosTests) dex-oidc; };
+  passthru.tests = {
+    inherit (nixosTests) dex-oidc;
+    version = testers.testVersion {
+      package = dex-oidc;
+      command = "dex version";
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     homepage = "https://github.com/dexidp/dex";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley techknowlogick ];
+    mainProgram = "dex";
   };
 }

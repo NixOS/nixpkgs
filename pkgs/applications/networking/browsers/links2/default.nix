@@ -1,23 +1,23 @@
 { lib, stdenv, fetchurl
 , gpm, openssl, pkg-config, libev # Misc.
-, libpng, libjpeg, libtiff, librsvg # graphic formats
+, libpng, libjpeg, libtiff, librsvg, libavif # graphic formats
 , bzip2, zlib, xz # Transfer encodings
-, enableFB ? true
+, enableFB ? (!stdenv.isDarwin)
 , enableDirectFB ? false, directfb
-, enableX11 ? true, libX11, libXt, libXau # GUI support
+, enableX11 ? (!stdenv.isDarwin), libX11, libXt, libXau # GUI support
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.29";
   pname = "links2";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
+    url = "http://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
   };
 
   buildInputs = with lib;
-    [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
+    [ libev librsvg libpng libjpeg libtiff libavif openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
     ++ optionals enableDirectFB [ directfb ];
@@ -30,12 +30,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFB "--with-fb"
     ++ lib.optional enableDirectFB "--with-directfb";
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  };
+
   meta = with lib; {
     homepage = "http://links.twibright.com/";
-    description = "A small browser with some graphics support";
+    description = "Small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
     mainProgram = "links";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

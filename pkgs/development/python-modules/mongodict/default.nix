@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymongo
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymongo,
 }:
 
 buildPythonPackage rec {
   pname = "mongodict";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/turicas/mongodict/";
     license = licenses.gpl3;
   };
-
 }

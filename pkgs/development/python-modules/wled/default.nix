@@ -1,37 +1,46 @@
-{ lib
-, aiohttp
-, awesomeversion
-, backoff
-, buildPythonPackage
-, cachetools
-, fetchFromGitHub
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  typer,
+  yarl,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "0.18.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
     rev = "refs/tags/v${version}";
-    hash = "sha256-esINtvctvgl8AqNwCDVnGU+3j/UzEHqY8H1Rws1kQfs=";
+    hash = "sha256-0BJgbyDhCPFlHxlEry7Rh/j0nv3D3kRhIqCSW+Irhqk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
@@ -39,22 +48,21 @@ buildPythonPackage rec {
     yarl
   ];
 
+  passthru.optional-dependencies = {
+    cli = [
+      typer
+      zeroconf
+    ];
+  };
+
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
-
-  pythonImportsCheck = [
-    "wled"
-  ];
+  pythonImportsCheck = [ "wled" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for WLED";

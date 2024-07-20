@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-# build inputs
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  # build inputs
+  typing-extensions,
+  typing-inspect,
 }:
 let
   pname = "pyre-extensions";
@@ -14,7 +15,7 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

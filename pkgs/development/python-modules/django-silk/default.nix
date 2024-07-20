@@ -1,31 +1,31 @@
-{ lib
-, autopep8
-, buildPythonPackage
-, django
-, factory_boy
-, fetchFromGitHub
-, fetchpatch
-, freezegun
-, gprof2dot
-, jinja2
-, mock
-, networkx
-, pillow
-, pydot
-, pygments
-, python
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, setuptools-scm
-, simplejson
-, sqlparse
+{
+  lib,
+  autopep8,
+  buildPythonPackage,
+  django,
+  factory-boy,
+  fetchFromGitHub,
+  freezegun,
+  gprof2dot,
+  jinja2,
+  mock,
+  networkx,
+  pillow,
+  pydot,
+  pygments,
+  python,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools-scm,
+  simplejson,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.0.3";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-silk";
     rev = "refs/tags/${version}";
-    hash = "sha256-91FcOqAYZK7/RCKgXjbQEPUQ2cZRFi7NzVLQF+MMDRI=";
+    hash = "sha256-QqY1bRa0v4DZ2/gDbssyhJA9Kb+5jig4hZEBVKZiowY=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
@@ -47,13 +47,9 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    mock
-  ];
+  buildInputs = [ mock ];
 
   propagatedBuildInputs = [
     autopep8
@@ -73,12 +69,10 @@ buildPythonPackage rec {
     freezegun
     networkx
     pydot
-    factory_boy
+    factory-boy
   ];
 
-  pythonImportsCheck = [
-    "silk"
-  ];
+  pythonImportsCheck = [ "silk" ];
 
   checkPhase = ''
     runHook preCheck

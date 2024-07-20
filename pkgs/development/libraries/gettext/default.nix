@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, libiconv, xz, bash
-, gnulib
+{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -17,11 +16,10 @@ stdenv.mkDerivation rec {
   };
   patches = [
     ./absolute-paths.diff
-  ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
-    name = "gettext_formatstring-ruby.patch";
-    sha256 = "sha256-6SxZObOMkQDxuKJuJY+mQ/VuJJxSeGbf97J8ZZddCV0=";
-  });
+    # fix reproducibile output, in particular in the grub2 build
+    # https://savannah.gnu.org/bugs/index.php?59658
+    ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+  ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
   LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
-     "--disable-csharp" "--with-xz"
+     "--disable-csharp"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -47,16 +45,21 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
   '';
 
   strictDeps = true;
   nativeBuildInputs = [
-    xz
-    xz.bin
+    updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs = [ bash ]
-  # HACK, see #10874 (and 14664)
-    ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [ libiconv ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    bash
+  ]
+  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+    # HACK, see #10874 (and 14664)
+    libiconv
+  ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -83,17 +86,17 @@ stdenv.mkDerivation rec {
       computer screen showing a lot less of English, and far more of their
       own language.
 
-      GNU `gettext' is an important step for the GNU Translation Project, as
+      GNU `gettext` is an important step for the GNU Translation Project, as
       it is an asset on which we may build many other steps. This package
       offers to programmers, translators, and even users, a well integrated
-      set of tools and documentation. Specifically, the GNU `gettext'
+      set of tools and documentation. Specifically, the GNU `gettext`
       utilities are a set of tools that provides a framework to help other
       GNU packages produce multi-lingual messages.
     '';
 
     homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm vrthra ];
+    maintainers = with maintainers; [ zimbatm ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

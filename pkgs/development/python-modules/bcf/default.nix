@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, click
-, colorama
-, intelhex
-, packaging
-, pyaml
-, pyftdi
-, pyserial
-, requests
-, schema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  click,
+  colorama,
+  intelhex,
+  packaging,
+  pyaml,
+  pyftdi,
+  pyserial,
+  requests,
+  schema,
 }:
 buildPythonPackage rec {
   pname = "bcf";
   version = "1.9.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -47,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-firmware-tool";
     description = "HARDWARIO Firmware Tool";
+    mainProgram = "bcf";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

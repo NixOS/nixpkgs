@@ -7,7 +7,7 @@
 , openvpn
 , obfs4
 , iproute2
-, dnscrypt-proxy2
+, dnscrypt-proxy
 , iptables
 , gawk
 , util-linux
@@ -41,6 +41,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ataraxiasjel ];
+    mainProgram = "ivpn";
   };
 })) {
   ivpn = {
@@ -74,7 +75,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
         --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
         'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
         --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-        'dnscryptproxyBinPath = "${dnscrypt-proxy2}/bin/dnscrypt-proxy"'
+        'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
     '';
 
     postFixup = ''

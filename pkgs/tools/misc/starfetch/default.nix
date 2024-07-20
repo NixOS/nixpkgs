@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "starfetch";
   };
 }

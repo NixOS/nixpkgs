@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "maui-shell";
-  version = "0.5.6";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lhTtIHE+FUgZFaPYoIRgLPrBUPISeXHCg3rn0FlQg7w=";
+    sha256 = "sha256-8D3rlYrqLfyDZQFRSaVlxLaEblbv8w787v8Np2aW3yc=";
   };
 
   nativeBuildInputs = [
@@ -79,9 +79,12 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A convergent shell for desktops, tablets, and phones";
+    description = "Convergent shell for desktops, tablets, and phones";
     homepage = "https://github.com/Nitrux/maui-shell";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
+    # https://github.com/Nitrux/maui-shell/issues/56
+    broken = true;
   };
 }

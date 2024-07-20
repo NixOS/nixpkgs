@@ -5,49 +5,56 @@
 #  supportedGpuTargets: List String
 # }
 
-{ blas
+{ autoPatchelfHook
+, blas
 , cmake
+, cudaPackages_11 ? null
 , cudaPackages
-  # FIXME: cuda being unfree means ofborg won't eval "magma".
-  # respecting config.cudaSupport -> false by default
-  # -> ofborg eval -> throws "no GPU targets specified".
-  # Probably should delete everything but "magma-cuda" and "magma-hip"
-  # from all-packages.nix
-, cudaSupport ? true
+, cudaSupport ? config.cudaSupport
 , fetchurl
 , gfortran
-, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , gpuTargets ? [ ] # Non-CUDA targets, that is HIP
-, hip
-, hipblas
-, hipsparse
+, rocmPackages_5
 , lapack
 , lib
 , libpthreadstubs
 , magmaRelease
 , ninja
-, openmp
-, rocmSupport ? false
-, static ? false
+, python3
+, config
+  # At least one back-end has to be enabled,
+  # and we can't default to CUDA since it's unfree
+, rocmSupport ? !cudaSupport
+, static ? stdenv.hostPlatform.isStatic
 , stdenv
-, symlinkJoin
 }:
 
 
 let
   inherit (lib) lists strings trivial;
-  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
   inherit (magmaRelease) version hash supportedGpuTargets;
+
+  # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
+  # If we're building a version prior to that, use the latest release of the 11.x series.
+  effectiveCudaPackages =
+    if strings.versionOlder version "2.7.1"
+    then cudaPackages_11
+    else cudaPackages;
+
+  inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
+
+  # move to newer ROCm version once supported
+  rocmPackages = rocmPackages_5;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
   #   lists.subtractLists a b = b - a
 
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) hip.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -75,12 +82,11 @@ let
       throw "No GPU targets specified"
   );
 
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
-
-  cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
+  cudaArchitecturesString = flags.cmakeCudaArchitecturesString;
   minArch =
     let
+      # E.g. [ "80" "86" "90" ]
+      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
@@ -100,67 +106,119 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
+  # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
+  # These are moved to $test/bin/ and $test/lib/ in postInstall.
+  outputs = ["out" "test"];
+
+  # Fixup for the python test runners
+  postPatch = ''
+    patchShebangs ./testing/run_{tests,summarize}.py
+    substituteInPlace ./testing/run_tests.py \
+      --replace-fail \
+        "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
+        "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
+  '';
+
   nativeBuildInputs = [
+    autoPatchelfHook
     cmake
     ninja
     gfortran
   ] ++ lists.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
+    effectiveCudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
     libpthreadstubs
     lapack
     blas
-  ] ++ lists.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
+    python3
+  ] ++ lists.optionals cudaSupport (with effectiveCudaPackages; [
+    cuda_cudart # cuda_runtime.h
     libcublas # cublas_v2.h
     libcusparse # cusparse.h
-  ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+  ] ++ lists.optionals (cudaOlder "11.8") [
     cuda_nvprof # <cuda_profiler_api.h>
-  ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+  ] ++ lists.optionals (cudaAtLeast "11.8") [
     cuda_profiler_api # <cuda_profiler_api.h>
+  ] ++ lists.optionals (cudaAtLeast "12.0") [
+    cuda_cccl # <nv/target>
   ]) ++ lists.optionals rocmSupport [
-    hip
-    hipblas
-    hipsparse
-    openmp
+    rocmPackages.clr
+    rocmPackages.hipblas
+    rocmPackages.hipsparse
+    rocmPackages.llvm.openmp
   ];
 
   cmakeFlags = [
-    "-DGPU_TARGET=${gpuTargetString}"
-  ] ++ lists.optionals static [
-    "-DBUILD_SHARED_LIBS=OFF"
+    (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
+    (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+    (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
+    (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
+    # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
+    # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
+    # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
+    (strings.cmakeBool "USE_FORTRAN" true)
+    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
+    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
+    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
   ] ++ lists.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
-    "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
-    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
-    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
-    "-DMAGMA_ENABLE_CUDA=ON"
+    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
   ] ++ lists.optionals rocmSupport [
-    "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
-    "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
-    "-DMAGMA_ENABLE_HIP=ON"
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
   ];
 
-  buildFlags = [
-    "magma"
-    "magma_sparse"
-  ];
-
+  # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
   doCheck = false;
 
+  # Copy the files to the test output and fix the RPATHs.
+  postInstall =
+    # NOTE: The python scripts aren't copied by CMake into the build directory, so we must copy them from the source.
+    # TODO(@connorbaker): This should be handled by having CMakeLists.txt install them, but such a patch is
+    # out of the scope of the PR which introduces the `test` output: https://github.com/NixOS/nixpkgs/pull/283777.
+    # See https://github.com/NixOS/nixpkgs/pull/283777#discussion_r1482125034 for more information.
+    # Such work is tracked by https://github.com/NixOS/nixpkgs/issues/296286.
+    ''
+      install -Dm755 ../testing/run_{tests,summarize}.py -t "$test/bin/"
+    ''
+    # Copy core test executables and libraries over to the test output.
+    # NOTE: Magma doesn't provide tests for sparse solvers for ROCm, but it does for CUDA -- we put them both in the same
+    # install command to avoid the case where a glob would fail to find any files and cause the install command to fail
+    # because it has no files to install.
+    + ''
+      install -Dm755 ./testing/testing_* ./sparse/testing/testing_* -t "$test/bin/"
+      install -Dm755 ./lib/lib*test*.* -t "$test/lib/"
+    ''
+    # All of the test executables and libraries will have a reference to the build directory in their RPATH, which we
+    # must remove. We do this by shrinking the RPATH to only include the Nix store. The autoPatchelfHook will take care
+    # of supplying the correct RPATH for needed libraries (like `libtester.so`).
+    + ''
+      find "$test" -type f -exec \
+        patchelf \
+          --shrink-rpath \
+          --allowed-rpath-prefixes "$NIX_STORE" \
+          {} \;
+    '';
+
   passthru = {
-    inherit cudaPackages cudaSupport;
+    inherit cudaSupport rocmSupport gpuTargets;
+    cudaPackages = effectiveCudaPackages;
   };
 
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
     homepage = "http://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ connorbaker ];
-    # CUDA and ROCm are mutually exclusive
-    broken = cudaSupport && rocmSupport || cudaSupport && strings.versionOlder cudaVersion "9";
+
+    # Cf. https://bitbucket.org/icl/magma/src/fcfe5aa61c1a4c664b36a73ebabbdbab82765e9f/CMakeLists.txt#lines-20
+    broken =
+      !(cudaSupport || rocmSupport) # At least one back-end enabled
+      || (cudaSupport && rocmSupport) # Mutually exclusive
+      || (cudaSupport && cudaOlder "9.0")
+      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);
   };
 }

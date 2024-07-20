@@ -1,25 +1,34 @@
-{ buildPythonPackage
-, einops
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
+{
+  buildPythonPackage,
+  einops,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "augmax";
-  version = "unstable-2022-02-19";
-  format = "setuptools";
+  version = "0.3.3";
+  pyproject = true;
+
+  disbaled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "khdlr";
-    repo = pname;
-    # augmax does not have releases tagged. See https://github.com/khdlr/augmax/issues/5.
-    rev = "3e5d85d6921a1e519987d33f226bc13f61e04d04";
-    sha256 = "046n43v7161w7najzlbi0443q60436xv24nh1mv23yw6psqqhx5i";
+    repo = "augmax";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FXgkhZEAR1Y2LvVvV+IWMSQDWrLulLDsSKKuw4ER5wg=";
   };
 
-  propagatedBuildInputs = [ einops jax ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    einops
+    jax
+  ];
 
   # augmax does not have any tests at the time of writing (2022-02-19), but
   # jaxlib is necessary for the pythonImportsCheckPhase.
@@ -30,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
     homepage = "https://github.com/khdlr/augmax";
+    changelog = "https://github.com/khdlr/augmax/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
   };

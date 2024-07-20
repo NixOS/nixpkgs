@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, python-engineio
-, python-socketio
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  netifaces,
+  python-engineio,
+  python-socketio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +28,6 @@ buildPythonPackage rec {
     "python-socketio"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -42,9 +39,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sisyphus_control"
-  ];
+  pythonImportsCheck = [ "sisyphus_control" ];
 
   meta = with lib; {
     description = "Control your Sisyphus Kinetic Art Table";

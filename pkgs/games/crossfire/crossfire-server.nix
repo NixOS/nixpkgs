@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     rev = "r${rev}";
   };
 
+  patches = [
+    ./add-cstdint-include-to-crossfire-server.patch
+  ];
+
   nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python39 ];
   hardeningDisable = [ "format" ];
 

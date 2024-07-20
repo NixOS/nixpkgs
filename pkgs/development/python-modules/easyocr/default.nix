@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hdf5
-, numpy
-, onnx
-, opencv3
-, pillow
-, pyaml
-, pyclipper
-, python-bidi
-, pythonOlder
-, scikit-image
-, scipy
-, shapely
-, torch
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hdf5,
+  numpy,
+  onnx,
+  opencv4,
+  pillow,
+  pyaml,
+  pyclipper,
+  python-bidi,
+  pythonOlder,
+  scikit-image,
+  scipy,
+  shapely,
+  torch,
+  torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "easyocr";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "JaidedAI";
     repo = "EasyOCR";
     rev = "refs/tags/v${version}";
-    hash = "sha256-01Exz55eTIO/xzdq/dzV+ELkU75hpxe/EbjIqLBA8h0=";
+    hash = "sha256-EiiJ2LJ3uYIvgPd2y25MraV5kTa47JalDR7SLbkM9UI=";
   };
 
   postPatch = ''
@@ -40,7 +41,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     hdf5
     numpy
-    opencv3
+    opencv4
     pillow
     pyaml
     pyclipper
@@ -52,16 +53,13 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  nativeCheckInputs = [
-    onnx
-  ];
+  nativeCheckInputs = [ onnx ];
 
-  pythonImportsCheck = [
-    "easyocr"
-  ];
+  pythonImportsCheck = [ "easyocr" ];
 
   meta = with lib; {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
+    mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
     license = licenses.asl20;

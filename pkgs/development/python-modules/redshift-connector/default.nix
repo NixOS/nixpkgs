@@ -1,21 +1,22 @@
-{ beautifulsoup4
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, lxml
-, packaging
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, scramp
+{
+  beautifulsoup4,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  lxml,
+  packaging,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  scramp,
 }:
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.0.911";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,12 +25,12 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D1LpFGYEpGmkYCAJbYJaQStDnol90mH8X4S6iXg6Nfs=";
+    hash = "sha256-sQRnnibkuA+Ejk6TDxDSdtIkkW7CMafYh9zQ/xtuCV4=";
   };
 
-  # disable test coverage
+  # remove addops as they add test directory and coverage parameters to pytest
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
+    substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
   '';
 
   propagatedBuildInputs = [

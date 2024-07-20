@@ -1,18 +1,25 @@
 .
 .if n \{\
-.  \" Character translations for non-keyboard
-.  \" characters - to make them searchable
+.  \" With groff 1.23.0 "[t]he 'utf8' output device now maps the input
+.  \" characters '^' (caret, circumflex accent, or 'hat') and '~' (tilde)
+.  \" to U+02C6 (modifier letter circumflex accent) and U+02DC (small tilde),
+.  \" respectively, for consistency with groff's other output devices.
+.  \" This change is expected to expose glyph usage errors in man pages.
+.  \" See [http://git.savannah.gnu.org/cgit/groff.git/tree/PROBLEMS] for
+.  \" a recipe that will conceal these errors"
+.  \" -- https://lists.gnu.org/archive/html/groff/2023-07/msg00051.html
+.  \"
+.  \" Conceal glyph usage errors in man pages with the following
+.  \" character translations for non-keyboard characters to make them searchable.
 .  if '\*[.T]'utf8' \{\
 .    char \- \N'45'
 .    char - \N'45'
-.    char ' \N'39'
-.    char \' \N'39'
+.    char \' \[aq]
+.    char ' \[aq]
+.    char ` \[ga]
+.    char ^ \[ha]
+.    char ~ \[ti]
 .  \}
-.
-.  \" Shut off SGR by default (groff colors)
-.  \" Require GROFF_SGR envvar defined to turn it on
-.  if '\V[GROFF_SGR]'' \
-.    output x X tty: sgr 0
 .\}
 .
 .ds doc-default-operating-system Nixpkgs

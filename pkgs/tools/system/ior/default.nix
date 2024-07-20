@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ior.readthedocs.io/en/latest/";
     description = "Parallel file system I/O performance test";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bzizou ];
   };

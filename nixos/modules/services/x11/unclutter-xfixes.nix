@@ -8,32 +8,27 @@ in {
   options.services.unclutter-xfixes = {
 
     enable = mkOption {
-      description = lib.mdDoc "Enable unclutter-xfixes to hide your mouse cursor when inactive.";
+      description = "Enable unclutter-xfixes to hide your mouse cursor when inactive.";
       type = types.bool;
       default = false;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "unclutter-xfixes derivation to use.";
-      type = types.package;
-      default = pkgs.unclutter-xfixes;
-      defaultText = literalExpression "pkgs.unclutter-xfixes";
-    };
+    package = mkPackageOption pkgs "unclutter-xfixes" { };
 
     timeout = mkOption {
-      description = lib.mdDoc "Number of seconds before the cursor is marked inactive.";
+      description = "Number of seconds before the cursor is marked inactive.";
       type = types.int;
       default = 1;
     };
 
     threshold = mkOption {
-      description = lib.mdDoc "Minimum number of pixels considered cursor movement.";
+      description = "Minimum number of pixels considered cursor movement.";
       type = types.int;
       default = 1;
     };
 
     extraOptions = mkOption {
-      description = lib.mdDoc "More arguments to pass to the unclutter-xfixes command.";
+      description = "More arguments to pass to the unclutter-xfixes command.";
       type = types.listOf types.str;
       default = [];
       example = [ "exclude-root" "ignore-scrolling" "fork" ];

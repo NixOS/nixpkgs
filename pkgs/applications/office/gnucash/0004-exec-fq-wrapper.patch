@@ -1,8 +1,6 @@
-diff --git a/libgnucash/app-utils/gnc-quotes.cpp b/libgnucash/app-utils/gnc-quotes.cpp
-index 3003fca71f..2f2b1398e1 100644
---- a/libgnucash/app-utils/gnc-quotes.cpp
-+++ b/libgnucash/app-utils/gnc-quotes.cpp
-@@ -122,7 +122,6 @@ private:
+--- a/libgnucash/app-utils/gnc-quotes.cpp	2023-09-23 07:04:21.000000000 +0900
++++ b/libgnucash/app-utils/gnc-quotes.cpp	2023-09-25 11:58:46.482696433 +0900
+@@ -125,7 +125,6 @@
  
  class GncFQQuoteSource final : public GncQuoteSource
  {
@@ -10,7 +8,7 @@ index 3003fca71f..2f2b1398e1 100644
      std::string c_fq_wrapper;
      std::string m_version;
      StrVec m_sources;
-@@ -145,13 +144,12 @@ static std::string parse_quotesource_error(const std::string& line);
+@@ -148,13 +147,12 @@
  static const std::string empty_string{};
  
  GncFQQuoteSource::GncFQQuoteSource() :
@@ -25,7 +23,7 @@ index 3003fca71f..2f2b1398e1 100644
      auto [rv, sources, errors] = run_cmd(args, empty_string);
      if (rv)
      {
-@@ -197,7 +195,7 @@ m_version{}, m_sources{}, m_api_key{}
+@@ -200,7 +198,7 @@
  QuoteResult
  GncFQQuoteSource::get_quotes(const std::string& json_str) const
  {
@@ -34,7 +32,7 @@ index 3003fca71f..2f2b1398e1 100644
      return run_cmd(args, json_str);
  }
  
-@@ -215,13 +213,13 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
+@@ -218,7 +216,7 @@
          auto input_buf = bp::buffer (json_string);
  	bp::child process;
  	if (m_api_key.empty())
@@ -43,6 +41,8 @@ index 3003fca71f..2f2b1398e1 100644
  				bp::std_out > out_buf,
  				bp::std_err > err_buf,
  				bp::std_in < input_buf,
+@@ -227,7 +225,7 @@
+ #endif
  				svc);
  	else
 -	    process = bp::child(c_cmd, args,

@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
       ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   installCheckPhase = ''
     bin/neko bin/test.n
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "A high-level dynamically typed programming language";
+    description = "High-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE

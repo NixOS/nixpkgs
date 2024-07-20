@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.30";
+  version = "2.5.31";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-4UwD283mKhZwC7setBU0BLRLsyfjD/6m/InSedrqgAU=";
+    sha256 = "sha256-UmyDKEaPP9VJqi8f+y6JZcTlQomhMTN+/C//ODYx6/w=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.gphoto.org/proj/libgphoto2/";
-    description = "A library for accessing digital cameras";
+    description = "Library for accessing digital cameras";
     longDescription = ''
       This is the library backend for gphoto2. It contains the code for PTP,
       MTP, and other vendor specific protocols for controlling and transferring data

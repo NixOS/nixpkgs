@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, ecdsa
-, hidapi
-, libusb1
-, mnemonic
-, protobuf
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  ecdsa,
+  hidapi,
+  libusb1,
+  mnemonic,
+  protobuf,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "keepkey";
   version = "7.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "keepkey";
@@ -20,7 +22,13 @@ buildPythonPackage rec {
     sha256 = "00hqppdj3s9y25x4ad59y8axq94dd4chhw9zixq32sdrd9v8z55a";
   };
 
-  propagatedBuildInputs = [ ecdsa hidapi libusb1 mnemonic protobuf ];
+  propagatedBuildInputs = [
+    ecdsa
+    hidapi
+    libusb1
+    mnemonic
+    protobuf
+  ];
 
   nativeCheckInputs = [ pytest ];
 
@@ -32,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "KeepKey Python client";
+    mainProgram = "keepkeyctl";
     homepage = "https://github.com/keepkey/python-keepkey";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];

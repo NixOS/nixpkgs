@@ -4,24 +4,26 @@
 , gmp
 , less
 , makeWrapper
+, libb2
 , ncurses6
+, openssl
 , stdenv
 , zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "M5b";
+  version = "0.5.24";
 
   src = if stdenv.isDarwin then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
-      hash = "sha256-Uknt1NrywmGs8YovlnN8TU8iaYgT1jeYP4SQCuK1u+I=";
+      hash = "sha256-5LVcN7ly0n68DFqIjA8EJabZa3WwJf1ueqgJ+gPHNbA=";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
-      hash = "sha256-CZLGA4fFFysxHkwedC8RBLmHWwr3BM8xqps7hN3TC/g=";
+      hash = "sha256-nCNmUYkBWhXL2eN+uQblf7oPkiVwfAKi6v+Cb9Co19g=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -31,14 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses6 zlib gmp ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ gmp ncurses6 zlib ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv ucm $out/bin
+    mkdir -p $out/{bin,lib}
+    mv runtime $out/lib/runtime
     mv ui $out/ui
-    wrapProgram $out/bin/ucm \
+    mv unison $out/unison
+    makeWrapper $out/unison/unison $out/bin/ucm \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libb2 openssl ]} \
       --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
+      --add-flags "--runtime-path $out/lib/runtime/bin/unison-runtime" \
       --set UCM_WEB_UI "$out/ui"
   '';
 
@@ -46,8 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
-    maintainers = [ maintainers.virusdave ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "ucm";
+    maintainers = with maintainers; [ ceedubs sellout virusdave ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

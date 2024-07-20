@@ -5,6 +5,7 @@
 , lib
 , fetchFromGitHub
 , fetchurl
+, copyDesktopItems
 , makeDesktopItem
 , python3
 , libX11
@@ -21,131 +22,85 @@
 , libpulseaudio
 , libpng
 , imagemagick
-, requireFile
-
-, oot ? rec {
-    enable = true;
-    variant = "debug";
-
-    rom = requireFile {
-      name = "oot-${variant}.z64";
-      message = ''
-        This nix expression requires that oot-${variant}.z64 is already part of the store.
-        To get this file you can dump your Ocarina of Time's cartridge to a file,
-        and add it to the nix store with nix-store --add-fixed sha1 <FILE>, or override the package:
-          shipwright.override { oot = { enable = true; variant = "debug"; rom = path/to/oot-debug-mq.z64; } }
-
-        The supported variants are:
-         - debug: Ocarina of Time Debug PAL GC (not Master Quest)
-         - pal-gc: Ocarina of Time PAL GameCube (may lead to crashes and instability)
-
-        This is optional if you have imported an Ocarina of Time Master Quest ROM.
-        If so, please set oot.enable to false and ootMq.enable to true.
-        If both are enabled, Ship of Harkinian will be built with both ROMs.
-      '';
-
-      # From upstream: https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/README.md#1-check-your-sha1
-      sha1 = {
-        debug = "cee6bc3c2a634b41728f2af8da54d9bf8cc14099";
-        pal-gc = "0227d7c0074f2d0ac935631990da8ec5914597b4";
-      }.${variant} or (throw "Unsupported romVariant ${variant}. Valid options are 'debug' and 'pal-gc'.");
-    };
-  }
-
-, ootMq ? rec {
-    enable = false;
-    variant = "debug-mq";
-
-    rom = requireFile {
-      name = "oot-${variant}.z64";
-      message = ''
-        This nix expression requires that oot-${variant}.z64 is already part of the store.
-        To get this file you can dump your Ocarina of Time Master Quest's cartridge to a file,
-        and add it to the nix store with nix-store --add-fixed sha1 <FILE>, or override the package:
-          shipwright.override { ootMq = { enable = true; variant = "debug-mq"; rom = path/to/oot-debug-mq.z64; } }
-
-        The supported variants are:
-         - debug-mq: Ocarina of Time Debug PAL GC MQ (Dungeons will be Master Quest)
-         - debug-mq-alt: Alternate ROM, not produced by decompilation.
-
-        This is optional if you have imported an Ocarina of Time ROM.
-        If so, please set oot.enable to true and ootMq.enable to false.
-        If both are enabled, Ship of Harkinian will be built with both ROMs.
-      '';
-
-      # From upstream: https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/README.md#1-check-your-sha1
-      sha1 = {
-        debug-mq = "079b855b943d6ad8bd1eb026c0ed169ecbdac7da";
-        debug-mq-alt = "50bebedad9e0f10746a52b07239e47fa6c284d03";
-      }.${variant} or (throw "Unsupported mqRomVariant ${variant}. Valid options are 'debug-mq' and 'debug-mq-alt'.");
-    };
-  }
+, zenity
+, makeWrapper
+, darwin
+, libicns
 }:
-
 let
-  checkAttrs = attrs:
-    let
-      validAttrs = [ "enable" "rom" "variant" ];
-    in
-    lib.all (name: lib.elem name validAttrs) (lib.attrNames attrs);
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    IOSurface Metal QuartzCore Cocoa AVFoundation;
 in
-assert (lib.assertMsg (checkAttrs oot) "oot must have the attributes 'enable' and 'rom', and none other");
-assert (lib.assertMsg (checkAttrs ootMq) "ootMq must have the attributes 'enable' and 'rom', and none other");
-assert (lib.assertMsg (oot.enable || ootMq.enable) "At least one of 'oot.enable' and 'ootMq.enable' must be true");
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "7.0.2";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
-    rev = version;
-    hash = "sha256-2VCcczGWSvp6hk8FTA1/T1E1KkrrvWyOdkEw8eiYYnY=";
+    rev = finalAttrs.version;
+    hash = "sha256-o2VwOF46Iq4pwpumOau3bDXJ/CArx6NWBi00s3E4PnE=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./darwin-fixes.patch
+  ];
 
   # This would get fetched at build time otherwise, see:
   # https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/soh/CMakeLists.txt#L736
   gamecontrollerdb = fetchurl {
     name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/c5b4df0e1061175cb11e3ebbf8045178339864a5/gamecontrollerdb.txt";
-    hash = "sha256-2VFCsaalXoe+JYWCH6IbgjnLXNKxe0UqSyJNGZMn5Ko=";
+    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/b7933e43ca2f8d26d8b668ea8ea52b736221af1e/gamecontrollerdb.txt";
+    hash = "sha256-XIuS9BkWkM9d+SgT1OYTfWtcmzqSUDbMrMLoVnPgidE=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    lsb-release
     python3
     imagemagick
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    lsb-release
+    copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [
+    libicns
+    darwin.sigtool
   ];
 
   buildInputs = [
     boost
+    glew
+    SDL2
+    SDL2_net
+    libpng
+  ] ++ lib.optionals stdenv.isLinux [
     libX11
     libXrandr
     libXinerama
     libXcursor
     libXi
     libXext
-    glew
-    SDL2
-    SDL2_net
     libpulseaudio
-    libpng
-  ];
-
-  patches = [
-    # These patches make soh look inside the nix store for data files (the controller database and the OTRs)
-    ./lus-install-paths.patch
-    ./soh-misc-otr-patches.patch
+    zenity
+  ] ++ lib.optionals stdenv.isDarwin [
+    IOSurface
+    Metal
+    QuartzCore
+    Cocoa
+    AVFoundation
+    darwin.apple_sdk_11_0.libs.simd
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib"
+    (lib.cmakeBool "NON_PORTABLE" true)
   ];
+
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-Wno-int-conversion -Wno-implicit-int";
 
   dontAddPrefix = true;
 
@@ -153,27 +108,67 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   postBuild = ''
-    cp ${gamecontrollerdb} ${gamecontrollerdb.name}
-
+    cp ${finalAttrs.gamecontrollerdb} ${finalAttrs.gamecontrollerdb.name}
     pushd ../OTRExporter
-    ${lib.optionalString oot.enable "python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out ${oot.rom}"}
-    ${lib.optionalString ootMq.enable "python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out ${ootMq.rom}"}
+    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.otr --port-ver ${finalAttrs.version}
     popd
   '';
 
-  preInstall = ''
+  preInstall = lib.optionalString stdenv.isLinux ''
     # Cmake likes it here for its install paths
     cp ../OTRExporter/soh.otr ..
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp ../OTRExporter/soh.otr soh/soh.otr
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/bin
-
-    # Copy the extracted assets, required to be in the same directory as the executable
-    ${lib.optionalString oot.enable "cp ../OTRExporter/oot.otr $out/lib"}
-    ${lib.optionalString ootMq.enable "cp ../OTRExporter/oot-mq.otr $out/lib"}
-
     ln -s $out/lib/soh.elf $out/bin/soh
+    install -Dm644 ../soh/macosx/sohIcon.png $out/share/pixmaps/soh.png
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Recreate the macOS bundle (without using cpack)
+    # We mirror the structure of the bundle distributed by the project
+
+    mkdir -p $out/Applications/soh.app/Contents
+    cp $src/soh/macosx/Info.plist.in $out/Applications/soh.app/Contents/Info.plist
+    substituteInPlace $out/Applications/soh.app/Contents/Info.plist \
+      --replace-fail "@CMAKE_PROJECT_VERSION@" "${finalAttrs.version}"
+
+    mv $out/MacOS $out/Applications/soh.app/Contents/MacOS
+
+    # Wrapper
+    cp $src/soh/macosx/soh-macos.sh.in $out/Applications/soh.app/Contents/MacOS/soh
+    chmod +x $out/Applications/soh.app/Contents/MacOS/soh
+    patchShebangs $out/Applications/soh.app/Contents/MacOS/soh
+
+    # "lib" contains all resources that are in "Resources" in the official bundle.
+    # We move them to the right place and symlink them back to $out/lib,
+    # as that's where the game expects them.
+    mv $out/Resources $out/Applications/soh.app/Contents/Resources
+    mv $out/lib/** $out/Applications/soh.app/Contents/Resources
+    rm -rf $out/lib
+    ln -s $out/Applications/soh.app/Contents/Resources $out/lib
+
+    # Copy icons
+    cp -r ../build/macosx/soh.icns $out/Applications/soh.app/Contents/Resources/soh.icns
+
+    # Fix executable
+    install_name_tool -change @executable_path/../Frameworks/libSDL2-2.0.0.dylib \
+                      ${SDL2}/lib/libSDL2-2.0.0.dylib \
+                      $out/Applications/soh.app/Contents/Resources/soh-macos
+    install_name_tool -change @executable_path/../Frameworks/libGLEW.2.2.0.dylib \
+                      ${glew}/lib/libGLEW.2.2.0.dylib \
+                      $out/Applications/soh.app/Contents/Resources/soh-macos
+    install_name_tool -change @executable_path/../Frameworks/libpng16.16.dylib \
+                      ${libpng}/lib/libpng16.16.dylib \
+                      $out/Applications/soh.app/Contents/Resources/soh-macos
+
+    # Codesign (ad-hoc)
+    codesign -f -s - $out/Applications/soh.app/Contents/Resources/soh-macos
+  '';
+
+  fixupPhase = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/lib/soh.elf --prefix PATH ":" ${lib.makeBinPath [ zenity ]}
   '';
 
   desktopItems = [
@@ -181,42 +176,24 @@ stdenv.mkDerivation rec {
       name = "soh";
       icon = "soh";
       exec = "soh";
+      comment = finalAttrs.meta.description;
       genericName = "Ship of Harkinian";
       desktopName = "soh";
       categories = [ "Game" ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/HarbourMasters/Shipwright";
     description = "A PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
-    longDescription = ''
-      An PC port of Ocarina of Time with modern controls, widescreen, high-resolution and more, based off of decompilation.
-      Note that you must supply an OoT rom yourself to use this package because propietary assets are extracted from it.
-
-      You can change the game variant like this:
-        shipwright.override { oot.enable = false; ootMq.enable = true }
-
-      The default ROM variants for Oot and OotMq are debug and debug-mq respectively.
-      If you have a pal-gc rom, you should override like this:
-        shipwright.override { oot = { enable = true; variant = "pal-gc"; rom = path/to/oot-pal-gc.z64; } }
-
-      The supported Oot variants are:
-       - debug: Ocarina of Time Debug PAL GC (not Master Quest)
-       - pal-gc: Ocarina of Time PAL GameCube (may lead to crashes and instability)
-
-      The supported OotMq variants are:
-       - debug-mq: Ocarina of Time Debug PAL GC MQ (Dungeons will be Master Quest)
-       - debug-mq-alt: Alternate ROM, not produced by decompilation.
-    '';
     mainProgram = "soh";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ivar j0lol ];
-    license = with licenses; [
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ j0lol matteopacini ];
+    license = with lib.licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit
       # Ship of Harkinian itself
       unfree
     ];
   };
-}
+})

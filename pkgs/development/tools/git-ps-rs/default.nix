@@ -3,8 +3,6 @@
 , rustPlatform
 , stdenv
 , pkg-config
-, libgpg-error
-, gpgme
 , dbus
 , openssl
 , Security
@@ -12,32 +10,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "6.8.0";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-M5VLQY+0QOKKygnNHjOutwniWO90y4RReAJoxwWpRSA=";
+    hash = "sha256-4lk6AHquWKgDk0pBaswbVShZbUDA3wO6cPakhrvrwac=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "home-dir-0.1.0" = "sha256-k5GYZcR1FI/JEfJhPWOdICBZ9CqJCqX+fYygxxWvFp4=";
-    };
-  };
+  cargoHash = "sha256-GS/RRPzULUla4XY4tO+eM2NAy2nG0qDxqcSq292ivgU=";
 
-  nativeBuildInputs = [
-    pkg-config
-    gpgme # gpgme runs a small script at build time so has to go here
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl dbus libgpg-error gpgme ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl dbus ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Tool for working with a stack of patches";
+    mainProgram = "gps";
     homepage = "https://git-ps.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ alizter ];

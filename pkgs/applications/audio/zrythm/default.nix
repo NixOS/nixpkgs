@@ -1,11 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchFromSourcehut
-, SDL2
+, fetchzip
 , alsa-lib
 , appstream
-, appstream-glib
 , bash-completion
 , boost
 , breeze-icons
@@ -15,7 +13,6 @@
 , curl
 , dbus
 , dconf
-, faust2lv2
 , fftw
 , fftwFloat
 , flex
@@ -26,146 +23,136 @@
 , guile
 , help2man
 , jq
-, json-glib
 , kissfft
 , libadwaita
-, libaudec
 , libbacktrace
 , libcyaml
 , libepoxy
-, libgtop
 , libjack2
 , libpanel
 , libpulseaudio
 , libsamplerate
-, libsass
 , libsndfile
-, libsoundio
 , libxml2
 , libyaml
 , lilv
 , lv2
 , meson
 , ninja
-, pandoc
-, pcre
 , pcre2
 , pkg-config
 , python3
-, reproc
-, rtaudio
+, rtaudio_6
 , rtmidi
 , rubberband
 , sassc
 , serd
 , sord
 , sox
+, soxr
 , sratom
 , texi2html
 , vamp-plugin-sdk
-, wrapGAppsHook
+, wrapGAppsHook4
+, writeScript
 , xdg-utils
 , xxHash
+, yyjson
 , zix
 , zstd
 }:
 
 let
-  # As of zrythm-1.0.0-beta.4.5.62, Zrythm needs clap
-  # https://github.com/falktx/carla/tree/main/source/includes/clap, which is
-  # only available on Carla unstable as of 2023-02-24.
-  carla-unstable = carla.overrideAttrs (oldAttrs: rec {
+  # Error: Dependency carla-host-plugin found: NO found 2.5.6 but need: '>=2.6.0'
+  # So we need Carla unstable
+  carla-unstable = carla.overrideAttrs (oldAttrs: {
     pname = "carla";
-    version = "unstable-2023-05-12";
+    version = "unstable-2024-04-26";
 
     src = fetchFromGitHub {
       owner = "falkTX";
-      repo = pname;
-      rev = "0175570f1d41285f39efe0ee32234458e0ed941c";
-      hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
+      repo = "carla";
+      rev = "948991d7b5104280c03960925908e589c77b169a";
+      hash = "sha256-uGAuKheoMfP9hZXsw29ec+58dJM8wMuowe95QutzKBY=";
     };
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zrythm";
-  version = "1.0.0-beta.4.9.1";
+  version = "1.0.0-rc.1";
 
-  src = fetchFromSourcehut {
-    owner = "~alextee";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-U3IUqNbHu20uyWfkTsLOOlUZjcUL4QdHilB3srSsebw=";
+  src = fetchzip {
+    url = "https://www.zrythm.org/releases/zrythm-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-Ljbw7bjGI6js4OP9KEXCkhC9AMbInSz0nn+pROm4vXw=";
   };
 
+  passthru.updateScript = writeScript "update-zrythm" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    version="$(curl -s https://www.zrythm.org/releases/ | grep -o -m 1 'href="zrythm-[^"]*\.tar\.xz"' | head -1 | sed 's/href="zrythm-\(.*\)\.tar\.xz"/\1/')"
+    update-source-version zrythm "$version"
+  '';
+
   nativeBuildInputs = [
+    chromaprint
     cmake
+    flex
+    guile
     help2man
     jq
-    libaudec
     libxml2
+    lilv
     meson
     ninja
-    pandoc
     pkg-config
     python3
     python3.pkgs.sphinx
     sassc
+    serd
+    sord
+    sratom
     texi2html
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    SDL2
     alsa-lib
     appstream
-    appstream-glib
     bash-completion
     boost
-    breeze-icons
     carla-unstable
-    chromaprint
     curl
     dbus
     dconf
-    faust2lv2
     fftw
     fftwFloat
-    flex
     glib
     graphviz
     gtk4
     gtksourceview5
-    guile
-    json-glib
     kissfft
     libadwaita
     libbacktrace
     libcyaml
     libepoxy
-    libgtop
     libjack2
     libpanel
     libpulseaudio
     libsamplerate
-    libsass
     libsndfile
-    libsoundio
     libyaml
-    lilv
     lv2
-    pcre
     pcre2
-    reproc
-    rtaudio
+    rtaudio_6
     rtmidi
     rubberband
-    serd
-    sord
     sox
-    sratom
+    soxr
     vamp-plugin-sdk
     xdg-utils
     xxHash
+    yyjson
     zix
     zstd
   ];
@@ -187,7 +174,6 @@ stdenv.mkDerivation rec {
     "-Dmanpage=true"
     "-Drtaudio=enabled"
     "-Drtmidi=enabled"
-    "-Dsdl=enabled"
     # "-Duser_manual=true" # needs sphinx-intl
   ];
 
@@ -210,7 +196,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
+      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}/glib-2.0/schemas/"
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${breeze-icons}/share"
     )
   '';
@@ -218,8 +204,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "Automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon yuu ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ tshaynik magnetophon yuu astavie PowerUser64 ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.agpl3Plus;
   };
-}
+})

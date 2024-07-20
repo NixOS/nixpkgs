@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, crcmod
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ndspy";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,20 +17,12 @@ buildPythonPackage rec {
     owner = "RoadrunnerWMC";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x3sp10had1mq192m7kgjivvs8kpjagxjgj9d4z95dfjhzzbjh70";
+    hash = "sha256-V7phRZCA0WbUpYLgS/4nJbje/JM61RksDUZQ2pnbQyU=";
   };
 
-  propagatedBuildInputs = [
-    crcmod
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "ndspy"
-  ];
+  pythonImportsCheck = [ "ndspy" ];
 
   preCheck = ''
     cd tests
@@ -40,6 +32,6 @@ buildPythonPackage rec {
     description = "Python library for many Nintendo DS file formats";
     homepage = "https://github.com/RoadrunnerWMC/ndspy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

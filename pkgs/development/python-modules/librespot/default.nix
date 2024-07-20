@@ -1,15 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, defusedxml
-, protobuf
-, pythonRelaxDepsHook
-, websocket-client
-, pyogg
-, zeroconf
-, requests
-, pycryptodomex
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  protobuf,
+  pycryptodomex,
+  pyogg,
+  requests,
+  websocket-client,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +19,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-k9qVsxjRlUZ7vCBx00quiAR7S+YkfyoZiAKVnOOG4xM=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = true;
+
 
   propagatedBuildInputs = [
     defusedxml
@@ -38,23 +36,15 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  pythonRelaxDeps = [
-    "protobuf"
-    "pyogg"
-    "requests"
-    "zeroconf"
-  ];
-
   # Doesn't include any tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "librespot"
-  ];
+  pythonImportsCheck = [ "librespot" ];
 
   meta = with lib; {
     description = "Open Source Spotify Client";
     homepage = "https://github.com/kokarare1212/librespot-python";
+    changelog = "https://github.com/kokarare1212/librespot-python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
   };

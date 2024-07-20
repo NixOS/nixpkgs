@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
          (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
-    ++ optional stdenv.isLinux "--enable-vidix"
+    ++ optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
     ++ optional stdenv.isLinux "--enable-fbdev"
     ++ optionals (crossBuild) [
     "--enable-cross-compile"
@@ -175,6 +175,9 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
+
+  # Fixes compilation with newer versions of clang that make these warnings errors by default.
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
 
   NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
@@ -199,10 +202,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A movie player that supports many video formats";
+    description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }

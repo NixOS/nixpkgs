@@ -1,52 +1,80 @@
-{ lib
-, python3
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
+
+  # build-system
+  poetry-core,
+
+  # propagates
+  fastapi,
+  flet-core,
+  flet-runtime,
+  httpx,
+  oauthlib,
+  packaging,
+  qrcode,
+  cookiecutter,
+  uvicorn,
+  watchdog,
+  websocket-client,
+  websockets,
+
 }:
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.7.4";
-  format = "pyproject";
+  inherit (flet-client-flutter) version src;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vFPjN+5wIygtP035odAOSdF9PQe6eXz6CJ9Q0d8ScFo=";
-  };
+  pyproject = true;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'httpx = "^0.23' 'httpx = ">=0.23' \
-      --replace 'watchdog = "^2' 'watchdog = ">=2'
-  '';
+  sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
+  ];
+
+  pythonRelaxDeps = [
+    "cookiecutter"
+    "packaging"
+    "watchdog"
+    "websockets"
+  ];
+
+  propagatedBuildInputs = [
+    fastapi
     flet-core
-    typing-extensions
+    flet-runtime
+    uvicorn
     websocket-client
     watchdog
     oauthlib
     websockets
     httpx
     packaging
+    qrcode
+    cookiecutter
+    fastapi
+    uvicorn
   ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flet"
-  ];
+  pythonImportsCheck = [ "flet" ];
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

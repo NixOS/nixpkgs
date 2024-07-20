@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arping";
-  version = "2.23";
+  version = "2.25";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-Yn0EFb23VJvcVluQhwGHg9cdnZ8LKlBEds7cq8Irftc=";
+    hash = "sha256-SAdbgPmApmFToYrAm8acUapZMEMQr5MO7bQOTO2hd2c=";
   };
 
   nativeBuildInputs = [
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ michalrus ];
     platforms = platforms.unix;
+    mainProgram = "arping";
   };
 }

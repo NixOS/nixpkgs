@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.4";
+  version = "1.6.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1sPQNYOET6UqvgAwQxhgB/DIQUX+OwD6slmVvtqb5Vo=";
+    hash = "sha256-ydxQ6MeLN5LRsObFxfUsk+k0XT2uKJHjEamTpXT1oE8=";
   };
 
   depsBuildBuild = [
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.gupnp.org/";
-    description = "An implementation of the UPnP specification";
+    description = "Implementation of the UPnP specification";
+    mainProgram = "gupnp-binding-tool-1.6";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

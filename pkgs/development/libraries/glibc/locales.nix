@@ -12,13 +12,12 @@
 
 (callPackage ./common.nix { inherit stdenv; } {
   pname = "glibc-locales";
+  extraNativeBuildInputs = [ glibc ];
 }).overrideAttrs(finalAttrs: previousAttrs: {
 
   builder = ./locales-builder.sh;
 
   outputs = [ "out" ];
-
-  extraNativeBuildInputs = [ glibc ];
 
   LOCALEDEF_FLAGS = [
     (if stdenv.hostPlatform.isLittleEndian
@@ -60,7 +59,11 @@
       echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
     '';
 
-  enableParallelBuilding = true;
+  # Current `nixpkgs` way of building locales is not compatible with
+  # parallel install. `locale-archive` is updated in parallel with
+  # multiple `localedef` processes and causes non-deterministic result:
+  #   https://github.com/NixOS/nixpkgs/issues/245360
+  enableParallelBuilding = false;
 
   makeFlags = (previousAttrs.makeFlags or []) ++ [
     "localedata/install-locales"

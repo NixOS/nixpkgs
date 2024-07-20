@@ -1,24 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-nodejs-version
-, hatchling
-, y-py
-, pytestCheckHook
-, websockets
-, ypy-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-nodejs-version,
+  hatchling,
+  importlib-metadata,
+  pycrdt,
+  pytestCheckHook,
+  websockets,
+  ypy-websocket,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "0.3.4";
+  version = "2.0.1";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-WiJi5wvwBLgsxs5xZ16TMKoFj+MNsuh82BJa1N0a5OE=";
+    hash = "sha256-cW3ajLiviB/sL7yIrqP7DTuyS764Cpmor/LgHQidWw0=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +30,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    y-py
-  ];
+  propagatedBuildInputs = [ pycrdt ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 
@@ -46,6 +48,6 @@ buildPythonPackage rec {
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

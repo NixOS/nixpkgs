@@ -16,12 +16,12 @@ let
     args = mkOption {
       type = with types; listOf str;
       default = [];
-      description = lib.mdDoc "Command-line arguments to pass to {manpage}`public-inbox-${proto}d(1)`.";
+      description = "Command-line arguments to pass to {manpage}`public-inbox-${proto}d(1)`.";
     };
     port = mkOption {
       type = with types; nullOr (either str port);
       default = defaultPort;
-      description = lib.mdDoc ''
+      description = ''
         Listening port.
         Beware that public-inbox uses well-known ports number to decide whether to enable TLS or not.
         Set to null and use `systemd.sockets.public-inbox-${proto}d.listenStreams`
@@ -32,13 +32,13 @@ let
       type = with types; nullOr str;
       default = null;
       example = "/path/to/fullchain.pem";
-      description = lib.mdDoc "Path to TLS certificate to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
+      description = "Path to TLS certificate to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
     };
     key = mkOption {
       type = with types; nullOr str;
       default = null;
       example = "/path/to/key.pem";
-      description = lib.mdDoc "Path to TLS key to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
+      description = "Path to TLS key to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
     };
   };
 
@@ -143,24 +143,19 @@ in
 
 {
   options.services.public-inbox = {
-    enable = mkEnableOption (lib.mdDoc "the public-inbox mail archiver");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.public-inbox;
-      defaultText = literalExpression "pkgs.public-inbox";
-      description = lib.mdDoc "public-inbox package to use.";
-    };
+    enable = mkEnableOption "the public-inbox mail archiver";
+    package = mkPackageOption pkgs "public-inbox" { };
     path = mkOption {
       type = with types; listOf package;
       default = [];
       example = literalExpression "with pkgs; [ spamassassin ]";
-      description = lib.mdDoc ''
+      description = ''
         Additional packages to place in the path of public-inbox-mda,
         public-inbox-watch, etc.
       '';
     };
     inboxes = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Inboxes to configure, where attribute names are inbox names.
       '';
       default = {};
@@ -169,40 +164,40 @@ in
         options.inboxdir = mkOption {
           type = types.str;
           default = "${stateDir}/inboxes/${name}";
-          description = lib.mdDoc "The absolute path to the directory which hosts the public-inbox.";
+          description = "The absolute path to the directory which hosts the public-inbox.";
         };
         options.address = mkOption {
           type = with types; listOf str;
           example = "example-discuss@example.org";
-          description = lib.mdDoc "The email addresses of the public-inbox.";
+          description = "The email addresses of the public-inbox.";
         };
         options.url = mkOption {
           type = types.nonEmptyStr;
           example = "https://example.org/lists/example-discuss";
-          description = lib.mdDoc "URL where this inbox can be accessed over HTTP.";
+          description = "URL where this inbox can be accessed over HTTP.";
         };
         options.description = mkOption {
           type = types.str;
           example = "user/dev discussion of public-inbox itself";
-          description = lib.mdDoc "User-visible description for the repository.";
+          description = "User-visible description for the repository.";
           apply = pkgs.writeText "public-inbox-description-${name}";
         };
         options.newsgroup = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc "NNTP group name for the inbox.";
+          description = "NNTP group name for the inbox.";
         };
         options.watch = mkOption {
           type = with types; listOf str;
           default = [];
-          description = lib.mdDoc "Paths for {manpage}`public-inbox-watch(1)` to monitor for new mail.";
+          description = "Paths for {manpage}`public-inbox-watch(1)` to monitor for new mail.";
           example = [ "maildir:/path/to/test.example.com.git" ];
         };
         options.watchheader = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "List-Id:<test@example.com>";
-          description = lib.mdDoc ''
+          description = ''
             If specified, {manpage}`public-inbox-watch(1)` will only process
             mail containing a matching header.
           '';
@@ -212,20 +207,20 @@ in
             description = "list of coderepo names";
           };
           default = [];
-          description = lib.mdDoc "Nicknames of a 'coderepo' section associated with the inbox.";
+          description = "Nicknames of a 'coderepo' section associated with the inbox.";
         };
       }));
     };
     imap = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox IMAP server");
+      enable = mkEnableOption "the public-inbox IMAP server";
     } // publicInboxDaemonOptions "imap" 993;
     http = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox HTTP server");
+      enable = mkEnableOption "the public-inbox HTTP server";
       mounts = mkOption {
         type = with types; listOf str;
         default = [ "/" ];
         example = [ "/lists/archives" ];
-        description = lib.mdDoc ''
+        description = ''
           Root paths or URLs that public-inbox will be served on.
           If domain parts are present, only requests to those
           domains will be accepted.
@@ -236,7 +231,7 @@ in
         type = with types; nullOr (either str port);
         default = 80;
         example = "/run/public-inbox-httpd.sock";
-        description = lib.mdDoc ''
+        description = ''
           Listening port or systemd's ListenStream= entry
           to be used as a reverse proxy, eg. in nginx:
           `locations."/inbox".proxyPass = "http://unix:''${config.services.public-inbox.http.port}:/inbox";`
@@ -246,25 +241,25 @@ in
       };
     };
     mda = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox Mail Delivery Agent");
+      enable = mkEnableOption "the public-inbox Mail Delivery Agent";
       args = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc "Command-line arguments to pass to {manpage}`public-inbox-mda(1)`.";
+        description = "Command-line arguments to pass to {manpage}`public-inbox-mda(1)`.";
       };
     };
-    postfix.enable = mkEnableOption (lib.mdDoc "the integration into Postfix");
+    postfix.enable = mkEnableOption "the integration into Postfix";
     nntp = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox NNTP server");
+      enable = mkEnableOption "the public-inbox NNTP server";
     } // publicInboxDaemonOptions "nntp" 563;
     spamAssassinRules = mkOption {
       type = with types; nullOr path;
       default = "${cfg.package.sa_config}/user/.spamassassin/user_prefs";
       defaultText = literalExpression "\${cfg.package.sa_config}/user/.spamassassin/user_prefs";
-      description = lib.mdDoc "SpamAssassin configuration specific to public-inbox.";
+      description = "SpamAssassin configuration specific to public-inbox.";
     };
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for the [public-inbox config file](https://public-inbox.org/public-inbox-config.html).
       '';
       default = {};
@@ -272,7 +267,7 @@ in
         freeformType = gitIni.type;
         options.publicinbox = mkOption {
           default = {};
-          description = lib.mdDoc "public inboxes";
+          description = "public inboxes";
           type = types.submodule {
             # Support both global options like `services.public-inbox.settings.publicinbox.imapserver`
             # and inbox specific options like `services.public-inbox.settings.publicinbox.foo.address`.
@@ -281,30 +276,30 @@ in
             options.css = mkOption {
               type = with types; listOf str;
               default = [];
-              description = lib.mdDoc "The local path name of a CSS file for the PSGI web interface.";
+              description = "The local path name of a CSS file for the PSGI web interface.";
             };
             options.imapserver = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "imap.public-inbox.org" ];
-              description = lib.mdDoc "IMAP URLs to this public-inbox instance";
+              description = "IMAP URLs to this public-inbox instance";
             };
             options.nntpserver = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "nntp://news.public-inbox.org" "nntps://news.public-inbox.org" ];
-              description = lib.mdDoc "NNTP URLs to this public-inbox instance";
+              description = "NNTP URLs to this public-inbox instance";
             };
             options.pop3server = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "pop.public-inbox.org" ];
-              description = lib.mdDoc "POP3 URLs to this public-inbox instance";
+              description = "POP3 URLs to this public-inbox instance";
             };
             options.wwwlisting = mkOption {
               type = with types; enum [ "all" "404" "match=domain" ];
               default = "404";
-              description = lib.mdDoc ''
+              description = ''
                 Controls which lists (if any) are listed for when the root
                 public-inbox URL is accessed over HTTP.
               '';
@@ -314,7 +309,7 @@ in
         options.publicinboxmda.spamcheck = mkOption {
           type = with types; enum [ "spamc" "none" ];
           default = "none";
-          description = lib.mdDoc ''
+          description = ''
             If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
             using SpamAssassin.
           '';
@@ -322,7 +317,7 @@ in
         options.publicinboxwatch.spamcheck = mkOption {
           type = with types; enum [ "spamc" "none" ];
           default = "none";
-          description = lib.mdDoc ''
+          description = ''
             If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
             using SpamAssassin.
           '';
@@ -331,29 +326,29 @@ in
           type = with types; nullOr str;
           default = null;
           example = "maildir:/path/to/spam";
-          description = lib.mdDoc ''
+          description = ''
             If set, mail in this maildir will be trained as spam and
             deleted from all watched inboxes
           '';
         };
         options.coderepo = mkOption {
           default = {};
-          description = lib.mdDoc "code repositories";
+          description = "code repositories";
           type = types.attrsOf (types.submodule {
             freeformType = types.attrsOf iniAtom;
             options.cgitUrl = mkOption {
               type = types.str;
-              description = lib.mdDoc "URL of a cgit instance";
+              description = "URL of a cgit instance";
             };
             options.dir = mkOption {
               type = types.str;
-              description = lib.mdDoc "Path to a git repository";
+              description = "Path to a git repository";
             };
           });
         };
       };
     };
-    openFirewall = mkEnableOption (lib.mdDoc "opening the firewall when using a port option");
+    openFirewall = mkEnableOption "opening the firewall when using a port option";
   };
   config = mkIf cfg.enable {
     assertions = [
@@ -460,7 +455,7 @@ in
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
-            BindPathsReadOnly =
+            BindReadOnlyPaths =
               map (c: c.dir) (lib.attrValues cfg.settings.coderepo);
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++

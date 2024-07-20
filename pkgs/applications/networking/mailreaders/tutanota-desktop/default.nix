@@ -1,61 +1,37 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper,
-electron, libsecret }:
+{ lib
+, appimageTools
+, fetchurl
+}:
 
-stdenv.mkDerivation rec {
+appimageTools.wrapType2 rec {
   pname = "tutanota-desktop";
-  version = "3.115.2";
+  version = "235.240712.0";
 
   src = fetchurl {
-    url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
-    name = "tutanota-desktop-${version}.tar.gz";
-    sha256 = "sha256-PdVvrb+sC8LF4tZXAHt2CevyoXhxTXJB01Fe64YI6BI=";
+    url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
+    hash = "sha256-IhGfpHzK853b21oqhlfvXVrS1gl/4xgrZeWvBCIL1qg=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-  ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
-  dontConfigure = true;
-  dontBuild = true;
+  extraInstallCommands =
+    let appimageContents = appimageTools.extract { inherit pname version src; };
+    in ''
+      install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
+      install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
 
-  desktopItems = makeDesktopItem {
-    name = pname;
-    exec = "tutanota-desktop";
-    icon = "tutanota-desktop";
-    comment = meta.description;
-    desktopName = "Tutanota Desktop";
-    genericName = "Email Reader";
-  };
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/opt/tutanota-desktop $out/share/tutanota-desktop
-
-    cp -r ./ $out/opt/tutanota-desktop
-    mv $out/opt/tutanota-desktop/{locales,resources} $out/share/tutanota-desktop
-
-    for icon_size in 64 512; do
-      icon=resources/icons/icon/$icon_size.png
-      path=$out/share/icons/hicolor/$icon_size'x'$icon_size/apps/tutanota-desktop.png
-      install -Dm644 $icon $path
-    done
-
-    makeWrapper ${electron}/bin/electron \
-      $out/bin/tutanota-desktop \
-      --add-flags $out/share/tutanota-desktop/resources/app.asar \
-      --run "mkdir -p /tmp/tutanota" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
-
-    runHook postInstall
-  '';
+      substituteInPlace $out/share/applications/tutanota-desktop.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+    '';
 
   meta = with lib; {
-    description = "Tutanota official desktop client";
-    homepage = "https://tutanota.com/";
+    description = "Tuta official desktop client";
+    homepage = "https://tuta.com/";
+    changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = [ ];
+    mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };
 }

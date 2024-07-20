@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -10,25 +10,28 @@
 , menu-cache
 , qtbase
 , qttools
-, qtx11extras
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.8.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "C38c/jCyRur7jQSgU2ByasCQnollHgy3/mUoNv61OCU=";
+    hash = "sha256-32Wq0Faphu0uSG0RdOqrDD/igrNaP6l1mtuV+HcsdcQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -37,8 +40,7 @@ mkDerivation rec {
     libfm-qt
     menu-cache
     qtbase
-    qttools
-    qtx11extras
+    qtwayland
   ];
 
   hardeningDisable = [ "format" ];
@@ -48,6 +50,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
+    mainProgram = "lxqt-archiver";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;

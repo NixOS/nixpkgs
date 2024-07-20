@@ -12,9 +12,11 @@ in
 
   options = {
 
-    security.polkit.enable = mkEnableOption (lib.mdDoc "polkit");
+    security.polkit.enable = mkEnableOption "polkit";
 
-    security.polkit.debug = mkEnableOption (lib.mdDoc "debug logs from polkit. This is required in order to see log messages from rule definitions");
+    security.polkit.package = mkPackageOption pkgs "polkit" { };
+
+    security.polkit.debug = mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
 
     security.polkit.extraConfig = mkOption {
       type = types.lines;
@@ -32,10 +34,10 @@ in
             if (subject.local) return "yes";
           });
         '';
-      description = lib.mdDoc
+      description =
         ''
           Any polkit rules to be added to config (in JavaScript ;-). See:
-          http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
+          <https://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules>
         '';
     };
 
@@ -43,7 +45,7 @@ in
       type = types.listOf types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
-      description = lib.mdDoc
+      description =
         ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
@@ -57,13 +59,13 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
+    environment.systemPackages = [ cfg.package.bin cfg.package.out ];
 
-    systemd.packages = [ pkgs.polkit.out ];
+    systemd.packages = [ cfg.package.out ];
 
     systemd.services.polkit.serviceConfig.ExecStart = [
       ""
-      "${pkgs.polkit.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
+      "${cfg.package.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
     ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
@@ -82,7 +84,7 @@ in
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit.out ];
+    services.dbus.packages = [ cfg.package.out ];
 
     security.pam.services.polkit-1 = {};
 
@@ -91,13 +93,13 @@ in
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.bin}/bin/pkexec";
+          source = "${cfg.package.bin}/bin/pkexec";
         };
       polkit-agent-helper-1 =
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+          source = "${cfg.package.out}/lib/polkit-1/polkit-agent-helper-1";
         };
     };
 
@@ -117,4 +119,3 @@ in
   };
 
 }
-

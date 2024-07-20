@@ -7,9 +7,10 @@
 , pkg-config
 , gobject-introspection
 , gettext
-, gtk3
+, gtk4
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook4
+, libadwaita
 , libgee
 , json-glib
 , qqwing
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "44.0";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ZRjZIzpG1+E4Bax4dme6RwGUjZ7UGke4h5f826Q7j7o=";
+    hash = "sha256-OKJqwUvlO2w0/9UuxmhSVpFEQHSF4xsvgXkn0hdmUSQ=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +38,12 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
     libgee
     json-glib
     qqwing
@@ -55,8 +57,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Sudoku";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-sudoku";
     description = "Test your logic skills in this number grid puzzle";
+    mainProgram = "gnome-sudoku";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

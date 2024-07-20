@@ -1,25 +1,22 @@
 { lib
 , fetchFromGitHub
-, glibcLocales
-, python39
+, python3
 }:
 
-let
-  python3 = python39;
-in python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "errbot";
-  version = "6.1.7";
+  version = "6.2.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "errbotio";
     repo = "errbot";
     rev = version;
-    sha256 = "02h44qd3d91zy657hyqsw3gskgxg31848pw6zpb8dhd1x84z5y77";
+    hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
   };
 
-  LC_ALL = "en_US.utf8";
-
-  buildInputs = [ glibcLocales ];
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = with python3.pkgs; [
     ansi
@@ -28,7 +25,6 @@ in python3.pkgs.buildPythonApplication rec {
     deepmerge
     dulwich
     flask
-    hypchat
     irc
     jinja2
     markdown
@@ -38,9 +34,8 @@ in python3.pkgs.buildPythonApplication rec {
     pygments-markdown-lexer
     pyopenssl
     requests
-    slackclient
-    sleekxmpp
-    telegram
+    slixmpp
+    python-telegram-bot
     webtest
   ];
 
@@ -49,23 +44,27 @@ in python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # Slack backend test has an import issue
+  # errbot-backend-slackv3 has not been packaged
   pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
 
   disabledTests = [
-    "backup"
-    "broken_plugin"
-    "plugin_cycle"
+    # require networking
+    "test_backup"
+    "test_broken_plugin"
+    "test_plugin_cycle"
+    "test_entrypoint_paths"
   ];
 
   pythonImportsCheck = [ "errbot" ];
 
   meta = with lib; {
+    changelog = "https://github.com/errbotio/errbot/blob/${version}/CHANGES.rst";
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = "http://errbot.io/";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     # flaky on darwin, "RuntimeError: can't start new thread"
+    mainProgram = "errbot";
   };
 }

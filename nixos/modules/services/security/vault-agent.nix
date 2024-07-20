@@ -6,20 +6,20 @@ let
   format = pkgs.formats.json { };
   commonOptions = { pkgName, flavour ? pkgName }: mkOption {
     default = { };
-    description = mdDoc ''
+    description = ''
       Attribute set of ${flavour} instances.
       Creates independent `${flavour}-''${name}.service` systemd units for each instance defined here.
     '';
     type = with types; attrsOf (submodule ({ name, ... }: {
       options = {
-        enable = mkEnableOption (mdDoc "this ${flavour} instance") // { default = true; };
+        enable = mkEnableOption "this ${flavour} instance" // { default = true; };
 
-        package = mkPackageOptionMD pkgs pkgName { };
+        package = mkPackageOption pkgs pkgName { };
 
         user = mkOption {
           type = types.str;
           default = "root";
-          description = mdDoc ''
+          description = ''
             User under which this instance runs.
           '';
         };
@@ -27,7 +27,7 @@ let
         group = mkOption {
           type = types.str;
           default = "root";
-          description = mdDoc ''
+          description = ''
             Group under which this instance runs.
           '';
         };
@@ -40,7 +40,7 @@ let
               pid_file = mkOption {
                 default = "/run/${flavour}/${name}.pid";
                 type = types.str;
-                description = mdDoc ''
+                description = ''
                   Path to use for the pid file.
                 '';
               };
@@ -53,8 +53,7 @@ let
                     if flavour == "vault-agent"
                     then "https://developer.hashicorp.com/vault/docs/agent/template"
                     else "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#templates";
-                  in
-                  mdDoc ''
+                  in ''
                     Template section of ${flavour}.
                     Refer to <${upstreamDocs}> for supported values.
                   '';
@@ -69,8 +68,7 @@ let
               if flavour == "vault-agent"
               then "https://developer.hashicorp.com/vault/docs/agent#configuration-file-options"
               else "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#configuration-file";
-            in
-            mdDoc ''
+            in ''
               Free-form settings written directly to the `config.json` file.
               Refer to <${upstreamDocs}> for supported values.
 

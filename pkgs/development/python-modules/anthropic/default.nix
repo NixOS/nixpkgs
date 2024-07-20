@@ -1,23 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, anyio
-, distro
-, httpx
-, pydantic
-, pytest-asyncio
-, respx
-, tokenizers
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  dirty-equals,
+  distro,
+  fetchFromGitHub,
+  google-auth,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  jiter,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  sniffio,
+  tokenizers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.3.6";
-  format = "pyproject";
+  version = "0.28.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,34 +31,51 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfMlM7IRP1PG7Ynr+MR4OPeKnHBbhhWKSug7UQ4/4rI=";
+    hash = "sha256-n5Vmi2frUdSbrmulopwUlIO+blkf7cANoKTaTFZQdjw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     distro
     httpx
+    jiter
+    sniffio
     pydantic
     tokenizers
     typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    vertex = [ google-auth ];
+  };
+
   nativeCheckInputs = [
+    dirty-equals
     pytest-asyncio
     pytestCheckHook
     respx
   ];
 
+  pythonImportsCheck = [ "anthropic" ];
+
   disabledTests = [
-    "api_resources"
+    # Test require network access
+    "test_copy_build_request"
   ];
 
-  pythonImportsCheck = [
-    "anthropic"
+  disabledTestPaths = [
+    # Test require network access
+    "tests/api_resources"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
@@ -61,6 +84,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
-    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

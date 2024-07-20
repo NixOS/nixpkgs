@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, tex}:
+{lib, stdenv, fetchurl, texliveMedium}:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 
-  buildInputs = [ tex ];
+  buildInputs = [ texliveMedium ];
 
   patchPhase = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple literate programming tool";
+    description = "Simple literate programming tool";
+    mainProgram = "nuweb";
     homepage = "https://nuweb.sourceforge.net";
     license = licenses.free;
     maintainers = [ maintainers.AndersonTorres ];

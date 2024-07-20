@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
     })
+    ./monotone-1.1-gcc-14.patch
   ];
 
   postPatch = ''
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
   #doCheck = true; # some tests fail (and they take VERY long)
 
   meta = with lib; {
-    description = "A free distributed version control system";
+    description = "Free distributed version control system";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;

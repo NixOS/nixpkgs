@@ -120,7 +120,7 @@ init_remote(){
         git config remote.origin.partialclonefilter "blob:none"
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
+    ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -161,11 +161,12 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    [[ -z "$deepClone" ]] && \
     clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
     local object_type=$(git cat-file -t "$hash")
-    if [[ "$object_type" == "commit" ]]; then
+    if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
         clean_git checkout -b "$branchName" "$hash" || return 1
     elif [[ "$object_type" == "tree" ]]; then
         clean_git config user.email "nix-prefetch-git@localhost"
@@ -206,7 +207,10 @@ checkout_ref(){
 
 # Update submodules
 init_submodules(){
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1}
+    # shallow with leaveDotGit will change hashes
+    [[ -z "$deepClone" ]] && [[ -z "$leaveDotGit" ]] && \
+    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
+    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress
 }
 
 clone(){
@@ -256,9 +260,15 @@ make_deterministic_repo(){
     cd "$repo"
     # Remove files that contain timestamps or otherwise have non-deterministic
     # properties.
-    rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD \
-        .git/refs/remotes/origin/HEAD .git/config
-
+    if [ -f .git ]; then
+        local dotgit_content=$(<.git)
+        local dotgit_dir="${dotgit_content#gitdir: }"
+    else
+        local dotgit_dir=".git"
+    fi
+    pushd "$dotgit_dir" >/dev/null
+        rm -rf logs/ hooks/ index FETCH_HEAD ORIG_HEAD refs/remotes/origin/HEAD config
+    popd >/dev/null
     # Remove all remote branches.
     git branch -r | while read -r branch; do
         clean_git branch -rD "$branch"
@@ -276,7 +286,7 @@ make_deterministic_repo(){
     # Do a full repack. Must run single-threaded, or else we lose determinism.
     clean_git config pack.threads 1
     clean_git repack -A -d -f
-    rm -f .git/config
+    rm -f "$dotgit_dir/config"
 
     # Garbage collect unreferenced objects.
     # Note: --keep-largest-pack prevents non-deterministic ordering of packs
@@ -292,9 +302,6 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
-        exit_handlers+=(remove_tmpHomePath)
-        HOME="$tmpHomePath"
         clean_git lfs install
     fi
 
@@ -325,7 +332,7 @@ clone_user_rev() {
         find "$dir" -name .git -print0 | xargs -0 rm -rf
     else
         find "$dir" -name .git | while read -r gitdir; do
-            make_deterministic_repo "$(readlink -f "$gitdir/..")"
+            make_deterministic_repo "$(readlink -f "$(dirname "$gitdir")")"
         done
     fi
 }
@@ -415,6 +422,13 @@ fi
 if test -z "$branchName"; then
     branchName=fetchgit
 fi
+
+tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
+exit_handlers+=(remove_tmpHomePath)
+ln -s "${NETRC:-$HOME/.netrc}" "$tmpHomePath/.netrc"
+HOME="$tmpHomePath"
+unset XDG_CONFIG_HOME
+export GIT_CONFIG_NOSYSTEM=1
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage

@@ -17,31 +17,26 @@ with lib;
   options = {
     services.haproxy = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable HAProxy, the reliable, high performance TCP/HTTP
-          load balancer.
-        '';
-      };
+      enable = mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer";
+
+      package = mkPackageOption pkgs "haproxy" { };
 
       user = mkOption {
         type = types.str;
         default = "haproxy";
-        description = lib.mdDoc "User account under which haproxy runs.";
+        description = "User account under which haproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "haproxy";
-        description = lib.mdDoc "Group account under which haproxy runs.";
+        description = "Group account under which haproxy runs.";
       };
 
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Contents of the HAProxy configuration file,
           {file}`haproxy.conf`.
         '';
@@ -70,15 +65,15 @@ with lib;
         ExecStartPre = [
           # when the master process receives USR2, it reloads itself using exec(argv[0]),
           # so we create a symlink there and update it before reloading
-          "${pkgs.coreutils}/bin/ln -sf ${pkgs.haproxy}/sbin/haproxy /run/haproxy/haproxy"
+          "${pkgs.coreutils}/bin/ln -sf ${lib.getExe cfg.package} /run/haproxy/haproxy"
           # when running the config test, don't be quiet so we can see what goes wrong
           "/run/haproxy/haproxy -c -f ${haproxyCfg}"
         ];
         ExecStart = "/run/haproxy/haproxy -Ws -f /etc/haproxy.cfg -p /run/haproxy/haproxy.pid";
         # support reloading
         ExecReload = [
-          "${pkgs.haproxy}/sbin/haproxy -c -f ${haproxyCfg}"
-          "${pkgs.coreutils}/bin/ln -sf ${pkgs.haproxy}/sbin/haproxy /run/haproxy/haproxy"
+          "${lib.getExe cfg.package} -c -f ${haproxyCfg}"
+          "${pkgs.coreutils}/bin/ln -sf ${lib.getExe cfg.package} /run/haproxy/haproxy"
           "${pkgs.coreutils}/bin/kill -USR2 $MAINPID"
         ];
         KillMode = "mixed";

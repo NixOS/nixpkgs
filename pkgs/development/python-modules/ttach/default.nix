@@ -1,14 +1,16 @@
-{ fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, torch
-, buildPythonPackage
-, lib
+{
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  torch,
+  buildPythonPackage,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "ttach";
   version = "0.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

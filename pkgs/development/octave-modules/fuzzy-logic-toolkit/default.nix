@@ -16,6 +16,6 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/fuzzy-logic-toolkit/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "A mostly MATLAB-compatible fuzzy logic toolkit for Octave";
+    description = "Mostly MATLAB-compatible fuzzy logic toolkit for Octave";
   };
 }

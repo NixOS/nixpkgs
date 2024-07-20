@@ -1,23 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, ply
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  ply,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
-  version = "1.3.0";
+  version = "1.3.1";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "calmjs";
     repo = "calmjs.parse";
     rev = version;
-    hash = "sha256-QhHNp9g88RhGHqRRjg4nk7aXjAgGCOauOagWJoJ3fqc=";
+    hash = "sha256-xph+NuTkWfW0t/1vxWBSgsjU7YHQMnsm/W/XdkAnl7I=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "env['PYTHONPATH'] = 'src'" "env['PYTHONPATH'] += ':src'"
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     setuptools
@@ -43,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/calmjs/calmjs.parse/blob/${src.rev}/CHANGES.rst";
     description = "Various parsers for ECMA standards";
     homepage = "https://github.com/calmjs/calmjs.parse";
     license = licenses.mit;

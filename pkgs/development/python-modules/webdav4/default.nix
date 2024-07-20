@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, cheroot
-, colorama
-, fetchFromGitHub
-, fsspec
-, hatch-vcs
-, hatchling
-, httpx
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, wsgidav
+{
+  lib,
+  buildPythonPackage,
+  cheroot,
+  colorama,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  httpx,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  wsgidav,
 }:
 
 buildPythonPackage rec {
   pname = "webdav4";
-  version = "0.9.8";
-  format = "pyproject";
+  version = "0.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skshetry";
-    repo = pname;
+    repo = "webdav4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
+    hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     hatch-vcs
@@ -49,26 +53,15 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.fsspec;
 
   passthru.optional-dependencies = {
-    fsspec = [
-      fsspec
-    ];
-    http2 = [
-      httpx.optional-dependencies.http2
-    ];
+    fsspec = [ fsspec ];
+    http2 = [ httpx.optional-dependencies.http2 ];
     all = [
       fsspec
       httpx.optional-dependencies.http2
     ];
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  pythonImportsCheck = [
-    "webdav4"
-  ];
+  pythonImportsCheck = [ "webdav4" ];
 
   disabledTests = [
     # ValueError: Invalid dir_browser htdocs_path
@@ -86,10 +79,12 @@ buildPythonPackage rec {
     # Tests requires network access
     "tests/test_client.py"
     "tests/test_fsspec.py"
+    "tests/test_cli.py"
   ];
 
   meta = with lib; {
     description = "Library for interacting with WebDAV";
+    mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
     changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
     license = with licenses; [ mit ];

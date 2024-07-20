@@ -1,36 +1,44 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
+, autoAddDriverRunpath
 , enableCuda ? config.cudaSupport
-, cudatoolkit
-, enableRocm ? false
-, rocm-core, rocm-runtime, rocm-device-libs, hip
+, cudaPackages
+, enableRocm ? config.rocmSupport
+, rocmPackages
 }:
 
 let
-  # Needed for configure to find all libraries
-  cudatoolkit' = symlinkJoin {
-    inherit (cudatoolkit) name meta;
-    paths = [ cudatoolkit cudatoolkit.lib ];
-  };
+  rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
+
   rocm = symlinkJoin {
     name = "rocm";
-    paths = [ rocm-core rocm-runtime rocm-device-libs hip ];
+    paths = rocmList;
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.14.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-oAigiCgbr27pX+kNl+RW1P10TKYFSKrHDK4U4z8WMko=";
+    sha256 = "sha256-Qd3c51LeF04haZA4wK6loNZwX2a3ju+ljwdPYPoUKCQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
+  outputs = [ "out" "doc" "dev" ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
   buildInputs = [
     libbfd
@@ -39,17 +47,33 @@ stdenv.mkDerivation rec {
     perl
     rdma-core
     zlib
-  ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvml_dev
+
+  ] ++ lib.optionals enableRocm rocmList;
+
+  LDFLAGS = lib.optionals enableCuda [
+    # Fake libnvidia-ml.so (the real one is deployed impurely)
+    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
+  ];
 
   configureFlags = [
-    "--with-rdmacm=${rdma-core}"
+    "--with-rdmacm=${lib.getDev rdma-core}"
     "--with-dc"
     "--with-rc"
     "--with-dm"
-    "--with-verbs=${rdma-core}"
-  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
+    "--with-verbs=${lib.getDev rdma-core}"
+  ] ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
+
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput bin/ucx_info $dev
+
+    moveToOutput share/ucx/examples $doc
+  '';
 
   enableParallelBuilding = true;
 

@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.14.0";
+  version = "0.16.1";
 
   format = "other";
 
@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     repo = pname;
     owner = "olivierkes";
     rev = "refs/tags/${version}";
-    hash = "sha256-mWLkah4eO1i5sp79xGLCIkr26TpbXxuVxIJ6gudKGWI=";
+    hash = "sha256-/Ryvv5mHdZ3iwMpZjOa62h8D2B00pzknJ70DfjDTPPA=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "A open-source tool for writers";
+    description = "Open-source tool for writers";
     homepage = "https://www.theologeek.ch/manuskript";
     longDescription = ''
     Manuskript is a tool for those writer who like to organize and
@@ -58,5 +58,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    mainProgram = "manuskript";
   };
 }

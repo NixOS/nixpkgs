@@ -1,120 +1,102 @@
-{ lib, stdenv, fetchFromGitHub, jdk11, gradle_6, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
-let
-  gradle = gradle_6;
+{ lib
+, jdk21
+, maven
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, glib
+, makeWrapper
+, wrapGAppsHook3
+}:
 
+let
+  jdk = jdk21.override {
+    enableJavaFX = true;
+  };
+in
+maven.buildMavenPackage rec {
   pname = "scenebuilder";
-  version = "15.0.1";
+  version = "21.0.1";
 
   src = fetchFromGitHub {
     owner = "gluonhq";
-    repo = pname;
+    repo = "scenebuilder";
     rev = version;
-    sha256 = "0dqlpfgr9qpmk62zsnhzw4q6n0swjqy00294q0kb4djp3jn47iz4";
+    hash = "sha256-YEcW1yQK6RKDqSstsrpdOqMt972ZagenGDxcJ/gP+SA=";
   };
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src;
+  patches = [
+    # makes the mvnHash platform-independent
+    ./pom-remove-javafx.patch
 
-    nativeBuildInputs = [ jdk11 perl gradle ];
+    # makes sure that maven upgrades don't change the mvnHash
+    ./fix-default-maven-plugin-versions.patch
+  ];
 
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d);
-      gradle --no-daemon build -x test
-    '';
-
-    # Mavenize dependency paths
-    # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "01dkayad68g3zpzdnjwrc0h6s7s6n619y5b576snc35l8g2r5sgd";
-  };
-
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${deps}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
+  postPatch = ''
+    # set the build timestamp to $SOURCE_DATE_EPOCH
+    substituteInPlace app/pom.xml \
+        --replace-fail "\''${maven.build.timestamp}" "$(date -d "@$SOURCE_DATE_EPOCH" '+%Y-%m-%d %H:%M:%S')"
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "scenebuilder";
-    exec = "scenebuilder";
-    icon = "scenebuilder";
-    comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = "Scene Builder";
-    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
-    categories = [ "Development" ];
-  };
+  mvnJdk = jdk;
+  mvnParameters = toString [
+    "-Dmaven.test.skip"
+    "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
+  ];
 
-in stdenv.mkDerivation rec {
-  inherit pname src version;
+  mvnHash = "sha256-fS7dS2Q4ORThLBwDOzJJnRboNNRmhp0RG6Dae9fl+pw=";
 
-  nativeBuildInputs = [ jdk11 gradle makeWrapper glib wrapGAppsHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    glib
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   dontWrapGApps = true; # prevent double wrapping
-
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle -PVERSION=${version} --offline --no-daemon --info --init-script ${gradleInit} build -x test
-
-    runHook postBuild
-    '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/{${pname},icons/hicolor/128x128/apps}
-    cp app/build/libs/SceneBuilder-${version}-all.jar $out/share/${pname}/${pname}.jar
-    cp app/build/resources/main/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
+    install -Dm644 app/target/lib/scenebuilder-${version}-SNAPSHOT-all.jar $out/share/scenebuilder/scenebuilder.jar
+    install -Dm644 app/src/main/resources/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${jdk11}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
-    '';
+    makeWrapper ${jdk}/bin/java $out/bin/scenebuilder \
+      --add-flags "--add-modules javafx.web,javafx.fxml,javafx.swing,javafx.media" \
+      --add-flags "--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED" \
+      --add-flags "-jar $out/share/scenebuilder/scenebuilder.jar" \
+      "''${gappsWrapperArgs[@]}"
+  '';
 
-  desktopItems = [ desktopItem ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scenebuilder";
+      exec = "scenebuilder";
+      icon = "scenebuilder";
+      comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+      desktopName = "Scene Builder";
+      mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+    changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
+    description = "Visual, drag'n'drop, layout tool for designing JavaFX application user interfaces";
     homepage = "https://gluonhq.com/products/scene-builder/";
+    license = licenses.bsd3;
+    mainProgram = "scenebuilder";
+    maintainers = with maintainers; [ wirew0rm ];
+    platforms = jdk.meta.platforms;
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wirew0rm ];
-    platforms = platforms.all;
   };
 }
+

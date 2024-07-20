@@ -43,6 +43,7 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
+, fetchpatch2
 , nixosTests
 }:
 
@@ -123,16 +124,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-07-17";
+  version = "2024-03-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d135b123cde78576e99e919a5db0428cb70fcd1e";
-    sha256 = "sha256-wjHHcJr1liYKESUtCjIdvC+USjd9EWjEFssvIKiEuVU=";
+    rev = "8f56209bd6f3b9ec53d50a23812a800dee7a1969";
+    hash = "sha256-mhEj02VruXPmxz3jsKHMov2ERNXk9DwaTAunWEO1iIQ=";
   };
 
   buildInputs = [
+    unzip
     libpqxx
     top-git
     mercurial
@@ -179,7 +181,6 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     mdbook
-    unzip
     nukeReferences
   ];
 
@@ -204,6 +205,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  patches = [
+    # https://github.com/NixOS/hydra/security/advisories/GHSA-2p75-6g9f-pqgx
+    (fetchpatch2 {
+      name = "CVE-2024-32657.patch";
+      url = "https://github.com/NixOS/hydra/commit/b72528be5074f3e62e9ae2c2ae8ef9c07a0b4dd3.patch";
+      hash = "sha256-+y27N8AIaHj13mj0LwW7dkpzfzZ4xfjN8Ld23c5mzuU=";
+    })
+  ];
 
   postPatch = ''
     # Change 5s timeout for init to 30s
@@ -234,8 +244,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontStrip = true;
-
   doCheck = true;
 
   passthru = {
@@ -245,8 +253,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix-based continuous build system";
+    homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi das_j ];
+    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
   };
 }

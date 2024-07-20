@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# optionals
-, genshi
+  # optionals
+  genshi,
 
-# tests
-, pytestCheckHook
-, webtest
+  # tests
+  pytestCheckHook,
+  webtest,
 }:
 
 buildPythonPackage rec {
@@ -31,23 +32,20 @@ buildPythonPackage rec {
     KidMagic = [
       # TODO: kid
     ];
-    Genshimagic = [
-      genshi
-    ];
+    Genshimagic = [ genshi ];
   };
 
-  pythonImportsCheck = [
-    "static"
-  ];
+  pythonImportsCheck = [ "static" ];
 
-  nativeCheckInputs  = [
+  nativeCheckInputs = [
     pytestCheckHook
     webtest
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/rmohr/static3/releases/tag/v${version}";
-    description = "A really simple WSGI way to serve static (or mixed) content";
+    description = "Really simple WSGI way to serve static (or mixed) content";
+    mainProgram = "static";
     homepage = "https://github.com/rmohr/static3";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ hexa ];

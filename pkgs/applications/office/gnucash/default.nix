@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchurl
 , aqbanking
 , boost
@@ -21,24 +22,24 @@
 , pkg-config
 , swig
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.3";
+  version = "5.8";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-FFjLCMWF6unXJL7G8oErzAO76D7SlKRqeJeqqwGm8Vo=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
+    hash = "sha256-osgj+3ALnUWYaS7IE5SVm944jY7xke/k6iwCQmu1JZM=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 
@@ -74,8 +75,9 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # this patch removes the online_wiggle GncQuotes test
-    ./0005-remove-gncquotes-online-wiggle.patch
+    # this patch disables a flaky test
+    # see https://bugs.gnucash.org/show_bug.cgi?id=799289
+    ./0005-disable-test-lots.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -91,27 +93,47 @@ stdenv.mkDerivation rec {
   enableParallelChecking = true;
   checkTarget = "check";
 
+  passthru.docs = stdenv.mkDerivation {
+    pname = "gnucash-docs";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "Gnucash";
+      repo = "gnucash-docs";
+      rev = version;
+      hash = "sha256-3b1Nue3eEefDi4WI+o3ATfrsQ+H/I+QwTr4Nuc9J7Zg=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ libxml2 libxslt ];
+  };
+
   preFixup = ''
     gappsWrapperArgs+=(
+      # documentation
+      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
-      # gnome settings schemas location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      # gsettings schema location on Nix
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
     )
   '';
 
-  # wrapGAppsHook would wrap all binaries including the cli utils which need
+  # wrapGAppsHook3 would wrap all binaries including the cli utils which need
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook.
+  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
     wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://www.gnucash.org/";
@@ -139,6 +161,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
     platforms = platforms.unix;
+    mainProgram = "gnucash";
   };
 }
 # TODO: investigate Darwin support

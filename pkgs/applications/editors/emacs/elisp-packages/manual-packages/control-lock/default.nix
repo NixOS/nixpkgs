@@ -1,7 +1,12 @@
-{ lib, trivialBuild, fetchurl }:
+{
+  lib,
+  fetchurl,
+  melpaBuild,
+}:
 
-trivialBuild {
+melpaBuild {
   pname = "control-lock";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/control-lock.el";
@@ -9,8 +14,9 @@ trivialBuild {
   };
 
   meta = {
-    description = "Like caps-lock, but for your control key.  Give your pinky a rest!";
     homepage = "https://www.emacswiki.org/emacs/control-lock.el";
+    description = "Like caps-lock, but for your control key";
+    license = lib.licenses.free;
     platforms = lib.platforms.all;
   };
 }

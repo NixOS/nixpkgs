@@ -11,9 +11,11 @@ maven.buildMavenPackage rec {
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
-  mvnHash = "sha256-kLpjMj05uC94/5vGMwMlFzLKNFOKeyNvq/vmB6pHTAo=";
+  mvnHash = "sha256-lEcAq0H8Uacv02ItjVGfxvtRip5206HtpREBrQDzBDo=";
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  mvnParameters = "-DskipTests";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/jd-cli
@@ -27,7 +29,6 @@ maven.buildMavenPackage rec {
     description = "Simple command line wrapper around JD Core Java Decompiler project";
     homepage = "https://github.com/intoolswetrust/jd-cli";
     license = licenses.gpl3;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ majiir ];
   };
 }

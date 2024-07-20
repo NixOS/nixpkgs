@@ -59,7 +59,7 @@ let
     { options = {
         address = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             IPv${toString v} address of the interface. Leave empty to configure the
             interface using DHCP.
           '';
@@ -67,7 +67,7 @@ let
 
         prefixLength = mkOption {
           type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-          description = lib.mdDoc ''
+          description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix (`${if v == 4 then "24" else "64"}`).
           '';
@@ -79,12 +79,12 @@ let
   { options = {
       address = mkOption {
         type = types.str;
-        description = lib.mdDoc "IPv${toString v} address of the network.";
+        description = "IPv${toString v} address of the network.";
       };
 
       prefixLength = mkOption {
         type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-        description = lib.mdDoc ''
+        description = ''
           Subnet mask of the network, specified as the number of
           bits in the prefix (`${if v == 4 then "24" else "64"}`).
         '';
@@ -95,7 +95,7 @@ let
           "unicast" "local" "broadcast" "multicast"
         ]);
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Type of the route.  See the `Route types` section
           in the `ip-route(8)` manual page for the details.
 
@@ -109,14 +109,14 @@ let
       via = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "IPv${toString v} address of the next hop.";
+        description = "IPv${toString v} address of the next hop.";
       };
 
       options = mkOption {
         type = types.attrsOf types.str;
         default = { };
         example = { mtu = "1492"; window = "524288"; };
-        description = lib.mdDoc ''
+        description = ''
           Other route options. See the symbol `OPTIONS`
           in the `ip-route(8)` manual page for the details.
           You may also specify `metric`,
@@ -138,21 +138,21 @@ let
 
       address = mkOption {
         type = types.str;
-        description = lib.mdDoc "The default gateway address.";
+        description = "The default gateway address.";
       };
 
       interface = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "enp0s3";
-        description = lib.mdDoc "The default gateway interface.";
+        description = "The default gateway interface.";
       };
 
       metric = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 42;
-        description = lib.mdDoc "The default gateway metric/preference.";
+        description = "The default gateway metric/preference.";
       };
 
     };
@@ -165,14 +165,14 @@ let
       name = mkOption {
         example = "eth0";
         type = types.str;
-        description = lib.mdDoc "Name of the interface.";
+        description = "Name of the interface.";
       };
 
       tempAddress = mkOption {
         type = types.enum (lib.attrNames tempaddrValues);
         default = cfg.tempAddresses;
         defaultText = literalExpression ''config.networking.tempAddresses'';
-        description = lib.mdDoc ''
+        description = ''
           When IPv6 is enabled with SLAAC, this option controls the use of
           temporary address (aka privacy extensions) on this
           interface. This is used to reduce tracking.
@@ -189,10 +189,12 @@ let
       useDHCP = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description = lib.mdDoc ''
-          Whether this interface should be configured with dhcp.
-          Null implies the old behavior which depends on whether ip addresses
-          are specified or not.
+        description = ''
+          Whether this interface should be configured with DHCP. Overrides the
+          default set by {option}`networking.useDHCP`. If `null` (the default),
+          DHCP is enabled if the interface has no IPv4 addresses configured
+          with {option}`networking.interfaces.<name>.ipv4.addresses`, and
+          disabled otherwise.
         '';
       };
 
@@ -203,7 +205,7 @@ let
           { address = "192.168.1.1"; prefixLength = 24; }
         ];
         type = with types; listOf (submodule (addrOpts 4));
-        description = lib.mdDoc ''
+        description = ''
           List of IPv4 addresses that will be statically assigned to the interface.
         '';
       };
@@ -215,7 +217,7 @@ let
           { address = "2001:1470:fffd:2098::e006"; prefixLength = 64; }
         ];
         type = with types; listOf (submodule (addrOpts 6));
-        description = lib.mdDoc ''
+        description = ''
           List of IPv6 addresses that will be statically assigned to the interface.
         '';
       };
@@ -227,7 +229,7 @@ let
           { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
         ];
         type = with types; listOf (submodule (routeOpts 4));
-        description = lib.mdDoc ''
+        description = ''
           List of extra IPv4 static routes that will be assigned to the interface.
 
           ::: {.warning}
@@ -251,7 +253,7 @@ let
           { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
         ];
         type = with types; listOf (submodule (routeOpts 6));
-        description = lib.mdDoc ''
+        description = ''
           List of extra IPv6 static routes that will be assigned to the interface.
         '';
       };
@@ -260,7 +262,7 @@ let
         default = null;
         example = "00:11:22:33:44:55";
         type = types.nullOr (types.str);
-        description = lib.mdDoc ''
+        description = ''
           MAC address of the interface. Leave empty to use the default.
         '';
       };
@@ -269,7 +271,7 @@ let
         default = null;
         example = 9000;
         type = types.nullOr types.int;
-        description = lib.mdDoc ''
+        description = ''
           MTU size for packets leaving the interface. Leave empty to use the default.
         '';
       };
@@ -277,7 +279,7 @@ let
       virtual = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether this interface is virtual and should be created by tunctl.
           This is mainly useful for creating bridges between a host and a virtual
           network such as VPN or a virtual machine.
@@ -287,7 +289,7 @@ let
       virtualOwner = mkOption {
         default = "root";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           In case of a virtual device, the user who owns it.
         '';
       };
@@ -296,7 +298,7 @@ let
         default = if hasPrefix "tun" name then "tun" else "tap";
         defaultText = literalExpression ''if hasPrefix "tun" name then "tun" else "tap"'';
         type = with types; enum [ "tun" "tap" ];
-        description = lib.mdDoc ''
+        description = ''
           The type of interface to create.
           The default is TUN for an interface name starting
           with "tun", otherwise TAP.
@@ -306,7 +308,7 @@ let
       proxyARP = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Turn on proxy_arp for this device.
           This is mainly useful for creating pseudo-bridges between a real
           interface and a virtual network such as VPN or a virtual machine for
@@ -325,7 +327,25 @@ let
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Whether to enable wol on this interface.";
+          description = "Whether to enable wol on this interface.";
+        };
+        policy = mkOption {
+          type = with types; listOf (
+            enum ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"]
+          );
+          default = ["magic"];
+          description = ''
+            The [Wake-on-LAN policy](https://www.freedesktop.org/software/systemd/man/systemd.link.html#WakeOnLan=)
+            to set for the device.
+
+            The options are
+            - `phy`: Wake on PHY activity
+            - `unicast`: Wake on unicast messages
+            - `multicast`: Wake on multicast messages
+            - `broadcast`: Wake on broadcast messages
+            - `arp`: Wake on ARP
+            - `magic`: Wake on receipt of a magic packet
+          '';
         };
       };
     };
@@ -372,20 +392,20 @@ let
     options = {
 
       name = mkOption {
-        description = lib.mdDoc "Name of the interface";
+        description = "Name of the interface";
         example = "eth0";
         type = types.str;
       };
 
       vlan = mkOption {
-        description = lib.mdDoc "Vlan tag to apply to interface";
+        description = "Vlan tag to apply to interface";
         example = 10;
         type = types.nullOr types.int;
         default = null;
       };
 
       type = mkOption {
-        description = lib.mdDoc "Openvswitch type to assign to interface";
+        description = "Openvswitch type to assign to interface";
         example = "internal";
         type = types.nullOr types.str;
         default = null;
@@ -442,7 +462,7 @@ in
       # reasons (as undocumented feature):
       type = types.strMatching
         "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
-      description = lib.mdDoc ''
+      description = ''
         The name of the machine. Leave it empty if you want to obtain it from a
         DHCP server (if using DHCP). The hostname must be a valid DNS label (see
         RFC 1035 section 2.3.1: "Preferred name syntax", RFC 1123 section 2.1:
@@ -472,13 +492,13 @@ in
           both networking.hostName and networking.domain are set properly.
         '';
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
-      description = lib.mdDoc ''
+      description = ''
         The fully qualified domain name (FQDN) of this host. It is the result
         of combining `networking.hostName` and `networking.domain.` Using this
         option will result in an evaluation error if the hostname is empty or
         no domain is specified.
 
-        Modules that accept a mere `networing.hostName` but prefer a fully qualified
+        Modules that accept a mere `networking.hostName` but prefer a fully qualified
         domain name may use `networking.fqdnOrHostName` instead.
       '';
     };
@@ -490,7 +510,7 @@ in
       defaultText = literalExpression ''
         if cfg.domain == null then cfg.hostName else cfg.fqdn
       '';
-      description = lib.mdDoc ''
+      description = ''
         Either the fully qualified domain name (FQDN), or just the host name if
         it does not exists.
 
@@ -504,7 +524,7 @@ in
       default = null;
       example = "4e98920d";
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
 
         You should try to make this ID unique among your machines. You can
@@ -524,7 +544,7 @@ in
     networking.enableIPv6 = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable support for IPv6.
       '';
     };
@@ -536,7 +556,7 @@ in
         interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
-      description = lib.mdDoc ''
+      description = ''
         The default gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.
       '';
@@ -549,7 +569,7 @@ in
         interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
-      description = lib.mdDoc ''
+      description = ''
         The default ipv6 gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.
       '';
@@ -559,7 +579,7 @@ in
       default = null;
       example = 524288;
       type = types.nullOr types.int;
-      description = lib.mdDoc ''
+      description = ''
         The window size of the default gateway. It limits maximal data bursts that TCP peers
         are allowed to send to us.
       '';
@@ -569,7 +589,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = ["130.161.158.4" "130.161.33.17"];
-      description = lib.mdDoc ''
+      description = ''
         The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
       '';
     };
@@ -578,7 +598,7 @@ in
       default = [];
       example = [ "example.com" "home.arpa" ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         The list of search paths used when resolving domain names.
       '';
     };
@@ -587,7 +607,7 @@ in
       default = null;
       example = "home.arpa";
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
       '';
     };
@@ -595,7 +615,7 @@ in
     networking.useHostResolvConf = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         In containers, whether to use the
         {file}`resolv.conf` supplied by the host.
       '';
@@ -605,7 +625,7 @@ in
       type = types.lines;
       default = "";
       example = "text=anything; echo You can put $text here.";
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed at the end of the
         `network-setup` systemd service.  Note that if
         you are using DHCP to obtain the network configuration,
@@ -621,10 +641,8 @@ in
             prefixLength = 25;
           } ];
         };
-      description = lib.mdDoc ''
-        The configuration for each network interface.  If
-        {option}`networking.useDHCP` is true, then every
-        interface not listed here will be configured using DHCP.
+      description = ''
+        The configuration for each network interface.
 
         Please note that {option}`systemd.network.netdevs` has more features
         and is better maintained. When building new things, it is advised to
@@ -639,8 +657,7 @@ in
         { vs0.interfaces = { eth0 = { }; lo1 = { type="internal"; }; };
           vs1.interfaces = [ { name = "eth2"; } { name = "lo2"; type="internal"; } ];
         };
-      description =
-        lib.mdDoc ''
+      description = ''
           This option allows you to define Open vSwitches that connect
           physical networks together. The value of this option is an
           attribute set. Each attribute specifies a vswitch, with the
@@ -653,7 +670,7 @@ in
         options = {
 
           interfaces = mkOption {
-            description = lib.mdDoc "The physical network interfaces connected by the vSwitch.";
+            description = "The physical network interfaces connected by the vSwitch.";
             type = with types; attrsOf (submodule vswitchInterfaceOpts);
           };
 
@@ -661,7 +678,7 @@ in
             type = types.listOf types.str;
             default = [];
             example = [ "ptcp:6653:[::1]" ];
-            description = lib.mdDoc ''
+            description = ''
               Specify the controller targets. For the allowed options see `man 8 ovs-vsctl`.
             '';
           };
@@ -672,7 +689,7 @@ in
             example = ''
               actions=normal
             '';
-            description = lib.mdDoc ''
+            description = ''
               OpenFlow rules to insert into the Open vSwitch. All `openFlowRules` are
               loaded with `ovs-ofctl` within one atomic operation.
             '';
@@ -683,7 +700,7 @@ in
             type = types.listOf types.str;
             example = [ "OpenFlow10" "OpenFlow13" "OpenFlow14" ];
             default = [ "OpenFlow13" ];
-            description = lib.mdDoc ''
+            description = ''
               Supported versions to enable on this switch.
             '';
           };
@@ -692,7 +709,7 @@ in
           openFlowVersion = mkOption {
             type = types.str;
             default = "OpenFlow13";
-            description = lib.mdDoc ''
+            description = ''
               Version of OpenFlow protocol to use when communicating with the switch internally (e.g. with `openFlowRules`).
             '';
           };
@@ -704,7 +721,7 @@ in
               set-fail-mode <switch_name> secure
               set Bridge <switch_name> stp_enable=true
             '';
-            description = lib.mdDoc ''
+            description = ''
               Commands to manipulate the Open vSwitch database. Every line executed with `ovs-vsctl`.
               All commands are bundled together with the operations for adding the interfaces
               into one atomic operation.
@@ -723,8 +740,7 @@ in
         { br0.interfaces = [ "eth0" "eth1" ];
           br1.interfaces = [ "eth2" "wlan0" ];
         };
-      description =
-        lib.mdDoc ''
+      description = ''
           This option allows you to define Ethernet bridge devices
           that connect physical networks together.  The value of this
           option is an attribute set.  Each attribute specifies a
@@ -739,14 +755,13 @@ in
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
             type = types.listOf types.str;
-            description =
-              lib.mdDoc "The physical network interfaces connected by the bridge.";
+            description = "The physical network interfaces connected by the bridge.";
           };
 
           rstp = mkOption {
             default = false;
             type = types.bool;
-            description = lib.mdDoc "Whether the bridge interface should enable rstp.";
+            description = "Whether the bridge interface should enable rstp.";
           };
 
         };
@@ -774,7 +789,7 @@ in
             anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           This option allows you to define bond devices that aggregate multiple,
           underlying networking interfaces together. The value of this option is
           an attribute set. Each attribute specifies a bond, with the attribute
@@ -788,14 +803,14 @@ in
             interfaces = mkOption {
               example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
               type = types.listOf types.str;
-              description = lib.mdDoc "The interfaces to bond together";
+              description = "The interfaces to bond together";
             };
 
             driverOptions = mkOption {
               type = types.attrsOf types.str;
               default = {};
               example = literalExpression driverOptionsExample;
-              description = lib.mdDoc ''
+              description = ''
                 Options for the bonding driver.
                 Documentation can be found in
                 <https://www.kernel.org/doc/Documentation/networking/bonding.txt>
@@ -807,7 +822,7 @@ in
               default = null;
               example = "fast";
               type = types.nullOr types.str;
-              description = lib.mdDoc ''
+              description = ''
                 DEPRECATED, use `driverOptions`.
                 Option specifying the rate in which we'll ask our link partner
                 to transmit LACPDU packets in 802.3ad mode.
@@ -818,7 +833,7 @@ in
               default = null;
               example = 100;
               type = types.nullOr types.int;
-              description = lib.mdDoc ''
+              description = ''
                 DEPRECATED, use `driverOptions`.
                 Miimon is the number of millisecond in between each round of polling
                 by the device driver for failed links. By default polling is not
@@ -831,7 +846,7 @@ in
               default = null;
               example = "active-backup";
               type = types.nullOr types.str;
-              description = lib.mdDoc ''
+              description = ''
                 DEPRECATED, use `driverOptions`.
                 The mode which the bond will be running. The default mode for
                 the bonding driver is balance-rr, optimizing for throughput.
@@ -844,7 +859,7 @@ in
               default = null;
               example = "layer2+3";
               type = types.nullOr types.str;
-              description = lib.mdDoc ''
+              description = ''
                 DEPRECATED, use `driverOptions`.
                 Selects the transmit hash policy to use for slave selection in
                 balance-xor, 802.3ad, and tlb modes.
@@ -866,7 +881,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to define macvlan interfaces which should
         be automatically created.
       '';
@@ -876,14 +891,14 @@ in
           interface = mkOption {
             example = "enp4s0";
             type = types.str;
-            description = lib.mdDoc "The interface the macvlan will transmit packets through.";
+            description = "The interface the macvlan will transmit packets through.";
           };
 
           mode = mkOption {
             default = null;
             type = types.nullOr types.str;
             example = "vepa";
-            description = lib.mdDoc "The mode of the macvlan device.";
+            description = "The mode of the macvlan device.";
           };
 
         };
@@ -898,7 +913,7 @@ in
           primary = { port = 9001; local = { address = "192.0.2.1"; dev = "eth0"; }; };
           backup =  { port = 9002; };
         };
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
         endpoints. See {manpage}`ip-fou(8)` for details.
       '';
@@ -906,7 +921,7 @@ in
         options = {
           port = mkOption {
             type = port;
-            description = lib.mdDoc ''
+            description = ''
               Local port of the encapsulation UDP socket.
             '';
           };
@@ -914,7 +929,7 @@ in
           protocol = mkOption {
             type = nullOr (ints.between 1 255);
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               Protocol number of the encapsulated packets. Specifying `null`
               (the default) creates a GUE endpoint, specifying a protocol number will create
               a FOU endpoint.
@@ -926,7 +941,7 @@ in
               options = {
                 address = mkOption {
                   type = types.str;
-                  description = lib.mdDoc ''
+                  description = ''
                     Local address to bind to. The address must be available when the FOU
                     endpoint is created, using the scripted network setup this can be achieved
                     either by setting `dev` or adding dependency information to
@@ -939,7 +954,7 @@ in
                   type = nullOr str;
                   default = null;
                   example = "eth0";
-                  description = lib.mdDoc ''
+                  description = ''
                     Network device to bind to.
                   '';
                 };
@@ -947,7 +962,7 @@ in
             });
             default = null;
             example = { address = "203.0.113.22"; };
-            description = lib.mdDoc ''
+            description = ''
               Local address (and optionally device) to bind to using the given port.
             '';
           };
@@ -971,7 +986,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to define 6-to-4 interfaces which should be automatically created.
       '';
       type = with types; attrsOf (submodule {
@@ -981,7 +996,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "10.0.0.1";
-            description = lib.mdDoc ''
+            description = ''
               The address of the remote endpoint to forward traffic over.
             '';
           };
@@ -990,7 +1005,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "10.0.0.22";
-            description = lib.mdDoc ''
+            description = ''
               The address of the local endpoint which the remote
               side should send packets to.
             '';
@@ -1000,7 +1015,7 @@ in
             type = types.nullOr types.int;
             default = null;
             example = 255;
-            description = lib.mdDoc ''
+            description = ''
               The time-to-live of the connection to the remote tunnel endpoint.
             '';
           };
@@ -1009,7 +1024,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "enp4s0f0";
-            description = lib.mdDoc ''
+            description = ''
               The underlying network device on which the tunnel resides.
             '';
           };
@@ -1019,7 +1034,7 @@ in
               options = {
                 type = mkOption {
                   type = enum [ "fou" "gue" ];
-                  description = lib.mdDoc ''
+                  description = ''
                     Selects encapsulation type. See
                     {manpage}`ip-link(8)` for details.
                   '';
@@ -1028,7 +1043,7 @@ in
                 port = mkOption {
                   type = port;
                   example = 9001;
-                  description = lib.mdDoc ''
+                  description = ''
                     Destination port for encapsulated packets.
                   '';
                 };
@@ -1037,7 +1052,7 @@ in
                   type = nullOr types.port;
                   default = null;
                   example = 9002;
-                  description = lib.mdDoc ''
+                  description = ''
                     Source port for encapsulated packets. Will be chosen automatically by
                     the kernel if unset.
                   '';
@@ -1046,7 +1061,7 @@ in
             });
             default = null;
             example = { type = "fou"; port = 9001; };
-            description = lib.mdDoc ''
+            description = ''
               Configures encapsulation in UDP packets.
             '';
           };
@@ -1076,7 +1091,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to define Generic Routing Encapsulation (GRE) tunnels.
       '';
       type = with types; attrsOf (submodule {
@@ -1086,7 +1101,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "10.0.0.1";
-            description = lib.mdDoc ''
+            description = ''
               The address of the remote endpoint to forward traffic over.
             '';
           };
@@ -1095,7 +1110,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "10.0.0.22";
-            description = lib.mdDoc ''
+            description = ''
               The address of the local endpoint which the remote
               side should send packets to.
             '';
@@ -1105,7 +1120,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "enp4s0f0";
-            description = lib.mdDoc ''
+            description = ''
               The underlying network device on which the tunnel resides.
             '';
           };
@@ -1114,7 +1129,7 @@ in
             type = types.nullOr types.int;
             default = null;
             example = 255;
-            description = lib.mdDoc ''
+            description = ''
               The time-to-live/hoplimit of the connection to the remote tunnel endpoint.
             '';
           };
@@ -1129,7 +1144,7 @@ in
               tun6 = "ip6gre";
               tap6 = "ip6gretap";
             }.${v};
-            description = lib.mdDoc ''
+            description = ''
               Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
             '';
           };
@@ -1151,8 +1166,7 @@ in
           };
         }
       '';
-      description =
-        lib.mdDoc ''
+      description = ''
           This option allows you to define vlan devices that tag packets
           on top of a physical interface. The value of this option is an
           attribute set. Each attribute specifies a vlan, with the name
@@ -1166,13 +1180,13 @@ in
           id = mkOption {
             example = 1;
             type = types.int;
-            description = lib.mdDoc "The vlan identifier";
+            description = "The vlan identifier";
           };
 
           interface = mkOption {
             example = "enp4s0";
             type = types.str;
-            description = lib.mdDoc "The interface the vlan will transmit packets through.";
+            description = "The interface the vlan will transmit packets through.";
           };
 
         };
@@ -1203,8 +1217,7 @@ in
           };
         }
       '';
-      description =
-        lib.mdDoc ''
+      description = ''
           Creating multiple WLAN interfaces on top of one physical WLAN device (NIC).
 
           The name of the WLAN interface corresponds to the name of the attribute.
@@ -1225,14 +1238,14 @@ in
           device = mkOption {
             type = types.str;
             example = "wlp6s0";
-            description = lib.mdDoc "The name of the underlying hardware WLAN device as assigned by `udev`.";
+            description = "The name of the underlying hardware WLAN device as assigned by `udev`.";
           };
 
           type = mkOption {
             type = types.enum [ "managed" "ibss" "monitor" "mesh" "wds" ];
             default = "managed";
             example = "ibss";
-            description = lib.mdDoc ''
+            description = ''
               The type of the WLAN interface.
               The type has to be supported by the underlying hardware of the device.
             '';
@@ -1241,14 +1254,14 @@ in
           meshID = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = lib.mdDoc "MeshID of interface with type `mesh`.";
+            description = "MeshID of interface with type `mesh`.";
           };
 
           flags = mkOption {
             type = with types; nullOr (enum [ "none" "fcsfail" "control" "otherbss" "cook" "active" ]);
             default = null;
             example = "control";
-            description = lib.mdDoc ''
+            description = ''
               Flags for interface of type `monitor`.
             '';
           };
@@ -1256,14 +1269,14 @@ in
           fourAddr = mkOption {
             type = types.nullOr types.bool;
             default = null;
-            description = lib.mdDoc "Whether to enable `4-address mode` with type `managed`.";
+            description = "Whether to enable `4-address mode` with type `managed`.";
           };
 
           mac = mkOption {
             type = types.nullOr types.str;
             default = null;
             example = "02:00:00:00:00:01";
-            description = lib.mdDoc ''
+            description = ''
               MAC address to use for the device. If `null`, then the MAC of the
               underlying hardware WLAN device is used.
 
@@ -1284,17 +1297,17 @@ in
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to use DHCP to obtain an IP address and other
-        configuration for all network interfaces that are not manually
-        configured.
+        configuration for all network interfaces that do not have any manually
+        configured IPv4 addresses.
       '';
     };
 
     networking.useNetworkd = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether we should use networkd as the network configuration backend or
         the legacy script based system. Note that this option is experimental,
         enable at your own risk.
@@ -1307,7 +1320,7 @@ in
         if ''${config.${opt.enableIPv6}} then "default" else "disabled"
       '';
       type = types.enum (lib.attrNames tempaddrValues);
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
         configured explicitly in
         [](#opt-networking.interfaces._name_.tempAddress).
@@ -1326,7 +1339,10 @@ in
 
   config = {
 
-    warnings = concatMap (i: i.warnings) interfaces;
+    warnings = (concatMap (i: i.warnings) interfaces) ++ (lib.optional
+      (config.systemd.network.enable && cfg.useDHCP && !cfg.useNetworkd) ''
+        The combination of `systemd.network.enable = true`, `networking.useDHCP = true` and `networking.useNetworkd = false` can cause both networkd and dhcpcd to manage the same interfaces. This can lead to loss of networking. It is recommended you choose only one of networkd (by also enabling `networking.useNetworkd`) or scripting (by disabling `systemd.network.enable`)
+      '');
 
     assertions =
       (forEach interfaces (i: {
@@ -1375,6 +1391,8 @@ in
       "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # allow all users to do ICMP echo requests (ping)
+      "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (forEach interfaces
@@ -1385,42 +1403,14 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
-    security.wrappers = {
-      ping = {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
+    systemd.services.domainname = lib.mkIf (cfg.domain != null) {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
+      serviceConfig.Type = "oneshot";
     };
-    security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
-      /run/wrappers/bin/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers>
-        rpx /run/wrappers/wrappers.*/ping,
-      }
-      /run/wrappers/wrappers.*/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers>
-        r /run/wrappers/wrappers.*/ping.real,
-        mrpx ${config.security.wrappers.ping.source},
-        capability net_raw,
-        capability setpcap,
-      }
-    '');
-
-    # Set the host and domain names in the activation script.  Don't
-    # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname = let
-        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
-      in optionalString (effectiveHostname != "") ''
-        hostname "${effectiveHostname}"
-      '';
-    system.activationScripts.domain =
-      optionalString (cfg.domain != null) ''
-        domainname "${cfg.domain}"
-      '';
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
@@ -1444,15 +1434,15 @@ in
       ]
       ++ bridgeStp;
 
-    # The network-interfaces target is kept for backwards compatibility.
-    # New modules must NOT use it.
-    systemd.targets.network-interfaces =
-      { description = "All Network Interfaces (deprecated)";
-        wantedBy = [ "network.target" ];
-        before = [ "network.target" ];
-        after = [ "network-pre.target" ];
-        unitConfig.X-StopOnReconfiguration = true;
-      };
+    # Wake-on-LAN configuration is shared by the scripted and networkd backends.
+    systemd.network.links = pipe interfaces [
+      (filter (i: i.wakeOnLan.enable))
+      (map (i: nameValuePair "40-${i.name}" {
+        matchConfig.OriginalName = i.name;
+        linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+      }))
+      listToAttrs
+    ];
 
     systemd.services = {
       network-local-commands = {

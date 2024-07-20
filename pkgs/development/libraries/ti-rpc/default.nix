@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtirpc";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
-    url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=0fb94eef5062d2657d75eee686fa47238fafa312;sf=tgz";
-    sha256 = "sha256-3P3xYKeAmLbBI4TdsG1VZBO7py9ktiwhXNtGsnryGNI=";
+    url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${lib.replaceStrings ["."] ["-"] version};sf=tgz";
+    sha256 = "sha256-fmZxpdyl98z+QBHpEccGB8A+YktuWONw6k0p06AImDw=";
     name = "${pname}-${version}.tar.gz";
   };
 
@@ -15,10 +15,13 @@ stdenv.mkDerivation rec {
   KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
+  strictDeps = true;
 
   preConfigure = ''
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/etc
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/libtirpc/";
-    description = "The transport-independent Sun RPC implementation (TI-RPC)";
+    description = "Transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sites.google.com/site/tranter/software";
     description = "Display serial port modem status lines";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
 
     longDescription =
       '' Statserial displays a table of the signals on a standard 9-pin or
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ rps ];
+    mainProgram = "statserial";
   };
 }

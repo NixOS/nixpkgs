@@ -1,35 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest-socket
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  packaging,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "luddite";
-  version = "1.0.2";
+  version = "1.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jumptrading";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "8/7uwO5HLhyXYt+T6VUO/O7TN9+FfRlT8y0r5+CJ/l4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iJ3h1XRBzLd4cBKFPNOlIV5Z5XJ/miscfIdkpPIpbJ8=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" ""
+      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
+      --replace "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-socket pytest-mock ];
+  propagatedBuildInputs = [ packaging ];
+
   pythonImportsCheck = [ "luddite" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
 
   meta = with lib; {
     description = "Checks for out-of-date package versions";
+    mainProgram = "luddite";
     homepage = "https://github.com/jumptrading/luddite";
     license = licenses.asl20;
     maintainers = with maintainers; [ emilytrau ];

@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, gtest
-, nbval
-, numpy
-, parameterized
-, protobuf
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, tabulate
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cmake,
+  fetchFromGitHub,
+  gtest,
+  nbval,
+  numpy,
+  parameterized,
+  protobuf_21,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
+  tabulate,
+  typing-extensions,
+  abseil-cpp,
+  google-re2,
+  pillow,
+  protobuf,
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.0";
+  version = "1.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,15 +34,24 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-f+s25Y/jGosaSdoZY6PE3j6pENkfDcD+IQndrbtuzWg=";
+    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     pybind11
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
+    abseil-cpp
+    protobuf
+    google-re2
+    gtestStatic
+    pillow
+  ];
+
+  dependencies = [
+    protobuf_21
     protobuf
     numpy
     typing-extensions
@@ -95,28 +110,30 @@ in buildPythonPackage rec {
     "onnx/examples"
   ];
 
-  disabledTests = [
-    # attempts to fetch data from web
-    "test_bvlc_alexnet_cpu"
-    "test_densenet121_cpu"
-    "test_inception_v1_cpu"
-    "test_inception_v2_cpu"
-    "test_resnet50_cpu"
-    "test_shufflenet_cpu"
-    "test_squeezenet_cpu"
-    "test_vgg19_cpu"
-    "test_zfnet512_cpu"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # AssertionError: Output 0 of test 0 in folder
-    "test__pytorch_converted_Conv2d_depthwise_padded"
-    "test__pytorch_converted_Conv2d_dilated"
-    "test_dft"
-    "test_dft_axis"
-    # AssertionError: Mismatch in test 'test_Conv2d_depthwise_padded'
-    "test_xor_bcast4v4d"
-    # AssertionError: assert 1 == 0
-    "test_ops_tested"
-  ];
+  disabledTests =
+    [
+      # attempts to fetch data from web
+      "test_bvlc_alexnet_cpu"
+      "test_densenet121_cpu"
+      "test_inception_v1_cpu"
+      "test_inception_v2_cpu"
+      "test_resnet50_cpu"
+      "test_shufflenet_cpu"
+      "test_squeezenet_cpu"
+      "test_vgg19_cpu"
+      "test_zfnet512_cpu"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # AssertionError: Output 0 of test 0 in folder
+      "test__pytorch_converted_Conv2d_depthwise_padded"
+      "test__pytorch_converted_Conv2d_dilated"
+      "test_dft"
+      "test_dft_axis"
+      # AssertionError: Mismatch in test 'test_Conv2d_depthwise_padded'
+      "test_xor_bcast4v4d"
+      # AssertionError: assert 1 == 0
+      "test_ops_tested"
+    ];
 
   disabledTestPaths = [
     # Unexpected output fields from running code: {'stderr'}
@@ -130,9 +147,7 @@ in buildPythonPackage rec {
     .setuptools-cmake-build/onnx_gtests
   '';
 
-  pythonImportsCheck = [
-    "onnx"
-  ];
+  pythonImportsCheck = [ "onnx" ];
 
   meta = with lib; {
     description = "Open Neural Network Exchange";

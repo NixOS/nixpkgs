@@ -1,14 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
 , meson
 , ninja
-, rsync
 , pkg-config
 , glib
+, json-glib
 , itstool
-, libxml2
 , xorg
 , accountsservice
 , libX11
@@ -24,12 +24,12 @@
 , audit
 , gobject-introspection
 , plymouth
-, librsvg
 , coreutils
 , xorgserver
 , xwayland
 , dbus
 , nixos-icons
+, runCommand
 }:
 
 let
@@ -41,21 +41,21 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "44.1";
+  version = "46.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "aCZrOr59KPxGnQBnqsnF2rsMp5UswffCOKBJUfPcWw0=";
+    url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TuNFQioWU3FQzYQkUM2lKyyoaYS8Ue4gzcAl3PS9Jos=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${passthru.initialVT}"
+    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rsync
     gobject-introspection
   ];
 
@@ -78,6 +77,7 @@ stdenv.mkDerivation rec {
     accountsservice
     audit
     glib
+    json-glib
     gtk3
     keyutils
     libX11
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
-      sha256 = "5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
+      hash = "sha256-5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
       revert = true;
     })
 
@@ -131,33 +131,36 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    install -D ${override} ${DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
+    install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
   '';
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
-    # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
     for o in $(getAllOutputNames); do
+        # debug is created later by _separateDebugInfo hook.
         if [[ "$o" = "debug" ]]; then continue; fi
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+        mv "$DESTDIR''${!o}" "$(dirname "''${!o}")"
     done
-    # Ensure the DESTDIR is removed.
-    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+
+    mv "$DESTDIR/etc" "$out"
+
+    # Ensure we did not forget to install anything.
+    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}"
+    ! test -e "$DESTDIR"
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  # HACK: We want to install configuration files to $out/etc
-  # but GDM should read them from /etc on a NixOS system.
-  # With autotools, it was possible to override Make variables
-  # at install time but Meson does not support this
-  # so we need to convince it to install all files to a temporary
-  # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env = {
+    # HACK: We want to install configuration files to $out/etc
+    # but GDM should read them from /etc on a NixOS system.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "dest";
+  };
 
   separateDebugInfo = true;
 
@@ -170,13 +173,25 @@ stdenv.mkDerivation rec {
     # Used in GDM NixOS module
     # Don't remove.
     initialVT = "7";
+    dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
+    dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
+
+    tests = {
+      profile = runCommand "gdm-profile-test" { } ''
+        if test "${finalAttrs.passthru.dconfProfile}" != "$(cat ${finalAttrs.finalPackage}/share/dconf/profile/gdm)"; then
+          echo "GDM dconf profile changed, please update gdm.nix"
+          exit 1
+        fi
+        touch $out
+      '';
+    };
   };
 
   meta = with lib; {
-    description = "A program that manages graphical display servers and handles graphical user logins";
-    homepage = "https://wiki.gnome.org/Projects/GDM";
+    description = "Program that manages graphical display servers and handles graphical user logins";
+    homepage = "https://gitlab.gnome.org/GNOME/gdm";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

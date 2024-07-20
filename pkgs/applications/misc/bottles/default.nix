@@ -28,13 +28,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.6";
+  version = "51.11";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-9oEC+ksgHz2HP4jVwTbLzjqc8WG1+S8hmVgl2dcuPB0=";
+    sha256 = "sha256-uS3xmTu+LrVFX93bYcJvYjl6179d3IjpxLKrOXn8Z8Y=";
   };
 
   patches = [
@@ -103,11 +103,12 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "An easy-to-use wineprefix manager";
+    description = "Easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
+    mainProgram = "bottles";
   };
 }

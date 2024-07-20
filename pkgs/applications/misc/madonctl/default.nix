@@ -32,6 +32,7 @@ buildGoModule rec {
     description = "CLI for the Mastodon social network API";
     homepage = "https://github.com/McKael/madonctl";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "madonctl";
   };
 }

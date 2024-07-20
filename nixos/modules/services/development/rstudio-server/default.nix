@@ -21,12 +21,12 @@ in
   meta.maintainers = with maintainers; [ jbedo cfhammill ];
 
   options.services.rstudio-server = {
-    enable = mkEnableOption (lib.mdDoc "RStudio server");
+    enable = mkEnableOption "RStudio server";
 
     serverWorkingDir = mkOption {
       type = types.str;
       default = "/var/lib/rstudio-server";
-      description = lib.mdDoc ''
+      description = ''
         Default working directory for server (server-working-dir in rserver.conf).
       '';
     };
@@ -34,25 +34,19 @@ in
     listenAddr = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on (www-address in rserver.conf).
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.rstudio-server;
-      defaultText = literalExpression "pkgs.rstudio-server";
-      example = literalExpression "pkgs.rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
-      description = lib.mdDoc ''
-        Rstudio server package to use. Can be set to rstudioServerWrapper to provide packages.
-      '';
+    package = mkPackageOption pkgs "rstudio-server" {
+      example = "rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
     };
 
     rserverExtraConfig = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra contents for rserver.conf.
       '';
     };
@@ -60,7 +54,7 @@ in
     rsessionExtraConfig = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra contents for resssion.conf.
       '';
     };

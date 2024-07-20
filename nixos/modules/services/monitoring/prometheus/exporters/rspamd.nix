@@ -1,9 +1,16 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.rspamd;
+  inherit (lib)
+    mkOption
+    types
+    replaceStrings
+    mkRemovedOptionModule
+    recursiveUpdate
+    concatStringsSep
+    literalExpression
+    ;
 
   mkFile = conf:
     pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);
@@ -69,7 +76,7 @@ in
           custom_label = "some_value";
         }
       '';
-      description = lib.mdDoc "Set of labels added to each metric.";
+      description = "Set of labels added to each metric.";
     };
   };
   serviceOpts.serviceConfig.ExecStart = ''

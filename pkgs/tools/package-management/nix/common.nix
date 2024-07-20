@@ -1,10 +1,13 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , version
 , suffix ? ""
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-}:
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
+, self_attribute_name
+}@args:
 assert (hash == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
@@ -13,6 +16,18 @@ let
   atLeast210 = lib.versionAtLeast version "2.10pre";
   atLeast213 = lib.versionAtLeast version "2.13pre";
   atLeast214 = lib.versionAtLeast version "2.14pre";
+  atLeast219 = lib.versionAtLeast version "2.19pre";
+  atLeast220 = lib.versionAtLeast version "2.20pre";
+  atLeast221 = lib.versionAtLeast version "2.21pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
+  # Major.minor versions unaffected by CVE-2024-27297
+  unaffectedByFodSandboxEscape = [
+    "2.3"
+    "2.16"
+    "2.18"
+    "2.19"
+    "2.20"
+  ];
 in
 { stdenv
 , autoconf-archive
@@ -27,8 +42,11 @@ in
 , callPackage
 , coreutils
 , curl
+, docbook_xsl_ns
+, docbook5
 , editline
 , flex
+, git
 , gnutar
 , gtest
 , gzip
@@ -36,11 +54,17 @@ in
 , lib
 , libarchive
 , libcpuid
+, libgit2
 , libsodium
+, libxml2
+, libxslt
 , lowdown
+, toml11
+, man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
 , pkg-config
@@ -61,6 +85,7 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, runCommand
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -76,15 +101,21 @@ self = stdenv.mkDerivation {
 
   hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals atLeast24 [
     autoconf-archive
     autoreconfHook
     bison
     flex
     jq
-  ] ++ lib.optionals (atLeast24 && enableDocumentation) [
+  ] ++ lib.optionals (enableDocumentation && !atLeast24) [
+    libxslt
+    libxml2
+    docbook_xsl_ns
+    docbook5
+  ] ++ lib.optionals (enableDocumentation && atLeast24) [
     (lib.getBin lowdown)
     mdbook
   ] ++ lib.optionals (atLeast213 && enableDocumentation) [
@@ -103,13 +134,16 @@ self = stdenv.mkDerivation {
     openssl
     sqlite
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ] ++ lib.optionals atLeast24 [
     gtest
     libarchive
     lowdown
-  ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
+  ] ++ lib.optionals atLeast220 [
+    libgit2
+  ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
+    toml11
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ] ++ lib.optionals (stdenv.isx86_64) [
     libcpuid
   ] ++ lib.optionals atLeast214 [
     rapidcheck
@@ -119,17 +153,16 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ];
 
+  installCheckInputs = lib.optionals atLeast221 [
+    git
+  ] ++ lib.optionals atLeast219 [
+    man
+  ];
+
   propagatedBuildInputs = [
     boehmgc
   ] ++ lib.optionals (atLeast27) [
     nlohmann_json
-  ];
-
-  NIX_LDFLAGS = lib.optionals (!atLeast24) [
-    # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-    (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
-    # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-    (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
 
   postPatch = ''
@@ -172,11 +205,6 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals (!atLeast24) [
-    # option was removed in 2.4
-    "--disable-init-state"
-  ] ++ lib.optionals atLeast214 [
-    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
@@ -208,6 +236,11 @@ self = stdenv.mkDerivation {
   preInstallCheck = lib.optionalString stdenv.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
+  # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
+  # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
+  + lib.optionalString stdenv.isDarwin ''
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+  ''
   # See https://github.com/NixOS/nix/issues/5687
   + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
@@ -223,10 +256,31 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      # Basic smoke test that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
+
+      srcVersion = runCommand "nix-src-version" {
+        inherit version;
+      } ''
+        # This file is an implementation detail, but it's a good sanity check
+        # If upstream changes that, we'll have to adapt.
+        srcVersion=$(cat ${src}/.version)
+        echo "Version in nix nix expression: $version"
+        echo "Version in nix.src: $srcVersion"
+        if [ "$version" != "$srcVersion" ]; then
+          echo "Version mismatch!"
+          exit 1
+        fi
+        touch $out
+      '';
     };
   };
 
+  # point 'nix edit' and ofborg at the file that defines the attribute,
+  # not this common file.
+  pos = builtins.unsafeGetAttrPos "version" args;
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
@@ -237,10 +291,12 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault artturin ];
+    license = licenses.lgpl21Plus;
+    inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    mainProgram = "nix";
+    knownVulnerabilities = lib.optional (!builtins.elem (lib.versions.majorMinor version) unaffectedByFodSandboxEscape && !atLeast221) "CVE-2024-27297";
   };
 };
 in self

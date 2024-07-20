@@ -1,16 +1,14 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "binary-cache";
-  meta.maintainers = with maintainers; [ thomasjm ];
+  meta.maintainers = with lib.maintainers; [ thomasjm ];
 
   nodes.machine =
     { pkgs, ... }: {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      environment.systemPackages = with pkgs; [python3];
-      system.extraDependencies = with pkgs; [hello.inputDerivation];
+      environment.systemPackages = [ pkgs.python3 ];
+      system.extraDependencies = [ pkgs.hello.inputDerivation ];
       nix.extraOptions = ''
         experimental-features = nix-command
       '';

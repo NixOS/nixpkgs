@@ -7,7 +7,7 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "parquet-tools";
-  version = "0.2.14";
+  version = "0.2.16";
 
   format = "pyproject";
 
@@ -15,8 +15,14 @@ buildPythonApplication rec {
     owner = "ktrueda";
     repo = "parquet-tools";
     rev = "refs/tags/${version}";
-    hash = "sha256-2jIwDsxB+g37zV9hLc2VNC5YuZXTpTmr2aQ72AeHYJo=";
+    hash = "sha256-mV66R5ejfzH1IasmoyAWAH5vzrnLVVhOqKBMfWKIVY0=";
   };
+
+  patches = [
+    # support Moto 5.x
+    # https://github.com/ktrueda/parquet-tools/pull/55
+    ./moto5.patch
+  ];
 
   postPatch = ''
     substituteInPlace tests/test_inspect.py \
@@ -33,7 +39,6 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +51,11 @@ buildPythonApplication rec {
     thrift
   ];
 
+  # TestGetMetaData.test_inspect shells out to `parquet-tools` CLI entrypoint
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   nativeCheckInputs = [
     moto
     pytest-mock
@@ -53,9 +63,6 @@ buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # These tests try to read Python code as parquet and fail
-    "test_local_wildcard"
-    "test_local_and_s3_wildcard_files"
     # test file is 2 bytes bigger than expected
     "test_excute_simple"
   ];
@@ -65,10 +72,11 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A CLI tool for parquet files";
+    description = "CLI tool for parquet files";
     homepage = "https://github.com/ktrueda/parquet-tools";
     changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "parquet-tools";
   };
 }

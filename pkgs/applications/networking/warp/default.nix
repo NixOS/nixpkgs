@@ -15,18 +15,22 @@
 , glib
 , gtk4
 , libadwaita
+, zbar
+, gst_all_1
+, Security
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.5.4";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "warp";
     rev = "v${version}";
-    hash = "sha256-twK0C2BvD3GLmJ9H05sas0bce/dIMIWeCoFRU/f+1eg=";
+    hash = "sha256-GRxZ3y1PdJpBDnGCfmOmZgN8n1aaYf9IhyszRwo3MjQ=";
   };
 
   postPatch = ''
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-mxM+V4gWGfW8M56+kV/Ljtzde7oRPH0twJtEImkUIF4=";
+    hash = "sha256-v/MhVcQmMYD/n/8wmPCYUy4YpXhL0v4fq8h6cllo/pw=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +61,23 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+    zbar
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+  ]) ++ lib.optionals stdenv.isDarwin [
+    Security
+    Foundation
   ];
 
   meta = {
     description = "Fast and secure file transfer";
-    homepage = "https://apps.gnome.org/app/app.drey.Warp";
+    homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
+    mainProgram = "warp";
+    broken = stdenv.isDarwin;
   };
 }

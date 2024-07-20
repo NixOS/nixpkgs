@@ -19,7 +19,6 @@
 , intltool
 , json-glib
 , callPackage
-, libsoup
 , libstartup_notification
 , libXtst
 , libXdamage
@@ -30,7 +29,7 @@
 , polkit
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk-doc
 , gnome
@@ -72,13 +71,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.8.4";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-34kOSDIU56cSZ4j0FadVfr9HLQytnK4ys88DFF7LTiM=";
+    hash = "sha256-zWSz49ESzuftrE4caTxa+9Zvyz2rdmGgRz2hZO2OWtc=";
   };
 
   patches = [
@@ -100,7 +99,6 @@ stdenv.mkDerivation rec {
     gsound
     gtk3
     json-glib
-    libsoup # referenced in js/ui/environment.js
     libstartup_notification
     libXtst
     libXdamage
@@ -134,20 +132,13 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     gtk-doc
     perl
     python3.pkgs.wrapPython
     pkg-config
   ];
-
-  # Use locales from cinnamon-translations.
-  # FIXME: Upstream does not respect localedir option from Meson currently.
-  # https://github.com/linuxmint/cinnamon/pull/11244#issuecomment-1305855783
-  postInstall = ''
-    ln -s ${cinnamon-translations}/share/locale $out/share/locale
-  '';
 
   postPatch = ''
     find . -type f -exec sed -i \
@@ -161,17 +152,25 @@ stdenv.mkDerivation rec {
       {} +
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
-      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
-      substituteInPlace ./bin/CinnamonGtkSettings.py      --replace "'python3'" "'${pythonEnv.interpreter}'"
-      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
-      substituteInPlace ./bin/Spices.py                   --replace "msgfmt" "${gettext}/bin/msgfmt"
-      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+      substituteInPlace ./bin/capi.py                     --replace-fail '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/SettingsWidgets.py          --replace-fail "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace-fail "subprocess.run(['/usr/bin/" "subprocess.run(['" \
+                                                          --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
+                                                          --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
+      substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
     popd
 
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
+    substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
+      --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
     patchShebangs src/data-to-c.pl
+  '';
+
+  postInstall = ''
+    # Use locales from cinnamon-translations.
+    ln -s ${cinnamon-translations}/share/locale $out/share/locale
   '';
 
   preFixup = ''
@@ -193,12 +192,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" ];
+    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
   };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon";
-    description = "The Cinnamon desktop environment";
+    description = "Cinnamon desktop environment";
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

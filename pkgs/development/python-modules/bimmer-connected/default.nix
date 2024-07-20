@@ -1,57 +1,79 @@
-{ lib
-, aiofile
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pbr
-, httpx
-, pycryptodome
-, pyjwt
-, pytestCheckHook
-, respx
-, time-machine
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pbr,
+  httpx,
+  pillow,
+  pycryptodome,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
+  respx,
+  setuptools,
+  time-machine,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.13.8";
-  format = "setuptools";
+  version = "0.15.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-IC668e9XRi4rxwiwwdu4mkrQQy/hkM3OGodCDso/Uo4=";
+    hash = "sha256-0Z7W9Z5zl7N0WbvfOTs8wcloI5VfqrZ+OBWocFAnjwY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
+    setuptools
   ];
 
   PBR_VERSION = version;
 
-  propagatedBuildInputs = [
-    aiofile
+  dependencies = [
     httpx
     pycryptodome
     pyjwt
   ];
 
+  passthru.optional-dependencies = {
+    china = [ pillow ];
+  };
+
+  postInstall = ''
+    cp -R bimmer_connected/tests/responses $out/${python.sitePackages}/bimmer_connected/tests/
+  '';
+
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     respx
     time-machine
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    # presumably regressed in pytest-asyncio 0.23.0
+    "test_get_remote_position_too_old"
   ];
 
-  pythonImportsCheck = [
-    "bimmer_connected"
-  ];
+  preCheck = ''
+    export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+  '';
+
+  pythonImportsCheck = [ "bimmer_connected" ];
 
   meta = with lib; {
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
+    mainProgram = "bimmerconnected";
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

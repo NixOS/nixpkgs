@@ -8,8 +8,8 @@
 , libsigcxx
 , libcanberra-gtk3
 , json-glib
-, gnome
-, wrapGAppsHook
+, adwaita-icon-theme
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     libsigcxx
     libcanberra-gtk3
     json-glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];
 
   configureFlags = [ "--disable-lynx" ];
 
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ abbradar globin ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
+    mainProgram = "pavucontrol";
   };
 }

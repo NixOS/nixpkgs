@@ -20,7 +20,7 @@ in
 stdenv.mkDerivation {
   inherit version;
   pname = "meteor";
-  src = srcs.${system};
+  src = srcs.${system} or (throw "unsupported system ${system}");
 
   #dontStrip = true;
 
@@ -97,6 +97,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "meteor";
   };
 }

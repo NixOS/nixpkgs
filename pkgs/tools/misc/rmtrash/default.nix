@@ -3,13 +3,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rmtrash";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "PhrozenByte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wfb2ykzlsxyqn9krfsis9jxhaxy3pxl71a4f15an1ngfndai694";
+    sha256 = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

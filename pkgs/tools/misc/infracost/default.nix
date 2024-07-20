@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.26";
+  version = "0.10.38";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-Tw+peSlcnSge4xOXslsFT6UTz7NQsy1Sy89vP2YjI90=";
+    sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
   };
-  vendorHash = "sha256-nObY/79e6I5PYso917rZxwVt6pwwI5BY0nguP/1yirc=";
+  vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -24,14 +24,14 @@ buildGoModule rec {
     # want but also limits the tests
     unset subPackages
 
-    # checkFlags aren't correctly passed through via buildGoModule so we use buildFlagsArray
-    # -short only runs the unit-tests tagged short
-    # move to checkFlags after https://github.com/NixOS/nixpkgs/pull/173702
-    buildFlagsArray+="-short"
-
     # remove tests that require networking
-    rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
+    rm cmd/infracost/{breakdown,comment,diff,hcl,run,upload}_test.go
+    rm cmd/infracost/comment_{azure_repos,bitbucket,github,gitlab}_test.go
   '';
+
+  checkFlags = [
+    "-short"
+  ];
 
   postInstall = ''
     export INFRACOST_SKIP_UPDATE_CHECK=true
@@ -62,6 +62,7 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk ];
+    maintainers = with maintainers; [ davegallant jk kashw2 ];
+    mainProgram = "infracost";
   };
 }

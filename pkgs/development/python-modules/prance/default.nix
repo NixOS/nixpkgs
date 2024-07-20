@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, chardet
-, click
-, flex
-, packaging
-, pyicu
-, requests
-, ruamel-yaml
-, setuptools-scm
-, six
-, swagger-spec-validator
-, pytestCheckHook
-, openapi-spec-validator
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  chardet,
+  click,
+  flex,
+  packaging,
+  pyicu,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  six,
+  swagger-spec-validator,
+  pytestCheckHook,
+  openapi-spec-validator,
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.22.02.22.0";
+  version = "23.06.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NtIbZp34IcMYJzaNQVL9GLdNS3NYOCRoWS1wGg/gLVA=";
+    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
   };
 
   postPatch = ''
@@ -36,11 +37,7 @@ buildPythonPackage rec {
       --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     chardet
@@ -63,19 +60,19 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Disable tests that require network
-  disabledTestPaths = [
-    "tests/test_convert.py"
-  ];
+  disabledTestPaths = [ "tests/test_convert.py" ];
   disabledTests = [
     "test_convert_defaults"
     "test_convert_output"
     "test_fetch_url_http"
+    "test_openapi_spec_validator_validate_failure"
   ];
   pythonImportsCheck = [ "prance" ];
 
   meta = with lib; {
     changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
+    mainProgram = "prance";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
     maintainers = [ ];

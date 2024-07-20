@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+
+# testing
+, testers
+, witness
+}:
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.13";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "testifysec";
-    repo = pname;
+    owner = "in-toto";
+    repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-BQfJ6pHA4Yrp1zo22GQ2/JtU2UCOf1hUBqIqcIp7p3A=";
+    sha256 = "sha256-ao9mxN5cMGopCRXUkJRTNJemizzibdw0Q+oAhKjUyHA=";
   };
-  proxyVendor = true;
-  vendorHash = "sha256-bSEV6cb+/RMkNzwbzfBkDM3PTIE8t8a6w9b1BI6YnCI=";
+  vendorHash = "sha256-pDMvtSavifWfxJqfiOef0CyT8KtU8BUjEFwReElkEeM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/testifysec/witness/cmd.Version=v${version}"
+    "-X github.com/in-toto/witness/cmd.Version=v${version}"
   ];
 
   # Feed in all tests for testing
@@ -38,16 +45,14 @@ buildGoModule rec {
       --zsh <($out/bin/witness completion zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/witness --help
-    $out/bin/witness version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = witness;
+    command = "witness version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
-    description = "A pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
+    description = "Pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
     longDescription = ''
       Witness prevents tampering of build materials and verifies the integrity
       of the build process from source to target. It works by wrapping commands
@@ -57,6 +62,7 @@ buildGoModule rec {
       PKI distribution system will mitigate against many software supply chain
       attack vectors and can be used as a framework for automated governance.
     '';
+    mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
     changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
     license = licenses.asl20;

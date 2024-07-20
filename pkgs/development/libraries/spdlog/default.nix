@@ -1,43 +1,31 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
-# Although we include upstream patches that fix compilation with fmt_10, we
-# still use fmt_9 because this dependency is propagated, and many of spdlog's
-# reverse dependencies don't support fmt_10 yet.
-, fmt_9
+, fmt
+, catch2_3
 , staticBuild ? stdenv.hostPlatform.isStatic
 
 # tests
-, bear, tiledb
+, bear
+, tiledb
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.11.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
-    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
+    hash  = "sha256-F7khXbMilbh5b+eKnzcB0fPPWQqUHqAYPWJb83OnUKQ=";
   };
 
-  patches = [
-    # Fix compatiblity with fmt 10.0. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/gabime/spdlog/commit/0ca574ae168820da0268b3ec7607ca7b33024d05.patch";
-      hash = "sha256-cRsQilkyUQW47PFpDwKgU/pm+tOeLvwPx32gNOPAO1U=";
-    })
-    (fetchpatch {
-      url = "https://github.com/gabime/spdlog/commit/af1785b897c9d1098d4aa7213fad232be63c19b4.patch";
-      hash = "sha256-zpfLiBeDAOsvk4vrIyXC0kvFe2WkhAhersd+fhA8DFY=";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ fmt_9 ];
+  # Required to build tests, even if they aren't executed
+  buildInputs = [ catch2_3 ];
+  propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"

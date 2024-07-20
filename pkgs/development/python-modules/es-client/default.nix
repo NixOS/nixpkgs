@@ -1,42 +1,46 @@
-{ lib
-, buildPythonPackage
-, certifi
-, click
-, elastic-transport
-, elasticsearch8
-, fetchFromGitHub
-, hatchling
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, six
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  click,
+  ecs-logging,
+  elastic-transport,
+  elasticsearch8,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  six,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.7.0";
-  format = "pyproject";
+  version = "8.14.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DJIo0yFJGR9gw5UJnmgnBFZx0uXUEW3rWT49jhfnXkQ=";
+    hash = "sha256-CJhiSDmIlhTWV7LLWd2ZCzuj5cWXwgh0lkKJvhmaDFw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+
+  dependencies = [
     certifi
     click
+    ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
@@ -51,14 +55,16 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "es_client"
-  ];
+  pythonImportsCheck = [ "es_client" ];
 
   disabledTests = [
     # Tests require network access
     "test_bad_version_raises"
+    "test_basic_operation"
+    "test_basic_operation"
     "test_client_info"
+    "test_logging_options_ecs"
+    "test_logging_options_json"
     "test_multiple_hosts_raises"
     "test_non_dict_passed"
     "test_skip_version_check"

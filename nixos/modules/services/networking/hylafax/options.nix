@@ -37,7 +37,7 @@ let
       name = mkOption {
         type = nonEmptyStr;
         example = "ttyS1";
-        description = lib.mdDoc ''
+        description = ''
           Name of modem device,
           will be searched for in {file}`/dev`.
         '';
@@ -45,7 +45,7 @@ let
       type = mkOption {
         type = nonEmptyStr;
         example = "cirrus";
-        description = lib.mdDoc ''
+        description = ''
           Name of modem configuration file,
           will be searched for in {file}`config`
           in the spooling area directory.
@@ -59,7 +59,7 @@ let
           FAXNumber = "123456";
           LocalIdentifier = "LostInBerlin";
         };
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of values for the given modem.
           ${commonDescr}
           Options defined here override options in
@@ -118,13 +118,13 @@ in
 
   options.services.hylafax = {
 
-    enable = mkEnableOption (lib.mdDoc "HylaFAX server");
+    enable = mkEnableOption "HylaFAX server";
 
     autostart = mkOption {
       type = bool;
       default = true;
       example = false;
-      description = lib.mdDoc ''
+      description = ''
         Autostart the HylaFAX queue manager at system start.
         If this is `false`, the queue manager
         will still be started if there are pending
@@ -136,34 +136,34 @@ in
       type = nullOr nonEmptyStr;
       default = null;
       example = "49";
-      description = lib.mdDoc "Country code for server and all modems.";
+      description = "Country code for server and all modems.";
     };
 
     areaCode = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "30";
-      description = lib.mdDoc "Area code for server and all modems.";
+      description = "Area code for server and all modems.";
     };
 
     longDistancePrefix = mkOption {
       type = nullOr str;
       default = null;
       example = "0";
-      description = lib.mdDoc "Long distance prefix for server and all modems.";
+      description = "Long distance prefix for server and all modems.";
     };
 
     internationalPrefix = mkOption {
       type = nullOr str;
       default = null;
       example = "00";
-      description = lib.mdDoc "International prefix for server and all modems.";
+      description = "International prefix for server and all modems.";
     };
 
     spoolAreaPath = mkOption {
       type = path;
       default = "/var/spool/fax";
-      description = lib.mdDoc ''
+      description = ''
         The spooling area will be created/maintained
         at the location given here.
       '';
@@ -172,7 +172,7 @@ in
     userAccessFile = mkOption {
       type = path;
       default = "/etc/hosts.hfaxd";
-      description = lib.mdDoc ''
+      description = ''
         The {file}`hosts.hfaxd`
         file entry in the spooling area
         will be symlinked to the location given here.
@@ -197,7 +197,7 @@ in
       type = path;
       example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
       # '' ;  # fix vim
-      description = lib.mdDoc ''
+      description = ''
         Path to {file}`sendmail` program.
         The default uses the local sendmail wrapper
         (see {option}`config.services.mail.sendmailSetuidWrapper`),
@@ -209,7 +209,7 @@ in
     hfaxdConfig = mkOption {
       type = configAttrType;
       example.RecvqProtection = "0400";
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of lines for the global
         hfaxd config file {file}`etc/hfaxd.conf`.
         ${commonDescr}
@@ -222,7 +222,7 @@ in
         InternationalPrefix = "00";
         LongDistancePrefix = "0";
       };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of lines for the global
         faxq config file {file}`etc/config`.
         ${commonDescr}
@@ -235,7 +235,7 @@ in
         InternationalPrefix = "00";
         LongDistancePrefix = "0";
       };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of default values for
         modem config files {file}`etc/config.*`.
         ${commonDescr}
@@ -254,7 +254,7 @@ in
           LocalIdentifier = "Smith";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Description of installed modems.
         At least on modem must be defined
         to enable the HylaFAX server.
@@ -265,31 +265,31 @@ in
       type = lines;
       default = "";
       example = "chmod 0755 .  # everyone may read my faxes";
-      description = lib.mdDoc ''
+      description = ''
         Additional shell code that is executed within the
         spooling area directory right after its setup.
       '';
     };
 
-    faxcron.enable.spoolInit = mkEnableOption (lib.mdDoc ''
-      Purge old files from the spooling area with
+    faxcron.enable.spoolInit = mkEnableOption ''
+      purging old files from the spooling area with
       {file}`faxcron`
-      each time the spooling area is initialized.
-    '');
+      each time the spooling area is initialized
+    '';
     faxcron.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
-      description = lib.mdDoc ''
-        Purge old files from the spooling area with
+      description = ''
+        purging old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7)).
+        (see systemd.time(7))
       '';
     };
     faxcron.infoDays = mkOption {
       type = ints.positive;
       default = 30;
-      description = lib.mdDoc ''
+      description = ''
         Set the expiration time for data in the
         remote machine information directory in days.
       '';
@@ -297,7 +297,7 @@ in
     faxcron.logDays = mkOption {
       type = ints.positive;
       default = 30;
-      description = lib.mdDoc ''
+      description = ''
         Set the expiration time for
         session trace log files in days.
       '';
@@ -305,22 +305,22 @@ in
     faxcron.rcvDays = mkOption {
       type = ints.positive;
       default = 7;
-      description = lib.mdDoc ''
+      description = ''
         Set the expiration time for files in
         the received facsimile queue in days.
       '';
     };
 
-    faxqclean.enable.spoolInit = mkEnableOption (lib.mdDoc ''
-      Purge old files from the spooling area with
+    faxqclean.enable.spoolInit = mkEnableOption ''
+      purging old files from the spooling area with
       {file}`faxqclean`
-      each time the spooling area is initialized.
-    '');
+      each time the spooling area is initialized
+    '';
     faxqclean.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
-      description = lib.mdDoc ''
+      description = ''
         Purge old files from the spooling area with
         {file}`faxcron` with the given frequency
         (see systemd.time(7)).
@@ -330,7 +330,7 @@ in
       type = enum [ "never" "as-flagged" "always" ];
       default = "as-flagged";
       example = "always";
-      description = lib.mdDoc ''
+      description = ''
         Enable or suppress job archiving:
         `never` disables job archiving,
         `as-flagged` archives jobs that
@@ -343,7 +343,7 @@ in
       type = ints.positive;
       default = 15;
       example = literalExpression "24*60";
-      description = lib.mdDoc ''
+      description = ''
         Set the job
         age threshold (in minutes) that controls how long
         jobs may reside in the doneq directory.
@@ -353,7 +353,7 @@ in
       type = ints.positive;
       default = 60;
       example = literalExpression "24*60";
-      description = lib.mdDoc ''
+      description = ''
         Set the document
         age threshold (in minutes) that controls how long
         unreferenced files may reside in the docq directory.

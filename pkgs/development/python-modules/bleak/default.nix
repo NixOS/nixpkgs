@@ -1,19 +1,20 @@
-{ lib
-, async-timeout
-, bluez
-, buildPythonPackage
-, dbus-fast
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  async-timeout,
+  bluez,
+  buildPythonPackage,
+  dbus-fast,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.20.2";
+  version = "0.22.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,12 +23,16 @@ buildPythonPackage rec {
     owner = "hbldh";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hiQSsQHq1hoCQhoWU50i2NXYR/LaTHAize9cfr1uZsY=";
+    hash = "sha256-O8EvF+saJ0UBZ8MESM5gIRmk2wbA4HUDADiVUtXzXrY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+    substituteInPlace bleak/backends/bluezdbus/version.py \
+      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     async-timeout
@@ -40,15 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    substituteInPlace bleak/backends/bluezdbus/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-  '';
-
-  pythonImportsCheck = [
-    "bleak"
-  ];
+  pythonImportsCheck = [ "bleak" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy platform agnostic client";

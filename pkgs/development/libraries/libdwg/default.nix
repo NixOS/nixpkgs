@@ -13,8 +13,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   meta = {
     description = "Library reading dwg files";

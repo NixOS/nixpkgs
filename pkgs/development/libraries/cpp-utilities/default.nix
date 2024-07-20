@@ -3,24 +3,24 @@
 , fetchFromGitHub
 , cmake
 , cppunit
-, iconv
+, libiconv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.24.0";
+  version = "5.25.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-krskfuoCRxYcAIDqrae4+yEABXXZ9Nv0BjBVwSMjC7g=";
+    repo = "cpp-utilities";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-ECTtKx/N5MfWwYSwOycs6FXxDR56DT9tkdRxrhX4fVU=";
   };
 
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ cppunit ];
   buildInputs = lib.optionals stdenv.isDarwin [
-    iconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
+    libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
 
   cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

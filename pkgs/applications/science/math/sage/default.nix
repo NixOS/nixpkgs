@@ -11,11 +11,11 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python3 = pkgs.python3.override {
-    packageOverrides = self: super: {
+  python3 = pkgs.python3 // {
+    pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
-        inherit flint arb;
+        inherit flint3;
         inherit sage-src env-locations singular;
         inherit (maxima) lisp-compiler;
         linbox = pkgs.linbox.override { withSage = true; };
@@ -29,9 +29,10 @@ let
       sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
-    };
+    });
   };
 
+  # matches src/sage/repl/ipython_kernel/install.py:kernel_spec
   jupyter-kernel-definition = {
     displayName = "SageMath ${sage-src.version}";
     argv = [
@@ -42,7 +43,7 @@ let
       "-f"
       "{connection_file}"
     ];
-    language = "sagemath";
+    language = "sage";
     # just one 16x16 logo is available
     logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
@@ -72,7 +73,7 @@ let
     sagelib = python3.pkgs.sagelib;
     sage-docbuild = python3.pkgs.sage-docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint pythonEnv maxima;
+    inherit python3 singular palp flint3 pythonEnv maxima;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
@@ -124,9 +125,7 @@ let
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
 
-  arb = pkgs.arb.override { inherit flint; };
-
-  singular = pkgs.singular.override { inherit flint; };
+  singular = pkgs.singular.override { inherit flint3; };
 
   maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
@@ -148,7 +147,7 @@ let
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
-  flint = pkgs.flint.override { withBlas = false; };
+  flint3 = pkgs.flint3.override { withBlas = false; };
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.

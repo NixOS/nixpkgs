@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
-  version = "0.20.1";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "sha256-qWF0DCttotGEw6aLv+hCHqr2arZGSniOqzAiFdfgF34=";
+    sha256 = "sha256-TjZ8n88uldCNfpdReE/SYPkj0m6bBA2lI4SyNAhPFFM=";
   };
 
-  cargoHash = "sha256-FLlz2bfc57WWzhc9JuV6OlbYCZOd61FojPcACjBt3i0=";
+  cargoHash = "sha256-AkeKAPzgKDvnS+eyAh8MJfPOPFF+v6Rje3eXu7LM6Pk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Shell independent context and namespace switcher for kubectl";
+    mainProgram = "kubie";
     homepage = "https://github.com/sbstp/kubie";
     license = with licenses; [ zlib ];
     maintainers = with maintainers; [ illiusdope ];

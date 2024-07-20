@@ -14,62 +14,62 @@ in
 
   options.services.lemmy = {
 
-    enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
+    enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
 
     server = {
-      package = mkPackageOptionMD pkgs "lemmy-server" {};
+      package = mkPackageOption pkgs "lemmy-server" {};
     };
 
     ui = {
-      package = mkPackageOptionMD pkgs "lemmy-ui" {};
+      package = mkPackageOption pkgs "lemmy-ui" {};
 
       port = mkOption {
         type = types.port;
         default = 1234;
-        description = lib.mdDoc "Port where lemmy-ui should listen for incoming requests.";
+        description = "Port where lemmy-ui should listen for incoming requests.";
       };
     };
 
-    caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
-    nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
+    caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
+    nginx.enable = mkEnableOption "exposing lemmy with the nginx reverse proxy";
 
     database = {
-      createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+      createLocally = mkEnableOption "creation of database on the instance";
 
       uri = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc "The connection URI to use. Takes priority over the configuration file if set.";
+        description = "The connection URI to use. Takes priority over the configuration file if set.";
       };
 
       uriFile = mkOption {
         type = with types; nullOr path;
         default = null;
-        description = lib.mdDoc "File which contains the database uri.";
+        description = "File which contains the database uri.";
       };
     };
 
     pictrsApiKeyFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc "File which contains the value of `pictrs.api_key`.";
+      description = "File which contains the value of `pictrs.api_key`.";
     };
 
     smtpPasswordFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc "File which contains the value of `email.smtp_password`.";
+      description = "File which contains the value of `email.smtp_password`.";
     };
 
     adminPasswordFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc "File which contains the value of `setup.admin_password`.";
+      description = "File which contains the value of `setup.admin_password`.";
     };
 
     settings = mkOption {
       default = { };
-      description = lib.mdDoc "Lemmy configuration";
+      description = "Lemmy configuration";
 
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -77,25 +77,25 @@ in
         options.hostname = mkOption {
           type = types.str;
           default = null;
-          description = lib.mdDoc "The domain name of your instance (eg 'lemmy.ml').";
+          description = "The domain name of your instance (eg 'lemmy.ml').";
         };
 
         options.port = mkOption {
           type = types.port;
           default = 8536;
-          description = lib.mdDoc "Port where lemmy should listen for incoming requests.";
+          description = "Port where lemmy should listen for incoming requests.";
         };
 
         options.captcha = {
           enabled = mkOption {
             type = types.bool;
             default = true;
-            description = lib.mdDoc "Enable Captcha.";
+            description = "Enable Captcha.";
           };
           difficulty = mkOption {
             type = types.enum [ "easy" "medium" "hard" ];
             default = "medium";
-            description = lib.mdDoc "The difficultly of the captcha to solve.";
+            description = "The difficultly of the captcha to solve.";
           };
         };
       };
@@ -146,7 +146,7 @@ in
         ensureDatabases = [ cfg.settings.database.database ];
         ensureUsers = [{
           name = cfg.settings.database.user;
-          ensurePermissions."DATABASE ${cfg.settings.database.database}" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }];
       };
 
@@ -157,6 +157,10 @@ in
         virtualHosts."${cfg.settings.hostname}" = {
           extraConfig = ''
             handle_path /static/* {
+              root * ${cfg.ui.package}/dist
+              file_server
+            }
+            handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
               root * ${cfg.ui.package}/dist
               file_server
             }
@@ -200,7 +204,6 @@ in
           };
           "/" = {
             # mixed frontend and backend requests, based on the request headers
-            proxyPass = "$proxpass";
             recommendedProxySettings = true;
             extraConfig = ''
               set $proxpass "${ui}";
@@ -216,6 +219,8 @@ in
 
               # Cuts off the trailing slash on URLs to make them valid
               rewrite ^(.+)/+$ $1 permanent;
+
+              proxy_pass $proxpass;
             '';
           };
         };

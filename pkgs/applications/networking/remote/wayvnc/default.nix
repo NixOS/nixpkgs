@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yNWTTjlmMCMTed1SiRep3iUxchQya1GnTVoub1cpR14=";
+    hash = "sha256-IGEM212CU91+pT8xq3BzrPrIDUZxZveb2jhatMGJAsw=";
   };
 
   strictDeps = true;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A VNC server for wlroots based Wayland compositors";
+    description = "VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches
       to a running Wayland session, creates virtual input devices and exposes a
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       headless one, so it is also possible to run wayvnc without a physical
       display attached.
     '';
+    mainProgram = "wayvnc";
     inherit (src.meta) homepage;
     changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
     license = licenses.isc;

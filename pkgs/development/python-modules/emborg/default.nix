@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, borgbackup
-, appdirs
-, arrow
-, docopt
-, inform
-, nestedtext
-, parametrize-from-file
-, quantiphy
-, requests
-, shlib
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  borgbackup,
+  appdirs,
+  arrow,
+  docopt,
+  inform,
+  nestedtext,
+  parametrize-from-file,
+  quantiphy,
+  requests,
+  shlib,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.37";
-  format = "flit";
+  version = "1.39";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -28,8 +30,10 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bHYs+vlNku/T5Hb9u77Xml9/FNj5vgqPeXSzcilsS+I=";
+    hash = "sha256-DK98VAYSwN+UKuwwbd2O+gF2PDQPosbXo9D2Zrwe/yU=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -64,9 +68,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "emborg"
-  ];
+  pythonImportsCheck = [ "emborg" ];
 
   meta = with lib; {
     description = "Interactive command line interface to Borg Backup";

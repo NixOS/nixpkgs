@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
-  version = "3.3";
+  version = "3.7";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
-    sha256 = "0y0hl32b2ks7r0fhbx3k2j1gqqms5aplyasjs3fz50caxl6096a1";
+    hash = "sha256-WP5OSB7ftEVsEUklRC4ROJ3xc5SSWs26PeIRFFzl6pg=";
   };
 
   postPatch = ''
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     substituteInPlace po/Makefile \
        --replace /usr/bin/install install --replace /usr/share /share
     substituteInPlace newrole/Makefile --replace /usr/share /share
-
-    sed -i -e '39i#include <crypt.h>' run_init/run_init.c
   '';
 
   nativeBuildInputs = [ gettext ];
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SELinux policy core utilities";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
 }

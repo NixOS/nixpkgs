@@ -19,7 +19,7 @@ mkDerivation rec {
     owner = "davidar";
     repo = "tensor";
     rev = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
-    sha256 = "sha256-aR6TsfUxsxoSDaIWYgRCwd7BCgekSEqY6LpDoQ5DNqY=";
+    hash = "sha256-aR6TsfUxsxoSDaIWYgRCwd7BCgekSEqY6LpDoQ5DNqY=";
     fetchSubmodules = true;
   };
 
@@ -60,8 +60,9 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://matrix.org/docs/projects/client/tensor.html";
+    homepage = "https://github.com/davidar/tensor";
     description = "Cross-platform Qt5/QML-based Matrix client";
+    mainProgram = "tensor";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;

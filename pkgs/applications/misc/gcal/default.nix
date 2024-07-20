@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin gettext;
@@ -32,5 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "gcal";
   };
 }

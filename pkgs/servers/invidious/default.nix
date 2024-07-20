@@ -1,18 +1,29 @@
-{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
-let
+{ lib
+, callPackage
+, crystal
+, fetchFromGitea
+, librsvg
+, pkg-config
+, libxml2
+, openssl
+, shards
+, sqlite
+, nixosTests
+
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
-  #   * pick the latest commit
-  #   * update .invidious.rev, .invidious.version, and .invidious.sha256
+  #   * pick the latest tag
+  #   * update .invidious.version, .invidious.date, .invidious.commit and .invidious.hash
   #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
-  #     and update .videojs.sha256 (they are normally fetched during build
+  #     and update .videojs.hash (they are normally fetched during build
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
-  #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
-  #       the same version of lsquic and lsquic requires the boringssl
-  #       commit mentioned in its README
-  versions = lib.importJSON ./versions.json;
+, versions ? lib.importJSON ./versions.json
+}:
+let
+  # normally video.js is downloaded at build time
+  videojs = callPackage ./videojs.nix { inherit versions; };
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
@@ -21,9 +32,10 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitea {
     domain = "gitea.invidious.io";
     owner = "iv-org";
-    repo = pname;
+    repo = "invidious";
     fetchSubmodules = true;
-    inherit (versions.invidious) rev sha256;
+    rev = versions.invidious.rev or "v${version}";
+    inherit (versions.invidious) hash;
   };
 
   postPatch =
@@ -36,6 +48,8 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+
+      inherit (versions.invidious) commit date;
     in
     ''
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
@@ -43,23 +57,23 @@ crystal.buildCrystalPackage rec {
       # Use the version metadata from the derivation instead of using git at
       # build-time
       substituteInPlace src/invidious.cr \
-          --replace ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceStrings ["-"] ["."] (lib.substring 9 10 version)}"' \
-          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
+          --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
+          --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
+          --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
-          --replace 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
       substituteInPlace src/invidious/helpers/i18n.cr \
-          --replace 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
+          --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
       # Reference sql initialisation/migration scripts by absolute path
       substituteInPlace src/invidious/database/base.cr \
-            --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
+            --replace-fail 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+          --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
   nativeBuildInputs = [ pkg-config shards ];
@@ -75,19 +89,8 @@ crystal.buildCrystalPackage rec {
       "--verbose"
       "--no-debug"
       "-Dskip_videojs_download"
-      "-Ddisable_quic"
     ];
   };
-
-  postConfigure = ''
-    # lib includes nix store paths which can’t be patched, so the links have to
-    # be dereferenced first.
-    cp -rL lib lib2
-    rm -r lib
-    mv lib2 lib
-    chmod +w -R lib
-    cp ${lsquic}/lib/liblsquic.a lib/lsquic/src/lsquic/ext
-  '';
 
   postInstall = ''
     mkdir -p $out/share/invidious/config
@@ -97,24 +100,35 @@ crystal.buildCrystalPackage rec {
     cp -r config/sql $out/share/invidious/config
   '';
 
-  # Invidious tries to open config/config.yml and connect to the database, even
-  # when running --help. This specifies a minimal configuration in an
-  # environment variable. Even though the database is bogus, --help still
-  # works.
+  # Invidious tries to open and validate config/config.yml, even when
+  # running --help. This specifies a minimal configuration in an
+  # environment variable. Even though the database and hmac_key are
+  # bogus, --help still works.
   installCheckPhase = ''
-    INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
+    export INVIDIOUS_CONFIG="$(cat <<EOF
+    database_url: sqlite3:///dev/null
+    hmac_key: "this-is-required"
+    EOF
+    )"
+    $out/bin/invidious --help
+    $out/bin/invidious --version
   '';
 
   passthru = {
-    inherit lsquic;
     tests = { inherit (nixosTests) invidious; };
     updateScript = ./update.sh;
   };
 
   meta = with lib; {
-    description = "An open source alternative front-end to YouTube";
+    description = "Open source alternative front-end to YouTube";
+    mainProgram = "invidious";
     homepage = "https://invidious.io/";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ infinisil sbruder ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
+      _999eagle
+      GaetanLepage
+      sbruder
+      pbsds
+    ];
   };
 }

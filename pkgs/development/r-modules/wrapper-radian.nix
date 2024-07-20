@@ -26,8 +26,7 @@ runCommand (radian.name + "-wrapper") {
   };
 } (''
   makeWrapper "${radian}/bin/radian" "$out/bin/radian" \
-    --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE" \
-    --set "R_HOME" "${R}/lib/R"
+    --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
 '' + lib.optionalString wrapR ''
   cd ${R}/bin
   for exe in *; do

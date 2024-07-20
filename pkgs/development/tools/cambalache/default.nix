@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitLab
 , python3
 , meson
@@ -8,11 +7,11 @@
 , gobject-introspection
 , desktop-file-utils
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
 , gtk3
 , gtk4
-, gtksourceview4
+, gtksourceview5
 , libadwaita
 , libhandy
 , webkitgtk_4_1
@@ -22,7 +21,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
-  version = "0.12.1";
+  version = "0.90.2";
 
   format = "other";
 
@@ -30,9 +29,9 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jpu";
-    repo = pname;
+    repo = "cambalache";
     rev = version;
-    sha256 = "sha256-kGCpccWIhaeWrzLlrDI7Vzd0KuAIKxvLrDuSqWtpSLU=";
+    hash = "sha256-m3rearoCFQUzdZMXY2xyKf4dgdq7G4QlUbetrIqW83U=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # for setup hook
     desktop-file-utils # for update-desktop-database
     shared-mime-info # for update-mime-database
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   pythonPath = with python3.pkgs; [
@@ -54,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gtk3
     gtk4
-    gtksourceview4
+    gtksourceview5
     webkitgtk_4_1
     webkitgtk_6_0
     # For extra widgets support.
@@ -70,8 +69,8 @@ python3.pkgs.buildPythonApplication rec {
     # those programs are used at runtime not build time
     # https://gitlab.gnome.org/jpu/cambalache/-/blob/0.12.1/meson.build#L79-80
     substituteInPlace ./meson.build \
-      --replace "find_program('broadwayd', required: true)" "" \
-      --replace "find_program('gtk4-broadwayd', required: true)" ""
+      --replace-fail "find_program('broadwayd', required: true)" "" \
+      --replace-fail "find_program('gtk4-broadwayd', required: true)" ""
   '';
 
   preFixup = ''
@@ -95,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";
     description = "RAD tool for GTK 4 and 3 with data model first philosophy";
+    mainProgram = "cambalache";
     maintainers = teams.gnome.members;
     license = with licenses; [
       lgpl21Only # Cambalache

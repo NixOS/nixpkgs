@@ -1,39 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, mkYarnPackage
-, nodejs
-, sqlite
-, fetchYarnDeps
-, python3
-, pkg-config
-, glib
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nodejs,
+  python3,
+  sqlite,
 }:
-
-let
-  pin = lib.importJSON ./pin.json;
-in
 
 mkYarnPackage rec {
   pname = "jellyseerr";
-  inherit (pin) version;
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
-    hash = pin.srcHash;
+    hash = "sha256-TXe/k/pb7idu7G1wGu6TZksnoFQ5/PN0voVlve3k1UI=";
   };
 
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = pin.yarnSha256;
+    hash = "sha256-2iRxguxEI+YKm8ddhRgZMvfZuUgQmCK5ER4jMCFJQMQ=";
   };
-
-  doDist = false;
 
   nativeBuildInputs = [
     nodejs
@@ -42,16 +34,23 @@ mkYarnPackage rec {
 
   # Fixes "SQLite package has not been found installed" at launch
   pkgConfig.sqlite3 = {
-    nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp python3 ];
+    nativeBuildInputs = [
+      nodejs.pkgs.node-pre-gyp
+      python3
+      sqlite
+    ];
     postInstall = ''
       export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node --sqlite=${sqlite.dev}
       rm -r build-tmp-napi-v6
     '';
   };
 
   pkgConfig.bcrypt = {
-    nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp python3 ];
+    nativeBuildInputs = [
+      nodejs.pkgs.node-pre-gyp
+      python3
+    ];
     postInstall = ''
       export CPPFLAGS="-I${nodejs}/include/node"
       node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
@@ -76,6 +75,8 @@ mkYarnPackage rec {
       --set NODE_ENV production
   '';
 
+  doDist = false;
+
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
@@ -89,5 +90,6 @@ mkYarnPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
     platforms = platforms.linux;
+    mainProgram = "jellyseerr";
   };
 }

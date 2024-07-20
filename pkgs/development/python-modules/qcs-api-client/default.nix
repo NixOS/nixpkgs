@@ -1,37 +1,38 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, iso8601
-, poetry-core
-, pydantic
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, respx
-, retrying
-, rfc3339
-, toml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  iso8601,
+  poetry-core,
+  pydantic,
+  pydantic-settings,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  respx,
+  retrying,
+  rfc3339,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.21.5";
-  format = "pyproject";
+  version = "0.25.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lw6jswIaqDFExz/hjIrpZf4BC757l83MeCfOyZaTbfg=";
+    hash = "sha256-MkM7cRgDGjW8nh4JOqH0aKKlTV5qpQDLCR5kGfdKp2A=";
   };
 
   patches = [
@@ -46,18 +47,19 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "attrs"
     "httpx"
+    "iso8601"
+    "pydantic"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     attrs
     httpx
     iso8601
     pydantic
+    pydantic-settings
     pyjwt
     python-dateutil
     retrying
@@ -74,9 +76,7 @@ buildPythonPackage rec {
   # Tests are failing on Python 3.11, Fatal Python error: Aborted
   doCheck = !(pythonAtLeast "3.11");
 
-  pythonImportsCheck = [
-    "qcs_api_client"
-  ];
+  pythonImportsCheck = [ "qcs_api_client" ];
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";

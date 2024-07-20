@@ -3,16 +3,16 @@
 with pkgs;
 
 let
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
-  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
-  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
-  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
-  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
-
-  mavenfod = pkgs.maven.buildMavenPackage;
+  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11 { };
+  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15 { };
+  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
+  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19 { };
+  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20 { };
+  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
+  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
 
 in {
-  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
+  inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
 
   compiler = let
 
@@ -34,10 +34,13 @@ in {
         else package-darwin;
     in {
       inherit package-linux package-darwin;
+      __attrsFailEvaluation = true;
 
       jdk-hotspot = callPackage package.jdk-hotspot {};
       jre-hotspot = callPackage package.jre-hotspot {};
+    } // lib.optionalAttrs (package?jdk-openj9) {
       jdk-openj9  = callPackage package.jdk-openj9  {};
+    } // lib.optionalAttrs (package?jre-openj9) {
       jre-openj9  = callPackage package.jre-openj9  {};
     };
 
@@ -60,7 +63,7 @@ in {
 
     mkOpenjdkLinuxOnly = path-linux: args: let
       openjdk = callPackage path-linux  (gnomeArgs // args);
-    in openjdk // {
+    in assert stdenv.isLinux; openjdk // {
       headless = openjdk.override { headless = true; };
     };
 
@@ -92,6 +95,11 @@ in {
     adoptopenjdk-17 = mkAdoptopenjdk
       ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix;
+
+    corretto11 = callPackage ../development/compilers/corretto/11.nix { };
+    corretto17 = callPackage ../development/compilers/corretto/17.nix { };
+    corretto19 = callPackage ../development/compilers/corretto/19.nix { };
+    corretto21 = callPackage ../development/compilers/corretto/21.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
@@ -141,12 +149,12 @@ in {
 
     openjdk8 = mkOpenjdk
       ../development/compilers/openjdk/8.nix
-      ../development/compilers/openjdk/darwin/8.nix
+      ../development/compilers/zulu/8.nix
       { };
 
     openjdk11 = mkOpenjdk
       ../development/compilers/openjdk/11.nix
-      ../development/compilers/openjdk/darwin/11.nix
+      ../development/compilers/zulu/11.nix
       { openjfx = openjfx11; };
 
     openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
@@ -170,17 +178,14 @@ in {
       openjfx = openjfx15;
     };
 
-    openjdk16 = mkOpenjdk
-      ../development/compilers/openjdk/16.nix
-      ../development/compilers/openjdk/darwin/16.nix
-      {
-        inherit openjdk16-bootstrap;
-        openjfx = openjfx15;
-      };
+    openjdk16 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/16.nix {
+      inherit openjdk16-bootstrap;
+      openjfx = openjfx15;
+    };
 
     openjdk17 = mkOpenjdk
       ../development/compilers/openjdk/17.nix
-      ../development/compilers/openjdk/darwin/17.nix
+      ../development/compilers/zulu/17.nix
       {
         inherit openjdk17-bootstrap;
         openjfx = openjfx17;
@@ -188,7 +193,7 @@ in {
 
     openjdk18 = mkOpenjdk
       ../development/compilers/openjdk/18.nix
-      ../development/compilers/openjdk/darwin/18.nix
+      ../development/compilers/zulu/18.nix
       {
         inherit openjdk18-bootstrap;
         openjfx = openjfx17;
@@ -196,7 +201,7 @@ in {
 
     openjdk19 = mkOpenjdk
       ../development/compilers/openjdk/19.nix
-      ../development/compilers/openjdk/darwin/19.nix
+      ../development/compilers/zulu/19.nix
       {
         openjdk19-bootstrap = temurin-bin.jdk-19;
         openjfx = openjfx19;
@@ -204,10 +209,26 @@ in {
 
     openjdk20 = mkOpenjdk
       ../development/compilers/openjdk/20.nix
-      ../development/compilers/openjdk/darwin/20.nix
+      ../development/compilers/zulu/20.nix
       {
         openjdk20-bootstrap = temurin-bin.jdk-20;
         openjfx = openjfx20;
+      };
+
+    openjdk21 = mkOpenjdk
+      ../development/compilers/openjdk/21.nix
+      ../development/compilers/zulu/21.nix
+      {
+        openjdk21-bootstrap = temurin-bin.jdk-21;
+        openjfx = openjfx21;
+      };
+
+    openjdk22 = mkOpenjdk
+      ../development/compilers/openjdk/22.nix
+      ../development/compilers/zulu/22.nix
+      {
+        openjdk22-bootstrap = temurin-bin.jdk-22;
+        openjfx = openjfx22;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (
@@ -222,8 +243,8 @@ in {
       else ../development/compilers/semeru-bin/jdk-darwin.nix
     ) {});
   };
-
-  inherit (callPackage ../development/java-modules/jogl { })
-    jogl_2_3_2
-    jogl_2_4_0;
+}
+// lib.optionalAttrs config.allowAliases {
+  jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";
+  mavenfod = throw "'mavenfod' is renamed to/replaced by 'maven.buildMavenPackage'";
 }

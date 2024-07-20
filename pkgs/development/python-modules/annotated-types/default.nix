@@ -1,37 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  typing-extensions,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "annotated-types";
-  version = "0.5.0";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "annotated-types";
     repo = "annotated-types";
-    rev = "v${version}";
-    hash = "sha256-zCsWfJ8BQuov8FN+hlm9XBKWAAQ/KHPK/x024A8k2kE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-I1SPUKq2WIwEX5JmS3HrJvrpNrKDu30RWkBRDFE+k9A=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   pythonImportsCheck = [ "annotated_types" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Reusable constraint types to use with typing.Annotated";

@@ -6,33 +6,34 @@
 , ninja
 , cairo
 , fribidi
+, libGL
 , libdatrie
 , libjpeg
 , libselinux
 , libsepol
 , libthai
+, libxkbcommon
 , pango
 , pcre
 , util-linux
 , wayland
 , wayland-protocols
 , wayland-scanner
-, wlroots
 , libXdmcp
 , debug ? false
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = finalAttrs.pname;
+    repo = "hyprpicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k+rG5AZjz47Q6bpVcTK7r4s7Avg3O+1iw+skK+cn0rk=";
+    hash = "sha256-BYQF1zM6bJ44ag9FJ0aTSkhOTY9U7uRdp3SmRCs5fJM=";
   };
 
-  cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake
@@ -43,53 +44,33 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fribidi
+    libGL
     libdatrie
     libjpeg
     libselinux
     libsepol
     libthai
+    libxkbcommon
     pango
     pcre
     wayland
     wayland-protocols
     wayland-scanner
-    wlroots
     libXdmcp
     util-linux
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    make protocols
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    make release
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,share/licenses}
-
-    install -Dm755 build/hyprpicker -t $out/bin
-    install -Dm644 LICENSE -t $out/share/licenses/hyprpicker
-
-    runHook postInstall
+  postInstall = ''
+    mkdir -p $out/share/licenses
+    install -Dm644 $src/LICENSE -t $out/share/licenses/hyprpicker
   '';
 
   meta = with lib; {
-    description = "A wlroots-compatible Wayland color picker that does not suck";
+    description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
+    mainProgram = "hyprpicker";
   };
 })

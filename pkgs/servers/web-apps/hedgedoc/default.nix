@@ -6,7 +6,7 @@
 , yarn
 , makeBinaryWrapper
 , nodejs
-, python3
+, python311
 , nixosTests
 }:
 
@@ -52,7 +52,11 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     yarn
-    python3 # needed for sqlite node-gyp
+    python311 # needed for sqlite node-gyp
+  ];
+
+  buildInputs = [
+    nodejs
   ];
 
   dontConfigure = true;
@@ -75,6 +79,8 @@ in stdenv.mkDerivation {
     yarn --immutable-cache
     yarn run build
 
+    # Delete scripts that are not useful for NixOS
+    rm bin/{heroku,setup}
     patchShebangs bin/*
 
     runHook postBuild
@@ -83,13 +89,18 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
+    mkdir -p $out/share/hedgedoc
+    cp -r {app.js,bin,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
 
+    for bin in $out/share/hedgedoc/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --set NODE_ENV production \
+        --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+    done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
-      --add-flags $out/app.js \
+      --add-flags $out/share/hedgedoc/app.js \
       --set NODE_ENV production \
-      --set NODE_PATH "$out/lib/node_modules"
+      --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
 
     runHook postInstall
   '';
@@ -99,11 +110,12 @@ in stdenv.mkDerivation {
     tests = { inherit (nixosTests) hedgedoc; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.linux;
+    mainProgram = "hedgedoc";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

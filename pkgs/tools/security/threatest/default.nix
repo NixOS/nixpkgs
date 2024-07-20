@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "threatest";
-  version = "1.2.1";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FDcCAKexFpqViSQngfOhkjTr0czHIRtZL3v2psfTuYI=";
+    hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-UQ3GPSv7P4+oMvcu4eFlosnw0TQxG33ptlMTQA/5Lkw=";
+  vendorHash = "sha256-EvVazz51sW8z+8XfZB0Xo42KuUT6Q9n2Y/0HvlF1bV4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";
+    mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
     changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
     license = licenses.asl20;

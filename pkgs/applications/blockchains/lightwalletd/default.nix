@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lightwalletd";
-  version = "0.4.15";
+  version = "0.4.16";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "lightwalletd";
     rev = "v${version}";
-    hash = "sha256-tkM9uTmobKXD7Il/uvmLLckPgdkmgwsNsjlARJQiY5A=";
+    hash = "sha256-M9xfV2T8L+nssrJj29QmPiErNMpfpT8BY/30Vj8wPjY=";
   };
 
   vendorHash = "sha256-z5Hs+CkPswWhz+Ya5MyHKA3MZzQkvS7WOxNckElkg6U=";
@@ -34,9 +34,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A backend service that provides a bandwidth-efficient interface to the Zcash blockchain";
+    description = "Backend service that provides a bandwidth-efficient interface to the Zcash blockchain";
     homepage = "https://github.com/zcash/lightwalletd";
     maintainers = with maintainers; [ centromere ];
     license = licenses.mit;
+    mainProgram = "lightwalletd";
   };
 }

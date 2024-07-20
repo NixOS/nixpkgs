@@ -8,7 +8,7 @@
 , gtk3
 , gdk-pixbuf
 , xapp
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , polkit
 , glib
@@ -29,24 +29,27 @@ let
     cryptography
     pynacl
     netifaces
+    netaddr
+    ifaddr
+    qrcode
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.6.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-BKptTQbSBTQyc5V6WWdsPdC76sH0CFMXOyahfRmvQzc=";
+    hash = "sha256-PODQvdi4CARHOyDG0dal6ge8icyFnvJXOdhqEcbcrAk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     polkit # for its gettext
   ];
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dbundle-grpc=false"
     "-Dbundle-zeroconf=false"
   ];
 
@@ -74,9 +78,9 @@ stdenv.mkDerivation rec {
     # We make bubblewrap mode always available since
     # landlock mode is not supported in old kernels.
     substituteInPlace src/warpinator-launch.py \
-      --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
-      --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
-      --replace 'GLib.find_program_in_path("bwrap")' "True"
+      --replace-fail '"/usr/bin/python3"' '"${pythonEnv.interpreter}"' \
+      --replace-fail "/usr/bin/bwrap" "${bubblewrap}/bin/bwrap" \
+      --replace-fail 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
   passthru.updateScript = gitUpdater {

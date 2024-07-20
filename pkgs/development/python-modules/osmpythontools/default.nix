@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, geojson
-, lxml
-, matplotlib
-, numpy
-, pandas
-, ujson
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  geojson,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  ujson,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "osmpythontools";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to access OpenStreetMap-related services";
+    description = "Library to access OpenStreetMap-related services";
     longDescription = ''
       The python package OSMPythonTools provides easy access to
       OpenStreetMap-related services, among them an Overpass endpoint,
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mocnik-science/osm-python-tools";
     license = licenses.gpl3Only;
     changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
   };
 }

@@ -1,33 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, six
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  filetype,
+  defusedxml,
+
+  # optional-dependencies
+  pillow-heif,
+
+  # tests
+  numpy,
+  opencv4,
+  pillow,
+  pytestCheckHook,
+  wand,
 }:
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.4.1";
-  disabled = pythonOlder "2.7";
+  version = "1.8.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "Willow";
-    inherit version;
-    hash = "sha256-Dfj/UoUx4AtI1Av3Ltgb6sHcgvLULlu+1K/wIYvvjA0=";
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = "Willow";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g9/v56mdo0sJe5Pl/to/R/kXayaKK3qaYbnnPXpFjXE=";
   };
 
-  propagatedBuildInputs = [ six pillow ];
+  nativeBuildInputs = [ flit-core ];
 
-  # Test data is not included
-  # https://github.com/torchbox/Willow/issues/34
-  doCheck = false;
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  propagatedBuildInputs = [
+    filetype
+    defusedxml
+  ];
+
+  passthru.optional-dependencies = {
+    heif = [ pillow-heif ];
+  };
+
+  nativeCheckInputs = [
+    numpy
+    opencv4
+    pytestCheckHook
+    pillow
+    wand
+  ] ++ passthru.optional-dependencies.heif;
 
   meta = with lib; {
-    description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
+    description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

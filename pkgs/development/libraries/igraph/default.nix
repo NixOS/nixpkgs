@@ -24,19 +24,19 @@ assert (blas.isILP64 == lapack.isILP64 &&
         blas.isILP64 == arpack.isILP64 &&
         !blas.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.6";
+  version = "0.10.13";
 
   src = fetchFromGitHub {
     owner = "igraph";
-    repo = pname;
-    rev = version;
-    hash = "sha256-HNc+xU7Gcv9BSpb2OgyG9tCbk/dfWw5Ix1c2gvFZklE=";
+    repo = "igraph";
+    rev = finalAttrs.version;
+    hash = "sha256-c5yZI5AfaO/NFyy88efu1COb+T2r1LpHhUTfilw2H1U=";
   };
 
   postPatch = ''
-    echo "${version}" > IGRAPH_VERSION
+    echo "${finalAttrs.version}" > IGRAPH_VERSION
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -88,16 +88,23 @@ stdenv.mkDerivation rec {
     cp -r doc "$out/share"
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
+
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
 
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
-}
+})

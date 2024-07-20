@@ -7,17 +7,17 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 builtins.listToAttrs (
   builtins.map
-    (nginxName:
+    (nginxPackage:
       {
-        name = nginxName;
+        name = pkgs.lib.getName nginxPackage;
         value = makeTest {
-          name = "nginx-variant-${nginxName}";
+          name = "nginx-variant-${pkgs.lib.getName nginxPackage}";
 
           nodes.machine = { pkgs, ... }: {
             services.nginx = {
               enable = true;
               virtualHosts.localhost.locations."/".return = "200 'foo'";
-              package = pkgs."${nginxName}";
+              package = nginxPackage;
             };
           };
 
@@ -29,5 +29,5 @@ builtins.listToAttrs (
         };
       }
     )
-    [ "nginxStable" "nginxMainline" "nginxQuic" "nginxShibboleth" "openresty" "tengine" ]
+    [ pkgs.angie pkgs.angieQuic pkgs.nginxStable pkgs.nginxMainline pkgs.nginxQuic pkgs.nginxShibboleth pkgs.openresty pkgs.tengine ]
 )

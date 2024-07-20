@@ -2,7 +2,7 @@
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
-, bison, flex, gdb, gperf, perl, pkg-config, python38, ruby
+, bison, flex, gdb, gperf, perl, pkg-config, python3, ruby
 , ICU, OpenGL
 }:
 
@@ -22,11 +22,11 @@ let
 in
 qtModule {
   pname = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
+  propagatedBuildInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
     ++ lib.optional stdenv.isDarwin qtmultimedia;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen ]
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ];
-  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python38 ruby cmake ];
+  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python3 ruby cmake ];
 
   cmakeFlags = [ "-DPORT=Qt" ]
     ++ lib.optionals stdenv.isDarwin [
@@ -47,11 +47,12 @@ qtModule {
 
   doCheck = false; # fails 13 out of 13 tests (ctest)
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''
-    rm -rf "$(pwd)"
-    mkdir "$(pwd)"
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/libexec/*
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     maintainers = with lib.maintainers; [ abbradar periklis ];

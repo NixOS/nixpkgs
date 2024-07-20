@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   inherit (fwts) src;
 
-  sourceRoot = "source/efi_runtime";
+  sourceRoot = "${src.name}/efi_runtime";
 
   postPatch = ''
     substituteInPlace Makefile --replace \

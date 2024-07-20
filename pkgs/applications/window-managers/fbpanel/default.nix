@@ -1,41 +1,58 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libX11, libXmu, libXpm, gtk2, libpng, libjpeg, libtiff, librsvg, gdk-pixbuf, gdk-pixbuf-xlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libX11
+, libXmu
+, libXpm
+, gtk2
+, libpng
+, libjpeg
+, libtiff
+, librsvg
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, pypy2
 }:
 
 stdenv.mkDerivation rec {
   pname = "fbpanel";
-  version = "6.1";
-  src = fetchurl {
-    url = "mirror://sourceforge/fbpanel/${pname}-${version}.tbz2";
-    sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
+  version = "7.0";
+  src = fetchFromGitHub {
+    owner = "aanatoly";
+    repo = "fbpanel";
+    rev = "478754b687e2b48b111507ea22e8e2a001be5199";
+    hash = "sha256-+KcVcrh1aV6kjLGyiDnRHXSzJfelXWrhJS0DitG4yPA=";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg gdk-pixbuf gdk-pixbuf-xlib.dev ];
+  nativeBuildInputs = [ pkg-config pypy2 ];
+  buildInputs = [
+    libX11
+    libXmu
+    libXpm
+    gtk2
+    libpng
+    libjpeg
+    libtiff
+    librsvg
+    gdk-pixbuf
+    gdk-pixbuf-xlib.dev
+  ];
 
-  preConfigure = "patchShebangs .";
-
-  postConfigure = ''
-    substituteInPlace config.mk \
-      --replace "CFLAGSX =" "CFLAGSX = -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+  preConfigure = ''
+    sed -re '1i#!${pypy2}/bin/pypy' -i configure .config/*.py
+    sed -re 's/\<out\>/outputredirect/g' -i .config/rules.mk
+    sed -i 's/struct\ \_plugin_instance \*stam\;//' panel/plugin.h
   '';
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: plugin.o:(.bss+0x0): multiple definition of `stam'; panel.o:(.bss+0x20): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-  NIX_LDFLAGS="-lX11";
+  makeFlags = ["V=1"];
+  NIX_CFLAGS_COMPILE = ["-Wno-error" "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"];
 
   meta = with lib; {
-    description = "A stand-alone panel";
+    description = "Stand-alone panel";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.mit;
+    mainProgram = "fbpanel";
   };
 
-  passthru = {
-    updateInfo = {
-      downloadPage = "fbpanel.sourceforge.net";
-    };
-  };
 }

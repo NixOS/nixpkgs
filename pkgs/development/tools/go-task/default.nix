@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , testers
 , go-task
@@ -8,16 +9,26 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.28.0";
+  version = "3.38.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jVRQnZGM+N3W/f4mW322qPiv7PFrFoyUHNdZNoAkpAc=";
+    hash = "sha256-mz/07DONaO3kCxOXEnvWglY0b9JXxCXjTrVIEbsbl98=";
   };
 
-  vendorHash = "sha256-gXWuKOTb/7AIF6orXlIHpdSxdYxl12Es2cl4egdJfxo=";
+  vendorHash = "sha256-2M/FrXip0Tz0wguCd81qbBDW3XIJlAWwVzD+hIFm6sw=";
+
+  patches = [
+    # fix version resolution when passed in though ldflags
+    # remove on next release
+    (fetchpatch {
+      name = "fix-ldflags-version.patch";
+      url = "https://github.com/go-task/task/commit/9ee4f21d62382714ac829df6f9bbf1637406eb5b.patch?full_index=1";
+      hash = "sha256-wu5//aZ/vzuObb03AjUUlVFjPr175mn1vVAZgqSGIZ0=";
+    })
+  ];
 
   doCheck = false;
 
@@ -45,7 +56,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";
-    description = "A task runner / simpler Make alternative written in Go";
+    description = "Task runner / simpler Make alternative written in Go";
     changelog = "https://github.com/go-task/task/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ parasrah ];

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
+    mainProgram = "xmcp";
   };
 }

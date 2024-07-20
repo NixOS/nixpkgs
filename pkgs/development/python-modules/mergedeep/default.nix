@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "mergedeep";
   version = "1.3.4";
+  format = "setuptools";
   disabled = isPy27;
 
   # PyPI tarball doesn't include tests directory
@@ -19,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/clarketm/mergedeep";
-    description = "A deep merge function for python";
+    description = "Deep merge function for python";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

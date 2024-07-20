@@ -26,10 +26,11 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
+  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
       buildInputs = [ appimage-exec ];
     } ''
       appimage-exec.sh -x $out ${src}
+      ${postExtract}
     '';
 
   # for compatibility, deprecated
@@ -38,15 +39,12 @@ rec {
   wrapType1 = wrapType2;
 
   wrapAppImage = args@{
-    name ? "${args.pname}-${args.version}",
     src,
-    extraPkgs,
+    extraPkgs ? pkgs: [ ],
     meta ? {},
     ...
   }: buildFHSEnv
     (defaultFhsEnvArgs // {
-      inherit name;
-
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
@@ -55,12 +53,12 @@ rec {
       meta = {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       } // meta;
-    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
+    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+  wrapType2 = args@{ src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
-      inherit name extraPkgs;
-      src = extract { inherit name src; };
+      inherit extraPkgs;
+      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" "src" ]) args);
 
       # passthru src to make nix-update work
       # hack to keep the origin position (unsafeGetAttrPos)
@@ -72,13 +70,11 @@ rec {
     });
 
   defaultFhsEnvArgs = {
-    name = "appimage-env";
-
     # Most of the packages were taken from the Steam chroot
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome.zenity
+      zenity
       xorg.xrandr
       which
       perl
@@ -166,12 +162,13 @@ rec {
       vulkan-loader
 
       flac
-      freeglut
+      libglut
       libjpeg
       libpng12
       libpulseaudio
       libsamplerate
       libmikmod
+      libthai
       libtheora
       libtiff
       pixman
@@ -206,6 +203,8 @@ rec {
       libtool.lib # for Synfigstudio
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
+      pciutils # for FreeCAD
+      pipewire # immersed-vr wayland support
     ];
   };
 }

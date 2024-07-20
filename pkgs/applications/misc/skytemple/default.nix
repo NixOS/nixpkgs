@@ -4,26 +4,28 @@
 , gtk3
 , gtksourceview4
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3Packages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.4.7";
+  version = "1.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple";
     rev = "refs/tags/${version}";
-    hash = "sha256-NK0yLxs7/pVpl9LCz6ggYsaUDuEAj6edBEPC+4yCxNM=";
+    hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
   };
 
+  build-system = with python3Packages; [ setuptools ];
+
   buildInputs = [
-    gobject-introspection
     gtk3
     gtksourceview4
-    # webkitgkt is used for rendering interactive statistics graph which
+    # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
     webkitgtk
@@ -31,10 +33,15 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonRelaxDeps = [
+    "skytemple-files"
+    "skytemple-ssb-debugger"
+  ];
+
+  dependencies = with python3Packages; [
     cairosvg
     natsort
     ndspy
@@ -52,14 +59,21 @@ python3Packages.buildPythonApplication rec {
     skytemple-icons
     skytemple-ssb-debugger
     tilequant
+    wheel
   ] ++ skytemple-files.optional-dependencies.spritecollab;
 
   doCheck = false; # there are no tests
 
+  postInstall = ''
+    install -Dm444 org.skytemple.SkyTemple.desktop -t $out/share/applications
+    install -Dm444 installer/skytemple.ico $out/share/icons/hicolor/256x256/apps/org.skytemple.SkyTemple.ico
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

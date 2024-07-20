@@ -16,34 +16,27 @@ in
 
     services.softether = {
 
-      enable = mkEnableOption (lib.mdDoc "SoftEther VPN services");
+      enable = mkEnableOption "SoftEther VPN services";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.softether;
-        defaultText = literalExpression "pkgs.softether";
-        description = lib.mdDoc ''
-          softether derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "softether" { };
 
-      vpnserver.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Server");
+      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
 
-      vpnbridge.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Bridge");
+      vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
 
       vpnclient = {
-        enable = mkEnableOption (lib.mdDoc "SoftEther VPN Client");
+        enable = mkEnableOption "SoftEther VPN Client";
         up = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are starting.
           '';
         };
         down = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are shutting down.
           '';
         };
@@ -52,7 +45,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/softether";
-        description = lib.mdDoc ''
+        description = ''
           Data directory for SoftEther VPN.
         '';
       };

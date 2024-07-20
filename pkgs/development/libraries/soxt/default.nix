@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
     license = licenses.bsd3;
-    description = "A GUI binding for using Open Inventor with Xt/Motif";
+    description = "GUI binding for using Open Inventor with Xt/Motif";
     maintainers = with maintainers; [ tmplt ];
     platforms = platforms.linux;
   };

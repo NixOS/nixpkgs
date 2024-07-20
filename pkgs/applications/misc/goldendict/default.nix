@@ -2,6 +2,7 @@
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , wrapQtAppsHook
+, wrapGAppsHook3
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
@@ -61,8 +62,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://goldendict.org/";
-    description = "A feature-rich dictionary lookup program";
+    description = "Feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "goldendict";
     maintainers = with maintainers; [ gebner astsmtl sikmir ];
     license = licenses.gpl3Plus;
   };

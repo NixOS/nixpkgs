@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitLab
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 , gobject-introspection
 , gtk3
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     # for setup hook
     gobject-introspection
   ];
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
   ];
 
-  # Prevent double wrapping because of wrapGAppsHook
+  # Prevent double wrapping because of wrapGAppsHook3
   dontWrapGApps = true;
 
   preFixup = ''
@@ -60,9 +60,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.thregr.org/~wavexx/software/screenkey/";
-    description = "A screencast tool to display your keys inspired by Screenflick";
+    description = "Screencast tool to display your keys inspired by Screenflick";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
+    mainProgram = "screenkey";
   };
 }

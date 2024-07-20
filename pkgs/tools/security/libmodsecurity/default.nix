@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.9";
+  version = "3.0.12";
 
   src = fetchFromGitHub {
-    owner = "SpiderLabs";
+    owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-7tA1fqKK5aGOhWBifLAjDmQ80ven4+OcwAzAowPStzA=";
+    hash = "sha256-WIFAg9LvKAC8e3gpcIxtNHT53AIfPtUTyrv30woxP4M=";
     fetchSubmodules = true;
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/SpiderLabs/ModSecurity";
+    homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
     '';
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "modsec-rules-check";
   };
 }

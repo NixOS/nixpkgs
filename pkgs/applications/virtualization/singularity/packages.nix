@@ -1,88 +1,112 @@
-{ callPackage
-, fetchFromGitHub
-, nixos
-, conmon
+{
+  callPackage,
+  fetchFromGitHub,
+  nixos,
+  conmon,
 }:
 let
-  apptainer = callPackage
-    (import ./generic.nix rec {
-      pname = "apptainer";
-      version = "1.1.7";
-      projectName = "apptainer";
+  apptainer =
+    callPackage
+      (import ./generic.nix rec {
+        pname = "apptainer";
+        version = "1.3.3";
+        projectName = "apptainer";
 
-      src = fetchFromGitHub {
-        owner = "apptainer";
-        repo = "apptainer";
-        rev = "v${version}";
-        hash = "sha256-3F8qwP27IXcnnEYMnLzkCOxQDx7yej6QIZ40Wb5pk34=";
+        src = fetchFromGitHub {
+          owner = "apptainer";
+          repo = "apptainer";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-xQZCQa9z1aJ2tVtxMlwcNhlm0EV/nn8OnbfaVZRm4JI=";
+        };
+
+        # Update by running
+        # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
+        # at the root directory of the Nixpkgs repository
+        vendorHash = "sha256-W853++SSvkAYYUczbl8vnoBQZnimUdsAEXp4MCkLPBU=";
+
+        extraDescription = " (previously known as Singularity)";
+        extraMeta.homepage = "https://apptainer.org";
+      })
+      {
+        # Apptainer doesn't depend on conmon
+        conmon = null;
+
+        # Apptainer builders require explicit --with-suid / --without-suid flag
+        # when building on a system with disabled unprivileged namespace.
+        # See https://github.com/NixOS/nixpkgs/pull/215690#issuecomment-1426954601
+        defaultToSuid = null;
+
+        sourceFilesWithDefaultPaths = {
+          "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
+          "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+          "internal/pkg/util/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+        };
       };
 
-      # Update by running
-      # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
-      # at the root directory of the Nixpkgs repository
-      vendorHash = "sha256-PfFubgR/W1WBXIsRO+Kg7hA6ebeAcRiJlTlAZbnl19A=";
+  singularity =
+    callPackage
+      (import ./generic.nix rec {
+        pname = "singularity-ce";
+        version = "4.1.4";
+        projectName = "singularity";
 
-      extraDescription = " (previously known as Singularity)";
-      extraMeta.homepage = "https://apptainer.org";
-    })
-    {
-      # Apptainer doesn't depend on conmon
-      conmon = null;
+        src = fetchFromGitHub {
+          owner = "sylabs";
+          repo = "singularity";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-+qwPzgwfF6A1c/rmSM/5T2N9/wVeWhMoAthj3eSQmh8=";
+        };
 
-      # Apptainer builders require explicit --with-suid / --without-suid flag
-      # when building on a system with disabled unprivileged namespace.
-      # See https://github.com/NixOS/nixpkgs/pull/215690#issuecomment-1426954601
-      defaultToSuid = null;
-    };
+        # Update by running
+        # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
+        # at the root directory of the Nixpkgs repository
+        vendorHash = "sha256-dTqOSk8APLOsqwEiZ/IL8Zu1SR48MyEYPgRe6PC2nd8=";
 
-  singularity = callPackage
-    (import ./generic.nix rec {
-      pname = "singularity-ce";
-      version = "3.11.1";
-      projectName = "singularity";
+        # Do not build conmon and squashfuse from the Git submodule sources,
+        # Use Nixpkgs provided version
+        extraConfigureFlags = [
+          "--without-conmon"
+          "--without-squashfuse"
+        ];
 
-      src = fetchFromGitHub {
-        owner = "sylabs";
-        repo = "singularity";
-        rev = "v${version}";
-        hash = "sha256-gdgg6VN3Ily+2Remz6dZBhhfWIxyaBa4bIlFcgrA/uY=";
+        extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";
+        extraMeta.homepage = "https://sylabs.io/";
+      })
+      {
+        # Sylabs SingularityCE builders defaults to set the SUID flag
+        # on UNIX-like platforms,
+        # and only have --without-suid but not --with-suid.
+        defaultToSuid = true;
+
+        sourceFilesWithDefaultPaths = {
+          "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
+          "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+          "internal/pkg/util/env/clean.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
+        };
       };
 
-      # Update by running
-      # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
-      # at the root directory of the Nixpkgs repository
-      vendorHash = "sha256-mBhlH6LSmcJuc6HbU/3Q9ii7vJkW9jcikBWCl8oeMOk=";
+  genOverridenNixos =
+    package: packageName:
+    (nixos {
+      programs.singularity = {
+        enable = true;
+        inherit package;
+      };
+    }).config.programs.singularity.packageOverriden.overrideAttrs
+      (oldAttrs: {
+        meta = oldAttrs.meta // {
+          description = "";
+          longDescription = ''
+            This package produces identical store derivations to `pkgs.${packageName}`
+            overriden and installed by the NixOS module `programs.singularity`
+            with default configuration.
 
-      # Do not build conmon from the Git submodule source,
-      # Use Nixpkgs provided version
-      extraConfigureFlags = [
-        "--without-conmon"
-      ];
-
-      extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";
-      extraMeta.homepage = "https://sylabs.io/";
-    })
-    {
-      defaultToSuid = true;
-    };
-
-  genOverridenNixos = package: packageName: (nixos {
-    programs.singularity = {
-      enable = true;
-      inherit package;
-    };
-  }).config.programs.singularity.packageOverriden.overrideAttrs (oldAttrs: {
-    meta = oldAttrs.meta // {
-      description = "";
-      longDescription = ''
-        This package produces identical store derivations to `pkgs.${packageName}`
-        overriden and installed by the NixOS module `programs.singularity`
-        with default configuration.
-
-        This is for binary substitutes only. Use pkgs.${packageName} instead.
-      '';
-    };
-  });
+            This is for binary substitutes only. Use pkgs.${packageName} instead.
+          '';
+        };
+      });
 in
 {
   inherit apptainer singularity;

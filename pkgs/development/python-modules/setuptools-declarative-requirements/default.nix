@@ -1,9 +1,17 @@
-{ buildPythonPackage, fetchPypi, lib, pypiserver, pytestCheckHook
-, setuptools-scm, virtualenv }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pypiserver,
+  pytestCheckHook,
+  setuptools-scm,
+  virtualenv,
+}:
 
 buildPythonPackage rec {
   pname = "setuptools-declarative-requirements";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -12,7 +20,11 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [ pypiserver pytestCheckHook virtualenv ];
+  nativeCheckInputs = [
+    pypiserver
+    pytestCheckHook
+    virtualenv
+  ];
 
   # Tests use network
   doCheck = false;

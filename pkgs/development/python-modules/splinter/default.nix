@@ -1,40 +1,54 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, urllib3
-, selenium
-, cssselect
-, django
-, flask
-, lxml
-, pytestCheckHook
-, zope-testbrowser
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  urllib3,
+  selenium,
+  cssselect,
+  django,
+  flask,
+  lxml,
+  pytestCheckHook,
+  zope-testbrowser,
 }:
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.19.0";
+  version = "0.21.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
     rev = "refs/tags/${version}";
-    hash = "sha256-K10zrQOM/khVcf+OT4s5UCY8zE2+nWtaAkRLy9/feU0=";
+    hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
   };
 
-  propagatedBuildInputs = [
-    urllib3
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ urllib3 ];
 
   passthru.optional-dependencies = {
-    "zope.testbrowser" = [ zope-testbrowser lxml cssselect ];
-    django = [ django lxml cssselect ];
-    flask = [ flask lxml cssselect ];
+    "zope.testbrowser" = [
+      zope-testbrowser
+      lxml
+      cssselect
+    ];
+    django = [
+      django
+      lxml
+      cssselect
+    ];
+    flask = [
+      flask
+      lxml
+      cssselect
+    ];
     selenium = [ selenium ];
   };
 
@@ -70,6 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "splinter" ];
 
   meta = with lib; {
+    changelog = "https://splinter.readthedocs.io/en/latest/news.html";
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
     license = licenses.bsd3;

@@ -9,14 +9,14 @@
 , libjpeg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "impy";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "bcampbell";
     repo = "impy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0bHm3jawYgcIeF2COALWlypX7kvPw1hifB/W+TKcC4M=";
   };
 
@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple library for loading/saving images and animations, written in C";
+    description = "Simple library for loading/saving images and animations, written in C";
     homepage = "https://github.com/bcampbell/impy";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
-
+})

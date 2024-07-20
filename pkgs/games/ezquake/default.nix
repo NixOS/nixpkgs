@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "QW-Group";
     repo = pname + "-source";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-mi/VDSZ+ybEAaZOhBGh/cSnrRUAB/h+WQZ4Aml0UfW4=";
+    hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ezquake.com/";
-    description = "A modern QuakeWorld client focused on competitive online play";
-    license = licenses.gpl2;
+    description = "Modern QuakeWorld client focused on competitive online play";
+    mainProgram = "ezquake";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];
   };

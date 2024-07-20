@@ -1,38 +1,38 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitleaks
-, installShellFiles
-, testers
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  gitleaks,
+  installShellFiles,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.17.0";
+  version = "8.18.4";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rwTyzXFGn9+2qbWZLhVHGRbHwbTTcosW8TtVKuNlbGI=";
+    repo = "gitleaks";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tAomF5Ym+D/VMYXrsPlUnh3M94Xdx6I8WoU1jMouZag=";
   };
 
-  vendorHash = "sha256-sLezh1H5mVgoPl8YsKL41xpGWKEBP5nkKQjtPIE5Zm0=";
+  vendorHash = "sha256-DgCtWRo5KNuFCdhGJvzoH2v8n7mIxNk8eHyZFPUPo24=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # With v8 the config tests are are blocking
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
       --bash <($out/bin/${pname} completion bash) \
       --fish <($out/bin/${pname} completion fish) \
@@ -54,5 +54,6 @@ buildGoModule rec {
     changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gitleaks";
   };
 }

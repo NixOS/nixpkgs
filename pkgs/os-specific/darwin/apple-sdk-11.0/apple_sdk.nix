@@ -229,8 +229,8 @@ in rec {
         installPhase = drv.installPhase + ''
           # When used as a module, complains about a missing import for
           # Darwin.C.stdint. Apparently fixed in later SDKs.
-          awk -i inplace '/CFBase.h/ { print "#include <stdint.h>" } { print }' \
-            $out/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h
+          sed -e "/CFBase.h/ i #include <stdint.h>" \
+            -i $out/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h
         '';
       });
 

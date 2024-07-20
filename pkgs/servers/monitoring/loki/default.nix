@@ -5,17 +5,19 @@
 , makeWrapper
 , nixosTests
 , systemd
+, testers
+, grafana-loki
 }:
 
 buildGoModule rec {
-  version = "2.8.3";
+  version = "3.1.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-Ceuxaxl4KHOlS51MbpYYox6r/SfbGcLrmKbst+xQk74=";
+    hash = "sha256-HISDW6qxpfJpOFweUQo6T+8aV5mvB3o3jnx8CZxweJo=";
   };
 
   vendorHash = null;
@@ -26,6 +28,7 @@ buildGoModule rec {
     "cmd/loki-canary"
     "clients/cmd/promtail"
     "cmd/logcli"
+    "cmd/lokitool"
   ];
 
   tags = ["promtail_journal_enabled"];
@@ -38,9 +41,15 @@ buildGoModule rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  passthru.tests = { inherit (nixosTests) loki; };
+  passthru.tests = {
+    inherit (nixosTests) loki;
+    version = testers.testVersion {
+      command = "loki --version";
+      package = grafana-loki;
+    };
+  };
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let t = "github.com/grafana/loki/v3/pkg/util/build"; in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"
@@ -52,9 +61,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
+    mainProgram = "promtail";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [ willibutz globin mmahut emilylange ];
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ] ++ teams.helsinki-systems.members;
   };
 }

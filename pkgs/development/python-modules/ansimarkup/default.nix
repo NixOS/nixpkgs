@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  colorama,
 }:
 
 buildPythonPackage rec {
   pname = "ansimarkup";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gvalkov";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ansimarkup" ];
 
   meta = with lib; {
-    description = "An XML-like markup for producing colored terminal text.";
+    description = "XML-like markup for producing colored terminal text";
     homepage = "https://github.com/gvalkov/python-ansimarkup";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cpcloud ];

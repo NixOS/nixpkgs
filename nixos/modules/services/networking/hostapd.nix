@@ -28,7 +28,6 @@ let
     literalExpression
     maintainers
     mapAttrsToList
-    mdDoc
     mkDefault
     mkEnableOption
     mkIf
@@ -115,12 +114,12 @@ in {
 
   options = {
     services.hostapd = {
-      enable = mkEnableOption (mdDoc ''
-        Whether to enable hostapd. hostapd is a user space daemon for access point and
+      enable = mkEnableOption ''
+        hostapd, a user space daemon for access point and
         authentication servers. It implements IEEE 802.11 access point management,
         IEEE 802.1X/WPA/WPA2/EAP Authenticators, RADIUS client, EAP server, and RADIUS
-        authentication server.
-      '');
+        authentication server
+      '';
 
       package = mkPackageOption pkgs "hostapd" {};
 
@@ -165,7 +164,7 @@ in {
             };
           }
         '';
-        description = mdDoc ''
+        description = ''
           This option allows you to define APs for one or multiple physical radios.
           At least one radio must be specified.
 
@@ -186,7 +185,7 @@ in {
               default = "nl80211";
               example = "none";
               type = types.str;
-              description = mdDoc ''
+              description = ''
                 The driver {command}`hostapd` will use.
                 {var}`nl80211` is used with all Linux mac80211 drivers.
                 {var}`none` is used if building a standalone RADIUS server that does
@@ -198,7 +197,7 @@ in {
             noScan = mkOption {
               type = types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Disables scan for overlapping BSSs in HT40+/- mode.
                 Caution: turning this on will likely violate regulatory requirements!
               '';
@@ -208,7 +207,7 @@ in {
               default = null;
               example = "US";
               type = types.nullOr types.str;
-              description = mdDoc ''
+              description = ''
                 Country code (ISO/IEC 3166-1). Used to set regulatory domain.
                 Set as needed to indicate country in which device is operating.
                 This can limit available channels and transmit power.
@@ -229,7 +228,7 @@ in {
             band = mkOption {
               default = "2g";
               type = types.enum ["2g" "5g" "6g" "60g"];
-              description = mdDoc ''
+              description = ''
                 Specifies the frequency band to use, possible values are 2g for 2.4 GHz,
                 5g for 5 GHz, 6g for 6 GHz and 60g for 60 GHz.
               '';
@@ -239,7 +238,7 @@ in {
               default = 7;
               example = 11;
               type = types.int;
-              description = mdDoc ''
+              description = ''
                 The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                 Beware that not every device supports ACS in which case {command}`hostapd`
                 will fail to start.
@@ -252,7 +251,7 @@ in {
               type = types.submodule {
                 freeformType = extraSettingsFormat.type;
               };
-              description = mdDoc ''
+              description = ''
                 Extra configuration options to put at the end of global initialization, before defining BSSs.
                 To find out which options are global and which are per-bss you have to read hostapd's source code,
                 which is non-trivial and not documented otherwise.
@@ -277,7 +276,7 @@ in {
                   ''';
                 }
               '';
-              description = mdDoc ''
+              description = ''
                 All of these scripts will be executed in lexicographical order before hostapd
                 is started, right after the global segment was generated and may dynamically
                 append global options the generated configuration file.
@@ -292,7 +291,7 @@ in {
               enable = mkOption {
                 default = true;
                 type = types.bool;
-                description = mdDoc ''
+                description = ''
                   Enables support for IEEE 802.11n (WiFi 4, HT).
                   This is enabled by default, since the vase majority of devices
                   are expected to support this.
@@ -303,7 +302,7 @@ in {
                 type = types.listOf types.str;
                 default = ["HT40" "HT40-" "SHORT-GI-20" "SHORT-GI-40"];
                 example = ["LDPC" "HT40+" "HT40-" "GF" "SHORT-GI-20" "SHORT-GI-40" "TX-STBC" "RX-STBC1"];
-                description = mdDoc ''
+                description = ''
                   HT (High Throughput) capabilities given as a list of flags.
                   Please refer to the hostapd documentation for allowed values and
                   only set values supported by your physical adapter.
@@ -315,7 +314,7 @@ in {
               require = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "Require stations (clients) to support WiFi 4 (HT) and disassociate them if they don't.";
+                description = "Require stations (clients) to support WiFi 4 (HT) and disassociate them if they don't.";
               };
             };
 
@@ -325,14 +324,14 @@ in {
               enable = mkOption {
                 default = true;
                 type = types.bool;
-                description = mdDoc "Enables support for IEEE 802.11ac (WiFi 5, VHT)";
+                description = "Enables support for IEEE 802.11ac (WiFi 5, VHT)";
               };
 
               capabilities = mkOption {
                 type = types.listOf types.str;
                 default = [];
                 example = ["SHORT-GI-80" "TX-STBC-2BY1" "RX-STBC-1" "RX-ANTENNA-PATTERN" "TX-ANTENNA-PATTERN"];
-                description = mdDoc ''
+                description = ''
                   VHT (Very High Throughput) capabilities given as a list of flags.
                   Please refer to the hostapd documentation for allowed values and
                   only set values supported by your physical adapter.
@@ -342,7 +341,7 @@ in {
               require = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "Require stations (clients) to support WiFi 5 (VHT) and disassociate them if they don't.";
+                description = "Require stations (clients) to support WiFi 5 (VHT) and disassociate them if they don't.";
               };
 
               operatingChannelWidth = mkOption {
@@ -355,7 +354,7 @@ in {
                     "160" = 2;
                     "80+80" = 3;
                   };
-                description = mdDoc ''
+                description = ''
                   Determines the operating channel width for VHT.
 
                   - {var}`"20or40"`: 20 or 40 MHz operating channel width
@@ -372,31 +371,31 @@ in {
               enable = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "Enables support for IEEE 802.11ax (WiFi 6, HE)";
+                description = "Enables support for IEEE 802.11ax (WiFi 6, HE)";
               };
 
               require = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "Require stations (clients) to support WiFi 6 (HE) and disassociate them if they don't.";
+                description = "Require stations (clients) to support WiFi 6 (HE) and disassociate them if they don't.";
               };
 
               singleUserBeamformer = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "HE single user beamformer support";
+                description = "HE single user beamformer support";
               };
 
               singleUserBeamformee = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "HE single user beamformee support";
+                description = "HE single user beamformee support";
               };
 
               multiUserBeamformer = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "HE multi user beamformee support";
+                description = "HE multi user beamformee support";
               };
 
               operatingChannelWidth = mkOption {
@@ -409,7 +408,7 @@ in {
                     "160" = 2;
                     "80+80" = 3;
                   };
-                description = mdDoc ''
+                description = ''
                   Determines the operating channel width for HE.
 
                   - {var}`"20or40"`: 20 or 40 MHz operating channel width
@@ -426,7 +425,7 @@ in {
               enable = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc ''
+                description = ''
                   Enables support for IEEE 802.11be (WiFi 7, EHT). This is currently experimental
                   and requires you to manually enable CONFIG_IEEE80211BE when building hostapd.
                 '';
@@ -435,19 +434,19 @@ in {
               singleUserBeamformer = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "EHT single user beamformer support";
+                description = "EHT single user beamformer support";
               };
 
               singleUserBeamformee = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "EHT single user beamformee support";
+                description = "EHT single user beamformee support";
               };
 
               multiUserBeamformer = mkOption {
                 default = false;
                 type = types.bool;
-                description = mdDoc "EHT multi user beamformee support";
+                description = "EHT multi user beamformee support";
               };
 
               operatingChannelWidth = mkOption {
@@ -460,7 +459,7 @@ in {
                     "160" = 2;
                     "80+80" = 3;
                   };
-                description = mdDoc ''
+                description = ''
                   Determines the operating channel width for EHT.
 
                   - {var}`"20or40"`: 20 or 40 MHz operating channel width
@@ -487,7 +486,7 @@ in {
                   };
                 }
               '';
-              description = mdDoc ''
+              description = ''
                 This defines a BSS, colloquially known as a WiFi network.
                 You have to specify at least one.
               '';
@@ -496,7 +495,7 @@ in {
                   logLevel = mkOption {
                     default = 2;
                     type = types.int;
-                    description = mdDoc ''
+                    description = ''
                       Levels (minimum value for logged events):
                       0 = verbose debugging
                       1 = debugging
@@ -510,7 +509,7 @@ in {
                     default = "wheel";
                     example = "network";
                     type = types.str;
-                    description = mdDoc ''
+                    description = ''
                       Members of this group can access the control socket for this interface.
                     '';
                   };
@@ -518,20 +517,20 @@ in {
                   utf8Ssid = mkOption {
                     default = true;
                     type = types.bool;
-                    description = mdDoc "Whether the SSID is to be interpreted using UTF-8 encoding.";
+                    description = "Whether the SSID is to be interpreted using UTF-8 encoding.";
                   };
 
                   ssid = mkOption {
                     example = "❄️ cool ❄️";
                     type = types.str;
-                    description = mdDoc "SSID to be used in IEEE 802.11 management frames.";
+                    description = "SSID to be used in IEEE 802.11 management frames.";
                   };
 
                   bssid = mkOption {
                     type = types.nullOr types.str;
                     default = null;
                     example = "11:22:33:44:55:66";
-                    description = mdDoc ''
+                    description = ''
                       Specifies the BSSID for this BSS. Usually determined automatically,
                       but for now you have to manually specify them when using multiple BSS.
                       Try assigning related addresses from the locally administered MAC address ranges,
@@ -550,7 +549,7 @@ in {
                         "allow" = 1;
                         "radius" = 2;
                       };
-                    description = mdDoc ''
+                    description = ''
                       Station MAC address -based authentication. The following modes are available:
 
                       - {var}`"deny"`: Allow unless listed in {option}`macDeny` (default)
@@ -567,7 +566,7 @@ in {
                     type = types.listOf types.str;
                     default = [];
                     example = ["11:22:33:44:55:66"];
-                    description = mdDoc ''
+                    description = ''
                       Specifies the MAC addresses to allow if {option}`macAcl` is set to {var}`"allow"` or {var}`"radius"`.
                       These values will be world-readable in the Nix store. Values will automatically be merged with
                       {option}`macAllowFile` if necessary.
@@ -577,7 +576,7 @@ in {
                   macAllowFile = mkOption {
                     type = types.nullOr types.path;
                     default = null;
-                    description = mdDoc ''
+                    description = ''
                       Specifies a file containing the MAC addresses to allow if {option}`macAcl` is set to {var}`"allow"` or {var}`"radius"`.
                       The file should contain exactly one MAC address per line. Comments and empty lines are ignored,
                       only lines starting with a valid MAC address will be considered (e.g. `11:22:33:44:55:66`) and
@@ -589,7 +588,7 @@ in {
                     type = types.listOf types.str;
                     default = [];
                     example = ["11:22:33:44:55:66"];
-                    description = mdDoc ''
+                    description = ''
                       Specifies the MAC addresses to deny if {option}`macAcl` is set to {var}`"deny"` or {var}`"radius"`.
                       These values will be world-readable in the Nix store. Values will automatically be merged with
                       {option}`macDenyFile` if necessary.
@@ -599,7 +598,7 @@ in {
                   macDenyFile = mkOption {
                     type = types.nullOr types.path;
                     default = null;
-                    description = mdDoc ''
+                    description = ''
                       Specifies a file containing the MAC addresses to deny if {option}`macAcl` is set to {var}`"deny"` or {var}`"radius"`.
                       The file should contain exactly one MAC address per line. Comments and empty lines are ignored,
                       only lines starting with a valid MAC address will be considered (e.g. `11:22:33:44:55:66`) and
@@ -616,7 +615,7 @@ in {
                         "empty" = 1;
                         "clear" = 2;
                       };
-                    description = mdDoc ''
+                    description = ''
                       Send empty SSID in beacons and ignore probe request frames that do not
                       specify full SSID, i.e., require stations to know SSID. Note that this does
                       not increase security, since your clients will then broadcast the SSID instead,
@@ -633,7 +632,7 @@ in {
                   apIsolate = mkOption {
                     default = false;
                     type = types.bool;
-                    description = mdDoc ''
+                    description = ''
                       Isolate traffic between stations (clients) and prevent them from
                       communicating with each other.
                     '';
@@ -645,7 +644,7 @@ in {
                     type = types.submodule {
                       freeformType = extraSettingsFormat.type;
                     };
-                    description = mdDoc ''
+                    description = ''
                       Extra configuration options to put at the end of this BSS's defintion in the
                       hostapd.conf for the associated interface. To find out which options are global
                       and which are per-bss you have to read hostapd's source code, which is non-trivial
@@ -673,7 +672,7 @@ in {
                         ''';
                       }
                     '';
-                    description = mdDoc ''
+                    description = ''
                       All of these scripts will be executed in lexicographical order before hostapd
                       is started, right after the bss segment was generated and may dynamically
                       append bss options to the generated configuration file.
@@ -688,15 +687,17 @@ in {
                   authentication = {
                     mode = mkOption {
                       default = "wpa3-sae";
-                      type = types.enum ["none" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
-                      description = mdDoc ''
+                      type = types.enum ["none" "wpa2-sha1" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
+                      description = ''
                         Selects the authentication mode for this AP.
 
                         - {var}`"none"`: Don't configure any authentication. This will disable wpa alltogether
                           and create an open AP. Use {option}`settings` together with this option if you
                           want to configure the authentication manually. Any password options will still be
                           effective, if set.
-                        - {var}`"wpa2-sha256"`: WPA2-Personal using SHA256 (IEEE 802.11i/RSN). Passwords are set
+                        - {var}`"wpa2-sha1"`: Not recommended. WPA2-Personal using HMAC-SHA1. Passwords are set
+                          using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
+                        - {var}`"wpa2-sha256"`: WPA2-Personal using HMAC-SHA256 (IEEE 802.11i/RSN). Passwords are set
                           using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
                         - {var}`"wpa3-sae-transition"`: Use WPA3-Personal (SAE) if possible, otherwise fallback
                           to WPA2-SHA256. Only use if necessary and switch to the newer WPA3-SAE when possible.
@@ -711,7 +712,7 @@ in {
                       default = ["CCMP"];
                       example = ["CCMP-256" "GCMP-256"];
                       type = types.listOf types.str;
-                      description = mdDoc ''
+                      description = ''
                         Set of accepted cipher suites (encryption algorithms) for pairwise keys (unicast packets).
                         By default this allows just CCMP, which is the only commonly supported secure option.
                         Use {option}`enableRecommendedPairwiseCiphers` to also enable newer recommended ciphers.
@@ -726,7 +727,7 @@ in {
                       default = false;
                       example = true;
                       type = types.bool;
-                      description = mdDoc ''
+                      description = ''
                         Additionally enable the recommended set of pairwise ciphers.
                         This enables newer secure ciphers, additionally to those defined in {option}`pairwiseCiphers`.
                         You will have to test whether your hardware supports these by trial-and-error, because
@@ -742,7 +743,7 @@ in {
                       default = null;
                       example = "a flakey password";
                       type = types.nullOr types.str;
-                      description = mdDoc ''
+                      description = ''
                         Sets the password for WPA-PSK that will be converted to the pre-shared key.
                         The password length must be in the range [8, 63] characters. While some devices
                         may allow arbitrary characters (such as UTF-8) to be used, but the standard specifies
@@ -759,7 +760,7 @@ in {
                     wpaPasswordFile = mkOption {
                       default = null;
                       type = types.nullOr types.path;
-                      description = mdDoc ''
+                      description = ''
                         Sets the password for WPA-PSK. Follows the same rules as {option}`wpaPassword`,
                         but reads the password from the given file to prevent the password from being
                         put into the Nix store.
@@ -771,7 +772,7 @@ in {
                     wpaPskFile = mkOption {
                       default = null;
                       type = types.nullOr types.path;
-                      description = mdDoc ''
+                      description = ''
                         Sets the password(s) for WPA-PSK. Similar to {option}`wpaPasswordFile`,
                         but additionally allows specifying multiple passwords, and some other options.
 
@@ -803,7 +804,7 @@ in {
                           { password = "sekret pazzword"; mac = "11:22:33:44:55:66"; }
                         ]
                       '';
-                      description = mdDoc ''
+                      description = ''
                         Sets allowed passwords for WPA3-SAE.
 
                         The last matching (based on peer MAC address and identifier) entry is used to
@@ -813,14 +814,14 @@ in {
                         Warning: These entries will get put into a world-readable file in
                         the Nix store! Using {option}`saePasswordFile` instead is recommended.
 
-                        Not used when {option}`mode` is {var}`"wpa2-sha256"`.
+                        Not used when {option}`mode` is {var}`"wpa2-sha1"` or {var}`"wpa2-sha256"`.
                       '';
                       type = types.listOf (types.submodule {
                         options = {
                           password = mkOption {
                             example = "a flakey password";
                             type = types.str;
-                            description = mdDoc ''
+                            description = ''
                               The password for this entry. SAE technically imposes no restrictions on
                               password length or character set. But due to limitations of {command}`hostapd`'s
                               config file format, a true newline character cannot be parsed.
@@ -834,7 +835,7 @@ in {
                             default = null;
                             example = "11:22:33:44:55:66";
                             type = types.nullOr types.str;
-                            description = mdDoc ''
+                            description = ''
                               If this attribute is not included, or if is set to the wildcard address (`ff:ff:ff:ff:ff:ff`),
                               the entry is available for any station (client) to use. If a specific peer MAC address is included,
                               only a station with that MAC address is allowed to use the entry.
@@ -845,14 +846,14 @@ in {
                             default = null;
                             example = 1;
                             type = types.nullOr types.int;
-                            description = mdDoc "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
+                            description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                           };
 
                           pk = mkOption {
                             default = null;
                             example = "";
                             type = types.nullOr types.str;
-                            description = mdDoc ''
+                            description = ''
                               If this attribute is given, SAE-PK will be enabled for this connection.
                               This prevents evil-twin attacks, but a public key is required additionally to connect.
                               (Essentially adds pubkey authentication such that the client can verify identity of the AP)
@@ -863,7 +864,7 @@ in {
                             default = null;
                             example = "";
                             type = types.nullOr types.str;
-                            description = mdDoc ''
+                            description = ''
                               If this attribute is given with non-zero length, it will set the password identifier
                               for this entry. It can then only be used with that identifier.
                             '';
@@ -875,7 +876,7 @@ in {
                     saePasswordsFile = mkOption {
                       default = null;
                       type = types.nullOr types.path;
-                      description = mdDoc ''
+                      description = ''
                         Sets the password for WPA3-SAE. Follows the same rules as {option}`saePasswords`,
                         but reads the entries from the given file to prevent them from being
                         put into the Nix store.
@@ -885,38 +886,19 @@ in {
                         parameters doesn't matter:
                         `<password>[|mac=<peer mac>][|vlanid=<VLAN ID>][|pk=<m:ECPrivateKey-base64>][|id=<identifier>]`
 
-                        Not used when {option}`mode` is {var}`"wpa2-sha256"`.
+                        Not used when {option}`mode` is {var}`"wpa2-sha1"` or {var}`"wpa2-sha256"`.
                       '';
                     };
 
                     saeAddToMacAllow = mkOption {
                       type = types.bool;
                       default = false;
-                      description = mdDoc ''
+                      description = ''
                         If set, all sae password entries that have a non-wildcard MAC associated to
                         them will additionally be used to populate the MAC allow list. This is
                         additional to any entries set via {option}`macAllow` or {option}`macAllowFile`.
                       '';
                     };
-                  };
-
-                  managementFrameProtection = mkOption {
-                    default = "required";
-                    type = types.enum ["disabled" "optional" "required"];
-                    apply = x:
-                      getAttr x {
-                        "disabled" = 0;
-                        "optional" = 1;
-                        "required" = 2;
-                      };
-                    description = mdDoc ''
-                      Management frame protection (MFP) authenticates management frames
-                      to prevent deauthentication (or related) attacks.
-
-                      - {var}`"disabled"`: No management frame protection
-                      - {var}`"optional"`: Use MFP if a connection allows it
-                      - {var}`"required"`: Force MFP for all clients
-                    '';
                   };
                 };
 
@@ -928,7 +910,7 @@ in {
                 in {
                   settings = {
                     ssid = bssCfg.ssid;
-                    utf8_ssid = bssCfg.ssid;
+                    utf8_ssid = bssCfg.utf8Ssid;
 
                     logger_syslog = mkDefault (-1);
                     logger_syslog_level = bssCfg.logLevel;
@@ -943,7 +925,8 @@ in {
 
                     # IEEE 802.11i (authentication) related configuration
                     # Encrypt management frames to protect against deauthentication and similar attacks
-                    ieee80211w = bssCfg.managementFrameProtection;
+                    ieee80211w = mkDefault 1;
+                    sae_require_mfp = mkDefault 1;
 
                     # Only allow WPA by default and disable insecure WEP
                     auth_algs = mkDefault 1;
@@ -978,6 +961,9 @@ in {
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+                  } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
+                    wpa = 2;
+                    wpa_key_mgmt = "WPA-PSK";
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256";
@@ -987,7 +973,7 @@ in {
                   } // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                     wpa_passphrase = bssCfg.authentication.wpaPassword;
                   } // optionalAttrs (bssCfg.authentication.wpaPskFile != null) {
-                    wpa_psk_file = bssCfg.authentication.wpaPskFile;
+                    wpa_psk_file = toString bssCfg.authentication.wpaPskFile;
                   };
 
                   dynamicConfigScripts = let
@@ -1185,14 +1171,6 @@ in {
                   message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
                 }
                 {
-                  assertion = auth.mode == "wpa3-sae" -> bssCfg.managementFrameProtection == 2;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires managementFrameProtection="required"'';
-                }
-                {
-                  assertion = auth.mode == "wpa3-sae-transition" -> bssCfg.managementFrameProtection != 0;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode with WPA2-SHA256, which requires managementFrameProtection="optional" or ="required"'';
-                }
-                {
                   assertion = countWpaPasswordDefinitions <= 1;
                   message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
                 }
@@ -1213,8 +1191,8 @@ in {
                   message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
                 }
                 {
-                  assertion = auth.mode == "wpa2-sha256" -> countWpaPasswordDefinitions == 1;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-SHA256 which requires defining a wpa password option'';
+                  assertion = (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
+                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
                 }
               ])
               radioCfg.networks))
@@ -1222,8 +1200,6 @@ in {
         cfg.radios));
 
     environment.systemPackages = [cfg.package];
-
-    services.udev.packages = with pkgs; [crda];
 
     systemd.services.hostapd = {
       description = "IEEE 802.11 Host Access-Point Daemon";

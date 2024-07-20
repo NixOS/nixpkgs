@@ -1,19 +1,20 @@
 { lib, stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
-, gobject-introspection }:
+, gobject-introspection, procps }:
 
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "networkmanager_dmenu";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
     rev = "v${version}";
-    sha256 = "sha256-cJeDYk2BQv2ZWGC96I7lXFFYgseWj68ZfvE7ATW46U0=";
+    sha256 = "sha256-ibZgXpHC3ueshN1BQkAaN/tW3+qulyufI3VOnxPwi7Q=";
   };
 
-  buildInputs = [ glib python pygobject3 gobject-introspection networkmanager python3Packages.wrapPython ];
+  nativeBuildInputs = [ gobject-introspection ];
+  buildInputs = [ glib python pygobject3 networkmanager python3Packages.wrapPython procps ];
 
   dontBuild = true;
 
@@ -35,6 +36,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description  = "Small script to manage NetworkManager connections with dmenu instead of nm-applet";
+    mainProgram = "networkmanager_dmenu";
     homepage     = "https://github.com/firecat53/networkmanager-dmenu";
     license      = lib.licenses.mit;
     maintainers  = [ lib.maintainers.jensbin ];

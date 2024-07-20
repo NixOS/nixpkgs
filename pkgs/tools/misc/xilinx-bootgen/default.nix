@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xilinx-bootgen";
-  version = "xilinx_v2023.1";
+  version = "xilinx_v2023.2";
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
     rev = version;
-    sha256 = "sha256-pEkpZachZX2tOhH2Odb2fZWqJehLILE/0Z500xRuRzU=";
+    hash = "sha256-YRaq36N6uBHyjuHQ5hCO35Y+y818NuSjg/js181iItA=";
   };
 
   buildInputs = [ openssl ];
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.flokli ];
+    mainProgram = "bootgen";
   };
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "relaxng";
     repo = "jing-trang";
     rev = "V${version}";
-    sha256 = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
+    hash = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}
-    cp ./build/*.jar "$out/share/java/"
+    cp ./build/*.jar ./lib/resolver.jar "$out/share/java/"
 
     for tool in jing trang; do
     cat > "$out/bin/$tool" <<EOF
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   checkPhase = "ant test";
 
   meta = with lib; {
-    description = "A RELAX NG validator in Java";
+    description = "RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";

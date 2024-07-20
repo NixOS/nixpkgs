@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     })
   ] ++ (lib.optional stdenv.isAarch64 ./no-sse-on-arm.patch);
 
-  buildInputs = [ qtbase qttools libGLU.dev ];
+  buildInputs = [ qtbase qttools libGLU ];
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   preConfigure = ''
@@ -59,9 +59,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://niftools.sourceforge.net/wiki/NifSkope";
-    description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
+    description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;
     license = licenses.bsd3;
+    mainProgram = "NifSkope";
   };
 }

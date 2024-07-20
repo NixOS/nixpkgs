@@ -1,36 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, nose
-, six
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cycler";
-  version = "0.11.0";
+  version = "0.12.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "cycler";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5L0APSi/mJ85SuKCVz+c6Fn8zZNpRm6vCeBO0fpGKxg=";
   };
 
-  nativeCheckInputs = [ coverage nose ];
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} run_tests.py
-  '';
-
-  # Tests were not included in release.
-  # https://github.com/matplotlib/cycler/issues/31
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = {
+    changelog = "https://github.com/matplotlib/cycler/releases/tag/v${version}";
     description = "Composable style cycles";
     homepage = "https://github.com/matplotlib/cycler";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

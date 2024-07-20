@@ -1,67 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, logbook
-, aiofiles
-, aiohttp
-, aiohttp-socks
-, aioresponses
-, atomicwrites
-, attrs
-, cachetools
-, faker
-, future
-, git
-, h11
-, h2
-, hypothesis
-, jsonschema
-, peewee
-, poetry-core
-, py
-, pycryptodome
-, pytest-aiohttp
-, pytest-benchmark
-, pytestCheckHook
-, python-olm
-, unpaddedbase64
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  aiofiles,
+  aiohttp,
+  aiohttp-socks,
+  h11,
+  h2,
+  jsonschema,
+  pycryptodome,
+  unpaddedbase64,
+
+  # optional-dependencies
+  atomicwrites,
+  cachetools,
+  peewee,
+  python-olm,
+
+  # tests
+  aioresponses,
+  faker,
+  hpack,
+  hyperframe,
+  hypothesis,
+  pytest-aiohttp,
+  pytest-benchmark,
+  pytestCheckHook,
+
+  # passthru tests
+  nixosTests,
+  opsdroid,
+  pantalaimon,
+  weechatScripts,
+  zulip,
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.20.1";
+  version = "0.24.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-6oMOfyl8yR8FMprPYD831eiXh9g/bqslvxDmVcrNK80=";
+    hash = "sha256-XlswVHLvKOi1qr+I7Mbm4IBjn1DG7glgDsNY48NA5Ew=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
-      --replace 'h11 = "^0.12.0"' 'h11 = "*"' \
-      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }' \
-      --replace 'aiohttp-socks = "^0.7.0"' 'aiohttp-socks = "*"'
-  '';
-
-  nativeBuildInputs = [
-    git
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
     aiohttp-socks
-    attrs
-    future
     h11
     h2
     jsonschema
-    logbook
     pycryptodome
     unpaddedbase64
   ];
@@ -78,16 +77,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     faker
+    hpack
+    hyperframe
     hypothesis
-    py
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
   ] ++ passthru.optional-dependencies.e2e;
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
     # touches network
@@ -96,11 +94,25 @@ buildPythonPackage rec {
     "test_transfer_monitor_callbacks"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests)
+      dendrite
+      matrix-appservice-irc
+      matrix-conduit
+      mjolnir
+      ;
+    inherit (weechatScripts) weechat-matrix;
+    inherit opsdroid pantalaimon zulip;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/poljar/matrix-nio";
     changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
-    description = "A Python Matrix client library, designed according to sans I/O principles";
+    description = "Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
-    maintainers = with maintainers; [ tilpner emily symphorien ];
+    maintainers = with maintainers; [
+      tilpner
+      symphorien
+    ];
   };
 }

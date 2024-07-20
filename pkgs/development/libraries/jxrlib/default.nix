@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "Implementation of the JPEG XR image codec standard";
     homepage = "https://jxrlib.codeplex.com";

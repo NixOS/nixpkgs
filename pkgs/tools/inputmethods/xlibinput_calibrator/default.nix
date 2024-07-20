@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Touch calibrator for libinput";
+    mainProgram = "xlibinput_calibrator";
     homepage = "https://github.com/kreijack/xlibinput_calibrator";
     changelog = "https://github.com/kreijack/xlibinput_calibrator/blob/${src.rev}/Changelog";
     license = with licenses; [ mit ];

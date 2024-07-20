@@ -4,17 +4,20 @@
 , gitUpdater
 , cmake
 , nasm
+
+# for passthru.tests
+, ffmpeg
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rGe4h3d2Ql8tB/5vKFJGPkhmjMHnqgMUpnGzeh+PasA=";
+    hash = "sha256-yfKnkO8GPmMpTWTVYDliERouSFgQPe3CfJmVussxfHY=";
   };
 
   nativeBuildInputs = [
@@ -22,8 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  cmakeFlags = [
+    "-DSVT_AV1_LTO=ON"
+  ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+    tests = {
+      ffmpeg = ffmpeg.override { withSvtav1 = true; };
+    };
   };
 
   meta = with lib; {
@@ -43,7 +55,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ aom bsd3 ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
-    # error: use of undeclared identifier 'kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange'
-    broken = stdenv.isAarch64 && stdenv.isDarwin;
   };
 })

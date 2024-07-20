@@ -11,14 +11,14 @@ in
 
   options = {
     services.geoipupdate = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
-        periodic downloading of GeoIP databases using geoipupdate.
-      '');
+      enable = lib.mkEnableOption ''
+        periodic downloading of GeoIP databases using geoipupdate
+      '';
 
       interval = lib.mkOption {
         type = lib.types.str;
         default = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           Update the GeoIP databases at this time / interval.
           The format is described in
           {manpage}`systemd.time(7)`.
@@ -35,7 +35,7 @@ in
             ProxyUserPassword = { _secret = "/run/keys/proxy_pass"; };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           geoipupdate configuration options. See
           <https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md>
           for a full list of available options.
@@ -62,7 +62,7 @@ in
 
             AccountID = lib.mkOption {
               type = lib.types.int;
-              description = lib.mdDoc ''
+              description = ''
                 Your MaxMind account ID.
               '';
             };
@@ -74,7 +74,7 @@ in
                 "GeoLite2-City"
                 "GeoLite2-Country"
               ];
-              description = lib.mdDoc ''
+              description = ''
                 List of database edition IDs. This includes new string
                 IDs like `GeoIP2-City` and old
                 numeric IDs like `106`.
@@ -83,7 +83,7 @@ in
 
             LicenseKey = lib.mkOption {
               type = with lib.types; either path (attrsOf path);
-              description = lib.mdDoc ''
+              description = ''
                 A file containing the MaxMind license key.
 
                 Always handled as a secret whether the value is
@@ -98,7 +98,7 @@ in
               type = lib.types.path;
               default = "/var/lib/GeoIP";
               example = "/run/GeoIP";
-              description = lib.mdDoc ''
+              description = ''
                 The directory to store the database files in. The
                 directory will be automatically created, the owner
                 changed to `geoip` and permissions

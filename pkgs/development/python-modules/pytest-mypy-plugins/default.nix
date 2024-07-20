@@ -1,41 +1,51 @@
-{ lib
-, buildPythonPackage
-, chevron
-, decorator
-, fetchFromGitHub
-, mypy
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  mypy,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "1.11.1";
-  format = "setuptools";
+  version = "3.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
-    repo = pname;
+    repo = "pytest-mypy-plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-UlNjqloAl0Qmy3EQ73e+KmsHeJN3eBkkBJxCehpOs48=";
+    hash = "sha256-yme1g9Kj5guao0Lf8mbkNJRw6ipS2Wd4Io1cSlEBAGo=";
   };
 
-  buildInputs = [
-    pytest
+  build-system = [ setuptools ];
+
+  buildInputs = [ pytest ];
+
+  dependencies = [
+    decorator
+    jinja2
+    jsonschema
+    mypy
+    packaging
+    pyyaml
+    regex
+    tomlkit
   ];
 
-  propagatedBuildInputs = [
-    chevron
-    pyyaml
-    mypy
-    decorator
-    regex
-  ];
+  pythonImportsCheck = [ "pytest_mypy_plugins" ];
 
   nativeCheckInputs = [
     mypy
@@ -46,17 +56,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "pytest_mypy_plugins"
-  ];
-
-  disabledTests = [
-    # ...TypecheckAssertionError: Invalid output:
-    "with_out"
-    "add_mypypath_env_var_to_package_searc"
-    "error_case"
-    "skip_if_false"
-  ];
+  disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
 
   meta = with lib; {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";

@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # stripping breaks static libs, causing this when you attempt to compile a binary:
+  # error adding symbols: Archive has no index; run ranlib to add one
+  dontStrip = true;
+
   buildPhase = ''
     runHook preBuild
     mkdir download; pushd download
@@ -88,10 +92,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A complete 32-bit GNU-based development system for Intel x86 PCs running DOS";
+    description = "Complete 32-bit GNU-based development system for Intel x86 PCs running DOS";
     homepage = "https://www.delorie.com/djgpp/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hughobrien ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

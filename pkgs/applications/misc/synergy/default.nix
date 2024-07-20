@@ -27,12 +27,12 @@
 , avahi-compat
 
   # MacOS / darwin
-, darwin
 , ApplicationServices
 , Carbon
 , Cocoa
 , CoreServices
 , ScreenSaver
+, UserNotifications
 }:
 
 stdenv.mkDerivation rec {
@@ -43,17 +43,13 @@ stdenv.mkDerivation rec {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
+    hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
-  ] ++ lib.optionals (stdenv.isDarwin && !(darwin.apple_sdk.frameworks ? UserNotifications)) [
-    # We cannot include UserNotifications because of a build failure in the Apple SDK.
-    # The functions used from it are already implicitly included anyways.
-    ./darwin-no-UserNotifications-includes.patch
   ];
 
   postPatch = ''
@@ -79,8 +75,7 @@ stdenv.mkDerivation rec {
     Cocoa
     CoreServices
     ScreenSaver
-  ] ++ lib.optionals (stdenv.isDarwin && darwin.apple_sdk.frameworks ? UserNotifications) [
-    darwin.apple_sdk.frameworks.UserNotifications
+    UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
     libselinux
@@ -104,12 +99,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+
-    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.targetPlatform.darwinSdkVersion}";
+    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion}";
 
   doCheck = true;
 
   checkPhase = ''
     runHook preCheck
+  '' + lib.optionalString stdenv.isDarwin ''
+    # filter out tests failing with sandboxing on darwin
+    export GTEST_FILTER=-ServerConfigTests.serverconfig_will_deem_equal_configs_with_same_cell_names:NetworkAddress.hostname_valid_parsing
+  '' + ''
     bin/unittests
     runHook postCheck
   '';
@@ -126,7 +125,7 @@ stdenv.mkDerivation rec {
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
     substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
       --replace "/usr/bin" "$out/bin"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString (stdenv.isDarwin && withGUI) ''
     mkdir -p $out/Applications
     cp -r bundle/Synergy.app $out/Applications
     ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
@@ -142,7 +141,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ talyz ivar ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.unix;
   };
 }

@@ -1,45 +1,36 @@
-{ lib
-, boolean-py
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  boolean-py,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.1.1";
-  format = "setuptools";
+  version = "30.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5pRfFRQLxWmhEKoJZiC7gZbmW8BbqBNBWbdwFL0MtpM=";
+    hash = "sha256-nHqfnetVyz4W2Q6onH0mU/4x9e/vD4rbl9DF4TYqWzs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    boolean-py
-  ];
+  propagatedBuildInputs = [ boolean-py ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "license_expression"
-  ];
+  pythonImportsCheck = [ "license_expression" ];
 
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions";

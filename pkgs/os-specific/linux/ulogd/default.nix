@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, gnumake, libnetfilter_acct, libnetfilter_conntrack
 , libnetfilter_log, libmnl, libnfnetlink, automake, autoconf, autogen, libtool
+, postgresql, libmysqlclient, sqlite
 , pkg-config, libpcap, linuxdoc-tools, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,9 @@ stdenv.mkDerivation rec {
     libmnl
     libnfnetlink
     libpcap
+    postgresql
+    libmysqlclient
+    sqlite
   ];
 
   nativeBuildInputs = [
@@ -53,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace logging daemon for netfilter/iptables";
+    mainProgram = "ulogd";
 
     longDescription = ''
       Logging daemon that reads event messages coming from the Netfilter
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.netfilter.org/projects/ulogd/index.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-h ];
   };

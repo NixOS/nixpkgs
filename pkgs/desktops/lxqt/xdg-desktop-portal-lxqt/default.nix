@@ -1,35 +1,41 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , kwindowsystem
+, libexif
 , libfm-qt
 , lxqt-qtplugin
-, qtx11extras
+, menu-cache
+, qtbase
+, wrapQtAppsHook
 , gitUpdater
 , extraQtStyles ? []
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-lxqt";
-  version = "0.4.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "gH4L6cjx3DjGWcgoqUSnsx4Bn+T9t03AXPB5ZNDa0Nw=";
+    hash = "sha256-zXZ0Un56uz1hKoPvZitJgQpJ7ko0LrSSFxl+agiqZ4A=";
   };
 
   nativeBuildInputs = [
     cmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     kwindowsystem
+    libexif
     libfm-qt
     lxqt-qtplugin
-    qtx11extras
+    menu-cache
+    qtbase
   ]
   ++ extraQtStyles;
 

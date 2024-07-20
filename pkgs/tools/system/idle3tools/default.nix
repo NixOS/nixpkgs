@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
+    mainProgram = "idle3ctl";
   };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [
     cmake
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
+    mainProgram = "tagutil";
   };
 }

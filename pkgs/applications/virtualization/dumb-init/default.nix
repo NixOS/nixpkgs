@@ -26,10 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimal init system for Linux containers";
+    description = "Minimal init system for Linux containers";
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.unix;
+    mainProgram = "dumb-init";
   };
 }

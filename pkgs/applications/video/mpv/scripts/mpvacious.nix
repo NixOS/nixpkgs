@@ -1,38 +1,37 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpvacious";
-  version = "0.23";
+  version = "0.36";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-b0JUT5Y0u/H9p5whuFTU8EgQnKzFCUR2HA9NO+mxe04=";
+    sha256 = "sha256-j8K9coa8kyA7AgRQaBXJJmeTpNtfDKkOGnAP9Up7biA=";
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace "'curl" "'${curl}/bin/curl"
+      --replace-fail "'curl" "'${lib.getExe curl}"
     substituteInPlace platform/nix.lua \
-      --replace "'curl" "'${curl}/bin/curl" \
-      --replace "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
-      --replace "'xclip" "'${xclip}/bin/xclip"
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
-
-  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    rm -r .github
-    mkdir -p $out/share/mpv/scripts
-    cp -r . $out/share/mpv/scripts/mpvacious
+    make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
 
@@ -42,7 +41,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";
     homepage = "https://github.com/Ajatt-Tools/mpvacious";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kmicklas ];
   };
 }

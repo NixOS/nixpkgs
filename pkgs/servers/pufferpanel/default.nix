@@ -1,40 +1,40 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
-, applyPatches
 , buildGoModule
 , buildNpmPackage
 , makeWrapper
 , go-swag
 , nixosTests
+, testers
+, pufferpanel
 }:
 
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.6.7";
+  version = "2.6.9";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "PufferPanel";
-      repo = "PufferPanel";
-      rev = "v${version}";
-      hash = "sha256-ay9NNcK+6QFobe/rwtZF8USl0vMbDZBg5z57fjA5VLw=";
-    };
-    patches = [
-      # Bump sha1cd package, otherwise i686-linux fails to build.
-      ./bump-sha1cd.patch
-
-      # Seems to be an anti-feature. Startup is the only place where user/group is
-      # hardcoded and checked.
-      #
-      # There is no technical reason PufferPanel cannot run as a different user,
-      # especially for simple commands like `pufferpanel version`.
-      ./disable-group-checks.patch
-
-      # Some tests do not have network requests stubbed :(
-      ./skip-network-tests.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "PufferPanel";
+    repo = "PufferPanel";
+    rev = "v${version}";
+    hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
   };
+
+  patches = [
+    # Bump sha1cd package, otherwise i686-linux fails to build.
+    # Also bump github.com/swaggo/swag for PR 257790.
+    ./deps.patch
+
+    # Seems to be an anti-feature. Startup is the only place where user/group is
+    # hardcoded and checked.
+    #
+    # There is no technical reason PufferPanel cannot run as a different user,
+    # especially for simple commands like `pufferpanel version`.
+    ./disable-group-checks.patch
+
+    # Some tests do not have network requests stubbed :(
+    ./skip-network-tests.patch
+  ];
 
   ldflags = [
     "-s"
@@ -58,7 +58,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-swag ];
 
-  vendorHash = "sha256-Esfk7SvqiWeiobXSI+4wYVEH9yVkB+rO7bxUQ5TzvG4=";
+  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
@@ -91,12 +91,17 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) pufferpanel;
+    version = testers.testVersion {
+      package = pufferpanel;
+      command = "${pname} version";
+    };
   };
 
   meta = with lib; {
-    description = "A free, open source game management panel";
+    description = "Free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie tie ];
+    maintainers = with maintainers; [ tie ];
+    mainProgram = "pufferpanel";
   };
 }

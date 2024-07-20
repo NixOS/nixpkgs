@@ -1,25 +1,24 @@
-{ lib
-, stdenv
-, anyio
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, rustPlatform
-, rustc
-, setuptools-rust
-, pythonOlder
-, dirty-equals
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, python
-, CoreServices
-, libiconv
+{
+  lib,
+  stdenv,
+  anyio,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  rustPlatform,
+  rustc,
+  pythonOlder,
+  dirty-equals,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  CoreServices,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.19.0";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,13 +27,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NmmeoaIfFMNKCcjH6tPnkpflkN35bKlT76MqF9W8LBc=";
+    hash = "sha256-TtRSRgtMOqsnhdvsic3lg33xlA+r/DcYHlzewSOu/44=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-9ruk3PMcWNLOIGth5fo91/miyF17lgERWL3F4y4as18=";
+    hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -49,9 +48,12 @@ buildPythonPackage rec {
     rustc
   ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
+
+  # Tests need these permissions in order to use the FSEvents API on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
 
   nativeCheckInputs = [
     dirty-equals
@@ -68,12 +70,16 @@ buildPythonPackage rec {
     rm -rf watchfiles
   '';
 
-  pythonImportsCheck = [
-    "watchfiles"
+  disabledTests = [
+    #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_awatch_interrupt_raise"
   ];
+
+  pythonImportsCheck = [ "watchfiles" ];
 
   meta = with lib; {
     description = "File watching and code reload";
+    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

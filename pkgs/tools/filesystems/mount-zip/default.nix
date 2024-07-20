@@ -1,19 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, fuse, boost, gcc, icu, libzip, pandoc
-, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  boost,
+  icu,
+  libzip,
+  pandoc,
+  pkg-config,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mount-zip";
-  version = "1.0.8";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mount-zip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+slN5eedSddYKgiNLq4KZ5BXwvGQw9859sVfkcIBYeo=";
+    hash = "sha256-7S+mZ6jejD9wCqFYfJ0mE2jCKt77S64LEAgAIV2DPqA=";
   };
 
-  nativeBuildInputs = [ boost gcc icu pandoc pkg-config ];
-  buildInputs = [ fuse libzip ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pandoc
+    pkg-config
+  ];
+
+  buildInputs = [
+    boost
+    fuse
+    icu
+    libzip
+  ];
 
   makeFlags = [ "prefix=$(out)" ];
 
@@ -28,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = with maintainers; [ arti5an ];
     platforms = platforms.linux;
+    mainProgram = "mount-zip";
   };
 })

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duet";
   version = "0.2.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -21,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A simple future-based async library for python";
+    description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";
     maintainers = with maintainers; [ drewrisinger ];
   };

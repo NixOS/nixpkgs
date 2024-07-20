@@ -1,43 +1,45 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, lxqt-build-tools
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
 , sudo
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "S+NWoF1l0HPOwceWwhfmGo7Xrm+6GeoMpJbGpK16rZs=";
+    hash = "sha256-kDcOHqHuAyHTQ7ccsCelPOBieXdRLloEvSMjq9PIa30=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
     kwindowsystem
     liblxqt
     libqtxdg
+    qtbase
+    qtsvg
+    qtwayland
     sudo
   ];
 

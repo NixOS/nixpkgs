@@ -37,13 +37,16 @@ stdenv.mkDerivation rec {
       hash = "sha256-a52Id7Nm3Mmmwv7eL58j6xovjlkpAO4KahVM/Q3H65w=";
     })
   ];
+  postPatch = ''
+    substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
+  '';
 
   nativeBuildInputs = [ ninja pkg-config meson ];
 
   buildInputs = [ libevent curl spdlog ];
 
   meta = with lib; {
-    description = "A simple async wrapper around CURL for C++";
+    description = "Simple async wrapper around CURL for C++";
     homepage = "https://nheko.im/nheko-reborn/coeurl";
     license = licenses.mit;
     platforms = platforms.all;

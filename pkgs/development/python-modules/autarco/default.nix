@@ -1,43 +1,34 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "0.2.0";
-  format = "pyproject";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "v${version}";
-    hash = "sha256-3f6N4b6WZPAUUQTuGeb20q0f7ZqDR+O24QRze5RpRlw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-e/wi4suDMSQTaSdyYsTiBxVUNvisYBVPqy9Rpk0lwJw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
-
-  nativeCheckInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -46,14 +37,31 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [
-    "autarco"
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    mashumaro
+    orjson
+    yarl
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
+  ];
+
+  pythonImportsCheck = [ "autarco" ];
 
   meta = with lib; {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

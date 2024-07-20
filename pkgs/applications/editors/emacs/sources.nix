@@ -4,10 +4,29 @@
 }:
 
 let
-  mainlineMeta = {
-    homepage = "https://www.gnu.org/software/emacs/";
-    description = "The extensible, customizable GNU text editor";
-    longDescription = ''
+  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
+    inherit pname version variant patches;
+
+    src = {
+      "mainline" = (fetchFromSavannah {
+        repo = "emacs";
+        inherit rev hash;
+      });
+      "macport" = (fetchFromBitbucket {
+        owner = "mituharu";
+        repo = "emacs-mac";
+        inherit rev hash;
+      });
+    }.${variant};
+
+    meta = {
+      homepage = {
+        "mainline" = "https://www.gnu.org/software/emacs/";
+        "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+      }.${variant};
+      description = "Extensible, customizable GNU text editor"
+                    + lib.optionalString (variant == "macport") " - macport variant";
+      longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more. At its core
       is an interpreter for Emacs Lisp, a dialect of the Lisp programming
       language with extensions to support text editing.
@@ -21,67 +40,110 @@ let
       functionality, including a project planner, mail and news reader, debugger
       interface, calendar, and more. Many of these extensions are distributed
       with GNU Emacs; others are available separately.
+    '' + lib.optionalString (variant == "macport") ''
+
+      This release is built from Mitsuharu Yamamoto's patched source code
+      tailored for macOS.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      AndersonTorres
-      adisbladis
-      atemu
-      jwiegley
-      lovek323
-      matthewbauer
-    ];
-    platforms = lib.platforms.all;
+      changelog = {
+        "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+        "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
+      }.${variant};
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [
+        AndersonTorres
+        adisbladis
+        jwiegley
+        lovek323
+        matthewbauer
+        # atemu for issues relating to Macport
+      ];
+      platforms = {
+        "mainline" = lib.platforms.all;
+        "macport" = lib.platforms.darwin;
+      }.${variant};
+      mainProgram = "emacs";
+    };
   };
 in
 {
-  emacs28 = import ./generic.nix {
+  emacs28 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "28.2";
     variant = "mainline";
-    src = fetchFromSavannah {
-      repo = "emacs";
-      rev = "28.2";
-      hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
-    };
+    rev = "28.2";
+    hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
 
-    meta = mainlineMeta;
-  };
+      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
+      })
 
-  emacs29 = import ./generic.nix {
+      # security fix from Emacs 29.4
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=c645e1d8205f0f0663ec4a2d27575b238c646c7c";
+        hash = "sha256-G+gGQx5w3KuWMotR1n/sYYL8WyAABYW3fUPeffMMs38=";
+      })
+    ];
+  });
+
+  emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.1-rc1";
+    version = "29.4";
     variant = "mainline";
-    src = fetchFromSavannah {
-      repo = "emacs";
-      rev = "29.1-rc1";
-      hash = "sha256-p0lBSKsHrFwYTqO5UVIF/PgiqwdhYQE4oUVcPtd+gsU=";
-    };
+    rev = "29.4";
+    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
+  });
 
-    meta = mainlineMeta;
-  };
-
-  emacs-macport = import ./generic.nix {
+  emacs28-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
     version = "28.2";
     variant = "macport";
-    src = fetchFromBitbucket {
-      owner = "mituharu";
-      repo = "emacs-mac";
-      rev = "emacs-28.2-mac-9.1";
-      hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
-    };
+    rev = "emacs-28.2-mac-9.1";
+    hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
 
-    meta = {
-      homepage = "https://bitbucket.org/mituharu/emacs-mac/";
-      description = mainlineMeta.description + " - with macport patches";
-      longDescription = mainlineMeta.longDescription + ''
+      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
+      })
+    ];
+  });
 
-        This release is built from Mitsuharu Yamamoto's patched source code
-        tailoired for MacOS X.
-      '';
-      inherit (mainlineMeta) license maintainers;
-      platforms = lib.platforms.darwin;
-    };
-  };
+  emacs29-macport = import ./make-emacs.nix (mkArgs {
+    pname = "emacs-mac";
+    version = "29.1";
+    variant = "macport";
+    rev = "emacs-29.1-mac-10.0";
+    hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+  });
 }

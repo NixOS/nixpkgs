@@ -1,33 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, tomli
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.4.0";
+  version = "4.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-V23pgHQ9GdZ2mukFEMAhkp+dl/CQTGxWHAhF7s1VvHo=";
+    hash = "sha256-p/pPpuuNjVxHSPyi4RL2DJlj9weSq8QinugQ4zmv9Ck=";
   };
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     git
@@ -48,9 +45,7 @@ buildPythonPackage rec {
     git init .
   '';
 
-  pythonImportsCheck = [
-    "pre_commit_hooks"
-  ];
+  pythonImportsCheck = [ "pre_commit_hooks" ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";

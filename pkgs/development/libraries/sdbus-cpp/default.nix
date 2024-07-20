@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdbus-cpp";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kistler-group";
     repo = "sdbus-cpp";
     rev = "v${version}";
-    hash = "sha256-EX/XLgqUwIRosLu3Jgtpp42Yt6Tf22Htj9JULoUL7ao=";
+    hash = "sha256-oO8QNffwNI245AEPdutOGqxj4qyusZYK3bZWLh2Lcag=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       inherent design complexities and limitations.
     '';
     license = lib.licenses.lgpl2Only;
-    maintainers = [ lib.maintainers.ivar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "sdbus-c++-xml2cpp";
   };

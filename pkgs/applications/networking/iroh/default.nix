@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iroh";
-  version = "0.4.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "bNuTEsbOx7ERH/TigLKVOV6eUF+5C2w3PDH9KkfajBo=";
+    hash = "sha256-1ke1S5IBrg8XYO67iUaH0T4dA59TkyqelsghIK+TuyM=";
   };
 
-  cargoSha256 = "WgpX8hz19mnmDmqErSuNDUiFUpr7/K46g4ylhvDIqVw=";
+  cargoHash = "sha256-O6HHZtZes8BO2XuCMdVuuHphzYiqkS5axbYIxsGZw6k=";
 
   buildInputs = lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk.frameworks; [
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://iroh.computer";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "iroh";
   };
 }

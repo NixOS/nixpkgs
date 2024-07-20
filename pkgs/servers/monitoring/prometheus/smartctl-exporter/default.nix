@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "smartctl_exporter";
-  version = "0.9.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fc1NZ5QwzR/jJkeaDm5PMT4wBFFlqZOXKTJMBJWKJJ8=";
+    hash = "sha256-QQoWAsnE/7ifvgEfQJ6cbzmwOrE7oe2zalTbu/P7r18=";
   };
 
-  vendorSha256 = "sha256-lQKuT5dzjDHFpRSmcXpKD1RJDlEv+0kcxENkv3mT4FU=";
+  vendorHash = "sha256-WUB2FgBl4Tybz7T0yvcSYIlG75NEhXpn1F0yuB9F21g=";
 
   ldflags = [
     "-X github.com/prometheus/common/version.Version=${version}"
@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export smartctl statistics for Prometheus";
+    mainProgram = "smartctl_exporter";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
     platforms = platforms.linux;

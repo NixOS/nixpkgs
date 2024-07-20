@@ -1,13 +1,14 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "tes"
-  ];
+  pythonImportsCheck = [ "tes" ];
 
   meta = with lib; {
     description = "Python SDK for the GA4GH Task Execution API";

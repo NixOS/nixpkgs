@@ -7,9 +7,8 @@
 , vala
 , gettext
 , itstool
-, appstream-glib
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , libhandy
@@ -22,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "44.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-E2otkksHfVzEEAyEWCbUcURCMKFsjawnMhE2gBcaYms=";
+    hash = "sha256-+xzqaOeTC73B2yi3zQqaN80xDUtOeHL+gU9QoWqNJdM=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +35,9 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    appstream-glib
     desktop-file-utils
     glib # glib-compile-resources
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
-    description = "A remote desktop client for the GNOME desktop environment";
+    description = "Remote desktop client for the GNOME desktop environment";
+    mainProgram = "gnome-connections";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

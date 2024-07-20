@@ -12,16 +12,16 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.32.5.7349-8f4248874";
+  version = "1.40.4.8679-424562606";
   pname = "plexmediaserver";
 
   # Fetch the source
   src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "18j98za5498v02asyyz2sakbl4inyxd6jsa4bjz8zm2jb1knk236";
+    sha256 = "sha256-EZAMZ8GLOLCWhgi2Xxtn+EIHavSwLrw32aCwzAQfu8s=";
   } else fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "0gm9i752fbplw1l0xlrhzpif5fjiwx471hv55bwbs3ywz3hp0jnb";
+    sha256 = "sha256-wVyA70xqZ9T8brPlzjov2j4C9W+RJYo99hO3VtNBVqw=";
   };
 
   outputs = [ "out" "basedb" ];
@@ -70,10 +70,7 @@ stdenv.mkDerivation rec {
 
       latestSha="$(nix-prefetch-url $dlUrl)"
 
-      # The script will not perform an update when the version attribute is up to date from previous platform run
-      # We need to clear it before each run
-      update-source-version plexRaw 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform
-      update-source-version plexRaw "$latestVersion" "$latestSha" --system=$platform
+      update-source-version plexRaw "$latestVersion" "$latestSha" --system=$platform --ignore-same-version
     done
   '';
 
@@ -88,7 +85,6 @@ stdenv.mkDerivation rec {
       lnl7
       pjones
       thoughtpolice
-      maxeaubrey
       MayNiklas
     ];
     description = "Media library streaming server";

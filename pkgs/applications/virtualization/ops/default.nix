@@ -15,7 +15,7 @@ buildGoModule rec {
 
   proxyVendor = true; # Doesn't build otherwise
 
-  vendorSha256 = "sha256-65VvUy4vGTfZgsXGJVSc/yU5R5MhSKJyMMsvPOCThks=";
+  vendorHash = "sha256-65VvUy4vGTfZgsXGJVSc/yU5R5MhSKJyMMsvPOCThks=";
 
   # Some tests fail
   doCheck = false;
@@ -32,5 +32,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "ops";
   };
 }

@@ -10,14 +10,23 @@ let
   configFile = format.generate configFileName cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "patroni" "raft" ] ''
+      Raft has been deprecated by upstream.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "patroni" "raftPort" ] ''
+      Raft has been deprecated by upstream.
+    '')
+  ];
+
   options.services.patroni = {
 
-    enable = mkEnableOption (lib.mdDoc "Patroni");
+    enable = mkEnableOption "Patroni";
 
     postgresqlPackage = mkOption {
       type = types.package;
       example = literalExpression "pkgs.postgresql_14";
-      description = mdDoc ''
+      description = ''
         PostgreSQL package to use.
         Plugins can be enabled like this `pkgs.postgresql_14.withPackages (p: [ p.pg_safeupdate p.postgis ])`.
       '';
@@ -28,7 +37,7 @@ in
       defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.patroni.postgresqlPackage.psqlSchema}"'';
       example = "/var/lib/postgresql/14";
       default = "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}";
-      description = mdDoc ''
+      description = ''
         The data directory for PostgreSQL. If left as the default value
         this directory will automatically be created before the PostgreSQL server starts, otherwise
         the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -39,7 +48,7 @@ in
     postgresqlPort = mkOption {
       type = types.port;
       default = 5432;
-      description = mdDoc ''
+      description = ''
         The port on which PostgreSQL listens.
       '';
     };
@@ -48,7 +57,7 @@ in
       type = types.str;
       default = defaultUser;
       example = "postgres";
-      description = mdDoc ''
+      description = ''
         The user for the service. If left as the default value this user will automatically be created,
         otherwise the sysadmin is responsible for ensuring the user exists.
       '';
@@ -58,7 +67,7 @@ in
       type = types.str;
       default = defaultGroup;
       example = "postgres";
-      description = mdDoc ''
+      description = ''
         The group for the service. If left as the default value this group will automatically be created,
         otherwise the sysadmin is responsible for ensuring the group exists.
       '';
@@ -67,15 +76,15 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/patroni";
-      description = mdDoc ''
-        Folder where Patroni data will be written, used by Raft as well if enabled.
+      description = ''
+        Folder where Patroni data will be written, this is where the pgpass password file will be written.
       '';
     };
 
     scope = mkOption {
       type = types.str;
       example = "cluster1";
-      description = mdDoc ''
+      description = ''
         Cluster name.
       '';
     };
@@ -83,7 +92,7 @@ in
     name = mkOption {
       type = types.str;
       example = "node1";
-      description = mdDoc ''
+      description = ''
         The name of the host. Must be unique for the cluster.
       '';
     };
@@ -91,7 +100,7 @@ in
     namespace = mkOption {
       type = types.str;
       default = "/service";
-      description = mdDoc ''
+      description = ''
         Path within the configuration store where Patroni will keep information about the cluster.
       '';
     };
@@ -99,15 +108,15 @@ in
     nodeIp = mkOption {
       type = types.str;
       example = "192.168.1.1";
-      description = mdDoc ''
+      description = ''
         IP address of this node.
       '';
     };
 
     otherNodesIps = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "192.168.1.2" "192.168.1.3" ];
-      description = mdDoc ''
+      description = ''
         IP addresses of the other nodes.
       '';
     };
@@ -115,31 +124,15 @@ in
     restApiPort = mkOption {
       type = types.port;
       default = 8008;
-      description = mdDoc ''
+      description = ''
         The port on Patroni's REST api listens.
-      '';
-    };
-
-    raft = mkOption {
-      type = types.bool;
-      default = false;
-      description = mdDoc ''
-        This will configure Patroni to use its own RAFT implementation instead of using a dedicated DCS.
-      '';
-    };
-
-    raftPort = mkOption {
-      type = types.port;
-      default = 5010;
-      description = mdDoc ''
-        The port on which RAFT listens.
       '';
     };
 
     softwareWatchdog = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         This will configure Patroni to use the software watchdog built into the Linux kernel
         as described in the [documentation](https://patroni.readthedocs.io/en/latest/watchdog.html#setting-up-software-watchdog-on-linux).
       '';
@@ -148,7 +141,7 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
-      description = mdDoc ''
+      description = ''
         The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html)
         for possible values.
         Secrets should be passed in by using the `environmentFiles` option.
@@ -162,7 +155,7 @@ in
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
         PATRONI_SUPERUSER_PASSWORD = "/secret/file";
       };
-      description = mdDoc "Environment variables made available to Patroni as files content, useful for providing secrets from files.";
+      description = "Environment variables made available to Patroni as files content, useful for providing secrets from files.";
     };
   };
 
@@ -176,12 +169,6 @@ in
       restapi = {
         listen = "${cfg.nodeIp}:${toString cfg.restApiPort}";
         connect_address = "${cfg.nodeIp}:${toString cfg.restApiPort}";
-      };
-
-      raft = mkIf cfg.raft {
-        data_dir = "${cfg.dataDir}/raft";
-        self_addr = "${cfg.nodeIp}:5010";
-        partner_addrs = map (ip: ip + ":5010") cfg.otherNodesIps;
       };
 
       postgresql = {
@@ -235,7 +222,7 @@ in
             KillMode = "process";
           }
           (mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni patroni/raft postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+            StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
             StateDirectoryMode = "0750";
           })
         ];
@@ -251,7 +238,6 @@ in
     environment.systemPackages = [
       pkgs.patroni
       cfg.postgresqlPackage
-      (mkIf cfg.raft pkgs.python310Packages.pysyncobj)
     ];
 
     environment.etc."${configFileName}".source = configFile;

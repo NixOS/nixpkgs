@@ -18,14 +18,14 @@
 
 mkDerivation rec {
   pname = "qcad";
-  version = "3.28.1.0";
+  version = "3.30.1.3";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-NizAUyj6YbfjxXDQkVaqzkp11WMJlt4FMr72i3Cn564=";
+    hash = "sha256-bGSXFX1LuNZzs981t0GZxnMPzyJ+bddB4m/wkLMsfg0=";
   };
 
   patches = [
@@ -65,23 +65,23 @@ mkDerivation rec {
     "MUPARSER_DIR=${muparser}"
     "INSTALLROOT=$(out)"
     "BOOST_DIR=${boost.dev}"
+    "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
-  qtWrapperArgs =
-    lib.optionals stdenv.isLinux [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ]
-    ++
-    lib.optionals stdenv.isDarwin [ "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ];
 
   installPhase = ''
     runHook preInstall
-
   '' + lib.optionalString stdenv.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
-  '' +
-  ''
+  '' + ''
     install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
@@ -121,11 +121,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ yvesf ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "qcad";
+    maintainers = with lib.maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
   };
 }

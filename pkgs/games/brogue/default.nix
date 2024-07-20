@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, SDL, ncurses, libtcod, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brogue";
   version = "1.7.5";
 
   src = fetchurl {
-    url = "https://sites.google.com/site/broguegame/brogue-${version}-linux-amd64.tbz2";
+    url = "https://sites.google.com/site/broguegame/brogue-${finalAttrs.version}-linux-amd64.tbz2";
     sha256 = "0i042zb3axjf0cpgpdh8hvfn66dbfizidyvw0iymjk2n760z2kx7";
   };
   patches = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m 555 -D bin/brogue $out/bin/brogue
-    install -m 444 -D ${desktopItem}/share/applications/brogue.desktop $out/share/applications/brogue.desktop
+    install -m 444 -D ${finalAttrs.desktopItem}/share/applications/brogue.desktop $out/share/applications/brogue.desktop
     install -m 444 -D bin/brogue-icon.png $out/share/icons/hicolor/256x256/apps/brogue.png
     mkdir -p $out/share/brogue
     cp -r bin/fonts $out/share/brogue/
@@ -50,10 +50,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = with lib; {
-    description = "A roguelike game";
+    description = "Roguelike game";
+    mainProgram = "brogue";
     homepage = "https://sites.google.com/site/broguegame/";
-    license = licenses.agpl3;
-    maintainers = [ maintainers.skeidel ];
+    license = licenses.agpl3Plus;
+    maintainers =  with maintainers; [ AndersonTorres fgaz ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

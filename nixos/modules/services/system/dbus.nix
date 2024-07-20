@@ -22,7 +22,7 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
+      enable = mkEnableOption "dbus in stage 1";
     };
 
     services.dbus = {
@@ -31,7 +31,7 @@ in
         type = types.bool;
         default = false;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to start the D-Bus message bus daemon, which is
           required by many other system services and applications.
         '';
@@ -40,7 +40,7 @@ in
       implementation = mkOption {
         type = types.enum [ "dbus" "broker" ];
         default = "dbus";
-        description = lib.mdDoc ''
+        description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
           Can be either the classic dbus daemon or dbus-broker, which aims to provide high
           performance and reliability, while keeping compatibility to the D-Bus
@@ -52,7 +52,7 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Packages whose D-Bus configuration files should be included in
           the configuration of the D-Bus system-wide or session-wide
           message bus.  Specifically, files in the following directories
@@ -68,7 +68,7 @@ in
 
       apparmor = mkOption {
         type = types.enum [ "enabled" "disabled" "required" ];
-        description = lib.mdDoc ''
+        description = ''
           AppArmor mode for dbus.
 
           `enabled` enables mediation when it's
@@ -95,10 +95,16 @@ in
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
         home = homeDir;
+        homeMode = "0755";
         group = "messagebus";
       };
 
       users.groups.messagebus.gid = config.ids.gids.messagebus;
+
+      # Install dbus for dbus tools even when using dbus-broker
+      environment.systemPackages = [
+        pkgs.dbus
+      ];
 
       # You still need the dbus reference implementation installed to use dbus-broker
       systemd.packages = [
@@ -122,19 +128,19 @@ in
         contents."/etc/dbus-1".source = pkgs.makeDBusConf {
           inherit (cfg) apparmor;
           suidHelper = "/bin/false";
-          serviceDirectories = [ pkgs.dbus ];
+          serviceDirectories = [ pkgs.dbus config.boot.initrd.systemd.package ];
         };
         packages = [ pkgs.dbus ];
-        storePaths = [ "${pkgs.dbus}/bin/dbus-daemon" ];
+        storePaths = [
+          "${pkgs.dbus}/bin/dbus-daemon"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system-services"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system.d"
+        ];
         targets.sockets.wants = [ "dbus.socket" ];
       };
     })
 
     (mkIf (cfg.implementation == "dbus") {
-      environment.systemPackages = [
-        pkgs.dbus
-      ];
-
       security.wrappers.dbus-daemon-launch-helper = {
         source = "${pkgs.dbus}/libexec/dbus-daemon-launch-helper";
         owner = "root";
@@ -145,6 +151,10 @@ in
       };
 
       systemd.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [
@@ -156,6 +166,10 @@ in
       };
 
       systemd.user.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [
@@ -182,8 +196,15 @@ in
       # https://github.com/NixOS/nixpkgs/issues/108643
       systemd.services.dbus-broker = {
         aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
           "dbus.service"
         ];
+        unitConfig = {
+          # We get errors when reloading the dbus-broker service
+          # if /tmp got remounted after this service started
+          RequiresMountsFor = [ "/tmp" ];
+        };
         # Don't restart dbus. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [
@@ -196,6 +217,8 @@ in
 
       systemd.user.services.dbus-broker = {
         aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
           "dbus.service"
         ];
         # Don't restart dbus. Bad things tend to happen if we do.

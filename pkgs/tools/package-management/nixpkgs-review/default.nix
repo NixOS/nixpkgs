@@ -2,26 +2,38 @@
 , python3
 , fetchFromGitHub
 
+, installShellFiles
 , bubblewrap
 , nix-output-monitor
 , cacert
 , git
 , nix
 
+, withAutocomplete ? true
 , withSandboxSupport ? false
 , withNom ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.9.3";
+  version = "2.10.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    rev = version;
-    sha256 = "sha256-Pcyhrw6oR+tLf/qgLnb7qx3003ldv3KuDVg6QsEhQp0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dRTKE8gkV298ZmMokyy3Ufer/Lp1GQYdEhIBoLhloEQ=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+    python3.pkgs.setuptools
+  ] ++ lib.optionals withAutocomplete [
+    python3.pkgs.argcomplete
+  ];
+
+  propagatedBuildInputs = [ python3.pkgs.argcomplete ];
 
   makeWrapperArgs =
     let
@@ -38,11 +50,21 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  postInstall = lib.optionalString withAutocomplete ''
+    for cmd in nix-review nixpkgs-review; do
+      installShellCompletion --cmd $cmd \
+        --bash <(register-python-argcomplete $cmd) \
+        --fish <(register-python-argcomplete $cmd -s fish) \
+        --zsh <(register-python-argcomplete $cmd -s zsh)
+    done
+  '';
+
   meta = with lib; {
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     license = licenses.mit;
+    mainProgram = "nixpkgs-review";
     maintainers = with maintainers; [ figsoda mic92 ];
   };
 }

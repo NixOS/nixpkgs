@@ -5,29 +5,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gam";
-  version = "6.25";
+  version = "6.58";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
-    repo = "gam";
+    repo = "GAM";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/VmBFMjCkd1xhudlcjYGGv+6tgEsyY/xqQoGdupJvOg=";
+    sha256 = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
   };
 
-  sourceRoot = "source/src";
-
-  patches = [
-    # Also disables update check
-    ./signal_files_as_env_vars.patch
-  ];
+  sourceRoot = "${src.name}/src";
 
   propagatedBuildInputs = with python3.pkgs; [
+    chardet
+    cryptography
     distro
     filelock
     google-api-python-client
     google-auth
     google-auth-oauthlib
+    httplib2
+    lxml
     passlib
     pathvalidate
     python-dateutil
@@ -52,8 +51,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
     mkdir -p $out/bin
     cp gam.py $out/bin/gam
-    mkdir -p $out/lib/${python3.libPrefix}/site-packages
-    cp -r gam $out/lib/${python3.libPrefix}/site-packages
+    mkdir -p $out/${python3.sitePackages}
+    cp -r gam $out/${python3.sitePackages}
     runHook postInstall
   '';
 
@@ -65,7 +64,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line management for Google Workspace";
+    mainProgram = "gam";
     homepage = "https://github.com/GAM-team/GAM/wiki";
+    changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thanegill ];
   };

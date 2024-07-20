@@ -44,7 +44,7 @@ As an alternative, you can proxy the guest shell to a local TCP server by first
 starting a TCP server in a terminal using the command:
 
 ```ShellSession
-$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr`
+$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr
 ```
 
 In the terminal where the test driver is running, connect to this server by
@@ -56,6 +56,27 @@ using:
 
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
+
+## Port forwarding to NixOS test VMs {#sec-nixos-test-port-forwarding}
+
+If your test has only a single VM, you may use e.g.
+
+```ShellSession
+$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-:22" ./result/bin/nixos-test-driver
+```
+
+to port-forward a port in the VM (here `22`) to the host machine (here port `2222`).
+
+This naturally does not work when multiple machines are involved,
+since a single port on the host cannot forward to multiple VMs.
+
+If the test defines multiple machines, you may opt to _temporarily_ set
+`virtualisation.forwardPorts` in the test definition for debugging.
+
+Such port forwardings connect via the VM's virtual network interface.
+Thus they cannot connect to ports that are only bound to the VM's
+loopback interface (`127.0.0.1`), and the VM's NixOS firewall
+must be configured to allow these connections.
 
 ## Reuse VM state {#sec-nixos-test-reuse-vm-state}
 

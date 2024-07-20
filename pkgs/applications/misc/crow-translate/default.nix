@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchzip
-, substituteAll
 , cmake
 , extra-cmake-modules
 , qttools
@@ -10,7 +9,6 @@
 , tesseract4
 , qtmultimedia
 , qtx11extras
-, qttranslations
 , wrapQtAppsHook
 , gst_all_1
 , testers
@@ -19,20 +17,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "2.10.7";
+  version = "2.11.1";
 
   src = fetchzip {
     url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
-    hash = "sha256-OVRl9yQKK3hJgRVV/W4Fl3LxdFpJs01Mo3pwxLg2RXg=";
+    hash = "sha256-1rq1pF4tOaZNEaHflxlBuHta80EzD9m3O99geR1EPxE=";
   };
-
-  patches = [
-    (substituteAll {
-      # See https://github.com/NixOS/nixpkgs/issues/86054
-      src = ./fix-qttranslations-path.patch;
-      inherit qttranslations;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace data/io.crow_translate.CrowTranslate.desktop \
@@ -68,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
+    description = "Simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
     homepage = "https://crow-translate.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

@@ -23,6 +23,7 @@ stdenv.mkDerivation  rec {
 
   meta = with lib; {
     description = "Classic-analog (VCOs-VCF-VCA) style software synthesizer";
+    mainProgram = "Xsynth_gtk";
     longDescription = ''
       Xsynth-DSSI is a classic-analog (VCOs-VCF-VCA) style software
       synthesizer which operates as a plugin for the DSSI Soft Synth

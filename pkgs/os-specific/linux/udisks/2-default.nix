@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "udisks";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
-    sha256 = "sha256-M0L2MjVKv7VmtML/JZx0I8vNj+m6KDWGezvcwFqoTNI=";
+    sha256 = "sha256-L8jr1+SJWsCizkPXC8VKDy2eVa7/FpqdB8SkBYq6vwc=";
   };
 
   outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
+    description = "Daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
     homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
     maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);

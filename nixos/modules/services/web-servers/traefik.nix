@@ -55,20 +55,20 @@ let
     else "/run/traefik/config.toml";
 in {
   options.services.traefik = {
-    enable = mkEnableOption (lib.mdDoc "Traefik web server");
+    enable = mkEnableOption "Traefik web server";
 
     staticConfigFile = mkOption {
       default = null;
       example = literalExpression "/path/to/static_config.toml";
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to traefik's static configuration to use.
         (Using that option has precedence over `staticConfigOptions` and `dynamicConfigOptions`)
       '';
     };
 
     staticConfigOptions = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Static configuration for Traefik.
       '';
       type = jsonValue;
@@ -85,14 +85,14 @@ in {
       default = null;
       example = literalExpression "/path/to/dynamic_config.toml";
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to traefik's dynamic configuration to use.
         (Using that option has precedence over `dynamicConfigOptions`)
       '';
     };
 
     dynamicConfigOptions = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Dynamic configuration for Traefik.
       '';
       type = jsonValue;
@@ -111,7 +111,7 @@ in {
     dataDir = mkOption {
       default = "/var/lib/traefik";
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Location for any persistent data traefik creates, ie. acme
       '';
     };
@@ -120,24 +120,19 @@ in {
       default = "traefik";
       type = types.str;
       example = "docker";
-      description = lib.mdDoc ''
+      description = ''
         Set the group that traefik runs under.
         For the docker backend this needs to be set to `docker` instead.
       '';
     };
 
-    package = mkOption {
-      default = pkgs.traefik;
-      defaultText = literalExpression "pkgs.traefik";
-      type = types.package;
-      description = lib.mdDoc "Traefik package to use.";
-    };
+    package = mkPackageOption pkgs "traefik" { };
 
     environmentFiles = mkOption {
       default = [];
       type = types.listOf types.path;
       example = [ "/run/secrets/traefik.env" ];
-      description = lib.mdDoc ''
+      description = ''
         Files to load as environment file. Environment variables from this file
         will be substituted into the static configuration file using envsubst.
       '';
@@ -149,6 +144,7 @@ in {
 
     systemd.services.traefik = {
       description = "Traefik web server";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;
@@ -174,7 +170,7 @@ in {
         PrivateDevices = true;
         ProtectHome = true;
         ProtectSystem = "full";
-        ReadWriteDirectories = cfg.dataDir;
+        ReadWritePaths = [ cfg.dataDir ];
         RuntimeDirectory = "traefik";
       };
     };

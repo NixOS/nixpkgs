@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, protobuf
-, pycryptodome
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  protobuf,
+  pycryptodome,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lakeside"
-  ];
+  pythonImportsCheck = [ "lakeside" ];
 
   meta = with lib; {
     description = "Library for controlling LED bulbs from Eufy";

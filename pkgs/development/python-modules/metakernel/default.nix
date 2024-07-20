@@ -1,31 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, ipykernel
-, jedi
-, jupyter-core
-, pexpect
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  ipykernel,
+  jedi,
+  jupyter-core,
+  pexpect,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.29.5";
-  format = "pyproject";
+  version = "0.30.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tGp8CHQ1Ekn/2KiGZGd/8V6NdWMseDSETZ/Z3T3P91U=";
+    hash = "sha256-Siff2FO4SfASgkLFUgTuWXpajYZClPJghLry+8gU1aQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipykernel
     jedi
     jupyter-core
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Tests hang, so disable
   doCheck = false;
 
-  pythonImportsCheck = [
-    "metakernel"
-  ];
+  pythonImportsCheck = [ "metakernel" ];
 
   meta = with lib; {
     description = "Jupyter/IPython Kernel Tools";

@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, wrapGAppsHook
+, wrapGAppsHook3
 , readline
 , ncurses
 , zlib
@@ -78,13 +78,15 @@ let
     if hdf5-forced != null
     then hdf5-forced
     else
-      hdf5.override {
+      hdf5.override ({
         usev110Api = useHdf5v110Api;
         mpiSupport = enableMPI;
         inherit mpi;
         szipSupport = enableSzip;
         inherit szip;
-      };
+      } // lib.optionalAttrs enableMPI {
+        cppSupport = false;
+      });
   netcdf-custom =
     if netcdf-forced != null
     then netcdf-forced
@@ -155,7 +157,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optional enableWX wrapGAppsHook;
+  ] ++ lib.optional enableWX wrapGAppsHook3;
 
   cmakeFlags = lib.optional (!enableHDF4) "-DHDF=OFF"
     ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]

@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, graphviz }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeBinaryWrapper
+, jre
+, graphviz
+}:
 
-stdenv.mkDerivation rec {
-  version = "1.2023.10";
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
+  version = "1.2024.5";
 
   src = fetchurl {
-    url = "https://github.com/plantuml/plantuml/releases/download/v${version}/plantuml-pdf-${version}.jar";
-    sha256 = "sha256-/+B16MQ5fzaRS/SjyMgiUsC+8Y7McyuS3IEMRgtY7jQ=";
+    url = "https://github.com/plantuml/plantuml/releases/download/v${finalAttrs.version}/plantuml-pdf-${finalAttrs.version}.jar";
+    hash = "sha256-YayIedHIIpecVF7BZSvBTp66Eb7He+l+1RCir5KuL28=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   buildCommand = ''
     install -Dm644 $src $out/lib/plantuml.jar
@@ -19,17 +27,22 @@ stdenv.mkDerivation rec {
       --argv0 plantuml \
       --set GRAPHVIZ_DOT ${graphviz}/bin/dot \
       --add-flags "-jar $out/lib/plantuml.jar"
-
-    $out/bin/plantuml -help
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  postCheckInstall = ''
+    $out/bin/plantuml -help
+    $out/bin/plantuml -testdot
+  '';
+
+  meta = {
     description = "Draw UML diagrams using a simple and human readable text description";
-    homepage = "http://plantuml.sourceforge.net/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    homepage = "https://plantuml.com/";
     # "plantuml -license" says GPLv3 or later
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor Mogria ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "plantuml";
+    maintainers = with lib.maintainers; [ bjornfor Mogria ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

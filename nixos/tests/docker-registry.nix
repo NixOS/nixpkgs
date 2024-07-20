@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "docker-registry";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin ma27 ironpinguin ];
+    maintainers = [ globin ironpinguin cafkafk ];
   };
 
   nodes = {
@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       services.dockerRegistry.port = 8080;
       services.dockerRegistry.listenAddress = "0.0.0.0";
       services.dockerRegistry.enableGarbageCollect = true;
-      networking.firewall.allowedTCPPorts = [ 8080 ];
+      services.dockerRegistry.openFirewall = true;
     };
 
     client1 = { ... }: {

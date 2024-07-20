@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Show processes' memory usage by looking into pss"; # upstream summary
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "psstop";
   };
 }

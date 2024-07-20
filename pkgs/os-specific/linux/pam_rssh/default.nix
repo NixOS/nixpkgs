@@ -1,29 +1,35 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, pam
-, openssh
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  coreutils,
+  pkg-config,
+  openssl,
+  pam,
+  openssh,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
-  version = "unstable-2023-03-18";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    rev = "92c240bd079e9711c7afa8bacfcf01de48f42577";
-    hash = "sha256-mIQeItPh6RrF3cFbAth2Kmb2E/Xj+lOgatvjcLE4Yag=";
+    rev = "v${version}";
+    hash = "sha256-SDtMqGy2zhq9jEQVwSEl4EwRp2jgXfTVLrCX7k/kBeU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-/AQqjmAGgvnpVWyoK3ymZ1gNAhTSN30KQEiqv4G+zx8=";
+  cargoHash = "sha256-gNy1tcHDUOG1XduGAIMapvx5dlq+U1LitUQkccGfb9o=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  postPatch = ''
+    substituteInPlace src/auth_keys.rs \
+      --replace '/bin/echo' '${coreutils}/bin/echo' \
+      --replace '/bin/false' '${coreutils}/bin/false'
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -35,9 +41,7 @@ rustPlatform.buildRustPackage {
     "--skip=tests::parse_user_authorized_keys"
   ];
 
-  nativeCheckInputs = [
-    openssh
-  ];
+  nativeCheckInputs = [ (openssh.override { dsaKeysSupport = true; }) ];
 
   env.USER = "nixbld";
 

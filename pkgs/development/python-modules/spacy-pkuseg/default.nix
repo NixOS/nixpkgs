@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cython
-, numpy
-, srsly
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  cython,
+  numpy,
+  srsly,
 }:
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "0.0.32";
+  version = "0.0.33";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-9y2TZROOkIOl54u6jocZD4WtP5Ct3bVfacWKqGLISEw=";
+    hash = "sha256-8TFWrE4ERg8aw17f0DbplwTbutGa0KObBsNA+AKinmI=";
   };
 
   # Does not seem to have actual tests, but unittest discover
@@ -25,7 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy srsly ];
+  propagatedBuildInputs = [
+    numpy
+    srsly
+  ];
 
   pythonImportsCheck = [ "spacy_pkuseg" ];
 

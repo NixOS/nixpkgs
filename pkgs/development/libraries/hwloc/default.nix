@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hwloc";
-  version = "2.9.2";
+  version = "2.11.1";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
-    sha256 = "sha256-Cof99nf4sAtWfSKbYyC/ayXGk+2qQ+C4UmjZmdawYM8=";
+    sha256 = "sha256-BM37/60iXOFfZhhPD0FBMn2r8ojRCouE0T9Rest4cMY=";
   };
 
   configureFlags = [
@@ -22,12 +22,13 @@ stdenv.mkDerivation rec {
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [ expat ncurses ]
     ++ lib.optionals x11Support [ cairo libX11 ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optional enableCuda cudaPackages.cudatoolkit;
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.isLinux pciutils;

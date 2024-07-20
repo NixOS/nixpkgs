@@ -1,54 +1,60 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, docker
-, distrobox
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  distrobox,
+  podman,
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "1.8.2";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-nBhSl4r7LlgCA5/HCLpOleihE5n/JCJgf43KdCklQbg=";
+    repo = "apx";
+    rev = "v${version}";
+    hash = "sha256-X6nphUzJc/R3Egw09eRQbza1QebpLGsMIfV7BpLOXTc=";
   };
 
-  vendorSha256 = null;
+  vendorHash = "sha256-hGi+M5RRUL2oyxFGVeR0sum93/CA+FGYy0m4vDmlXTc=";
+
+  # podman needed for apx to not error when building shell completions
+  nativeBuildInputs = [ installShellFiles podman ];
 
   ldflags = [ "-s" "-w" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    installShellFiles
-  ];
+  postPatch = ''
+    substituteInPlace config/apx.json \
+      --replace-fail "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
+      --replace-fail "/usr/share/apx" "$out/bin/apx"
+    substituteInPlace settings/config.go \
+      --replace-fail "/usr/share/apx/" "$out/share/apx/"
+  '';
 
   postInstall = ''
-    mkdir -p $out/etc/apx
+    install -Dm444 config/apx.json -t $out/share/apx/
+    installManPage man/man1/*
+    install -Dm444 README.md -t $out/share/docs/apx
+    install -Dm444 COPYING.md $out/share/licenses/apx/LICENSE
 
-    cat > "$out/etc/apx/config.json" <<EOF
-    {
-      "containername": "apx_managed",
-      "image": "docker.io/library/ubuntu",
-      "pkgmanager": "apt",
-      "distroboxpath": "${distrobox}/bin/distrobox"
-    }
-    EOF
-
-    wrapProgram $out/bin/apx --prefix PATH : ${lib.makeBinPath [ docker distrobox ]}
-
-    installManPage man/de/man1/apx.1 man/es/man1/apx.1 man/fr/man1/apx.1 man/it/man1/apx.1 man/man1/apx.1 man/nl/man1/apx.1 man/pl/man1/apx.1 man/pt/man1/apx.1 man/pt_BR/man1/apx.1 man/ro/man1/apx.1 man/ru/man1/apx.1 man/sv/man1/apx.1 man/tr/man1/apx.1
+    # Create a temp writable home-dir so apx outputs completions without error
+    export HOME=$(mktemp -d)
+    # apx command now works (for completions)
+    # though complains "Error: no such file or directory"
+    installShellCompletion --cmd apx \
+      --bash <($out/bin/apx completion bash) \
+      --fish <($out/bin/apx completion fish) \
+      --zsh <($out/bin/apx completion zsh)
   '';
 
   meta = with lib; {
-    description = "The Vanilla OS package manager";
+    description = "Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
-    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/${version}";
+    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya chewblacka ];
+    mainProgram = "apx";
   };
 }

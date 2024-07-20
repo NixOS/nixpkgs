@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ensemble-chorus";
-  version = "unstable-15-02-2019";
+  version = "0-unstable-2019-02-15";
 
   src = fetchFromGitHub {
     owner = "jpcima";
@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0c1y10vyhrihcjvxqpqf6b52yk5yhwh813cfp6nla5ax2w88dbhr";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix compile error regarding packed attribute in 3rd party juice library
+    ./juice-cxx-packing-fix.diff
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

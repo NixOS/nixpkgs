@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-j1UO8lkVoS56hwPQXH8aIr1UegM6PdtaBXKZn50GP60=";
+    sha256 = "sha256-6m4Yrev9W5WV4/pptc8tJ4hc6QSC+eJ7BSt2mx33s9U=";
   };
 
   patches = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     dbus
     gobject-introspection
     umockdev
-    (python3.pythonForBuild.withPackages
+    (python3.pythonOnBuildForHost.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
+    mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ callahad ];

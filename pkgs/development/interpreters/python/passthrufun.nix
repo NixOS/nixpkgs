@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, pythonPackagesExtensions, config, makeScopeWithSplicing, ... }:
+{ lib, stdenv, callPackage, pythonPackagesExtensions, config, makeScopeWithSplicing', ... }:
 
 { implementation
 , libPrefix
@@ -47,12 +47,12 @@
         selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
       };
       hooks = import ./hooks/default.nix;
-      keep = lib.extends hooks pythonPackagesFun;
-      extra = _: {};
+      keep = self: hooks self {};
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
       python2Extension = import ../../../top-level/python2-packages.nix;
       extensions = lib.composeManyExtensions ([
+        hooks
         pythonExtension
       ] ++ (optionalExtensions (!self.isPy3k) [
         python2Extension
@@ -60,15 +60,15 @@
         overrides
       ]);
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
-    in makeScopeWithSplicing
-      otherSplices
-      keep
-      extra
-      (lib.extends (lib.composeExtensions aliases extensions) keep))
-    {
+    in makeScopeWithSplicing' {
+      inherit otherSplices keep;
+      f = lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun;
+    }) {
       overrides = packageOverrides;
       python = self;
     });
+  pythonOnBuildForHost_overridden =
+    pythonOnBuildForHost.override { inherit packageOverrides; self = pythonOnBuildForHost_overridden; };
 in rec {
     isPy27 = pythonVersion == "2.7";
     isPy37 = pythonVersion == "3.7";
@@ -91,9 +91,11 @@ in rec {
     pythonAtLeast = lib.versionAtLeast pythonVersion;
     pythonOlder = lib.versionOlder pythonVersion;
     inherit hasDistutilsCxxPatch;
-    # TODO: rename to pythonOnBuild
-    # Not done immediately because its likely used outside Nixpkgs.
-    pythonForBuild = pythonOnBuildForHost.override { inherit packageOverrides; self = pythonForBuild; };
+    # Remove after 24.11 is released.
+    pythonForBuild =
+      lib.warnIf (lib.isInOldestRelease 2311) "`pythonForBuild` (from `python*`) has been renamed to `pythonOnBuildForHost`"
+        pythonOnBuildForHost_overridden;
+    pythonOnBuildForHost = pythonOnBuildForHost_overridden;
 
     tests = callPackage ./tests.nix {
       python = self;

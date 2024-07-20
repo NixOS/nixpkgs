@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 
-  vendorSha256 = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";
+  vendorHash = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";
 
   meta = with lib; {
     description =
@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/SoMuchForSubtlety/f1viewer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ michzappa ];
+    mainProgram = "f1viewer";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 
 # for passthru.tests
 , git
@@ -11,12 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cpio";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchurl {
     url = "mirror://gnu/cpio/cpio-${version}.tar.bz2";
-    sha256 = "/NwV1g9yZ6b8fvzWudt7bIlmxPL7u5ZMJNQTNv0/LBI=";
+    hash = "sha256-k3YQuXwymh7JJoVT+3gAN7z/8Nz/6XJevE/ZwaqQdds=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   separateDebugInfo = true;
 
@@ -34,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";
-    description = "A program to create or extract from cpio archives";
+    description = "Program to create or extract from cpio archives";
     license = licenses.gpl3;
     platforms = platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
+    mainProgram = "cpio";
   };
 }

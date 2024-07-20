@@ -28,10 +28,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+
   meta = with lib; {
     homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
-    license = with licenses; [ cddl gpl2 lgpl21 ];
+    license = with licenses; [ cddl gpl2Plus lgpl21 ];
     platforms = with platforms; linux ++ darwin;
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this

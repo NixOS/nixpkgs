@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "21.2.1";
+  version = "24.5.10";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    sha256 = "sha256-sVp13PhLj2LmhyDMqxOT+WEcB4/NOv3WOaEIbK0BCQA=";
+    hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];
@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # ECL’s ‘make check’ only works after install, making it a de-facto
+  # installCheck.
+  doInstallCheck = true;
+  installCheckTarget = "check";
+
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
@@ -79,6 +84,7 @@ stdenv.mkDerivation rec {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
     license = licenses.mit;
+    mainProgram = "ecl";
     maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";

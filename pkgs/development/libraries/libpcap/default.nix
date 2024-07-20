@@ -9,6 +9,16 @@
 , pkg-config
 , withBluez ? false
 , withRemote ? false
+
+# for passthru.tests
+, ettercap
+, nmap
+, ostinato
+, tcpreplay
+, vde2
+, wireshark
+, python3
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +54,16 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+  passthru.tests = {
+    inherit ettercap nmap ostinato tcpreplay vde2 wireshark;
+    inherit (python3.pkgs) pcapy-ng scapy;
+    haskell-pcap = haskellPackages.pcap;
+  };
+
   meta = with lib; {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
+    mainProgram = "pcap-config";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.bsd3;

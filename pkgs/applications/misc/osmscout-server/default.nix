@@ -1,7 +1,23 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config
-, qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
-, libosmscout, valhalla, libpostal, osrm-backend, protobuf
-, libmicrohttpd, sqlite, marisa, kyotocabinet, boost
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, qmake
+, qttools
+, boost
+, kirigami2
+, kyotocabinet
+, libmicrohttpd
+, libosmscout
+, libpostal
+, marisa
+, osrm-backend
+, protobuf
+, qtquickcontrols2
+, qtlocation
+, sqlite
+, valhalla
 }:
 
 let
@@ -29,6 +45,19 @@ mkDerivation rec {
     kirigami2 qtquickcontrols2 qtlocation
     valhalla libosmscout osrm-backend libmicrohttpd
     libpostal sqlite marisa kyotocabinet boost protobuf date
+  ];
+
+  patches = [
+    # Valhalla 3.2.1 support. Only required for next patch to apply cleanly
+    (fetchpatch {
+      url = "https://github.com/rinigus/osmscout-server/commit/1df9d383e61dd14cbe9e5b52412a2e951cee2ee4.patch";
+      hash = "sha256-h+YTyHr4RYgwH5bfVgyujSekbL2LfV8vJgVkjXT0I10=";
+    })
+    # Valhalla 3.4.0 support
+    (fetchpatch {
+      url = "https://github.com/rinigus/osmscout-server/commit/fe6562a4c3ba5da2735232ea8fdc7f71d7e7e714.patch";
+      hash = "sha256-wibLTFk3cFS5mcC71TgMA9ZAAHS3mbjboFHqax6nCxs=";
+    })
   ];
 
   qmakeFlags = [

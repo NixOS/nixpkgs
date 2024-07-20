@@ -6,6 +6,7 @@
 , glib
 , pkg-config
 , udev
+, libevdev
 , libgudev
 , python3
 , valgrind
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "2.7.0";
+  version = "2.12.2";
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "sha256-NNfhZMshM5U/EfJHuNgkDe5NEkEGKtJ56vSpXyGf/xw=";
+    hash = "sha256-dxnXh+O/8q8ShsPbpqvaBPNQR6lJBphBolYTmcJEF/0=";
   };
 
   postPatch = ''
@@ -38,10 +39,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     udev
+    libevdev
     libgudev
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform valgrind;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform
+            && lib.meta.availableOn stdenv.hostPlatform valgrind
+            && !stdenv.hostPlatform.isPower  # one test times out
+  ;
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"
@@ -49,11 +54,12 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     valgrind
-  ] ++ (with python3.pkgs; [
-    libevdev
-    pytest
-    pyudev
-  ]);
+    (python3.withPackages (ps: with ps; [
+      ps.libevdev
+      pytest
+      pyudev
+    ]))
+  ];
 
   meta = with lib; {
     platforms = platforms.linux;
@@ -61,6 +67,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/linuxwacom/libwacom/blob/${src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     maintainers = teams.freedesktop.members;
-    license = licenses.mit;
+    license = licenses.hpnd;
   };
 }

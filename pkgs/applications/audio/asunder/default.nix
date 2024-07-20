@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.9.7";
+  version = "3.0.1";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "1x3l308ss0iqhz90qyjb94gyd8b4piyrm2nzjmg5kf049k9prjf1";
+    sha256 = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkg-config ];
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A graphical Audio CD ripper and encoder for Linux";
+    description = "Graphical Audio CD ripper and encoder for Linux";
+    mainProgram = "asunder";
     homepage = "http://littlesvr.ca/asunder/index.php";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mudri ];

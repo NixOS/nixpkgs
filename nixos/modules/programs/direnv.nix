@@ -8,13 +8,13 @@
 in {
   options.programs.direnv = {
 
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       direnv integration. Takes care of both installation and
       setting up the sourcing of the shell. Additionally enables nix-direnv
-      integration. Note that you need to logout and login for this change to apply.
-    '');
+      integration. Note that you need to logout and login for this change to apply
+    '';
 
-    package = lib.mkPackageOptionMD pkgs "direnv" {};
+    package = lib.mkPackageOption pkgs "direnv" {};
 
     direnvrcExtra = lib.mkOption {
       type = lib.types.lines;
@@ -23,44 +23,46 @@ in {
         export FOO="foo"
         echo "loaded direnv!"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra lines to append to the sourced direnvrc
       '';
     };
 
-    silent = lib.mkEnableOption (lib.mdDoc ''
+    silent = lib.mkEnableOption ''
       the hiding of direnv logging
-    '');
-
-    persistDerivations =
-      (lib.mkEnableOption (lib.mdDoc ''
-        setting keep-derivations and keep-outputs to true
-        to prevent shells from getting garbage collected
-      ''))
-      // {
-        default = true;
-      };
+    '';
 
     loadInNixShell =
-      lib.mkEnableOption (lib.mdDoc ''
+      lib.mkEnableOption ''
         loading direnv in `nix-shell` `nix shell` or `nix develop`
-      '')
+      ''
       // {
         default = true;
       };
 
     nix-direnv = {
       enable =
-        (lib.mkEnableOption (lib.mdDoc ''
+        (lib.mkEnableOption ''
           a faster, persistent implementation of use_nix and use_flake, to replace the built-in one
-        ''))
+        '')
         // {
           default = true;
         };
 
-      package = lib.mkPackageOptionMD pkgs "nix-direnv" {};
+      package = lib.mkOption {
+        default = pkgs.nix-direnv.override { nix = config.nix.package; };
+        defaultText = "pkgs.nix-direnv";
+        type = lib.types.package;
+        description = ''
+          The nix-direnv package to use
+        '';
+      };
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is no longer necessary")
+  ];
 
   config = lib.mkIf cfg.enable {
 
@@ -85,11 +87,6 @@ in {
          ${lib.getExe cfg.package} hook fish | source
         end
       '';
-    };
-
-    nix.settings = lib.mkIf cfg.persistDerivations {
-      keep-outputs = true;
-      keep-derivations = true;
     };
 
     environment = {

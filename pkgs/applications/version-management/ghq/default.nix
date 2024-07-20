@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ghq";
-  version = "1.4.2";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     rev = "v${version}";
-    sha256 = "sha256-ggTx5Kz9cRqOqxxzERv4altf7m1GlreGgOiYCnHyJks=";
+    sha256 = "sha256-vO/skiVq9wFWjTWyUb9IbKRAmtGSZEtBBEbW6R+oOQM=";
   };
 
-  vendorHash = "sha256-6ZDvU3RQ/1M4DZMFOaQsEuodldB8k+2thXNhvZlVQEg=";
+  vendorHash = "sha256-qUMpHFCCzfwM4wC0FIaOrnTiqq3BlG5Jr9XlkSx2HRo=";
 
   doCheck = false;
 
@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/x-motemen/ghq";
     maintainers = with lib.maintainers; [ sigma ];
     license = lib.licenses.mit;
+    mainProgram = "ghq";
   };
 }

@@ -5,26 +5,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conserve";
-  version = "23.5.0";
+  version = "23.11.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "conserve";
     rev = "v${version}";
-    hash = "sha256-OzSTueaw2kWc2e45zckXS2O4bfykREOcz8/PpUIK09w=";
+    hash = "sha256-Ck2+3etwfZiDMZHzI2hIBuUKn7L0ZTGEe9yJjXjoRIM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nutmeg-0.1.3-pre" = "sha256-WcbQf8DZ9ryY+TWcVObdHj005GvfeMG+wesr6FiCUCE=";
-    };
-  };
+  cargoHash = "sha256-tMj1icGNTFpouts1TE6BIiABexV3vmOW9r5Y/7ynUMM=";
 
   meta = with lib; {
     description = "Robust portable backup tool in Rust";
     homepage = "https://github.com/sourcefrog/conserve";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "conserve";
   };
 }

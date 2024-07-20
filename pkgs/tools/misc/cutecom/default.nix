@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A graphical serial terminal";
+    description = "Graphical serial terminal";
     homepage = "https://gitlab.com/cutecom/cutecom/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bennofs ];
     platforms = platforms.unix;
+    mainProgram = "cutecom";
   };
 }

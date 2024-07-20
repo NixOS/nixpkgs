@@ -10,14 +10,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
+  version = "3.1.0";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    hash = "sha256-nUwPT7374dfE/T6yuCUynObq6LxBHDp90Dj2JGwJ4+M=";
+    hash = "sha256-cClSNBlresMHqJrqSFWvUo589TlwJ2tL5FWJG9QBuis=";
   };
 
   buildInputs =
@@ -117,7 +117,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
+    description = "Web server based on Nginx and has many advanced features, originated by Taobao";
+    mainProgram = "nginx";
     homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;

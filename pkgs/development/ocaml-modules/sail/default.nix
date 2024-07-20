@@ -10,23 +10,21 @@
 , pprint
 , makeWrapper
 , lem
-, z3
 , linksem
-, num
+, yojson
 }:
 
 buildDunePackage rec {
   pname = "sail";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "sail";
     rev = version;
-    hash = "sha256-eNdFOSzkniNvSCZeORRJ/IYAu+9P4HSouwmhd4BQLPk=";
+    hash = "sha256-HY/rgWi0S7ZiAWZF0fVIRK6fpoJ7Xp5EQcxoPRCPJ5Y=";
   };
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   nativeBuildInputs = [
@@ -43,6 +41,7 @@ buildDunePackage rec {
     linenoise
     pprint
     linksem
+    yojson
   ];
 
   preBuild = ''
@@ -72,7 +71,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/rems-project/sail";
-    description = "A language for describing the instruction-set architecture (ISA) semantics of processors";
+    description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd2;
   };

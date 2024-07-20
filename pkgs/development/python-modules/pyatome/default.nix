@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, simplejson
-, fake-useragent
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  simplejson,
+  fake-useragent,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +30,11 @@ buildPythonPackage rec {
   # No tests in PyPI tarballs
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyatome"
-  ];
+  pythonImportsCheck = [ "pyatome" ];
 
   meta = with lib; {
     description = "Python module to get energy consumption data from Atome";
+    mainProgram = "pyatome";
     homepage = "https://github.com/baqs/pyAtome";
     license = licenses.asl20;
     maintainers = with maintainers; [ uvnikita ];

@@ -1,57 +1,58 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
-  versions = if stdenv.isLinux then {
-    stable = "0.0.28";
-    ptb = "0.0.44";
-    canary = "0.0.162";
-    development = "0.0.217";
-  } else {
-    stable = "0.0.273";
-    ptb = "0.0.59";
-    canary = "0.0.283";
-    development = "0.0.8778";
-  };
+  versions =
+    if stdenv.isLinux then {
+      stable = "0.0.59";
+      ptb = "0.0.93";
+      canary = "0.0.450";
+      development = "0.0.22";
+    } else {
+      stable = "0.0.310";
+      ptb = "0.0.122";
+      canary = "0.0.559";
+      development = "0.0.44";
+    };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "sha256-JwxVVm/QIBLoVyQ2Ff/MX06UNgZ+dAsD960GsCg1M+U=";
+        hash = "sha256-wv0HcbPlFRb8OTvnkCdb1MAuvl/7LHTUfE5UxpeSIPw=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "lehrB2jTvMKIDt7QWK/UAkrzYnW5pAP4LRHfIvGpnzA=";
+        hash = "sha256-MO940dRAJ0J/fa8I+nU8483AH8PA7eIJ9ZUF15iqbgE=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-eSWcwSw46hKJmDLxHtolBZgKrIS2QnTbVoYe0EI4Njs=";
+        hash = "sha256-qKg27ysy3kUAPL5YrB2BKu5FCwXMfQZtDUT23Yge5No=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-        sha256 = "sha256-fzNFKrYo5qckrWZAkkiK337czCt6nOM1O8FeG18Q8Y0=";
+        hash = "sha256-dSoi/YZra8SRbV1rvbtKkyHmhfTb+A6mja8zZ9Y5JNo=";
       };
     };
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-        sha256 = "1vz2g83gz9ks9mxwx7gl7kys2xaw8ksnywwadrpsbj999fzlyyal";
+        hash = "sha256-zQ4/S2BpQDuU3ReKaNh31DRHS4S6FFUo6Y6YjGB1/mE=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
+        hash = "sha256-DckRIoLKmAqUtdXUvvSKeNZUq/77Acy0Np0fPhQjUa4=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
+        hash = "sha256-HrgWpmqyn4k3DDM/LE4JUN6DeJKklm7kzyry4ZiL7pA=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
-        sha256 = "sha256-K4rlShYhmsjT2QHjb6+IbCXJFK+9REIx/gW68bcVSVc=";
+        hash = "sha256-Ryk43s8peXIvifcrxeot2nIGpqOfpgWKmVEYQkuX4I0=";
       };
     };
     aarch64-darwin = x86_64-darwin;
   };
-  src = srcs.${stdenv.hostPlatform.system}.${branch};
+  src = srcs.${stdenv.hostPlatform.system}.${branch} or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
@@ -59,22 +60,21 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ MP2E Scrumplex artturin infinidoge jopejoe1 ];
+    maintainers = with maintainers; [ Scrumplex artturin infinidoge jopejoe1 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "discord";
   };
   package =
     if stdenv.isLinux
     then ./linux.nix
     else ./darwin.nix;
 
-  openasar = callPackage ./openasar.nix { };
-
   packages = (
     builtins.mapAttrs
       (_: value:
         callPackage package (value
           // {
-          inherit src version openasar branch;
+          inherit src version branch;
           meta = meta // { mainProgram = value.binaryName; };
         }))
       {

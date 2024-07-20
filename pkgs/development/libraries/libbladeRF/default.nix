@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "sha256-H40w5YKp6M3QLrsPhILEnJiWutCYLtbgC4a63sV397Q=";
+    hash = "sha256-H40w5YKp6M3QLrsPhILEnJiWutCYLtbgC4a63sV397Q=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     "-DINSTALL_UDEV_RULES=ON"
     "-DBLADERF_GROUP=bladerf"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   hardeningDisable = [ "fortify" ];
 

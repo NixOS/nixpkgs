@@ -3,10 +3,8 @@
 , fetchurl
 , pkg-config
 , vala
+, gi-docgen
 , gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
 , glib
 , babl
 , libpng
@@ -33,18 +31,19 @@
 , openexr
 , OpenCL
 , suitesparse
+, withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit
 }:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.44";
+  version = "0.4.48";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "CkzbQWNeQGoISc0NPwPK99l8q4qhPShwfVMtAInVYSY=";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
+    hash = "sha256-QYwm2UvogF19mPbeDGglyia9dPystsGI2kdTPZ7igkc=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     gobject-introspection
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
+    gi-docgen
   ];
 
   buildInputs = [
@@ -75,13 +72,14 @@ stdenv.mkDerivation rec {
     libraw
     libwebp
     gexiv2
-    luajit
     openexr
     suitesparse
   ] ++ lib.optionals stdenv.isDarwin [
     OpenCL
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
+  ] ++ lib.optionals withLuaJIT [
+    luajit
   ];
 
   # for gegl-4.0.pc
@@ -92,7 +90,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk-doc=true"
     "-Dmrg=disabled" # not sure what that is
     "-Dsdl2=disabled"
     "-Dpygobject=disabled"
@@ -102,15 +99,18 @@ stdenv.mkDerivation rec {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
+  ] ++ lib.optionals (!withLuaJIT) [
+    "-Dlua=disabled"
   ];
-
-  # TODO: Fix missing math symbols in gegl seamless clone.
-  # It only appears when we use packaged poly2tri-c instead of vendored one.
-  env.NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh
     patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode

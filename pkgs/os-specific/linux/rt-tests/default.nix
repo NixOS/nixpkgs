@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rt-tests";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-LzN3YB3Lb7tjyEplrFaNYtiGwHUUTztZBsMrUndd2cU=";
+    sha256 = "sha256-1kfLmB1RPO8Hd7o8tROSyVBWchchc+AGPuOUlM2hR8g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Suite of real-time tests - cyclictest, hwlatdetect, pip_stress, pi_stress, pmqtest, ptsematest, rt-migrate-test, sendme, signaltest, sigwaittest, svsematest";
     platforms = platforms.linux;
     maintainers = with maintainers; [ poelzi ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

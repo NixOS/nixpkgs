@@ -1,33 +1,47 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, pythonOlder
-, fetchPypi
-, isPyPy
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  pythonOlder,
+  fetchPypi,
+  writeText,
 
-# build
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# propagates
-, attrs
-, exceptiongroup
-, iniconfig
-, packaging
-, pluggy
-, py
-, tomli
+  # dependencies
+  attrs,
+  exceptiongroup,
+  iniconfig,
+  packaging,
+  pluggy,
+  tomli,
+
+  # optional-dependencies
+  argcomplete,
+  hypothesis,
+  mock,
+  pygments,
+  requests,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.2.1";
-  format = "pyproject";
+  version = "8.2.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1F4JUvNyckGRi4/Q83b1/2swHMB3fG+aVWk1yS2KfUI=";
+    hash = "sha256-3ku4EE4gGTnM3GiLJ6iae+IHmyLivSsH+Aa2unEReXc=";
   };
+
+  patches = [
+    # https://github.com/pytest-dev/pytest/issues/12424
+    # https://github.com/pytest-dev/pytest/pull/12436
+    ./8.2.2-unittest-testcase-regression.patch
+  ];
 
   outputs = [
     "out"
@@ -35,19 +49,33 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    iniconfig
-    packaging
-    pluggy
-    py
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
+
+  passthru.optional-dependencies = {
+    testing = [
+      argcomplete
+      attrs
+      hypothesis
+      mock
+      pygments
+      requests
+      setuptools
+      xmlschema
+    ];
+  };
 
   postInstall = ''
     mkdir $testout
@@ -78,15 +106,18 @@ buildPythonPackage rec {
     preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [
+      domenkozar
+      lovek323
+      madjar
+      lsix
+    ];
     license = licenses.mit;
   };
 }

@@ -1,38 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  importlib-metadata,
+  pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
-, flask
-, black
-, magic-wormhole
-, mitmproxy
-, typer
+  flask,
+  black,
+  magic-wormhole,
+  mitmproxy,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.3";
+  version = "8.1.7";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "click";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # test fails with filename normalization on zfs
+    "test_file_surrogates"
   ];
 
   passthru.tests = {
-    inherit black flask magic-wormhole mitmproxy typer;
+    inherit
+      black
+      flask
+      magic-wormhole
+      mitmproxy
+      typer
+      ;
   };
 
   meta = with lib; {

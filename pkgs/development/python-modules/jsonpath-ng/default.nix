@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchFromGitHub
-, ply
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
-  version = "1.5.3";
+  version = "1.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = pname;
-    # missing tag https://github.com/h2non/jsonpath-ng/issues/114
-    rev = "cce4a3d4063ac8af928795acc53beb27a2bfd101";
-    hash = "sha256-+9iQHQs5TQhZFeIqMlsa3FFPfZEktAWy1lSdJU7kZrc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0ErTGxGlMn/k2KMwRV26WJpx85yJUfn6Hgp5pU4RZA4=";
   };
 
   propagatedBuildInputs = [
-    decorator
     ply
-    six
+    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -35,8 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonpath_ng" ];
 
   meta = with lib; {
-    description = "JSONPath implementation for Python";
+    description = "JSONPath implementation";
+    mainProgram = "jsonpath_ng";
     homepage = "https://github.com/h2non/jsonpath-ng";
+    changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

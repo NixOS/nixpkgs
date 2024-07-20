@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "polylith";
-  version = "0.2.15-alpha";
+  version = "0.2.20";
 
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "sha256-RAFxOwQykERpW+KEjTQDJN+XRv3JudREyBOk99A/qV8=";
+    sha256 = "sha256-c/EFacN8isuxghnxaMn/uqDK1r7w1qn/suV8xbnmvOo=";
   };
 
   dontUnpack = true;
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool used to develop Polylith based architectures in Clojure";
+    description = "Tool used to develop Polylith based architectures in Clojure";
+    mainProgram = "poly";
     homepage = "https://github.com/polyfy/polylith";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

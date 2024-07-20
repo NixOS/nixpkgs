@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
+    description = "Reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
     longDescription = ''
       GemRB (Game engine made with pre-Rendered Background) is a portable
       open-source implementation of Bioware's Infinity Engine. It was written to

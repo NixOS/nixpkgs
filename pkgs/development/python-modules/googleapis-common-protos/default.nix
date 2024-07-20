@@ -1,20 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  grpc,
+  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.58.0";
+  version = "1.63.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xyclHsAllH1UUYS6F+NXiED8OiSgUWoCBHntq2YEV98=";
+    hash = "sha256-xkQvegprKoA2lFfXnmZyu33LqriOCEgwJJfj7IB4Cmo=";
   };
 
-  propagatedBuildInputs = [ grpc protobuf ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    grpc
+    protobuf
+  ];
 
   # does not contain tests
   doCheck = false;

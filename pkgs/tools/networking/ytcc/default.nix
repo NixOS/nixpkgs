@@ -3,16 +3,21 @@
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
   version = "2.6.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "sha256-pC2uoog+nev/Xa6UbXX4vX00VQQLHtZzbVkxrxO/Pg8=";
+    hash = "sha256-pC2uoog+nev/Xa6UbXX4vX00VQQLHtZzbVkxrxO/Pg8=";
   };
 
-  nativeBuildInputs = [ gettext installShellFiles ];
+  nativeBuildInputs = [
+    gettext
+    installShellFiles
+  ] ++ (with python3Packages; [
+    setuptools
+  ]);
 
   propagatedBuildInputs = with python3Packages; [
     yt-dlp
@@ -20,7 +25,9 @@ python3Packages.buildPythonApplication rec {
     wcwidth
   ];
 
-  nativeCheckInputs = with python3Packages; [ nose pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [
@@ -48,6 +55,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";
     homepage = "https://github.com/woefe/ytcc";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ marius851000 marsam ];
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

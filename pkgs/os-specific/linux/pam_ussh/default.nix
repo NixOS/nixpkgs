@@ -21,7 +21,7 @@ buildGoModule rec {
     cp ${./go.sum} go.sum
   '';
 
-  vendorSha256 = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
+  vendorHash = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
 
   buildInputs = [
     pam

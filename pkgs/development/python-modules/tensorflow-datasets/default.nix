@@ -1,60 +1,62 @@
-{ apache-beam
-, array-record
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, click
-, datasets
-, dill
-, dm-tree
-, fetchFromGitHub
-, ffmpeg
-, future
-, imagemagick
-, importlib-resources
-, jax
-, jaxlib
-, jinja2
-, langdetect
-, lib
-, lxml
-, matplotlib
-, mwparserfromhell
-, mwxml
-, networkx
-, nltk
-, numpy
-, opencv4
-, pandas
-, pillow
-, promise
-, protobuf
-, psutil
-, pycocotools
-, pydub
-, pytest-xdist
-, pytestCheckHook
-, requests
-, scikit-image
-, scipy
-, six
-, tensorflow
-, tensorflow-metadata
-, termcolor
-, tifffile
-, tqdm
-, zarr
+{
+  apache-beam,
+  array-record,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  datasets,
+  dill,
+  dm-tree,
+  fetchFromGitHub,
+  ffmpeg,
+  future,
+  imagemagick,
+  importlib-resources,
+  jax,
+  jaxlib,
+  jinja2,
+  langdetect,
+  lib,
+  lxml,
+  matplotlib,
+  mwparserfromhell,
+  mwxml,
+  networkx,
+  nltk,
+  numpy,
+  opencv4,
+  pandas,
+  pillow,
+  promise,
+  protobuf,
+  psutil,
+  pycocotools,
+  pydub,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
+  scikit-image,
+  scipy,
+  six,
+  tensorflow,
+  tensorflow-metadata,
+  termcolor,
+  tifffile,
+  tqdm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.9.2";
+  version = "4.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FKquhuk5hVBH9Im2RrIwgmosgqkoJHj0ESR2BmAOlbI=";
+    hash = "sha256-HY/atBEWeEJgBNxEapq9jPFoZbFof2AHEDAiJa/lYAE=";
   };
 
   patches = [
@@ -80,9 +82,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "tensorflow_datasets"
-  ];
+  pythonImportsCheck = [ "tensorflow_datasets" ];
 
   nativeCheckInputs = [
     apache-beam

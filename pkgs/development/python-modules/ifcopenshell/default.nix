@@ -1,31 +1,38 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, gcc10
-, cmake
-, boost179
-, icu
-, swig
-, pcre
-, opencascade-occt
-, opencollada
-, libxml2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gcc10,
+  cmake,
+  boost179,
+  icu,
+  swig,
+  pcre,
+  opencascade-occt_7_6,
+  opencollada,
+  libxml2,
 }:
-
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "210410";
+  version = "240611";
   format = "other";
 
   src = fetchFromGitHub {
-    owner  = "IfcOpenShell";
-    repo   = "IfcOpenShell";
-    rev    = "blenderbim-${version}";
+    owner = "IfcOpenShell";
+    repo = "IfcOpenShell";
+    rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "1g52asxrqcfj01iqvf03k3bb6rg3v04hh1wc3nmn329a2lwjbxpw";
+    hash = "sha256-fCgxSambC01qb14EoZTrVxNNw8H3nX8oMi6gk0O/HmQ=";
   };
 
-  nativeBuildInputs = [ gcc10 cmake ];
+  nativeBuildInputs = [
+    gcc10
+    cmake
+  ];
 
   buildInputs = [
     boost179
@@ -38,7 +45,7 @@ buildPythonPackage rec {
     cd cmake
   '';
 
-  PYTHONUSERBASE=".";
+  PYTHONUSERBASE = ".";
   cmakeFlags = [
     "-DUSERSPACE_PYTHON_PREFIX=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
@@ -53,8 +60,8 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Open source IFC library and geometry engine";
-    homepage    = "http://ifcopenshell.org/";
-    license     = licenses.lgpl3;
+    homepage = "http://ifcopenshell.org/";
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ fehnomenal ];
   };
 }

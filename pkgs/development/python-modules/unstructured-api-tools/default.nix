@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# propagated build inputs
-, click
-, fastapi
-, jinja2
-, mypy
-, nbconvert
-, python-multipart
-, pandas
-, types-requests
-, types-ujson
-, uvicorn
-, autoflake
-# native check inputs
-, pytestCheckHook
-, black
-, coverage
-, flake8
-, httpx
-, ipython
-, pytest-cov
-, requests
-, requests-toolbelt
-, nbdev
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # propagated build inputs
+  click,
+  fastapi,
+  jinja2,
+  mypy,
+  nbconvert,
+  python-multipart,
+  pandas,
+  types-requests,
+  types-ujson,
+  uvicorn,
+  autoflake,
+  # native check inputs
+  pytestCheckHook,
+  black,
+  coverage,
+  flake8,
+  httpx,
+  ipython,
+  pytest-cov,
+  requests,
+  requests-toolbelt,
+  nbdev,
+  pytest-mock,
 }:
 let
-  version = "0.10.10";
+  version = "0.10.11";
 in
 buildPythonPackage {
   pname = "unstructured-api-tools";
@@ -40,8 +41,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-api-tools";
-    rev = version;
-    hash = "sha256-CJ5bsII24hw03JN4+8VywYRYCsnMlYHjmaIIn0zttIs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-t1fK40ayR2bxc1iMIwvn/OHuyVlR98Gq+NpIhOmaP+4=";
   };
 
   propagatedBuildInputs = [
@@ -85,6 +86,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "";
+    mainProgram = "unstructured_api_tools";
     homepage = "https://github.com/Unstructured-IO/unstructured-api-tools";
     changelog = "https://github.com/Unstructured-IO/unstructured-api-tools/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

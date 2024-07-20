@@ -1,43 +1,55 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cons
-, cython
-, etuples
-, fetchFromGitHub
-, filelock
-, jax
-, jaxlib
-, logical-unification
-, minikanren
-, numba
-, numba-scipy
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  versioneer,
+
+  # dependencies
+  cons,
+  etuples,
+  filelock,
+  logical-unification,
+  minikanren,
+  numpy,
+  scipy,
+
+  # checks
+  jax,
+  jaxlib,
+  numba,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  tensorflow-probability,
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.11.3";
-  format = "setuptools";
+  version = "2.25.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
+    hash = "sha256-+82zQtC20Q2u3/ujnt8UfmK4oYCpH6Eo2TTlk2g3z+s=";
   };
 
-  nativeBuildInputs = [
-    cython
+  pythonRelaxDeps = [
+    "scipy"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
+    versioneer
+  ];
+
+  dependencies = [
     cons
     etuples
     filelock
@@ -45,29 +57,22 @@ buildPythonPackage rec {
     minikanren
     numpy
     scipy
-    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jax
     jaxlib
     numba
-    numba-scipy
+    pytest-mock
     pytestCheckHook
+    tensorflow-probability
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--durations=50" ""
-  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "pytensor"
-  ];
+  pythonImportsCheck = [ "pytensor" ];
 
   disabledTests = [
     # benchmarks (require pytest-benchmark):
@@ -82,16 +87,18 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sandbox/"
     "tests/sparse/sandbox/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
+    mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      ferrine
+    ];
   };
 }

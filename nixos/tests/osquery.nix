@@ -1,7 +1,5 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
-with lib;
-
 let
   config_refresh = "10";
   nullvalue = "NULL";
@@ -9,9 +7,7 @@ let
 in
 {
   name = "osquery";
-  meta = with maintainers; {
-    maintainers = [ znewman01 lewo ];
-  };
+  meta.maintainers = with lib.maintainers; [ znewman01 lewo ];
 
   nodes.machine = { config, pkgs, ... }: {
     services.osquery = {
@@ -40,7 +36,7 @@ in
       machine.succeed("echo 'SELECT address FROM etc_hosts LIMIT 1;' | osqueryi | tee /dev/console | grep -q '127.0.0.1'")
 
       # osquery binaries respect configuration from the Nix config option.
-      machine.succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"utc\";' | osqueryi | tee /dev/console | grep -q ${boolToString utc}")
+      machine.succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"utc\";' | osqueryi | tee /dev/console | grep -q ${lib.boolToString utc}")
 
       # osquery binaries respect configuration from the Nix flags option.
       machine.succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"config_refresh\";' | osqueryi | tee /dev/console | grep -q ${config_refresh}")

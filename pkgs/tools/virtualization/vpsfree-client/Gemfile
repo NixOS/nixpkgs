@@ -2,4 +2,4 @@
 
 source "https://rubygems.org"
 
-gem "vpsfree-client", "0.17.1"
+gem "vpsfree-client", "0.18.0"

@@ -1,8 +1,17 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope_interface, twisted, greenlet }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  zope-interface,
+  twisted,
+  greenlet,
+}:
 
 buildPythonPackage rec {
   pname = "python3-eventlib";
   version = "0.3.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -13,14 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
   };
 
-  propagatedBuildInputs = [ zope_interface twisted greenlet ];
+  propagatedBuildInputs = [
+    zope-interface
+    twisted
+    greenlet
+  ];
 
   dontUseSetuptoolsCheck = true;
 
   pythonImportsCheck = [ "eventlib" ];
 
   meta = with lib; {
-    description = "A networking library written in Python";
+    description = "Networking library written in Python";
     homepage = "https://github.com/AGProjects/python3-eventlib";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ chanley ];

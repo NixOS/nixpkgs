@@ -1,21 +1,25 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{ buildGoModule, lib, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "frp";
-  version = "0.51.1";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B15GyMk4tYbhj4QGpona0CK89WyIkPnH6QMxmd8BS+w=";
+    hash = "sha256-2zAvrI7Vxy3/FuDhV4K77n7EsTZR3kpwYDLIEQ2bsuk=";
   };
 
-  vendorHash = "sha256-JNBQO4rZmtBKIAQAikQDyREQ3Kw1CG6pC9HouJQ5dh4=";
+  vendorHash = "sha256-/FxX1Tl393X/KheBG5aFFhdgKDUhRkd7Ge032P0ZE64=";
 
   doCheck = false;
 
   subPackages = [ "cmd/frpc" "cmd/frps" ];
+
+  passthru.tests = {
+    frp = nixosTests.frp;
+  };
 
   meta = with lib; {
     description = "Fast reverse proxy";

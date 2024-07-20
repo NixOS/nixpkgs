@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Serve embedded files from jteeuwen/go-bindata";
+    mainProgram = "go-bindata-assetfs";
     license = licenses.bsd2;
     maintainers = with maintainers; [ avnik ];
   };

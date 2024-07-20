@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, ghostscript
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  ghostscript,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.7.0";
+  version = "0.11.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-paiMsG5b62Sh7yFH7oebDlE59f24J/2i/PFKAYx7EeY=";
+    hash = "sha256-OU3d9hnMqdDFVxXjxV6hIam/nLx4DNwSAaJCeRe4a2Q=";
   };
 
   postPatch = ''
@@ -25,9 +26,7 @@ buildPythonPackage rec {
       --replace "--isort --flake8 --cov --no-cov-on-fail" ""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     ghostscript
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pydyf"
-  ];
+  pythonImportsCheck = [ "pydyf" ];
 
   meta = with lib; {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";

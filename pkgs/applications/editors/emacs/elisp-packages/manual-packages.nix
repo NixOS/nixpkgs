@@ -5,11 +5,11 @@ let
   inherit (self) callPackage;
 in
 {
+  inherit (pkgs) emacspeak;
+
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
-
-  agda-input = callPackage ./manual-packages/agda-input { };
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
@@ -17,25 +17,31 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
+  consult-gh = callPackage ./manual-packages/consult-gh { };
+
   control-lock = callPackage ./manual-packages/control-lock { };
+
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
+  el-easydraw = callPackage ./manual-packages/el-easydraw { };
+
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
-  emacspeak = callPackage ./manual-packages/emacspeak { };
+  emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
 
-  ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
+  enlight = callPackage ./manual-packages/enlight { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
-
   git-undo = callPackage ./manual-packages/git-undo { };
 
-  haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
+  grid = callPackage ./manual-packages/grid { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
@@ -55,23 +61,27 @@ in
     inherit (pkgs) python3 git go gopls pyright;
   };
 
+  lspce = callPackage ./manual-packages/lspce { };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
 
+  mu4e = callPackage ./manual-packages/mu4e { };
+
+  notdeft = callPackage ./manual-packages/notdeft { };
+
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
-  perl-completion = callPackage ./manual-packages/perl-completion { };
-
   pod-mode = callPackage ./manual-packages/pod-mode { };
-
-  power-mode = callPackage ./manual-packages/power-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 
   structured-haskell-mode = self.shm;
 
   sv-kalender = callPackage ./manual-packages/sv-kalender { };
+
+  texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
@@ -84,6 +94,8 @@ in
   voicemacs = callPackage ./manual-packages/voicemacs { };
 
   wat-mode = callPackage ./manual-packages/wat-mode { };
+
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 
@@ -103,4 +115,12 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+}
+### Aliases
+// lib.optionalAttrs pkgs.config.allowAliases {
+  agda-input = throw "emacsPackages.agda-input is contained in emacsPackages.agda2-mode, please use that instead."; # Added 2024-07-17
+  ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
+  ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
+  haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
+  perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }

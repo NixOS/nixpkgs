@@ -10,27 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3006.1";
+  version = "3007.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lVh71hHepq/7aQjQ7CaGy37bhMFBRLSFF3bxJ6YOxbk=";
+    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
   };
-
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    jmespath
-    looseversion
-    markupsafe
-    msgpack
-    packaging
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-  ] ++ extraInputs;
 
   patches = [
     ./fix-libcrypto-loading.patch
@@ -50,6 +36,22 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace "requirements/zeromq.txt" \
       --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
+
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
+    jinja2
+    jmespath
+    looseversion
+    markupsafe
+    msgpack
+    packaging
+    psutil
+    pycryptodomex
+    pyyaml
+    pyzmq
+    requests
+    tornado
+  ] ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";

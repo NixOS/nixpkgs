@@ -6,20 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.13.0";
-  format = "pyproject";
+  version = "1.19.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
-    rev = "v${version}";
-    hash = "sha256-vYb4XWBdQ4HJzICXNiBXit4aVgjYA9SCX15MppVtTS8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V5B+/zfUlpF0TMTHqzyjapW93/DoJKgbJkTMX2NZyIQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
-    pytestCheckHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     pillow
     pymupdf
+    pyperclip
     rich
     rich-click
     rich-pixels
@@ -48,24 +47,42 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-textual-snapshot
+    pytestCheckHook
+  ];
+
   pythonRelaxDeps = [
     "art"
+    "pandas"
     "pymupdf"
     "rich-click"
+    "rich-pixels"
+    "rich"
     "textual"
   ];
 
-  pythonImportsCheck = [ "browsr" ];
+  pythonImportsCheck = [
+    "browsr"
+  ];
 
-  # requires internet access
+  pytestFlagsArray = [
+    "--snapshot-update"
+  ];
+
   disabledTests = [
+    # Tests require internet access
     "test_github_screenshot"
     "test_github_screenshot_license"
     "test_textual_app_context_path_github"
+    "test_mkdocs_screenshot"
+    # Different output
+    "test_textual_app_context_path"
   ];
 
   meta = with lib; {
-    description = "A file explorer in your terminal";
+    description = "File explorer in your terminal";
+    mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;

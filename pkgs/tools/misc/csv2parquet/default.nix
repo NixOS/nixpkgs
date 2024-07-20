@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/domoritz/csv2parquet";
     license = licenses.mit;
     maintainers = with maintainers; [ john-shaffer ];
+    mainProgram = "csv2parquet";
   };
 }

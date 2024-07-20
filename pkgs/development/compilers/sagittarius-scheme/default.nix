@@ -6,7 +6,7 @@
 , boehmgc
 , openssl
 , zlib
-, odbcSupport ? true
+, odbcSupport ? !stdenv.isDarwin
 , libiodbc
 }:
 
@@ -16,10 +16,10 @@ let platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
 in
 stdenv.mkDerivation rec {
   pname = "sagittarius-scheme";
-  version = "0.9.10";
+  version = "0.9.11";
   src = fetchurl {
     url = "https://bitbucket.org/ktakashi/${pname}/downloads/sagittarius-${version}.tar.gz";
-    sha256 = "sha256-F2GaaYVnDAGYDlQZBGhdPDO8lbeVgn+ta6LSK0L0zNA=";
+    hash = "sha256-LIF1EW8sMBMKycQnVAXk+5iEpKmRHMmzBILAg2tjk8c=";
   };
   preBuild = ''
            # since we lack rpath during build, need to explicitly add build path
@@ -31,9 +31,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libffi boehmgc openssl zlib ] ++ lib.optional odbcSupport libiodbc;
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=int-conversion"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # error: '__builtin_ia32_aeskeygenassist128' needs target feature aes
+    "-maes"
+  ]);
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "An R6RS/R7RS Scheme system";
+    description = "R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting
       R6RS/R7RS specification.

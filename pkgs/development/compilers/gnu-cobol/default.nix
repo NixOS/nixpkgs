@@ -13,7 +13,7 @@
 # docs
 , help2man
 , texinfo
-, texlive
+, texliveBasic
 # test
 , writeText
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libtool
     help2man
     texinfo
-    texlive.combined.scheme-basic
+    texliveBasic
   ];
 
   buildInputs = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open-source COBOL compiler";
+    description = "Open-source COBOL compiler";
     homepage = "https://sourceforge.net/projects/gnucobol/";
     license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ ericsagnes lovesegfault ];

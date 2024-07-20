@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "--with-berkeleydb=${db62.out}"
     "--with-xerces=${xercesc}"
     "--with-xqilla=${xqilla}"
+    # code uses register storage specifier
+    "CXXFLAGS=-std=c++14"
   ];
 
   preConfigure = ''
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.oracle.com/database/berkeley-db/xml.html";
     description = "Embeddable XML database based on Berkeley DB";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };

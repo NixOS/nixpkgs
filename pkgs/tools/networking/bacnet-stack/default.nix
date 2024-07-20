@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bacnet-stack";
-  version = "1.0.0";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "bacnet-stack";
     repo = "bacnet-stack";
     rev = "bacnet-stack-${version}";
-    sha256 = "078p7qsy9v6fl7pzwgcr72pgjqxfxmfxyqajih2zqlb5g5sf88vh";
+    sha256 = "sha256-Iwo0bNulKdFNwNU2xj6Uin+5hQt1I3N6+zso5BHrIOU=";
   };
 
   hardeningDisable = [ "all" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "BACnet open source protocol stack for embedded systems, Linux, and Windows";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ WhittlesJr ];
   };
 }

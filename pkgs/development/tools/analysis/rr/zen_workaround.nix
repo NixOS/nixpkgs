@@ -6,11 +6,11 @@
 */
 stdenv.mkDerivation rec {
   pname = "rr-zen_workaround";
-  version = "2020-09-22";
+  version = "2023-11-23";
 
   src = fetchzip {
-    url = "https://gist.github.com/glandium/01d54cefdb70561b5f6675e08f2990f2/archive/2f430f0c136a69b0886281d0c76708997d8878af.zip";
-    sha256 = "1mbmbyymgl75wparv3rgnyxnc44rd6n935jziz9anl9apy031ryi";
+    url = "https://gist.github.com/glandium/01d54cefdb70561b5f6675e08f2990f2/archive/f9d2070a7d87388da39acd157e0e53666a7d6ee0.zip";
+    sha256 = "sha256-VqqKYjd8J7Uh5ea+PjLT93cNdQFvGIwGu4bzx+weSvo=";
   };
 
   hardeningDisable = [ "pic" ];

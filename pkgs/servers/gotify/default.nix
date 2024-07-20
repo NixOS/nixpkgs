@@ -1,22 +1,21 @@
 { lib
-, buildGoPackage
 , fetchFromGitHub
 , buildGoModule
 , sqlite
 , callPackage
+, nixosTests
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "gotify-server";
-  # should be update just like all other files imported like that via the
-  # `update.sh` script.
-  version = import ./version.nix;
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    sha256 = import ./source-sha.nix;
+    hash = "sha256-Na/bxETIgVm1mxMOXWTgYIFFuB6XG1jGvbW6q/n5LRw=";
   };
 
   # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
@@ -25,20 +24,31 @@ buildGoModule rec {
   #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
   allowGoReference = true;
 
-  vendorSha256 = import ./vendor-sha.nix;
+  vendorHash = "sha256-Vnk/c2dzxIXDChobFSP++9uyiFD+SKyxJC9ZwaQ2pVw=";
 
   doCheck = false;
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+  ];
 
   ui = callPackage ./ui.nix { };
 
   preBuild = ''
-    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && go run hack/packr/packr.go
+    if [ -n "$ui" ] # to make the preBuild a no-op inside the goModules fixed-output derivation, where it would fail
+    then
+      cp -r $ui ui/build
+    fi
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    # For nix-update to detect the location of this attribute from this
+    # derivation.
+    inherit (ui) offlineCache;
+    updateScript = nix-update-script { };
+    tests = {
+      nixos = nixosTests.gotify-server;
+    };
   };
 
   # Otherwise, all other subpackages are built as well and from some reason,
@@ -50,11 +60,10 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A simple server for sending and receiving messages in real-time per WebSocket";
+    description = "Simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
     mainProgram = "server";
   };
-
 }

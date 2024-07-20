@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, importlib-metadata
-, importlib-resources
-, setuptools
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  importlib-metadata,
+  importlib-resources,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "1.1.3";
-  format = "pyproject";
+  version = "1.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,27 +20,23 @@ buildPythonPackage rec {
     owner = "fake-useragent";
     repo = "fake-useragent";
     rev = "refs/tags/${version}";
-    hash = "sha256-8fVNko65nP/u9vLGBPfSseKW07b4JC6kCPFCPK2f6wU=";
+    hash = "sha256-BDXJJeT29GWkN9DoVl8sxXFpV/eMqu3mqlvMr2lzJM8=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pytest.ini
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [ ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "fake_useragent" ];
 
   meta = with lib; {
     description = "Up to date simple useragent faker with real world database";

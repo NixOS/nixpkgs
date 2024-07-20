@@ -1,0 +1,93 @@
+commit abcb3cca9452779e91380b7636f32745166af3de
+Author: John Ericson <John.Ericson@Obsidian.Systems>
+Date:   Wed Nov 29 23:55:38 2023 -0500
+
+    Make build system: enable/disable shared/static support
+    
+    This allows building this package in static-lib-only distros.
+
+diff --git a/Makefile b/Makefile
+index 5d21221..cbc7914 100644
+--- a/Makefile
++++ b/Makefile
+@@ -18,6 +18,9 @@
+ # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ # IN THE SOFTWARE.
+ 
++ENABLE_SHARED ?= 1
++ENABLE_STATIC ?=
++
+ PLATFORM ?= $(shell sh -c 'uname -s | tr "[A-Z]" "[a-z]"')
+ HELPER ?=
+ BINEXT ?=
+@@ -25,6 +28,8 @@ SOLIBNAME = libhttp_parser
+ SOMAJOR = 2
+ SOMINOR = 9
+ SOREV   = 4
++AEXT    = a
++STATICLIBNAME = $(SOLIBNAME).$(AEXT)
+ ifeq (darwin,$(PLATFORM))
+ SOEXT ?= dylib
+ SONAME ?= $(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOEXT)
+@@ -109,11 +114,17 @@ test-valgrind: test_g
+ libhttp_parser.o: http_parser.c http_parser.h Makefile
+ 	$(CC) $(CPPFLAGS_FAST) $(CFLAGS_LIB) -c http_parser.c -o libhttp_parser.o
+ 
+-library: libhttp_parser.o
+-	$(CC) $(LDFLAGS_LIB) -o $(LIBNAME) $<
++.PHONY: library
++library: $(LIBNAME)
++
++$(LIBNAME): libhttp_parser.o
++	$(CC) $(LDFLAGS_LIB) -o $@ $<
+ 
+-package: http_parser.o
+-	$(AR) rcs libhttp_parser.a http_parser.o
++.PHONY: package
++package: $(STATICLIBNAME)
++
++$(STATICLIBNAME): http_parser.o
++	$(AR) rcs $@ $<
+ 
+ url_parser: http_parser.o contrib/url_parser.c
+ 	$(CC) $(CPPFLAGS_FAST) $(CFLAGS_FAST) $^ -o $@
+@@ -130,12 +141,30 @@ parsertrace_g: http_parser_g.o contrib/parsertrace.c
+ tags: http_parser.c http_parser.h test.c
+ 	ctags $^
+ 
+-install: library
++.PHONY: install-headers
++install-headers:
+ 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
++
++.PHONY: install-library
++install-library: library
+ 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+ 	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+ 	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+ 
++.PHONY: install-package
++install-package: package
++	$(INSTALL) -D $(STATICLIBNAME) $(DESTDIR)$(LIBDIR)/$(STATICLIBNAME)
++
++.PHONY: install
++install: install-headers
++ifeq ($(ENABLE_SHARED),1)
++install: install-library
++endif
++ifeq ($(ENABLE_STATIC),1)
++install: install-package
++endif
++
++.PHONY: install-strip
+ install-strip: library
+ 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
+ 	$(INSTALL) -D -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+@@ -147,6 +176,7 @@ uninstall:
+ 	rm $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+ 	rm $(DESTDIR)$(LIBDIR)/$(SONAME)
+ 	rm $(DESTDIR)$(LIBDIR)/$(LIBNAME)
++	rm $(DESTDIR)$(LIBDIR)/$(STATICLIBNAME)
+ 
+ clean:
+ 	rm -f *.o *.a tags test test_fast test_g \

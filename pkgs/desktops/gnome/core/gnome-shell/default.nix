@@ -12,23 +12,21 @@
 , python3
 , polkit
 , networkmanager
-, gtk-doc
-, docbook-xsl-nons
+, gi-docgen
 , at-spi2-core
-, libstartup_notification
 , unzip
 , shared-mime-info
 , libgweather
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , geoclue2
 , perl
-, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , libxslt
 , gcr_4
 , accountsservice
@@ -37,7 +35,6 @@
 , upower
 , ibus
 , libnma-gtk4
-, libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
 , gnome-keyring
@@ -45,7 +42,6 @@
 , gjs
 , mutter
 , evolution-data-server-gtk4
-, gtk3
 , gtk4
 , libadwaita
 , sassc
@@ -57,31 +53,38 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
+, gnome-tecla
 , asciidoc
 , bash-completion
 , mesa
+, libGL
+, libXi
+, libX11
+, libxml2
 }:
 
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "44.3";
+  version = "46.3.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "VWlLccLuTq72DZNCgAPy6qTPABhoSPXja0XP5Qb8Mb8=";
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
+    hash = "sha256-575fxu4sxSitJh3HpVyN5aMkEtPWhAoKB14PwSoH/4s=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit libgnomekbd unzip;
+      glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
+      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
+      unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -93,16 +96,13 @@ stdenv.mkDerivation rec {
 
     # Fix greeter logo being too big.
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
-      revert = true;
-      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
-    })
+    # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
+    ./greeter-logo-size.patch
 
     # Work around failing fingerprint auth
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
-      sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
+      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
+      hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
     })
   ];
 
@@ -111,15 +111,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    gtk-doc
+    gi-docgen
     perl
-    wrapGAppsHook
+    wrapGAppsHook4
     sassc
     desktop-file-utils
     libxslt.bin
     asciidoc
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -134,13 +133,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     librsvg
     networkmanager
-    libstartup_notification
     gjs
     mutter
     libpulseaudio
     evolution-data-server-gtk4
     libical
-    gtk3
     gtk4
     libadwaita
     gdm
@@ -153,8 +150,11 @@ stdenv.mkDerivation rec {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     mesa
+    libGL # for egl, required by mutter-clutter
+    libXi # required by libmutter
+    libX11
+    libxml2
 
     # recording
     pipewire
@@ -185,14 +185,15 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
-    rm data/theme/gnome-shell.css
+    rm data/theme/gnome-shell-{light,dark}.css
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];
@@ -212,6 +213,9 @@ stdenv.mkDerivation rec {
     for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   separateDebugInfo = true;
@@ -226,10 +230,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 
-}
+})

@@ -15,6 +15,7 @@ let
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
     plugin_dir = /var/lib/graylog/plugins
+    data_dir = ${cfg.dataDir}
 
     ${cfg.extraConfig}
   '';
@@ -33,36 +34,36 @@ in
 
     services.graylog = {
 
-      enable = mkEnableOption (lib.mdDoc "Graylog");
+      enable = mkEnableOption "Graylog, a log management solution";
 
       package = mkOption {
         type = types.package;
-        default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_0;
-        defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_0");
-        description = lib.mdDoc "Graylog package to use.";
+        default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
+        defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
+        description = "Graylog package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "graylog";
-        description = lib.mdDoc "User account under which graylog runs";
+        description = "User account under which graylog runs";
       };
 
       isMaster = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether this is the master instance of your Graylog cluster";
+        description = "Whether this is the master instance of your Graylog cluster";
       };
 
       nodeIdFile = mkOption {
         type = types.str;
         default = "/var/lib/graylog/server/node-id";
-        description = lib.mdDoc "Path of the file containing the graylog node-id";
+        description = "Path of the file containing the graylog node-id";
       };
 
       passwordSecret = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           You MUST set a secret to secure/pepper the stored user passwords here. Use at least 64 characters.
           Generate one by using for example: pwgen -N 1 -s 96
         '';
@@ -71,13 +72,13 @@ in
       rootUsername = mkOption {
         type = types.str;
         default = "admin";
-        description = lib.mdDoc "Name of the default administrator user";
+        description = "Name of the default administrator user";
       };
 
       rootPasswordSha2 = mkOption {
         type = types.str;
         example = "e3c652f0ba0b4801205814f8b6bc49672c4c74e25b497770bb89b22cdeb4e952";
-        description = lib.mdDoc ''
+        description = ''
           You MUST specify a hash password for the root user (which you only need to initially set up the
           system and in case you lose connectivity to your authentication backend)
           This password cannot be changed using the API or via the web interface. If you need to change it,
@@ -90,29 +91,35 @@ in
       elasticsearchHosts = mkOption {
         type = types.listOf types.str;
         example = literalExpression ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
-        description = lib.mdDoc "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
+        description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/graylog/data";
+        description = "Directory used to store Graylog server state.";
       };
 
       messageJournalDir = mkOption {
         type = types.str;
         default = "/var/lib/graylog/data/journal";
-        description = lib.mdDoc "The directory which will be used to store the message journal. The directory must be exclusively used by Graylog and must not contain any other files than the ones created by Graylog itself";
+        description = "The directory which will be used to store the message journal. The directory must be exclusively used by Graylog and must not contain any other files than the ones created by Graylog itself";
       };
 
       mongodbUri = mkOption {
         type = types.str;
         default = "mongodb://localhost/graylog";
-        description = lib.mdDoc "MongoDB connection string. See http://docs.mongodb.org/manual/reference/connection-string/ for details";
+        description = "MongoDB connection string. See http://docs.mongodb.org/manual/reference/connection-string/ for details";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Any other configuration options you might want to add";
+        description = "Any other configuration options you might want to add";
       };
 
       plugins = mkOption {
-        description = lib.mdDoc "Extra graylog plugins";
+        description = "Extra graylog plugins";
         default = [ ];
         type = types.listOf types.package;
       };

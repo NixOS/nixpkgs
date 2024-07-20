@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "3.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
-    rev = "v${version}";
-    sha256 = "sha256-q340ChF7VZcbLMW/nd1so7WScsPfbdeJUjTzsY5dkec=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -16,7 +16,7 @@ buildPythonApplication rec {
     lilypond
     pygame
     python-ly
-    sip_4
+    sip4
     pyqt5
     poppler-qt5
     pyqtwebengine
@@ -40,7 +40,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://frescobaldi.org/";
-    description = "A LilyPond sheet music text editor";
+    description = "LilyPond sheet music text editor";
     longDescription = ''
       Powerful text editor with syntax highlighting and automatic completion,
       Music view with advanced Point & Click, Midi player to proof-listen
@@ -57,5 +57,6 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ sepi ];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
+    mainProgram = "frescobaldi";
   };
 }

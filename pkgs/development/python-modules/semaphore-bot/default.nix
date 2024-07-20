@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, attrs
-, anyio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  attrs,
+  anyio,
 }:
 
 buildPythonPackage rec {
   pname = "semaphore-bot";
-  version = "0.16.0";
+  version = "0.17.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-EOUvzW4a8CgyQSxb2fXnIWfOYs5Xe0v794vDIruSHmI=";
+    hash = "sha256-3zb6+HdOB6+YrVRcmIHsokFKUOlFmKCoVNllvM+aOXQ=";
   };
 
   postPatch = ''

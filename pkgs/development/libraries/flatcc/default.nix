@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFLATCC_INSTALL=on"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -28,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "FlatBuffers Compiler and Library in C for C ";
+    mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
     license = [ licenses.asl20 ];
     maintainers = with maintainers; [ onny ];

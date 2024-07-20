@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, attrs
-, pdfminer-six
-, commoncode
-, plugincode
-, binaryornot
-, typecode-libmagic
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  attrs,
+  pdfminer-six,
+  commoncode,
+  plugincode,
+  binaryornot,
+  typecode-libmagic,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
@@ -47,14 +46,20 @@ buildPythonPackage rec {
 
   disabledTests = [
     "TestFileTypesDataDriven"
+
+    # Many of the failures below are reported in:
+    # https://github.com/nexB/typecode/issues/36
+
     # AssertionError: assert 'application/x-bytecode.python'...
     "test_compiled_python_1"
     "test_package_json"
+
+    # fails due to change in file (libmagic) 5.45
+    "test_doc_postscript_eps"
+    "test_package_debian"
   ];
 
-  pythonImportsCheck = [
-    "typecode"
-  ];
+  pythonImportsCheck = [ "typecode" ];
 
   meta = with lib; {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";

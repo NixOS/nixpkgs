@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib
-, ncurses, openssl, aspell, gnutls, gettext
+, ncurses, openssl, aspell, cjson, gnutls, gettext
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
 , asciidoctor # manpages
@@ -36,15 +36,18 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.0.2";
+      version = "4.3.4";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-DmSO4NAkyAmUJe5g1BsnKSTsjhmADujxRBCQcIg0Ajw=";
+        hash = "sha256-ytRYAi9GmRILfXLgYrNGxNDng1nMl4X6LhaG/XS6f2c=";
       };
+
+      # Why is this needed? https://github.com/weechat/weechat/issues/2031
+      patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
@@ -60,7 +63,7 @@ let
 
       nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
       buildInputs = with lib; [
-          ncurses openssl aspell gnutls gettext zlib curl
+          ncurses openssl aspell cjson gnutls gettext zlib curl
           libgcrypt ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]
         ++ concatMap (p: p.buildInputs) enabledPlugins
@@ -87,14 +90,15 @@ let
       meta = {
         homepage = "https://weechat.org/";
         changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
-        description = "A fast, light and extensible chat client";
+        description = "Fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
-          (eg. adding python modules for scripts that would require them, etc.)
+          (e.g. adding python modules for scripts that would require them, etc.)
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
         maintainers = with lib.maintainers; [ ncfavier ];
+        mainProgram = "weechat";
         platforms = lib.platforms.unix;
       };
     }

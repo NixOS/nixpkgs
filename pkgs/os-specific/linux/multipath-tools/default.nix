@@ -1,51 +1,66 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , coreutils
-, pkg-config
+
 , perl
-, lvm2
+, pkg-config
+
+, json_c
 , libaio
+, liburcu
+, linuxHeaders
+, lvm2
 , readline
 , systemd
-, liburcu
-, json_c
-, linuxHeaders
+, util-linuxMinimal
+
 , cmocka
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.4";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-CPvtnjzkyxKXrT8+YXaIgDA548h8X61+jCxMHKFfEyg=";
+    sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
   };
+
+  patches = [
+    # Backport build fix for musl libc 1.2.5
+    (fetchpatch {
+      url = "https://github.com/openSUSE/multipath-tools/commit/e5004de8296cd596aeeac0a61b901e98cf7a69d2.patch";
+      hash = "sha256-3Qt8zfrWi9aOdqMObZQaNAaXDmjhvSYrXK7qycC9L1Q=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace create-config.mk \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
 
-    substituteInPlace multipathd/multipathd.service \
-      --replace /sbin/multipathd "$out/bin/multipathd"
-
-    sed -i -re '
-      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
-    ' libmultipath/defaults.h
-    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
-      kpartx/Makefile libmpathpersist/Makefile
-    sed -i -e "s,GZIP,GZ," \
-      $(find * -name Makefile\*)
-
-    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
+    substituteInPlace multipathd/multipathd.service.in \
+      --replace-fail /sbin/multipathd "$out/bin/multipathd"
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c linuxHeaders ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    json_c
+    libaio
+    liburcu
+    linuxHeaders
+    lvm2
+    readline
+    systemd
+    util-linuxMinimal # for libmount
+  ];
 
   makeFlags = [
     "LIB=lib"
@@ -60,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''
     # skip test attempting to access /sys/dev/block
-    substituteInPlace tests/Makefile --replace ' devt ' ' '
+    substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
   nativeCheckInputs = [ cmocka ];
 
@@ -69,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for the Linux multipathing storage driver";
     homepage = "http://christophe.varoqui.free.fr/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

@@ -1,0 +1,15 @@
+{
+  "version": "0.4.0",
+  "aarch64-darwin": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-darwin.arm64.zip",
+    "hash": "sha256-tMo3+gQPnldCARm0WB7UYSMwaVpz90N2BiTzmvIFTg0="
+  },
+  "x86_64-darwin": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-darwin.x86_64.zip",
+    "hash": "sha256-zfrEDRyflvvp4Hf2+42RL+5ooY0iBU0bkO2caOAGp74="
+  },
+  "x86_64-linux": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-linux.x86_64.zip",
+    "hash": "sha256-JEHjk51vYCFAcj9xant2vBU3BZI0krYbfZk9ALjdIs0="
+  }
+}

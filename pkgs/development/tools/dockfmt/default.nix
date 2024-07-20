@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-wEC9kENcE3u+Mb7uLbx/VBUup6PBnCY5cxTYvkJcavg=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [
     "-w"
@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Dockerfile format";
+    mainProgram = "dockfmt";
     homepage = "https://github.com/jessfraz/dockfmt";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

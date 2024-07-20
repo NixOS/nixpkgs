@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "jira-cli-go";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
     rev = "v${version}";
-    hash = "sha256-+8OPXyOTEnX864Lr8IugHh890XtmRtUr1pEN1/QxMz4=";
+    hash = "sha256-edytj9hB8lDwy3qGSyLudu5G4DSRGKhD0vDoWz5eUgs=";
   };
 
-  vendorSha256 = "sha256-sG/ZKQRVxBfaMKnLk2+HdmRhojI6BZVob1XDIAYMfY0=";
+  vendorHash = "sha256-DAdzbANqr0fa4uO8k/yJFoirgbZiKOQhOH8u8d+ncao=";
 
   ldflags = [
     "-s" "-w"

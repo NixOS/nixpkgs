@@ -1,14 +1,41 @@
-{ lib, buildDunePackage, lsp, xdg, re, fiber, makeWrapper, dot-merlin-reader, spawn, ocamlc-loc }:
+{ lib
+, ocaml
+, buildDunePackage
+, lsp
+, xdg
+, re
+, fiber
+, makeWrapper
+, dot-merlin-reader
+, spawn
+, ocamlc-loc
+, merlin-lib
+, astring
+, camlp-streams
+, base
+}:
+
+# Freeze ocaml-lsp-version at 1.17.0 for OCaml 5.0
+#  for which merlin 4.16 is not available
+let lsp_v =
+  if lib.versions.majorMinor ocaml.version == "5.0"
+  then lsp.override { version = "1.17.0"; }
+  else lsp
+; in
+
+let lsp = lsp_v; in
 
 buildDunePackage rec {
   pname = "ocaml-lsp-server";
   inherit (lsp) version src preBuild;
-  duneVersion = "3";
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
   ++ lib.optional (lib.versionAtLeast version "1.9") spawn
   ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
-  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc;
+  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
+  ++ lib.optionals (lib.versionAtLeast version "1.17.0") [ astring camlp-streams merlin-lib ]
+  ++ lib.optional (lib.versionAtLeast version "1.18.0") base
+  ;
 
   nativeBuildInputs = [ makeWrapper ];
 

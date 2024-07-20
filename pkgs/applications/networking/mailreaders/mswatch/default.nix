@@ -8,7 +8,7 @@
 , glib
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mswatch";
   # Stable release won't compile successfully
   version = "unstable-2018-11-21";
@@ -29,10 +29,10 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "A command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
+    description = "Command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
     homepage = "https://mswatch.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ doronbehar ];
   };
-}
+})

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, latexcodec
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  latexcodec,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.24.0";
+  format = "setuptools";
   pname = "pybtex";
 
   doCheck = false;
@@ -26,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pybtex.org/";
-    description = "A BibTeX-compatible bibliography processor written in Python";
+    description = "BibTeX-compatible bibliography processor written in Python";
     license = licenses.mit;
   };
 }

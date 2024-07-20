@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
+, autoconf-archive
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -22,13 +23,13 @@
 }:
 
 let
-  apparmor-version = "3.1.6";
+  apparmor-version = "4.0.1";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
-    description = "A mandatory access control system - ${component}";
+    description = "Mandatory access control system - ${component}";
     license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ julm thoughtpolice ajs124 ];
+    maintainers = with maintainers; [ julm thoughtpolice ] ++ teams.helsinki-systems.members;
     platforms = platforms.linux;
   };
 
@@ -36,7 +37,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-VPgRmmQv+kgLduc6RTu9gotyjT6OImUXsPeatgG7m9E=";
+    hash = "sha256-0S/P62wi3/aPATvJL6afu+SebjoSHsTMu/WV9m7E1OE=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -56,7 +57,9 @@ let
       --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./0001-aa-remove-unknown_empty-ruleset.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -84,6 +87,7 @@ let
     strictDeps = false;
 
     nativeBuildInputs = [
+      autoconf-archive
       autoreconfHook
       bison
       flex
@@ -128,9 +132,10 @@ let
     meta = apparmor-meta "library";
   };
 
-  apparmor-utils = stdenv.mkDerivation {
+  apparmor-utils = python.pkgs.buildPythonApplication {
     pname = "apparmor-utils";
     version = apparmor-version;
+    format = "other";
 
     src = apparmor-sources;
 
@@ -143,7 +148,15 @@ let
       perl
       python
       libapparmor
+      (libapparmor.python or null)
+    ];
+
+    propagatedBuildInputs = [
       libapparmor.python
+
+      # Used by aa-notify
+      python.pkgs.notify2
+      python.pkgs.psutil
     ];
 
     prePatch = prePatchCommon +
@@ -151,9 +164,12 @@ let
       lib.optionalString stdenv.hostPlatform.isMusl ''
         sed -i ./utils/Makefile -e "/\<vim\>/d"
       '' + ''
-      for file in utils/apparmor/easyprof.py utils/apparmor/aa.py utils/logprof.conf; do
-        substituteInPlace $file --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
-      done
+      sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' ./utils/Makefile
+
+      sed -i utils/aa-unconfined -e "/my_env\['PATH'\]/d"
+
+      substituteInPlace utils/aa-remove-unknown \
+       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
     '';
     inherit patches;
     postPatch = "cd ./utils";
@@ -161,17 +177,6 @@ let
     installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
-      sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
-      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.sitePackages}:$PYTHONPATH"
-      done
-
-      substituteInPlace $out/bin/aa-notify \
-        --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
-        --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
-
-      substituteInPlace $out/bin/aa-remove-unknown \
-       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
       wrapProgram $out/bin/aa-remove-unknown \
        --prefix PATH : ${lib.makeBinPath [ gawk ]}
 

@@ -20,5 +20,6 @@ buildPythonApplication rec {
     description = "Perform a merge between two branches incrementally";
     license = licenses.gpl2Plus;
     maintainers = [ ];
+    mainProgram = "git-imerge";
   };
 }

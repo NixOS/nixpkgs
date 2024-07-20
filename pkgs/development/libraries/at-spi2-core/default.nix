@@ -1,13 +1,12 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
 , dbus
@@ -20,26 +19,20 @@
 , libXext
 , gnome
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.48.3";
+  version = "2.52.0";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "NzFt9DypmJzlOdVM9CmnaMKLs4oLNJUL6t0EIYJ+31U=";
+    hash = "sha256-CsP8gyDI0B+hR8Jyun+gOAY4nGsD08QG0II+MONf9as=";
   };
-
-  patches = [
-    # Fix implicit declaration of `strcasecmp`, which is an error on clang 16.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/147.patch";
-      hash = "sha256-UU2n//Z9F1SyUGyuDKsiwZDyThsp/tJprz/zolDDTyw=";
-    })
-  ];
 
   nativeBuildInputs = [
     glib
@@ -59,7 +52,7 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
+  ] ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support
     systemd
   ];
@@ -80,9 +73,11 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals systemdSupport [
     # Same as the above, but for dbus-broker
     "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
+  ] ++ lib.optionals (!systemdSupport) [
+    "-Duse_systemd=false"
   ];
 
   passthru = {

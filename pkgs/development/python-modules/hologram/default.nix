@@ -1,10 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -19,8 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-DboVCvByI8bTThamGBwSiQADGxIaEnTMmwmVI+4ARgc=";
   };
 
+  patches = [
+    # https://github.com/dbt-labs/hologram/pull/58
+    (fetchpatch {
+      name = "python3.11-test-compatibility.patch";
+      url = "https://github.com/dbt-labs/hologram/commit/84bbe862ef6a2fcc8b8ce85b5c9a006cc7dc1f66.patch";
+      hash = "sha256-t096jJDoKUPED4QHSfVjUMLtUJjWcqjblCtGR8moEJc=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -28,18 +41,19 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "hologram"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
+
+  pythonImportsCheck = [ "hologram" ];
 
   meta = with lib; {
-    description = "A library for automatically generating Draft 7 JSON Schemas from Python dataclasses";
+    description = "Library for automatically generating Draft 7 JSON Schemas from Python dataclasses";
     homepage = "https://github.com/dbt-labs/hologram";
     license = licenses.mit;
-    maintainers = with maintainers; [ mausch tjni ];
+    maintainers = with maintainers; [
+      mausch
+      tjni
+    ];
   };
 }

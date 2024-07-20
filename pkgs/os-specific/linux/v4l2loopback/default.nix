@@ -1,20 +1,15 @@
 { lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "v4l2loopback";
-  version = "unstable-2023-02-19-${kernel.version}";
+  version = "0.12.7-unstable-2024-02-12-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "fb410fc7af40e972058809a191fae9517b9313af";
-    hash = "sha256-gLFtR7s+3LUQ0BZxHbmaArHbufuphbtAX99nxJU3c84=";
+    rev = "5d72c17f92ee0e38efbb7eb85e34443ecbf1a80c";
+    hash = "sha256-ggmYH5MUXhMPvA8UZ2EAG+eGoPTNbw7B8UxmmgP6CsE=";
   };
-
-  patches = [
-    # fix bug https://github.com/umlaeute/v4l2loopback/issues/535
-    ./revert-pr518.patch
-  ];
 
   hardeningDisable = [ "format" "pic" ];
 
@@ -37,10 +32,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A kernel module to create V4L2 loopback devices";
+    description = "Kernel module to create V4L2 loopback devices";
+    mainProgram = "v4l2loopback-ctl";
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     platforms = platforms.linux;
     outputsToInstall = [ "out" ];
   };

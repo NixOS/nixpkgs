@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensbi";
-  version = "1.3.1";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "opensbi";
     rev = "v${version}";
-    hash = "sha256-JNkPvmKYd5xbGB2lsZKWrpI6rBIckWbkLYu98bw7+QY=";
+    hash = "sha256-vK14P97FcaVz4GDr/0055Z6s/k7BPKPQGZ/MQxbOWu0=";
   };
 
   postPatch = ''
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     "FW_FDT_PATH=${withFDT}"
   ];
 
+  enableParallelBuilding = true;
+
   dontStrip = true;
   dontPatchELF = true;
 
@@ -44,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/riscv-software-src/opensbi";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ius nickcao zhaofengli ];
-    platforms = [ "riscv64-linux" ];
+    platforms = [ "riscv64-linux" "riscv32-linux" ];
   };
 }

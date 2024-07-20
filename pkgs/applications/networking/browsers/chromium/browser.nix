@@ -6,7 +6,7 @@
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+  buildTargets = [ "run_mksnapshot_default" "chrome_sandbox" "chrome" ];
 
   outputs = ["out" "sandbox"];
 
@@ -73,7 +73,7 @@ mkChromiumDerivation (base: rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    description = "An open source web browser from Google"
+    description = "Open source web browser from Google"
       + lib.optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
@@ -85,8 +85,8 @@ mkChromiumDerivation (base: rec {
       then "https://github.com/ungoogled-software/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with lib.maintainers; if ungoogled
-      then [ squalus primeos michaeladler networkexception ]
-      else [ primeos thefloweringash networkexception ];
+      then [ networkexception emilylange ]
+      else [ networkexception emilylange ];
     license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     mainProgram = "chromium";

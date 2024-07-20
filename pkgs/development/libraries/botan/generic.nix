@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
 # Passed by version specific builders
-, baseVersion, revision, sha256
+, baseVersion, revision, hash
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , extraPatches ? [ ]
@@ -24,17 +24,18 @@ stdenv.mkDerivation rec {
        "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
        "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
     ];
-    inherit sha256;
+    inherit hash;
   };
   patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python3 bzip2 zlib gmp boost ]
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
     runHook preConfigure
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"}
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
     runHook postConfigure
   '';
 
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic algorithms library";
+    mainProgram = "botan";
     maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;

@@ -3,20 +3,24 @@
 , fetchFromGitHub
 , which
 , enableStatic ? stdenv.hostPlatform.isStatic
+, gettext
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.3";
+  version = "1.4.4";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
-    sha256 = "sha256-R+dHYG0DBI1uo+yF/pxoTv/V9WSfph043bH6erZjeCE=";
+    sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
+  patches = [ ./dont-fail-ln.patch ./do-link-so.patch ];
+
   nativeBuildInputs = [ which ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
 
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;

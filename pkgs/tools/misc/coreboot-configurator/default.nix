@@ -51,10 +51,11 @@ mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A simple GUI to change settings in Coreboot's CBFS";
+    description = "Simple GUI to change settings in Coreboot's CBFS";
     homepage = "https://support.starlabs.systems/kb/guides/coreboot-configurator";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danth ];
+    mainProgram = "coreboot-configurator";
   };
 }

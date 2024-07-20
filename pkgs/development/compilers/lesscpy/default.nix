@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname   = "lesscpy";
-  version = "0.13.0";
+  version = "0.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bbjag13kawnjdn7q4flfrkd0a21rgn9ycfqsgfdmg658jsx1ipk";
+    hash = "sha256-EEXRepj2iGRsp1jf8lTm6cA3RWSOBRoIGwOVw7d8gkw=";
   };
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python LESS Compiler";
+    mainProgram = "lesscpy";
     homepage    = "https://github.com/lesscpy/lesscpy";
     license     = licenses.mit;
     maintainers = with maintainers; [ s1341 ];

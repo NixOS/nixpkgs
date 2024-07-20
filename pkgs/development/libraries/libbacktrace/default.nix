@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "unstable-2022-12-16";
+  version = "0-unstable-2024-03-02";
 
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = "libbacktrace";
-    rev = "da7eff2f37e38136c5a0c8922957b9dfab5483ef";
-    sha256 = "ADp8n1kUf8OysFY/Jv1ytxKjqgz1Nu2VRcFGlt1k/HM=";
+    rev = "28824f2cc9069e3fdc39d3702acdf753e35c41b4";
+    sha256 = "1k1O1GT22hZAWPF8NYP0y4qe+e3pGfzT9Mz2TH+H/v4=";
   };
 
   patches = [
@@ -41,14 +41,14 @@ stdenv.mkDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.isLinux && !stdenv.hostPlatform.isMusl;
 
   passthru = {
     updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {
-    description = "A C library that may be linked into a C/C++ program to produce symbolic backtraces";
+    description = "C library that may be linked into a C/C++ program to produce symbolic backtraces";
     homepage = "https://github.com/ianlancetaylor/libbacktrace";
     maintainers = with maintainers; [ twey ];
     license = with licenses; [ bsd3 ];

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-x9DekflZoXxH964isWCi6YuV3v/iIyYOuRYVgKaUBx0=";
+    hash = "sha256-x9DekflZoXxH964isWCi6YuV3v/iIyYOuRYVgKaUBx0=";
   };
 
   cargoSha256 = "sha256-73gqk0DjhaLGIEP5VQQlubPomxHQyg4RnY5XTgE7msQ=";
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mrshmllow/gh-cal";
     license = licenses.mit;
     maintainers = with maintainers; [ loicreynier ];
+    mainProgram = "gh-cal";
   };
 }

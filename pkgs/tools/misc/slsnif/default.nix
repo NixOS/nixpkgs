@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Serial line sniffer";
     homepage = "http://slsnif.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "slsnif";
   };
 }

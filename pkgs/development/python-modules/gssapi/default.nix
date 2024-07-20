@@ -1,74 +1,78 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, six
-, decorator
-, nose
-, krb5
-, GSS
-, parameterized
-, shouldbe
-, cython
-, python
-, k5test
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  krb5,
+  setuptools,
+
+  # dependencies
+  decorator,
+
+  # native dependencies
+  GSS,
+
+  # tests
+  parameterized,
+  k5test,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.8.2";
+  version = "1.8.3";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qz4EWAO++yq72/AGwyNOtH/fTRSFbiCo/K98htROUxI=";
+    hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
   };
 
-  # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
   '';
 
-  nativeBuildInputs = [
+  env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+    GSSAPI_SUPPORT_DETECT = "false";
+  };
+
+  build-system = [
     cython
     krb5
+    setuptools
   ];
 
-  propagatedBuildInputs =  [
-    decorator
-    six
-  ];
+  dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    GSS
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+
+  # k5test is marked as broken on darwin
+  doCheck = !stdenv.isDarwin;
 
   nativeCheckInputs = [
     k5test
-    nose
     parameterized
-    shouldbe
-    six
+    pytestCheckHook
   ];
 
-  doCheck = pythonOlder "3.8"  # `shouldbe` not available
-    && !stdenv.isDarwin;  # many failures on darwin
-
-  # skip tests which fail possibly due to be an upstream issue (see
-  # https://github.com/pythongssapi/python-gssapi/issues/220)
-  checkPhase = ''
-    # some tests don't respond to being disabled through nosetests -x
-    echo $'\ndel CredsTestCase.test_add_with_impersonate' >> gssapi/tests/test_high_level.py
-    echo $'\ndel TestBaseUtilities.test_acquire_creds_impersonate_name' >> gssapi/tests/test_raw.py
-    echo $'\ndel TestBaseUtilities.test_add_cred_impersonate_name' >> gssapi/tests/test_raw.py
-
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    nosetests -e 'ext_test_\d.*'
+  preCheck = ''
+    mv gssapi/tests $TMPDIR/
+    pushd $TMPDIR
   '';
+
+  postCheck = ''
+    popd
+  '';
+
   pythonImportsCheck = [ "gssapi" ];
 
   meta = with lib; {

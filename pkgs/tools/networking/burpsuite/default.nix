@@ -1,30 +1,49 @@
-{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem }:
+{ lib
+, buildFHSEnv
+, fetchurl
+, jdk
+, makeDesktopItem
+, proEdition ? false
+, unzip
+}:
+
 let
-  version = "2023.5.3";
+  version = "2024.5.3";
+
+  product = if proEdition then {
+    productName = "pro";
+    productDesktop = "Burp Suite Professional Edition";
+    hash = "sha256-1+IAlm4irUVqGFHlL+vNZNdDJrq3ZpJdUJYGrUN2cuY=";
+  } else {
+    productName = "community";
+    productDesktop = "Burp Suite Community Edition";
+    hash = "sha256-+YgRKYF9NPAAfuy97nmAVeI8fCvwjvHn7hHtBUjUoXk=";
+  };
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
     ];
-    sha256 = "e2e9a9b307b5b54daf724ae7f5fda22b9cbd8382a4c72e18b85ac39b3e8a16ab";
+    hash = product.hash;
   };
 
-  name = "burpsuite-${version}";
+  pname = "burpsuite";
   description = "An integrated platform for performing security testing of web applications";
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "burpsuite";
-    exec = name;
-    icon = name;
-    desktopName = "Burp Suite Community Edition";
+    exec = pname;
+    icon = pname;
+    desktopName = product.productDesktop;
     comment = description;
     categories = [ "Development" "Security" "System" ];
   };
 
 in
 buildFHSEnv {
-  inherit name;
+  inherit pname version;
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
@@ -37,10 +56,12 @@ buildFHSEnv {
     expat
     glib
     gtk3
+    gtk3-x11
+    jython
+    libcanberra-gtk3
     libdrm
     libudev0-shim
     libxkbcommon
-    mesa.drivers
     nspr
     nss
     pango
@@ -54,9 +75,8 @@ buildFHSEnv {
   ];
 
   extraInstallCommands = ''
-    mv "$out/bin/${name}" "$out/bin/burpsuite" # name includes the version number
     mkdir -p "$out/share/pixmaps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64community.png > "$out/share/pixmaps/burpsuite.png"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
@@ -69,11 +89,11 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    downloadPage = "https://portswigger.net/burp/freedownload";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs stepech ];
+    maintainers = with maintainers; [ bennofs ];
+    mainProgram = "burpsuite";
   };
 }

@@ -1,11 +1,11 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , wrapGAppsHook4
 , meson
 , ninja
 , pkg-config
 , glib
+, glib-networking
 , desktop-file-utils
 , gettext
 , librsvg
@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    glib-networking
     libadwaita
     libportal
     libportal-gtk4
@@ -65,6 +66,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     svglib
     yapsy
+    packaging
   ];
 
   preFixup = ''

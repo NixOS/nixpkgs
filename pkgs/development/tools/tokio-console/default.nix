@@ -1,23 +1,27 @@
 { lib
 , fetchFromGitHub
+, installShellFiles
 , rustPlatform
 , protobuf
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
     rev = "tokio-console-v${version}";
-    sha256 = "sha256-yTNLKpBkzzN0X73CjN/UXRGjAGOnCCgJa6A6loA6baM=";
+    hash = "sha256-sjfdxOeaNANYJuJMjZ/tCGc2mWM+98d8yPHAVSl4cF4=";
   };
 
-  cargoSha256 = "sha256-K/auhqlL/K6RYE0lHyvSUqK1cOwJBBZD3QTUevZzLXQ=";
+  cargoHash = "sha256-86KQpRpYSCQs6SUeG0HV26b58x/QUyovoL+5fg8JCOI=";
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [
+    installShellFiles
+    protobuf
+  ];
 
   # uses currently unstable tokio features
   RUSTFLAGS = "--cfg tokio_unstable";
@@ -29,9 +33,17 @@ rustPlatform.buildRustPackage rec {
     "--skip config::tests::toml_example_changed"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd tokio-console \
+      --bash <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion bash) \
+      --fish <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion fish) \
+      --zsh <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion zsh)
+  '';
+
   meta = with lib; {
-    description = "A debugger for asynchronous Rust code";
+    description = "Debugger for asynchronous Rust code";
     homepage = "https://github.com/tokio-rs/console";
+    mainProgram = "tokio-console";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ max-niederman ];
   };

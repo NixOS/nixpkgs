@@ -1,13 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  pyyaml,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "saneyaml";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,24 +18,16 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "saneyaml"
-  ];
+  pythonImportsCheck = [ "saneyaml" ];
 
   meta = with lib; {
-    description = "A PyYaml wrapper with sane behaviour to read and write readable YAML safely";
+    description = "PyYaml wrapper with sane behaviour to read and write readable YAML safely";
     homepage = "https://github.com/nexB/saneyaml";
     license = licenses.asl20;
     maintainers = [ ];

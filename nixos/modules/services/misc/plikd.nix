@@ -11,18 +11,18 @@ in
 {
   options = {
     services.plikd = {
-      enable = mkEnableOption (lib.mdDoc "the plikd server");
+      enable = mkEnableOption "plikd, a temporary file upload system";
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the plikd.";
+        description = "Open ports in the firewall for the plikd.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Configuration for plikd, see <https://github.com/root-gg/plik/blob/master/server/plikd.cfg>
           for supported values.
         '';

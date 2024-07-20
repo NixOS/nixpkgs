@@ -8,8 +8,11 @@
 , imagemagick
 }:
 
-# To test:
-# $(nix-build --no-out-link -E 'with import <nixpkgs> {}; jupyter.override { definitions = { clojure = clojupyter.definition; }; }')/bin/jupyter-notebook
+# Jupyter console:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel clojupyter.definition'
+
+# Jupyter notebook:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.clojure = clojupyter.definition; }'
 
 let
   cljdeps = import ./deps.nix { inherit pkgs; };
@@ -23,7 +26,7 @@ let
   version = "0.3.3";
 
   meta = with lib; {
-    description = "A Jupyter kernel for Clojure";
+    description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];  # deps from maven
     license = licenses.mit;

@@ -1,8 +1,6 @@
 { lib, fetchFromGitHub, makeWrapper, maven, jdk }:
-let
-  mavenWithJdk = maven.override { inherit jdk; };
-in
-mavenWithJdk.buildMavenPackage rec {
+
+maven.buildMavenPackage rec {
   pname = "slipstream";
   version = "1.9.1";
 
@@ -13,9 +11,10 @@ mavenWithJdk.buildMavenPackage rec {
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
-  mvnHash = "sha256-oDtUitsfZPiDtyfzzw1yMNBCKyP6rHczKZT/SPPJYGE=";
+  mvnJdk = jdk;
+  mvnHash = "sha256-woOSkF5TuzaJ84EndryMoXTMbbK/V/BShM1k+WB8D/c=";
 
-  nativeBuildInputs = [ mavenWithJdk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -40,10 +39,10 @@ mavenWithJdk.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A mod manager for FTL: Faster Than Light";
+    description = "Mod manager for FTL: Faster Than Light";
     homepage = "https://github.com/Vhati/Slipstream-Mod-Manager";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ mib ];
-    platforms = platforms.all;
+    mainProgram = "slipstream";
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "iso3166"
-  ];
+  pythonImportsCheck = [ "iso3166" ];
 
   meta = with lib; {
     description = "Self-contained ISO 3166-1 country definitions";

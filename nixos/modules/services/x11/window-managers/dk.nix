@@ -7,9 +7,9 @@ in
 {
   options = {
     services.xserver.windowManager.dk = {
-      enable = lib.mkEnableOption (lib.mdDoc "dk");
+      enable = lib.mkEnableOption "dk";
 
-      package = lib.mkPackageOptionMD pkgs "dk" { };
+      package = lib.mkPackageOption pkgs "dk" { };
     };
   };
 

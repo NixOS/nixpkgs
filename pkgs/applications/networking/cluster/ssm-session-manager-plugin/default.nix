@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   pname = "ssm-session-manager-plugin";
-  version = "1.2.463.0";
+  version = "1.2.650.0";
 
   goPackagePath = "github.com/aws/session-manager-plugin";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "aws";
     repo = "session-manager-plugin";
     rev = version;
-    hash = "sha256-0n7/3CAPf+ioSE041Zik9xeHt5qtrdHotJjBWhizExo=";
+    hash = "sha256-IcDVt/iE/EYV9Blvl7Gj0UFJcdsUCFdaSQkIto0CKRI=";
   };
 
   postPatch = ''
@@ -48,6 +48,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
+    mainProgram = "session-manager-plugin";
     license = licenses.asl20;
     maintainers = with maintainers; [ amarshall mbaillie ];
   };

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.23.0402";
+  version = "1.24.0104";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    sha256 = "sha256-6SQuFN8Fi0fbWCYrQIIeSaXR2haI7uux4txCPKEoJvo=";
+    hash = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An amateur radio companion to WSJT-X or JTDX";
+    description = "Amateur radio companion to WSJT-X or JTDX";
+    mainProgram = "gridtracker";
     longDescription = ''
       GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,
       and has a sophisticated alerting and filtering system for finding and

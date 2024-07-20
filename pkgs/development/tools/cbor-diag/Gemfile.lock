@@ -3,7 +3,7 @@ GEM
   specs:
     cbor-canonical (0.1.2)
     cbor-deterministic (0.1.3)
-    cbor-diag (0.8.4)
+    cbor-diag (0.8.7)
       cbor-canonical
       cbor-deterministic
       cbor-packed
@@ -24,4 +24,4 @@ DEPENDENCIES
   cbor-diag
 
 BUNDLED WITH
-   2.4.10
+   2.4.20

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
   nodes.machine = { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
     in
 
     { imports = [ ./common/user-account.nix ];
@@ -14,25 +14,27 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = user.name;
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = user.name;
       };
 
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
       services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
-      services.xserver.displayManager.defaultSession = "gnome-flashback-metacity";
+      services.displayManager.defaultSession = "gnome-flashback-metacity";
     };
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
+    user = nodes.machine.users.users.alice;
     uid = toString user.uid;
     xauthority = "/run/user/${uid}/gdm/Xauthority";
   in ''
       with subtest("Login to GNOME Flashback with GDM"):
           machine.wait_for_x()
+          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
           # Wait for alice to be logged in"
           machine.wait_for_unit("default.target", "${user.name}")
           machine.wait_for_file("${xauthority}")
@@ -41,9 +43,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
       with subtest("Wait for Metacity"):
-          machine.wait_until_succeeds(
-              "pgrep metacity"
-          )
+          machine.wait_until_succeeds("pgrep metacity")
+
+      with subtest("Regression test for #233920"):
+          machine.wait_until_succeeds("pgrep -fa gnome-flashback-media-keys")
           machine.sleep(20)
           machine.screenshot("screen")
     '';

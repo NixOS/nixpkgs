@@ -5,8 +5,8 @@ let
 in
 {
   options.services.twingate = {
-    enable = lib.mkEnableOption (lib.mdDoc "Twingate Client daemon");
-    package = lib.mkPackageOptionMD pkgs "twingate" { };
+    enable = lib.mkEnableOption "Twingate Client daemon";
+    package = lib.mkPackageOption pkgs "twingate" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -17,7 +17,7 @@ in
     };
 
     networking.firewall.checkReversePath = lib.mkDefault "loose";
-    services.resolved.enable = !(config.networking.networkmanager.enable);
+    services.resolved.enable = lib.mkIf (!config.networking.networkmanager.enable) true;
 
     environment.systemPackages = [ cfg.package ]; # For the CLI.
   };

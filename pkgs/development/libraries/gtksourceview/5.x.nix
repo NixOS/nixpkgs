@@ -24,15 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.8.0";
+  version = "5.12.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EQ3Uwg3vIYhvv3dymP4O+Mwq1gI7jzbHQkQRpBSBiTM=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hMgqrZhcWq2ufOp4BJBKdjQeyCsmjUZZTBpHjzm0LB8=";
   };
 
   patches = [
@@ -75,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Ddocumentation=true"
   ];
 
   doCheck = stdenv.isLinux;
@@ -110,10 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Source code editing widget for GTK";
-    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-5" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
+    # https://hydra.nixos.org/build/258191535/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 })

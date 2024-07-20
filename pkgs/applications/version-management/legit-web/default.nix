@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "legit";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
     rev = "v${version}";
-    hash = "sha256-Y0lfbe4xBCj80z07mLFIiX+shvntYAHiW2Uw7h94jrE=";
+    hash = "sha256-C6PzZFYGjQs1BbYuEwcTpLQ3bNVb1rXTd0zXosF1kaE=";
   };
 
-  vendorHash = "sha256-RAUSYCtP4rcJ2zIBXfPAEZWD1VSfr3d4MrmUMiPpjK8=";
+  vendorHash = "sha256-G4Wij0UCiXyVtb+66yU3FY2WbpPfqo0SA7OOcywnKU0=";
 
   postInstall = ''
     mkdir -p $out/lib/legit/templates
@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/icyphox/legit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ratsclub ];
+    mainProgram = "legit";
   };
 }

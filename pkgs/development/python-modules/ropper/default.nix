@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, filebytes
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  filebytes,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,19 +27,15 @@ buildPythonPackage rec {
     filebytes
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ropper"
-  ];
+  pythonImportsCheck = [ "ropper" ];
 
   meta = with lib; {
     description = "Show information about files in different file formats";
+    mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];
-    broken = stdenv.isDarwin;
   };
 }

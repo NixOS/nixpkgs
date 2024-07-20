@@ -1,36 +1,30 @@
-{ lib
-, azure-common
-, azure-core
-, azure-storage-common
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, isodate
-, msrest
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.17.0";
+  version = "12.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-wUt4WhcFCzD8MmoxW9rmvEoHiFX0+UpMMDrXSkjcjGM=";
+    hash = "sha256-7rkSVuQdS1ubrWqH/QqK3gfdWKpSNE4sjSdG4noBfTs=";
   };
 
   propagatedBuildInputs = [
-    azure-common
     azure-core
-    azure-storage-common
     cryptography
     isodate
-    msrest
     typing-extensions
   ];
 
@@ -42,6 +36,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-blob_${version}/sdk/storage/azure-storage-blob/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai maxwilson ];
+    maintainers = with maintainers; [
+      cmcdragonkai
+      maxwilson
+    ];
   };
 }

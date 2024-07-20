@@ -1,13 +1,23 @@
-{ lib, trivialBuild, fetchurl }:
+{
+  lib,
+  melpaBuild,
+  fetchurl,
+}:
 
-trivialBuild {
+melpaBuild {
   pname = "prolog-mode";
+  ename = "prolog";
   version = "1.28";
 
   src = fetchurl {
     url = "https://bruda.ca/_media/emacs/prolog.el";
-    sha256 = "ZzIDFQWPq1vI9z3btgsHgn0axN6uRQn9Tt8TnqGybOk=";
+    hash = "sha256-ZzIDFQWPq1vI9z3btgsHgn0axN6uRQn9Tt8TnqGybOk=";
   };
+
+  postPatch = ''
+    substituteInPlace prolog.el \
+      --replace-fail ";; prolog.el ---" ";;; prolog.el ---"
+  '';
 
   meta = {
     homepage = "https://bruda.ca/emacs/prolog_mode_for_emacs/";

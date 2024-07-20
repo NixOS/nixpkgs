@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cfdg";
-  version = "3.3";
+  version = "3.4.1";
   src = fetchFromGitHub {
     owner = "MtnViewJohn";
     repo = "context-free";
     rev = "Version${version}";
-    sha256 = "13m8npccacmgxbs4il45zw53dskjh53ngv2nxahwqw8shjrws4mh";
+    sha256 = "sha256-f2VMb0TM50afKf/lGdZBP2z13UrCVgG4/IYi5gnD+ow=";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://contextfreeart.org/";
     license = licenses.gpl2Only;
+    mainProgram = "cfdg";
   };
 }

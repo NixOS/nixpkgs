@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, poetry-core
-, pymacaroons
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  poetry-core,
+  pymacaroons,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pypitoken";
-  version = "7.0.0";
+  version = "7.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,16 +22,14 @@ buildPythonPackage rec {
     owner = "ewjoachim";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CjSENkk1VlzrCngwFoJuq31Iai60qTJXBGMoV5QkSsE=";
+    hash = "sha256-1SUR6reZywgFpSdD49E5PjEDNrlvsHH4TK6SkXStUws=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pymacaroons
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pypitoken"
-  ];
+  pythonImportsCheck = [ "pypitoken" ];
 
   meta = with lib; {
     description = "Library for generating and manipulating PyPI tokens";

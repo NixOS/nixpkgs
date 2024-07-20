@@ -1,27 +1,26 @@
-{ lib
-, stdenv
-, aiohttp
-, alexapy
-, async-timeout
-, buildPythonPackage
-, click
-, construct
-, dacite
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, pycryptodome
-, pycryptodomex
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  construct,
+  dacite,
+  fetchFromGitHub,
+  paho-mqtt,
+  poetry-core,
+  pycryptodome,
+  pycryptodomex,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.30.2";
-  format = "pyproject";
+  version = "2.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -29,20 +28,20 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mjhHNnhYNMrn4aiPvcq6YM9XCyfzOeZ/yh3RIYiZeaY=";
+    hash = "sha256-W+xq6FwBZNjrqivAWv821h5Pak0wGaksQoYN5EULSnA=";
   };
 
-  pythonRelaxDeps = [
-    "pycryptodome"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core==1.8.0" "poetry-core"
+  '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = [ "pycryptodome" ];
+
+  build-system = [ poetry-core ];
+
 
   propagatedBuildInputs = [
-    alexapy
     aiohttp
     async-timeout
     click
@@ -50,18 +49,14 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [
-    pycryptodomex
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "roborock"
-  ];
+  pythonImportsCheck = [ "roborock" ];
 
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
@@ -69,5 +64,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "roborock";
   };
 }

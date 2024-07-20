@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
-  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
+  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     file
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs =  [
@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.plcplc ];
+    mainProgram = "subtitleeditor";
   };
 }

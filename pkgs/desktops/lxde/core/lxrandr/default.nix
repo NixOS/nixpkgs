@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Standard screen manager of LXDE";
+    mainProgram = "lxrandr";
     homepage = "https://lxde.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rawkode ];

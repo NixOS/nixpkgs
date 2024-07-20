@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/aantron/markup.ml/";
-    description = "A pair of best-effort parsers implementing the HTML5 and XML specifications";
+    description = "Pair of best-effort parsers implementing the HTML5 and XML specifications";
     license = licenses.mit;
     maintainers = with maintainers; [ gal_bolle ];
   };

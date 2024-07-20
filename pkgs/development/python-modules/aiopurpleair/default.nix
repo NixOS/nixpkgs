@@ -1,19 +1,21 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
-  version = "2022.12.1";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,22 +24,18 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+    hash = "sha256-2Ngo2pvzwcgQvpyW5Q97VQN/tGSVhVJwRj0DMaPn+O4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pydantic = "^1.10.2"' 'pydantic = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     pydantic
+    certifi
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses
@@ -51,9 +49,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "aiopurpleair"
-  ];
+  pythonImportsCheck = [ "aiopurpleair" ];
 
   meta = with lib; {
     description = "Python library for interacting with the PurpleAir API";

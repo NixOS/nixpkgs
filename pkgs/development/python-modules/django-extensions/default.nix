@@ -1,51 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, django
-, factory_boy
-, mock
-, pygments
-, pytest-django
-, pytestCheckHook
-, shortuuid
-, vobject
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiosmtpd,
+  django,
+  looseversion,
+
+  # tests
+  factory-boy,
+  mock,
+  pip,
+  pygments,
+  pytestCheckHook,
+  pytest-django,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.2.1";
+  version = "3.2.3";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
+    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
 
   patches = [
-    (fetchpatch {
-      # pygments 2.14 compat for tests
-      url = "https://github.com/django-extensions/django-extensions/commit/61ebfe38f8fca9225b41bec5418e006e6a8815e1.patch";
-      hash = "sha256-+sxaQMmKi/S4IlfHqARPGhaqc+F1CXUHVFyeU/ArW2U=";
+    (fetchpatch2 {
+      # Replace dead asyncore, smtp implementation with aiosmtpd
+      name = "django-extensions-aiosmtpd.patch";
+      url = "https://github.com/django-extensions/django-extensions/commit/37d56c4a4704c823ac6a4ef7c3de4c0232ceee64.patch";
+      hash = "sha256-49UeJQKO0epwY/7tqoiHgOXdgPcB/JBIZaCn3ulaHTg=";
     })
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
+      --replace-fail "--cov=django_extensions --cov-report html --cov-report term" ""
+
+    substituteInPlace django_extensions/management/commands/pipchecker.py \
+      --replace-fail "from distutils.version" "from looseversion"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiosmtpd
     django
+    looseversion
   ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     mock
+    pip
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django
     pytestCheckHook
@@ -54,13 +75,20 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+  disabledTests = [
+    # Mismatch in expectation of exception message
+    "test_installed_apps_no_resolve_conflicts_function"
+  ];
+
   disabledTestPaths = [
     # requires network access
     "tests/management/commands/test_pipchecker.py"
+    # django.db.utils.OperationalError: no such table: django_extensions_permmodel
+    "tests/test_dumpscript.py"
   ];
 
   meta = with lib; {
-    description = "A collection of custom extensions for the Django Framework";
+    description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };

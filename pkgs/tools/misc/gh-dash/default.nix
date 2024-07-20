@@ -7,21 +7,21 @@
 
 buildGoModule rec {
   pname = "gh-dash";
-  version = "3.10.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${version}";
-    hash = "sha256-ypYM/FXp+BObR2fjVCV8nDJhRuuu2Y7213haAJnzRIE=";
+    hash = "sha256-HNGg3e6QoAkcio/78u2U1u0EhX707yXmA4fyGIqJHX0=";
   };
 
-  vendorHash = "sha256-lOIONv+7cUUC0mGCwYkOkDn3zHreYpFeqmTbp2Ob3yM=";
+  vendorHash = "sha256-JOd2czYWVgE1jBfeuoVRp+oE/asyk50o5Pf021jD5mY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/dlvhdr/gh-dash/cmd.Version=${version}"
+    "-X github.com/dlvhdr/gh-dash/v4/cmd.Version=${version}"
   ];
 
   passthru.tests = {
@@ -34,5 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/dlvhdr/gh-dash";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
+    mainProgram = "gh-dash";
   };
 }

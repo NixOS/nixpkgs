@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "github-copilot-cli.fish";
-  version = "0.1.33";
+  version = "0.1.33.1";
 
   src = fetchFromGitHub {
     owner = "z11i";
     repo = pname;
     rev = version;
-    hash = "sha256-dhACPlFrw1Z0dW0eA0IMnOelYJc7Fyz2D9u+rL1pyiM=";
+    hash = "sha256-CFXbeO0euC/UtvQV0KCz4WQfdJgsuXKPM6M9oaw7hvg=";
   };
 
   meta = with lib; {

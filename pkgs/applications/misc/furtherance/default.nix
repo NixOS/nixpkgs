@@ -6,19 +6,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furtherance";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "lakoliu";
     repo = "Furtherance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KNC0e1Qfls+TcUDPvLaTWWF4ELBJYPE7Oo9/4PK10js=";
+    hash = "sha256-TxYARpCqqjjwinoRU2Wjihp+FYIvcI0YCGlOuumX6To=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-NHrKk7XgqeEuNAOyIDfzFJzIExTpUfv83Pdv/NPkgYQ=";
+    hash = "sha256-VGBxBHs/kqW0mvOiz0UQRg0duDmW8ee9cSh6EOT9aaY=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Track your time without being tracked";
+    mainProgram = "furtherance";
     homepage = "https://github.com/lakoliu/Furtherance";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

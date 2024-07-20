@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "1.1.0";
+  version = "1.7.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.5";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IW67v7gXV04Nlr/0/lceC5WmknaqqwOJ8bqRGZZ4KcY=";
+    hash = "sha256-ULtDJkNSrWM0/pDblTeE7lKS/4UNYM06hWrEw51ZbVA=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests require a network connection

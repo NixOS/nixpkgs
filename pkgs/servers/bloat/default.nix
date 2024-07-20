@@ -6,15 +6,15 @@
 
 buildGoModule {
   pname = "bloat";
-  version = "unstable-2022-12-17";
+  version = "0-unstable-2024-06-17";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";
-    rev = "5147897c6c8ba3428ea6998f77241182ee8caa24";
-    sha256 = "sha256-/sSRzAAWO/KtXOD3lQsqaXc+lOuN7MJqbfASueLYBQk=";
+    rev = "51d6ff26fe224444b921b5b1f367f15782cf84d3";
+    hash = "sha256-g5CbX134o9aeFggsVYnPfbZ4bsRQUUNnAe1KhTlONuU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postInstall = ''
     mkdir -p $out/share/bloat
@@ -29,7 +29,7 @@ buildGoModule {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A web client for Pleroma and Mastodon";
+    description = "Web client for Pleroma and Mastodon";
     longDescription = ''
       A lightweight web client for Pleroma and Mastodon.
       Does not require JavaScript to display text, images, audio and videos.
@@ -38,5 +38,6 @@ buildGoModule {
     downloadPage = "https://git.freesoftwareextremist.com/bloat/";
     license = licenses.cc0;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "bloat";
   };
 }

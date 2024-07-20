@@ -17,11 +17,18 @@ let
     };
   };
   makeCert = { config, pkgs, ... }: {
-    system.activationScripts.create-test-cert = stringAfter [ "users" ] ''
-      ${pkgs.openssl}/bin/openssl req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
-      ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
-      chown stunnel /test-key.pem /test-key-and-cert.pem
+    systemd.services.create-test-cert = {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.Type = "oneshot";
+      script = ''
+        ${pkgs.openssl}/bin/openssl req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
+        ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
+        chown stunnel /test-key.pem /test-key-and-cert.pem
     '';
+    };
   };
   serverCommon = { pkgs, ... }: {
     networking.firewall.allowedTCPPorts = [ 443 ];

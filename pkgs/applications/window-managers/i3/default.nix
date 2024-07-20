@@ -1,17 +1,17 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre2, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb-run
+, xvfb-run
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 }:
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.22";
+  version = "4.23";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KGOZEeWdlWOfCSZCqYL14d6lkiUMK1zpjtoQCDNRPks=";
+    sha256 = "sha256-YQJqcZbJE50POq3ScZfosyDFduOkUOAddMGspIQETEY=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libstartup_notification libX11 pcre2 libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb-run
+    xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];
@@ -64,9 +64,10 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
-    description = "A tiling window manager";
+    description = "Tiling window manager";
     homepage    = "https://i3wm.org";
-    maintainers = with maintainers; [ modulistic fpletz globin ];
+    maintainers = with maintainers; [ modulistic fpletz ];
+    mainProgram = "i3";
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

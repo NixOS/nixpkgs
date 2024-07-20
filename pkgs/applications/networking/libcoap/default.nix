@@ -4,13 +4,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libcoap";
-  version = "4.3.1";
+  version = "4.3.4a";
   src = fetchFromGitHub {
     repo = "libcoap";
     owner = "obgm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-4XcAo5StyYIfe9wD0cPHKFZalMcBAuiVV2qFZ126KT8=";
+    hash = "sha256-SzuXFn4rihZIHxKSH5waC5362mhsOtBdRatIGI6nv4I=";
   };
   nativeBuildInputs = [
     automake
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTLS "--enable-dtls";
   meta = with lib; {
     homepage = "https://github.com/obgm/libcoap";
-    description = "A CoAP (RFC 7252) implementation in C";
+    description = "CoAP (RFC 7252) implementation in C";
     platforms = platforms.unix;
     license = licenses.bsd2;
     maintainers = [ maintainers.kmein ];

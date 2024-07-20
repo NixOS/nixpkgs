@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.viric ];
     platforms = lib.platforms.unix;
+    mainProgram = "rapidsvn";
   };
 }

@@ -1,16 +1,14 @@
 --- a/libbuild2/buildfile
 +++ b/libbuild2/buildfile
-@@ -83,9 +83,13 @@ config/cxx{host-config}: config/in{host-config}
-   # want it).
-   #
-   build2_config = $regex.replace_lines(                                          \
-+    $regex.replace_lines(                                                        \
-     $config.save(),                                                              \
-     '^( *(#|(config\.(test[. ]|dist\.|install\.chroot|config\.hermetic))).*|)$', \
-     [null],                                                                      \
-+    return_lines),                                                               \
-+    '^.*'$getenv(NIX_STORE)'/[a-z0-9]{32}-.*$',                                  \
-+    [null],                                                                      \
-     return_lines)
+@@ -86,8 +86,11 @@ build2_config_lines = [strings]
+ host_config_lines = [strings]
  
-   # Also preserve config.version.
+ for l: $regex.replace_lines(                                                   \
++  $regex.replace_lines(                                                        \
+   $config.save(),                                                              \
+   '^( *(#|(config\.(test[. ]|dist\.|install\.chroot|config\.hermetic))).*|)$', \
++  [null], return_lines),                                                       \
++  '^.*'$getenv(NIX_STORE)'/[a-z0-9]{32}-.*$',                                  \
+   [null])
+ {
+   build2_config_lines += $l

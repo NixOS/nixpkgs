@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-tRh3+X6QCdkkJE1O60ZRkDBRbznGZ1aB1AOmcz0EINI=";
+    hash = "sha256-tRh3+X6QCdkkJE1O60ZRkDBRbznGZ1aB1AOmcz0EINI=";
   };
 
   cargoSha256 = "sha256-lZJcsCg7e5ZmClnzKFjm/roXBIyhkPTzS7R6BTmcNIk=";
@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-embedded/cargo-binutils";
     changelog = "https://github.com/rust-embedded/cargo-binutils/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ stupremee ];
+    maintainers = with maintainers; [ stupremee matthiasbeyer ];
   };
 }

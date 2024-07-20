@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fnX5CIYLdFqi04PQPVIAYDGn+xXi016l8pPcIrYIhmQ=";
+    hash = "sha256-fnX5CIYLdFqi04PQPVIAYDGn+xXi016l8pPcIrYIhmQ=";
   };
 
   cargoSha256 = "sha256-8I3mPSJ5aXvQ88nh0SWyuTq9JSTktS2lQPrXlcvD66c=";
@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/garbas/asciinema-scenario/";
     maintainers = with maintainers; [ garbas ];
     license = with licenses; [ mit ];
+    mainProgram = "asciinema-scenario";
   };
 }

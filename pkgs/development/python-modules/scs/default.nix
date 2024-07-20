@@ -1,32 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blas
-, lapack
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  meson-python,
+  numpy,
+  pkg-config,
+
+  # buildInputs
+  Accelerate,
+  blas,
+  lapack,
+
+  # dependencies
+  scipy,
+
   # check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.0.0";
+  version = "3.2.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    rev = version;
-    hash = "sha256-7OgqCo21S0FDev8xv6/8iGFXg8naVi93zd8v1f9iaWw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Sl0+1/uEXAg+V2ijDFGmez6hBKQjbi63gN26lPCiEnI=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    lapack
-    blas
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
+  '';
+
+  build-system = [
+    meson-python
+    numpy
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  buildInputs =
+    if stdenv.isDarwin then
+      [ Accelerate ]
+    else
+      [
+        blas
+        lapack
+      ];
+
+  dependencies = [
     numpy
     scipy
   ];
@@ -34,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for SCS: Splitting Conic Solver";
     longDescription = ''
       Solves convex cone programs via operator splitting.
@@ -43,7 +71,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

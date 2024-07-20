@@ -1,40 +1,37 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, protobuf
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  protobuf,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "androidtvremote2";
-  version = "0.0.12";
-  format = "pyproject";
+  version = "0.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "androidtvremote2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-A/1zNBrYo9oPAVexq/W2G9mqBeTsUvF5/T2db6g9AGk=";
+    hash = "sha256-Zem2IWBUWmyVdBjqoVKFk+/lg5T7CPXCKFXhFusQFLY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     cryptography
     protobuf
   ];
 
-  pythonImportsCheck = [
-    "androidtvremote2"
-  ];
+  pythonImportsCheck = [ "androidtvremote2" ];
 
   # Module only has a dummy test
   doCheck = false;

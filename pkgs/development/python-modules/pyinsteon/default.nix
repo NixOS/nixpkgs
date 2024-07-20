@@ -1,39 +1,41 @@
-{ lib
-, aiofiles
-, aiohttp
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async-timeout,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.4.3";
-  format = "pyproject";
+  version = "1.6.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyinsteon";
+    repo = "pyinsteon";
     rev = "refs/tags/${version}";
-    hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
+    hash = "sha256-SyhPM3NS7iJX8jwTJ4YWZ72eYLn9JT6eESekPf5eCKI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
     pyserial-asyncio
@@ -41,13 +43,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    async_generator
+    async-generator
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyinsteon"
+  disabledTests = [
+    # RuntimeError: BUG: Dead Listener called, still subscribed!
+    "test_linking_with_i1_device"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # Tests are blocking or failing
+    "tests/test_handlers/"
+  ];
+
+  pythonImportsCheck = [ "pyinsteon" ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
@@ -57,7 +67,9 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }

@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nulltype
-, python-dateutil
-, urllib3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nulltype,
+  python-dateutil,
+  urllib3,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "15.2.0";
-  format = "setuptools";
+  version = "24.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NJCU82Q19X1fApYcbP+ZAxf76uwAnSnhch4aBer9Nm4=";
+    pname = "plaid_python";
+    inherit version;
+    hash = "sha256-0LtYs2S1fGunmmPFl3cGa/lMtE7Ng+Xb4FruowjdWGM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     nulltype
     python-dateutil
     urllib3
@@ -28,9 +33,7 @@ buildPythonPackage rec {
   # Tests require a Client IP
   doCheck = false;
 
-  pythonImportsCheck = [
-    "plaid"
-  ];
+  pythonImportsCheck = [ "plaid" ];
 
   meta = with lib; {
     description = "Python client library for the Plaid API and Link";

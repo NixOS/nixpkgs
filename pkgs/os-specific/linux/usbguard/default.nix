@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , installShellFiles
 , nixosTests
@@ -28,9 +29,19 @@ stdenv.mkDerivation rec {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
+    hash = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Pull upstream fix for gcc-13:
+    #   https://github.com/USBGuard/usbguard/pull/586
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/USBGuard/usbguard/commit/22b1e0897af977cc96af926c730ff948bd120bb5.patch";
+      hash = "sha256-yw0ZHcn6naHcsfsqdBB/aTgCwvEHecew/6HDmjyY2ZA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -74,7 +85,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.usbguard;
 
   meta = with lib; {
-    description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    description = "USBGuard software framework helps to protect your computer against BadUSB";
     longDescription = ''
       USBGuard is a software framework for implementing USB device authorization
       policies (what kind of USB devices are authorized) as well as method of

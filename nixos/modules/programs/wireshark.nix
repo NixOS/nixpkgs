@@ -1,33 +1,26 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.wireshark;
   wireshark = cfg.package;
 in {
   options = {
     programs.wireshark = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to add Wireshark to the global environment and configure a
           setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.wireshark-cli;
-        defaultText = literalExpression "pkgs.wireshark-cli";
-        description = lib.mdDoc ''
-          Which Wireshark package to install in the global environment.
-        '';
+      package = lib.mkPackageOption pkgs "wireshark-cli" {
+        example = "wireshark";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ wireshark ];
     users.groups.wireshark = {};
 

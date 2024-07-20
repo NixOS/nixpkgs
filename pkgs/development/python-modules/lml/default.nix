@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "lml";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

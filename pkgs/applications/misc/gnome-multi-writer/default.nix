@@ -12,7 +12,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , polkit
 , udisks
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for writing an ISO file to multiple USB devices at once";
-    homepage = "https://wiki.gnome.org/Apps/MultiWriter";
+    mainProgram = "gnome-multi-writer";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-multi-writer";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "5.2";
+  version = "5.6";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
-    hash = "sha256-I34wnUawdSEMDky3ib/Qycd37d9sswNBw/49vMZYw4A=";
+    hash = "sha256-AiK435KNO1o7UZTWPn3gmFM+BBkNnZoVS5JsbB+d0U4=";
   };
 
   postPatch = ''
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
+  TARGET_OS = stdenv.hostPlatform.uname.system;
+
   meta = with lib; {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
@@ -25,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub synthetica ];
+    mainProgram = "entr";
   };
 }

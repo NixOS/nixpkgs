@@ -1,37 +1,55 @@
-{ lib
-, stdenv
-, fetchurl
-, chromaprint
+{ chromaprint
 , cmake
 , docbook_xml_dtd_45
 , docbook_xsl
+, fetchurl
 , ffmpeg
 , flac
 , id3lib
+, kdePackages
+, lib
 , libogg
 , libvorbis
 , libxslt
 , mp4v2
-, phonon
 , pkg-config
 , python3
 , qtbase
+, qtdeclarative
 , qtmultimedia
-, qtquickcontrols
 , qttools
 , readline
+, stdenv
 , taglib
 , wrapQtAppsHook
 , zlib
+, withCLI ? true
+, withKDE ? true
+, withQt ? false
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib) optionals;
+
+  apps = lib.concatStringsSep ";" (
+    optionals withCLI [ "CLI" ]
+    ++ optionals withKDE [ "KDE" ]
+    ++ optionals withQt [ "Qt" ]
+  );
+
+  mainProgram =
+    if withQt then "kid3-qt"
+    else if withKDE then "kid3"
+    else "kid3-cli";
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.9.3";
+  version = "3.9.5";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-D2hrdej2Q69AYjDn2Ey4vBSOmzBY3UzZMUdJSRjurdA=";
+    url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
+    hash = "sha256-pCT+3eNcF247RDNEIqrUOEhBh3LaAgdR0A0IdOXOgUU=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +58,10 @@ stdenv.mkDerivation rec {
     docbook_xsl
     pkg-config
     python3
+    qttools
     wrapQtAppsHook
   ];
+
   buildInputs = [
     chromaprint
     ffmpeg
@@ -51,26 +71,34 @@ stdenv.mkDerivation rec {
     libvorbis
     libxslt
     mp4v2
-    phonon
     qtbase
+    qtdeclarative
     qtmultimedia
-    qtquickcontrols
-    qttools
     readline
     taglib
     zlib
-  ];
+  ] ++ lib.optionals withKDE (with kdePackages; [
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kio
+    kxmlgui
+    phonon
+  ]);
 
-  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
-  NIX_LDFLAGS = "-lm -lpthread";
+  cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
 
-  preConfigure = ''
-    export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
-  '';
+  env = {
+    DOCBOOKDIR = "${docbook_xsl}/xml/xsl/docbook/";
+    LANG = "C.UTF-8";
+    NIX_LDFLAGS = "-lm -lpthread";
+  };
 
-  meta = with lib; {
+  meta = {
+    description = "Simple and powerful audio tag editor";
+    inherit mainProgram;
     homepage = "https://kid3.kde.org/";
-    description = "A simple and powerful audio tag editor";
+    license = lib.licenses.lgpl2Plus;
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
       MP2, Opus, Speex, TrueAudio, WavPack, WMA, WAV and AIFF files (e.g. full
@@ -100,8 +128,7 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "Mouse wheel configuration tool for XFree86/Xorg";
     maintainers = with maintainers; [ jhillyerd ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    mainProgram = "imwheel";
   };
 }

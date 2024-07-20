@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , coreutils
 }:
 
@@ -9,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "findutils";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
-    sha256 = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
   postPatch = ''
@@ -22,11 +23,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-install-statedir.patch ];
 
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck
     =  !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isFreeBSD
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -90,5 +93,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
 
     license = lib.licenses.gpl3Plus;
+
+    mainProgram = "find";
   };
 }

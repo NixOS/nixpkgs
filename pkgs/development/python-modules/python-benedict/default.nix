@@ -1,75 +1,107 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, ftfy
-, mailchecker
-, openpyxl
-, orjson
-, phonenumbers
-, pytestCheckHook
-, python-dateutil
-, python-decouple
-, python-fsutil
-, python-slugify
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, six
-, toml
-, xlrd
-, xmltodict
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ftfy,
+  mailchecker,
+  openpyxl,
+  orjson,
+  phonenumbers,
+  beautifulsoup4,
+  pytestCheckHook,
+  python-dateutil,
+  python-decouple,
+  python-fsutil,
+  python-slugify,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  toml,
+  xlrd,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.32.0";
-  format = "setuptools";
+  version = "0.33.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
+    repo = "python-benedict";
     rev = "refs/tags/${version}";
-    hash = "sha256-4fBV7sInw/jrKt7CmG7riMTmpLyrsyvWZGRY6s3YbHw=";
+    hash = "sha256-1/eLJFXACn1W5Yz43BIhdqqUVk3t9285d8aLwH+VmAE=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = [ "boto3" ];
 
-  pythonRelaxDeps = [
-    "boto3"
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    boto3
-    ftfy
-    mailchecker
-    openpyxl
-    phonenumbers
-    python-dateutil
     python-fsutil
     python-slugify
-    pyyaml
     requests
-    toml
-    xlrd
-    xmltodict
   ];
+
+  passthru.optional-dependencies = {
+    all = [
+      beautifulsoup4
+      boto3
+      ftfy
+      mailchecker
+      openpyxl
+      phonenumbers
+      python-dateutil
+      pyyaml
+      toml
+      xlrd
+      xmltodict
+    ];
+    html = [
+      beautifulsoup4
+      xmltodict
+    ];
+    io = [
+      beautifulsoup4
+      openpyxl
+      pyyaml
+      toml
+      xlrd
+      xmltodict
+    ];
+    parse = [
+      ftfy
+      mailchecker
+      phonenumbers
+      python-dateutil
+    ];
+    s3 = [ boto3 ];
+    toml = [ toml ];
+    xls = [
+      openpyxl
+      xlrd
+    ];
+    xml = [ xmltodict ];
+    yaml = [ pyyaml ];
+  };
 
   nativeCheckInputs = [
     orjson
     pytestCheckHook
     python-decouple
-    six
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # Tests require network access
     "test_from_base64_with_valid_url_valid_content"
+    "test_from_html_with_valid_file_valid_content"
+    "test_from_html_with_valid_url_valid_content"
     "test_from_json_with_valid_url_valid_content"
     "test_from_pickle_with_valid_url_valid_content"
     "test_from_plist_with_valid_url_valid_content"
@@ -80,9 +112,7 @@ buildPythonPackage rec {
     "test_from_yaml_with_valid_url_valid_content"
   ];
 
-  pythonImportsCheck = [
-    "benedict"
-  ];
+  pythonImportsCheck = [ "benedict" ];
 
   meta = with lib; {
     description = "Module with keylist/keypath support";

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "shopify-themekit";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "themekit";
     rev = "v${version}";
-    sha256 = "sha256-HtgA+R6THZ49WYtGlHS1EzekjuuGgPe657Y6ewraD4o=";
+    sha256 = "sha256-A/t6yQW2xRFZYuYRyNN/0v4zdivch3tiv65a7TdHm2c=";
   };
 
-  vendorSha256 = "sha256-8QpkYj0fQb4plzvk6yCrZho8rq9VBiLft/EO3cczciI=";
+  vendorHash = "sha256-o928qjp7+/U1W03esYTwVEfQ4A3TmPnmgmh4oWpqJoo=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -21,7 +21,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool for shopify themes";
+    description = "Command line tool for shopify themes";
+    mainProgram = "theme";
     homepage = "https://shopify.github.io/themekit/";
     license = licenses.mit;
     maintainers = with maintainers; [ _1000101 ];

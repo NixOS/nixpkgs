@@ -1,26 +1,26 @@
 { lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkg-config
 , curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpg-error, lz4
-, ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
+, ncurses, numactl, openssl, procps, protobuf, valgrind, xxd, zlib
 , perlPackages
-, version, sha256, fetchSubmodules ? false, extraPatches ? [], extraPostInstall ? "", ...
+, version, hash, fetchSubmodules ? false, extraPatches ? [], extraPostInstall ? "", ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "percona-xtrabackup";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
-    rev = "${pname}-${version}";
-    inherit sha256 fetchSubmodules;
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    inherit hash fetchSubmodules;
   };
 
   nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
     (curl.override { inherit openssl; }) cyrus_sasl libaio libedit libevent libev libgcrypt libgpg-error lz4
-    ncurses numactl openssl protobuf valgrind xxd zlib
+    ncurses numactl openssl procps protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 
   patches = extraPatches;
@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/plugin/debug
   '' + extraPostInstall;
 
+  passthru.mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+
   meta = with lib; {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = teams.flyingcircus.members ++ [ maintainers.izorkin ];
   };
-}
+})

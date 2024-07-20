@@ -32,16 +32,17 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
 
     tests.version = testers.testVersion { package = colmena; };
   };
 
   meta = with lib; {
-    description = "A simple, stateless NixOS deployment tool";
+    description = "Simple, stateless NixOS deployment tool";
     homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "colmena";
   };
 }

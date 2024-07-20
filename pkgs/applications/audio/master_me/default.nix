@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "master_me";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-FG3X1dOF9KRHHSnd5/zP+GrYCB2O0y+tnI5/l9tNhyE=";
+    hash = "sha256-FG3X1dOF9KRHHSnd5/zP+GrYCB2O0y+tnI5/l9tNhyE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin; # error: no type or protocol named 'NSPasteboardType'
     license = licenses.gpl3Plus;
+    mainProgram = "master_me";
   };
 }

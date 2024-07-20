@@ -1,8 +1,8 @@
 diff --git a/src/Views/InputMethod.vala b/src/Views/InputMethod.vala
-index 7f73c1e1..1f0d6400 100644
+index ba12d6db..b9263c1d 100644
 --- a/src/Views/InputMethod.vala
 +++ b/src/Views/InputMethod.vala
-@@ -328,7 +328,7 @@ public class Pantheon.Keyboard.InputMethodPage.Page : Gtk.Grid {
+@@ -338,7 +338,7 @@ public class Keyboard.InputMethodPage.Page : Gtk.Grid {
      private void spawn_ibus_daemon () {
          bool is_spawn_succeeded = false;
          try {
@@ -11,24 +11,24 @@ index 7f73c1e1..1f0d6400 100644
          } catch (GLib.SpawnError e) {
              warning (e.message);
              set_visible_view (e.message);
-diff --git a/src/Views/Layout.vala b/src/Views/Layout.vala
-index 75d2d805..b86252a4 100644
---- a/src/Views/Layout.vala
-+++ b/src/Views/Layout.vala
-@@ -219,7 +219,7 @@ namespace Pantheon.Keyboard {
+diff --git a/src/Views/Behavior.vala b/src/Views/Behavior.vala
+index 8a89a0a4..a4f98668 100644
+--- a/src/Views/Behavior.vala
++++ b/src/Views/Behavior.vala
+@@ -270,7 +270,7 @@ public class Keyboard.Behaviour.Page : Gtk.Box {
  
-             onscreen_keyboard_settings.clicked.connect (() => {
-                 try {
--                    var appinfo = AppInfo.create_from_commandline ("onboard-settings", null, AppInfoCreateFlags.NONE);
-+                    var appinfo = AppInfo.create_from_commandline ("@onboard@/bin/onboard-settings", null, AppInfoCreateFlags.NONE);
-                     appinfo.launch (null, null);
-                 } catch (Error e) {
-                     warning ("Unable to launch onboard-settings: %s", e.message);
+         onscreen_keyboard_settings.clicked.connect (() => {
+             try {
+-                var appinfo = AppInfo.create_from_commandline ("onboard-settings", null, NONE);
++                var appinfo = AppInfo.create_from_commandline ("@onboard@/bin/onboard-settings", null, NONE);
+                 appinfo.launch (null, null);
+             } catch (Error e) {
+                 critical ("Unable to launch onboard-settings: %s", e.message);
 diff --git a/src/Dialogs/AddLayoutDialog.vala b/src/Dialogs/AddLayoutDialog.vala
-index 7c2efda3..de77094f 100644
+index aa084295..a486b52a 100644
 --- a/src/Dialogs/AddLayoutDialog.vala
 +++ b/src/Dialogs/AddLayoutDialog.vala
-@@ -197,7 +197,7 @@ public class Pantheon.Keyboard.LayoutPage.AddLayoutDialog : Granite.Dialog {
+@@ -197,7 +197,7 @@ public class Keyboard.LayoutPage.AddLayoutDialog : Granite.Dialog {
          });
  
          keyboard_map_button.clicked.connect (() => {

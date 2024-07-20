@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, testtools
 }:
 
 buildPythonApplication rec {
@@ -17,7 +18,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
+    hash = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
   };
 
   propagatedBuildInputs = [
@@ -30,12 +31,14 @@ buildPythonApplication rec {
     fixtures
     mock
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [ "bashate" ];
 
   meta = with lib; {
     description = "Style enforcement for bash programs";
+    mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

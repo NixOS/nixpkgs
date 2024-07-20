@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ contrun ];
+    mainProgram = "sftpman";
   };
 }

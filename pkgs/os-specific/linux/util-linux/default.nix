@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
@@ -15,39 +15,20 @@
 , writeSupport ? stdenv.isLinux
 , shadowSupport ? stdenv.isLinux
 , memstreamHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.39";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-MrMKM2zakDGC7WH+s+m5CLdipeZv4U5D77iNNxYgdcs=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-
-    # FIXME: backport mount fixes for older kernels, remove in next release
-    (fetchpatch {
-      url = "https://github.com/util-linux/util-linux/commit/f94a7760ed7ce81389a6059f020238981627a70d.diff";
-      hash = "sha256-UorqDeECK8pBePkmpo2x90p/jP3rCMshyPCyijSX1wo=";
-    })
-    (fetchpatch {
-      url = "https://github.com/util-linux/util-linux/commit/1bd85b64632280d6bf0e86b4ff29da8b19321c5f.diff";
-      hash = "sha256-dgu4de5ul/si7Vzwe8lr9NvsdI1CWfDQKuqvARaY6sE=";
-    })
-
-    # FIXME: backport bcache detection fixes, remove in next release
-    (fetchpatch {
-      url = "https://github.com/util-linux/util-linux/commit/158639a2a4c6e646fd4fa0acb5f4743e65daa415.diff";
-      hash = "sha256-9F1OQFxKuI383u6MVy/UM15B6B+tkZFRwuDbgoZrWME=";
-    })
-    (fetchpatch {
-      url = "https://github.com/util-linux/util-linux/commit/00a19fb8cdfeeae30a6688ac6b490e80371b2257.diff";
-      hash = "sha256-w1S6IKSoL6JhVew9t6EemNRc/nrJQ5oMqFekcx0kno8=";
-    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -128,16 +109,35 @@ stdenv.mkDerivation rec {
     ln -svf "$swap/bin/"* $bin/bin/
     '' + ''
 
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
+
     installShellCompletion --bash bash-completion/*
   '';
 
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc).*";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
-    description = "A set of system utilities for Linux";
+    description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];
     platforms = platforms.unix;
+    pkgConfigModules = [
+      "blkid"
+      "fdisk"
+      "mount"
+      "smartcols"
+      "uuid"
+    ];
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }

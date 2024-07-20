@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, callPackage
 , lib
 , envoy
 , mkYarnPackage
@@ -14,15 +13,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.22.2";
+  version = "0.26.1";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    sha256 = "sha256-EcAzj2VLbBPu5afKZcf2fGBbw2kTOYGgSemD70msrqw=";
+    hash = "sha256-lMI6dVCTInqHsz4N0HsOVUQo8TkheAwr54FW46r+DUA=";
   };
 
-  vendorSha256 = "sha256-xe8as7OY1+tTSqgpwk2Q1jcBnn89latJpMyx4KG7zg8=";
+  vendorHash = "sha256-AHlnhAh4RBz8aJoFJjbX/MUDHq81xK7b7gvCyuV3gjU=";
 
   ui = mkYarnPackage {
     inherit version;
@@ -54,7 +53,9 @@ buildGoModule rec {
   ];
 
   # patch pomerium to allow use of external envoy
-  patches = [ ./external-envoy.diff ];
+  patches = [
+    ./0001-envoy-allow-specification-of-external-binary.patch
+  ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
@@ -121,8 +122,9 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
+    mainProgram = "pomerium";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [ lukegb devusb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

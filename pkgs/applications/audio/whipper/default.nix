@@ -3,9 +3,12 @@
 , fetchFromGitHub
 , fetchpatch
 , installShellFiles
+, wrapGAppsNoGuiHook
+, gobject-introspection
 , libcdio-paranoia
 , cdrdao
 , libsndfile
+, glib
 , flac
 , sox
 , util-linux
@@ -37,6 +40,8 @@ in python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     installShellFiles
+    wrapGAppsNoGuiHook
+    gobject-introspection
 
     setuptools-scm
     docutils
@@ -54,7 +59,7 @@ in python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  buildInputs = [ libsndfile ];
+  buildInputs = [ libsndfile glib ];
 
   nativeCheckInputs = with python3.pkgs; [
     twisted
@@ -62,11 +67,10 @@ in python3.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath bins)
+    "\${gappsWrapperArgs[@]}"
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  dontWrapGApps = true;
 
   outputs = [ "out" "man" ];
   postBuild = ''
@@ -92,9 +96,9 @@ in python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
-    description = "A CD ripper aiming for accuracy over speed";
+    description = "CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

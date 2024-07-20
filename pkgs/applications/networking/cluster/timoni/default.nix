@@ -6,22 +6,24 @@
 
 buildGoModule rec {
   pname = "timoni";
-  version = "0.11.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     rev = "v${version}";
-    hash = "sha256-1l+PEG3ptlWmM48v9K7Rm090WF8cv+e2ezYFN2JRK/o=";
+    hash = "sha256-g0B5UbveQ6KYqfXGF5bsGJfUuZ3q1TNEaC1GwtNAig8=";
   };
 
-  vendorHash = "sha256-Mgo6Q3P8Piv5uLgyXDGpRI4CgbZn1DUcM7XhVZxl8EE=";
+  vendorHash = "sha256-XeqHETKWw74edsWCOKC+bhIt0NZz5mgrTShoQk1hb5Y=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];
 
   # Some tests require running Kubernetes instance
   doCheck = false;
+
+  passthru.updateScript = ./update.sh;
 
   ldflags = [
     "-s"
@@ -39,7 +41,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://timoni.sh";
     changelog = "https://github.com/stefanprodan/timoni/releases/tag/${src.rev}";
-    description = "A package manager for Kubernetes, powered by CUE and inspired by Helm";
+    description = "Package manager for Kubernetes, powered by CUE and inspired by Helm";
+    mainProgram = "timoni";
     license = licenses.asl20;
     maintainers = with maintainers; [ votava ];
   };

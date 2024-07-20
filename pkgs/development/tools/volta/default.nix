@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/volta completions zsh)
   '';
   meta = with lib; {
-    description = "The Hassle-Free JavaScript Tool Manager";
+    description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
       about it. You can switch between projects and stop having to manually

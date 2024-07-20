@@ -3,13 +3,13 @@
 , cppunit
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "5.9";
+  version = "6.8";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
-    hash = "sha256-P+XCAH2idXRGr5G275dPFUsggSCpo5OW6mgeXEq7BLU=";
+    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
+    hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -50,10 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
+    description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
+    knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
   };
-}
+})

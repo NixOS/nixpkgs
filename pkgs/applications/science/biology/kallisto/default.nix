@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kallisto";
-  version = "0.50.0";
+  version = "0.50.1";
 
   src = fetchFromGitHub {
     repo = "kallisto";
     owner = "pachterlab";
     rev = "v${version}";
-    sha256 = "sha256-GJ8xMbHrnTzvPoMSczpugbIjh79cT3ngX3tLtwzlfEQ=";
+    sha256 = "sha256-JJZJOl4u6FzngrrMuC2AfD5ry2LBOT8tdz2piH+9LFE=";
   };
 
   nativeBuildInputs = [ autoconf cmake ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Program for quantifying abundances of transcripts from RNA-Seq data";
+    mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;

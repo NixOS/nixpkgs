@@ -37,12 +37,12 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkEnableOption (lib.mdDoc "Deluge daemon");
+        enable = mkEnableOption "Deluge daemon";
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
           type = types.either types.int types.str;
-          description = lib.mdDoc ''
+          description = ''
             Number of files to allow deluged to open.
           '';
         };
@@ -60,7 +60,7 @@ in {
               listen_ports = [ ${toString listenPortsDefault} ];
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Deluge core configuration for the core.conf file. Only has an effect
             when {option}`services.deluge.declarative` is set to
             `true`. String values must be quoted, integer and
@@ -73,7 +73,7 @@ in {
         declarative = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to use a declarative deluge configuration.
             Only if set to `true`, the options
             {option}`services.deluge.config`,
@@ -86,7 +86,7 @@ in {
         openFirewall = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Whether to open the firewall for the ports in
             {option}`services.deluge.config.listen_ports`. It only takes effet if
             {option}`services.deluge.declarative` is set to
@@ -102,7 +102,7 @@ in {
         dataDir = mkOption {
           type = types.path;
           default = "/var/lib/deluge";
-          description = lib.mdDoc ''
+          description = ''
             The directory where deluge will create files.
           '';
         };
@@ -110,7 +110,7 @@ in {
         authFile = mkOption {
           type = types.path;
           example = "/run/keys/deluge-auth";
-          description = lib.mdDoc ''
+          description = ''
             The file managing the authentication for deluge, the format of this
             file is straightforward, each line contains a
             username:password:level tuple in plaintext. It only has an effect
@@ -124,7 +124,7 @@ in {
         user = mkOption {
           type = types.str;
           default = "deluge";
-          description = lib.mdDoc ''
+          description = ''
             User account under which deluge runs.
           '';
         };
@@ -132,7 +132,7 @@ in {
         group = mkOption {
           type = types.str;
           default = "deluge";
-          description = lib.mdDoc ''
+          description = ''
             Group under which deluge runs.
           '';
         };
@@ -140,29 +140,23 @@ in {
         extraPackages = mkOption {
           type = types.listOf types.package;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
             Extra packages available at runtime to enable Deluge's plugins. For example,
             extraction utilities are required for the built-in "Extractor" plugin.
             This always contains unzip, gnutar, xz and bzip2.
           '';
         };
 
-        package = mkOption {
-          type = types.package;
-          example = literalExpression "pkgs.deluge-2_x";
-          description = lib.mdDoc ''
-            Deluge package to use.
-          '';
-        };
+        package = mkPackageOption pkgs "deluge-2_x" { };
       };
 
       deluge.web = {
-        enable = mkEnableOption (lib.mdDoc "Deluge Web daemon");
+        enable = mkEnableOption "Deluge Web daemon";
 
         port = mkOption {
           type = types.port;
           default = 8112;
-          description = lib.mdDoc ''
+          description = ''
             Deluge web UI port.
           '';
         };
@@ -170,7 +164,7 @@ in {
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Open ports in the firewall for deluge web daemon
           '';
         };
@@ -197,17 +191,25 @@ in {
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz bzip2 ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config/deluge' 0770 ${cfg.user} ${cfg.group}"
-    ]
-    ++ optional (cfg.config ? download_location)
-      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? torrentfiles_location)
-      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? move_completed_path)
-      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
+    systemd.tmpfiles.settings."10-deluged" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0770";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig;
+      "${cfg.dataDir}/.config".d = defaultConfig;
+      "${cfg.dataDir}/.config/deluge".d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? download_location) {
+      ${cfg.config.download_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? torrentfiles_location) {
+      ${cfg.config.torrentfiles_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? move_completed_path) {
+      ${cfg.config.move_completed_path}.d = defaultConfig;
+    };
 
     systemd.services.deluged = {
       after = [ "network.target" ];

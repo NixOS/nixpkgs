@@ -1,7 +1,10 @@
 { bash
 , buildGoModule
 , fetchFromGitHub
+
+, withFish ? false
 , fish
+
 , lib
 , makeWrapper
 , xdg-utils
@@ -9,16 +12,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.14.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/mSefgkRNhKahToUOZQ73TYERq2mV23u+M8DSJL8E4Y=";
+    sha256 = "sha256-GrmY7R37F9hc8jGHMqMRwyapFXupa3M76/q8pPVch/Q=";
   };
 
-  vendorHash = "sha256-SGm5jJ8savjUqgeK5wQ9dxz9BgROkKrnrSwNcojC9gE=";
+  vendorHash = "sha256-/X7kHaBZyDV4IqvKqyR7pAQLgYqIvcvSSh0NdrA5d3I=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,6 +39,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    ln -s $out/bin/granted $out/bin/assumego
+
     # Install shell script
     install -Dm755 $src/scripts/assume $out/bin/assume
     substituteInPlace $out/bin/assume \
@@ -44,6 +49,7 @@ buildGoModule rec {
     wrapProgram $out/bin/assume \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
+  '' + lib.optionalString withFish ''
     # Install fish script
     install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
     substituteInPlace $out/share/assume.fish \
@@ -51,7 +57,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The easiest way to access your cloud.";
+    description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;

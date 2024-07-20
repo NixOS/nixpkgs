@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "isounidecode";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

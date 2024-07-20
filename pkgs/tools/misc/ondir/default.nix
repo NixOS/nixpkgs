@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "a small program to automate tasks specific to certain directories";
+    description = "Small program to automate tasks specific to certain directories";
     longDescription = ''
     It works by executing scripts in directories when you enter and leave them.
     This is done by overriding the shell builtins cd, pushd, and popd,
@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/alecthomas/ondir/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.michaelCTS ];
+    mainProgram = "ondir";
   };
 }

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2023.06";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
-    hash = "sha256-dMh1KwKh89ZUqIUPHOH9DPgxLWq37kW3hTTwsFe1imM=";
+    hash = "sha256-y+xtJ4YbzPr1168tu+148Co7Ke/iC68aOQBwTINlp2Y=";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
     license = licenses.artistic2;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [ thoughtpolice sgo ];
     mainProgram = "moar";
     platforms = platforms.unix;
   };

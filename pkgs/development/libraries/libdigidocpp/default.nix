@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, minizip, pcsclite, opensc, openssl
+{ lib, stdenv, fetchurl, cmake, minizip, pcsclite, opensc, openssl
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
-  version = "3.15.0";
+  version = "3.17.1";
   pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     hash = "sha256-CNHBPeodU2EzvmQBa9KI+1vGuuD25gSwdU9dVhVG04Q=";
+     hash = "sha256-3qDsIAOiWMZDj2zLE+Os7BoeCPeC4JQ6p8jSBd7PdV0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for creating DigiDoc signature files";
+    mainProgram = "digidoc-tool";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, autograd, scipy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  autograd,
+  scipy,
+}:
 
 buildPythonPackage rec {
   pname = "autograd-gamma";
   version = "0.4.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";

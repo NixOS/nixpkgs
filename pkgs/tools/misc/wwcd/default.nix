@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~bitfehler/wwcd";
     license = licenses.mit;
     maintainers = with maintainers; [ laalsaas ];
+    mainProgram = "wwcd";
   };
 }

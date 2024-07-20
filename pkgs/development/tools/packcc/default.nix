@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
     # Disable a failing test.
     rm -rf ../../tests/style.d
+  '' + lib.optionalString stdenv.cc.isClang ''
+    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
   '';
 
   installPhase = ''
@@ -50,7 +52,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A parser generator for C";
+    description = "Parser generator for C";
+    mainProgram = "packcc";
     longDescription = ''
       PackCC is a parser generator for C. Its main features are as follows:
       - Generates your parser in C from a grammar described in a PEG,

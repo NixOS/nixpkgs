@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "http://frodo.looijaard.name/project/getopt";
     description = "Parses command-line arguments from shell scripts";
+    mainProgram = "getopt";
   };
 }

@@ -7,7 +7,7 @@
 , glib
 , gobject-introspection
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -39,7 +39,7 @@ let
         pillow
         rencode
         six
-        zope_interface
+        zope-interface
         dbus-python
         pycairo
         librsvg
@@ -54,7 +54,7 @@ let
         glib
       ] ++ optionals withGUI [
         gobject-introspection
-        wrapGAppsHook
+        wrapGAppsHook3
       ];
 
       nativeCheckInputs = with pypkgs; [
@@ -77,7 +77,7 @@ let
         install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
       '' else ''
         rm -r $out/bin/deluge-gtk
-        rm -r $out/lib/${python3Packages.python.libPrefix}/site-packages/deluge/ui/gtk3
+        rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
         rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
       '');
 

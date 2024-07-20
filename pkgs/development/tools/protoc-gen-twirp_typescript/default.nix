@@ -12,12 +12,13 @@ buildGoModule {
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-UyxHa28SY60U8VeL7TbSTyscqN5T7tKGfuN2GIL6QIg";
+  vendorHash = "sha256-UyxHa28SY60U8VeL7TbSTyscqN5T7tKGfuN2GIL6QIg";
 
   subPackages = [ "." ];
 
   meta = with lib; {
     description = "Protobuf Plugin for Generating a Twirp Typescript Client";
+    mainProgram = "protoc-gen-twirp_typescript";
     homepage = "https://github.com/larrymyers/protoc-gen-twirp_typescript";
     license = licenses.mit;
     maintainers = with maintainers; [ jojosch dgollings ];

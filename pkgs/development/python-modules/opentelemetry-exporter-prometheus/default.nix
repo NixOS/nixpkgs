@@ -1,28 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, opentelemetry-sdk
-, opentelemetry-test-utils
-, prometheus-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-sdk,
+  opentelemetry-test-utils,
+  prometheus-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-api) version src;
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-exporter-prometheus";
-  disabled = pythonOlder "3.7";
+  # This package is in the same repository as `opentelemetry-api`,
+  # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
+  version = opentelemetry-instrumentation.version;
+  pyproject = true;
 
-  sourceRoot = "source/exporter/opentelemetry-exporter-prometheus";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-prometheus";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
     opentelemetry-sdk
     prometheus-client

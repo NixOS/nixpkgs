@@ -10,8 +10,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     netdata =
       { pkgs, ... }:
         {
-          environment.systemPackages = with pkgs; [ curl jq ];
-          services.netdata.enable = true;
+          environment.systemPackages = with pkgs; [ curl jq netdata ];
+          services.netdata = {
+            enable = true;
+            python.recommendedPythonPackages = true;
+          };
         };
     };
 
@@ -30,9 +33,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # check if netdata can read disk ops for root owned processes.
     # if > 0, successful. verifies both netdata working and
     # apps.plugin has elevated capabilities.
-    url = "http://localhost:19999/api/v1/data\?chart=users.pwrites"
-    filter = '[.data[range(10)][.labels | indices("root")[0]]] | add | . > 0'
+    url = "http://localhost:19999/api/v1/data\?chart=user.root_disk_physical_io"
+    filter = '[.data[range(10)][2]] | add | . < 0'
     cmd = f"curl -s {url} | jq -e '{filter}'"
     netdata.wait_until_succeeds(cmd)
+
+    # check if the control socket is available
+    netdata.succeed("sudo netdatacli ping")
   '';
 })

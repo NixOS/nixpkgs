@@ -14,20 +14,15 @@ in
   ##### interface
   options = {
     services.klipper = {
-      enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
+      enable = mkEnableOption "Klipper, the 3D printer firmware";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.klipper;
-        defaultText = literalExpression "pkgs.klipper";
-        description = lib.mdDoc "The Klipper package.";
-      };
+      package = mkPackageOption pkgs "klipper" { };
 
       logFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/klipper/klipper.log";
-        description = lib.mdDoc ''
+        description = ''
           Path of the file Klipper should log to.
           If `null`, it logs to stdout, which is not recommended by upstream.
         '';
@@ -36,20 +31,20 @@ in
       inputTTY = mkOption {
         type = types.path;
         default = "/run/klipper/tty";
-        description = lib.mdDoc "Path of the virtual printer symlink to create.";
+        description = "Path of the virtual printer symlink to create.";
       };
 
       apiSocket = mkOption {
         type = types.nullOr types.path;
         default = "/run/klipper/api";
-        description = lib.mdDoc "Path of the API socket to create.";
+        description = "Path of the API socket to create.";
       };
 
       mutableConfig = mkOption {
         type = types.bool;
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to copy the config to a mutable directory instead of using the one directly from the nix store.
           This will only copy the config if the file at `services.klipper.mutableConfigPath` doesn't exist.
         '';
@@ -58,13 +53,13 @@ in
       mutableConfigFolder = mkOption {
         type = types.path;
         default = "/var/lib/klipper";
-        description = lib.mdDoc "Path to mutable Klipper config file.";
+        description = "Path to mutable Klipper config file.";
       };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to default Klipper config.
         '';
       };
@@ -72,13 +67,13 @@ in
       octoprintIntegration = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Allows Octoprint to control Klipper.";
+        description = "Allows Octoprint to control Klipper.";
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           User account under which Klipper runs.
 
           If null is specified (default), a temporary user will be created by systemd.
@@ -88,7 +83,7 @@ in
       group = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Group account under which Klipper runs.
 
           If null is specified (default), a temporary user will be created by systemd.
@@ -98,32 +93,32 @@ in
       settings = mkOption {
         type = types.nullOr format.type;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Klipper. See the [documentation](https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides)
           for supported values.
         '';
       };
 
       firmwares = mkOption {
-        description = lib.mdDoc "Firmwares klipper should manage";
+        description = "Firmwares klipper should manage";
         default = { };
         type = with types; attrsOf
           (submodule {
             options = {
-              enable = mkEnableOption (lib.mdDoc ''
-                building of firmware for manual flashing.
-              '');
-              enableKlipperFlash = mkEnableOption (lib.mdDoc ''
+              enable = mkEnableOption ''
+                building of firmware for manual flashing
+              '';
+              enableKlipperFlash = mkEnableOption ''
                 flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
-                Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`.
-              '');
+                Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`
+              '';
               serial = mkOption {
                 type = types.nullOr path;
-                description = lib.mdDoc "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";
+                description = "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";
               };
               configFile = mkOption {
                 type = path;
-                description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";
+                description = "Path to firmware config which is generated using `klipper-genconf`";
               };
             };
           });

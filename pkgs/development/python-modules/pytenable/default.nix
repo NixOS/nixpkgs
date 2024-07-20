@@ -1,27 +1,29 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, pythonOlder
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  marshmallow,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-pkcs12,
+  requests-toolbelt,
+  responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.13";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,30 +31,36 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-UY3AFnPplmU0jrV4LIKH4+2tcJEFkKMqO2GWVkgaHYE=";
+    hash = "sha256-uLZ1TQx5awHOOF+IR3aWTwwYTd71O/V+EHaDrb1LAXU=";
   };
 
-  propagatedBuildInputs = [
-    semver
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
 
-  buildInputs = [
-    appdirs
+  build-system = [ setuptools ];
+
+  dependencies = [
     defusedxml
     marshmallow
     python-box
     python-dateutil
     requests
-    requests-pkcs12
+    requests-toolbelt
     restfly
+    semver
     typing-extensions
   ];
 
   nativeCheckInputs = [
-    responses
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
+    requests-pkcs12
+    responses
+  ];
+
+  disabledTestPaths = [
+    # Disable tests that requires network access
+    "tests/io/"
   ];
 
   disabledTests = [
@@ -61,11 +69,12 @@ buildPythonPackage rec {
     "test_uploads_docker_push_tag_typeerror"
     "test_uploads_docker_push_cs_name_typeerror"
     "test_uploads_docker_push_cs_tag_typeerror"
+    # Test requires network access
+    "test_assets_list_vcr"
+    "test_events_list_vcr"
   ];
 
-  pythonImportsCheck = [
-    "tenable"
-  ];
+  pythonImportsCheck = [ "tenable" ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lB6vJqb6/Qwj3odCJzyQ0+xEl5V/ZPj9cAJGNfiYAOY=";
+    sha256 = "sha256-1OsQT3RMNLQMjr4aA2u5knp/HhOUOJ/oZYHG/+cTQFQ=";
   };
 
-  cargoSha256 = "sha256-Ff5vGc90VxmyKQSsjUfoI1NL95DmD1SJx3eC1SP6rt4=";
+  cargoHash = "sha256-9xRlm5pWWRRPq6MMwiMADmm8Bg2FqKNSfv7tm1ONiiQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda misuzu ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    mainProgram = "kmon";
   };
 }

@@ -1,31 +1,62 @@
-{ lib, fetchFromGitHub, pythonPackages, mopidy }:
+{
+  lib,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
+  nix-update-script,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "unstable-2023-04-21";
+  version = "5.0.0a2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    rev = "984151ac96c5f9c35892055bff20cc11f46092d5";
-    hash = "sha256-4e9Aj0AOFR4/FK54gr1ZyPt0nYZDMrMetV4FPtBxapU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QeABG9rQKJ8sIoK38R74N0s5rRG+zws7AZR0xPysdcY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ pythonPackages.setuptools ];
+
+  dependencies = [
     mopidy
-    pythonPackages.responses
+    pythonPackages.pykka
+    pythonPackages.requests
   ];
 
-  nativeBuildInputs = [
-    pythonPackages.pytestCheckHook
-  ];
+  optional-dependencies = {
+    lint = with pythonPackages; [
+      black
+      check-manifest
+      flake8
+      flake8-bugbear
+      isort
+    ];
+
+    test = with pythonPackages; [
+      pytest
+      pytest-cov
+      responses
+    ];
+
+    dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ pythonPackages.tox ];
+  };
+
+  nativeCheckInputs = [ pythonPackages.pytestCheckHook ] ++ optional-dependencies.test;
 
   pythonImportsCheck = [ "mopidy_spotify" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/mopidy/mopidy-spotify";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Mopidy extension for playing music from Spotify";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    homepage = "https://github.com/mopidy/mopidy-spotify";
+    changelog = "https://github.com/mopidy/mopidy-spotify/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

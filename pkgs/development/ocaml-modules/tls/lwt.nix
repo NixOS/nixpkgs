@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, tls, lwt, mirage-crypto-rng-lwt, cmdliner, x509 }:
+{ buildDunePackage, tls, lwt, mirage-crypto-rng-lwt, x509 }:
 
 buildDunePackage rec {
   pname = "tls-lwt";
@@ -6,7 +6,6 @@ buildDunePackage rec {
   inherit (tls) src meta version;
 
   minimalOCamlVersion = "4.11";
-  duneVersion = "3";
 
   doCheck = true;
 

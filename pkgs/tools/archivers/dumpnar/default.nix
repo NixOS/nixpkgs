@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/stephank/dumpnar";
-    description = "Minimal tool to produce a Nix NAR archive.";
+    description = "Minimal tool to produce a Nix NAR archive";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.stephank ];
+    mainProgram = "dumpnar";
   };
 }

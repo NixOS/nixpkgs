@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, intltool, pkg-config, qmake, wrapQtAppsHook, libqalculate, qtbase, qttools, qtsvg, qtwayland }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "4.7.0";
+  version = "5.2.0.1";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
-    rev = "v${version}";
-    hash = "sha256-fMchJgxuOO2e7cOHLako26c9gsWvQY2MTRVD3JWGSAU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kzOxOCZmu4mYYgegRBU8SMAkTiE4p1AugVAeZa8yDDE=";
   };
 
   nativeBuildInputs = [ qmake intltool pkg-config qttools wrapQtAppsHook ];
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The ultimate desktop calculator";
+    description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ _4825764518 ];
     license = licenses.gpl2Plus;
+    mainProgram = "qalculate-qt";
     platforms = platforms.unix;
   };
-}
+})

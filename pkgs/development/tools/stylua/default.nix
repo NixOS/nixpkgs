@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.18.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-R/GFAbaR/f3kO1n4jQyCPOkfG9fRubnuQy0VUg0NqKw=";
+    sha256 = "sha256-bqUmLtJLjImWqe06CeIWIU4FP+/Vxszp2yKMosVeyZM=";
   };
 
-  cargoSha256 = "sha256-Ca6HNhdT5/CAI3qyzM7wBuCYYOPOHEyP+QyDia1csUo=";
+  cargoHash = "sha256-EMHt9oskPJCeAu/5VG6PaMt/4NTmNOaFTM5TMOy0BV8=";
 
   # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
   postPatch = ''
@@ -26,10 +26,11 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = features;
 
   meta = with lib; {
-    description = "An opinionated Lua code formatter";
+    description = "Opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
     changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "stylua";
   };
 }

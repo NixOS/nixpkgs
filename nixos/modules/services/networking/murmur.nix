@@ -33,7 +33,7 @@ let
     sendversion=${boolToString cfg.sendVersion}
 
     ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
-    ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
     ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
     ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
@@ -58,13 +58,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "If enabled, start the Murmur Mumble server.";
+        description = "If enabled, start the Murmur Mumble server.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the Murmur Mumble server.
         '';
       };
@@ -72,7 +72,7 @@ in
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
-        description = lib.mdDoc ''
+        description = ''
           Number of attempts a client is allowed to make in
           `autobanTimeframe` seconds, before being
           banned for `autobanTime`.
@@ -82,7 +82,7 @@ in
       autobanTimeframe = mkOption {
         type = types.int;
         default = 120;
-        description = lib.mdDoc ''
+        description = ''
           Timeframe in which a client can connect without being banned
           for repeated attempts (in seconds).
         '';
@@ -91,51 +91,46 @@ in
       autobanTime = mkOption {
         type = types.int;
         default = 300;
-        description = lib.mdDoc "The amount of time an IP ban lasts (in seconds).";
+        description = "The amount of time an IP ban lasts (in seconds).";
       };
 
       logFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/log/murmur/murmurd.log";
-        description = lib.mdDoc "Path to the log file for Murmur daemon. Empty means log to journald.";
+        description = "Path to the log file for Murmur daemon. Empty means log to journald.";
       };
 
       welcometext = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Welcome message for connected clients.";
+        description = "Welcome message for connected clients.";
       };
 
       port = mkOption {
         type = types.port;
         default = 64738;
-        description = lib.mdDoc "Ports to bind to (UDP and TCP).";
+        description = "Ports to bind to (UDP and TCP).";
       };
 
       hostName = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Host to bind to. Defaults binding on all addresses.";
+        description = "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.murmur;
-        defaultText = literalExpression "pkgs.murmur";
-        description = lib.mdDoc "Overridable attribute of the murmur package to use.";
-      };
+      package = mkPackageOption pkgs "murmur" { };
 
       password = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Required password to join server, if specified.";
+        description = "Required password to join server, if specified.";
       };
 
       bandwidth = mkOption {
         type = types.int;
         default = 72000;
-        description = lib.mdDoc ''
+        description = ''
           Maximum bandwidth (in bits per second) that clients may send
           speech at.
         '';
@@ -144,25 +139,25 @@ in
       users = mkOption {
         type = types.int;
         default = 100;
-        description = lib.mdDoc "Maximum number of concurrent clients allowed.";
+        description = "Maximum number of concurrent clients allowed.";
       };
 
       textMsgLength = mkOption {
         type = types.int;
         default = 5000;
-        description = lib.mdDoc "Max length of text messages. Set 0 for no limit.";
+        description = "Max length of text messages. Set 0 for no limit.";
       };
 
       imgMsgLength = mkOption {
         type = types.int;
         default = 131072;
-        description = lib.mdDoc "Max length of image messages. Set 0 for no limit.";
+        description = "Max length of image messages. Set 0 for no limit.";
       };
 
       allowHtml = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Allow HTML in client messages, comments, and channel
           descriptions.
         '';
@@ -171,7 +166,7 @@ in
       logDays = mkOption {
         type = types.int;
         default = 31;
-        description = lib.mdDoc ''
+        description = ''
           How long to store RPC logs for in the database. Set 0 to
           keep logs forever, or -1 to disable DB logging.
         '';
@@ -180,7 +175,7 @@ in
       bonjour = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable Bonjour auto-discovery, which allows clients over
           your LAN to automatically discover Murmur servers.
         '';
@@ -189,13 +184,13 @@ in
       sendVersion = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Send Murmur version in UDP response.";
+        description = "Send Murmur version in UDP response.";
       };
 
       registerName = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Public server registration name, and also the name of the
           Root channel. Even if you don't publicly register your
           server, you probably still want to set this.
@@ -205,7 +200,7 @@ in
       registerPassword = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Public server registry password, used authenticate your
           server to the registry to prevent impersonation; required for
           subsequent registry updates.
@@ -215,13 +210,13 @@ in
       registerUrl = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "URL website for your server.";
+        description = "URL website for your server.";
       };
 
       registerHostname = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           DNS hostname where your server can be reached. This is only
           needed if you want your server to be accessed by its
           hostname and not IP - but the name *must* resolve on the
@@ -232,38 +227,38 @@ in
       clientCertRequired = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Require clients to authenticate via certificates.";
+        description = "Require clients to authenticate via certificates.";
       };
 
       sslCert = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Path to your SSL certificate.";
+        description = "Path to your SSL certificate.";
       };
 
       sslKey = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Path to your SSL key.";
+        description = "Path to your SSL key.";
       };
 
       sslCa = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Path to your SSL CA certificate.";
+        description = "Path to your SSL CA certificate.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Extra configuration to put into murmur.ini.";
+        description = "Extra configuration to put into murmur.ini.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/murmur/murmurd.env";
-        description = lib.mdDoc ''
+        description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
           Secrets may be passed to the service without adding them to the world-readable
@@ -288,7 +283,7 @@ in
       dbus = mkOption {
         type = types.enum [ null "session" "system" ];
         default = null;
-        description = lib.mdDoc "Enable D-Bus remote control. Set to the bus you want Murmur to connect to.";
+        description = "Enable D-Bus remote control. Set to the bus you want Murmur to connect to.";
       };
     };
   };
@@ -331,6 +326,29 @@ in
         RuntimeDirectoryMode = "0700";
         User = "murmur";
         Group = "murmur";
+
+        # service hardening
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "full";
+        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
       };
     };
 
@@ -355,5 +373,37 @@ in
       '';
       destination = "/share/dbus-1/system.d/murmur.conf";
     })];
+
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
+
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
+
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk /var/lib/murmur/murmur.sqlite,
+        owner rw /var/lib/murmur/murmur.sqlite-journal,
+        owner r /var/lib/murmur/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+      '' + optionalString (cfg.logFile != null) ''
+        rw ${cfg.logFile},
+      '' + optionalString (cfg.sslCert != "") ''
+        r ${cfg.sslCert},
+      '' + optionalString (cfg.sslKey != "") ''
+        r ${cfg.sslKey},
+      '' + optionalString (cfg.sslCa != "") ''
+        r ${cfg.sslCa},
+      '' + optionalString (cfg.dbus != null) ''
+        dbus bus=${cfg.dbus}
+      '' + ''
+      }
+    '';
   };
 }

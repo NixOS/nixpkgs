@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -40,17 +41,47 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
-  # weeder == 2.5.* requires GHC 9.4
+  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
+
+  # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
+  # Allow dhall 1.42.*
+  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
+    # weeder < 2.6 only supports algebraic-graphs < 0.7
+    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+  });
+
+
+  haskell-language-server = lib.pipe super.haskell-language-server [
+    (disableCabalFlag "fourmolu")
+    (disableCabalFlag "ormolu")
+    (disableCabalFlag "stylishHaskell")
+    (d: d.override {
+      ormolu = null;
+      fourmolu = null;
+    })
+  ];
+
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  primitive-unlifted = super.primitive-unlifted_0_1_3_1;
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -60,20 +91,14 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
-
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
-
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
 
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
+
+  # 0.2.2.3 requires Cabal >= 3.8
+  shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -81,9 +106,6 @@ self: super: {
   # https://github.com/NixOS/cabal2nix/issues/554
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
   clash-prelude = dontDistribute (markBroken super.clash-prelude);
-
-  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
-  hiedb = dontCheck super.hiedb;
 
   # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
   # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
@@ -93,4 +115,24 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_5_0;
+
+  # Requires GHC < 9.4
+  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchpatch, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  PCSC,
+  pcsclite,
+  pkg-config,
+  pytestCheckHook,
+  setuptools,
+  stdenv,
+  swig,
+}:
 
 let
   # Package does not support configuring the pcsc library.
@@ -6,43 +17,56 @@ let
 in
 
 buildPythonPackage rec {
-  version = "2.0.2";
   pname = "pyscard";
+  version = "2.0.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "05de0579c42b4eb433903aa2fb327d4821ebac262434b6584da18ed72053fd9e";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = "pyscard";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DO4Ea+mlrWPpOLI8Eki+03UnsOXEhN2PAl0+gdN5sTo=";
   };
 
-  patches = [
-    # present in master - remove after 2.0.2
-    (fetchpatch {
-      name = "darwin-typo-test-fix.patch";
-      url = "https://github.com/LudovicRousseau/pyscard/commit/ce842fcc76fd61b8b6948d0b07306d82ad1ec12a.patch";
-      sha256 = "0wsaj87wp9d2vnfzwncfxp2w95m0zhr7zpkmg5jccn06z52ihis3";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = if withApplePCSC then ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
-                "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-  '' else ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "libpcsclite.so.1" \
-                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+  nativeBuildInputs = [ swig ] ++ lib.optionals (!withApplePCSC) [ pkg-config ];
+
+  buildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postPatch =
+    if withApplePCSC then
+      ''
+        substituteInPlace smartcard/scard/winscarddll.c \
+          --replace-fail "/System/Library/Frameworks/PCSC.framework/PCSC" \
+                    "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+      ''
+    else
+      ''
+        substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+        substituteInPlace smartcard/scard/winscarddll.c \
+          --replace-fail "libpcsclite.so.1" \
+                    "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+      '';
+
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -r smartcard
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
-    "-I ${lib.getDev pcsclite}/include/PCSC";
-
-  propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
-  nativeBuildInputs = [ swig ];
+  disabledTests = [
+    # AssertionError
+    "test_hresult"
+    "test_low_level"
+  ];
 
   meta = with lib; {
-    homepage = "https://pyscard.sourceforge.io/";
     description = "Smartcard library for python";
-    license = licenses.lgpl21;
+    homepage = "https://pyscard.sourceforge.io/";
+    changelog = "https://github.com/LudovicRousseau/pyscard/releases/tag/${version}";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ layus ];
   };
 }

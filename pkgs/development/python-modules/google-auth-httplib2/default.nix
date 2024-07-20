@@ -1,31 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, google-auth
-, httplib2
-, mock
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  google-auth,
+  httplib2,
+  mock,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
-  version = "0.1.0";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oHw5/WMr7KzT8HcY39YCG/OWl48DrTzkMh0GABXMMKw=";
+    hash = "sha256-OKp7rfSPl08euYYXlOnAyyoFEaTsBnmx+IbRCPVkDgU=";
   };
 
   propagatedBuildInputs = [
     google-auth
     httplib2
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     flask

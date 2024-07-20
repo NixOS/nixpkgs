@@ -1,15 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.8.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-t1P20BDNQ0aJRgQhOgYP2Md44+I8xs6884ktBO4nGjY=";
+    hash = "sha256-hCZZPbkbkZcR2xFTECQWJl2MvSu8MnOznadaj0nKfSo=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -17,7 +19,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-oHusgU5SMkFDY2dhFRdDonyYkyOBGOp+zqx2nFmOWXk=";
+  vendorHash = "sha256-nbwrVihcH+ARLHylsjogsv3LVP+0+YtQ+7cozB7pAWo=";
+
+  postInstall = ''
+    installManPage $src/git-credential-oauth.1
+  '';
 
   meta = {
     description = "Git credential helper that securely authenticates to GitHub, GitLab and BitBucket using OAuth";
@@ -25,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/hickford/git-credential-oauth/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shyim ];
+    mainProgram = "git-credential-oauth";
   };
 }

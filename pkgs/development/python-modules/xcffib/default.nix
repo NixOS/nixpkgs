@@ -1,42 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, xorg
-, cffi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  xorg,
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
   pname = "xcffib";
+  version = "1.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8yMCFEf55zB40hu5KMSPTavq6z87N+gDxta5hzXoFIM=";
+    hash = "sha256-qVyUZfL5e0/O3mBr0eCEB6Mt9xy3YP1Xv+U2d9tpGsw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-leftover-six-import.patch";
-      url = "https://github.com/tych0/xcffib/commit/8a488867d30464913706376ca3a9f4c98ca6c5cf.patch";
-      hash = "sha256-wEms0gC7tVqtmKMjjpH/34kdQ6HUV0h67bUGbgijlqw=";
-    })
-  ];
 
   postPatch = ''
     # Hardcode cairo library path
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedBuildInputs = [ cffi ];
-
   propagatedNativeBuildInputs = [ cffi ];
+
+  propagatedBuildInputs = [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
     xorg.xeyes
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   preCheck = ''
@@ -46,10 +42,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xcffib" ];
 
+  # Tests use xvfb
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "A drop in replacement for xpyb, an XCB python binding";
+    description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
+    changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
     license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ kamilchm ];
   };
 }

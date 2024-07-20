@@ -1,9 +1,12 @@
 { lib
 , mkXfceDerivation
+, dbus
 , glib
 , gtk3
+, gtk-layer-shell
 , libcanberra-gtk3
 , libnotify
+, libX11
 , libxfce4ui
 , libxfce4util
 , sqlite
@@ -14,15 +17,19 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.8.2";
+  version = "0.9.4";
+  odd-unstable = false;
 
-  sha256 = "sha256-M8L2HWTuQDl/prD7s6uptkW4XDscpk6fc+epoxjFNS8=";
+  sha256 = "sha256-oDvP2xE/KvIKl7D5hAwROxhqpli7G/UNd51YCdT7Dv4=";
 
   buildInputs = [
+    dbus
     gtk3
+    gtk-layer-shell
     glib
     libcanberra-gtk3
     libnotify
+    libX11
     libxfce4ui
     libxfce4util
     sqlite
@@ -39,6 +46,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Simple notification daemon for Xfce";
+    mainProgram = "xfce4-notifyd-config";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

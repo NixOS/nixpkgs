@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , buildNpmPackage
 , fetchFromGitHub
@@ -7,39 +8,40 @@
 , sqlite
 , testers
 , moonfire-nvr
-, breakpointHook
+, darwin
 }:
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.6";
+  version = "0.7.7";
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     rev = "v${version}";
-    hash = "sha256-hPgS4Y/dD6G8lqfsJz3aeeed6P+ngJpBOng88xUc55Q=";
+    hash = "sha256-+7VahlS+NgaO2knP+xqdlZnNEfjz8yyF/VmjWf77KXI=";
   };
   ui = buildNpmPackage {
     inherit version src;
     pname = "${pname}-ui";
-    sourceRoot = "source/ui";
+    sourceRoot = "${src.name}/ui";
     npmDepsHash = "sha256-IpZWgMo6Y3vRn9h495ifMB3tQxobLeTLC0xXS1vrKLA=";
-    installPhase = "
+    installPhase = ''
       runHook preInstall
 
       cp -r build $out
 
       runHook postInstall
-    ";
+    '';
   };
 in rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "coded-0.2.0-pre" = "sha256-ICDvLFCsiPCzAzf3nrRhH/McNPVQz1+uVOmj6Uc5teg=";
       "hashlink-0.8.1" = "sha256-h7DEapTVy0SSTaOV9rCkdH3em4A9+PS0k1QQh1+0P4c=";
       "mp4-0.9.2" = "sha256-mJZJDzD8Ep9c+4QusyBtRoqAArHK9SLdFxG1AR7JydE=";
     };
@@ -47,13 +49,14 @@ in rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    breakpointHook
   ];
 
   buildInputs = [
     ncurses
     sqlite
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Security
+  ]);
 
   postInstall = ''
     mkdir -p $out/lib/ui
@@ -77,5 +80,6 @@ in rustPlatform.buildRustPackage {
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "moonfire-nvr";
   };
 }

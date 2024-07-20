@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, buildPackages
+, vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
 , libadwaita
 , libnotify, libsoup, libgee
@@ -22,15 +23,15 @@
 , webrtc-audio-processing
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "v${version}";
-    sha256 = "sha256-smy/t6wTCnG0kuRFKwyeLENKqOQDhL0fZTtj3BHo6kw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-I0ASeEjdXyxhz52QisU0q8mIBTKMfjaspJbxRIyOhD4=";
   };
 
   postPatch = ''
@@ -44,13 +45,13 @@ stdenv.mkDerivation rec {
     cmake
     ninja # https://github.com/dino/dino/issues/230
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
+    gobject-introspection
   ];
 
   buildInputs = [
     qrencode
-    gobject-introspection
     glib
     glib-networking # required for TLS support
     libadwaita
@@ -85,7 +86,11 @@ stdenv.mkDerivation rec {
     "-DRTP_ENABLE_VP9=true"
     "-DVERSION_FOUND=true"
     "-DVERSION_IS_RELEASE=true"
-    "-DVERSION_FULL=${version}"
+    "-DVERSION_FULL=${finalAttrs.version}"
+    "-DXGETTEXT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/xgettext"
+    "-DMSGFMT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/msgfmt"
+    "-DGLIB_COMPILE_RESOURCES_EXECUTABLE=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "-DSOUP_VERSION=${lib.versions.major libsoup.version}"
   ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
@@ -116,9 +121,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
+    mainProgram = "dino";
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
-}
+})

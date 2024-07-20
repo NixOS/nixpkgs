@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, mako
-, markdown
-, setuptools-git
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pythonOlder,
+  mako,
+  markdown,
+  setuptools-git,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc3";
   version = "0.10.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
       name = "fix-test-for-python310.patch";
       url = "https://github.com/pdoc3/pdoc/commit/80af5d40d3ca39e2701c44941c1003ae6a280799.patch";
       hash = "sha256-69Cn+BY7feisSHugONIF/PRgEDEfnvnS/RBHWv1P8/w=";
-      excludes = [".github/workflows/ci.yml"];
+      excludes = [ ".github/workflows/ci.yml" ];
     })
   ];
 
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Auto-generate API documentation for Python projects.";
+    description = "Auto-generate API documentation for Python projects";
     homepage = "https://pdoc3.github.io/pdoc/";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ catern ];

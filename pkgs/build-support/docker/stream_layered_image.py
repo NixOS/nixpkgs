@@ -9,6 +9,8 @@ image as an uncompressed tarball to stdout:
   the fields with the same name on the image spec [2].
 * "created" can be "now".
 * "created" is also used as mtime for files added to the image.
+* "uid", "gid", "uname", "gname" is the file ownership, for example,
+  0, 0, "root", "root".
 * "store_layers" is a list of layers in ascending order, where each
   layer is the list of store paths to include in that layer.
 
@@ -45,7 +47,7 @@ from datetime import datetime, timezone
 from collections import namedtuple
 
 
-def archive_paths_to(obj, paths, mtime):
+def archive_paths_to(obj, paths, mtime, uid, gid, uname, gname):
     """
     Writes the given store paths as a tar file to the given stream.
 
@@ -61,14 +63,14 @@ def archive_paths_to(obj, paths, mtime):
 
     def apply_filters(ti):
         ti.mtime = mtime
-        ti.uid = 0
-        ti.gid = 0
-        ti.uname = "root"
-        ti.gname = "root"
+        ti.uid = uid
+        ti.gid = gid
+        ti.uname = uname
+        ti.gname = gname
         return ti
 
     def nix_root(ti):
-        ti.mode = 0o0555  # r-xr-xr-x
+        ti.mode = 0o0755  # rwxr-xr-x
         return ti
 
     def dir(path):
@@ -208,7 +210,7 @@ def overlay_base_config(from_image, final_config):
     return final_config
 
 
-def add_layer_dir(tar, paths, store_dir, mtime):
+def add_layer_dir(tar, paths, store_dir, mtime, uid, gid, uname, gname):
     """
     Appends given store paths to a TarFile object as a new layer.
 
@@ -231,7 +233,7 @@ def add_layer_dir(tar, paths, store_dir, mtime):
     archive_paths_to(
         extract_checksum,
         paths,
-        mtime=mtime,
+        mtime, uid, gid, uname, gname
     )
     (checksum, size) = extract_checksum.extract()
 
@@ -247,7 +249,7 @@ def add_layer_dir(tar, paths, store_dir, mtime):
             archive_paths_to(
                 write,
                 paths,
-                mtime=mtime,
+                mtime, uid, gid, uname, gname
             )
             write.close()
 
@@ -324,6 +326,10 @@ def main():
       else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
+    uid = int(conf["uid"])
+    gid = int(conf["gid"])
+    uname = conf["uname"]
+    gname = conf["gname"]
     store_dir = conf["store_dir"]
 
     from_image = load_from_image(conf["from_image"])
@@ -336,7 +342,8 @@ def main():
         for num, store_layer in enumerate(conf["store_layers"], start=start):
             print("Creating layer", num, "from paths:", store_layer,
                   file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
+            info = add_layer_dir(tar, store_layer, store_dir,
+                                 mtime, uid, gid, uname, gname)
             layers.append(info)
 
         print("Creating layer", len(layers) + 1, "with customisation...",

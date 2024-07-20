@@ -6,12 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "6.17.1";
+  version = "24.7.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-804zPzVVyZ/zTHePYdRw0eOh623HYJDQ3XuVsslHRcI=";
+    inherit version;
+    pname = "ansible_lint";
+    hash = "sha256-yi7cfk6AzxnfSyjL9MEY92HObN1qXvnIVh5FTtevWiQ=";
   };
 
   postPatch = ''
@@ -25,12 +26,17 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "ruamel.yaml"
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
     ansible-core
     ansible-compat
     black
     filelock
+    importlib-metadata
     jsonschema
     packaging
     pyyaml
@@ -83,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Best practices checker for Ansible";
+    mainProgram = "ansible-lint";
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;

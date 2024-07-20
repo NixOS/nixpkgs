@@ -1,27 +1,38 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, wcwidth
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  wcwidth,
+
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.1.1";
+  version = "6.2.0";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v8IBn4T82FFBkVIyCmN1YEoPFFnCgbWxmbLNDS5yf48=";
+    hash = "sha256-XkIUPHAl75eUTKJhnWthsGGfxmVPmHcdOehiwUJMdcA=";
   };
 
-  propagatedBuildInputs = [
-    wcwidth
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ wcwidth ];
 
   nativeCheckInputs = [
+    versionCheckHook
     pytestCheckHook
   ];
 
@@ -34,9 +45,9 @@ buildPythonPackage rec {
     "tests/test_cli.py"
   ];
 
-
   meta = with lib; {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
+    mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];

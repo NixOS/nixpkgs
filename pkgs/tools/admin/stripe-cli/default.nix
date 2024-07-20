@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.16.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wK9nsek06T7hHdDmDKK9hY/4GcIOTtqGdoMujEEwb7g=";
+    hash = "sha256-8r+Gu36zAmNTZb6xA5iS0+smkmJ7UrdGi9TaUXUr5aQ=";
   };
-  vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
+  vendorHash = "sha256-TuxYJ3u4/5PJYRoRgom+M1au9XerZ+vj9X3jUWTPM58=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     rm pkg/cmd/resources_test.go
     rm pkg/cmd/root_test.go
 
-    # TODO: no clue why it's broken (1.16.0), remove for now.
+    # TODO: no clue why it's broken (1.17.1), remove for now.
     rm pkg/login/client_login_test.go
     rm pkg/git/editor_test.go
     rm pkg/rpcservice/sample_create_test.go
@@ -60,7 +60,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";
     changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${version}";
-    description = "A command-line tool for Stripe";
+    description = "Command-line tool for Stripe";
     longDescription = ''
       The Stripe CLI helps you build, test, and manage your Stripe integration
       right from the terminal.
@@ -72,7 +72,7 @@ buildGoModule rec {
       Create, retrieve, update, or delete API objects.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ RaghavSood jk ];
+    maintainers = with maintainers; [ RaghavSood jk kashw2 ];
     mainProgram = "stripe";
   };
 }

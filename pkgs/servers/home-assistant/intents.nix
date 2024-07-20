@@ -2,15 +2,17 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+
+# build-system
 , setuptools
 
-# build
+# codegen
 , hassil
-, jinja2
-, pyyaml
-, regex
-, voluptuous
 , python
+, pyyaml
+, voluptuous
+, regex
+, jinja2
 
 # tests
 , pytest-xdist
@@ -19,48 +21,44 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.6.28";
-  format = "pyproject";
+  version = "2024.7.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "intents";
+    repo = "intents-package";
     rev = "refs/tags/${version}";
-    hash = "sha256-K441nrwoQ7zzle4iC679oGxU6iZn/yTJOElvDblHB7U=";
+    hash = "sha256-3JnBmSNa9Yrh+5QFQ6KIKZProxMuX+CyTZzqRUAlBcQ=";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = "source/package";
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "2023.4.26" "${version}"
-  '';
-
-  nativeBuildInputs = [
-    hassil
-    jinja2
-    pyyaml
-    regex
+  build-system = [
     setuptools
+
+    # build-time codegen; https://github.com/home-assistant/intents/blob/main/requirements.txt#L1-L5
+    hassil
+    pyyaml
     voluptuous
+    regex
+    jinja2
   ];
 
   postInstall = ''
-    pushd ..
-    # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
-    popd
+    # https://github.com/home-assistant/intents-package/blob/main/script/package#L23-L24
+    PACKAGE_DIR=$out/${python.sitePackages}/home_assistant_intents
+    ${python.pythonOnBuildForHost.interpreter} script/merged_output.py $PACKAGE_DIR/data
+    ${python.pythonOnBuildForHost.interpreter} script/write_languages.py $PACKAGE_DIR/data > $PACKAGE_DIR/languages.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "../tests"
+    "intents/tests"
   ];
 
   meta = with lib; {

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "nanosaur2";
-  version = "2.1.0";
+  version = "2.1.0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UY+fyn8BA/HfCd2LCj5cfGmQACKUICH6CDCW4q6YDkg=";
+    rev = "72d93ed08148d81aa89bab511a9650d7b929d4c7";
+    hash = "sha256-1AvM2KTQB9aUYB0e/7Y6h18yQvzsxMOgGkF9zPgTzFo=";
     fetchSubmodules = true;
   };
 
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"
@@ -29,13 +27,15 @@ stdenv.mkDerivation rec {
     mv Data ReadMe.txt "$out/share/Nanosaur2/"
     install -Dm755 {.,$out/bin}/Nanosaur2
     wrapProgram $out/bin/Nanosaur2 --chdir "$out/share/Nanosaur2"
-    install -Dm644 $src/packaging/nanosaur2.desktop $out/share/applications/nanosaur2.desktop
-    install -Dm644 $src/packaging/nanosaur2-desktopicon.png $out/share/pixmaps/nanosaur2-desktopicon.png
+    install -Dm644 $src/packaging/io.jor.nanosaur2.desktop $out/share/applications/nanosaur2.desktop
+    install -Dm644 $src/packaging/io.jor.nanosaur2.png $out/share/pixmaps/nanosaur2.png
     runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
-    description = "A port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 2004 Macintosh game by Pangea Software.
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jorio/Nanosaur2";
     license = licenses.cc-by-sa-40;
+    mainProgram = "Nanosaur2";
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
   };

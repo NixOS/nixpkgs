@@ -1,52 +1,34 @@
-{ callPackage
-, lib
-, stdenv
-, stdenvNoCC
-, fetchFromGitHub
+{ lib
+, callPackage
 , fixDarwinDylibNames
-, genBytecode ? false
-, bqn-path ? null
+, libffi
 , mbqn-source
+, pkg-config
+, stdenv
+# Boolean flags
 , enableReplxx ? false
 , enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
-, libffi
-, pkg-config
+, generateBytecode ? false
+# "Configurable" options
+, bqn-interpreter
 }:
 
 let
-  cbqn-bytecode-submodule =
-    callPackage ./cbqn-bytecode.nix { inherit lib fetchFromGitHub stdenvNoCC; };
-  replxx-submodule = callPackage ./replxx.nix { inherit lib fetchFromGitHub stdenvNoCC; };
-  singeli-submodule = callPackage ./singeli.nix { inherit lib fetchFromGitHub stdenvNoCC; };
+  sources = callPackage ./sources.nix { };
 in
-assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
-
 stdenv.mkDerivation rec {
-  pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.3.0";
-
-  src = fetchFromGitHub {
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "v${version}";
-    hash = "sha256-LoxwNxuadbYJgIkr1+bZoErTc9WllN2siAsKnxoom3Y=";
-  };
+  pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
+  inherit (sources.cbqn) version src;
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     libffi
   ];
-
-  dontConfigure = true;
-  doInstallCheck = true;
-
-  postPatch = ''
-    sed -i '/SHELL =.*/ d' makefile
-    patchShebangs build/build
-  '';
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -64,25 +46,38 @@ stdenv.mkDerivation rec {
     "shared-o3"
   ];
 
-  preBuild = ''
-    # Purity: avoids git downloading bytecode files
-    mkdir -p build/bytecodeLocal/gen
-    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
-  '' + (if genBytecode then ''
-    ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
-  '' else ''
-    cp -r ${cbqn-bytecode-submodule}/dev/* build/bytecodeLocal/gen/
-  '')
-  + lib.optionalString enableReplxx ''
-    cp -r ${replxx-submodule}/dev/* build/replxxLocal/
-  '';
-
   outputs = [
     "out"
   ] ++ lib.optionals enableLibcbqn [
     "lib"
     "dev"
   ];
+
+  dontConfigure = true;
+
+  doInstallCheck = true;
+
+  strictDeps = true;
+
+  postPatch = ''
+    sed -i '/SHELL =.*/ d' makefile
+    patchShebangs build/build
+  '';
+
+  preBuild = ''
+    mkdir -p build/singeliLocal/
+    cp -r ${sources.singeli.src}/* build/singeliLocal/
+  '' + (if generateBytecode then ''
+    mkdir -p build/bytecodeLocal/gen
+    ${bqn-interpreter} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
+  '' else ''
+    mkdir -p build/bytecodeLocal/gen
+    cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
+  '')
+  + lib.optionalString enableReplxx ''
+    mkdir -p build/replxxLocal/
+    cp -r ${sources.replxx.src}/* build/replxxLocal/
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -121,11 +116,26 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      # https://github.com/dzaima/CBQN?tab=readme-ov-file#licensing
+      asl20
+      boost
+      gpl3Only
+      lgpl3Only
+      mit
+      mpl20
+    ];
+    mainProgram = "cbqn";
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      detegr
+      shnarazk
+      sternenseemann
+      synthetica
+    ];
+    platforms = lib.platforms.all;
   };
 }

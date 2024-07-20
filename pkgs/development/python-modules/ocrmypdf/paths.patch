@@ -1,71 +1,63 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index 9e21c33c..21f134b3 100644
+index 94eec244..4bb15db9 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
-@@ -32,15 +32,7 @@ log = logging.getLogger(__name__)
- # Most reliable what to get the bitness of Python interpreter, according to Python docs
- _IS_64BIT = sys.maxsize > 2**32
- 
--_GSWIN = None
--if os.name == 'nt':
--    if _IS_64BIT:
--        _GSWIN = 'gswin64c'
--    else:
--        _GSWIN = 'gswin32c'
--
--GS = _GSWIN if _GSWIN else 'gs'
--del _GSWIN
+@@ -31,7 +31,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
+     ]
+ )
+ # Ghostscript executable - gswin32c is not supported
+-GS = 'gswin64c' if os.name == 'nt' else 'gs'
 +GS = '@gs@'
  
  
- def version():
+ log = logging.getLogger(__name__)
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 0f8f7392..db792b10 100644
+index 5a34a95a..5ee1b333 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
-@@ -12,7 +12,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -14,7 +14,7 @@ from ocrmypdf.subprocess import get_version, run
  
  
- def version():
--    return get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*')
-+    return get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*')
+ def version() -> Version:
+-    return Version(get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*'))
++    return Version(get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*'))
  
  
  def available():
-@@ -25,7 +25,7 @@ def available():
+@@ -27,7 +27,7 @@ def available():
  
- def convert_group(*, cwd, infiles, out_prefix):
+ def convert_group(cwd, infiles, out_prefix, threshold):
      args = [
 -        'jbig2',
 +        '@jbig2@',
          '-b',
          out_prefix,
-         '-s',  # symbol mode (lossy)
-@@ -44,7 +44,7 @@ def convert_group_mp(args):
+         '--symbol-mode',  # symbol mode (lossy)
+@@ -44,7 +44,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
  
  
- def convert_single(*, cwd, infile, outfile):
--    args = ['jbig2', '-p', infile]
-+    args = ['@jbig2@', '-p', infile]
+ def convert_single(cwd, infile, outfile, threshold):
+-    args = ['jbig2', '--pdf', '-t', str(threshold), infile]
++    args = ['@jbig2@', '--pdf', '-t', str(threshold), infile]
      with open(outfile, 'wb') as fstdout:
          proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
      proc.check_returncode()
 diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
-index 64e91139..ab5b9c49 100644
+index 5b8600d0..fcad771b 100644
 --- a/src/ocrmypdf/_exec/pngquant.py
 +++ b/src/ocrmypdf/_exec/pngquant.py
-@@ -17,7 +17,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
  
  
- def version():
--    return get_version('pngquant', regex=r'(\d+(\.\d+)*).*')
-+    return get_version('@pngquant@', regex=r'(\d+(\.\d+)*).*')
+ def version() -> Version:
+-    return Version(get_version('pngquant', regex=r'(\d+(\.\d+)*).*'))
++    return Version(get_version('@pngquant@', regex=r'(\d+(\.\d+)*).*'))
  
  
  def available():
-@@ -44,7 +44,7 @@ def input_as_png(input_file: Path):
- def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max: int):
-     with input_as_png(input_file) as input_stream:
+@@ -37,7 +37,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
+     """
+     with open(input_file, 'rb') as input_stream:
          args = [
 -            'pngquant',
 +            '@pngquant@',
@@ -73,19 +65,19 @@ index 64e91139..ab5b9c49 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index ad98836a..a12d3002 100644
+index fab92bb1..78b634a7 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
-@@ -111,7 +111,7 @@ class TesseractVersion(Version):
+@@ -95,7 +95,7 @@ class TesseractVersion(Version):
  
  
- def version() -> str:
--    return get_version('tesseract', regex=r'tesseract\s(.+)')
-+    return get_version('@tesseract@', regex=r'tesseract\s(.+)')
+ def version() -> Version:
+-    return TesseractVersion(get_version('tesseract', regex=r'tesseract\s(.+)'))
++    return TesseractVersion(get_version('@tesseract@', regex=r'tesseract\s(.+)'))
  
  
- def has_user_words() -> bool:
-@@ -138,7 +138,7 @@ def get_languages() -> set[str]:
+ def has_thresholding() -> bool:
+@@ -113,7 +113,7 @@ def get_languages() -> set[str]:
          msg += output
          return msg
  
@@ -94,7 +86,7 @@ index ad98836a..a12d3002 100644
      try:
          proc = run(
              args_tess,
-@@ -160,7 +160,7 @@ def get_languages() -> set[str]:
+@@ -135,7 +135,7 @@ def get_languages() -> set[str]:
  
  
  def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
@@ -104,19 +96,19 @@ index ad98836a..a12d3002 100644
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index d7f24265..d14f85de 100644
+index 493d9b3a..578c2dda 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
-@@ -66,7 +66,7 @@ class UnpaperImageTooLargeError(Exception):
+@@ -70,7 +70,7 @@ class UnpaperImageTooLargeError(Exception):
  
  
- def version() -> str:
--    return get_version('unpaper')
-+    return get_version('@unpaper@')
+ def version() -> Version:
+-    return Version(get_version('unpaper'))
++    return Version(get_version('@unpaper@'))
  
  
- SUPPORTED_MODES = {'1', 'L', 'RGB'}
-@@ -120,7 +120,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+ @contextmanager
+@@ -92,7 +92,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
  def run_unpaper(
      input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
  ) -> None:

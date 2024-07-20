@@ -29,8 +29,6 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  preConfigure = "patchShebangs ./configure.sh";
-
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
   dontAddStaticConfigureFlags = true;
@@ -39,7 +37,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ javalib ];
 
   meta = with lib; {
-    description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
+    description = "Library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
     homepage = "http://sawja.inria.fr/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];

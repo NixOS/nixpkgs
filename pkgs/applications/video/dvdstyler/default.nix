@@ -16,7 +16,7 @@
 , libexif
 , libjpeg
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 , wxSVG
 , xine-ui
@@ -24,7 +24,6 @@
 , zip
 
 , dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
 , udevSupport ? true, udev ? null
 , dbusSupport ? true, dbus ? null
 }:
@@ -53,7 +52,7 @@ in stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
     zip
   ];
@@ -72,8 +71,7 @@ in stdenv.mkDerivation rec {
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ]
-  ++ optionals thumbnailSupport [ libgnomeui ];
+  ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 
@@ -93,7 +91,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";
-    description = "A DVD authoring software";
+    description = "DVD authoring software";
     longDescription = ''
       DVDStyler is a cross-platform free DVD authoring application for the
       creation of professional-looking DVDs. It allows not only burning of video
@@ -128,5 +126,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
+    mainProgram = "dvdstyler";
   };
 }

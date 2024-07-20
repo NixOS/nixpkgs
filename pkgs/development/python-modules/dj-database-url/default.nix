@@ -1,32 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-o1qfD0N3XKb5DYGdxFYjPve8x2tHN31dkIt1x+syBiQ=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "dj-database-url";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i2btutob+5R+FFPlGwRSNF01MTfxVop8xaePDHxnqLE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
+    typing-extensions
   ];
 
   # Tests access a DB via network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dj_database_url"
-  ];
+  pythonImportsCheck = [ "dj_database_url" ];
 
   meta = with lib; {
     description = "Use Database URLs in your Django Application";

@@ -1,59 +1,77 @@
-{ lib, stdenv, fetchurl, appimageTools, undmg }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, electron_29
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+}:
 
 let
+  electron = electron_29;
+in
+stdenv.mkDerivation rec {
   pname = "passky-desktop";
-  version = "7.1.0";
+  version = "8.1.2";
 
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/Rabbit-Company/Passky-Desktop/releases/download/v${version}/Passky-${version}.AppImage";
-      sha256 = "1xnhrmmm018mmyzjq05mhbf673f0n81fh1k3kbfarbgk2kbwpq6y";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/Rabbit-Company/Passky-Desktop/releases/download/v${version}/Passky-${version}.dmg";
-      sha256 = "0mm7hk4v7zvpjdqyw3nhk33x72j0gh3f59bx3q18azlm4dr61r2d";
-    };
+  src = fetchFromGitHub {
+    owner = "Rabbit-Company";
+    repo = "Passky-Desktop";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-QQ0+qIkDPNCHeWmcF6FkbDrrt/r3fIkNi0dv6XlV1rc=";
   };
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/passky
+    cp -r "." "$out/share/passky/electron"
+
+    local resolution
+    for icon in $out/share/passky/electron/images/icons/icon*.png; do
+      resolution=''${icon%".png"}
+      resolution=''${resolution##*/icon-}
+      mkdir -p "$out/share/icons/hicolor/''${resolution}/apps"
+      ln -s "$icon" "$out/share/icons/hicolor/''${resolution}/apps/passky.png"
+    done
+
+    mkdir "$out/share/applications"
+    makeWrapper ${electron}/bin/electron "$out/bin/passky" \
+      --add-flags "$out/share/passky/electron/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (
+      makeDesktopItem {
+        name = "passky";
+        type = "Application";
+        desktopName = "Passky";
+        comment = "Simple, modern, open source and secure password manager.";
+        icon = "passky";
+        exec = "passky %U";
+        terminal = false;
+        categories = [ "Utility" ];
+        startupWMClass = "Passky";
+      }
+    )
+  ];
+
   meta = with lib; {
+    description = "Simple, modern, lightweight, open source and secure password manager";
     homepage = "https://passky.org";
     downloadPage = "https://github.com/Rabbit-Company/Passky-Desktop/releases";
+    changelog = "https://github.com/Rabbit-Company/Passky-Desktop/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akkesm ];
-    platforms = builtins.attrNames srcs;
+    mainProgram = "passky";
+    platforms = platforms.unix;
   };
-
-  linux = appimageTools.wrapType2 {
-    inherit pname version src meta;
-
-    extraInstallCommands = ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
-      install -D ${appimageContents}/passky.desktop \
-        $out/share/applications/${pname}.desktop
-
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-
-      cp -r ${appimageContents}/usr/share/icons $out/share
-    '';
-  };
-
-  darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
-
-    nativeBuildInputs = [ undmg ];
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
-    '';
-  };
-in
-if stdenv.isDarwin
-  then darwin
-  else linux
+}

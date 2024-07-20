@@ -1,25 +1,22 @@
-{lib, stdenv, fetchFromGitLab, fetchpatch, autoconf, automake, gettext, ncurses}:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, gettext
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
-  version = "23.5";
+  version = "23.7";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-02jvRPqN8DS30ID42hQFu400NoFC5QiH5YA3NB+EoFI=";
+    hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
-
-  patches = [
-    # Upstream patch to be released in the next version
-    (fetchpatch {
-      name = "fallback-to-kill.diff";
-      url = "https://gitlab.com/psmisc/psmisc/-/commit/6892e321e7042e3df60a5501a1c59d076e8a856f.patch";
-      sha256 = "sha256-3uk1KXEOqAxpHWBORUw5+dR5s/Z55JJs5tuBZlTdjlo=";
-      excludes = [ "ChangeLog" ];
-    })
-  ];
 
   nativeBuildInputs = [ autoconf automake gettext ];
   buildInputs = [ ncurses ];
@@ -35,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/psmisc/psmisc";
-    description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
+    description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ryantm ];

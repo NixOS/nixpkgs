@@ -1,74 +1,109 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, haskellPackages
-, haskell
-, slither-analyzer
+{
+  lib,
+  fetchpatch,
+  mkDerivation,
+  fetchFromGitHub,
+  haskellPackages,
+  slither-analyzer,
 }:
 
-let haskellPackagesOverride = haskellPackages.override {
-      overrides = self: super: {
-        # following the revision specified in echidna/stack.yaml
-        # TODO: 0.51.3 is not in haskellPackages yet
-        hevm = haskell.lib.overrideCabal super.hevm (oa: {
-          version = "0.51.3";
-          src = fetchFromGitHub {
-            owner = "ethereum";
-            repo = "hevm";
-            rev = "release/0.51.3";
-            hash = "sha256-H6oURBGoQWSOuPhBB+UKg2UarVzXgv1tmfDBLnOtdhU=";
-          };
-          libraryHaskellDepends = oa.libraryHaskellDepends
-                                  ++ (with haskellPackages;[githash witch]);
-        });
-      };
-    };
-in mkDerivation rec {
+mkDerivation rec {
   pname = "echidna";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-5d9ttPR3rRHywBeLM85EGCEZLNZNZzOAhIN6AJToJyI=";
+    sha256 = "sha256-NJ2G6EkexYE4P3GD7PZ+lLEs1dqnoqIB2zfAOD5SQ8M=";
   };
 
-  isLibrary = true;
+  patches = [
+    # Support cross platform vty 6.x with vty-crossplatform
+    # https://github.com/crytic/echidna/pull/1290
+    (fetchpatch {
+      url = "https://github.com/crytic/echidna/commit/2913b027d7e793390ed489ef6a47d23ec9b3c800.patch";
+      hash = "sha256-5CGD9nDbDUTG869xUybWYSvGRsrm7JP7n0WMBNYfayw=";
+    })
+  ];
+
   isExecutable = true;
 
-  libraryToolDepends = with haskellPackagesOverride; [
-    haskellPackages.hpack
+  libraryToolDepends = with haskellPackages; [ haskellPackages.hpack ];
+
+  executableHaskellDepends = with haskellPackages; [
+    # package.yaml - dependencies
+    base
+    aeson
+    async
+    base16-bytestring
+    binary
+    bytestring
+    code-page
+    containers
+    data-bword
+    data-dword
+    deepseq
+    extra
+    directory
+    exceptions
+    filepath
+    hashable
+    hevm
+    html-entities
+    ListLike
+    MonadRandom
+    mtl
+    optparse-applicative
+    optics
+    optics-core
+    process
+    random
+    rosezipper
+    semver
+    split
+    text
+    transformers
+    time
+    unliftio
+    utf8-string
+    vector
+    with-utf8
+    word-wrap
+    yaml
+    http-conduit
+    html-conduit
+    warp
+    wai-extra
+    xml-conduit
+    strip-ansi-escape
+    # package.yaml - dependencies when "!os(windows)"
+    brick
+    unix
+    vty
   ];
 
-  # Note: This can be extracted from package.yaml of echidna, the list is shorter because some are transitive.
-  executableHaskellDepends = with haskellPackagesOverride;
-    [aeson base base16-bytestring binary brick bytestring code-page containers data-dword data-has directory exceptions extra
-     filepath hashable hevm html-conduit html-entities http-conduit lens ListLike MonadRandom mtl optics optparse-applicative
-     process random semver text transformers unix unliftio unordered-containers vector vector-instances vty with-utf8
-     xml-conduit yaml];
-
-  # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
+  # Note: there is also a runtime dependency of slither-analyzer. So, let's include it.
   executableSystemDepends = [ slither-analyzer ];
-
-  testHaskellDepends = with haskellPackagesOverride; [
-    tasty tasty-hunit tasty-quickcheck
-  ];
 
   preConfigure = ''
     hpack
-    # re-enable dynamic build for Linux
-    sed -i -e 's/os(linux)/false/' echidna.cabal
   '';
+
   shellHook = "hpack";
+
   doHaddock = false;
+
   # tests depend on a specific version of solc
   doCheck = false;
 
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
+  maintainers = with lib.maintainers; [
+    arturcygan
+    hellwolf
+  ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }

@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, stups-cli-support
-, stups-zign
-, pytest
-, pytest-cov
-, isPy3k
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  requests,
+  stups-cli-support,
+  stups-zign,
+  pytest,
+  pytest-cov,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "stups-fullstop";
   version = "1.1.31";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -37,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Convenience command line tool for fullstop. audit reporting.";
+    description = "Convenience command line tool for fullstop. audit reporting";
     homepage = "https://github.com/zalando-stups/stups-fullstop-cli";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

@@ -10,7 +10,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-igovWWk8GfNmOS/NbZWfv9kox6QLNIbM09jdvA/lL3A=";
   };
-  vendorSha256 = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
+  vendorHash = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
 
   ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
 
@@ -18,6 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/corneliusweig/rakkess";
     changelog = "https://github.com/corneliusweig/rakkess/releases/tag/v${version}";
     description = "Review Access - kubectl plugin to show an access matrix for k8s server resources";
+    mainProgram = "rakkess";
     longDescription = ''
       Have you ever wondered what access rights you have on a provided
       kubernetes cluster? For single resources you can use

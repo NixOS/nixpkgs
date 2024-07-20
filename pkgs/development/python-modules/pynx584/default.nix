@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, mock
-, prettytable
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, requests
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  mock,
+  prettytable,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "pynx584";
   version = "0.8.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
-
 
   src = fetchFromGitHub {
     owner = "kk7ds";

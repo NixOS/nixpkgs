@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -21,6 +20,9 @@
 , qtdeclarative
 , qtgraphicaleffects
 , flac
+, libopusenc
+, libopus
+, tinyxml-2
 , qtquickcontrols
 , qtquickcontrols2
 , qtscript
@@ -46,25 +48,16 @@ let
       Carbon
     ;
   } else portaudio;
-in stdenv'.mkDerivation rec {
+in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.1.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${version}";
-    sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-QjvY8R2nq/DeFDikHn9qr4aCEwzAcogQXM5vdZqhoMM=";
   };
-  patches = [
-    # Upstream from some reason wants to install qml files from qtbase in
-    # installPhase, this patch removes this behavior. See:
-    # https://github.com/musescore/MuseScore/issues/18665
-    (fetchpatch {
-      url = "https://github.com/doronbehar/MuseScore/commit/f48448a3ede46f5a7ef470940072fbfb6742487c.patch";
-      hash = "sha256-UEc7auscnW0KMfWkLKQtm+UstuTNsuFeoNJYIidIlwM=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSESCORE_BUILD_MODE=release"
@@ -72,8 +65,12 @@ in stdenv'.mkDerivation rec {
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
     "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
-    # Use our freetype
-    "-DUSE_SYSTEM_FREETYPE=ON"
+    # Use our versions of system libraries
+    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
+    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
+    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
     # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
     # upstream defaults to compiling to x86_64 only, unless this cmake flag is
     # set
@@ -94,11 +91,6 @@ in stdenv'.mkDerivation rec {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the
-  # sandbox profile from `qtbase`, see:
-  # https://github.com/NixOS/nixpkgs/issues/237458
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
-
   nativeBuildInputs = [
     wrapQtAppsHook
     cmake
@@ -117,6 +109,9 @@ in stdenv'.mkDerivation rec {
     portaudio'
     portmidi
     flac
+    libopusenc
+    libopus
+    tinyxml-2
     qtbase
     qtdeclarative
     qtgraphicaleffects
@@ -138,8 +133,11 @@ in stdenv'.mkDerivation rec {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
+
+  # Don't run bundled upstreams tests, as they require a running X window system.
+  doCheck = false;
 
   passthru.tests = nixosTests.musescore;
 
@@ -147,10 +145,8 @@ in stdenv'.mkDerivation rec {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever turion doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = with maintainers; [ vandenoever doronbehar ];
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
-}
+})

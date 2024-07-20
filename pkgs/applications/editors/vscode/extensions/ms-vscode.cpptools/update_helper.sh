@@ -121,8 +121,6 @@ make_trapped_tmpdir
 find "$monoRuntimeBinaries_storePath" -mindepth 1 -maxdepth 1 | xargs -d '\n' cp -rp -t "$tmpDir"
 chmod -R a+rwx "$tmpDir"
 
-ls -la "$tmpDir/debugAdapters"
-
 patchelf_mono "$tmpDir/debugAdapters/mono.linux-x86_64"
 
 chmod a+x "$tmpDir/debugAdapters/mono.linux-x86_64"
@@ -140,8 +138,6 @@ echo "------------- Runtime dep clang ---------------"
 make_trapped_tmpdir
 find "$clanFormatBinaries_storePath" -mindepth 1 -maxdepth 1 | xargs -d '\n' cp -rp -t "$tmpDir"
 chmod -R a+rwx "$tmpDir"
-
-ls -la "$tmpDir/bin"
 
 patchelf_clangformat "$tmpDir/bin/clang-format"
 

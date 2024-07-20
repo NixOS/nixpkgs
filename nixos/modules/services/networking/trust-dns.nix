@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.trust-dns;
   toml = pkgs.formats.toml { };
@@ -12,14 +11,14 @@ let
     options = with lib; {
       zone = mkOption {
         type = types.str;
-        description = mdDoc ''
+        description = ''
           Zone name, like "example.com", "localhost", or "0.0.127.in-addr.arpa".
         '';
       };
       zone_type = mkOption {
         type = types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
         default = "Primary";
-        description = mdDoc ''
+        description = ''
           One of:
           - "Primary" (the master, authority for the zone).
           - "Secondary" (the slave, replicated from the primary).
@@ -35,7 +34,7 @@ let
         type = types.either types.path types.str;
         default = "${config.zone}.zone";
         defaultText = literalExpression ''"''${config.zone}.zone"'';
-        description = mdDoc ''
+        description = ''
           Path to the .zone file.
           If not fully-qualified, this path will be interpreted relative to the `directory` option.
           If omitted, defaults to the value of the `zone` option suffixed with ".zone".
@@ -48,20 +47,18 @@ in
   meta.maintainers = with lib.maintainers; [ colinsane ];
   options = {
     services.trust-dns = with lib; {
-      enable = mkEnableOption (lib.mdDoc "trust-dns");
-      package = mkOption {
-        type = types.package;
-        default = pkgs.trust-dns;
-        defaultText = "pkgs.trust-dns";
-        description = mdDoc ''
-          Trust-dns package to use.
-          Only `bin/named` need be provided: the other trust-dns utilities (client and resolver) are not needed.
+      enable = mkEnableOption "trust-dns";
+      package = mkPackageOption pkgs "trust-dns" {
+        extraDescription = ''
+          ::: {.note}
+          The package must provide `meta.mainProgram` which names the server binary; any other utilities (client, resolver) are not needed.
+          :::
         '';
       };
       quiet = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Log ERROR level messages only.
           This option is mutually exclusive with the `debug` option.
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
@@ -70,14 +67,14 @@ in
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Log DEBUG, INFO, WARN and ERROR messages.
           This option is mutually exclusive with the `debug` option.
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
         '';
       };
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Settings for trust-dns. The options enumerated here are not exhaustive.
           Refer to upstream documentation for all available options:
           - [Example settings](https://github.com/bluejekyll/trust-dns/blob/main/tests/test-data/test_configs/example.toml)
@@ -88,36 +85,36 @@ in
             listen_addrs_ipv4 = mkOption {
               type = types.listOf types.str;
               default = [ "0.0.0.0" ];
-              description = mdDoc ''
-              List of ipv4 addresses on which to listen for DNS queries.
+              description = ''
+                List of ipv4 addresses on which to listen for DNS queries.
               '';
             };
             listen_addrs_ipv6 = mkOption {
               type = types.listOf types.str;
               default = lib.optional config.networking.enableIPv6 "::0";
               defaultText = literalExpression ''lib.optional config.networking.enableIPv6 "::0"'';
-              description = mdDoc ''
+              description = ''
                 List of ipv6 addresses on which to listen for DNS queries.
               '';
             };
             listen_port = mkOption {
               type = types.port;
               default = 53;
-              description = mdDoc ''
+              description = ''
                 Port to listen on (applies to all listen addresses).
               '';
             };
             directory = mkOption {
               type = types.str;
               default = "/var/lib/trust-dns";
-              description = mdDoc ''
+              description = ''
                 The directory in which trust-dns should look for .zone files,
                 whenever zones aren't specified by absolute path.
               '';
             };
             zones = mkOption {
-              description = mdDoc "List of zones to serve.";
-              default = {};
+              description = "List of zones to serve.";
+              default = [];
               type = types.listOf (types.coercedTo types.str (zone: { inherit zone; }) zoneType);
             };
           };
@@ -136,7 +133,7 @@ in
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${cfg.package}/bin/named --config ${configFile} ${flagsStr}
+          ${cfg.package}/bin/${cfg.package.meta.mainProgram} --config ${configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";

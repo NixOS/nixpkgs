@@ -13,7 +13,7 @@ in
   options = {
     services.gonic = {
 
-      enable = mkEnableOption (lib.mdDoc "Gonic music server");
+      enable = mkEnableOption "Gonic music server";
 
       settings = mkOption rec {
         type = settingsFormat.type;
@@ -28,7 +28,7 @@ in
           music-path = [ "/mnt/music" ];
           podcast-path = "/mnt/podcasts";
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Gonic, see <https://github.com/sentriz/gonic#configuration-options> for supported values.
         '';
       };
@@ -55,8 +55,12 @@ in
         RuntimeDirectory = "gonic";
         RootDirectory = "/run/gonic";
         ReadWritePaths = "";
+        BindPaths = [
+          cfg.settings.playlists-path
+        ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
+          "-/etc/resolv.conf"
           "-/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           cfg.settings.podcast-path

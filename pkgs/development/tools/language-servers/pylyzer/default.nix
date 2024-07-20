@@ -5,27 +5,38 @@
 , git
 , python3
 , makeWrapper
+, writeScriptBin
 , darwin
 , which
+, nix-update-script
+, testers
+, pylyzer
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.37";
+  version = "0.0.56";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
-    rev = "v${version}";
-    hash = "sha256-MzcGWOJud8SA6cpTdhms+Hfi0sAqelOr7dgy/k1H+qw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-t/v9Ghnfsnwvo05PnvRInXRCbA0fi9ZQkIrrvtzBSCg=";
   };
 
-  cargoHash = "sha256-Xl0YxBmhhFKBzxbO1GXIds3XdSS78/7Z1rOAmLgTYSw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustpython-ast-0.3.1" = "sha256-KjglE3KvA9F7eg9pPTV6+PrLxiWnCgtkMOsFsoPC5N8=";
+    };
+  };
 
   nativeBuildInputs = [
     git
     python3
     makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    (writeScriptBin "diskutil" "")
   ];
 
   buildInputs = [
@@ -57,11 +68,17 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg
   '';
 
-  meta = with lib; {
-    description = "A fast static code analyzer & language server for Python";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = pylyzer; };
+  };
+
+  meta = {
+    description = "Fast static code analyzer & language server for Python";
     homepage = "https://github.com/mtshiba/pylyzer";
     changelog = "https://github.com/mtshiba/pylyzer/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
+    mainProgram = "pylyzer";
   };
 }

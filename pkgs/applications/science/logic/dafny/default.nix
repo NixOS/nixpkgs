@@ -8,28 +8,37 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.2.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    sha256 = "sha256-RSGaOgGf3m94t3SKnvSPqz0VHhWr6NmIMtGsmOynMaM=";
+    hash = "sha256-XoSk08TVv17YyuTsRJ25e6bwSwKIF2+HjF5nFaul8+M=";
   };
 
-  postPatch = ''
-    cp ${writeScript "fake-gradlew-for-dafny" ''
-      mkdir -p build/libs/
-      javac $(find -name "*.java" | grep "^./src/main") -d classes
-      jar cf build/libs/DafnyRuntime-${version}.jar -C classes dafny
-    ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+  postPatch =
+    let
+      # This file wasn't updated between 4.6.0 and 4.7.0.
+      runtimeJarVersion = "4.6.0";
+    in
+    ''
+      cp ${
+        writeScript "fake-gradlew-for-dafny" ''
+          mkdir -p build/libs/
+          javac $(find -name "*.java" | grep "^./src/main") -d classes
+          jar cf build/libs/DafnyRuntime-${runtimeJarVersion}.jar -C classes dafny
+        ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
-    # Needed to fix
-    # "error NETSDK1129: The 'Publish' target is not supported without specifying a target framework. The current project targets multiple frameworks, you must specify the framework for the published application."
-    substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
-      --replace TargetFrameworks TargetFramework \
-      --replace "netstandard2.0;net452" net6.0
-  '';
+      # Needed to fix
+      # "error NETSDK1129: The 'Publish' target is not supported without
+      # specifying a target framework. The current project targets multiple
+      # frameworks, you must specify the framework for the published
+      # application."
+      substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
+        --replace-warn TargetFrameworks TargetFramework \
+        --replace-warn "netstandard2.0;net452" net6.0
+    '';
 
   buildInputs = [ jdk11 ];
   nugetDeps = ./deps.nix;
@@ -52,7 +61,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "A programming language with built-in specification constructs";
+    description = "Programming language with built-in specification constructs";
     homepage = "https://research.microsoft.com/dafny";
     maintainers = with maintainers; [ layus ];
     license = licenses.mit;

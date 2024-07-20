@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   buildPhase = ''
     runHook preBuild
-    ${python3Packages.python.pythonForBuild.interpreter} -O -m compileall .
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} -O -m compileall .
     runHook postBuild
   '';
 
@@ -46,7 +46,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A fork/continuation of the ZeroNet project";
+    description = "Fork/continuation of the ZeroNet project";
+    mainProgram = "zeronet";
     longDescription = ''
       zeronet-conservancy is a fork/continuation of ZeroNet project (that has
       been abandoned by its creator) that is dedicated to sustaining existing

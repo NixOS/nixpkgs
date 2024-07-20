@@ -1,14 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, fire, tqdm, intelhex, libusb1 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  fire,
+  tqdm,
+  intelhex,
+  libusb1,
+}:
 
 buildPythonPackage rec {
   pname = "nkdfu";
   version = "0.2";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-8l913dOCxHKFtpQ83p9RV3sUlu0oT5PVi14FSuYJ9fg=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     fire
@@ -24,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tool for Nitrokeys' firmware update";
+    mainProgram = "nkdfu";
     homepage = "https://github.com/Nitrokey/nkdfu";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ frogamic ];

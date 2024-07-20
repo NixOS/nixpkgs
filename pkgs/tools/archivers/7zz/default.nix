@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 
   # Only used for Linux's x86/x86_64
 , uasm
@@ -11,7 +11,6 @@
 , enableUnfree ? false
 
   # For tests
-, _7zz
 , testers
 }:
 
@@ -24,40 +23,29 @@ let
     x86_64-linux = "../../cmpl_gcc_x64.mak";
   }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "22.01";
+  version = "24.07";
 
-  src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
+  src = fetchzip {
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
-      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
+      free = "sha256-D41Sf437WYRQMdVW7hwcnZI0UG67IJsTTMfxlpkk36M=";
+      unfree = "sha256-iKCs893IFG0I6a2kpUe0qiuCX+YUxIgMIBRykc9XYjA=";
     }.${if enableUnfree then "unfree" else "free"};
-    downloadToTemp = (!enableUnfree);
+    stripRoot = false;
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
     # https://fedoraproject.org/wiki/Licensing:Unrar
     postFetch = lib.optionalString (!enableUnfree) ''
-      mkdir tmp
-      tar xf $downloadedFile -C ./tmp
-      rm -r ./tmp/CPP/7zip/Compress/Rar*
-      tar cfJ $out -C ./tmp . \
-        --sort=name \
-        --mtime="@$SOURCE_DATE_EPOCH" \
-        --owner=0 --group=0 --numeric-owner \
-        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime
-    '';
+      rm -r $out/CPP/7zip/Compress/Rar*
+   '';
   };
 
-  sourceRoot = ".";
-
   patches = [
-    ./fix-build-on-darwin.patch
     ./fix-cross-mingw-build.patch
   ];
-  patchFlags = [ "-p0" ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
@@ -69,6 +57,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-Wno-conversion"
     "-Wno-unused-macros"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-declaration-after-statement"
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
+      "-Wno-reserved-identifier"
+      "-Wno-unused-but-set-variable"
+    ])
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16") [
+      "-Wno-unsafe-buffer-usage"
+      "-Wno-cast-function-type-strict"
+    ])
   ]);
 
   inherit makefile;
@@ -89,6 +87,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
+  setupHook = ./setup-hook.sh;
+
   enableParallelBuilding = true;
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
-    install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../../../../DOC/*.txt
 
     runHook postInstall
   '';
@@ -105,23 +105,23 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
-      package = _7zz;
+      package = finalAttrs.finalPackage;
       command = "7zz --help";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line archiver utility";
     homepage = "https://7-zip.org";
-    license = with licenses;
+    license = with lib.licenses;
       # 7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
       [ lgpl2Plus /* and */ bsd3 ] ++
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with maintainers; [ anna328p peterhoeg jk ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+    platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
   };
-}
+})

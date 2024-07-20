@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   pname = "s3backer";
-  version = "2.0.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-xmOtL4v3UxdjrL09sSfXyF5FoMrNerSqG9nvEuwMvNM=";
+    sha256 = "sha256-BttU5wdnifhsFPdNX3yb/l12biskzED72v0Qfxi7FWU=";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "s3backer";
   };
 }

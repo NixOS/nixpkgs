@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pymvglive";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyMVGLive";

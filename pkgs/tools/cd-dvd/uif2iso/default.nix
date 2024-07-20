@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://aluigi.org/mytoolz.htm#uif2iso";
     license = lib.licenses.gpl1Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "uif2iso";
   };
 }

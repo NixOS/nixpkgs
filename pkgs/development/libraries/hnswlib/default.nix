@@ -12,24 +12,24 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hnswlib";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nmslib";
     repo = "hnswlib";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-XXz0NIQ5dCGwcX2HtbK5NFTalP0TjLO6ll6TmH3oflI=";
+    hash = "sha256-1KkAX42j/I06KO4wCnDsDifN1JiENqYKR5NNHBjyuVA=";
   };
 
   # this is a header-only library, so we don't need to build it
   # we need `cmake` only to run tests
-  nativeBuildInputs = lib.optionals finalAttrs.doCheck [
+  nativeCheckInputs = [
     cmake
     python
   ];
 
   # we only want to run buildPhase when we run tests
-  dontBuild = !finalAttrs.doCheck;
+  dontBuild = !finalAttrs.finalPackage.doCheck;
 
   installPhase = ''
     runHook preInstall

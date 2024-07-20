@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, chardet
-, regex
-, packaging
+  # propagates
+  chardet,
+  regex,
+  packaging,
 
-# optionals
-, faust-cchardet
-, pandas
-, tabview
-# TODO: , wilderness
+  # optionals
+  faust-cchardet,
+  pandas,
+  tabview,
+  # TODO: , wilderness
 
-# tests
-, python
-, pytestCheckHook
+  # tests
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.8.0";
+  version = "0.8.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/JveB6fpIJvR5byGcmO9XBuCbUw7yNTpSoDs68Wffmo=";
+    hash = "sha256-yyPUNFDq9W5OW1muHtQ10QgAHhXI8w7CY77fsWhIy0k=";
   };
 
   propagatedBuildInputs = [
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
@@ -61,9 +60,7 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  pytestFlagsArray = [
-    "./tests/test_unit"
-  ];
+  pytestFlagsArray = [ "./tests/test_unit" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'wilderness'
@@ -72,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CleverCSV is a Python package for handling messy CSV files";
+    mainProgram = "clevercsv";
     longDescription = ''
       CleverCSV is a Python package for handling messy CSV files. It provides
       a drop-in replacement for the builtin CSV module with improved dialect

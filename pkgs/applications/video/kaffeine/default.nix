@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.pasqui23 ];
     platforms = platforms.all;
+    mainProgram = "kaffeine";
   };
 }

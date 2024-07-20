@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ];
 
   meta = with lib; {
-    description = "A iconv based simplified-traditional chinese conversion tool";
+    description = "Iconv based simplified-traditional chinese conversion tool";
+    mainProgram = "cconv";
     homepage = "https://github.com/xiaoyjy/cconv";
     license = licenses.mit;
     platforms = platforms.all;

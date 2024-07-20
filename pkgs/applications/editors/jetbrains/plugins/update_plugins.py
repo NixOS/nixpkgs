@@ -21,7 +21,7 @@ TOKENS = {
 }
 SNAPSHOT_VALUE = 99999
 PLUGINS_FILE = Path(__file__).parent.joinpath("plugins.json").resolve()
-IDES_FILE = Path(__file__).parent.joinpath("../versions.json").resolve()
+IDES_FILE = Path(__file__).parent.joinpath("../bin/versions.json").resolve()
 # The plugin compatibility system uses a different naming scheme to the ide update system.
 # These dicts convert between them
 FRIENDLY_TO_PLUGIN = {
@@ -36,6 +36,7 @@ FRIENDLY_TO_PLUGIN = {
     "pycharm-professional": "PYCHARM",
     "rider": "RIDER",
     "ruby-mine": "RUBYMINE",
+    "rust-rover": "RUST",
     "webstorm": "WEBSTORM"
 }
 PLUGIN_TO_FRIENDLY = {j: i for i, j in FRIENDLY_TO_PLUGIN.items()}
@@ -379,6 +380,11 @@ def main():
     result["files"] = get_file_hashes(file_list, refetch_all)
 
     write_result(result)
+
+    # Commit the result
+    commitMessage = "jetbrains.plugins: update"
+    print("#### Committing changes... ####")
+    run(['git', 'commit', f'-m{commitMessage}', '--', f'{PLUGINS_FILE}'], check=True)
 
 
 if __name__ == '__main__':

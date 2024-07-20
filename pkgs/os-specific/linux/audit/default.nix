@@ -5,10 +5,10 @@
 , autoreconfHook
 , bash
 , buildPackages
-, libtool
 , linuxHeaders
 , python3
 , swig
+, pkgsCross
 
 # Enabling python support while cross compiling would be possible, but the
 # configure script tries executing python to gather info instead of relying on
@@ -18,20 +18,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "3.1.1";
+  version = "4.0";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RuRrN2I8zgnm7hNOeNZor8NPThyHDIU+8S5BkweM/oc=";
+    hash = "sha256-v0ItQSard6kqTDrDneVHPyeNw941ck0lGKSMe+FdVNg=";
   };
 
-  patches = [
-    ./000-fix-static-attribute-malloc.diff
-    ./001-ignore-flexible-array.patch
+  patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/64cb48e1e5137b8a389c7528e611617a98389bc7.patch";
+      hash = "sha256-DN2F5w+2Llm80FZntH9dvdyT00pVBSgRu8DDFILyrlU=";
+    })
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/4192eb960388458c85d76e5e385cfeef48f02c79.patch";
+      hash = "sha256-G6CJ9nBJSsTyJ0qq14PVo+YdInAvLLQtXcR25Q8V5/4=";
+    })
   ];
 
   postPatch = ''
-    sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace "/usr/include/linux/audit.h" \
                 "${linuxHeaders}/include/linux/audit.h"
@@ -67,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    musl = pkgsCross.musl64.audit;
+  };
 
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";

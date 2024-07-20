@@ -3,7 +3,7 @@
 , libjpeg, jxrlib, pkg-config
 , fixDarwinDylibNames, autoSignDarwinBinariesHook }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeimage";
   version = "unstable-2021-11-01";
 
@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     rev = "1900";
     sha256 = "rWoNlU/BWKZBPzRb1HqU6T0sT7aK6dpqKPe88+o/4sA=";
   };
-  sourceRoot = "svn-r1900/FreeImage/trunk";
+
+  sourceRoot = "${finalAttrs.src.name}/FreeImage/trunk";
 
   # Ensure that the bundled libraries are not used at all
   prePatch = ''
@@ -71,7 +72,21 @@ stdenv.mkDerivation {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
+    knownVulnerabilities = [
+      "CVE-2021-33367"
+      "CVE-2021-40262"
+      "CVE-2021-40263"
+      "CVE-2021-40264"
+      "CVE-2021-40265"
+      "CVE-2021-40266"
+
+      "CVE-2023-47992"
+      "CVE-2023-47993"
+      "CVE-2023-47994"
+      "CVE-2023-47995"
+      "CVE-2023-47996"
+    ];
     maintainers = with lib.maintainers; [viric l-as];
     platforms = with lib.platforms; unix;
   };
-}
+})

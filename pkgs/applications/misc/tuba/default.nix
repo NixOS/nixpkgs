@@ -13,25 +13,35 @@
 , json-glib
 , glib
 , glib-networking
+, gnome
+, gobject-introspection
 , gtksourceview5
 , libxml2
 , libgee
+, librsvg
 , libsoup_3
 , libsecret
 , libwebp
 , libspelling
+, webp-pixbuf-loader
+, icu
 , gst_all_1
+, clapper
+# clapper support is still experimental and has bugs.
+# See https://github.com/GeopJr/Tuba/pull/931
+, clapperSupport? false
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.4.0";
+  version = "0.8.1";
+
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-sLdkSIevz2spL+Q5sS+ugqEbqJTXrLxmszzijtKvY6k=";
+    hash = "sha256-dN915sPBttnrcOuhUJjEtdojOQi9VRLmc+t1RvWmx64=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +52,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -57,24 +68,44 @@ stdenv.mkDerivation rec {
     libsecret
     libwebp
     libspelling
+    icu
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })
     gst-plugins-bad
-  ]);
+  ]) ++ lib.optionals clapperSupport [
+    clapper
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "clapper" clapperSupport)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  # Pull in WebP support for avatars from Misskey instances.
+  # In postInstall to run before gappsWrapperArgsHook.
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
+  meta = {
     description = "Browse the Fediverse";
     homepage = "https://tuba.geopjr.dev/";
     mainProgram = "dev.geopjr.Tuba";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with maintainers; [ chuangzhu aleksana ];
+    maintainers = with lib.maintainers; [ chuangzhu aleksana donovanglover ];
   };
 }

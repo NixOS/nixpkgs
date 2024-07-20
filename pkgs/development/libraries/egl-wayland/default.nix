@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , eglexternalplatform
 , pkg-config
 , meson
@@ -16,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.12";
+  version = "1.1.14";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    hash = "sha256-KxlUuoj2HJhkqkIX+Pic/0+36g/N3qfAAlnvYO2Y6uQ=";
+    hash = "sha256-MD+D/dRem3ONWGPoZ77j2UKcOCUuQ0nrahEQkNVEUnI=";
   };
 
   postPatch = ''
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The EGLStream-based Wayland external platform";
+    description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rfc";
-  version = "0.2.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "rfc";
     rev = "v${version}";
-    hash = "sha256-dfaeTdJiJuKp8/k6LBP+RC60gTRHfHR5hhLD4ZWJufE=";
+    hash = "sha256-zN+MQtHh69PkzbrfceHFpBYCPmTg9qrOf/ML2efq6Xk=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to read RFCs from the command line";
+    description = "Tool to read RFCs from the command line";
     longDescription = ''
       rfc is a little tool written in Bash to read RFCs from the command-line.
       It fetches RFCs and drafts from the Web and caches them locally.
@@ -44,5 +44,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.all;
+    mainProgram = "rfc";
   };
 }

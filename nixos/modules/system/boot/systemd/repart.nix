@@ -10,12 +10,26 @@ let
     "repart.d"
     format
     (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
+
+  partitionAssertions = lib.mapAttrsToList (fileName: definition:
+    let
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+      labelLength = builtins.stringLength definition.Label;
+    in
+    {
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
+      message = ''
+        The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
+      '';
+    }
+  ) cfg.partitions;
 in
 {
   options = {
     boot.initrd.systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table at boot time in the initrd.
           systemd-repart only works with GPT partition tables.
 
@@ -26,7 +40,7 @@ in
 
       device = lib.mkOption {
         type = with lib.types; nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           The device to operate on.
 
           If `device == null`, systemd-repart will operate on the device
@@ -39,8 +53,8 @@ in
     };
 
     systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table.
           systemd-repart only works with GPT partition tables.
 
@@ -62,7 +76,7 @@ in
             SizeMaxBytes = "2G";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
           configuration can use all upstream options. See <link
@@ -74,6 +88,18 @@ in
   };
 
   config = lib.mkIf (cfg.enable || initrdCfg.enable) {
+    assertions = [
+      {
+        assertion = initrdCfg.enable -> config.boot.initrd.systemd.enable;
+        message = ''
+          'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
+        '';
+      }
+    ] ++ partitionAssertions;
+
+    # systemd-repart uses loopback devices for partition creation
+    boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
+
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"

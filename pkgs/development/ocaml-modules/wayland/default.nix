@@ -2,28 +2,28 @@
 , buildDunePackage
 , fetchurl
 , xmlm
-, lwt
+, eio
 , logs
 , fmt
 , cstruct
 , cmdliner
-, alcotest-lwt
+, alcotest
+, eio_main
 }:
 
 buildDunePackage rec {
   pname = "wayland";
-  version = "1.1";
+  version = "2.1";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "5.0";
 
   src = fetchurl {
     url = "https://github.com/talex5/ocaml-wayland/releases/download/v${version}/wayland-${version}.tbz";
-    sha256 = "0b7czgh08i6xcx3fsz6vd19sfyngwi0i27jdzg8cnjgrgwnagv6d";
+    hash = "sha256-D/tTlYlU8e1O+HShIsBxqc8953rjQblj63tRPYAo88E=";
   };
 
   propagatedBuildInputs = [
-    lwt
+    eio
     logs
     fmt
     cstruct
@@ -35,7 +35,8 @@ buildDunePackage rec {
   ];
 
   checkInputs = [
-    alcotest-lwt
+    alcotest
+    eio_main
   ];
   doCheck = true;
 

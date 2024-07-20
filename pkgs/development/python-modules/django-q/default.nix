@@ -1,34 +1,47 @@
-{ arrow
-, blessed
-, buildPythonPackage
-, croniter
-, django
-, django-redis
-, django-picklefield
-, fetchFromGitHub
-, future
-, lib
-, poetry-core
-, pytest-django
-, pytest-mock
-, pytestCheckHook
-, pkgs
-, stdenv
+{
+  lib,
+  stdenv,
+  arrow,
+  blessed,
+  buildPythonPackage,
+  croniter,
+  django,
+  django-picklefield,
+  django-redis,
+  fetchFromGitHub,
+  future,
+  pkgs,
+  poetry-core,
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-q";
   version = "1.3.9";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Koed00";
     repo = "django-q";
+    rev = "refs/tags/v${version}";
     hash = "sha256-gFSrAl3QGoJEJfvTTvLQgViPPjeJ6BfvgEwgLLo+uAA=";
-    rev = "v${version}";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  # fixes empty version string
+  # analog to https://github.com/NixOS/nixpkgs/pull/171200
+  patches = [ ./pep-621.patch ];
+
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django-picklefield
@@ -38,15 +51,15 @@ buildPythonPackage rec {
     future
   ];
 
-  # fixes empty version string
-  # analog to https://github.com/NixOS/nixpkgs/pull/171200
-  patches = [
-    ./pep-621.patch
-  ];
+  nativeCheckInputs = [
+    croniter
+    django-redis
+    pytest-django
+    pytest-mock
+    pytestCheckHook
+  ] ++ django-redis.optional-dependencies.hiredis;
 
-  pythonImportsCheck = [
-    "django_q"
-  ];
+  pythonImportsCheck = [ "django_q" ];
 
   preCheck = ''
     ${pkgs.redis}/bin/redis-server &
@@ -57,14 +70,6 @@ buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  nativeCheckInputs = [
-    croniter
-    django-redis
-    pytest-django
-    pytest-mock
-    pytestCheckHook
-  ];
-
   # don't bother with two more servers to test
   disabledTests = [
     "test_disque"
@@ -74,9 +79,13 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A multiprocessing distributed task queue for Django";
+    description = "Multiprocessing distributed task queue for Django";
     homepage = "https://django-q.readthedocs.org";
+    changelog = "https://github.com/Koed00/django-q/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    # django-q is unmaintained at the moment
+    # https://github.com/Koed00/django-q/issues/733
+    broken = lib.versionAtLeast redis.version "5";
   };
 }

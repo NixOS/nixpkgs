@@ -8,37 +8,25 @@
   # purposes of the index.
   packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
     inherit (super)
+      agdaPackages
       apacheHttpdPackages
-      atomPackages
       fdbPackages
       fusePackages
       gns3Packages
+      haskellPackages
       idrisPackages
       nodePackages
       nodePackages_latest
       platformioPackages
-      quicklispPackagesClisp
-      quicklispPackagesSBCL
       rPackages
       roundcubePlugins
-      sconsPackages
       sourceHanPackages
       steamPackages
       ut2004Packages
-      zabbix40
       zabbix50
       zabbix60
       zeroadPackages
     ;
-
-    haskellPackages = super.haskellPackages // {
-      # mesos, which this depends on, has been removed from nixpkgs. We are keeping
-      # the error message for now, so users will get an error message they can make
-      # sense of, but need to work around it here.
-      # TODO(@sternenseemann): remove this after branch-off of 22.05, along with the
-      # override in configuration-nix.nix
-      hs-mesos = null;
-    };
 
     # Make sure haskell.compiler is included, so alternative GHC versions show up,
     # but don't add haskell.packages.* since they contain the same packages (at
@@ -46,5 +34,11 @@
     haskell = super.haskell // {
       compiler = recurseIntoAttrs super.haskell.compiler;
     };
+
+    # minimal-bootstrap packages aren't used for anything but bootstrapping our
+    # stdenv. They should not be used for any other purpose and therefore not
+    # show up in search results or repository tracking services that consume our
+    # packages.json https://github.com/NixOS/nixpkgs/issues/244966
+    minimal-bootstrap = { };
   };
 }

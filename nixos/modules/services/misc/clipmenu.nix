@@ -7,14 +7,9 @@ let
 in {
 
   options.services.clipmenu = {
-    enable = mkEnableOption (lib.mdDoc "clipmenu, the clipboard management daemon");
+    enable = mkEnableOption "clipmenu, the clipboard management daemon";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.clipmenu;
-      defaultText = literalExpression "pkgs.clipmenu";
-      description = lib.mdDoc "clipmenu derivation to use.";
-    };
+    package = mkPackageOption pkgs "clipmenu" { };
   };
 
   config = mkIf cfg.enable {

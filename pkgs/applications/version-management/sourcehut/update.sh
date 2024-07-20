@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p git mercurial common-updater-scripts
+#! nix-shell -i bash -p gnused git mercurial common-updater-scripts
 set -eux -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
@@ -7,16 +7,26 @@ root=../../../..
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
+attr_path() {
+  case "$1" in
+    pagessrht) printf "sourcehut.$1";;
+    *) printf "sourcehut.python.pkgs.$1";;
+  esac
+}
+
 default() {
-  (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+  local p="$(attr_path "$1")"
+  (cd "$root" && nix-instantiate --eval --strict -A $p.meta.position | sed -re 's/^"(.*):[0-9]+"$/\1/')
 }
 
 version() {
-  (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.version" | tr -d '"')
+  local p="$(attr_path "$1")"
+  (cd "$root" && nix-instantiate --eval --strict -A $p.version | tr -d '"')
 }
 
 src_url() {
-  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.meta.homepage" | tr -d '"'
+  local p="$(attr_path "$1")"
+  nix-instantiate --eval --strict --expr " with import $root {}; let src = $p.drvAttrs.src; in src.meta.homepage" | tr -d '"'
 }
 
 get_latest_version() {
@@ -24,21 +34,30 @@ get_latest_version() {
   rm -rf "$tmp"
   if [ "$1" = "hgsrht" ]; then
     hg clone "$src" "$tmp" >/dev/null
-    printf "%s" "$(cd "$tmp" && hg log --limit 1 --template '{latesttag}')"
+    printf "%s %s\n" \
+        "$(cd "$tmp" && hg log --limit 1 --template '{latesttag}')" \
+        "$(cd "$tmp" && sed -ne 's/^\s*github\.com\/99designs\/gqlgen v\(.*\)$/\1/p' go.mod)"
   else
     git clone "$src" "$tmp" >/dev/null
-    printf "%s" "$(cd "$tmp" && git describe "$(git rev-list --tags --max-count=1)")"
+    printf "%s %s\n" \
+        "$(cd "$tmp" && git describe "$(git rev-list --tags --max-count=1)")" \
+        "$(cd "$tmp" && sed -ne 's/^\s*github\.com\/99designs\/gqlgen v\(.*\)$/\1/p' go.mod)"
   fi
 }
 
 update_version() {
   default_nix="$(default "$1")"
   oldVersion="$(version "$1")"
-  version="$(get_latest_version "$1")"
+  read -r version gqlgen_ver < <(get_latest_version "$1")
+  local p="$(attr_path "$1")"
 
-  (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
+  (cd "$root" && update-source-version "$p" "$version")
 
-  # Update vendorSha256 of Go modules
+  # update `gqlgenVersion` if necessary
+  old_gqlgen_ver="$(sed -ne 's/^.*gqlgenVersion = "\(.*\)".*$/\1/p' "$default_nix")"
+  sed -ri "s|gqlgenVersion = \"$old_gqlgen_ver\";|gqlgenVersion = \"$gqlgen_ver\";|w /dev/stdout" "$default_nix"
+
+  # Update vendorHash of Go modules
   retry=true
   while "$retry"; do
     retry=false;
@@ -52,7 +71,7 @@ update_version() {
     done
   done
 
-  if [ "$oldVersion" != "$version" ]; then
+  if [ "$oldVersion" != "$version" ] || [ "$old_gqlgen_ver" != "$gqlgen_ver" ]; then
     git add "$default_nix"
     git commit -m "sourcehut.$1: $oldVersion -> $version"
   fi

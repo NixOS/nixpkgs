@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    hash = "sha256-sTkj2UkUENpezPFAzyDUz6rC4F0G864uLLYOU9fyXjo=";
+    hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
-  cargoHash = "sha256-omjm+NSny1NLUj9MCeGU6XgrVRAxMJzTbvIyfmWgoCU=";
+  cargoHash = "sha256-8cH8QrnkfPF0Di7+Ns/P/8cFe0jej/v7m4fkkfTFdvs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A basic http server for hosting a folder fast and simply";
+    description = "Basic http server for hosting a folder fast and simply";
+    mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
     license = licenses.mit;

@@ -14,6 +14,9 @@ let
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
+
+  # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -51,7 +54,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # terminfo is not built if GHC is a cross compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -62,40 +65,12 @@ self: super: {
   # Version deviations from Stackage LTS
   #
 
-  doctest = doDistribute super.doctest_0_21_1;
-  inspection-testing = doDistribute self.inspection-testing_0_5_0_1; # allows base >= 4.18
-  OneTuple = doDistribute (dontCheck super.OneTuple_0_4_1_1); # allows base >= 4.18
-  primitive = doDistribute (dontCheck self.primitive_0_7_4_0); # allows base >= 4.18
-  http-api-data = doDistribute self.http-api-data_0_5_1; # allows base >= 4.18
-  attoparsec-iso8601 = doDistribute self.attoparsec-iso8601_1_1_0_0; # for http-api-data-0.5.1
-  tagged = doDistribute self.tagged_0_8_7; # allows template-haskell-2.20
-  some = doDistribute self.some_1_0_5;
-  tasty-inspection-testing = doDistribute self.tasty-inspection-testing_0_2;
-  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
-  th-desugar = doDistribute self.th-desugar_1_15;
-  turtle = doDistribute self.turtle_1_6_1;
-  aeson = doDistribute self.aeson_2_1_2_1;
-  memory = doDistribute self.memory_0_18_0;
-  semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
-  bifunctors = doDistribute self.bifunctors_5_6_1;
-  cabal-plan = doDistribute self.cabal-plan_0_7_3_0;
-  base-compat = doDistribute self.base-compat_0_13_0;
-  base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
-  semialign = doDistribute self.semialign_1_3;
-  assoc = doDistribute self.assoc_1_1;
-  strict = doDistribute self.strict_0_5;
+  # Too strict upper bound on template-haskell
+  # https://github.com/mokus0/th-extras/pull/21
+  th-extras = doJailbreak super.th-extras;
 
-  ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
-
-  # allows mtl, template-haskell, text and transformers
-  hedgehog = doDistribute self.hedgehog_1_2;
-  # allows base >= 4.18
-  tasty-hedgehog = doDistribute self.tasty-hedgehog_1_4_0_1;
-
-  # v0.1.6 forbids base >= 4.18
-  singleton-bool = doDistribute super.singleton-bool_0_1_7;
+  # not in Stackage, needs to match ghc-lib
+  ghc-tags = doDistribute self.ghc-tags_1_7;
 
   #
   # Too strict bounds without upstream fix
@@ -103,6 +78,8 @@ self: super: {
 
   # Forbids transformers >= 0.6
   quickcheck-classes-base = doJailbreak super.quickcheck-classes-base;
+  # https://github.com/Gabriella439/Haskell-Break-Library/pull/3
+  break = doJailbreak super.break;
   # Forbids mtl >= 2.3
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   # Forbids base >= 4.18
@@ -112,121 +89,93 @@ self: super: {
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
 
-  cborg-json = jailbreakForCurrentVersion super.cborg-json "0.2.5.0";
-  serialise = jailbreakForCurrentVersion super.serialise "0.2.6.0";
+  # Jailbreaks for servant <0.20
+  servant-lucid = doJailbreak super.servant-lucid;
 
-  #
-  # Too strict bounds, waiting on Hackage release in nixpkgs
-  #
-
-  #
-  # Compilation failure workarounds
-  #
-
-  # Add missing Functor instance for Tuple2
-  # https://github.com/haskell-foundation/foundation/pull/572
-  foundation = appendPatches [
-      (pkgs.fetchpatch {
-        name = "foundation-pr-572.patch";
-        url =
-          "https://github.com/haskell-foundation/foundation/commit/d3136f4bb8b69e273535352620e53f2196941b35.patch";
-        sha256 = "sha256-oPadhQdCPJHICdCPxn+GsSQUARIYODG8Ed6g2sK+eC4=";
-        stripLen = 1;
-      })
-    ] (super.foundation);
-
-  # Add support for time 1.10
-  # https://github.com/vincenthz/hs-hourglass/pull/56
-  hourglass = appendPatches [
-      (pkgs.fetchpatch {
-        name = "hourglass-pr-56.patch";
-        url =
-          "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
-        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
-      })
-    ] (super.hourglass);
-
-
-  # Test suite doesn't compile with base-4.18 / GHC 9.6
-  # https://github.com/dreixel/syb/issues/40
-  syb = dontCheck super.syb;
-
-  # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
-  #
-  haskell-language-server =
-    let
-      # TODO: HLS-2.0.0.0 added support for the foumolu plugin for ghc-9.6.
-      # However, putting together all the overrides to get the latest
-      # version of fourmolu compiling together with ghc-9.6 and HLS is a
-      # little annoying, so currently fourmolu has been disabled.  We should
-      # try to enable this at some point in the future.
-      hlsWithFlags = disableCabalFlag "fourmolu" super.haskell-language-server;
-    in
-    hlsWithFlags.override {
-      hls-ormolu-plugin = null;
-      hls-floskell-plugin = null;
-      hls-fourmolu-plugin = null;
-      hls-hlint-plugin = null;
-      hls-stylish-haskell-plugin = null;
-    };
-
-  MonadRandom = super.MonadRandom_0_6;
-  unix-compat = super.unix-compat_0_7;
   lifted-base = dontCheck super.lifted-base;
-  hw-fingertree = dontCheck super.hw-fingertree;
   hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
-  rebase = doJailbreak super.rebase_1_20;
-  rerebase = doJailbreak super.rerebase_1_20;
   hiedb = dontCheck super.hiedb;
-  retrie = dontCheck (super.retrie);
-
-  # break infinite recursion with foldable1-classes-compat's test suite, which depends on 'these'.
-  these = doDistribute (super.these_1_2.override { foldable1-classes-compat = dontCheck super.foldable1-classes-compat; });
-
-  ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
-   HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
-  ]) super.ghc-exactprint_1_7_0_1);
+  retrie = dontCheck super.retrie;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
-    hls-cabal-plugin
-    algebraic-graphs
-    co-log-core
-    lens
-    cryptohash-sha1
-    cryptohash-md5
     ghc-trace-events
-    tasty-hspec
-    constraints-extras
-    tree-diff
-    implicit-hie-cradle
-    focus
-    hie-compat
-    xmonad-contrib              # mtl >=1 && <2.3
-    dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
+    gi-cairo-connector          # mtl <2.3
+    ghc-prof                    # base <4.18
+    env-guard                   # doctest <0.21
+    package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
-  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
-  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
-  # the GHC 9.6 configuration may need similar overrides eventually.
-  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
-  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
-  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
-  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
-  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
+  # Avoid triggering an issue in ghc-9.6.2
+  gi-gtk = disableParallelBuilding super.gi-gtk;
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 
+  # 2023-12-23: It needs this to build under ghc-9.6.3.
+  #   A factor of 100 is insufficent, 200 seems seems to work.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
   # Doctest comments have bogus imports.
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
-  # Fix ghc-9.6.x build errors.
-  libmpd = appendPatch
-    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
-                       sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
-                     })
-    super.libmpd;
+  # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-predicates = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-predicates/commit/2e6d9ed45987a8566f3a77eedf7836055c076d1a.patch";
+        name = "ascii-predicates-pull-1.patch";
+        relative = "ascii-predicates";
+        sha256 = "sha256-4JguQFZNRQpjZThLrAo13jNeypvLfqFp6o7c1bnkmZo=";
+      })
+    super.ascii-predicates;
 
+  # This can be removed once https://github.com/typeclasses/ascii-numbers/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-numbers = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-numbers/commit/e9474ad91bc997891f1a46afd5d0bdf9b9f7d768.patch";
+        name = "ascii-numbers-pull-1.patch";
+        relative = "ascii-numbers";
+        sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
+      })
+    super.ascii-numbers;
+
+  # Apply patch from PR with mtl-2.3 fix.
+  ConfigFile = overrideCabal (drv: {
+    editedCabalFile = null;
+    buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
+    patches = [(pkgs.fetchpatch {
+      # https://github.com/jgoerzen/configfile/pull/12
+      name = "ConfigFile-pr-12.patch";
+      url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
+      sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
+    })];
+  }) super.ConfigFile;
+
+  # This runs into the following GHC bug currently affecting 9.6.* and 9.8.* as
+  # well as 9.10.1: https://gitlab.haskell.org/ghc/ghc/-/issues/24432
+  inherit (lib.mapAttrs (_: overrideCabal (drv: {
+      badPlatforms = drv.badPlatforms or [ ] ++ [ "aarch64-linux" ];
+    })) super)
+    mueval
+    lambdabot
+    lambdabot-haskell-plugins
+    ;
+
+  singletons-base = dontCheck super.singletons-base;
+}
+# super.ghc is required to break infinite recursion as Nix is strict in the attrNames
+// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
+  # The NCG backend for aarch64 generates invalid jumps in some situations,
+  # the workaround on 9.6 is to revert to the LLVM backend (which is used
+  # for these sorts of situations even on 9.2 and 9.4).
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
+  inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
+    tls
+    mmark
+    ;
 }

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbt";
-  version = "1.2.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "kbt";
     rev = version;
-    hash = "sha256-IVKGpifLcpqPD4ZYP+1mY0EokNoQW6qSbxt66w6b81w=";
+    hash = "sha256-ROCZDa5eyGF9yE+zdZ4snzdz8+jk+H6ZnqsnCe8JtJw=";
   };
 
-  cargoHash = "sha256-iPsBYccLQdPvzaV7pRa3ZLFFwJ1lIJoFMWChLkQpyyk=";
+  cargoHash = "sha256-6zD9WRPWEt0ubppaMRTOusy0zm3z6SGB/5/kMxcJ/Ag=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bloznelis/kbt";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "kbt";
   };
 }

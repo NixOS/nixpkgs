@@ -1,10 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi
-, chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
-, nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chameleon,
+  colander,
+  iso8601,
+  peppercorn,
+  translationstring,
+  zope-deprecation,
+  nose,
+  coverage,
+  beautifulsoup4,
+  flaky,
+  pyramid,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "deform";
   version = "2.0.15";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +32,7 @@ buildPythonPackage rec {
     iso8601
     peppercorn
     translationstring
-    zope_deprecation
+    zope-deprecation
   ];
 
   nativeCheckInputs = [

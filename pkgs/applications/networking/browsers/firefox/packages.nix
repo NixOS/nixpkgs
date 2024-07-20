@@ -1,17 +1,22 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach
+, python311
+}:
 
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "115.0.3";
+    version = "128.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "d42d522e4c2160824c74d94c90b9d61ff7fd0515cddc9e4d544003ddf975fe975aa517493dc28bad31c67915a22477b2fbb42266dc3bda87a2555b7f57a6f5a2";
+      sha512 = "309c0e2a0bea5699e6daf4fa02300ad7fd118d2c02c35cb5fa97a5fcc6e250cc7aec34e50fe872b8fd516436bfcfe37ddf33c9d0f9291860388cd6f3f08ea9f1";
     };
+
+    extraPatches = [
+    ];
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
-      description = "A web browser built from Firefox source tree";
+      description = "Web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ lovesegfault hexa ];
       platforms = lib.platforms.unix;
@@ -20,6 +25,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
@@ -29,15 +35,16 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "116.0b8";
+    version = "128.0b3";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "5e34b3eed2ee54de4209af85be80f240c674d22ace072fba5e4cf14a7d733edc0cfd0feafc80b23898ef8c43e5e950b5e683f536d84f12a8a7fcee0120479701";
+      sha512 = "d2519052244dd6d5cad39afcf78e86b17e5f1520f3f182db123997f8d126b048cd6862e92558c8f112224c951f706ccf1ccb2cb19b5221d4a47bc7154f562ab2";
     };
 
     meta = {
-      description = "A web browser built from Firefox Beta Release source tree";
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
+      description = "Web browser built from Firefox Beta Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
@@ -46,6 +53,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-beta ];
     updateScript = callPackage ./update.nix {
@@ -54,18 +62,20 @@
     };
   };
 
-  firefox-devedition = (buildMozillaMach rec {
+  firefox-devedition = buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "116.0b8";
+    version = "128.0b3";
     applicationName = "Mozilla Firefox Developer Edition";
+    requireSigning = false;
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "06ae0998a537a464a85cf9767555eb1b9d1378345201c9df760cb8ca856fcce61d84ca8398450b80175e9d13e6077df3c5fee9d4781d0879490d30bc6d362a0d";
+      sha512 = "b1313d35218adac5b81059f605b788188454f064c3192a6bb91a7c7b361fb2e087ac49177c48f23de517551b563489adfc7486bc4e6b95e5ae4aeac49aa5ac97";
     };
 
     meta = {
-      description = "A web browser built from Firefox Developer Edition source tree";
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
+      description = "Web browser built from Firefox Developer Edition source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
@@ -74,6 +84,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-devedition ];
     updateScript = callPackage ./update.nix {
@@ -81,50 +92,49 @@
       versionSuffix = "b[0-9]*";
       baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
     };
-  }).overrideAttrs (prev: {
-    env.MOZ_REQUIRE_SIGNING = "";
-  });
+  };
 
-  firefox-esr-102 = buildMozillaMach rec {
-    pname = "firefox-esr-102";
-    version = "102.13.0esr";
-    applicationName = "Mozilla Firefox ESR";
+  firefox-esr-128 = buildMozillaMach rec {
+    pname = "firefox";
+    version = "128.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "745f4a77e4c898313f11118274d27513f4baa16bb42d5b71d9bd0dbe8957dbf39a5f7ae8442cd711aca9b597bc909c04b44cb8d9094c57aa34e285e64f834fde";
+      sha512 = "b65f28a530016fd0cf46bc5f55fdec2a0cc66bd9a71b606b8d6dace1f6ce1d8744b08298549cf9c338eca1d9331dd506874ed3244bd3b856c153bd765e6071be";
     };
 
     meta = {
-      changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
-      description = "A web browser built from Firefox Extended Support Release source tree";
+      changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+      description = "Web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ hexa ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
-    tests = [ nixosTests.firefox-esr-102 ];
+    tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-102-unwrapped";
-      versionPrefix = "102";
+      attrPath = "firefox-esr-128-unwrapped";
+      versionPrefix = "128";
       versionSuffix = "esr";
     };
   };
 
-  firefox-esr-115 = buildMozillaMach rec {
+  firefox-esr-115 = (buildMozillaMach rec {
     pname = "firefox-esr-115";
-    version = "115.0.3esr";
+    version = "115.13.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "416ee56bd4a602c543391faaa8de31808f267ef2167f7d913195de45d3628de08d0582dbaa8905c847e1431bccd9d1d5d73ad9e7e5ea75be39e4d908a8b40376";
+      sha512 = "799cdf2d0494003a5addd0da703f53deb9c9d6bb6f6c95d40026363382803e2d086039c7798940a1f35f4cba111f2e8e21bde8ac2eac29fd9bd6876dd8d3a85f";
     };
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
-      description = "A web browser built from Firefox Extended Support Release source tree";
+      description = "Web browser built from Firefox Extended Support Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ hexa ];
       platforms = lib.platforms.unix;
@@ -132,6 +142,7 @@
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-esr-115 ];
     updateScript = callPackage ./update.nix {
@@ -139,5 +150,6 @@
       versionPrefix = "115";
       versionSuffix = "esr";
     };
-  };
+  })
+   .override { python3 = python311; };
 }

@@ -1,58 +1,66 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.7";
-  format = "setuptools";
+  version = "3.1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
-    repo = pname;
+    repo = "wapiti";
     rev = "refs/tags/${version}";
-    hash = "sha256-muAugc0BgVSER2LSRv7ATbCqpXID8/WH+hfhmtoS36o=";
+    hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiocache
-    aiosqlite
-    arsenic
-    beautifulsoup4
-    brotli
-    browser-cookie3
-    cryptography
-    dnspython
-    httpcore
-    httpx
-    humanize
-    importlib-metadata
-    loguru
-    mako
-    markupsafe
-    mitmproxy
-    six
-    sqlalchemy
-    tld
-    yaswfp
-  ] ++ httpx.optional-dependencies.brotli
-  ++ httpx.optional-dependencies.socks;
+  postPatch = ''
+    # Remove code coverage checking
+    substituteInPlace pyproject.toml \
+      --replace "--cov --cov-report=xml" ""
+  '';
+
+  pythonRelaxDeps = true;
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+
+  dependencies =
+    with python3.pkgs;
+    [
+      aiocache
+      aiohttp
+      aiosqlite
+      arsenic
+      beautifulsoup4
+      browser-cookie3
+      dnspython
+      h11
+      httpcore
+      httpx
+      httpx-ntlm
+      loguru
+      mako
+      markupsafe
+      mitmproxy
+      pyasn1
+      six
+      sqlalchemy
+      tld
+      yaswfp
+    ]
+    ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.socks;
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-report=xml" ""
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -114,6 +122,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_xxe"
     # Requires a PHP installation
     "test_cookies"
+    "test_fallback_to_html_injection"
     "test_loknop_lfi_to_rce"
     "test_redirect"
     "test_timesql"
@@ -121,6 +130,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_xss_inside_src_iframe"
     # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
+    # Requires creating a socket to an external URL
+    "test_attack_unifi"
   ];
 
   disabledTestPaths = [
@@ -128,9 +139,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/attack/test_mod_ssl.py"
   ];
 
-  pythonImportsCheck = [
-    "wapitiCore"
-  ];
+  pythonImportsCheck = [ "wapitiCore" ];
 
   meta = with lib; {
     description = "Web application vulnerability scanner";
@@ -144,7 +153,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }

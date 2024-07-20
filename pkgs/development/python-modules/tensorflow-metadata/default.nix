@@ -1,25 +1,25 @@
-{ absl-py
-, buildPythonPackage
-, fetchFromGitHub
-, googleapis-common-protos
-, protobuf
-, lib
+{
+  absl-py,
+  buildPythonPackage,
+  fetchFromGitHub,
+  googleapis-common-protos,
+  protobuf,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
-  version = "1.13.1";
+  version = "1.14.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G7OEupjKDbblp96u2oHVdSueGG5NON5gvYhuvyz4f3E=";
+    hash = "sha256-ZfX25CaV+tZVdas+n7O6Gqv1GxOP1iwippIXxfhcOfg=";
   };
 
-  patches = [
-    ./build.patch
-  ];
+  patches = [ ./build.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -43,9 +43,7 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tensorflow_metadata"
-  ];
+  pythonImportsCheck = [ "tensorflow_metadata" ];
 
   meta = with lib; {
     description = "Standard representations for metadata that are useful when training machine learning models with TensorFlow";

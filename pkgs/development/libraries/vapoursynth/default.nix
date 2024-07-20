@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "63";
+  version = "65";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = "R${version}";
-    sha256 = "sha256-6ITmzz1xJN/UnzVl0aAO8VNs0Go8zGcswwGpJUwwLB8=";
+    sha256 = "sha256-HrTXhRoKSFeLXYQM7W2FvYf7yCD1diSZGtPop9urrSk=";
   };
 
   patches = [
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
-    description = "A video processing framework with the future in mind";
+    description = "Video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    maintainers = with maintainers; [ rnhmjoj sbruder ];
     mainProgram = "vspipe";
   };
 }

@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , wrapGAppsHook4
 , python3
-, appstream-glib
 , blueprint-compiler
 , desktop-file-utils
 , meson
@@ -13,26 +12,26 @@
 , gobject-introspection
 , gst_all_1
 , libsoup_3
+, glib-networking
 , libadwaita
+, libsecret
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.1.1";
-
-  format = "other";
+  version = "2.4.1";
+  pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "dialect-app";
-    repo = pname;
+    repo = "dialect";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-ytZnolQTOj0dpv+ouN1N7sypr1LxSN/Uhp7qP0ZOTHE=";
+    hash = "sha256-WEeTdUdhDSfStu+rBYcuk6miuh5e0AsodbyF93Mg4mo=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
     blueprint-compiler
     desktop-file-utils
     gobject-introspection
@@ -45,17 +44,20 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     glib
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libsoup_3
+    glib-networking
     libadwaita
+    libsecret
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
     gtts
     pygobject3
+    beautifulsoup4
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
@@ -72,11 +74,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dialect-app/dialect";
-    description = "A translation app for GNOME";
-    maintainers = with maintainers; [ linsui ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    description = "Translation app for GNOME";
+    maintainers = with lib.maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    mainProgram = "dialect";
   };
 }

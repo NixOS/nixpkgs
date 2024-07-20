@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlr-which-key";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wlr-which-key";
     rev = "v${version}";
-    hash = "sha256-GLTbUa5EfpJV7OACTlewAgGjd5Ub0fYHoW8f+EVrT14=";
+    hash = "sha256-DedmLWjK0a6AoGaKGRKfsmK/NIAFV2EYY8MgfiEj4+o=";
   };
 
-  cargoHash = "sha256-TtA4Ley5bwymF8Yiqso5fGAwGsT0GRlfAlGS5j4s0Qw=";
+  cargoHash = "sha256-ZGaQX5raMSCwt88xhctwCxGWa9HZtcNqTKM35Z8QvAc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ xlambein ];
     platforms = platforms.linux;
+    mainProgram = "wlr-which-key";
   };
 }

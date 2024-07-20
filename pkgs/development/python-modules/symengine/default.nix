@@ -1,55 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, cython
-, cmake
-, symengine
-, pytest
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cython,
+  cmake,
+  symengine,
+  pytest,
+  sympy,
+  python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.11.0";
+
+  build-system = [ setuptools ];
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "v${version}";
-    hash = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uUMcNnynE2itIwc7IGFwxveqLRL8f4dAAcaD6FUWJaY=";
+  };
+
+  env = {
+    SymEngine_DIR = "${symengine}";
   };
 
   patches = [
+    # Distutils has been removed in python 3.12
+    # See https://github.com/symengine/symengine.py/pull/478
     (fetchpatch {
-      # setuptools 61 compat
-      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
-      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
+      name = "no-distutils.patch";
+      url = "https://github.com/symengine/symengine.py/pull/478/commits/e72006d5f7425cd50c54b22766e0ed4bcd2dca85.patch";
+      hash = "sha256-kGJRGkBgxOfI1wf88JwnSztkOYd1wvg62H7wA6CcYEQ=";
     })
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
-      --replace "'cython>=0.29.24'" "'cython'"
+      --replace-fail "\"cmake\"" "\"${lib.getExe' cmake "cmake"}\"" \
+      --replace-fail "'cython>=0.29.24'" "'cython'"
+
+    export PATH=${cython}/bin:$PATH
   '';
 
   nativeBuildUnputs = [ cmake ];
 
   buildInputs = [ cython ];
 
-  nativeCheckInputs = [ pytest sympy ];
-
-  setupPyBuildFlags = [
-    "--symengine-dir=${symengine}/"
-    "--define=\"CYTHON_BIN=${cython}/bin/cython\""
+  nativeCheckInputs = [
+    pytest
+    sympy
   ];
 
   checkPhase = ''
-    mkdir empty
-    cd empty
+    mkdir empty && cd empty
     ${python.interpreter} ../bin/test_python.py
   '';
 

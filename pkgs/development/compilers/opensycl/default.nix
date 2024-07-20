@@ -2,19 +2,25 @@
 , fetchFromGitHub
 , llvmPackages_15
 , lld_15
-, rocm-device-libs
 , python3
-, rocm-runtime
 , cmake
 , boost
 , libxml2
 , libffi
 , makeWrapper
-, hip
-, rocmSupport ? false
+, config
+, cudaPackages
+, rocmPackages_5
+, ompSupport ? true
+, openclSupport ? false
+, rocmSupport ? config.rocmSupport
+, cudaSupport ? config.cudaSupport
+, autoAddDriverRunpath
 }:
 let
   inherit (llvmPackages_15) stdenv;
+  # move to newer ROCm version once supported
+  rocmPackages = rocmPackages_5;
 in
 stdenv.mkDerivation rec {
   pname = "OpenSYCL";
@@ -30,6 +36,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     makeWrapper
+  ] ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -40,13 +49,21 @@ stdenv.mkDerivation rec {
     llvmPackages_15.libclang.dev
     llvmPackages_15.llvm
   ] ++ lib.optionals rocmSupport [
-    hip
-    rocm-runtime
+    rocmPackages.clr
+    rocmPackages.rocm-runtime
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    (lib.getOutput "stubs" cudaPackages.cuda_cudart)
   ];
 
   # opensycl makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
   cmakeFlags = [
     "-DCLANG_INCLUDE_PATH=${llvmPackages_15.libclang.dev}/include"
+    (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
+    (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
+    (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
+  ] ++ lib.optionals (lib.versionAtLeast version "24") [
+    (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
   ];
 
   postFixup = ''
@@ -55,7 +72,7 @@ stdenv.mkDerivation rec {
       --add-flags "-L${llvmPackages_15.openmp}/lib" \
       --add-flags "-I${llvmPackages_15.openmp.dev}/include" \
   '' + lib.optionalString rocmSupport ''
-    --add-flags "--rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+    --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
   '';
 
   meta = with lib; {

@@ -17,14 +17,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.1.6";
+  version = "3.1.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0cfyxf3xcj552bhd5awv5j0lb8xk3xhz87iixp3wnbvsgvl6dpwq";
+    hash = "sha256-Wgm2QdW4rg573soF/8HhDmlyN4S2cA0VWOejow464gU=";
   };
 
   depsBuildBuild = [ pkg-config ];

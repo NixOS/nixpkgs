@@ -4,48 +4,48 @@
 , pkg-config
 , gettext
 , glib
-, dbus-glib
 , libxklavier
 , libcanberra-gtk3
 , libnotify
+, libmatekbd
+, libmatemixer
 , nss
 , polkit
 , dconf
 , gtk3
-, mate
+, mate-desktop
 , pulseaudioSupport ? stdenv.config.pulseaudio or true
 , libpulseaudio
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "aX6mW1QpIcK3ZhRSktJo0wCcwtqDFtKnhphpBV5LGFk=";
+    sha256 = "TtfNraqkyZ7//AKCuEEXA7t24HLEHEtXmJ+MW0BhGjo=";
   };
 
   nativeBuildInputs = [
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    dbus-glib
     libxklavier
     libcanberra-gtk3
     libnotify
+    libmatekbd
+    libmatemixer
     nss
     polkit
     gtk3
     dconf
-    mate.mate-desktop
-    mate.libmatekbd
-    mate.libmatemixer
+    mate-desktop
   ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";

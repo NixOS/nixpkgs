@@ -1,8 +1,9 @@
-{ qtModule, lib, python3, qtbase, qtsvg }:
+{ lib
+, qtModule, python3, qtbase, qtsvg }:
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtsvg ];
+  propagatedBuildInputs = [ qtbase qtsvg ];
   nativeBuildInputs = [ python3 ];
   outputs = [ "out" "dev" "bin" ];
   preConfigure = ''

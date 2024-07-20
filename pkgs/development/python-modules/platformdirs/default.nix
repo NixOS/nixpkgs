@@ -1,17 +1,18 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "3.5.1";
+  version = "4.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +21,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/qi22jiF+P7XcG/D+dxoOrHk89amdBoGewrTqZZOsoM=";
+    hash = "sha256-WsHB+Si8RnJ9b8dYA9m7YRin3UYdJlL1v6/v8SExXtY=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "platformdirs"
-  ];
+  pythonImportsCheck = [ "platformdirs" ];
 
   meta = with lib; {
     description = "Module for determining appropriate platform-specific directories";

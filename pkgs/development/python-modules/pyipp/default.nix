@@ -1,49 +1,49 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, deepmerge
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  deepmerge,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyipp";
-  version = "0.14.2";
-  format = "pyproject";
+  version = "0.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-   owner = "ctalkington";
-   repo = "python-ipp";
-   rev = version;
-   hash = "sha256-IPmpup0VrilfLnYiigjVjL6oRwW4RPlgiafIy7yyckI=";
+    owner = "ctalkington";
+    repo = "python-ipp";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ddI9K0lJDZbVgO+hptP4I+EH//5vOoFDYXWxGALF8Ik=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
     deepmerge
     yarl
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aresponses
@@ -53,9 +53,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pyipp"
-  ];
+  pythonImportsCheck = [ "pyipp" ];
 
   meta = with lib; {
     changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${version}";

@@ -1,14 +1,20 @@
+/*
+This is a minimal/manual luarocks derivation used by `buildLuarocksPackage` to install lua packages.
+
+As a nix user, you should use the generated lua.pkgs.luarocks that contains a luarocks manifest
+which makes it recognizable to luarocks.
+Generating the manifest for luarocks_bootstrap seemed too hackish, which is why we end up
+with two "luarocks" derivations.
+
+*/
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , curl
 , makeWrapper
 , which
 , unzip
 , lua
-, file
-, nix-prefetch-git
   # for 'luarocks pack'
 , zip
 , nix-update-script
@@ -18,24 +24,18 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "luarocks";
-  version = "3.9.1";
+  pname = "luarocks_bootstrap";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-G6HDap3pspeQtGDBq+ukN7kftDaT/CozMVdYM60F6HI=";
+    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
   };
 
   patches = [
     ./darwin-3.7.0.patch
-    # follow standard environmental variables
-    # https://github.com/luarocks/luarocks/pull/1433
-    (fetchpatch {
-      url = "https://github.com/luarocks/luarocks/commit/d719541577a89909185aa8de7a33cf73b7a63ac3.diff";
-      sha256 = "sha256-rMnhZFqLEul0wnsxvw9nl6JXVanC5QgOZ+I/HJ0vRCM=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
@@ -66,8 +66,20 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace '${lua.luaOnBuild}' '${lua}'
+     --replace-fail '${lua.luaOnBuild}' '${lua}'
+   ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd luarocks \
+      --bash <($out/bin/luarocks completion bash) \
+      --fish <($out/bin/luarocks completion fish) \
+      --zsh <($out/bin/luarocks completion zsh)
 
+    installShellCompletion --cmd luarocks-admin \
+      --bash <($out/bin/luarocks-admin completion bash) \
+      --fish <($out/bin/luarocks-admin completion fish) \
+      --zsh <($out/bin/luarocks-admin completion zsh)
+  ''
+  + ''
     for i in "$out"/bin/*; do
         test -L "$i" || {
             wrapProgram "$i" \
@@ -75,15 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-              --suffix PATH : ${lib.makeBinPath ([ unzip ] ++
-                lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
         }
     done
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd luarocks \
-      --bash <($out/bin/luarocks completion bash) \
-      --fish <($out/bin/luarocks completion fish) \
-      --zsh <($out/bin/luarocks completion zsh)
   '';
 
   propagatedBuildInputs = [ zip unzip cmake ];
@@ -108,9 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A package manager for Lua";
+    description = "Package manager for Lua";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin teto ];
+    mainProgram = "luarocks";
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
   };

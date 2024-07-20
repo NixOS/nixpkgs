@@ -1,36 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, mock
-, blessings
-, nose
-, pillow
-, args
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  args,
 }:
 
 buildPythonPackage rec {
   pname = "clint";
   version = "0.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1an5lkkqk1zha47198p42ji3m94xmzx1a03dn7866m87n4r4q8h5";
+    hash = "sha256-BSJMMrEHVWPQsW0AFfqvnaQ6ohTkohQOUfCHieekxao=";
   };
 
-  LC_ALL="en_US.UTF-8";
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pillow blessings args ];
+  dependencies = [ args ];
 
-  # nose-progressive and clint are not actively maintained
-  # no longer compatible as behavior demand 2to3, which was removed
-  # in setuptools>=58
-  doCheck  = false;
-  nativeCheckInputs = [ mock nose pkgs.glibcLocales ];
-  checkPhase = ''
-    ${python.interpreter} test_clint.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "clint" ];
 
@@ -40,5 +31,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

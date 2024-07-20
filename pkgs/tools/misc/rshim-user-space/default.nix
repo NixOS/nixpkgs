@@ -3,34 +3,42 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, makeBinaryWrapper
 , pkg-config
 , pciutils
 , libusb1
 , fuse
+, busybox
+, pv
+, withBfbInstall ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.0.9";
+  version = "2.0.32";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-B85nhZRzcvTqwjfnVAeLNYti4Y/mprJsxBAMd+MwH84=";
+    hash = "sha256-GF7cKIf72EYRBRb6d3IWONE7YJwohTLKF1RGdDMTG6c=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     pkg-config
-  ];
+  ] ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
     pciutils
     libusb1
     fuse
   ];
+
+  prePatch = ''
+    patchShebangs scripts/bfb-install
+  '';
 
   strictDeps = true;
 
@@ -39,6 +47,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/bin
     cp -a src/rshim "$out"/bin/
+  '' + lib.optionalString withBfbInstall ''
+    cp -a scripts/bfb-install "$out"/bin/
+  '';
+
+  postFixup = lib.optionalString withBfbInstall ''
+    wrapProgram $out/bin/bfb-install \
+      --set PATH ${lib.makeBinPath [ busybox pv ]}
   '';
 
   meta = with lib; {
@@ -51,7 +66,7 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nikstur ];
   };

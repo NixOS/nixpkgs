@@ -1,8 +1,9 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, blueprint-compiler
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , gtk4
 , libdrm
@@ -13,20 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.4.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-zSQqR5AxdqcSwgapSwXYn/36F6SQna8+RS6UTQJySrg=";
+    hash = "sha256-ehJYUZ4Bdttqzs3/SSvhJRzPO7CPbeP8ormXQ7NUzXI=";
   };
 
-  cargoHash = "sha256-DDBYfafLg2fH+HsC5VZzVyRCyVSwcMydUGBe7NQRwEk=";
+  cargoHash = "sha256-jG1DfFwpmSSVMu3zKpxg25uTrELcD43bkGbcZI2NOzk=";
 
   nativeBuildInputs = [
+    blueprint-compiler
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -53,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
     pushd $cargoDepsCopy/pciid-parser
     oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    sed 's|@hwdata@|${hwdata}|g' < ${./pci-ids.patch} | patch -p1
+    substituteInPlace src/lib.rs --subst-var-by hwdata ${hwdata}
     substituteInPlace .cargo-checksum.json \
       --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
     popd
@@ -76,5 +78,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;
+    mainProgram = "lact";
   };
 }

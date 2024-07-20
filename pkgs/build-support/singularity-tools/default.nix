@@ -4,7 +4,7 @@
 , storeDir ? builtins.storeDir
 , writeScript
 , singularity
-, writeReferencesToFile
+, writeClosure
 , bash
 , vmTools
 , gawk
@@ -45,23 +45,18 @@ rec {
     , diskSize ? 1024
     , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
     , runAsRoot ? null
-    , memSize ? 512
+    , memSize ? 1024
     , singularity ? defaultSingularity
     }:
     let
       projectName = singularity.projectName or "singularity";
-      layer = mkLayer {
-        inherit name;
-        contents = contents ++ [ bash runScriptFile ];
-        inherit projectName;
-      };
       runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
       runScriptFile = shellScript "run-script.sh" runScript;
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.img"
           {
             buildInputs = [ singularity e2fsprogs util-linux gawk ];
-            layerClosure = writeReferencesToFile layer;
+            layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
@@ -111,7 +106,7 @@ rec {
             touch .${projectName}.d/env/94-appsbase.sh
 
             cd ..
-            mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
+            mkdir -p /var/lib/${projectName}/mnt/session
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
             TMPDIR=$(pwd -P) ${projectName} build $out ./img

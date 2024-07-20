@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "twitch-cli";
-  version = "1.1.20";
+  version = "1.1.24";
 
   src = fetchFromGitHub {
     owner = "twitchdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hIyZwXDI3lJQOK27RaABf7cnj7jOxKdLUdZB5fp+7kY=";
+    hash = "sha256-kRyJl2SxppVGCO/6wrsb8cO+wpBT1nBsyI/JsPRYzMc=";
   };
 
   patches = [
     ./application-name.patch
   ];
 
-  vendorHash = "sha256-OhcRMXY8s+XciF+gV3cZ8fxtzo9+I76tBPZ0xG8ddHU=";
+  vendorHash = "sha256-Z5bWS4oqjkEfOsvBzupKKnF6rJPU0TLVdwxDkIKcBQY=";
 
   ldflags = [
     "-s"
@@ -41,7 +41,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "The official Twitch CLI to make developing on Twitch easier";
+    description = "Official Twitch CLI to make developing on Twitch easier";
+    mainProgram = "twitch-cli";
     homepage = "https://github.com/twitchdev/twitch-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ benediktbroich ];

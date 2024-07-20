@@ -9,12 +9,9 @@
 , cleo
 , crashtest
 , dulwich
-, filelock
-, html5lib
+, fastjsonschema
 , installer
-, jsonschema
 , keyring
-, lockfile
 , packaging
 , pexpect
 , pkginfo
@@ -27,37 +24,39 @@
 , shellingham
 , tomlkit
 , trove-classifiers
-, urllib3
 , virtualenv
 , xattr
 , tomli
 , importlib-metadata
-, cachy
 , deepdiff
-, flatdict
 , pytestCheckHook
 , httpretty
 , pytest-mock
 , pytest-xdist
-, pythonAtLeast
+, darwin
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.5.1";
-  format = "pyproject";
+  version = "1.8.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
+    repo = "poetry";
     rev = "refs/tags/${version}";
-    hash = "sha256-1zqfGzSI5RDACSNcz0tLA4VKMFwE5uD/YqOkgpzg2nQ=";
+    hash = "sha256-PPHt9GG5XJzrhnuAS8L+0Pa3El3RNCdEbXbLnHopDWg=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  pythonRelaxDeps = [
+    "dulwich"
+    "keyring"
   ];
 
   propagatedBuildInputs = [
@@ -66,12 +65,9 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
-    filelock
-    html5lib
+    fastjsonschema
     installer
-    jsonschema
     keyring
-    lockfile
     packaging
     pexpect
     pkginfo
@@ -84,7 +80,6 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     trove-classifiers
-    urllib3
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -102,13 +97,13 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    cachy
     deepdiff
-    flatdict
     pytestCheckHook
     httpretty
     pytest-mock
     pytest-xdist
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
 
   preCheck = (''
@@ -123,28 +118,14 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_installer_with_pypi_repository"
-    # touches network
-    "git"
-    "solver"
-    "load"
-    "vcs"
-    "prereleases_if_they_are_compatible"
-    "test_executor"
-    # requires git history to work correctly
-    "default_with_excluded_data"
-    # toml ordering has changed
-    "lock"
-    # fs permission errors
     "test_builder_should_execute_build_scripts"
-    # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
-    "test_prepare_sdist"
-    "test_prepare_directory"
-    "test_prepare_directory_with_extensions"
-    "test_prepare_directory_editable"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
-    # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
-    "test_info_setup_complex_pep517_error"
+    "test_env_system_packages_are_relative_to_lib"
+    "test_executor_known_hashes"
+    "test_install_warning_corrupt_root"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not network'"
   ];
 
   # Allow for package to use pep420's native namespaces
@@ -163,5 +144,6 @@ buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    mainProgram = "poetry";
   };
 }

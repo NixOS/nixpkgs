@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.02";
+  version = "2.0.05";
   pname = "flrig";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3I9ucz8XtGqY9I0tO9BRt1IQiOkpAkjMy3e7302gGMg=";
+    sha256 = "sha256-Mc3AJfBdtIn9m6CH602Mj4UWj8OqnPlf5IiwLXgMYrA=";
   };
 
   buildInputs = [
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dysinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "flrig";
   };
 }

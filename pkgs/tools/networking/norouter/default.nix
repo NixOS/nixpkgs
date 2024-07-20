@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-EY/Yfyaz2DeQKHJ4awpQDbrVkse9crIZlLzfviPy3Tk=";
   };
 
-  vendorSha256 = "sha256-RxrmYfEm1Maq8byoLXUr5RfXcwgqpCcAq5enMnl9V9E=";
+  vendorHash = "sha256-RxrmYfEm1Maq8byoLXUr5RfXcwgqpCcAq5enMnl9V9E=";
 
   subPackages = [ "cmd/norouter" ];
   doInstallCheck = true;
@@ -27,9 +27,13 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    # Doesn't build with Go >=1.21
+    # https://github.com/norouter/norouter/issues/165
+    broken = true;
     description = "Tool to handle unprivileged networking by using multiple loopback addresses";
     homepage = "https://github.com/norouter/norouter";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];
+    mainProgram = "norouter";
   };
 }

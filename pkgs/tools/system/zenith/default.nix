@@ -11,13 +11,13 @@ assert nvidiaSupport -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
-    repo = pname;
+    repo = "zenith";
     rev = version;
-    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
+    hash = "sha256-y+/s0TDVAFGio5uCzHjf+kHFZB0G8dDgTt2xaqSSz1c=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
@@ -46,9 +46,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage"
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
+    mainProgram = "zenith";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;
   };
 }

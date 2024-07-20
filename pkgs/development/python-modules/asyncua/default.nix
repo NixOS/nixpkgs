@@ -1,24 +1,27 @@
-{ lib
-, stdenv
-, aiofiles
-, aiosqlite
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, sortedcontainers
-, typing-extensions
+{
+  lib,
+  stdenv,
+  aiofiles,
+  aiosqlite,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  pytest-asyncio_0_21,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  setuptools,
+  sortedcontainers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+    hash = "sha256-tHlo5oNsb8E6r0vmSi0eVbk4RCMg0xe97LITzW9FQWA=";
     fetchSubmodules = true;
   };
 
@@ -41,25 +44,26 @@ buildPythonPackage rec {
       --replace "tools/" "$out/bin/"
   '';
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    aiosqlite
     aiofiles
-    pytz
-    python-dateutil
-    sortedcontainers
+    aiosqlite
     cryptography
+    pyopenssl
+    python-dateutil
+    pytz
+    sortedcontainers
     typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "asyncua"
-  ];
+  pythonImportsCheck = [ "asyncua" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>

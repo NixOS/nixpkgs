@@ -52,24 +52,24 @@ let
 
       label = mkOption {
         type = str;
-        description = lib.mdDoc "Label for this destination. Defaults to the attribute name.";
+        description = "Label for this destination. Defaults to the attribute name.";
       };
 
       plan = mkOption {
         type = str;
-        description = lib.mdDoc planDescription;
+        description = planDescription;
         example = planExample;
       };
 
       dataset = mkOption {
         type = str;
-        description = lib.mdDoc "Dataset name to send snapshots to.";
+        description = "Dataset name to send snapshots to.";
         example = "tank/main";
       };
 
       host = mkOption {
         type = nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           Host to use for the destination dataset. Can be prefixed with
           `user@` to specify the ssh user.
         '';
@@ -79,7 +79,7 @@ let
 
       presend = mkOption {
         type = nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           Command to run before sending the snapshot to the destination.
           Intended to run a remote script via {command}`ssh` on the
           destination, e.g. to bring up a backup disk or server or to put a
@@ -91,7 +91,7 @@ let
 
       postsend = mkOption {
         type = nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           Command to run after sending the snapshot to the destination.
           Intended to run a remote script via {command}`ssh` on the
           destination, e.g. to bring up a backup disk or server or to put a
@@ -115,26 +115,26 @@ let
 
       enable = mkOption {
         type = bool;
-        description = lib.mdDoc "Whether to enable this source.";
+        description = "Whether to enable this source.";
         default = true;
       };
 
       recursive = mkOption {
         type = bool;
-        description = lib.mdDoc "Whether to do recursive snapshots.";
+        description = "Whether to do recursive snapshots.";
         default = false;
       };
 
       mbuffer = {
         enable = mkOption {
           type = bool;
-          description = lib.mdDoc "Whether to use {command}`mbuffer`.";
+          description = "Whether to use {command}`mbuffer`.";
           default = false;
         };
 
         port = mkOption {
           type = nullOr ints.u16;
-          description = lib.mdDoc ''
+          description = ''
               Port to use for {command}`mbuffer`.
 
               If this is null, it will run {command}`mbuffer` through
@@ -149,7 +149,7 @@ let
 
         size = mkOption {
           type = mbufferSizeType;
-          description = lib.mdDoc ''
+          description = ''
             The size for {command}`mbuffer`.
             Supports the units b, k, M, G.
           '';
@@ -160,7 +160,7 @@ let
 
       presnap = mkOption {
         type = nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           Command to run before snapshots are taken on the source dataset,
           e.g. for database locking/flushing. See also
           {option}`postsnap`.
@@ -173,7 +173,7 @@ let
 
       postsnap = mkOption {
         type = nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           Command to run after snapshots are taken on the source dataset,
           e.g. for database unlocking. See also {option}`presnap`.
         '';
@@ -185,7 +185,7 @@ let
 
       timestampFormat = mkOption {
         type = timestampType;
-        description = lib.mdDoc ''
+        description = ''
           The timestamp format to use for constructing snapshot names.
           The syntax is `strftime`-like. The string must
           consist of the mandatory `%Y %m %d %H %M %S`.
@@ -199,7 +199,7 @@ let
 
       sendDelay = mkOption {
         type = int;
-        description = lib.mdDoc ''
+        description = ''
           Specify delay (in seconds) before sending snaps to the destination.
           May be useful if you want to control sending time.
         '';
@@ -209,19 +209,19 @@ let
 
       plan = mkOption {
         type = str;
-        description = lib.mdDoc planDescription;
+        description = planDescription;
         example = planExample;
       };
 
       dataset = mkOption {
         type = str;
-        description = lib.mdDoc "The dataset to use for this source.";
+        description = "The dataset to use for this source.";
         example = "tank/home";
       };
 
       destinations = mkOption {
         type = attrsOf (destType config);
-        description = lib.mdDoc "Additional destinations.";
+        description = "Additional destinations.";
         default = {};
         example = literalExpression ''
           {
@@ -294,13 +294,13 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption (lib.mdDoc "ZnapZend ZFS backup daemon");
+      enable = mkEnableOption "ZnapZend ZFS backup daemon";
 
       logLevel = mkOption {
         default = "debug";
         example = "warning";
         type = enum ["debug" "info" "warning" "err" "alert"];
-        description = lib.mdDoc ''
+        description = ''
           The log level when logging to file. Any of debug, info, warning, err,
           alert. Default in daemonized form is debug.
         '';
@@ -310,26 +310,34 @@ in
         type = str;
         default = "syslog::daemon";
         example = "/var/log/znapzend.log";
-        description = lib.mdDoc ''
+        description = ''
           Where to log to (syslog::\<facility\> or \<filepath\>).
+        '';
+      };
+
+      mailErrorSummaryTo = mkOption {
+        type = singleLineStr;
+        default = "";
+        description = ''
+          Email address to send a summary to if "send task(s) failed".
         '';
       };
 
       noDestroy = mkOption {
         type = bool;
         default = false;
-        description = lib.mdDoc "Does all changes to the filesystem except destroy.";
+        description = "Does all changes to the filesystem except destroy.";
       };
 
       autoCreation = mkOption {
         type = bool;
         default = false;
-        description = lib.mdDoc "Automatically create the destination dataset if it does not exist.";
+        description = "Automatically create the destination dataset if it does not exist.";
       };
 
       zetup = mkOption {
         type = attrsOf srcType;
-        description = lib.mdDoc "Znapzend configuration.";
+        description = "Znapzend configuration.";
         default = {};
         example = literalExpression ''
           {
@@ -350,7 +358,7 @@ in
 
       pure = mkOption {
         type = bool;
-        description = lib.mdDoc ''
+        description = ''
           Do not persist any stateful znapzend setups. If this option is
           enabled, your previously set znapzend setups will be cleared and only
           the ones defined with this module will be applied.
@@ -358,17 +366,17 @@ in
         default = false;
       };
 
-      features.oracleMode = mkEnableOption (lib.mdDoc ''
-        Destroy snapshots one by one instead of using one long argument list.
+      features.oracleMode = mkEnableOption ''
+        destroying snapshots one by one instead of using one long argument list.
         If source and destination are out of sync for a long time, you may have
         so many snapshots to destroy that the argument gets is too long and the
-        command fails.
-      '');
-      features.recvu = mkEnableOption (lib.mdDoc ''
+        command fails
+      '';
+      features.recvu = mkEnableOption ''
         recvu feature which uses `-u` on the receiving end to keep the destination
-        filesystem unmounted.
-      '');
-      features.compressed = mkEnableOption (lib.mdDoc ''
+        filesystem unmounted
+      '';
+      features.compressed = mkEnableOption ''
         compressed feature which adds the options `-Lce` to
         the {command}`zfs send` command. When this is enabled, make
         sure that both the sending and receiving pool have the same relevant
@@ -377,34 +385,34 @@ in
         support and -e is for embedded data support. see
         {manpage}`znapzend(1)`
         and {manpage}`zfs(8)`
-        for more info.
-      '');
-      features.sendRaw = mkEnableOption (lib.mdDoc ''
+        for more info
+      '';
+      features.sendRaw = mkEnableOption ''
         sendRaw feature which adds the options `-w` to the
         {command}`zfs send` command. For encrypted source datasets this
         instructs zfs not to decrypt before sending which results in a remote
         backup that can't be read without the encryption key/passphrase, useful
         when the remote isn't fully trusted or not physically secure. This
         option must be used consistently, raw incrementals cannot be based on
-        non-raw snapshots and vice versa.
-      '');
-      features.skipIntermediates = mkEnableOption (lib.mdDoc ''
-        Enable the skipIntermediates feature to send a single increment
+        non-raw snapshots and vice versa
+      '';
+      features.skipIntermediates = mkEnableOption ''
+        the skipIntermediates feature to send a single increment
         between latest common snapshot and the newly made one. It may skip
         several source snaps if the destination was offline for some time, and
         it should skip snapshots not managed by znapzend. Normally for online
         destinations, the new snapshot is sent as soon as it is created on the
-        source, so there are no automatic increments to skip.
-      '');
-      features.lowmemRecurse = mkEnableOption (lib.mdDoc ''
+        source, so there are no automatic increments to skip
+      '';
+      features.lowmemRecurse = mkEnableOption ''
         use lowmemRecurse on systems where you have too many datasets, so a
         recursive listing of attributes to find backup plans exhausts the
         memory available to {command}`znapzend`: instead, go the slower
         way to first list all impacted dataset names, and then query their
-        configs one by one.
-      '');
-      features.zfsGetType = mkEnableOption (lib.mdDoc ''
-        use zfsGetType if your {command}`zfs get` supports a
+        configs one by one
+      '';
+      features.zfsGetType = mkEnableOption ''
+        using zfsGetType if your {command}`zfs get` supports a
         `-t` argument for filtering by dataset type at all AND
         lists properties for snapshots by default when recursing, so that there
         is too much data to process while searching for backup plans.
@@ -412,8 +420,8 @@ in
         `--recursive` search for backup plans can literally
         differ by hundreds of times (depending on the amount of snapshots in
         that dataset tree... and a decent backup plan will ensure you have a lot
-        of those), so you would benefit from requesting this feature.
-      '');
+        of those), so you would benefit from requesting this feature
+      '';
     };
   };
 
@@ -455,6 +463,8 @@ in
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
+              (optionalString (cfg.mailErrorSummaryTo != "")
+                "--mailErrorSummaryTo=${cfg.mailErrorSummaryTo}")
               (optionalString (enabledFeatures != [])
                 "--features=${concatStringsSep "," enabledFeatures}")
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
@@ -465,5 +475,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ infinisil SlothOfAnarchy ];
+  meta.maintainers = with maintainers; [ SlothOfAnarchy ];
 }

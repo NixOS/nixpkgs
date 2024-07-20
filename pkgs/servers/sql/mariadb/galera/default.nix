@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.15";
+  version = "26.4.19";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    hash = "sha256-9CjxtNvsj2qM65u+R0pJZVwEaTdqtqURrfOGbT+/5ks=";
+    hash = "sha256-DSYwOMBs7kxskTjEIO1AqXw+oAUeDXzX+qLNBuob0Jg=";
     fetchSubmodules = true;
   };
 
@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Galera 3 wsrep provider library";
+    mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ ajs124 izorkin ];
+    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
     broken = stdenv.isDarwin;
   };

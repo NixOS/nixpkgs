@@ -1,0 +1,33 @@
+diff --git a/test/test_datatable_data.py b/test/test_datatable_data.py
+index ee9ac61..0266a19 100644
+--- a/test/test_datatable_data.py
++++ b/test/test_datatable_data.py
+@@ -1,3 +1,4 @@
++import datetime
+ import re
+ import unittest
+ import httpretty
+@@ -135,7 +136,7 @@ class ListDatatableDataTest(unittest.TestCase):
+         df = results.to_pandas()
+         self.assertEqual(df.index.name, 'None')
+ 
+-    # if datatable has Date field then it should be convert to pandas datetime
++    # if datatable has Date field then it should be convert to datetime
+     @parameterized.expand(['GET', 'POST'])
+     def test_pandas_dataframe_date_field_is_datetime(self, request_method):
+         if request_method == 'POST':
+@@ -143,10 +144,10 @@ class ListDatatableDataTest(unittest.TestCase):
+         datatable = Datatable('ZACKS/FC')
+         results = Data.page(datatable, params={})
+         df = results.to_pandas()
+-        self.assertIsInstance(df['per_end_date'][0], pandas.datetime)
+-        self.assertIsInstance(df['per_end_date'][1], pandas.datetime)
+-        self.assertIsInstance(df['per_end_date'][2], pandas.datetime)
+-        self.assertIsInstance(df['per_end_date'][3], pandas.datetime)
++        self.assertIsInstance(df['per_end_date'][0], datetime.datetime)
++        self.assertIsInstance(df['per_end_date'][1], datetime.datetime)
++        self.assertIsInstance(df['per_end_date'][2], datetime.datetime)
++        self.assertIsInstance(df['per_end_date'][3], datetime.datetime)
+ 
+     @parameterized.expand(['GET', 'POST'])
+     def test_to_numpy_returns_numpy_object(self, request_method):

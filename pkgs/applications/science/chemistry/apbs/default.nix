@@ -33,6 +33,10 @@ let
       "-DBUILD_SUPERLU=OFF"
     ];
 
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+    };
+
     buildInputs = [
       blas
       superlu
@@ -65,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace "include(ImportFETK)" "" \
       --replace 'import_fetk(''${FETK_VERSION})' ""
+
+    # U was removed in python 3.11 because it had no effect
+    substituteInPlace tools/manip/inputgen.py \
+      --replace '"rU"' '"r"'
   '';
 
   nativeBuildInputs = [
@@ -88,10 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_TESTS=1"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
+
   doCheck = true;
 
   meta = with lib; {
     description = "Software for biomolecular electrostatics and solvation calculations";
+    mainProgram = "apbs";
     homepage = "https://www.poissonboltzmann.org/";
     changelog = "https://github.com/Electrostatics/apbs/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;

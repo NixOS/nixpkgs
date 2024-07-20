@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, qt4, protobuf, qrencode, hexdump
-, withGui }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch2, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, hexdump }:
 
 stdenv.mkDerivation rec {
-  pname = "namecoin" + lib.optionalString (!withGui) "d";
+  pname = "namecoind";
   version = "25.0";
 
   src = fetchFromGitHub {
@@ -11,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "nc${version}";
     sha256 = "sha256-2KMK5Vb8osuaKbzI1aaPSYg+te+v9CEcGUkrVI6Fk54=";
   };
+
+  patches = [
+    # upnp: add compatibility for miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/namecoin/namecoin-core/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
+      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -25,10 +32,6 @@ stdenv.mkDerivation rec {
     db4
     miniupnpc
     eject
-  ] ++ lib.optionals withGui [
-    qt4
-    protobuf
-    qrencode
   ];
 
   enableParallelBuilding = true;

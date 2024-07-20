@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, callPackage
+{ buildDunePackage, callPackage
 , ffmpeg-base ? callPackage ./base.nix { }
 , ffmpeg-avutil
 , ffmpeg-avcodec
@@ -14,7 +14,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src duneVersion;
+  inherit (ffmpeg-base) version src;
 
   propagatedBuildInputs = [
     ffmpeg-avutil

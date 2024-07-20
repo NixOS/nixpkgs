@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=channel:nixpkgs-unstable -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp packaging ])" -p git nurl nodePackages.pyright ruff isort
+#!nix-shell -I nixpkgs=channel:nixpkgs-unstable -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp packaging ])" -p git nurl pyright ruff isort
 
 import asyncio
 import json
@@ -192,11 +192,11 @@ class HomeAssistant:
 
 
     async def update_core(self, old_version: str, new_version: str) -> None:
-        old_sdist_hash = str(await Nix.eval("home-assistant.src.outputHash"))
+        old_sdist_hash = str(await Nix.eval("home-assistant.sdist.outputHash"))
         new_sdist_hash = await Nurl.prefetch("https://pypi.org/project/homeassistant/", new_version)
         print(f"sdist: {old_sdist_hash} -> {new_sdist_hash}")
 
-        old_git_hash = str(await Nix.eval("home-assistant.gitSrc.outputHash"))
+        old_git_hash = str(await Nix.eval("home-assistant.src.outputHash"))
         new_git_hash = await Nurl.prefetch("https://github.com/home-assistant/core/", new_version)
         print(f"git: {old_git_hash} -> {new_git_hash}")
 
@@ -222,7 +222,7 @@ class HomeAssistant:
 
     async def update_components(self):
         await run_async([
-            f"{ROOT}/pkgs/servers/home-assistant/parse-requirements.py"
+            f"{ROOT}/pkgs/servers/home-assistant/update-component-packages.py"
         ])
 
 
@@ -258,6 +258,6 @@ async def main():
 
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=E501", __file__])
     run_sync(["isort", __file__])
     asyncio.run(main())

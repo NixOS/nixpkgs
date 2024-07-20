@@ -4,17 +4,18 @@
 , rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
 , libiconv
+, darwin
 }:
 
 assert fontconfigSupport -> fontconfig != null;
 
 stdenv.mkDerivation rec {
   pname = "libass";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8NoLv7pHbBauPhz9hiJW0wkVkR96uqGxbOYu5lMZJ4Q=";
+    sha256 = "sha256-6CYbUdZrqTP+mSSMb92HZ+2WxaflNjyDmSxzWiwvv3Q=";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,7 +30,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ freetype fribidi harfbuzz ]
     ++ lib.optional fontconfigSupport fontconfig
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.CoreText
+    ];
 
   meta = with lib; {
     description = "Portable ASS/SSA subtitle renderer";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.5.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    sha256 = "sha256-qD49NExR0OZ6hgt5ejGiltxF9xkmseJjhJNzEGofnhw=";
+    hash = "sha256-sc4AfdXLuA9evoGU6Z97+Hq7zj9nx093+nPALRkhziQ=";
     fetchSubmodules = true;
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A command-line time tracker";
+    description = "Command-line time tracker";
     homepage = "https://timewarrior.net";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];

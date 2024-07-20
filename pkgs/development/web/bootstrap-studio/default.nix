@@ -2,10 +2,10 @@
 
 let
   pname = "bootstrap-studio";
-  version = "6.2.1";
+  version = "6.7.2";
   src = fetchurl {
-    url = "https://bootstrapstudio.io/releases/desktop/${version}/Bootstrap%20Studio.AppImage";
-    sha256 = "sha256-1+3YCM1K2k1Gga7Y2ciMqmwzxYJQ7Ab5uDHP1iHXK7g=";
+    url = "https://releases.bootstrapstudio.io/${version}/Bootstrap%20Studio.AppImage";
+    sha256 = "sha256-t75lmprCWumwt1wNVNWZSHdk1NBSmFqwjDQZHRpBv9g=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -13,8 +13,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/bstudio.desktop -t $out/share/applications
 
     substituteInPlace $out/share/applications/bstudio.desktop \

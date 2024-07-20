@@ -7,65 +7,60 @@ let
 
 in {
   options.services.skydns = {
-    enable = mkEnableOption (lib.mdDoc "skydns service");
+    enable = mkEnableOption "skydns service";
 
     etcd = {
       machines = mkOption {
         default = [ "http://127.0.0.1:2379" ];
         type = types.listOf types.str;
-        description = lib.mdDoc "Skydns list of etcd endpoints to connect to.";
+        description = "Skydns list of etcd endpoints to connect to.";
       };
 
       tlsKey = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc "Skydns path of TLS client certificate - private key.";
+        description = "Skydns path of TLS client certificate - private key.";
       };
 
       tlsPem = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc "Skydns path of TLS client certificate - public key.";
+        description = "Skydns path of TLS client certificate - public key.";
       };
 
       caCert = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc "Skydns path of TLS certificate authority public key.";
+        description = "Skydns path of TLS certificate authority public key.";
       };
     };
 
     address = mkOption {
       default = "0.0.0.0:53";
       type = types.str;
-      description = lib.mdDoc "Skydns address to bind to.";
+      description = "Skydns address to bind to.";
     };
 
     domain = mkOption {
       default = "skydns.local.";
       type = types.str;
-      description = lib.mdDoc "Skydns default domain if not specified by etcd config.";
+      description = "Skydns default domain if not specified by etcd config.";
     };
 
     nameservers = mkOption {
       default = map (n: n + ":53") config.networking.nameservers;
       defaultText = literalExpression ''map (n: n + ":53") config.networking.nameservers'';
       type = types.listOf types.str;
-      description = lib.mdDoc "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
+      description = "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
       example = ["8.8.8.8:53" "8.8.4.4:53"];
     };
 
-    package = mkOption {
-      default = pkgs.skydns;
-      defaultText = literalExpression "pkgs.skydns";
-      type = types.package;
-      description = lib.mdDoc "Skydns package to use.";
-    };
+    package = mkPackageOption pkgs "skydns" { };
 
     extraConfig = mkOption {
       default = {};
       type = types.attrsOf types.str;
-      description = lib.mdDoc "Skydns attribute set of extra config options passed as environment variables.";
+      description = "Skydns attribute set of extra config options passed as environment variables.";
     };
   };
 

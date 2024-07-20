@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bchoppr";
-  version = "1.12.2";
+  version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P6sbxhgnlek1IJ4i9yTe/3g/2C8oLPKXI3zbLdswvl8=";
+    hash = "sha256-/aLoLUpWu66VKd9lwjli+FZZctblrZUPSEsdYH85HwQ=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sjaehn/BChoppr";
-    description = "An audio stream chopping LV2 plugin";
+    description = "Audio stream chopping LV2 plugin";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

@@ -1,15 +1,17 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, opentracing
-, threadloop
-, thrift
-, tornado
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  opentracing,
+  threadloop,
+  thrift,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "jaeger-client";
   version = "4.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

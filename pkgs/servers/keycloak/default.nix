@@ -5,18 +5,24 @@
 , jre
 , nixosTests
 , callPackage
-
 , confFile ? null
 , plugins ? [ ]
+, extraFeatures ? [ ]
+, disabledFeatures ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+let
+  featuresSubcommand = ''
+    ${lib.optionalString (extraFeatures != [ ]) "--features=${lib.concatStringsSep "," extraFeatures}"} \
+    ${lib.optionalString (disabledFeatures != [ ]) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
+  '';
+in stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "22.0.1";
+  version = "25.0.1";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-I0tmCcXqS1nfA7ZQd0qUsSWEUYvNa/caCZU8AYWSO7Y=";
+    hash = "sha256-gwnBCH65s8KGca2FNBxfBfNKox9OFTN3oEAPcYhSx9o=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
     patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bin/kc.sh build
+    bin/kc.sh build ${featuresSubcommand}
 
     runHook postBuild
   '';
@@ -78,7 +84,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
-    maintainers = with maintainers; [ ngerstle talyz ];
+    maintainers = with maintainers; [ ngerstle talyz nickcao ];
   };
 
 }

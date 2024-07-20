@@ -4,14 +4,14 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tweeny";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mobius3";
     repo = "tweeny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VmvOMK+FjYZXKH9kPUT2L7pmJMPSr5eXptCcoGWK+qo=";
   };
 
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A modern C++ tweening library";
+    description = "Modern C++ tweening library";
     license = licenses.mit;
     homepage = "http://mobius3.github.io/tweeny";
     maintainers = [ maintainers.doronbehar ];
     platforms = with platforms; darwin ++ linux;
   };
-}
+})

@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.9.7";
+  version = "1.9.12";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
-    sha256 = "sha256-uIhYk79ZXcJ/ttexgjtxskI2nEwlq+E4jgIZzwz8hmI=";
+    sha256 = "sha256-8M8ovb3T7iSHXepG1eH3ByX+g5iVRl4/pctigQ4I0Pk=";
   };
 
   doCheck = false;
@@ -17,6 +17,14 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd ghorg \
+      --bash <($out/bin/ghorg completion bash) \
+      --fish <($out/bin/ghorg completion fish) \
+      --zsh <($out/bin/ghorg completion zsh)
+  '';
 
   meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";
@@ -32,5 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
     maintainers = with maintainers; [ vidbina ];
+    mainProgram = "ghorg";
   };
 }

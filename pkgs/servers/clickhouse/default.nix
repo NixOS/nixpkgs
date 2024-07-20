@@ -6,12 +6,13 @@
 , ninja
 , python3
 , perl
+, nasm
 , yasm
 , nixosTests
 , darwin
 , findutils
+, libiconv
 
-# currently for BLAKE3 hash function
 , rustSupport ? true
 
 , corrosion
@@ -24,11 +25,11 @@ let
   inherit (llvmPackages) stdenv;
   mkDerivation = (
     if stdenv.isDarwin
-    then darwin.apple_sdk_11_0.llvmPackages_15.stdenv
+    then darwin.apple_sdk_11_0.llvmPackages_16.stdenv
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.5.9";
+  version = "24.3.5.46";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -36,7 +37,7 @@ in mkDerivation rec {
     rev = "v${version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${rev}.tar.gz";
-    hash = "sha256-soF0L69oi95r0zgzPL0DfDhhXfRKekN5u/4+/mt8QwM=";
+    hash = "sha256-YauScK9rIR9XgUbcxSq0XBH3nRAnXL/dDr/5oWCtvGw=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -61,13 +62,29 @@ in mkDerivation rec {
     '';
   };
 
+  patches = [
+    # They updated the Cargo.toml without updating the Cargo.lock :/
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/bccd33932b5fe17ced2dc2f27813da0b1c034afa.patch";
+      revert = true;
+      hash = "sha256-4idwr+G8WGuT/VILKtDIJIvbCvi6pZokJFze4dP6ExE=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/b6bd5ecb199ef8a10e3008a4ea3d96087db8a8c1.patch";
+      revert = true;
+      hash = "sha256-nbb/GV2qWEZ+BEfT6/9//yZf4VWdhOdJCI3PLeh6o0M=";
+    })
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
     python3
     perl
+    llvmPackages.lld
   ] ++ lib.optionals stdenv.isx86_64 [
+    nasm
     yasm
   ] ++ lib.optionals stdenv.isDarwin [
     llvmPackages.bintools
@@ -79,41 +96,46 @@ in mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  corrosionDeps = if rustSupport then corrosion.cargoDeps else null;
-  blake3Deps = if rustSupport then rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "blake3-deps";
-    preBuild = "cd rust/BLAKE3";
-    hash = "sha256-lDMmmsyjEbTfI5NgTgT4+8QQrcUE/oUWfFgj1i19W0Q=";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
+  corrosionSrc = if rustSupport then fetchFromGitHub {
+    owner = "corrosion-rs";
+    repo = "corrosion";
+    rev = "v0.3.5";
+    hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
   } else null;
-  skimDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+  corrosionDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    src = corrosionSrc;
+    name = "corrosion-deps";
+    preBuild = "cd generator";
+    hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
+  } else null;
+  rustDeps = if rustSupport then rustPlatform.fetchCargoTarball {
     inherit src;
-    name = "skim-deps";
-    preBuild = "cd rust/skim";
-    hash = "sha256-gEWB+U8QrM0yYyMXpwocszJZgOemdTlbSzKNkS0NbPk=";
+    name = "rust-deps";
+    preBuild = "cd rust";
+    hash = "sha256-rbEfCRB2QAZ2WBgSLYYUqeYtI4Y5d9oQ2G8/mPirIp4=";
   } else null;
 
   dontCargoSetupPostUnpack = true;
   postUnpack = lib.optionalString rustSupport ''
     pushd source
 
-    # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
     rm -rf contrib/corrosion
-    cp -r --no-preserve=mode ${corrosion.src} contrib/corrosion
+    cp -r --no-preserve=mode $corrosionSrc contrib/corrosion
 
     pushd contrib/corrosion/generator
     cargoDeps="$corrosionDeps" cargoSetupPostUnpackHook
     corrosionDepsCopy="$cargoDepsCopy"
     popd
 
-    pushd rust/BLAKE3
-    cargoDeps="$blake3Deps" cargoSetupPostUnpackHook
-    blake3DepsCopy="$cargoDepsCopy"
-    popd
-
-    pushd rust/skim
-    cargoDeps="$skimDeps" cargoSetupPostUnpackHook
-    skimDepsCopy="$cargoDepsCopy"
+    pushd rust
+    cargoDeps="$rustDeps" cargoSetupPostUnpackHook
+    rustDepsCopy="$cargoDepsCopy"
+    cat .cargo/config >> .cargo/config.toml.in
+    cat .cargo/config >> skim/.cargo/config.toml.in
+    rm .cargo/config
     popd
 
     popd
@@ -141,15 +163,15 @@ in mkDerivation rec {
     cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
     popd
 
-    pushd rust/BLAKE3
-    cargoDepsCopy="$blake3DepsCopy" cargoSetupPostPatchHook
-    popd
-
-    pushd rust/skim
-    cargoDepsCopy="$skimDepsCopy" cargoSetupPostPatchHook
+    pushd rust
+    cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
     popd
 
     cargoSetupPostPatchHook() { true; }
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Make sure Darwin invokes lld.ld64 not lld.
+    substituteInPlace cmake/tools.cmake \
+      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
   '';
 
   cmakeFlags = [
@@ -157,6 +179,15 @@ in mkDerivation rec {
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
   ];
+
+  env = {
+    NIX_CFLAGS_COMPILE =
+      # undefined reference to '__sync_val_compare_and_swap_16'
+      lib.optionalString stdenv.isx86_64 " -mcx16" +
+      # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+      # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+      lib.optionalString stdenv.isDarwin " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+  };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
   hardeningDisable = [ "fortify" ];
@@ -181,7 +212,7 @@ in mkDerivation rec {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej mbalatsko ];
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);

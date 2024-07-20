@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
     owner = "saibotd";
     repo = pname;
     rev = version;
-    sha256 = "0db9h15zyz2sq5r1qmq41288i54rhdl30qy08snpsh6sx2q4443y";
+    hash = "sha256-fhBCsOjaQH2tRsBjMGiDmZSIkAgEVxxywVp8/0uAaTU=";
   };
 
-  cargoSha256 = "0m1gcvshbd9cfb0v6f86kbcfjxb4p9cxynmxgi4nxkhaszfyf56c";
+  cargoHash = "sha256-zBTn3dcKzm5JfL1a31m6ZHXp2JoGObPBciy1BfVmL1Q=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libevdev openssl ];
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sebtm ];
     platforms = platforms.linux;
+    mainProgram = "tp-auto-kbbl";
   };
 }

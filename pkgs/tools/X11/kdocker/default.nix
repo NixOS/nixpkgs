@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ hexclover ];
     platforms = platforms.linux;
+    mainProgram = "kdocker";
   };
 })

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , substituteAll
 , fetchurl
 , pkg-config
@@ -7,6 +8,7 @@
 , graphene
 , gi-docgen
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -37,19 +39,23 @@
 , waylandSupport ? stdenv.isLinux
 , libGL
 # experimental and can cause crashes in inspector
-, vulkanSupport ? false
+, vulkanSupport ? stdenv.isLinux
+, shaderc
 , vulkan-loader
 , vulkan-headers
+, libdrm
 , wayland
 , wayland-protocols
 , wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
 , Cocoa
 , libexecinfo
 , broadwaySupport ? true
+, testers
 }:
 
 let
@@ -62,9 +68,9 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.10.4";
+  version = "4.14.4";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -75,14 +81,9 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "dyVABILgaF4oJl4ibGKEf05zz8qem0FqxYOCB/U3eiQ=";
+    url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    hash = "sha256-RDUYuX6DSPn2QwrENbEBD5psUgf03Gp81dJOOCDO5jM=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
-    ./patches/4.0-fix-darwin-build.patch
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -99,9 +100,13 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
-  ] ++ setupHooks;
+  ] ++ lib.optionals vulkanSupport [
+    shaderc # for glslc
+  ] ++ finalAttrs.setupHooks;
 
   buildInputs = [
     libxkbcommon
@@ -112,6 +117,7 @@ stdenv.mkDerivation rec {
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
+    libdrm
   ] ++ [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
@@ -157,24 +163,21 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ] ++ [
     # Required for GSettings schemas at runtime.
-    # Will be picked up by wrapGAppsHook.
+    # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
   ];
 
   mesonFlags = [
     # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    "-Dgtk_doc=${lib.boolToString x11Support}"
+    (lib.mesonBool "documentation" x11Support)
     "-Dbuild-tests=false"
-    "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
-    "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
-  ] ++ lib.optionals vulkanSupport [
-    "-Dvulkan=enabled"
-  ] ++ lib.optionals (!cupsSupport) [
-    "-Dprint-cups=disabled"
+    (lib.mesonEnable "tracker" trackerSupport)
+    (lib.mesonBool "broadway-backend" broadwaySupport)
+    (lib.mesonEnable "vulkan" vulkanSupport)
+    (lib.mesonEnable "print-cups" cupsSupport)
+    (lib.mesonBool "x11-backend" x11Support)
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
-  ] ++ lib.optionals (!x11Support) [
-    "-Dx11-backend=false"
   ];
 
   doCheck = false; # needs X11
@@ -190,8 +193,13 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+
     files=(
-      build-aux/meson/gen-demo-header.py
+      build-aux/meson/gen-profile-conf.py
+      build-aux/meson/gen-visibility-macros.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py
@@ -232,7 +240,7 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
   '' + lib.optionalString x11Support ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -245,10 +253,15 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -263,6 +276,17 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
+    pkgConfigModules = [
+      "gtk4"
+    ] ++ lib.optionals broadwaySupport [
+      "gtk4-broadway"
+    ] ++ lib.optionals stdenv.hostPlatform.isUnix [
+      "gtk4-unix-print"
+    ] ++ lib.optionals waylandSupport [
+      "gtk4-wayland"
+    ] ++ lib.optionals x11Support [
+      "gtk4-x11"
+    ];
   };
-}
+})

@@ -97,8 +97,8 @@ class HTMLRenderer(Renderer):
     def strong_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</strong></span>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        # TODO use token.info. docbook doesn't so we can't yet.
-        return f'<pre class="programlisting">\n{escape(token.content)}</pre>'
+        info = f" {escape(token.info, True)}" if token.info != "" else ""
+        return f'<pre><code class="programlisting{info}">{escape(token.content)}</code></pre>'
     def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '<div class="blockquote"><blockquote class="blockquote">'
     def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -163,7 +163,7 @@ class HTMLRenderer(Renderer):
         # keycap-styled spans.
         (id_part, class_part) = ("", "")
         if s := token.attrs.get('id'):
-            id_part = f'<a id="{escape(cast(str, s), True)}" />'
+            id_part = f'<span id="{escape(cast(str, s), True)}"></span>'
         if s := token.attrs.get('class'):
             if s == 'keycap':
                 class_part = '<span class="keycap"><strong>'
@@ -181,7 +181,7 @@ class HTMLRenderer(Renderer):
         if hstyle:
             hstyle = f'style="{escape(hstyle, True)}"'
         if anchor := cast(str, token.attrs.get('id', '')):
-            anchor = f'<a id="{escape(anchor, True)}"></a>'
+            anchor = f'id="{escape(anchor, True)}"'
         result = self._close_headings(hlevel)
         tag = self._heading_tag(token, tokens, i)
         toc_fragment = self._build_toc(tokens, i)
@@ -192,8 +192,7 @@ class HTMLRenderer(Renderer):
             f' <div class="titlepage">'
             f'  <div>'
             f'   <div>'
-            f'    <{htag} class="title" {hstyle}>'
-            f'     {anchor}'
+            f'    <{htag} {anchor} class="title" {hstyle}>'
         )
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         heading = self._headings[-1]
@@ -220,13 +219,13 @@ class HTMLRenderer(Renderer):
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
             id = f'id="{escape(id, True)}"' if id else ''
-        return f'<div class="example"><a {id} />'
+        return f'<div class="example"><span {id} ></span><details>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</div></div><br class="example-break" />'
+        return '</div></details></div><br class="example-break" />'
     def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '<p class="title"><strong>'
+        return '<summary><span class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</strong></p><div class="example-contents">'
+        return '</strong></span></summary><div class="example-contents">'
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         src = self._pull_image(cast(str, token.attrs['src']))
         alt = f'alt="{escape(token.content, True)}"' if token.content else ""
@@ -239,7 +238,7 @@ class HTMLRenderer(Renderer):
         )
     def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if anchor := cast(str, token.attrs.get('id', '')):
-            anchor = f'<a id="{escape(anchor, True)}"></a>'
+            anchor = f'<span id="{escape(anchor, True)}"></span>'
         return f'<div class="figure">{anchor}'
     def figure_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return (

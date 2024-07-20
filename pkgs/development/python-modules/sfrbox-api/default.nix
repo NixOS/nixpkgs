@@ -1,59 +1,60 @@
-{ lib
-, buildPythonPackage
-, click
-, defusedxml
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  click,
+  defusedxml,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.6";
-  format = "pyproject";
+  version = "0.0.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = pname;
+    repo = "sfrbox-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Jn785e4aLd83EHjkgB90sWi9No8wqCjUEn4ecyVl4o=";
+    hash = "sha256-rMfX9vA8IuWxXvVs4WYNHO6neeoie/3gABwhXyJoAF8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pydantic = ">=1.10.2"' 'pydantic = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "defusedxml"
+    "pydantic"
   ];
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    click
     defusedxml
     httpx
     pydantic
   ];
 
+  passthru.optional-dependencies = {
+    cli = [ click ];
+  };
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     respx
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "sfrbox_api"
-  ];
+  pythonImportsCheck = [ "sfrbox_api" ];
 
   meta = with lib; {
     description = "Module for the SFR Box API";
+    mainProgram = "sfrbox-api";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
     changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/v${version}";
     license = licenses.mit;

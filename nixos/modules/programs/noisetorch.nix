@@ -1,24 +1,15 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let cfg = config.programs.noisetorch;
 in
 {
   options.programs.noisetorch = {
-    enable = mkEnableOption (lib.mdDoc "noisetorch + setcap wrapper");
+    enable = lib.mkEnableOption "noisetorch (+ setcap wrapper), a virtual microphone device with noise suppression";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.noisetorch;
-      defaultText = literalExpression "pkgs.noisetorch";
-      description = lib.mdDoc ''
-        The noisetorch package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "noisetorch" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.noisetorch = {
       owner = "root";
       group = "root";

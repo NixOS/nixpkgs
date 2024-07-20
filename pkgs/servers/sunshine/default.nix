@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, callPackage
 , fetchFromGitHub
-, fetchurl
 , autoPatchelfHook
+, autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
+, nixosTests
 , cmake
 , avahi
 , libevdev
@@ -14,7 +14,6 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg_5-full
 , boost
 , pkg-config
 , libdrm
@@ -23,49 +22,57 @@
 , libcap
 , mesa
 , curl
+, pcre
+, pcre2
+, python3
+, libuuid
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
 , libva
 , libvdpau
+, libglvnd
 , numactl
 , amf-headers
+, intel-media-sdk
 , svt-av1
 , vulkan-loader
 , libappindicator
+, libnotify
+, miniupnpc
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackages ? { }
 }:
 let
-  libcbs = callPackage ./libcbs.nix { };
-  # get cmake file used to find external ffmpeg from previous sunshine version
-  findFfmpeg = fetchurl {
-    url = "https://raw.githubusercontent.com/LizardByte/Sunshine/6702802829869547708dfec98db5b8cbef39be89/cmake/FindFFMPEG.cmake";
-    sha256 = "sha256:1hl3sffv1z8ghdql5y9flk41v74asvh23y6jmaypll84f1s6k1xa";
-  };
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.20.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-/ceN44PAEtXzrAUi4AEldW1FBhJqIXah1Zd0S6fiV3s=";
+    hash = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
     fetchSubmodules = true;
   };
 
-  # remove pre-built ffmpeg; use ffmpeg from nixpkgs
   patches = [
-    ./ffmpeg.diff
+    # fix(upnp): support newer miniupnpc library (#2782)
+    # Manually cherry-picked on to 0.23.1.
+    ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
   ];
 
-  # fetch node_modules needed for webui
+  # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-pwmkpZjDwluKJjcY0ehetQbAlFnj1tsW100gRjolboc=";
-
-    dontNpmBuild = true;
+    npmDepsHash = "sha256-9FuMtxTwrU9UIhZXQn/tmGN0IHZBdunV0cY/EElj4bA=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -74,23 +81,23 @@ stdenv.mkDerivation rec {
 
     installPhase = ''
       mkdir -p $out
-      cp -r node_modules $out/
+      cp -r * $out/
     '';
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
+    python3
     makeWrapper
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
-    libcbs
     avahi
-    ffmpeg_5-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -109,6 +116,16 @@ stdenv.mkDerivation rec {
     libcap
     libdrm
     curl
+    pcre
+    pcre2
+    libuuid
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    xorg.libXdmcp
+    libxkbcommon
+    libepoxy
     libva
     libvdpau
     numactl
@@ -116,8 +133,12 @@ stdenv.mkDerivation rec {
     amf-headers
     svt-av1
     libappindicator
+    libnotify
+    miniupnpc
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
+  ] ++ lib.optionals stdenv.isx86_64 [
+    intel-media-sdk
   ];
 
   runtimeDependencies = [
@@ -125,30 +146,40 @@ stdenv.mkDerivation rec {
     mesa
     xorg.libXrandr
     libxcb
+    libglvnd
   ];
 
   cmakeFlags = [
     "-Wno-dev"
+    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
   ];
 
   postPatch = ''
-    # fix hardcoded libevdev and icon path
-    substituteInPlace CMakeLists.txt \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
-      --replace '/usr/share' "$out/share"
+    # remove upstream dependency on systemd and udev
+    substituteInPlace cmake/packaging/linux.cmake \
+      --replace-fail 'find_package(Systemd)' "" \
+      --replace-fail 'find_package(Udev)' ""
 
     substituteInPlace packaging/linux/sunshine.desktop \
-      --replace '@PROJECT_NAME@' 'Sunshine'
+      --subst-var-by PROJECT_NAME 'Sunshine' \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
 
-    # add FindFFMPEG to source tree
-    cp ${findFfmpeg} cmake/FindFFMPEG.cmake
+    substituteInPlace packaging/linux/sunshine.service.in \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
   '';
 
   preBuild = ''
-    # copy node_modules where they can be picked up by build
-    mkdir -p ../node_modules
-    cp -r ${ui}/node_modules/* ../node_modules
+    # copy webui where it can be picked up by build
+    cp -r ${ui}/build ../
   '';
+
+  buildFlags = [
+    "sunshine"
+  ];
 
   # allow Sunshine to find libvulkan
   postFixup = lib.optionalString cudaSupport ''
@@ -156,16 +187,27 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
+  # redefine installPhase to avoid attempt to build webui
+  installPhase = ''
+    runHook preInstall
+    cmake --install .
+    runHook postInstall
+  '';
+
   postInstall = ''
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru = {
+    tests.sunshine = nixosTests.sunshine;
+    updateScript = ./updater.sh;
+  };
 
   meta = with lib; {
-    description = "Sunshine is a Game stream host for Moonlight.";
+    description = "Sunshine is a Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
+    mainProgram = "sunshine";
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
   };

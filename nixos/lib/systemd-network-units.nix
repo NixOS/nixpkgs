@@ -1,8 +1,13 @@
 { lib, systemdUtils }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatMapStrings
+    concatStringsSep
+    flip
+    optionalString
+    ;
+
   attrsToSection = systemdUtils.lib.attrsToSection;
   commonMatchText = def:
     optionalString (def.matchConfig != { }) ''
@@ -20,9 +25,18 @@ in {
     commonMatchText def + ''
       [NetDev]
       ${attrsToSection def.netdevConfig}
+    '' + optionalString (def.bridgeConfig != { }) ''
+      [Bridge]
+      ${attrsToSection def.bridgeConfig}
     '' + optionalString (def.vlanConfig != { }) ''
       [VLAN]
       ${attrsToSection def.vlanConfig}
+    '' + optionalString (def.ipvlanConfig != { }) ''
+      [IPVLAN]
+      ${attrsToSection def.ipvlanConfig}
+    '' + optionalString (def.ipvtapConfig != { }) ''
+      [IPVTAP]
+      ${attrsToSection def.ipvtapConfig}
     '' + optionalString (def.macvlanConfig != { }) ''
       [MACVLAN]
       ${attrsToSection def.macvlanConfig}
@@ -49,13 +63,13 @@ in {
       ${attrsToSection def.l2tpConfig}
     '' + flip concatMapStrings def.l2tpSessions (x: ''
       [L2TPSession]
-      ${attrsToSection x.l2tpSessionConfig}
+      ${attrsToSection x}
     '') + optionalString (def.wireguardConfig != { }) ''
       [WireGuard]
       ${attrsToSection def.wireguardConfig}
     '' + flip concatMapStrings def.wireguardPeers (x: ''
       [WireGuardPeer]
-      ${attrsToSection x.wireguardPeerConfig}
+      ${attrsToSection x}
     '') + optionalString (def.bondConfig != { }) ''
       [Bond]
       ${attrsToSection def.bondConfig}
@@ -65,6 +79,9 @@ in {
     '' + optionalString (def.vrfConfig != { }) ''
       [VRF]
       ${attrsToSection def.vrfConfig}
+    '' + optionalString (def.wlanConfig != { }) ''
+      [WLAN]
+      ${attrsToSection def.wlanConfig}
     '' + optionalString (def.batmanAdvancedConfig != { }) ''
       [BatmanAdvanced]
       ${attrsToSection def.batmanAdvancedConfig}
@@ -105,13 +122,13 @@ in {
       ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
     '' + "\n" + flip concatMapStrings def.addresses (x: ''
       [Address]
-      ${attrsToSection x.addressConfig}
+      ${attrsToSection x}
     '') + flip concatMapStrings def.routingPolicyRules (x: ''
       [RoutingPolicyRule]
-      ${attrsToSection x.routingPolicyRuleConfig}
+      ${attrsToSection x}
     '') + flip concatMapStrings def.routes (x: ''
       [Route]
-      ${attrsToSection x.routeConfig}
+      ${attrsToSection x}
     '') + optionalString (def.dhcpV4Config != { }) ''
       [DHCPv4]
       ${attrsToSection def.dhcpV4Config}
@@ -130,24 +147,27 @@ in {
     '' + optionalString (def.ipv6SendRAConfig != { }) ''
       [IPv6SendRA]
       ${attrsToSection def.ipv6SendRAConfig}
-    '' + flip concatMapStrings def.ipv6Prefixes (x: ''
+    '' + flip concatMapStrings def.ipv6PREF64Prefixes (x: ''
+      [IPv6PREF64Prefix]
+      ${attrsToSection x}
+    '') + flip concatMapStrings def.ipv6Prefixes (x: ''
       [IPv6Prefix]
-      ${attrsToSection x.ipv6PrefixConfig}
+      ${attrsToSection x}
     '') + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
       [IPv6RoutePrefix]
-      ${attrsToSection x.ipv6RoutePrefixConfig}
+      ${attrsToSection x}
     '') + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
       [DHCPServerStaticLease]
-      ${attrsToSection x.dhcpServerStaticLeaseConfig}
+      ${attrsToSection x}
     '') + optionalString (def.bridgeConfig != { }) ''
       [Bridge]
       ${attrsToSection def.bridgeConfig}
     '' + flip concatMapStrings def.bridgeFDBs (x: ''
       [BridgeFDB]
-      ${attrsToSection x.bridgeFDBConfig}
+      ${attrsToSection x}
     '') + flip concatMapStrings def.bridgeMDBs (x: ''
       [BridgeMDB]
-      ${attrsToSection x.bridgeMDBConfig}
+      ${attrsToSection x}
     '') + optionalString (def.lldpConfig != { }) ''
       [LLDP]
       ${attrsToSection def.lldpConfig}
@@ -234,7 +254,7 @@ in {
       ${attrsToSection def.quickFairQueueingConfigClass}
     '' + flip concatMapStrings def.bridgeVLANs (x: ''
       [BridgeVLAN]
-      ${attrsToSection x.bridgeVLANConfig}
+      ${attrsToSection x}
     '') + def.extraConfig;
 
 }

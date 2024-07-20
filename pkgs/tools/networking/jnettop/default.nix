@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/jnettop/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    mainProgram = "jnettop";
   };
 }

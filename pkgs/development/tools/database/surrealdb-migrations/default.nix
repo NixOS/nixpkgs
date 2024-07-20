@@ -10,7 +10,7 @@
 
 let
   pname = "surrealdb-migrations";
-  version = "0.9.12";
+  version = "1.5.0";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,12 +19,10 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-avDztyxjRTa66MUfIvwtxY1SiGNAtVdepUPHggrbDk0=";
+    hash = "sha256-x5WyaVHLVFCHWPqyEuaVSbeIaGXDB0o7h776udcC4DM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-wANIaEvHtFzAAsly2aqHlYwiKnxHkqH3/0rYs05AkXI=";
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -59,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "An awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project.";
+    description = "Awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project";
     homepage = "https://crates.io/crates/surrealdb-migrations";
     mainProgram = "surrealdb-migrations";
     license = licenses.mit;

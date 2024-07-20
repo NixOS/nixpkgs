@@ -1,85 +1,135 @@
 { lib
 , cmake
 , fetchFromGitHub
+, fetchzip
+, fetchurl
 , git
-, llvmPackages
-, nixosTests
-, overrideCC
 , perl
 , python3
-, stdenv
-, openssl_1_1
+, stdenvNoCC
+, ninja
+, autoPatchelfHook
+, writeShellApplication
+, jq
+, removeReferencesTo
+, nixosTests
 }:
 
 let
-  buildStdenv = overrideCC stdenv llvmPackages.clangUseLLVM;
-in
-buildStdenv.mkDerivation rec {
-  pname = "osquery";
-  version = "5.5.1";
+
+  version = "5.12.2";
+
+  opensslVersion = "3.2.1";
+
+  opensslSha256 = "83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39";
 
   src = fetchFromGitHub {
     owner = "osquery";
     repo = "osquery";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Q6PQVnBjAjAlR725fyny+RhQFUNwxWGjLDuS5p9JKlU=";
+    hash = "sha256-PJrGAqDxo5l6jtQdpTqraR195G6kaLQ2ik08WtlWEmk=";
   };
+
+  extractOpensslInfo = writeShellApplication {
+    name = "extractOpensslInfo";
+    text = ''
+      if [ $# -ne 1 ]; then
+        echo "Usage: $0 <osquery-source-directory>"
+        exit 1
+      fi
+      opensslCmake="$1"/libraries/cmake/formula/openssl/CMakeLists.txt
+      version=$(gawk 'match($0, /OPENSSL_VERSION "(.*)"/, a) {print a[1]}' < "$opensslCmake")
+      sha256=$(gawk 'match($0, /OPENSSL_ARCHIVE_SHA256 "(.*)"/, a) {print a[1]}' < "$opensslCmake")
+      echo "{\"version\": \"$version\", \"sha256\": \"$sha256\"}"
+    '';
+  };
+
+  opensslSrc = fetchurl {
+    url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
+    sha256 = opensslSha256;
+  };
+
+  toolchain = import ./toolchain-bin.nix { inherit autoPatchelfHook stdenvNoCC lib fetchzip; };
+
+in
+
+stdenvNoCC.mkDerivation rec {
+
+  pname = "osquery";
+
+  inherit src version;
 
   patches = [
     ./Remove-git-reset.patch
-    ./Use-locale.h-instead-of-removed-xlocale.h-header.patch
-    ./Remove-circular-definition-of-AUDIT_FILTER_EXCLUDE.patch
-    # For current state of compilation against glibc in the clangWithLLVM toolchain, refer to the upstream issue in https://github.com/osquery/osquery/issues/7823.
-    ./Remove-system-controls-table.patch
   ];
 
-
-  buildInputs = [
-    llvmPackages.libunwind
-  ];
   nativeBuildInputs = [
     cmake
     git
     perl
     python3
+    ninja
+    autoPatchelfHook
+    extractOpensslInfo
+    jq
+    removeReferencesTo
   ];
 
   postPatch = ''
     substituteInPlace cmake/install_directives.cmake --replace "/control" "control"
-    # This is required to build libarchive with our glibc version
-    # which provides the ARC4RANDOM_BUF function
-    substituteInPlace libraries/cmake/source/libarchive/CMakeLists.txt --replace "  target_compile_definitions(thirdparty_libarchive PRIVATE" "  target_compile_definitions(thirdparty_libarchive PRIVATE HAVE_ARC4RANDOM_BUF"
-    # We need to override this hash because we use our own openssl 1.1 version
-    substituteInPlace libraries/cmake/formula/openssl/CMakeLists.txt --replace "d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca" "e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6"
-    cat libraries/cmake/formula/openssl/CMakeLists.txt
   '';
 
-  # For explanation of these deletions, refer to the ./Use-locale.h-instead-of-removed-xlocale.h-header.patch file.
-  preConfigure = ''
-    find libraries/cmake/source -name 'config.h' -exec sed -i '/#define HAVE_XLOCALE_H 1/d' {} \;
+  configurePhase = ''
+    expectedOpensslVersion=$(extractOpensslInfo . | jq -r .version)
+    expectedOpensslSha256=$(extractOpensslInfo . | jq -r .sha256)
+
+    if [ "$expectedOpensslVersion" != "${opensslVersion}" ]; then
+      echo "openssl version mismatch: expected=$expectedOpensslVersion actual=${opensslVersion}"
+      opensslMismatch=1
+    fi
+
+    if [ "$expectedOpensslSha256" != "${opensslSha256}" ]; then
+      echo "openssl sha256 mismatch: expected=$expectedOpensslSha256 actual=${opensslSha256}"
+      opensslMismatch=1
+    fi
+
+    if [ -n "$opensslMismatch" ]; then
+      exit 1
+    fi
+
+    mkdir build
+    cd build
+    cmake .. \
+      -DCMAKE_INSTALL_PREFIX=$out \
+      -DOSQUERY_TOOLCHAIN_SYSROOT=${toolchain} \
+      -DOSQUERY_VERSION=${version} \
+      -DCMAKE_PREFIX_PATH=${toolchain}/usr/lib/cmake \
+      -DCMAKE_LIBRARY_PATH=${toolchain}/usr/lib \
+      -DOSQUERY_OPENSSL_ARCHIVE_PATH=${opensslSrc} \
+      -GNinja
   '';
 
-  cmakeFlags = [
-    "-DOSQUERY_VERSION=${version}"
-    "-DOSQUERY_OPENSSL_ARCHIVE_PATH=${openssl_1_1.src}"
-  ];
+  disallowedReferences = [ toolchain ];
 
-  postFixup = ''
-    patchelf --set-rpath "${llvmPackages.libunwind}/lib:$(patchelf --print-rpath $out/bin/osqueryd)" "$out/bin/osqueryd"
+  postInstall = ''
+    rm -rf $out/control
+    remove-references-to -t ${toolchain} $out/bin/osqueryd
   '';
 
-  passthru.tests.osquery = nixosTests.osquery;
+  passthru = {
+    inherit extractOpensslInfo opensslSrc toolchain;
+    tests = {
+      inherit (nixosTests) osquery;
+    };
+  };
 
   meta = with lib; {
-    description = "SQL powered operating system instrumentation, monitoring, and analytics.";
-    longDescription = ''
-      The system controls table is not included as it does not presently compile with glibc >= 2.32.
-      For more information, refer to https://github.com/osquery/osquery/issues/7823
-    '';
+    description = "SQL powered operating system instrumentation, monitoring, and analytics";
     homepage = "https://osquery.io";
-    license = licenses.bsd3;
+    license = with licenses; [ gpl2Only asl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ znewman01 lewo ];
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    maintainers = with maintainers; [ znewman01 lewo squalus ];
   };
 }

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-g0D6nJiHY7cz72DSmdQZsj9Vgv/VOp0exTcLsaypGiU=";
   };
 
-  vendorSha256 = "sha256-qrLECQkjXH0aTHmysq64jnXj9jgbunpVtBAIXJOEYIY=";
+  vendorHash = "sha256-qrLECQkjXH0aTHmysq64jnXj9jgbunpVtBAIXJOEYIY=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     description = "Contextual information about your git projects, right on the command-line";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "gitty";
   };
 }

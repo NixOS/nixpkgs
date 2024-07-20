@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yder";
-  version = "1.4.19";
+  version = "1.4.20";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KP79i1yYJ6jrsdtS85fHOmJV+oAL/MNgc9On4RfOTwo=";
+    sha256 = "sha256-BaCF1r5mOYxj0zKc11uoKI9gVKuxWd8GaneGcV+qIFg=";
   };
 
   patches = [

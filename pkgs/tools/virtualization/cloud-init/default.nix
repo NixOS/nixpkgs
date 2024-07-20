@@ -1,6 +1,5 @@
 { lib
 , nixosTests
-, buildPythonApplication
 , cloud-utils
 , dmidecode
 , fetchFromGitHub
@@ -12,24 +11,25 @@
 , coreutils
 , gitUpdater
 , busybox
+, procps
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.2.1";
+  version = "24.2";
+  pyproject = true;
+
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-2e05ExF6JOeFR0BUd/iCIYV0XoKTgoI7xz20GQ/bmO4=";
+    hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
   };
 
   patches = [
     ./0001-add-nixos-support.patch
-    # upstream: https://github.com/canonical/cloud-init/pull/4190
-    ./0002-Add-Udhcpc-support.patch
   ];
 
   prePatch = ''
@@ -54,6 +54,10 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     configobj
     jinja2
@@ -67,14 +71,16 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper
+    passlib
     shadow
     responses
     pytest-mock
     coreutils
+    procps
   ];
 
   makeWrapperArgs = [
@@ -84,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # tries to create /var
     "test_dhclient_run_with_tmpdir"
+    "test_dhcp_client_failover"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
@@ -96,8 +103,6 @@ python3.pkgs.buildPythonApplication rec {
     "TestConsumeUserDataHttp"
     # Chef Omnibus
     "TestInstallChefOmnibus"
-    # https://github.com/canonical/cloud-init/pull/893
-    "TestGetPackageMirrorInfo"
     # Disable failing VMware and PuppetAio tests
     "test_get_data_iso9660_with_network_config"
     "test_get_data_vmware_guestinfo_with_network_config"
@@ -108,6 +113,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_install_with_default_arguments"
     "test_install_with_no_cleanup"
     "test_install_with_version"
+    # https://github.com/canonical/cloud-init/issues/5002
+    "test_found_via_userdata"
   ];
 
   preCheck = ''

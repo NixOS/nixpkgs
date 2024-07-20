@@ -8,6 +8,7 @@
 , cmark
 , coeurl
 , curl
+, kdsingleapplication
 , libevent
 , libsecret
 , lmdb
@@ -16,30 +17,27 @@
 , nlohmann_json
 , olm
 , qtbase
-, qtgraphicaleffects
 , qtimageformats
 , qtkeychain
-, qtmacextras
 , qtmultimedia
-, qtquickcontrols2
 , qttools
+, qtwayland
 , re2
 , spdlog
 , wrapQtAppsHook
-, voipSupport ? true
 , gst_all_1
 , libnice
 }:
 
 stdenv.mkDerivation rec {
   pname = "nheko";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    hash = "sha256-2daXxTbpSUlig47y901JOkWRxbZGH4qrvNMepJbvS3o=";
+    hash = "sha256-hQb+K8ogNj/s6ZO2kgS/sZZ35y4CwMeS3lVeMYNucYQ=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +53,7 @@ stdenv.mkDerivation rec {
     cmark
     coeurl
     curl
+    kdsingleapplication
     libevent
     libsecret
     lmdb
@@ -62,19 +61,18 @@ stdenv.mkDerivation rec {
     nlohmann_json
     olm
     qtbase
-    qtgraphicaleffects
     qtimageformats
     qtkeychain
     qtmultimedia
-    qtquickcontrols2
     qttools
+    qtwayland
     re2
     spdlog
-  ] ++ lib.optional stdenv.isDarwin qtmacextras
-  ++ lib.optionals voipSupport (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
-    (gst-plugins-good.override { qt5Support = true; })
+    (gst-plugins-good.override { qt6Support = true; })
     gst-plugins-bad
     libnice
   ]);
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
   ];
 
-  preFixup = lib.optionalString voipSupport ''
+  preFixup = ''
     # add gstreamer plugins path to the wrapper
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
@@ -92,6 +90,7 @@ stdenv.mkDerivation rec {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     license = licenses.gpl3Plus;
+    mainProgram = "nheko";
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:

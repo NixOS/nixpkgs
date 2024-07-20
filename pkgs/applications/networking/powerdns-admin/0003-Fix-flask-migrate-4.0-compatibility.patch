@@ -1,0 +1,25 @@
+From 8c320a34bcca6dc2c1b423a1445235bf178b653e Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:31:02 +0100
+Subject: [PATCH 3/6] Fix flask-migrate 4.0 compatibility
+
+See https://github.com/PowerDNS-Admin/PowerDNS-Admin/issues/1376
+---
+ migrations/env.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/migrations/env.py b/migrations/env.py
+index 4742e14..739d753 100755
+--- a/migrations/env.py
++++ b/migrations/env.py
+@@ -73,7 +73,6 @@ def run_migrations_online():
+     context.configure(connection=connection,
+                       target_metadata=target_metadata,
+                       process_revision_directives=process_revision_directives,
+-                      render_as_batch=config.get_main_option('sqlalchemy.url').startswith('sqlite:'),
+                       **current_app.extensions['migrate'].configure_args)
+ 
+     try:
+-- 
+2.42.0
+

@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, nats-server
-, pytestCheckHook
-, pythonOlder
-, uvloop
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  ed25519,
+  fetchFromGitHub,
+  nats-server,
+  nkeys,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,13 +24,20 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
+    hash = "sha256-xPjyi5dFR9xVp1Fl6mM2JNKTRlLBQ6J9aB0dpjnZ+eQ=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    ed25519
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ed25519 ];
+
+  passthru.optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    nkeys = [ nkeys ];
+    # fast_parse = [
+    #   fast-mail-parser
+    # ];
+  };
 
   nativeCheckInputs = [
     nats-server
@@ -35,25 +45,24 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=nats --cov-report html" ""
-  '';
+  disabledTests =
+    [
+      # AssertionError: assert 5 == 0
+      "test_pull_subscribe_limits"
+      "test_fetch_n"
+      "test_subscribe_no_echo"
+      "test_stream_management"
+      # Tests fail on hydra, often Time-out
+      "test_subscribe_iterate_next_msg"
+      "test_ordered_consumer_larger_streams"
+      "test_object_file_basics"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_subscribe_iterate_next_msg"
+      "test_buf_size_force_flush_timeout"
+    ];
 
-  disabledTests = [
-    # AssertionError: assert 5 == 0
-    "test_pull_subscribe_limits"
-    "test_fetch_n"
-    "test_subscribe_no_echo"
-    "test_stream_management"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_subscribe_iterate_next_msg"
-    "test_buf_size_force_flush_timeout"
-  ];
-
-  pythonImportsCheck = [
-    "nats"
-  ];
+  pythonImportsCheck = [ "nats" ];
 
   meta = with lib; {
     description = "Python client for NATS.io";

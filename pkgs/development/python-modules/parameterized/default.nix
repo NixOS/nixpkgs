@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,28 +21,24 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # broken with pytest 7
+    # broken with pytest 7 and python 3.12
     # https://github.com/wolever/parameterized/issues/167
+    # https://github.com/wolever/parameterized/pull/162
     substituteInPlace parameterized/test.py \
-      --replace 'assert_equal(missing, [])' ""
+      --replace 'assert_equal(missing, [])' "" \
+      --replace "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   checkInputs = [
     mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "parameterized/test.py"
-  ];
+  pytestFlagsArray = [ "parameterized/test.py" ];
 
-  pythonImportsCheck = [
-    "parameterized"
-  ];
+  pythonImportsCheck = [ "parameterized" ];
 
   meta = with lib; {
     description = "Parameterized testing with any Python test framework";

@@ -1,11 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "slugid";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "taskcluster";
@@ -16,9 +18,7 @@ buildPythonPackage rec {
 
   doCheck = false; # has no tests
 
-  pythonImportsCheck = [
-    "slugid"
-  ];
+  pythonImportsCheck = [ "slugid" ];
 
   meta = with lib; {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
