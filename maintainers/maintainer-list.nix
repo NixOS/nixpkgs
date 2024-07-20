@@ -6628,6 +6628,12 @@
     githubId = 5741401;
     name = "Tim Windelschmidt";
   };
+  fiq = {
+    email = "raf+git@dreamthought.com";
+    github = "fiq";
+    githubId = 236293;
+    name = "Raf Gemmail";
+  };
   firefly-cpp = {
     email = "iztok@iztok-jr-fister.eu";
     github = "firefly-cpp";
