@@ -7,6 +7,7 @@
 , coreutils
 , rcodesign
 , targetPackages
+, updateAutotoolsGnuConfigScriptsHook
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -204,7 +205,9 @@ stdenv.mkDerivation rec {
   #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
   #       and update this comment accordingly.
 
-  nativeBuildInputs = [ perl ]
+  # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ perl updateAutotoolsGnuConfigScriptsHook ]
     # Upstream binaries may not be linker-signed, which invalidates their signatures
     # because `install_name_tool` will only replace a signature if it is both
     # an ad hoc signature and the signature is flagged as linker-signed.

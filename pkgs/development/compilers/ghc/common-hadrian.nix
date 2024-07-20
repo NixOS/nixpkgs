@@ -30,6 +30,7 @@
 , autoSignDarwinBinariesHook
 , bash
 , srcOnly
+, updateAutotoolsGnuConfigScriptsHook
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -477,6 +478,9 @@ stdenv.mkDerivation ({
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
+    # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+    # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+    updateAutotoolsGnuConfigScriptsHook
     perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
     # autoconf and friends are necessary for hadrian to create the bindist
     autoconf automake m4
