@@ -1,25 +1,54 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) types mkBefore;
+  inherit (lib) literalExpression types mkBefore;
 
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override {
     inherit (cfg) acceleration;
   };
+
+  staticUser = cfg.user != null && cfg.group != null;
 in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "services" "ollama" "listenAddress" ]
       "Use `services.ollama.host` and `services.ollama.port` instead.")
+    (lib.mkRemovedOptionModule [ "services" "ollama" "sandbox" ]
+      "Set `services.ollama.user` and `services.ollama.group` instead.")
   ];
 
   options = {
     services.ollama = {
       enable = lib.mkEnableOption "ollama server for local large language models";
       package = lib.mkPackageOption pkgs "ollama" { };
+
+      user = lib.mkOption {
+        type = with types; nullOr str;
+        default = null;
+        example = "ollama";
+        description = ''
+          User account under which to run ollama. Defaults to [`DynamicUser`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=)
+          when set to `null`.
+
+          The user will automatically be created, if this option is set to a non-null value.
+        '';
+      };
+
+      group = lib.mkOption {
+        type = with types; nullOr str;
+        default = cfg.user;
+        defaultText = literalExpression "config.services.ollama.user";
+        example = "ollama";
+        description = ''
+          Group under which to run ollama. Only used when `services.ollama.user` is set.
+
+          The group will automatically be created, if this option is set to a non-null value.
+        '';
+      };
+
       home = lib.mkOption {
         type = types.str;
-        default = "%S/ollama";
+        default = "/var/lib/ollama";
         example = "/home/foo";
         description = ''
           The home directory that the ollama service is started in.
@@ -27,29 +56,17 @@ in
           See also `services.ollama.writablePaths` and `services.ollama.sandbox`.
         '';
       };
+
       models = lib.mkOption {
         type = types.str;
-        default = "%S/ollama/models";
+        default = "${cfg.home}/models";
+        defaultText = "\${config.services.ollama.home}/models";
         example = "/path/to/ollama/models";
         description = ''
           The directory that the ollama service will read models from and download new models to.
 
           See also `services.ollama.writablePaths` and `services.ollama.sandbox`
           if downloading models or other mutation of the filesystem is required.
-        '';
-      };
-      sandbox = lib.mkOption {
-        type = types.bool;
-        default = true;
-        example = false;
-        description = ''
-          Whether to enable systemd's sandboxing capabilities.
-
-          This sets [`DynamicUser`](
-          https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=
-          ), which runs the server as a unique user with read-only access to most of the filesystem.
-
-          See also `services.ollama.writablePaths`.
         '';
       };
       writablePaths = lib.mkOption {
@@ -149,6 +166,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    users = lib.mkIf staticUser  {
+      users.${cfg.user} = {
+        inherit (cfg) home;
+        isSystemUser = true;
+        group = cfg.group;
+      };
+      groups.${cfg.group} = {};
+    };
+
     systemd.services.ollama = {
       description = "Server for local large language models";
       wantedBy = [ "multi-user.target" ];
@@ -159,11 +185,14 @@ in
         OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
         HSA_OVERRIDE_GFX_VERSION = lib.mkIf (cfg.rocmOverrideGfx != null) cfg.rocmOverrideGfx;
       };
-      serviceConfig = {
+      serviceConfig = lib.optionalAttrs staticUser {
+        User = cfg.user;
+        Group = cfg.group;
+      } // {
+        DynamicUser = true;
         ExecStart = "${lib.getExe ollamaPackage} serve";
         WorkingDirectory = cfg.home;
         StateDirectory = [ "ollama" ];
-        DynamicUser = cfg.sandbox;
         ReadWritePaths = cfg.writablePaths;
       };
       postStart = mkBefore ''
