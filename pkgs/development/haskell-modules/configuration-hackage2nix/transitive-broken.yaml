@@ -1784,8 +1784,6 @@ dont-distribute-packages:
  - groundhog-sqlite
  - groundhog-th
  - grpc-etcd-client
- - grpc-haskell
- - grpc-haskell-core
  - gruff
  - gruff-examples
  - gsc-weighting
@@ -2503,7 +2501,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -3200,7 +3197,6 @@ dont-distribute-packages:
  - proplang
  - prosidyc
  - proto-lens-descriptors
- - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork

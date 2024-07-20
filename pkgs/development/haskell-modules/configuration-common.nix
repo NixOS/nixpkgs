@@ -2648,9 +2648,6 @@ self: super: {
     sha256 = "sha256-iHiF4EWL/GjJFnr/6aR+yMZKLMLAZK+gsgSxG8YaeDI=";
   }) super.records-sop;
 
-  # Need https://github.com/well-typed/large-records/pull/151
-  large-generics = doJailbreak super.large-generics;
-
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial = appendPatch (fetchpatch {
     name = "haskell-polynomial.20.patch";

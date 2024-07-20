@@ -3404,7 +3404,6 @@ broken-packages:
   - language-webidl # failure in job https://hydra.nixos.org/build/233194656 at 2023-09-02
   - laop # failure in job https://hydra.nixos.org/build/233204106 at 2023-09-02
   - LargeCardinalHierarchy # failure in job https://hydra.nixos.org/build/233250339 at 2023-09-02
-  - large-records
   - Lastik # failure in job https://hydra.nixos.org/build/233194460 at 2023-09-02
   - latest-npm-version # failure in job https://hydra.nixos.org/build/233239108 at 2023-09-02
   - latex-formulae-image # failure in job https://hydra.nixos.org/build/233251243 at 2023-09-02
@@ -6232,7 +6231,6 @@ broken-packages:
   - type-indexed-queues # failure in job https://hydra.nixos.org/build/233197833 at 2023-09-02
   - type-interpreter # failure in job https://hydra.nixos.org/build/233192182 at 2023-09-02
   - type-int # failure in job https://hydra.nixos.org/build/233245978 at 2023-09-02
-  - typelet # failure in job https://hydra.nixos.org/build/236691051 at 2023-10-04
   - type-level-bst # failure in job https://hydra.nixos.org/build/233202030 at 2023-09-02
   - type-level-natural-number-induction # failure in job https://hydra.nixos.org/build/233259499 at 2023-09-02
   - type-level-natural-number-operations # failure in job https://hydra.nixos.org/build/233198314 at 2023-09-02
