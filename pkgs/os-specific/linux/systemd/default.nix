@@ -412,7 +412,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
     "trivialautovarinit"
-  ];
+    # breaks clang -target bpf; should be fixed to filter target?
+  ] ++ (lib.optional withLibBPF "zerocallusedregs");
 
   nativeBuildInputs =
     [
