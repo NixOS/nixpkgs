@@ -83,7 +83,11 @@ stdenv.mkDerivation (finalAttrs: ({
 
     find $out/share/emacs -type f -name '*.el' -print0 \
       | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
+          "emacs \
+             --batch \
+             --eval '(setq large-file-warning-threshold nil)' \
+             -f batch-native-compile {} \
+           || true"
   '';
 }
 
