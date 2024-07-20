@@ -84,7 +84,7 @@ mkCoqDerivation {
     [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
 
   meta = {
-    description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
+    description = "Coq/SSReflect Library for Monoidal Rings and Multinomials";
     license = lib.licenses.cecill-c;
   };
 }
