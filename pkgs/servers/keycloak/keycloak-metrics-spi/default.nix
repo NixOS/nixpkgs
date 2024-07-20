@@ -1,21 +1,21 @@
-{ maven, stdenv, lib, fetchFromGitHub }:
+{
+  maven,
+  lib,
+  fetchFromGitHub,
+}:
 
 maven.buildMavenPackage rec {
   pname = "keycloak-metrics-spi";
-  version = "5.0.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "aerogear";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iagXbsKsU4vNP9eg05bwXEo67iij3N2FF0BW50MjRGE=";
+    hash = "sha256-MMonBRau8FpfCqija6NEdvp4zJfEub2Kwk4MA7FYWHI=";
   };
 
-  mvnHash = {
-    aarch64-linux = "sha256-zO79pRrY8TqrSK4bB8l4pl6834aFX2pidyk1j9Itz1E=`";
-    x86_64-linux = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}");
-
+  mvnHash = "sha256-u+UAbKDqtlBEwrzh6LRgs8sZfMZ1u2TAluzOxsBrb/k=";
 
   installPhase = ''
     runHook preInstall
@@ -23,11 +23,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aerogear/keycloak-metrics-spi";
     description = "Keycloak Service Provider that adds a metrics endpoint";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benley ];
+    platforms = lib.platforms.linux;
   };
 }
