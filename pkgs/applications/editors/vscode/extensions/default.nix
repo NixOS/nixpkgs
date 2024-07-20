@@ -3222,6 +3222,22 @@ let
         };
       };
 
+      ms-python.pylint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pylint";
+          publisher = "ms-python";
+          version = "2023.10.1";
+          hash = "sha256-1tI5u33c5CHFQxkJZ/OxW3ZA5qPr4RoCIf6dqIMPykQ=";
+        };
+        meta = with lib; {
+          description = "Python linting support for VS Code using Pylint";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.pylint";
+          homepage = "https://github.com/microsoft/vscode-pylint";
+          license = licenses.mit;
+          maintainers = with lib.maintainers; [ amadejkastelic ];
+        };
+      };
+
       ms-python.python = callPackage ./ms-python.python { };
 
       ms-python.debugpy = buildVscodeMarketplaceExtension {
