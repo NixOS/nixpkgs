@@ -6216,6 +6216,8 @@ self: super: with self; {
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
+  json2html = callPackage ../development/python-modules/json2html { };
+
   json5 = callPackage ../development/python-modules/json5 { };
 
   jsonargparse = callPackage ../development/python-modules/jsonargparse { };
