@@ -90,8 +90,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.25.3";
-          hash = "sha256-1kz/M2od2gLSFgqW6LsPHgtm+BwXA+0+7z3HyqNmsOg=";
+          version = "4.27.0";
+          hash = "sha256-urXGyHpIDWQ0Bc+8LODC0DcEo6jQ5tA/QptyxCej9yU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -3568,8 +3568,8 @@ let
         mktplcRef = {
           name = "vscode-just-syntax";
           publisher = "nefrob";
-          version = "0.3.0";
-          hash = "sha256-WBoqH9TNco9lyjOJfP54DynjmYZmPUY+YrZ1rQlC518=";
+          version = "0.5.1";
+          hash = "sha256-DacDGK8gqlt8u0ZKcVxZ7jiUFFEX3ixv3P7RKWJVluA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nefrob.vscode-just-syntax/changelog";
@@ -4354,8 +4354,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.3";
-          hash = "sha256-CEGwbw5RpFsfB/g2inScIqWB7/3oxgxz7Yuc6V3OiHg=";
+          version = "4.0.4";
+          hash = "sha256-WbEhTIuPqH77IuEDgjPUz9chHM/aYjMdpCI9Kf0KS2Q=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
