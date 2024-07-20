@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rJ/V9pJgmqERgjD0FQ/oqhZQlIeN4/3ECx15/FOUQdA=";
   };
 
-  cargoSha256 = "159a5ph1gxwcgahyr8885lq3c1w76nxzfrfdpyqixqrr7jzx2rd3";
+  cargoHash = "sha256-o2XRvzw54x6xv81l97s1hwc2MC0Ioeyheoz3F+AtKpU=";
   cargoDepsName = pname;
 
   nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];

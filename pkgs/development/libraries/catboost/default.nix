@@ -2,7 +2,7 @@
 , config
 , fetchFromGitHub
 , cmake
-, darwin
+, cctools
 , libiconv
 , llvmPackages
 , ninja
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     ragel
     yasm
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.cctools
+    cctools
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);

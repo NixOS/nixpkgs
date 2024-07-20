@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, addOpenGLRunpath, cudatoolkit }:
+{ lib, stdenv, fetchFromGitHub, addDriverRunpath, cudatoolkit }:
 
 stdenv.mkDerivation {
   pname = "gpu-burn";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cudatoolkit ];
 
-  nativeBuildInputs = [ addOpenGLRunpath ];
+  nativeBuildInputs = [ addDriverRunpath ];
 
   makeFlags = [ "CUDAPATH=${cudatoolkit}" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    addOpenGLRunpath $out/bin/gpu_burn
+    addDriverRunpath $out/bin/gpu_burn
   '';
 
   meta = with lib; {

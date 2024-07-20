@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  addOpenGLRunpath,
+  addDriverRunpath,
   cudaPackages,
   buildPythonPackage,
   fetchurl,
@@ -64,7 +64,7 @@ buildPythonPackage rec {
         old = [ "-lcuda" ];
         new = [
           "-lcuda"
-          "-L${addOpenGLRunpath.driverLink}"
+          "-L${addDriverRunpath.driverLink}"
           "-L${cudaPackages.cuda_cudart}/lib/stubs/"
         ];
 

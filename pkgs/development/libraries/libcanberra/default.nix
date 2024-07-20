@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
 , gtk2-x11, gtk3-x11 , gtkSupport ? null
-, libpulseaudio, gst_all_1, libvorbis, libcap
+, libpulseaudio, gst_all_1, libvorbis, libcap, systemd
 , Carbon, CoreServices, AppKit
 , withAlsa ? stdenv.isLinux, alsa-lib }:
 
@@ -24,10 +24,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
     ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices AppKit ]
-    ++ lib.optional stdenv.isLinux libcap
+    ++ lib.optionals stdenv.isLinux [ libcap systemd ]
     ++ lib.optional withAlsa alsa-lib;
 
-  configureFlags = [ "--disable-oss" ];
+  configureFlags = [ "--disable-oss" ]
+    ++ lib.optional stdenv.isLinux "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
 
   patches = [
     (fetchpatch {

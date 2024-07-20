@@ -17,7 +17,7 @@
 , pcre
 , automake
 , autoconf
-, addOpenGLRunpath
+, addDriverRunpath
 , waylandSupport ? false
 , wayland
 }:
@@ -48,7 +48,7 @@ mkDerivation rec {
   ])
   ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addDriverRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -79,7 +79,7 @@ mkDerivation rec {
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
   postFixup = ''
-    addOpenGLRunpath $out/lib/librenderdoc.so
+    addDriverRunpath $out/lib/librenderdoc.so
   '';
 
   passthru.updateScript = nix-update-script { };

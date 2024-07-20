@@ -3,7 +3,7 @@
   runPatches ? [ ],
   autoPatchelfHook,
   autoAddDriverRunpath,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alsa-lib,
   curlMinimal,
   expat,
@@ -74,7 +74,7 @@ backendStdenv.mkDerivation rec {
       perl
       makeWrapper
       rsync
-      addOpenGLRunpath
+      addDriverRunpath
       autoPatchelfHook
       autoAddDriverRunpath
       markForCudatoolkitRootHook

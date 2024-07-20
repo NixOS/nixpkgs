@@ -25,9 +25,6 @@ buildPythonPackage rec {
 
   dependencies = [ sphinx-rtd-theme ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     nose
     sphinx

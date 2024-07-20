@@ -1,4 +1,6 @@
 { lib, stdenv, icu, expat, zlib, bzip2, zstd, xz, python ? null, fixDarwinDylibNames, libiconv, libxcrypt
+, makePkgconfigItem
+, copyPkgconfigItems
 , boost-build
 , fetchpatch
 , which
@@ -210,12 +212,28 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+  env = {
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
+    # copyPkgconfigItems will substitute these in the pkg-config file
+    includedir = "${placeholder "dev"}/include";
+    libdir = "${placeholder "out"}/lib";
+  };
+
+  pkgconfigItems = [
+    (makePkgconfigItem {
+      name = "boost";
+      inherit version;
+      # Exclude other variables not needed by meson
+      variables = {
+        includedir = "@includedir@";
+        libdir = "@libdir@";
+      };
+    })
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which boost-build ]
+  nativeBuildInputs = [ which boost-build copyPkgconfigItems ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ lib.optional (lib.versionAtLeast version "1.69") zstd

@@ -82,9 +82,6 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = with python3Packages; [
     nose
     mock

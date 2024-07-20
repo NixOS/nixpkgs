@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.8";
+  version = "2.4.10";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-dcMmtLpzl178yaJQeMSwTNtO4zPKqtDQgj29UixkeaA=";
+    sha256 = "sha256-11dXwrwPeiiwLuTVLKnksaoboq/+FrmFhU9TNpQOWtc=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IThXEY+mvT2MCw0PSWU/182xbUafd6dtm6hNjieLlKg=";
   };
 
-  cargoSha256 = "sha256-yRzM4tcYc6mweTpLnnlCeKgP00L2wRgHamtUzK9Kstc=";
+  cargoHash = "sha256-yRzM4tcYc6mweTpLnnlCeKgP00L2wRgHamtUzK9Kstc=";
 
   installPhase = ''
     export LIBDIR=$out/lib

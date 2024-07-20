@@ -27,10 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
   };
 
-  # Meson doesn't find boost without these
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-
   nativeBuildInputs = [
     git
     makeWrapper

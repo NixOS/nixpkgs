@@ -511,6 +511,7 @@ let
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
       SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
+      SND_HDA_CODEC_CS8409 = whenAtLeast "6.6" module; # Cirrus Logic HDA Bridge CS8409
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
@@ -1028,12 +1029,15 @@ let
       SERIAL_DEV_CTRL_TTYPORT = yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
-      BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
+
+      BT_HCIUART        = module; # required for BT devices with serial port interface (QCA6390)
+      BT_HCIUART_BCM    = option yes; # Broadcom Bluetooth support
+      BT_HCIUART_BCSP   = option yes; # CSR BlueCore support
+      BT_HCIUART_H4     = option yes; # UART (H4) protocol support
+      BT_HCIUART_LL     = option yes; # Texas Instruments BRF
+      BT_HCIUART_QCA    = yes; # Qualcomm Atheros support
       BT_HCIUART_SERDEV = yes; # required by BT_HCIUART_QCA
-      BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
-      BT_HCIUART_BCSP = option yes;
-      BT_HCIUART_H4   = option yes; # UART (H4) protocol support
-      BT_HCIUART_LL   = option yes;
+
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
       BT_QCA = module; # enables QCA6390 bluetooth
 
@@ -1048,6 +1052,12 @@ let
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
       EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
           whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
+
+      # Generic compression support for EFI payloads
+      # Add new platforms only after they have been verified to build and boot.
+      # This is unsupported on x86 due to a custom decompression mechanism.
+      EFI_ZBOOT = mkIf stdenv.hostPlatform.isAarch64 (whenAtLeast "6.1" yes);
+
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231

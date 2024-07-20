@@ -1,31 +1,31 @@
 { lib
 , coreutils
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , getopt
 , libcap
 , gnused
 , nixosTests
 , testers
+, autoreconfHook
+, po4a
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.29";
+  version = "1.32.2";
   pname = "fakeroot";
 
-  src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${finalAttrs.version}.orig.tar.gz";
-    sha256 = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
+  src = fetchFromGitLab {
+    owner = "clint";
+    repo = "fakeroot";
+    rev = "upstream/${finalAttrs.version}";
+    domain = "salsa.debian.org";
+    hash = "sha256-j1qSMPNCtAxClqYqWkRNQmtxkitYi7g/9KtQ5XqcX3w=";
   };
 
   patches = lib.optionals stdenv.isLinux [
     ./einval.patch
-    (fetchpatch {
-      name = "also-wrap-stat-library-call.patch";
-      url = "https://sources.debian.org/data/main/f/fakeroot/1.29-1/debian/patches/also-wrap-stat-library-call.patch";
-      sha256 = "0p7lq6m31k3rqsnjbi06a8ykdqa3cp4y5ngsjyk3q1269gx59x8b";
-    })
 
     # patches needed for musl libc, borrowed from alpine packaging.
     # it is applied regardless of the environment to prevent patchrot
@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  nativeBuildInputs = [ autoreconfHook po4a ];
   buildInputs = lib.optional (!stdenv.isDarwin) libcap;
 
   postUnpack = ''
@@ -50,7 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's@kill@${coreutils}/bin/kill@g' \
       -e 's@/bin/ls@${coreutils}/bin/ls@g' \
       -e 's@cut@${coreutils}/bin/cut@g' \
-      fakeroot-${finalAttrs.version}/scripts/fakeroot.in
+      source/scripts/fakeroot.in
+  '';
+
+  postConfigure = ''
+    pushd doc
+    po4a -k 0 --variable "srcdir=../doc/" po4a/po4a.cfg
+    popd
   '';
 
   passthru = {

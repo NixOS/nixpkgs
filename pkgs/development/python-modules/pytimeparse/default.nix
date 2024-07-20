@@ -21,9 +21,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [ nose ];
 
   pythonImportsCheck = [ "pytimeparse" ];

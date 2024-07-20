@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --host src/bison.sh
   '';
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {

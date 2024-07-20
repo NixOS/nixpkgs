@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZptjlnOiF+hKuKYvBFJL95H5YQuR99d4biOco/MVEmE=";
   };
 
-  # work around https://github.com/NixOS/nixpkgs/issues/19098
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto";
-
   nativeBuildInputs = [ wrapQtAppsHook qmake ];
 
   buildInputs = [ qtbase qtdeclarative qtquickcontrols ];

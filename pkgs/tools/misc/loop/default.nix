@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
     sha256 = "0v61kahwk1kdy8pb40rjnzcxby42nh02nyg9jqqpx3vgdrpxlnix";
   };
 
-  cargoSha256 = "0pk6hwmzs58vgbkvmlpa4s4cd29izp6xq17zaix5v2didbzr5ixi";
+  cargoHash = "sha256-sceS/2qxiV16VP8E3M39MYnGiCbq0rrnehsV/SuHZl4=";
 
   meta = with lib; {
     description = "UNIX's missing `loop` command";

@@ -1,0 +1,25 @@
+From 3e80d438e2a3ec50d666f2b6e32007c275d4a08a Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 11 Apr 2024 23:13:29 -0400
+Subject: [PATCH 8/8] Disable searching in standard library locations
+
+---
+ src/ld/Options.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ld/Options.cpp b/src/ld/Options.cpp
+index 67a9f53..611b583 100644
+--- a/src/ld/Options.cpp
++++ b/src/ld/Options.cpp
+@@ -4320,7 +4320,7 @@ bool Options::shouldUseBuildVersion(ld::Platform plat, uint32_t minOSvers) const
+ 
+ void Options::buildSearchPaths(int argc, const char* argv[])
+ {
+-	bool addStandardLibraryDirectories = true;
++	bool addStandardLibraryDirectories = false;
+ 	ld::Platform platform = ld::Platform::unknown;
+ 	std::vector<const char*> libraryPaths;
+ 	std::vector<const char*> frameworkPaths;
+-- 
+2.45.1
+

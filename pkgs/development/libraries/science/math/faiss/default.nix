@@ -11,7 +11,7 @@
 , llvmPackages
 , blas
 , swig
-, addOpenGLRunpath
+, addDriverRunpath
 , optLevel ? let
     optLevels =
       lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
-    addOpenGLRunpath
+    addDriverRunpath
   ] ++ lib.optionals pythonSupport [
     pythonPackages.python
   ];
@@ -121,8 +121,8 @@ stdenv.mkDerivation {
   '';
 
   postFixup = lib.optionalString (pythonSupport && cudaSupport) ''
-    addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
-    addOpenGLRunpath $demos/bin/*
+    addDriverRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
+    addDriverRunpath $demos/bin/*
   '';
 
   # Need buildPythonPackage for this one

@@ -121,13 +121,14 @@ in python3.pkgs.buildPythonApplication rec {
   pname = "asciidoc"
     + lib.optionalString enableStandardFeatures "-full"
     + lib.optionalString enableExtraPlugins "-with-plugins";
-  version = "10.2.0";
+  version = "10.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asciidoc-py";
     repo = "asciidoc-py";
     rev = version;
-    hash = "sha256-TqC0x9xB6e2d6Wc9bgnlqgZVOmYHmUUKfE/CKAiEtag=";
+    hash = "sha256-td3C7xTWfSzdo9Bbz0dHW2oPaCQYmUE9H2sUFfg5HH0=";
   };
 
   nativeBuildInputs = [
@@ -249,6 +250,8 @@ in python3.pkgs.buildPythonApplication rec {
     substituteInPlace Makefile.in \
       --replace "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"
   '';
+
+  build-system = with python3.pythonOnBuildForHost.pkgs; [ setuptools ];
 
   postBuild = ''
     make manpages

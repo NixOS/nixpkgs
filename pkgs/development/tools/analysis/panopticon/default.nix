@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   dontWrapQtApps = true;
 
-  cargoSha256 = "0vhcb3kw1zgchx3nrk8lyrz8p5071y99vsysxvi71klv7dcvn0am";
+  cargoHash = "sha256-VQG7WTubznDi7trrnZIPB5SLfvYUzWxHh+z9wOdYDG4=";
   doCheck = false;
 
   postInstall = ''

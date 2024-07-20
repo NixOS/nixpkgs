@@ -14,16 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "libimagequant";
     rev = version;
-    hash = "sha256-/gHe3LQaBWOQImBesKvHK46T42TtRld988wgxbut4i0=";
+    hash = "sha256-dau+oGwcyN7AA1jEBtCgYV/cmrx5Wo3koKXbloYagrw=";
   };
 
   cargoLock = {
+    # created it by running `cargo update` in the source tree.
     lockFile = ./Cargo.lock;
   };
 

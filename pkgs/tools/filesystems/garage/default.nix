@@ -11,7 +11,7 @@
 , nixosTests
 }:
 let
-  generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
+  generic = { version, sha256, cargoHash, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
     inherit version;
 
@@ -29,7 +29,7 @@ let
       rm .cargo/config.toml || true
     '';
 
-    inherit cargoSha256;
+    inherit cargoHash;
 
     nativeBuildInputs = [ protobuf pkg-config ];
 
@@ -97,7 +97,7 @@ rec {
   garage_0_8_7 = generic {
     version = "0.8.7";
     sha256 = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoSha256 = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
+    cargoHash = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
     broken = stdenv.isDarwin;
   };
 
@@ -106,14 +106,14 @@ rec {
   garage_0_9_4 = generic {
     version = "0.9.4";
     sha256 = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
-    cargoSha256 = "sha256-Cssls9csn6qribF+pAAagBydX9e9WTq4K/ehaLCWOOA=";
+    cargoHash = "sha256-Cssls9csn6qribF+pAAagBydX9e9WTq4K/ehaLCWOOA=";
     broken = stdenv.isDarwin;
   };
 
   garage_1_0_0 = generic {
     version = "1.0.0";
     sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
-    cargoSha256 = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
+    cargoHash = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
     broken = stdenv.isDarwin;
   };
 

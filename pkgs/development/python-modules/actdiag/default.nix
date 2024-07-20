@@ -27,9 +27,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ blockdiag ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     nose
     pytestCheckHook
