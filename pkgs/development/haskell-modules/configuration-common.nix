@@ -2614,10 +2614,6 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
-  # Too strict bounds on hspec
-  # https://github.com/klapaucius/vector-hashtables/issues/11
-  vector-hashtables = doJailbreak super.vector-hashtables;
-
   # doctest-parallel is broken with v1-style cabal-install / Setup.hs
   # https://github.com/martijnbastiaan/doctest-parallel/issues/22
   doctest-parallel = dontCheck super.doctest-parallel;
