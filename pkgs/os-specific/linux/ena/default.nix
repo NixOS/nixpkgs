@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       eelco
       sielicki
+      arianvp
     ];
     platforms = platforms.linux;
   };
