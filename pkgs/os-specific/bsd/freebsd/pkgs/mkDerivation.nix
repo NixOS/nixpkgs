@@ -2,8 +2,10 @@
   lib,
   stdenv,
   stdenvNoCC,
+  stdenvNoLibs,
+  overrideCC,
+  buildPackages,
   versionData,
-  writeText,
   patches,
   compatIfNeeded,
   freebsd-lib,
@@ -21,7 +23,15 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        stdenvNoLibs
+      else if attrs.noLibcxx or false then
+        overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -107,7 +117,9 @@ lib.makeOverridable (
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (
-          freebsd-lib.filterPatches patches (attrs.extraPaths or [ ] ++ [ attrs.path ])
+          freebsd-lib.filterPatches patches (
+            attrs.extraPaths or [ ] ++ (lib.optional (attrs ? path) attrs.path)
+          )
         ))
         ++ attrs.patches or [ ];
     }

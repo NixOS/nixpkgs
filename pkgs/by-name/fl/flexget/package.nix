@@ -1,11 +1,18 @@
 { lib
 , python3
+, python311
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = if (builtins.tryEval python3.pkgs.nose.outPath).success
+    then python3
+    else python311;
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.39";
+  version = "3.11.41";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -13,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-saNxs+Xdf6OTRRcMTceU8/ITcYzwtP8VqRKxsWyas+o=";
+    hash = "sha256-ZSqkD53fdDnKulVPgM9NWXVFXDR0sZ94mRyV1iKS87o=";
   };
 
   postPatch = ''
@@ -21,30 +28,24 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  build-system = with python3.pkgs; [
+  build-system = with python.pkgs; [
     setuptools
     wheel
   ];
 
-  dependencies = with python3.pkgs; [
-    # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
+  dependencies = with python.pkgs; [
+    # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
     apscheduler
     beautifulsoup4
-    click
     colorama
-    commonmark
     feedparser
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
-    more-itertools
-    packaging
-    pendulum
     psutil
     pynzb
-    pyrsistent
     pyrss2gen
     python-dateutil
     pyyaml
@@ -53,27 +54,51 @@ python3.pkgs.buildPythonApplication rec {
     rich
     rpyc
     sqlalchemy
-    typing-extensions
 
     # WebUI requirements
     cherrypy
     flask-compress
     flask-cors
     flask-login
-    flask-restful
     flask-restx
     flask
+    packaging
     pyparsing
     werkzeug
     zxcvbn
+    pendulum
 
     # Plugins requirements
     transmission-rpc
+    qbittorrent-api
+    deluge-client
+    cloudscraper
+    python-telegram-bot
   ];
 
   pythonImportsCheck = [
     "flexget"
+    "flexget.api.core.authentication"
+    "flexget.api.core.database"
+    "flexget.api.core.plugins"
+    "flexget.api.core.schema"
+    "flexget.api.core.server"
+    "flexget.api.core.tasks"
+    "flexget.api.core.user"
+    "flexget.components.thetvdb.api"
+    "flexget.components.tmdb.api"
+    "flexget.components.trakt.api"
+    "flexget.components.tvmaze.api"
+    "flexget.plugins.clients.aria2"
+    "flexget.plugins.clients.deluge"
+    "flexget.plugins.clients.nzbget"
+    "flexget.plugins.clients.pyload"
+    "flexget.plugins.clients.qbittorrent"
+    "flexget.plugins.clients.rtorrent"
     "flexget.plugins.clients.transmission"
+    "flexget.plugins.services.kodi_library"
+    "flexget.plugins.services.myepisodes"
+    "flexget.plugins.services.pogcal_acquired"
   ];
 
   # ~400 failures

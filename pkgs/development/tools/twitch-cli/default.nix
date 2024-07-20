@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "twitch-cli";
-  version = "1.1.23";
+  version = "1.1.24";
 
   src = fetchFromGitHub {
     owner = "twitchdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BAVnXxkUXCKYq5hCPRtZu33andYm2ic4Vbx9an0MwFw=";
+    hash = "sha256-kRyJl2SxppVGCO/6wrsb8cO+wpBT1nBsyI/JsPRYzMc=";
   };
 
   patches = [

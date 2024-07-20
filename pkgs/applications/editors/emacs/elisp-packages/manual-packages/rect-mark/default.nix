@@ -1,24 +1,23 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
- }:
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+}:
 
-trivialBuild rec {
+melpaBuild rec {
   pname = "rect-mark";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
-    repo = pname;
+    repo = "rect-mark";
     rev = version;
     hash = "sha256-/8T1VTYkKUxlNWXuuS54S5jpl4UxJBbgSuWc17a/VyM=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://emacswiki.org/emacs/RectangleMark";
     description = "Mark a rectangle of text with highlighting";
-    license = licenses.gpl2Plus;
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl2Plus;
   };
 }

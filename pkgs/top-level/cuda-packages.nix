@@ -81,7 +81,7 @@ let
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
-    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-python-test.nix { };
+    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });
 
   mkVersionedPackageName =
