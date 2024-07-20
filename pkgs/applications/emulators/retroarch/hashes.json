@@ -246,10 +246,10 @@
         "src": {
             "owner": "schellingb",
             "repo": "dosbox-pure",
-            "rev": "bcb46c4a8803028d5f64935e80433338464dfc0f",
-            "hash": "sha256-ce3QcKonKsuGolB2RhKlWYtHI2Et54/ITG27UkWgQn8="
+            "rev": "1476308debfad87ce377c6cfe62db1398774cd65",
+            "hash": "sha256-Op+3UQoPSHOSBqOdebp9wjgTt0apTLuwlcbooPqMvLU="
         },
-        "version": "unstable-2024-07-07"
+        "version": "unstable-2024-07-20"
     },
     "easyrpg": {
         "fetcher": "fetchFromGitHub",
