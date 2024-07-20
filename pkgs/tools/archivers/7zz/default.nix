@@ -118,8 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
       [ lgpl2Plus /* and */ bsd3 ] ++
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
-      # the unRAR compression code is disabled by default
-      lib.optionals enableUnfree [ unfree ];
+      lib.optionals enableUnfree [ unrar ];
     maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
