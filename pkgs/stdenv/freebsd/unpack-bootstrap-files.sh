@@ -30,7 +30,8 @@ export PATH=$out/bin
 # sanity check
 $out/bin/true || exit 1
 
-# scorched earth
+# meticulously replace every nix store path with the right one
+# to work with binaries, make sure the path remains the same length by prefixing pathsep chars
 for f in $(find $out -type f); do
     while true; do
         BADMAN="$(strings $f | grep -o '/nix/store/.*' | grep -v "$out" | head -n1)"
