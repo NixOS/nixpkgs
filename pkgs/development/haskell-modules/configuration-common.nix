@@ -2723,9 +2723,6 @@ self: super: {
     purenix
     ;
 
-  # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
-  tzdata = dontCheck super.tzdata;
-
   # We provide newer dependencies than upstream expects.
   swarm = doJailbreak super.swarm;
 
