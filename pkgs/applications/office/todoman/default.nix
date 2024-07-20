@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
-    pytest-cov
+    pytest-cov-stub
   ];
 
   LC_ALL = "en_US.UTF-8";
