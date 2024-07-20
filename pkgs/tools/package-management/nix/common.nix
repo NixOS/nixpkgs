@@ -101,7 +101,9 @@ self = stdenv.mkDerivation {
 
   hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable = [
+    "shadowstack"
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   nativeBuildInputs = [
     pkg-config
