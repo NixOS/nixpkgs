@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/ed8b4264f65b1ced1e3b13967dd1cf90102cfa40.patch";
       hash = "sha256-EvxoUcr+VXBbYvK1PBV+KWcWTDk9rMWf+GXCYvXWDMI=";
     })
+    # Fix more error handling
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/e30cb632e734394ddbd7bd62b57cee3586424352.patch";
+      hash = "sha256-C0ef17wTRC9rH0dKua/LJwwqTRI5W8sKWmvL7JxzT4o=";
+    })
   ];
 
   strictDeps = true;
