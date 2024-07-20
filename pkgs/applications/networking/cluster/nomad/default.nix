@@ -45,6 +45,8 @@ let
         maintainers = with maintainers; [ rushmorem pradeepchhetri techknowlogick cottand ];
       };
     } // attrs');
+
+    throwUnsupportaed = version: "${version} is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
 in
 rec {
   # Nomad never updates major go versions within a release series and is unsupported
@@ -55,19 +57,9 @@ rec {
 
   nomad = nomad_1_7;
 
-  nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
+  nomad_1_4 = throwUnsupportaed "nomad_1_4";
 
-  nomad_1_5 = generic {
-    buildGoModule = buildGo121Module;
-    version = "1.5.15";
-    sha256 = "sha256-OFmGOU+ObA0+BS48y0ZyyxR+VI5DYL39peVKcyVHgGI=";
-    vendorHash = "sha256-Ds94lB43cyMNyRJZti0mZDWGTtSdwY31dDijfAUxR0I=";
-    license = lib.licenses.mpl20;
-    passthru.tests.nomad = nixosTests.nomad;
-    preCheck = ''
-      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
-    '';
-  };
+  nomad_1_5 = throwUnsupportaed "nomad_1_5";
 
   nomad_1_6 = generic {
     buildGoModule = buildGo121Module;
