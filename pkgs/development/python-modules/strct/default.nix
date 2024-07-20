@@ -4,6 +4,7 @@
   buildPythonPackage,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   sortedcontainers,
 }:
 
@@ -19,13 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-uPM2U+emZUCGqEhIeTBmaOu8eSfK4arqvv9bItBWpUs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail  \
-        '"--cov' \
-        '#"--cov'
-  '';
-
   # don't append .dev0 to version
   env.RELEASING_PROCESS = "1";
 
@@ -33,6 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     sortedcontainers
   ];
 
