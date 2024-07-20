@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kubevirt";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    hash = "sha256-W31B803XTdJ7ExeIwsTAac7RyAX7TZI3UKLURkotjBI=";
+    hash = "sha256-ct+z+RjAJCGzV3+V1Lw1Qt//AmEfksV3Zyi59+QTGCs=";
   };
 
   vendorHash = null;
