@@ -248,12 +248,6 @@ let
         "bin/unxz"
       ];
     };
-    cacert = linkBS {
-      paths = [
-        "etc/ssl/certs"
-        "nix-support/setup-hook"
-      ];
-    };
     binutils-unwrapped = linkBS {
       name = "binutils";
       paths = map (str: "bin/" + str) [
@@ -425,7 +419,6 @@ in
           gzip
           bzip2
           xz
-          cacert
           ;
         binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
         fetchurl = import ../../build-support/fetchurl {
@@ -492,7 +485,6 @@ in
       # we can import bins and libs that DON'T get imported OR LINKED into the final stdenv from boot-0
       curl = prevStage.curlReal;
       curlReal = super.curl;
-      cacert = prevStage.cacert;
       inherit (prevStage)
         fetchurl
         python3
@@ -501,6 +493,7 @@ in
         cmake
         ninja
         ;
+      fetchurlReal = super.fetchurl;
       freebsd = super.freebsd.overrideScope (
         self': super': {
           locales = prevStage.freebsd.locales;
@@ -518,7 +511,7 @@ in
     overrides = prevStage: self: super: {
       __bootstrapArchive = bootstrapArchive;
       curl = prevStage.curlReal;
-      inherit (prevStage) fetchurl;
+      fetchurl = prevStage.fetchurlReal;
       freebsd = super.freebsd.overrideScope (
         self': super': { localesPrev = prevStage.freebsd.localesReal; }
       );
