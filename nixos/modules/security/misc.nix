@@ -98,6 +98,17 @@ with lib;
           enters the guest.  May incur significant performance cost.
       '';
     };
+
+    security.enableX32Abi = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable the x32 subarchitecture on x86_64 kernels.
+        Enabling the x32 subarchitecture means that programs built for
+        the x32 ABI will run, but at the cost of security as x32 may
+        introduce security risks if enabled.
+      '';
+    };
   };
 
   config = mkMerge [
@@ -135,6 +146,10 @@ with lib;
 
     (mkIf (config.security.virtualisation.flushL1DataCache != null) {
       boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
+    })
+
+    (mkIf (!config.security.enableX32Abi) {
+      boot.kernelParams = [ "syscall.x32=n" ];
     })
   ];
 }
