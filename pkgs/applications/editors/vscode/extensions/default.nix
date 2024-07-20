@@ -3178,8 +3178,8 @@ let
         mktplcRef = {
           name = "black-formatter";
           publisher = "ms-python";
-          version = "2023.4.1";
-          hash = "sha256-IJaLke0WF1rlKTiuwJHAXDQB1SS39AoQhc4iyqqlTyY=";
+          version = "2024.2.0";
+          hash = "sha256-qIO+YqTXjwgznzUlnPSts1R2BM6iN8B9vESkelGPgZM=";
         };
         meta = with lib; {
           description = "Formatter extension for Visual Studio Code using black";
