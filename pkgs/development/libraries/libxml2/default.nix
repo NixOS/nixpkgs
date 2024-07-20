@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , autoreconfHook
 , libintl
@@ -34,6 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
     hash = "sha256-58j14LVUIVng3cQJwiyRZDBLWB6qmTBlOnb7hFsWkmM=";
   };
+
+  patches = [
+    # Fix XInclude failing too aggresively.
+    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/772
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/a0330b53c8034bb79220e403e8d4ad8c23ef088f.patch";
+      hash = "sha256-iVAgX8qNF0fw8GYUKsWduudjEuRMEOTAENAIFTjyRjU=";
+    })
+    # Fix error handling
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/ed8b4264f65b1ced1e3b13967dd1cf90102cfa40.patch";
+      hash = "sha256-EvxoUcr+VXBbYvK1PBV+KWcWTDk9rMWf+GXCYvXWDMI=";
+    })
+  ];
 
   strictDeps = true;
 
