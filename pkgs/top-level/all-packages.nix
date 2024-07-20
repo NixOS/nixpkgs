@@ -21269,8 +21269,6 @@ with pkgs;
 
   jama = callPackage ../development/libraries/jama { };
 
-  jansson = callPackage ../development/libraries/jansson { };
-
   jarowinkler-cpp = callPackage ../development/libraries/jarowinkler-cpp { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
