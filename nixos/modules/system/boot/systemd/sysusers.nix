@@ -90,6 +90,11 @@ in
         assertion = config.users.mutableUsers -> config.system.etc.overlay.enable;
         message = "config.users.mutableUsers requires config.system.etc.overlay.enable.";
       }
+      {
+        assertion = !config.users.mutableUsers ->
+          ! builtins.any lib.id (lib.mapAttrsToList (_: opts: opts.hashedPasswordFile != null) config.users.users);
+        message = "systemd-sysusers is incompatible with hashedPasswordFile, as the sysusers module does not currently support reading secrets at activation time";
+      }
     ];
 
     systemd = lib.mkMerge [
