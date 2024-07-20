@@ -3178,15 +3178,19 @@ let
         mktplcRef = {
           name = "black-formatter";
           publisher = "ms-python";
-          version = "2023.4.1";
-          hash = "sha256-IJaLke0WF1rlKTiuwJHAXDQB1SS39AoQhc4iyqqlTyY=";
+          version = "2024.2.0";
+          hash = "sha256-qIO+YqTXjwgznzUlnPSts1R2BM6iN8B9vESkelGPgZM=";
         };
-        meta = with lib; {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.black-formatter/changelog";
           description = "Formatter extension for Visual Studio Code using black";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter";
           homepage = "https://github.com/microsoft/vscode-black-formatter";
-          license = licenses.mit;
-          maintainers = with maintainers; [ sikmir ];
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [
+            amadejkastelic
+            sikmir
+          ];
         };
       };
 
