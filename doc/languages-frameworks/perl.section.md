@@ -158,7 +158,7 @@ $ nix-generate-from-cpan XML::Simple
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {
-      description = "An API for simple XML files";
+      description = "API for simple XML files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
