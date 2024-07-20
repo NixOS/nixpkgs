@@ -1252,9 +1252,9 @@ lib.mapAttrs mkLicense ({
 
   unrar = {
     fullName = "UnRAR - free utility for RAR archives: License for use and distribution of FREEWARE version";
-    url = "https://www.rarlab.com/rar/unrarsrc-7.0.9.tar.gz";
+    # also contained the in the source of the unrar package
+    url = "https://fedoraproject.org/wiki/Licensing:Unrar";
     free = false;
-    redistributable = true;
   };
 
   upl = {
