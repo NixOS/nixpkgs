@@ -2384,9 +2384,6 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2022-12-30: Restrictive upper bound on optparse-applicative
-  retrie = doJailbreak super.retrie;
-
   # 2022-08-30 Too strict bounds on finite-typelits
   # https://github.com/jumper149/blucontrol/issues/1
   blucontrol = doJailbreak super.blucontrol;
