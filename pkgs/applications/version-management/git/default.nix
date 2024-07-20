@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
 
-  nativeInstallCheckInputs = lib.optional stdenv.isDarwin sysctl;
+  nativeInstallCheckInputs = lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) sysctl;
 
   preInstallCheck = ''
     installCheckFlagsArray+=(
