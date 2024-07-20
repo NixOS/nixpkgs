@@ -5273,6 +5273,8 @@ self: super: with self; {
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
+  geoarrow-rust-core = callPackage ../development/python-modules/geoarrow-rust-core { };
+
   geocoder = callPackage ../development/python-modules/geocoder { };
 
   geodatasets = callPackage ../development/python-modules/geodatasets { };
