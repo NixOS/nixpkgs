@@ -1223,6 +1223,13 @@ in mkLicense lset) ({
     fullName = "The Unlicense";
   };
 
+  unrar = {
+    fullName = "UnRAR - free utility for RAR archives: License for use and distribution of FREEWARE version";
+    url = "https://www.rarlab.com/rar/unrarsrc-7.0.9.tar.gz";
+    free = false;
+    redistributable = true;
+  };
+
   upl = {
     spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
