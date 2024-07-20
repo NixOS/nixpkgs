@@ -19,8 +19,38 @@
   ocl-icd,
   substituteAll,
   makeWrapper,
-}:
+  withSIMD ?
+    if stdenv.buildPlatform.isx86 then
+      [
+        "avx512bw"
+        "avx512f"
+        "avx2"
+        "xop"
+        "avx"
+        "sse2"
+        false
+      ]
+    else
+      [ false ],
+  withOpenMP ? [
+    true
+    false
+  ],
+  callPackage,
+}@args:
 
+let
+  toCString =
+    s:
+    "\""
+    + (lib.strings.escapeC [
+      "\""
+      "\\"
+      "\r"
+      "\n"
+    ] s)
+    + "\"";
+in
 stdenv.mkDerivation rec {
   pname = "john";
   version = "rolling-2404";
@@ -50,6 +80,17 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
+  # john has a "fallback chain" mechanism; whenever the john binary
+  # encounters that it is built for a SIMD target that is not supported
+  # by the current CPU, it can fall back to another binary that is not
+  # built to expect that feature, continuing until it eventually reaches
+  # a compatible binary. See:
+  # https://github.com/openwall/john/blob/bleeding-jumbo/src/packaging/build.sh
+  # https://github.com/openwall/john/blob/bleeding-jumbo/doc/README-DISTROS
+  # https://github.com/NixOS/nixpkgs/issues/328226
+  passthru.cpuFallback = (callPackage ./default.nix (args // { withSIMD = lib.tail withSIMD; }));
+  passthru.ompFallback = (callPackage ./default.nix (args // { withOpenMP = lib.tail withOpenMP; }));
+
   preConfigure =
     ''
       cd src
@@ -61,9 +102,26 @@ stdenv.mkDerivation rec {
     + lib.optionalString withOpenCL ''
       python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
     '';
+  cppFlags =
+    [
+      # To run a fallback, john execs "${JOHN_SYSTEMWIDE_EXEC}/${XXX_FALLBACK_BINARY}"
+      "-DJOHN_SYSTEMWIDE_EXEC=${lib.escapeShellArg (toCString "")}"
+    ]
+    ++ (lib.optionals (lib.tail withSIMD != [ ]) [
+      "-DCPU_FALLBACK"
+      "-DCPU_FALLBACK_BINARY=${lib.escapeShellArg (toCString "${lib.removePrefix "/" passthru.cpuFallback}/bin/john")}"
+    ])
+    ++ (lib.optionals (lib.tail withOpenMP != [ ]) [
+      "-DOMP_FALLBACK"
+      "-DOMP_FALLBACK_BINARY=${lib.escapeShellArg (toCString "${lib.removePrefix "/" passthru.ompFallback}/bin/john")}"
+    ]);
+  __structuredAttrs = true;
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
+    (if lib.head withSIMD != false then "--enable-simd=${lib.head withSIMD}" else "--disable-simd")
+    (if lib.head withOpenMP then "--enable-openmp" else "--disable-openmp")
+    "CPPFLAGS=${builtins.concatStringsSep " " cppFlags}"
   ];
 
   buildInputs =
