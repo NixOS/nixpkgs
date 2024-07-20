@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.11.0";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
+    hash = "sha256-XUqQlekXc6dWXUwVlZSuMOynkv1fm4ne1FnXEUhKlss=";
   };
 
   propagatedBuildInputs = [
