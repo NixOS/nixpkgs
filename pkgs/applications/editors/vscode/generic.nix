@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , makeDesktopItem
+, runCommandLocal
 , unzip
 , libsecret
 , libXScrnSaver
@@ -115,9 +116,17 @@ in
   inherit pname version src sourceRoot dontFixup;
 
   passthru = {
-    inherit executableName longName tests updateScript;
+    inherit executableName longName updateScript;
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
+    tests = tests // lib.optionalAttrs meta.license.free or false {
+      cli-help = runCommandLocal "test-vscodium-cli-help" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        set -eu -o pipefail
+        ${lib.escapeShellArg finalAttrs.finalPackage.meta.mainProgram} --help | tee "$out"
+      '';
+    };
   } // lib.optionalAttrs (vscodeServer != null) {
     inherit rev vscodeServer;
   };
