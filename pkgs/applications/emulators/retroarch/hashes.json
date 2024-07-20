@@ -358,10 +358,10 @@
         "src": {
             "owner": "libretro",
             "repo": "Genesis-Plus-GX",
-            "rev": "5355eae2e1c70893a14ec0fda68de4e49cd5a0d5",
-            "hash": "sha256-134J1ifF9EOaPk6qqANdJawVtoa1M91Bc5jqxA0hMOM="
+            "rev": "7f3efe569177702f77d1cdfadba6568f82e30112",
+            "hash": "sha256-ABuWTzN0AvHXiODMSVU0lVYr44WGWpjtEuFfe0y6URw="
         },
-        "version": "unstable-2024-06-29"
+        "version": "unstable-2024-07-20"
     },
     "gpsp": {
         "fetcher": "fetchFromGitHub",
