@@ -219,11 +219,12 @@
       apsystems-ez1
     ];
     "aquacell" = ps: with ps; [
+      aioaquacell
       fnv-hash-fast
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: aioaquacell
+    ];
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -5274,6 +5275,7 @@
     "aprilaire"
     "aprs"
     "apsystems"
+    "aquacell"
     "aranet"
     "arcam_fmj"
     "aseko_pool_live"

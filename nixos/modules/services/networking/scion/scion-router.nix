@@ -40,7 +40,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
         ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-router";

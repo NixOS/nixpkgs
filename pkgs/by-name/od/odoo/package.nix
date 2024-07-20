@@ -52,12 +52,14 @@ in python.pkgs.buildPythonApplication rec {
     docutils-0_17  # sphinx has a docutils requirement >= 18
     ebaysdk
     freezegun
+    geoip2
     gevent
     greenlet
     idna
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     num2words
     ofxparse

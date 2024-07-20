@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "irc";
-  version = "20.4.1";
+  version = "20.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J1aYebrlzYmRwhfNy0ZRkNe08YpqJnSeSNBT/QtaUsw=";
+    hash = "sha256-dXguOB679BBEP3kU/XTKF/vcRBTRTUjaVhSZ6wlY0AI=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

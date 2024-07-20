@@ -1,36 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, buildEnv
-, linkFarm
-, substituteAll
-, R
-, rPackages
-, cmake
-, ninja
-, pkg-config
-, boost
-, libarchive
-, readstat
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildEnv,
+  linkFarm,
+  substituteAll,
+  R,
+  rPackages,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  libarchive,
+  readstat,
+  qt6,
 }:
 
 let
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     rev = "v${version}";
-    hash = "sha256-eKBxCIamNhUig+0vUEqXYbPjiaOsZk6QnOw8cnpjKFY=";
+    hash = "sha256-G84bmR+40W9RV+OIXYuMmwdEFE0iPMp/wEOcRHYUoj8=";
     fetchSubmodules = true;
   };
 
-  inherit (callPackage ./modules.nix {
+  moduleSet = import ./modules.nix {
+    inherit fetchFromGitHub rPackages;
     jasp-src = src;
     jasp-version = version;
-  }) engine modules;
+  };
+
+  inherit (moduleSet) engine modules;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -42,8 +45,12 @@ let
     ] ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules"
-    (lib.mapAttrsToList (name: drv: { name = name; path = "${drv}/library"; }) modules);
+  modulesDir = linkFarm "jasp-${version}-modules" (
+    lib.mapAttrsToList (name: drv: {
+      name = name;
+      path = "${drv}/library";
+    }) modules
+  );
 in
 stdenv.mkDerivation {
   pname = "jasp-desktop";
@@ -66,9 +73,6 @@ stdenv.mkDerivation {
     "-DCUSTOM_R_PATH=${customREnv}"
   ];
 
-  # necessary for R 4.4.0
-  hardeningDisable = [ "format" ];
-
   nativeBuildInputs = [
     cmake
     ninja
@@ -81,13 +85,12 @@ stdenv.mkDerivation {
     boost
     libarchive
     readstat
-  ] ++ (with qt6; [
-    qtbase
-    qtdeclarative
-    qtwebengine
-    qtsvg
-    qt5compat
-  ]);
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtwebengine
+    qt6.qtsvg
+    qt6.qt5compat
+  ];
 
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
@@ -98,7 +101,7 @@ stdenv.mkDerivation {
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
-        --replace "Exec=org.jaspstats.JASP" "Exec=JASP"
+        --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
     ln -s ${modulesDir} $out/Modules
@@ -121,4 +124,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
   };
 }
-

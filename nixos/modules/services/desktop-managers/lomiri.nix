@@ -63,7 +63,7 @@ in {
 
     fonts.packages = with pkgs; [
       # Applications tend to default to Ubuntu font
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     # Copy-pasted basic stuff
