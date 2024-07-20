@@ -3114,4 +3114,11 @@ self: super: {
 
   # Doesn't officially support hedgehog > 1.3 yet: https://github.com/coot/free-algebras/pull/33
   free-algebras = doJailbreak super.free-algebras;
+
+  # https://github.com/haskell-works/avro/pull/195
+  avro = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/haskell-works/avro/commit/5f6eb1ec8c8bac325d84b44757d4e2f8608d6939.patch";
+    sha256 = "sha256-1QEaoO8BTdvfFzMrybrf0v7cK0NbYrWOj4Mqexr+ylc=";
+  }) super.avro;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

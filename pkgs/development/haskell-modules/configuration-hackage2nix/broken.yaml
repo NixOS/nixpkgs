@@ -310,7 +310,6 @@ broken-packages:
   - avatar-generator # failure in job https://hydra.nixos.org/build/233214253 at 2023-09-02
   - aviation-units # failure in job https://hydra.nixos.org/build/233245762 at 2023-09-02
   - avl-static # failure in job https://hydra.nixos.org/build/233199062 at 2023-09-02
-  - avro # failure in job https://hydra.nixos.org/build/252731168 at 2024-03-16
   - avro-piper # failure in job https://hydra.nixos.org/build/233197510 at 2023-09-02
   - avr-shake # failure in job https://hydra.nixos.org/build/233223187 at 2023-09-02
   - avwx # failure in job https://hydra.nixos.org/build/233258167 at 2023-09-02
