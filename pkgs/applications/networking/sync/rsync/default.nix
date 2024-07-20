@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook perl ];
 
+  patches = [
+    # https://github.com/WayneD/rsync/pull/558
+    ./configure.ac-fix-failing-IPv6-check.patch
+  ];
+
   buildInputs = [ libiconv zlib popt ]
     ++ lib.optional enableACLs acl
     ++ lib.optional enableZstd zstd
