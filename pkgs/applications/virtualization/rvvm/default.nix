@@ -38,10 +38,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
-    ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0"
-
-    # work around https://github.com/NixOS/nixpkgs/issues/19098
-    ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "CFLAGS=-fno-lto";
+    ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
 
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";

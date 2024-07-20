@@ -188,7 +188,6 @@ stdenv.mkDerivation {
   mesonFlags =
     [
       # LTO optimization
-      (lib.mesonBool "b_lto" (!stdenv.isDarwin))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
