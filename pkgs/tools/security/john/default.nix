@@ -106,9 +106,7 @@ stdenv.mkDerivation rec {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
-  # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
-  # gcc: error: memdbg.o: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/${perlPackages.perl.libPrefix}"
