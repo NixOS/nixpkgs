@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
     mainProgram = "bash";
   };
 }
