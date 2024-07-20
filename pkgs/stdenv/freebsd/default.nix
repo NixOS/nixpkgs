@@ -46,7 +46,7 @@ let
     }
   );
 
-  linkBS = (
+  linkBootstrap = (
     attrs:
     derivation (
       attrs
@@ -55,19 +55,19 @@ let
         name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
-        args = [ ./linkBS.sh ];
+        args = [ ./linkBootstrap.sh ];
         PATH = "${bootstrapArchive}/bin";
         paths = attrs.paths;
       }
     )
   );
 
-  # commented linkBS entries are provided but unused
+  # commented linkBootstrap entries are provided but unused
   bootstrapTools = {
     expand-response-params = "";
-    bsdcp = linkBS { paths = [ "bin/bsdcp" ]; };
-    patchelf = linkBS { paths = [ "bin/patchelf" ]; };
-    bash = linkBS {
+    bsdcp = linkBootstrap { paths = [ "bin/bsdcp" ]; };
+    patchelf = linkBootstrap { paths = [ "bin/patchelf" ]; };
+    bash = linkBootstrap {
       paths = [
         "bin/bash"
         "bin/sh"
@@ -75,13 +75,13 @@ let
       shell = "bin/bash";
       shellPath = "/bin/bash";
     };
-    curl = linkBS {
+    curl = linkBootstrap {
       paths = [
         "bin/curl"
       ];
     };
     llvmPackages = {
-      clang-unwrapped = linkBS {
+      clang-unwrapped = linkBootstrap {
         paths = [
           "bin/clang"
           "bin/clang++"
@@ -89,7 +89,7 @@ let
         ];
         version = "16";
       };
-      libunwind = linkBS {
+      libunwind = linkBootstrap {
         name = "libunwind";
         paths = [
           "lib/libunwind.a"
@@ -100,7 +100,7 @@ let
         ];
       };
     };
-    coreutils = linkBS {
+    coreutils = linkBootstrap {
       name = "coreutils";
       paths = map (str: "bin/" + str) [
         "base64"
@@ -201,7 +201,7 @@ let
         "["
       ];
     };
-    diffutils = linkBS {
+    diffutils = linkBootstrap {
       name = "diffutils";
       paths = map (str: "bin/" + str) [
         "diff"
@@ -210,45 +210,45 @@ let
         #"sdiff"
       ];
     };
-    findutils = linkBS {
+    findutils = linkBootstrap {
       name = "findutils";
       paths = [
         "bin/find"
         "bin/xargs"
       ];
     };
-    iconv = linkBS { paths = [ "bin/iconv" ]; };
-    patch = linkBS { paths = [ "bin/patch" ]; };
-    gnutar = linkBS { paths = [ "bin/tar" ]; };
-    gawk = linkBS {
+    iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
+    patch = linkBootstrap { paths = [ "bin/patch" ]; };
+    gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
+    gawk = linkBootstrap {
       paths = [
         "bin/awk"
         "bin/gawk"
       ];
     };
-    gnumake = linkBS { paths = [ "bin/make" ]; };
-    gnugrep = linkBS {
+    gnumake = linkBootstrap { paths = [ "bin/make" ]; };
+    gnugrep = linkBootstrap {
       paths = [
         "bin/grep"
         "bin/egrep"
         "bin/fgrep"
       ];
     };
-    gnused = linkBS { paths = [ "bin/sed" ]; };
-    gzip = linkBS {
+    gnused = linkBootstrap { paths = [ "bin/sed" ]; };
+    gzip = linkBootstrap {
       paths = [
         "bin/gzip"
         #"bin/gunzip"
       ];
     };
-    bzip2 = linkBS { paths = [ "bin/bzip2" ]; };
-    xz = linkBS {
+    bzip2 = linkBootstrap { paths = [ "bin/bzip2" ]; };
+    xz = linkBootstrap {
       paths = [
         "bin/xz"
         "bin/unxz"
       ];
     };
-    binutils-unwrapped = linkBS {
+    binutils-unwrapped = linkBootstrap {
       name = "binutils";
       paths = map (str: "bin/" + str) [
         "ld"
@@ -269,8 +269,8 @@ let
       ];
     };
     freebsd = {
-      locales = linkBS { paths = [ "share/locale" ]; };
-      libc = linkBS {
+      locales = linkBootstrap { paths = [ "share/locale" ]; };
+      libc = linkBootstrap {
         name = "bootstrapLibs";
         paths = [
           "lib"
