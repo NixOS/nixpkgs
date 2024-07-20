@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "5.7.0";
+  version = "6.3.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5VnJXQo/VjeGB9Kpazg/MHU8m4Kh/JVd43HXitpk0Mk=";
+    hash = "sha256-DV/wH7lT8ivMYQkzZ9JhmA9mihkAnePtzvHjJUFF8cs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
