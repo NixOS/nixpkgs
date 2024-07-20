@@ -1,8 +1,8 @@
-let version = "2.9.11"; in
+let version = "2.10.0"; in
 { stdenv, lib, buildPackages, fetchurl, zlib, gettext
 , lists ? [ (fetchurl {
   url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
-  hash = "sha256-popxGjE1c517Z+nzYLM/DU7M+b1/rE0XwNXkVqkcUXo=";
+  hash = "sha256-JDLo/bSLIijC2DUl+8Q704i2zgw5cxL6t68wvuivPpY=";
 }) ]
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-yosEmjwtOyIloejRXWE3mOvHSOOVA4jtomlN5Qe6YCA=";
+    hash = "sha256-cAw5YMplCx6vAhfWmskZuBHyB1o4dGd7hMceOG3V51Y=";
   };
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.cracklib;
