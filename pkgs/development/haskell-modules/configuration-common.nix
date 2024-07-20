@@ -1554,9 +1554,6 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/6884
   persistent-sqlite = dontCheck super.persistent-sqlite;
 
-  # 2021-12-26: Too strict bounds on doctest
-  polysemy-plugin = doJailbreak super.polysemy-plugin;
-
   # Needs matching lsp-types
   lsp_2_4_0_0 = super.lsp_2_4_0_0.override {
     lsp-types = self.lsp-types_2_1_1_0;
